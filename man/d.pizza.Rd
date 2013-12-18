@@ -1,0 +1,45 @@
+\name{d.pizza}
+\alias{d.pizza}
+\docType{data}
+\title{Data pizza
+%%   ~~ data name/kind ... ~~
+}
+\description{An artificial dataset inspired by a similar dataset pizza.sav in \emph{Arbeitsbuch zur deskriptiven und induktiven Statistik} by Toutenburg et.al.\cr
+The dataset contains data of three pizza services in three districts. Every record defines an order and the according properties. A pizza is supposed to taste good, if it's temperature is high enough, say 45 Celsius. So it might be interesting for the pizza delivery service to minimize the delivery time.
+}
+\usage{data(d.pizza)}
+\format{
+  A data frame with 1209 observations on the following 17 variables.
+  \describe{
+    \item{\code{index}}{a numeric vector, indexing the records (no missings here).}
+    \item{\code{delivery_h}}{numeric, the delivery time in hours (decimal)}
+    \item{\code{delivery_min}}{numeric, the delivery time in minutes (decimal)}
+    \item{\code{date}}{Date, the delivery date}
+    \item{\code{weekday}}{integer, the weekday}
+    \item{\code{week}}{integer, the weeknumber}
+    \item{\code{operator}}{a factor with levels \code{Allanah} \code{Christal} \code{Rhonda}}
+    \item{\code{area}}{factor with levels \code{Westminster} \code{Kensington} \code{Notting Hill}}
+    \item{\code{driver}}{a factor with levels \code{Carpenter} \code{Carter} \code{Taylor} \code{Butcher} \code{Hunter} \code{Miller} \code{Farmer}}
+    \item{\code{price}}{numeric, the total price of delivered pizza(s) }
+    \item{\code{count}}{integer, the number of pizzas delivered}
+    \item{\code{temperature}}{numeric, the temperature of the pizza in degrees Celsius when delivered to the customer }
+    \item{\code{wine_ordered}}{boolean, TRUE if wine was ordered}
+    \item{\code{wine_delivered}}{boolean, TRUE if wine was delivered}
+    \item{\code{rabate}}{numeric, a potential rabate }
+    \item{\code{wrongpizza}}{logical, TRUE if a wrong pizza was delivered }
+    \item{\code{quality}}{ordered factor with levels \code{low} < \code{mid} < \code{hot}, defining the quality of the pizza when delivered}
+  }
+}
+\details{The dataset contains NAs randomly scattered.
+%%  ~~ If necessary, more details than the __description__ above ~~
+}
+\references{Toutenburg H, Schomaker M, Wissmann M, Heumann C (2009): \emph{Arbeitsbuch zur deskriptiven und induktiven Statistik} Springer, Berlin Heidelberg 
+}
+\examples{
+str(d.pizza)
+head(d.pizza)
+
+Desc(d.pizza)
+
+}
+\keyword{datasets}

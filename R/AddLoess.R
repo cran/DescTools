@@ -1,0 +1,4 @@
+AddLoess <-
+function(...){
+  UseMethod("AddLoess")
+}

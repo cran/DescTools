@@ -1,0 +1,106 @@
+\name{BinomCI}
+\alias{BinomCI}
+\title{ Confidence Intervals for Binomial Proportions }
+\description{
+Compute confidence intervals for binomial proportions following the most popular methods.\cr
+(Wald, Wilson, Agresti-Coull, Jeffreys, Clopper-Pearson etc.)  
+}
+\usage{
+BinomCI(x, n, conf.level = 0.95, 
+        method = c("wilson", "wald", "agresti-coull", "jeffreys", 
+                   "modified wilson", "modified jeffreys", 
+                   "clopper-pearson", "arcsine", "logit", "witting"), 
+        rand = 123)
+}
+\arguments{
+  \item{x}{ number of successes. }
+  \item{n}{ number of trials. }
+  \item{conf.level}{ confidence level, defaults to 0.95. }
+  \item{method}{ character string specifing which method to use; this can be one out of: 
+  \code{"wald"}, \code{"wilson"}, \code{"agresti-coull"}, \code{"jeffreys"}, 
+  \code{"modified wilson"}, \code{"modified jeffreys"}, \code{"clopper-pearson"}, 
+  \code{"arcsine"}, \code{"logit"} or \code{"witting"}. Defaults to \code{"wilson"}.
+  Abbreviation of method are accepted. See details. }
+  \item{rand}{ seed for random number generator; see details. }
+}
+\details{
+  All arguments are being recycled.
+ 
+  The Wald interval is obtained by inverting the acceptance region of the Wald 
+  large-sample normal test. 
+  
+  The Wilson interval, which is the default, was introduced by Wilson (1927) and is
+  the inversion of the CLT approximation to the family of equal tail tests of p = p0.
+  The Wilson interval is recommended by Agresti and Coull (1998) as well as by 
+  Brown et al (2001).
+  
+  The Agresti-Coull interval was proposed by Agresti and Coull (1998) and is a slight
+  modification of the Wilson interval. The Agresti-Coull intervals are never shorter 
+  than the Wilson intervals; cf. Brown et al (2001).
+  
+  The Jeffreys interval is an implementation of the equal-tailed Jeffreys prior interval
+  as given in Brown et al (2001).
+  
+  The modified Wilson interval is a modification of the Wilson interval for x close to 0
+  or n as proposed by Brown et al (2001).
+  
+  The modified Jeffreys interval is a modification of the Jeffreys interval for 
+  \code{x == 0 | x == 1} and \code{x == n-1 | x == n} as proposed by 
+  Brown et al (2001).
+  
+  The Clopper-Pearson interval is based on quantiles of corresponding beta
+  distributions. This is sometimes also called exact interval.
+  
+  The arcsine interval is based on the variance stabilizing distribution for the binomial
+  distribution.
+  
+  The logit interval is obtained by inverting the Wald type interval for the log odds.
+  
+  The Witting interval (cf. Beispiel 2.106 in Witting (1985)) uses randomization to 
+  obtain uniformly optimal lower and upper confidence bounds (cf. Satz 2.105 in
+  Witting (1985)) for binomial proportions.
+
+  For more details we refer to Brown et al (2001) as well as Witting (1985).
+  
+  
+}
+\value{
+  A vector with 3 elements for estimate, lower confidence intervall and upper for the upper one.  
+ }
+
+\note{ This function was previously published as \code{binomCI()} in the  \pkg{SLmisc} package and has been integrated here with some adaptations concerning the interface, but without any change in the computation logic. 
+}
+
+
+\references{ 
+  A. Agresti and B.A. Coull (1998) Approximate is better than "exact" for interval 
+  estimation of binomial proportions. 
+  \emph{American Statistician}, \bold{52}, pp. 119-126.  
+
+  L.D. Brown, T.T. Cai and A. Dasgupta (2001) Interval estimation for a binomial
+  proportion. \emph{Statistical Science}, \bold{16}(2), pp. 101-133.
+
+  H. Witting (1985). \emph{Mathematische Statistik I}. Stuttgart: Teubner.
+}
+\author{ Matthias Kohl <Matthias.Kohl@stamats.de>, Andri Signorell <andri@signorell.net> (interface issues) }
+
+\seealso{\code{\link[stats]{binom.test}}, \code{\link[Hmisc]{binconf}}, \code{\link{MultinomCI}} }
+\examples{
+
+BinomCI(x=37, n=43, method=c("wald", "wilson", "agresti-coull", "jeffreys", 
+  "modified wilson", "modified jeffreys", "clopper-pearson", "arcsine", "logit", "witting")
+) 
+
+
+# the confidence interval computed by binom.test 
+#   corresponds to the Clopper-Pearson interval
+BinomCI(x=42, n=43, method="clopper-pearson")
+binom.test(x=42, n=43)$conf.int
+
+
+# all arguments are being recycled:
+BinomCI(x=c(42, 35, 23, 22), n=43, method="wilson")
+BinomCI(x=c(42, 35, 23, 22), n=c(50, 60, 70, 80), method="jeffreys") 
+
+}
+\keyword{univar}
