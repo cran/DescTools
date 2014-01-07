@@ -1,0 +1,30 @@
+AreaIdent <-
+function(formula, data, subset){
+
+  opt <- options(na.action=na.pass); on.exit(options(opt)) 
+  
+  # identifies points in a plot, lying in a rectangle, spanned by upleft, botright
+  mf <- match.call(expand.dots = FALSE)
+  m <- match(c("formula", "data", "na.action", "subset"), names(mf), 0L)
+  mf <- mf[c(1L, m)]
+  mf$drop.unused.levels <- TRUE
+  mf[[1L]] <- as.name("model.frame")
+  mf <- eval(mf, parent.frame())
+  response <- attr(attr(mf, "terms"), "response")
+  x <- mf[[-response]]
+  y <- mf[[response]]
+  
+  cat("Select upper-left and bottom-right point!\n")
+  xy <- locator(n=2, type="n")[1:2]
+  rect(xy$x[1], xy$y[1], xy$x[2], xy$y[2], border="grey", lty="dotted")
+  
+  idx <- (x %[]% range(xy$x) & y %[]% range(xy$y))
+  
+  res <- which(idx)
+  vname <- attr(attr(attr(mf, "terms"), "dataClasses"), "names")
+  xy <- lapply(lapply(xy, range), signif, digits=4)
+  attr(x=res, which="cond") <- paste(vname[2], " %[]% c(", xy$x[1], ", ", xy$x[2], ") & ", vname[1] ," %[]% c(",  xy$y[1], ", ", xy$y[2], "))", sep="")
+  
+  return(res)
+  
+}

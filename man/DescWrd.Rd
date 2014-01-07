@@ -1,0 +1,115 @@
+\name{DescWrd}
+
+\alias{DescWrd}
+\alias{DescWrd.data.frame}
+\alias{DescWrd.default}
+\alias{DescWrd.formula}
+
+%- Also NEED an '\alias' for EACH other topic documented here.
+\title{ Use Word as Reporting Tool for Describing Data
+%%  ~~function to do ... ~~
+}
+\description{
+Calculates descriptive statistics for x and uses Word as reporting tool.
+%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+}
+\usage{
+
+\method{DescWrd}{default}(x, wrd, caption = deparse(substitute(x)), \dots)
+\method{DescWrd}{data.frame}(x, wrd, caption = deparse(substitute(x)), 
+                 univar = TRUE, colpairs = FALSE, notch = TRUE, 
+                 col0 = "#9A0941FF", col1 = "#8296C4FF", width = 100, 
+                 fontname = "Consolas", fontsize = 7, \dots)
+\method{DescWrd}{formula}(formula, data = parent.frame(), wrd, \dots)
+
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{x}{the object to be described.}
+  \item{caption}{the title of the decription. Default is name and class of the variable.}
+  \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()} 
+  or an existing one, created by \code{GetCurrWrd()}.
+  Default is the last created pointer stored in \code{getOption("lastWord")}.}
+
+  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}  
+
+  \item{data}{an optional matrix or data frame containing the variables in the formula \code{formula}. 
+    By default the variables are taken from \code{environment(formula)}.}  
+
+  \item{univar}{logical. Specifying if only univariate descriptions should be produced. Defaults to TRUE.}
+  \item{colpairs}{logical. Specifying if pairwise bivariate descriptions should be produced. Defaults to FALSE.}
+  \item{notch}{if notch is TRUE, a notch is drawn in each side of the boxes in a boxplot. See \code{\link{boxplot}} for the details.}
+  \item{col0}{the first color used in mosaicplots.}
+  \item{col1}{the last color used in mosaicplots. }
+  \item{width}{integer. The linewidth of the results in characters. Defaults to 80.  }
+  \item{fontname}{the font of the text.}
+  \item{fontsize}{the fontsize of the text.}
+
+  
+  \item{\dots}{further argument to be passed to methods.}
+
+}
+
+\details{This function is not thought of being directly run by the enduser. It will normally be called automatically, when 
+a pointer to a Word instance is passed to the function \code{\link{Desc}}.\cr 
+However \code{DescWrd} takes some more specific arguments concerning the Word output (like font or fontsize), which can make it necessary to call the function directly.
+%%  ~~ If necessary, more details than the description above ~~
+}
+\author{
+Andri Signorell <andri@signorell.net>
+%%  ~~who you are~~
+}
+
+\seealso{ \code{\link{Desc}}
+%% ~~objects to See Also as \code{\link{help}}, ~~~
+}
+\examples{
+
+# Output into word document ---------------------------------------------------------
+
+\dontrun{# Windows-specific example
+
+wrd <- GetNewWrd(header=TRUE)    # create a new word instance and insert title and contents
+
+# let's have a subset
+d.sub <- d.pizza[,c("driver","date","operator","price","wrongpizza")]
+
+# do just the univariate analysis
+Desc(d.sub, wrd=wrd) 
+
+# do a full report
+Desc(d.sub, wrd=wrd, colpairs=TRUE)
+
+# do just bivariate analysis
+Desc( d.sub, univar=FALSE, colpairs=TRUE, wrd=wrd) 
+
+# selected bivariate analysis into word document
+Desc(week ~ driver, data=d.pizza, wrd=wrd)   
+Desc(price ~ operator, data=d.pizza, digits=c(2,2,2,2,0,3,0,0), wrd=wrd ) 
+Desc(driver ~ operator, data=d.pizza, wrd=wrd) 
+Desc(price ~ operator + driver + wrongpizza, data=d.pizza
+     , digits=c(2,2,2,2,0,3,0,0), wrd=wrd) 
+
+Desc(price ~ delivery_min, data=d.pizza, wrd=wrd ) 
+
+
+# internal functions (not meant to be used by the enduser):
+Desc.factor(d.pizza$driver, ord="n" )  # ordered by name
+Desc.factor(d.pizza$driver, ord="l" )  # ordered by level
+Desc.logical(d.pizza$wrongpizza)
+Desc.integer(d.pizza$weekday, maxlevels=NA)
+Desc.integer(d.pizza$weekday, maxlevels=3)
+Desc.numeric(d.pizza$count, highlow=FALSE)
+Desc.numeric(d.pizza$count, highlow=TRUE)
+ 
+DescNumFact( x=d.pizza$delivery_min, grp=d.pizza$operator )
+DescFactFact( x=d.pizza$driver, grp=d.pizza$operator)
+DescNumNum( x=d.pizza$delivery_min, y=d.pizza$price )
+
+}
+
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{ print }
+\keyword{ IO }

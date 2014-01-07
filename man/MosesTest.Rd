@@ -1,0 +1,77 @@
+\name{MosesTest}
+\alias{MosesTest}
+\alias{MosesTest.default}
+\alias{MosesTest.formula}
+\title{Moses Test of Extreme Reactions
+}
+\description{
+Perform Moses test of extreme reactions, which can be used to determine the difference 
+in range between two samples. The exact one-tailed probability is calculated. }
+\usage{
+MosesTest(x, ...)
+
+\method{MosesTest}{default}(x, y, extreme = NULL, \dots)
+         
+\method{MosesTest}{formula}(formula, data, subset, na.action, \dots)
+
+}
+\arguments{
+  \item{x}{numeric vector of data values. x will be treated as control group. Non-finite (e.g. infinite or missing) values will be omitted.
+}
+  \item{y}{numeric vector of data values. y will be treated as experiment group. Non-finite (e.g. infinite or missing) values will be omitted.
+}
+  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}  
+  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}. 
+    By default the variables are taken from \code{environment(formula)}.}  
+  \item{subset}{an optional vector specifying a subset of observations to be used.}  
+  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}  
+\item{extreme}{integer, defines the number of extreme values to be dropped from the control group before calculating the 
+span. Default (NULL) is the integer part of 0.05 * length(x) or 1, whichever is greater. If extreme is too large, it will be cut down to floor(length(x)-2)/2. }
+  \item{\dots}{further arguments to be passed to or from methods.}
+%\item{g}{a vector or factor object giving the group for the corresponding elements of x. }
+
+}
+\details{
+For two independent samples from a continuous field, this tests whether extreme values 
+are equally likely in both populations or if they are more likely to occur in the population 
+from which the sample with the larger range was drawn.
+
+Note that the ranks are calculated in decreasing mode. 
+
+}
+
+\value{
+  A list with class \dQuote{htest} containing the following components: 
+  \item{statistic}{the value of the Moses Test statistic.}
+  \item{p.value}{the p-value for the test.}
+  \item{method}{the character string \dQuote{Moses Test of Extreme Reactions}.}
+  \item{data.name}{a character string giving the name(s) of the data.} 
+}
+
+
+\references{
+Moses, L.E. (1952) A Two-Sample Test, \emph{Psychometrika}, 17, 239-247.
+
+\url{http://publib.boulder.ibm.com/infocenter/spssstat/v20r0m0/index.jsp?topic=\%2Fcom.ibm.spss.statistics.help\%2Falg_nonparametric_independent_moses.htm}
+}
+\author{Andri Signorell <andri@signorell.net>
+}
+
+\seealso{ \code{\link{wilcox.test}}, \code{\link{ks.test}} }
+
+\examples{
+
+x <- c(0.80, 0.83, 1.89, 1.04, 1.45, 1.38, 1.91, 1.64, 0.73, 1.46)
+y <- c(1.15, 0.88, 0.90, 0.74, 1.21)
+
+MosesTest(x, y)
+
+
+set.seed(1479)
+x <- sample(1:20, 10, replace=TRUE)
+y <- sample(5:25, 6, replace=TRUE)
+
+MosesTest(x, y)
+
+}
+\keyword{ htest }

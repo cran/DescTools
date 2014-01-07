@@ -1,0 +1,5 @@
+%\VignetteIndexEntry{DescTools}
+\documentclass{article}
+\begin{document}
+...
+\end{document}
