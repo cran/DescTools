@@ -1,14 +1,14 @@
 \name{AreaIdent}
 \alias{AreaIdent}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Identify Points in Plot Defined by an Upper-Left and a Bottom-Right Click
+\title{Identify Points in Plot Lying within a Rectangle or Polygon
 %%  ~~function to do ... ~~
 }
-\description{Find all the points lying in a rectangle area, spanned by an upper left point and a bottom-right point clicked by the user.
+\description{Find all the points lying either in a rectangle area, spanned by an upper left point and a bottom-right point clicked by the user or in a polygon area defined by the user.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-AreaIdent(formula, data, subset)
+AreaIdent(formula, data, subset, poly = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -23,6 +23,10 @@ AreaIdent(formula, data, subset)
   \item{subset}{ an optional vector specifying a subset of observations
     to be used.
 %%     ~~Describe \code{subset} here~~
+}
+  \item{poly}{logical. Defines if a polygon or a rectangle should be used to select the points. Default is rectangle.
+  If a polygon should be used, set this argument to TRUE and select all desired points. The polygon will be closed 
+  automatically when finished.
 }
 }
 \value{Index vector with the points lying within the selected area.
@@ -58,6 +62,11 @@ attr(idx, "cond")
 
 # create a group variable for the found points
 d.pizza$grp <- seq(nrow(d.pizza)) \%in\% idx 
+
+# try the polygon option
+idx <- AreaIdent(temperature ~ delivery_min, data=d.pizza, poly=TRUE)
+points(temperature ~ delivery_min, data = d.pizza[idx,], col="red")
+
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

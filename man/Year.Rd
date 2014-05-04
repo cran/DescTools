@@ -8,6 +8,8 @@
 \alias{Weekday}
 \alias{Yearday}
 \alias{Yearmonth}
+\alias{IsWeekend}
+
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Part of Date
@@ -19,14 +21,18 @@
 \usage{
 Year(x)
 Quarter(x)
-Month(x, format = c("num", "abbr", "full"), stringsAsFactors = TRUE)
+Month(x, format = c("num", "abbr", "full"), lang = c("local", "engl"), 
+      stringsAsFactors = TRUE)
 Week(x)
 Day(x)
-Weekday(x, format = c("num", "abbr", "full"), stringsAsFactors = TRUE)
+Weekday(x, format = c("num", "abbr", "full"), lang = c("local", "engl"), 
+        stringsAsFactors = TRUE)
 Yearday(x)
 Yearmonth(x)
 
 Day(x) <- value
+
+IsWeekend(x)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -38,6 +44,9 @@ Day(x) <- value
 %%     ~~Describe \code{format} here~~
 }
   \item{value}{new value
+%%     ~~Describe \code{value} here~~
+}
+  \item{lang}{the language for the months and daynames. This can be either the current locale (default) or english.
 %%     ~~Describe \code{value} here~~
 }
   \item{stringsAsFactors}{logical. Defines if the result should be coerced to a factor, using the local definitions as levels.
@@ -55,6 +64,8 @@ Based on the requested time component, the output is as follows:\cr\cr
 \kbd{Yearday} returns the day of the year numbering (1 to 366). \cr
 \kbd{Day} returns the day of the month (1 to 31). \cr
 \kbd{Yearmonth} returns the yearmonth representation (YYYYMM) of a date as longinteger. \cr
+
+\kbd{IsWeekend} returns TRUE, if the date x falls on a weekend. \cr
 
 The day can not only be extracted, but as well defined. See examples.
 %%  ~~ If necessary, more details than the description above ~~
@@ -74,21 +85,31 @@ x <- Sys.Date()
 
 Year(x)
 Quarter(x)
-Month(x)
-Month(x, format="full")
-Week(x)
-Day(x)
 
+Month(x)
+Month(x, format = "abb", lang="engl")
+Month(x, format = "abb", lang="local")
+Month(x, format = "full", lang="engl")
+Month(x, format = "full", lang="local")
+
+Week(x)
+
+Day(x)
 Day(x) <- 20
 x
 
-Weekday(x, format="abbr")
+Weekday(x)
+Weekday(x, format = "abb", lang="engl")
+Weekday(x, format = "abb", lang="local")
+Weekday(x, format = "full", lang="engl")
+Weekday(x, format = "full", lang="local")
+
 Yearday(x)
+
+IsWeekend(x)
 
 # let's generate a time sequence by weeks
 Month(seq(from=as.Date(Sys.Date()), to=Sys.Date()+150, by="weeks"), format="a")
-
-
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

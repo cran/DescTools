@@ -2,6 +2,7 @@ PlotMultiDens.default <-
 function( x, xlim = NULL, ylim = NULL
                                    , col = rainbow(length(x)), lty = "solid", lwd = 1
                                    , xlab = "x", ylab = "density"
+                                   # , type = c("line", "stack", "cond")
                                    , args.dens = NULL
                                    , args.legend = NULL
                                    , na.rm = FALSE, flipxy=FALSE, ...) {
@@ -41,12 +42,12 @@ function( x, xlim = NULL, ylim = NULL
   for(i in 1:maxdim)  {
     if(length(x[[i]]) > 2)    
       l.dens[[i]] <- if(flipxy) { 
-        # FlipDensXY(density(x[[i]], n=n[i])) 
         FlipDensXY(do.call("density", append(list(x[[i]]), lapply(args.dens1,"[", i)) ))
       } else { 
         do.call("density", append(list(x[[i]]), lapply(args.dens1,"[", i)) )
       }
   }
+
   
   # recycle line attributes
   # which geom parameter has the highest dimension
@@ -56,13 +57,23 @@ function( x, xlim = NULL, ylim = NULL
   if( missing("xlim") ) xlim <- range(pretty( unlist(lapply(l.dens, "[", "x")) ) )
   if( missing("ylim") ) ylim <- range(pretty( unlist(lapply(l.dens, "[", "y")) )) 
   
+  dev.hold()
+  on.exit(dev.flush())
+  
   plot( x=1, y=1, xlim = xlim, ylim = ylim, type="n", xlab=xlab, ylab=ylab, ... )
-  for(i in 1:length(l.dens))  {
-    lines( l.dens[[i]], col=l.par$col[i], lty=l.par$lty[i], lwd=l.par$lwd[i] )
-  }
   
+#   switch(match.arg(type,choices=c("line","stack","cond"))
+#     overlay = {       
+              for(i in 1:length(l.dens))  {
+                lines( l.dens[[i]], col=l.par$col[i], lty=l.par$lty[i], lwd=l.par$lwd[i] )
+               } 
+# },
+#     stack =   { },
+#     cond =    { 
+#               }
+#   )
   
-  args.legend1 <- list( x="topright", inset=0.02, legend=if(is.null(names(x))){1:length(x)} else {names(x)}
+  args.legend1 <- list( x="topright", inset=0, legend=if(is.null(names(x))){1:length(x)} else {names(x)}
                         , fill=col, bg="white", cex=0.8 )
   if( length(unique(lwd))>1 || length(unique(lty))>1 ) {
     args.legend1[["fill"]] <-  NULL

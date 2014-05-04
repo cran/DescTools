@@ -1,7 +1,7 @@
 PlotDesc.logical <-
 function(x, xlab="", col0=hblue, col1=hred, ..., wrd=NULL) {
 
-  tab <- table(x)
+  tab <- table(factor(x))
   if(nrow(tab)>2) stop( "!PlotDesc.logical! can only display 2 levels" )
   ptab <- prop.table(tab)
 

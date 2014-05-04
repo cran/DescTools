@@ -1,6 +1,6 @@
 WrdText <-
 function(txt, fontname="Consolas", fontsize=7, bold=FALSE, italic=FALSE, appendCR=TRUE, wrd=getOption("lastWord") ){
-
+  
   if (!inherits(txt, "character"))  txt <- capture.output(txt)
   
   wrdSel <- wrd[["Selection"]]
@@ -12,12 +12,12 @@ function(txt, fontname="Consolas", fontsize=7, bold=FALSE, italic=FALSE, appendC
     bold = wrdFont[["Bold"]] ,
     italic = wrdFont[["Italic"]] 
   )  
-
+  
   wrdFont[["Name"]] <- fontname
   wrdFont[["Size"]] <- fontsize
   wrdFont[["Bold"]] <- bold
   wrdFont[["Italic"]] <- italic
-
+  
   wrdSel$TypeText( paste(txt,collapse="\n") )
   if(appendCR) wrdSel$TypeParagraph()
   
@@ -26,7 +26,7 @@ function(txt, fontname="Consolas", fontsize=7, bold=FALSE, italic=FALSE, appendC
   wrdFont[["Size"]] <- currfont[["size"]]
   wrdFont[["Bold"]] <- currfont[["bold"]]
   wrdFont[["Italic"]] <- currfont[["italic"]]
- 
+  
   invisible(currfont) 
   
 }

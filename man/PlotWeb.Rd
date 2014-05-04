@@ -10,7 +10,8 @@ in proportion to the correlation of two variables. It will place the elements ho
 connecting lines between the points. 
 }
 \usage{
-PlotWeb(m, col = c("red", "blue"), lty = par("lty"), ...)
+PlotWeb(m, col = c("red", "blue"), lty = par("lty"), args.legend=NULL, 
+        pch = 21, pt.cex = 2, pt.col = "black", pt.bg = "darkgrey", ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +23,18 @@ PlotWeb(m, col = c("red", "blue"), lty = par("lty"), ...)
 }
   \item{lty}{the line type for the connecting lines
 %%     ~~Describe \code{lty} here~~
+}
+  \item{args.legend}{list of additional arguments to be passed to the \code{legend} function. 
+  Use \code{args.legend = NA} if no legend should be added. 
+%%     ~~Describe \code{args.legend} here~~
+}
+  \item{pch}{the plotting symbols appearing in the plot, as a non-negative numeric vector (see \code{\link{points}}, but unlike there negative values are omitted) or a vector of 1-character strings, or one multi-character string.
+}
+  \item{pt.cex}{expansion factor(s) for the points.
+}
+  \item{pt.col}{the foreground color for the points, corresponding to its argument \code{col}.
+}
+  \item{pt.bg}{the background color for the points, corresponding to its argument \code{bg}.
 }
   \item{\dots}{dots are passed to plot.
 %%     ~~Describe \code{\dots} here~~

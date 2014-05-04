@@ -15,7 +15,7 @@ function(x){
 #' apply(permutations(letters[1:6]), 1, paste, collapse = '')
 # author: David Kahle <david.kahle@gmail.com>
 # package: mpoly 
-# original function name: permuations
+# original function name: permutations
 
   insert <- function(elem, slot, v){
     n <- length(v)

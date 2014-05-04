@@ -40,4 +40,4 @@ formatC(StrTrunc(x, maxlen=10), width = 10, flag=" ")
 
 
 }
-\keyword{misc}
+\keyword{character}

@@ -1,5 +1,5 @@
 AddLoess.formula <-
-function(formula, data, col = "#8296C4FF", lwd = 2, lty = "solid", type = "l",  n = 100
+function(formula, data, col = hblue, lwd = 2, lty = "solid", type = "l",  n = 100
     , conf.level = 0.95, args.band = NULL, ...){
   
     lo <- loess(formula, data, ...)

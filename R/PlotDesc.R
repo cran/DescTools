@@ -8,7 +8,7 @@ function(x, ..., wrd=NULL){
     if(!is.null(wrd)) WrdPlot(width=7.5, height=5, dfact=2.2, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
     
   } else {  
-    if( is.vector(x) && length(unique(na.omit(x))) == 2) {
+    if( is.vector(x) && length(unique(na.omit(x))) == 2) { 
       PlotDesc.logical(x=x, ..., wrd=wrd)
     } else {  
       UseMethod("PlotDesc") 

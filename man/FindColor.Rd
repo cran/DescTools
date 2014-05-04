@@ -9,7 +9,8 @@
 }
 \usage{
 FindColor(x, cols = rev(heat.colors(100)), 
-          min.x = min(pretty(x)), max.x = max(pretty(x)))
+          min.x = min(pretty(x)), max.x = max(pretty(x)), 
+          all.inside = FALSE)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -26,7 +27,18 @@ FindColor(x, cols = rev(heat.colors(100)),
   \item{max.x}{the x-value for the last color.
 %%     ~~Describe \code{col_end} here~~
 }
+  \item{all.inside}{logical; if true, the returned indices are coerced into \code{1, ..., N-1}, i.e., \code{0} 
+  is mapped to \code{1} and \code{N} to \code{N-1}.
+%%     ~~Describe \code{col_end} here~~
 }
+}
+\details{For the selection of colors the option \code{rightmost.closed} in the used function 
+\code{\link{findInterval}} is set to TRUE.
+This will ensure that all values on the right edge of the range are assigned a color. 
+How values outside the boundaries of min.x and max.x are handled can be controlled by \code{all.inside}. Set this value to TRUE, if those values
+should get the colors at the edges or set it to FALSE, if they should remain white (which is the default).}
+
+
 \author{
 Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~

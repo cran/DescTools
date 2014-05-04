@@ -50,6 +50,14 @@ barplot(tab, beside=FALSE, space=1.2, horiz=TRUE)
 AddConnLines(tab, beside=FALSE, space=1.2, horiz=TRUE, lcol="grey50", lwd=1, lty=2)
 
 
+cols <- PalHelsana()[1:4]
+b <- barplot(tab, beside=FALSE, horiz=FALSE, col=cols) 
+AddConnLines(tab, beside=FALSE, horiz=FALSE, lcol="grey50", lwd=1, lty=2) 
+
+# set some labels
+text(x=b, y=t(apply(rbind(0,tab), 2, Midx)), labels=tab, 
+     col=(matrix(rep(TextContrastColor(cols), each=ncol(tab)), nrow=nrow(tab), byrow=FALSE )))
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -1,13 +1,13 @@
 XLGetRange <-
 function (file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE, 
                         header = FALSE, stringsAsFactors = FALSE) {
-
+  
   A1ToZ1S1 <- function(x){
     xlcol <- c( LETTERS 
-      , sort(c(outer(LETTERS, LETTERS, paste, sep="" )))
-      , sort(c(outer(LETTERS, c(outer(LETTERS, LETTERS, paste, sep="" )), paste, sep="")))
+                , sort(c(outer(LETTERS, LETTERS, paste, sep="" )))
+                , sort(c(outer(LETTERS, c(outer(LETTERS, LETTERS, paste, sep="" )), paste, sep="")))
     )[1:16384]
-
+    
     z1s1 <- function(x) {
       colnr <- match( regmatches(x, regexec("^[[:alpha:]]+", x)), xlcol)
       rownr <- as.numeric(regmatches(x, regexec("[[:digit:]]+$", x)))
@@ -16,9 +16,9 @@ function (file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
     
     lapply(unlist(strsplit(toupper(x),":")), z1s1)
   }
-
   
-  # main function
+  
+  # main function  *******************************
   
   if(is.null(file)){
     xl <- GetCurrXL()
@@ -41,19 +41,22 @@ function (file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
   }
   
   lst <- list()
-  for(i in 1:length(range)){
+  #  for(i in 1:length(range)){  # John Chambers prefers this: (why actually?)
+  for(i in seq_along(range)){
     zs <- A1ToZ1S1(range[i])
     rr <- xl$Range(xl$Cells(zs[[1]][1], zs[[1]][2]), xl$Cells(zs[[2]][1], zs[[2]][2]) )
     lst[[i]] <- rr[["Value2"]]
     names(lst)[i] <- range[i]
   }
-
+  
   if(!is.null(file)) xl$Quit()  # only quit, if a new XL-instance was created before
   
   # replace NULL values by NAs, as NULLs are evil while coercing to data.frame!
   if(as.data.frame){
-    for(i in 1:length(lst)){
-      for(j in 1:length(lst[[i]])){
+    #    for(i in 1:length(lst)){    # original
+    for(i in seq_along(lst)){
+      #      for(j in 1:length(lst[[i]])){
+      for(j in seq_along(lst[[i]])){
         lst[[i]][[j]][unlist(lapply(lst[[i]][[j]], is.null))] <- NA
       }
       xnames <- unlist(lapply(lst[[i]], "[", 1))        # define the names in case header = TRUE

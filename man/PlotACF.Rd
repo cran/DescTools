@@ -2,15 +2,15 @@
 \alias{PlotACF}
 \alias{PlotGACF}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Combined Plot of a Time Series and it's Autocorrelation and Partial Autocorrelation
+\title{Combined Plot of a Time Series and it's ACF and PACF
 %%  ~~function to do ... ~~
 }
-\description{Combined Plot of a Time Series and it's Autocorrelation and Partial Autocorrelation
+\description{Combined plot of a time Series and it's autocorrelation and partial autocorrelation
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 PlotACF(series, lag.max = 10 * log10(length(series)), ...)
-PlotGACF(series, lag.max=10*log10(length(series)), type="corr", ylab="Auto-Korr.", ...)
+PlotGACF(series, lag.max = 10 * log10(length(series)), type = "cor", ylab = NULL, ...)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -22,7 +22,7 @@ PlotGACF(series, lag.max=10*log10(length(series)), type="corr", ylab="Auto-Korr.
   is 10 * log10(length(series)). 
 %%     ~~Describe \code{lag.max} here~~
 }
-  \item{type}{character string giving the type of acf to be computed. Allowed values are \code{"correlation"} (the default), \code{"covariance"} or \code{"partial"}.
+  \item{type}{character string giving the type of acf to be computed. Allowed values are \code{"cor"} (the default), \code{"cov"} or \code{"part"} for autocorrelation, covariance or partial correlation.
 %%     ~~Describe \code{lag.max} here~~
 }
   \item{ylab}{a title for the y axis: see \code{\link{title}}.
@@ -36,7 +36,7 @@ PlotGACF(series, lag.max=10*log10(length(series)), type="corr", ylab="Auto-Korr.
 subfunction to produce the acf- and pacf-plots.
 %%  ~~ If necessary, more details than the description above ~~
 }
-\author{Markus Huerzeler, ETH Zurich
+\author{Markus Huerzeler (ETH Zurich), some minor modifications Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~
 }
 

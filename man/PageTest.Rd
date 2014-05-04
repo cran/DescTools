@@ -45,7 +45,11 @@ PageTest(y, \dots)
   
   The null hypothesis is that apart from an effect of \code{blocks},
   the location parameter of \code{y} is the same in each of the
-  \code{groups}.
+  \code{groups}.\cr
+  The implemented alternative is, that the location parameter will be monotonly greater along the groups, \cr
+  \eqn{H_{A}: \theta_{1} \le \theta_{2} \le \theta_{3}} ... (where at least one inequality is strict).\cr
+  If the other direction is required, the order of the groups has to be reversed.
+  \cr\cr
   The Page test for ordered alternatives is slightly more powerful than
   the Friedman analysis of variance by ranks.
   

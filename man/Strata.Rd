@@ -3,9 +3,10 @@
 \title{Stratified sampling}
 \description{Stratified sampling with equal/unequal probabilities.}
 
-\usage{Strata(data, stratanames = NULL, size, 
-              method = c("srswor","srswr","poisson", "systematic"), 
-              pik, description = FALSE)}
+\usage{
+Strata(data, stratanames = NULL, size, 
+       method = c("srswor", "srswr", "poisson", "systematic"), 
+       pik, description = FALSE)}
 
 \arguments{
 \item{data}{data frame or data matrix; its number of rows is N, the population size.}
@@ -39,9 +40,9 @@ The function produces an object, which contains the following information:
 }
 \details{
 The data should be sorted in ascending order by the columns given in the stratanames argument before applying the function. 
-Use, for example, data[order(data$state, data$region), ]. 
+Use, for example, \code{data[order(data$state, data$region), ]}. 
 }
-\note{This function has been taken from the library \pkg{sample} without logical changes.}
+\note{This function has been taken from the library \pkg{sampling} without logical changes.}
 \author{Yves Tille <yves.tille@unine.ch>, Alina Matei <alina.matei@unine.ch>}
 
 \seealso{

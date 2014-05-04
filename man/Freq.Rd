@@ -12,8 +12,8 @@ Categorical variables will be aggregated by \code{\link{table}}. The result will
 }
 \usage{
 Freq(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE,
-     digits = 3, ord = c("level", "desc", "asc", "name"), 
-     useNA = c("no", "ifany", "always"), print = TRUE, ...)
+     ord = c("level", "desc", "asc", "name"), 
+     useNA = c("no", "ifany", "always"), ...)
      
 \method{print}{Freq}(x, digits = 3, ...)
 
@@ -29,17 +29,14 @@ Freq(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE,
 }
   \item{include.lowest}{logical, indicating if an x[i] equal to the lowest (or highest, for \code{right = FALSE}) \code{"breaks"} value should be included.
 }
-  \item{digits}{integer, determining the number of digits used to format the relative frequencies.
-}
   \item{ord}{how should the result be ordered? Default is \kbd{"level"}, other choices are by frequency (\kbd{"descending"} or \kbd{"ascending"}) 
     or by name of the levels (\kbd{"name"}). The argument can be abbreviated. This is ignored if x is numeric.
 }
   \item{useNA}{one out of \code{"no"}, \code{"ifany"}, \code{"always"}. Defines whether to include extra NA levels in the table. 
    Defaults to \code{"no"} which is the \code{\link{table}()} default too.
 }
-  \item{print}{logical. If set to \code{TRUE} (default) the result is printed, even if assigned to a variable name. 
-  Set this to \code{FALSE} to suppress printing. 
-  }
+  \item{digits}{integer, determining the number of digits used to format the relative frequencies.
+}
 
   \item{\dots}{further arguments are passed to the function \code{\link{cut}()}. Use \code{dig.lab} to control the format of numeric group names. Use the argument \code{right} to define if the intervals should be closed on the right (and open on the left) or vice versa. \cr
   In print.Freq the dots are not used.

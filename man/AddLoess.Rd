@@ -14,7 +14,7 @@ Add a loess smoother to an existing plot. The function first calculates the pred
 \usage{
 \method{AddLoess}{default}(x, y, ...) 
 
-\method{AddLoess}{formula}(formula, data, col = "#8296C4FF", lwd = 2, lty = "solid", 
+\method{AddLoess}{formula}(formula, data, col = hblue, lwd = 2, lty = "solid", 
                  type = "l", n = 100, conf.level = 0.95, args.band = NULL, ...)
 
 }
@@ -29,7 +29,7 @@ Add a loess smoother to an existing plot. The function first calculates the pred
    containing the variables in the model. If not found in data, the variables are taken from environment(formula), 
    typically the environment from which loess is called.
 }
-  \item{col}{linecolor of the smoother. Default is a lightblue color #8296C4FF.
+  \item{col}{linecolor of the smoother. Default is DescTools's lightblue.
 %%     ~~Describe \code{col} here~~
 }
   \item{lwd}{line width of the smoother.

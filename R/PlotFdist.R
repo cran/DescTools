@@ -11,7 +11,6 @@ function (x, main = deparse(substitute(x)), xlab = ""
   , heights = NULL  # heights (hist, boxplot, ecdf) used by layout
   , pdist = c(0, 0)           # distances of the plots, default = 0                        
   , na.rm = FALSE ) {
-#  , newwin = FALSE ) {
  
   # Plot function to display the distribution of a cardinal variable
   # combines a histogram with a density curve, a boxplot and an ecdf 
@@ -22,7 +21,7 @@ function (x, main = deparse(substitute(x)), xlab = ""
   # dev question: should dots be passed somewhere??
   
   usr <- par("usr");  on.exit( par(usr) ) 
-    
+  
   add.rug <- TRUE
   if(!is.null(args.rug)) if(all(is.na(args.rug))) {add.rug <- FALSE} 
   add.dens <- TRUE
@@ -44,6 +43,9 @@ function (x, main = deparse(substitute(x)), xlab = ""
   
   # plot histogram, change margin if no main title
   par(mar = c(0, 5.1, ifelse(main == "", 1.1, 4.1), 2.1))
+
+  # wait for omitting NAs until all arguments are evaluated, e.g. main...
+  if(na.rm) x <- na.omit(x) 
   
   # handle open list of arguments: args.legend in barplot is implemented this way...
   # we need histogram anyway to define xlim
@@ -67,7 +69,7 @@ function (x, main = deparse(substitute(x)), xlab = ""
     if (add.dens) {
       # preset default values
 
-      args.dens1 <- list(x = if (na.rm) na.omit(x) else x, 
+      args.dens1 <- list(x = x, 
           col = "#9A0941FF", lwd = 2, lty = "solid")
       if (!is.null(args.dens)) {
           args.dens1[names(args.dens)] <- args.dens
@@ -127,6 +129,8 @@ function (x, main = deparse(substitute(x)), xlab = ""
           las = 1, xaxs = "e", cex.axis = 1.2)
       abline(h = c(0.25, 0.5, 0.75), col = "grey", lty = "dotted")
       grid(ny = NA)
+      points(x=range(x), y=c(0,1), col=args.ecdf1$col, pch=3, cex=2)
+      
   }
   layout(matrix(1))           # reset layout on exit
 }

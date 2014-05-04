@@ -28,15 +28,15 @@ Mbind(...)
 \examples{
 data(d.pizza)
 
-m1 <- do.call("rbind", lapply( d.pizza[,c("delivery_h","temperature")], 
+m1 <- do.call("rbind", lapply( d.pizza[,c("delivery_min","temperature")], 
   tapply, d.pizza$area, mean, na.rm=TRUE))
 names(dimnames(m1)) <- c("vname","area")
 
-m2 <- do.call("rbind", lapply( d.pizza[,c("delivery_h","temperature")], 
+m2 <- do.call("rbind", lapply( d.pizza[,c("delivery_min","temperature")], 
   tapply, d.pizza$area, median, na.rm=TRUE))
 names(dimnames(m2)) <- c("vname","area")
 
-m3 <- do.call("rbind", lapply( d.pizza[,c("delivery_h","temperature")], 
+m3 <- do.call("rbind", lapply( d.pizza[,c("delivery_min","temperature")], 
   tapply, d.pizza$area, sd, na.rm=TRUE))
 names(dimnames(m3)) <- c("vname","area")
 

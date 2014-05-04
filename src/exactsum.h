@@ -2,7 +2,23 @@
 #ifndef EXACTSUM_H
 #define EXACTSUM_H
 
-#include <R.h>
+#include <R.h>  /* to include Rconfig.h */
+#include <Rversion.h>
+#include <Rinternals.h>
+size_t dplRlength(SEXP x);
+          
+#ifdef ENABLE_NLS
+#include <libintl.h>
+#define _(String) dgettext ("dplR", String)
+#else
+#define _(String) (String)
+#define dngettext(pkg, String, StringP, N) (N > 1 ? StringP: String)
+#endif
+
+#if defined(R_VERSION) && R_VERSION >= R_Version(3, 0, 0)
+#define DPLR_RGEQ3
+#endif
+
 
 /* Conditional typedef of dplr_double */
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
@@ -100,9 +116,14 @@ typedef struct liststruct listnode;
   array, because the list usually only has a handful of elements.
   Output: the sum of the numbers
 */
-dplr_double msum(double *array, int n, listnode *expansion);
+dplr_double msum(double *array, size_t n, listnode *expansion);
+
+/* Cumulative sum, overwrites array */
+dplr_double cumsum(double *array, size_t n, listnode *expansion);
 
 /* Add number a to the sum represented by expansion */
 void grow_exp(listnode *expansion, dplr_double a);
 
 #endif
+
+

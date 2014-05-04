@@ -10,6 +10,7 @@ The cells of the matrix can be shaded or colored to show the correlation value.
 \usage{
 PlotCorr(x, cols = colorRampPalette(c("red", "white", "blue"), space = "rgb")(20), 
          breaks = seq(-1, 1, length = length(cols) + 1), 
+         border = NA, lwd = 1,
          args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"), 
          cex.axis = 0.8, las = 2, mar = c(3, 8, 8, 8), ...)
 }
@@ -25,7 +26,12 @@ PlotCorr(x, cols = colorRampPalette(c("red", "white", "blue"), space = "rgb")(20
  If breaks is specified then the algorithm used follows \code{\link{cut}}, so intervals are closed on the right and open on the left except for the lowest interval.
 %%     ~~Describe \code{cols} here~~
 }
-  \item{args.colorlegend}{list of arguments for the \code{\link{ColorLegend}}. Use NA if no color legend should be painted.
+  \item{border}{color for borders. The default is \code{NA}, which means borders are omitted.
+}
+  \item{lwd}{line width for borders. Default is 1.
+%%     ~~Describe \code{lwd} here~~
+}
+\item{args.colorlegend}{list of arguments for the \code{\link{ColorLegend}}. Use NA if no color legend should be painted.
 %%    
 }
   \item{xaxt}{parameter to define, whether to draw an x-axis, defaults to \code{"n"}.
@@ -62,7 +68,6 @@ PlotCorr(x, cols = colorRampPalette(c("red", "white", "blue"), space = "rgb")(20
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 m <- cor(d.pizza[,WhichNumerics(d.pizza)], use="pairwise.complete.obs")
 
 PlotCorr(m, cols=colorRampPalette(c("red", "black", "green"), space = "rgb")(20))
@@ -71,8 +76,8 @@ PlotCorr(m, cols=colorRampPalette(c("red", "black", "green"), space = "rgb")(20)
 
 m <- PairApply(d.diamonds[,WhichFactors(d.diamonds)], CramerV)
 PlotCorr(m, cols = colorRampPalette(c("white", "steelblue"), space = "rgb")(20),
-         breaks=seq(0, 1, length=21),
-         args.colorlegend = list(labels=sprintf("\%.1f", seq(1, 0, length = 11)))
+         breaks=seq(0, 1, length=21), border="black",
+         args.colorlegend = list(labels=sprintf("\%.1f", seq(1, 0, length = 11)), frame=TRUE)
 )
 title(main="Cramer's V", line=2)
 text(x=rep(1:ncol(m),ncol(m)), y=rep(1:ncol(m),each=ncol(m)), 
@@ -83,7 +88,9 @@ csp <- cor(data.frame(lapply(d.diamonds[,c("carat", "clarity", "cut", "polish",
                       "symmetry", "price")], as.numeric)), method="spearman")
 PlotCorr(csp)
 
-
+# some more colors
+PlotCorr(cor(mtcars), col=PalDescTools("RedWhiteBlue1", 100), border="grey",
+         args.colorlegend=list(labels=FormatFix(seq(1,-1,-.25), 2), frame="grey"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

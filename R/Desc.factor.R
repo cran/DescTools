@@ -7,6 +7,8 @@ function(x, xname = NULL, ord=c("desc","asc","name","level"),
   #   data(d.pizza, package="DescTools")
   #   Desc.factor(d.pizza$driver)
   
+  opt <- options(digts=digits); on.exit(options(opt))
+  
   if( is.null(xname)) xname <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), collapse=", "))
   
   # if only 2 levels it's a flag, use Desc.logical instead
@@ -55,7 +57,7 @@ function(x, xname = NULL, ord=c("desc","asc","name","level"),
   cat("\n")
 #  cat(txt.frq[1:min(length(txt.frq), maxrows+1)], sep="\n")
   cat(txt.frq, sep="\n")
-  if( maxrows+1 <length(txt.frq) ) cat("... etc.\n [list output truncated]\n\n")  else cat("\n")
+  if( maxrows < nlevels(x) ) cat("... etc.\n [list output truncated]\n\n")  else cat("\n")
 
   if(plotit) PlotDesc.factor(x, main=xname, maxrows = maxrows)
   

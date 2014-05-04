@@ -1,11 +1,16 @@
 PlotWeb <-
-function(m, col=c("red","blue"), lty=par("lty"), ... ){
+function(m, col=c("red","blue"), lty=par("lty"), args.legend=NULL, pch=21, pt.cex=2,
+                    pt.col="black", pt.bg="darkgrey", ... ){
 
 # following an idee from library(LIM)
 # example(plotweb)
 
+  oldpar <- par(c("lend","xpd"))
+  on.exit(par(oldpar))
+  
   w <- 4
-  par("xpd"=TRUE)
+  par("xpd"=TRUE, lend="butt")
+
   Canvas(w, ...)  
   angles <- seq(0, 2*pi, length=nrow(m)+1)[-1]
   xy <- PolToCart(r=3, theta=angles)
@@ -26,9 +31,14 @@ function(m, col=c("red","blue"), lty=par("lty"), ... ){
   col <- rep(col, length.out=2)
   segments( x0=d.m$from.x, y0=d.m$from.y, x1 = d.m$to.x, y1 = d.m$to.y,
          col = col[((sign(d.m$d)+1)/2)+1], lty = lty, lwd = d.m$d.sc, lend= 1)
-  points( xy, cex=2, pch=21, col="black", bg="darkgrey" )
+  points( xy, cex=pt.cex, pch=pch, col=pt.col, bg=pt.bg )
   
-  legend( x="bottomright", inset=-0.05, legend=round(c(-min(abs(d.m$d)), max(abs(d.m$d))), 3)
-    , lwd = c(a,b), col=col, bg="white", cex=0.8)
+  args.legend1 <- list( x="bottomright", inset=-0.05, legend=round(c(-min(abs(d.m$d)), max(abs(d.m$d))), 3)
+                        , lwd = c(a,b), col=col, bg="white", cex=0.8)
+  if ( !is.null(args.legend) ) { args.legend1[names(args.legend)] <- args.legend }
+  add.legend <- TRUE
+  if(!is.null(args.legend)) if(all(is.na(args.legend))) {add.legend <- FALSE} 
+  
+  if(add.legend) do.call("legend", args.legend1)
   
 }

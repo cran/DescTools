@@ -63,5 +63,5 @@ function( x, y=NULL, cols=rev(heat.colors(100)), labels=NULL
         , y=ylbl, labels=labels, adj=adj, cex=cex, ... ) 	
     }    
   }
-  if(!is.na(frame)) rect( xleft=x, xright=x+width, ytop=y, ybottom=y-height, border=frame)   
+  if(!is.na(frame)) rect( xleft=left, xright=left+width, ytop=top, ybottom=top-height, border=frame)   
 }

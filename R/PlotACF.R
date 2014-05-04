@@ -22,11 +22,11 @@ function(series, lag.max = 10*log10(length(series)), ...)  {
   split.screen(figs=matrix(c(0,1,0.33,1, 0,0.5,0,0.33, 0.5,1,0,0.33),
                            ncol=4, byrow=T), erase=TRUE)
   ##screen(1)
-  plot.ts(series, cex=0.7, ...)
+  plot.ts(series, cex=0.7, ylab=deparse(substitute(series)), ...)
   screen(2)
   PlotGACF(series, lag.max=lag.max, cex=0.7)
   screen(3)
-  PlotGACF(series, lag.max=lag.max, type="partial", ylab="part. Autokorr", cex=0.7)
+  PlotGACF(series, lag.max=lag.max, type="part", cex=0.7)
   close.screen(all.screens=TRUE)
   invisible(par(old.par))
 }

@@ -1,5 +1,7 @@
 \name{MeanDiffCI}
 \alias{MeanDiffCI}
+\alias{MeanDiffCI.formula}
+\alias{MeanDiffCI.default}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Confidence Intervals for Difference of Means
 %%  ~~function to do ... ~~
@@ -8,8 +10,13 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-MeanDiffCI(x, y, type = c("classic", "norm", "basic", "stud", "perc", "bca"), 
-           conf.level = 0.95, na.rm = FALSE, R = 999)
+MeanDiffCI(x, ...)
+
+\method{MeanDiffCI}{default}(x, y, type = c("classic", "norm", "basic", "stud", "perc", "bca"), 
+           conf.level = 0.95, na.rm = FALSE, R = 999, ...)
+           
+\method{MeanDiffCI}{formula}(formula, data, subset, na.action, ...)
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -34,6 +41,12 @@ MeanDiffCI(x, y, type = c("classic", "norm", "basic", "stud", "perc", "bca"),
   See \code{\link{boot}}.
 %%     ~~Describe \code{x} here~~
 }
+  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} is a numeric variable giving the data values and \code{rhs} a factor with two levels giving the corresponding groups.}  
+  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}. 
+    By default the variables are taken from \code{environment(formula)}.}  
+  \item{subset}{an optional vector specifying a subset of observations to be used.}  
+  \item{na.action}{a function which indicates what should happen when the data contain \code{NAs}. Defaults to \code{getOption("na.action")}.}  
+  \item{\dots}{further argument to be passed to or from methods.}
 }
 \details{This function collects code from two sources. The classical confidence interval is calculated by means of \code{\link{t.test}}.
 The bootstrap intervals are strongly based on the example in \code{\link{boot}}.
@@ -63,6 +76,10 @@ MeanDiffCI(x, y, type="basic", na.rm=TRUE)
 # MeanDiffCI(x, y, type="stud", na.rm=TRUE)
 MeanDiffCI(x, y, type="perc", na.rm=TRUE)
 MeanDiffCI(x, y, type="bca", na.rm=TRUE)
+
+# the formula interface
+MeanDiffCI(price ~ driver, data=d.pizza, subset=driver \%in\% c("Carter","Miller"))
+
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -14,10 +14,10 @@ size factor for inserting.\cr
 PpText inserts a new textbox with given text and box properties.
 }
 \usage{
-PpAddSlide(pp = getOption("lastPP"))
+PpAddSlide(pos = NULL, pp = getOption("lastPP"))
 
 PpPlot(type = "png", crop = c(0, 0, 0, 0), picscale = 100, x = 1, y = 1, 
-       height = NA, width = NA, pp = getOption("lastPP"))
+       height = NA, width = NA, res=200, dfact=1.6, pp = getOption("lastPP"))
 
 PpText(txt, x = 1, y = 1, height = 50, width = 100, fontname = "Calibri", fontsize = 18, 
        bold = FALSE, italic = FALSE, col = "black", bg = "white", 
@@ -26,12 +26,15 @@ PpText(txt, x = 1, y = 1, height = 50, width = 100, fontname = "Calibri", fontsi
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
+  \item{pos}{position of the new inserted slide.}
   \item{type}{the format for the picture file, default is \code{"png"}.}
   \item{crop}{crop options for the picture, defined by a 4-elements-vector. The first element is the bottom side, the second the left and so on.}
   \item{picscale}{scale factor of the picture in percent, default ist 100.}
   \item{x, y}{left/upper xy-coordinate for the plot or for the textbox.}
   \item{height}{height in cm, this overrides the picscale if both are given.}
   \item{width}{width in cm, this overrides the picscale if both are given.}
+  \item{res}{resolution for the png file, defaults to 200.}
+  \item{dfact}{the size factor for the graphic.}
 
   \item{txt}{text to be placed in the textbox}
   \item{fontname}{used font for textbox}
@@ -78,14 +81,28 @@ segments(x0=0.43, y0=0.64, x1=x1, y1=-tan(pi/3)* x1 + tan(pi/3) * 0.93,
 # get a handle to a new PowerPoint instance
 pp <- GetNewPP()
 # insert plot with a specified height
-PpPlot(pp=pp,  x=50, y=50, height=5)
+PpPlot(pp=pp,  x=150, y=150, height=10, width=10)
+
 PpText("Remember?\n", fontname="Arial", x=200, y=70, height=30, fontsize=14, 
        bold=TRUE, pp=pp, bg="lemonchiffon", hasFrame=TRUE)
 
 PpAddSlide(pp=pp)
 # crop the picture
-pic <- PpPlot(pp=pp, x=1, y=200, crop=c(9,9,0,0))
+pic <- PpPlot(pp=pp, x=1, y=200, height=10, width=10, crop=c(9,9,0,0))
 pic
+
+
+# some more automatic procedure
+pp <- GetNewPP()
+PpText("Hello to my presentation", x=100, y=100, fontsize=32, bold=TRUE, 
+       width=300, hasFrame=FALSE, col="blue", pp=pp)
+
+for(i in 1:4){
+  barplot(1:4, col=i)
+  PpAddSlide(pp=pp)
+  PpPlot(height=15, width=21, x=50, y=50, pp=pp)
+  PpText(gettextf("This is my barplot nr \%s", i), x=100, y=10, width=300, pp=pp)
+}
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

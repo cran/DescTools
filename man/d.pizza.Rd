@@ -12,20 +12,19 @@ The dataset contains data of three pizza services in three districts. Every reco
   A data frame with 1209 observations on the following 17 variables.
   \describe{
     \item{\code{index}}{a numeric vector, indexing the records (no missings here).}
-    \item{\code{delivery_h}}{numeric, the delivery time in hours (decimal)}
-    \item{\code{delivery_min}}{numeric, the delivery time in minutes (decimal)}
     \item{\code{date}}{Date, the delivery date}
-    \item{\code{weekday}}{integer, the weekday}
     \item{\code{week}}{integer, the weeknumber}
-    \item{\code{operator}}{a factor with levels \code{Allanah} \code{Christal} \code{Rhonda}}
+    \item{\code{weekday}}{integer, the weekday}
     \item{\code{area}}{factor with levels \code{Westminster} \code{Kensington} \code{Notting Hill}}
-    \item{\code{driver}}{a factor with levels \code{Carpenter} \code{Carter} \code{Taylor} \code{Butcher} \code{Hunter} \code{Miller} \code{Farmer}}
-    \item{\code{price}}{numeric, the total price of delivered pizza(s) }
     \item{\code{count}}{integer, the number of pizzas delivered}
+    \item{\code{rabate}}{numeric, a potential rabate }
+    \item{\code{price}}{numeric, the total price of delivered pizza(s) }
+    \item{\code{operator}}{a factor with levels \code{Allanah} \code{Christal} \code{Rhonda}}
+    \item{\code{driver}}{a factor with levels \code{Carpenter} \code{Carter} \code{Taylor} \code{Butcher} \code{Hunter} \code{Miller} \code{Farmer}}
+    \item{\code{delivery_min}}{numeric, the delivery time in minutes (decimal)}
     \item{\code{temperature}}{numeric, the temperature of the pizza in degrees Celsius when delivered to the customer }
     \item{\code{wine_ordered}}{boolean, TRUE if wine was ordered}
     \item{\code{wine_delivered}}{boolean, TRUE if wine was delivered}
-    \item{\code{rabate}}{numeric, a potential rabate }
     \item{\code{wrongpizza}}{logical, TRUE if a wrong pizza was delivered }
     \item{\code{quality}}{ordered factor with levels \code{low} < \code{mid} < \code{hot}, defining the quality of the pizza when delivered}
   }

@@ -13,7 +13,7 @@ function(..., lcol = 1, lwd = 1, lty = "solid" ) {
   # the midpoints of the bars
   mx <- (b[-1]+b[-length(b)])/2 
   if(is.null(arg$space)) 
-    if(horiz == FALSE) space <- 1 else space = 0.2
+    if(horiz == TRUE) space <- 1 else space = 0.2
   else space <- eval(arg$space, parent.frame())
   
   lx <- mx - space/2 

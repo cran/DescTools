@@ -14,7 +14,7 @@ Character vectors are treated as unordered factors.
 }
 \usage{
 \method{Desc}{factor}(x, xname = NULL, ord = c("desc", "asc", "name", "level"), 
-            maxrows = 12, digits = 3, plotit = FALSE, ...)
+     maxrows = 12, digits = 3, plotit = FALSE, ...)
 
 \method{Desc}{ordered}(x, xname = NULL, ...)
 
@@ -26,7 +26,7 @@ Character vectors are treated as unordered factors.
   \item{x}{a single factor, an ordered factor or a character vector to be described.
 %%     ~~Describe \code{x} here~~
 }
-  \item{xname}{the caption of the output.
+  \item{xname}{the caption of the output. If this is set to NULL (which is the default) the name of the factor and its class will be printed. Use NA if no caption should be printed at all.
 %%     ~~Describe \code{xname} here~~
 }
   \item{ord}{the order for the frequency table. Factors (and character vectors) are by default orderd by their descending 

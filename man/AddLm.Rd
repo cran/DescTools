@@ -13,7 +13,7 @@ Add a linear regression line to an existing plot. The function first calculates 
 \usage{
 \method{AddLm}{default}(x, y, ...) 
 \method{AddLm}{formula}(formula, data, ...) 
-\method{AddLm}{lm}(x, col = "blue", lwd = 2, lty = "solid", 
+\method{AddLm}{lm}(x, col = hblue, lwd = 2, lty = "solid", 
          type = "l", n = 100, conf.level = 0.95, args.cband = NULL, 
          pred.level = NA, args.pband = NULL, ...) 
 }
@@ -27,7 +27,7 @@ Add a linear regression line to an existing plot. The function first calculates 
    containing the variables in the model. If not found in data, the variables are taken from environment(formula), 
    typically the environment from which the function is called.
 }
-  \item{col}{linecolor of the line.
+  \item{col}{linecolor of the line. Default is DescTools's lightblue.
 %%     ~~Describe \code{col} here~~
 }
   \item{lwd}{line width of the line.

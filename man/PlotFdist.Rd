@@ -36,11 +36,11 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
 %%     ~~Describe \code{do.hist} here~~
 }
   \item{args.hist}{list of additional arguments to be passed to the histogram \code{hist()}, ignored if \code{do.hist = FALSE}.
-  The defaults are more or less the same as in \code{\link{hist}}.
+  The defaults chosen when setting \code{args.hist = NULL} are more or less the same as in \code{\link{hist}}.
 %%     ~~Describe \code{args.hist} here~~
 }
   \item{args.rug}{list of additional arguments to be passed to the function \code{rug()}.
-      Use \code{args.rug = NA} if no rug should be added. This is the default.
+      Use \code{args.rug = NA} if no rug should be added. This is the default. Use \code{args.rug = NULL} to add rug with reasonable default values. 
   %%     ~~Describe \code{args.rug} here~~
 }
   \item{args.dens}{list of additional arguments to be passed to \code{density()}.
@@ -90,12 +90,16 @@ PlotFdist(d.pizza$delivery_min, args.hist=list(breaks=50),
 # do a "h"-plot instead of a histogram for integers 
 PlotFdist(d.pizza$weekday, na.rm=TRUE)
 
+# special arguments for ecdf
+PlotFdist(x=faithful$eruptions, args.ecdf=list(verticals=FALSE, 
+  do.points=TRUE, cex=1.2, pch=16, lwd=1), args.rug=NULL)
+
 # no density curve, no ecdf but add rug instead, make boxplot a bit higher
 PlotFdist(x=d.pizza$delivery_min, na.rm=TRUE, args.dens=NA, args.ecdf=NA, 
   args.hist=list(xaxt="s"),  # display x-axis on the histogram
   args.rug=TRUE, heights=c(3, 2.5), pdist=2.5, main="Delivery time")
 
-# alpha channel on rug is cool, but take its time to draw...
+# alpha channel on rug is cool, but take its time for being drawn...
 PlotFdist(x=d.pizza$temperature, args.rug=list(col=SetAlpha("black", 0.1)), na.rm=TRUE)
 
 }

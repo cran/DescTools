@@ -50,7 +50,8 @@ function (data, stratanames = NULL, size,
   }
   
   srswr <-  function (n, N) 
-    as.vector(rmultinom(1, n, rep(n/N, times = N)))
+#    as.vector(rmultinom(1, n, rep(n/N, times = N)))
+    if(n==0) rep(0, N) else as.vector(rmultinom(1, n, rep(n/N, times = N)))
   
   
   UPsystematic <- function (pik, eps = 1e-06) 
@@ -201,7 +202,9 @@ function (data, stratanames = NULL, size,
           }
         }
       }
-      if (!is.null(r)) {
+      # corrected 7.4.2014 for allowing size=0 for a stratum:
+      # if (!is.null(r)) {
+      if (!is.null(r) & nrow(r)>0) {
         r = cbind(r, i)
         result = rbind.data.frame(result, r)
       }

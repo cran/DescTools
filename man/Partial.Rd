@@ -1,7 +1,7 @@
 \name{Partial}
 \alias{Partial}
 
-\title{ Find the Partial Correlations for a Set x of Variables With Set y Removed. }
+\title{Find the Correlations for a Set x of Variables With Set y Removed}
 \description{A straightforward application of matrix algebra to remove the effect of the variables in the y set from the x set. 
 Input may be either a data matrix or a correlation matrix.  Variables in x and y are specified by location.
 }

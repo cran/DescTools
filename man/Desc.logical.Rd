@@ -10,7 +10,8 @@ with only two unique values.
 }
 \usage{
 \method{Desc}{logical}(x, xname = NULL, digits = 3, 
-             conf.level = 0.95, plotit = FALSE, ...)
+     conf.level = 0.95, plotit = FALSE, ...)
+        
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -26,8 +27,7 @@ with only two unique values.
   \item{conf.level}{confidence level of the interval.
 %%     ~~Describe \code{conf.level} here~~
 }
-  \item{plotit}{boolean. Should a plot be created? The vector would be plotted by means of \code{\link{PlotDesc.numeric}}, which again basically is 
-  \code{\link{PlotFdist}}. Default is FALSE.
+  \item{plotit}{boolean. Should a plot be created? The plot looks like a horizontal bar plot. Default is FALSE.
 %%     ~~Describe \code{plotit} here~~
 }
   \item{\dots}{the dots are passed to the \code{table} command within \code{Desc.logical}.

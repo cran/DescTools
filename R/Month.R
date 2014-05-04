@@ -1,16 +1,31 @@
 Month <-
-function (x, format = c("num", "abbr", "full"), stringsAsFactors = TRUE) {
+function (x, format = c("num", "abbr", "full"), lang = c("local", "engl"), stringsAsFactors = TRUE) {
   
   switch(match.arg(arg = format, choices = c("num", "abbr", "full")), 
          num = { res <- as.integer(format(x, "%m")) }, 
          abbr = {
-           res <- format(x, "%b")
-           # months in current locale:  format(ISOdate(2000, 1:12, 1), "%b")
-           res <- factor(res, levels=format(ISOdate(2000, 1:12, 1), "%b"))
+           res <- as.integer(format(x, "%m"))
+           switch(match.arg(arg = lang, choices = c("local", "engl")), 
+             local = {
+               # months in current locale:  format(ISOdate(2000, 1:12, 1), "%b")
+               res <- factor(res, levels=1:12, labels=format(ISOdate(2000, 1:12, 1), "%b"))
+               },
+             engl = {
+               res <- factor(res, levels=1:12, labels=month.abb)
+             })
+           if(!stringsAsFactors) res <- as.character(res)
          }, 
          full = {
-           res <- format(x, "%B")
-           res <- factor(res, levels=format(ISOdate(2000, 1:12, 1), "%B"))
+           res <- as.integer(format(x, "%m"))
+           switch(match.arg(arg = lang, choices = c("local", "engl")), 
+                  local = {
+                    # months in current locale:  format(ISOdate(2000, 1:12, 1), "%b")
+                    res <- factor(res, levels=1:12, labels=format(ISOdate(2000, 1:12, 1), "%B"))
+                  },
+                  engl = {
+                    res <- factor(res, levels=1:12, labels=month.name)
+                  })
+           if(!stringsAsFactors) res <- as.character(res)
          })
   return(res)
 }

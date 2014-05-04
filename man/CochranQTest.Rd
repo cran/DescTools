@@ -27,7 +27,7 @@ a vector giving the group for the corresponding elements of y if this is a vecto
   \item{blocks}{
 a vector giving the block for the corresponding elements of y if this is a vector; ignored if y is a matrix. If not a factor object, it is coerced to one.}
   \item{formula}{
-a formula of the form a ~ b | c, where a, b and c give the data values and corresponding groups and blocks, respectively.}
+a formula of the form \code{a ~ b | c}, where a, b and c give the data values and corresponding groups and blocks, respectively.}
   \item{data}{
 an optional matrix or data frame (or similar: see model.frame) containing the variables in the formula formula. By default the variables are taken from environment(formula).}
   \item{subset}{

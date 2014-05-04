@@ -18,8 +18,6 @@ function( x, grp, digits = NULL, width=getOption("width")
 		} 
 		return(out)
 	}
-  
-  # AscToChar(185), AscToChar(178)  "¹", "²"
 
   # Pairs summary
   n <- length(x)
@@ -85,8 +83,18 @@ function( x, grp, digits = NULL, width=getOption("width")
   #cat( wmax+2, "\n") 
 	CatTable(out, wcol=wmax+2, nrepchars=8, width )
   cat(gettextf("%s min, %s max\n", Coalesce(getOption("footnote1"),"'"), Coalesce(getOption("footnote2"),'"'))) 
-  cat("\nKruskal-Wallis rank sum test:\n  "
-	  , capture.output( kruskal.test( x ~ grp, na.action = "na.omit" ))[5], "\n", sep="") 
+  
+  # cat("\nKruskal-Wallis rank sum test:\n  "
+	#   , capture.output( kruskal.test( x ~ grp, na.action = "na.omit" ))[5], "\n", sep="") 
+
+  res <- tryCatch(kruskal.test( x ~ grp, na.action = "na.omit"), error=function(e) {e})  
+  
+  if (inherits(res, "simpleError")) {
+    cat(gettextf("\nError in kruskal.test(x) : %s\n\n", res$message))  
+  } else {
+    cat(gettextf("\nKruskal-Wallis rank sum test:\n  %s", 
+                 capture.output(res)[5], "\n\n", sep=""))
+  }
 
   if((sum(is.na(grp)) > 0) & (length(grep("NA",cname))==0))
     cat(gettextf("\nWarning:\n  Grouping variable contains %s NAs (%s"

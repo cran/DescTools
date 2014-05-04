@@ -8,7 +8,7 @@ The format of the plot can be selected, as well as crop options and the size fac
 }
 \usage{
 WrdPlot(type = "png", append.cr = TRUE, crop = c(0, 0, 0, 0), 
-        picscale = 100, height = NA, width = NA, res = 200,
+        picscale = 100, height = NA, width = NA, res = 300,
         dfact = 1.6, wrd = getOption("lastWord"))
 }
 \arguments{
@@ -18,7 +18,7 @@ WrdPlot(type = "png", append.cr = TRUE, crop = c(0, 0, 0, 0),
   \item{picscale}{scale factor of the picture in percent, default ist 100.}
   \item{height}{height in cm, this overrides the picscale if both are given.}
   \item{width}{width in cm, this overrides the picscale if both are given.}
-  \item{res}{resolution for the png file, defaults to 200.}
+  \item{res}{resolution for the png file, defaults to 300.}
   \item{dfact}{the size factor for the graphic.}
   \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()} 
   or an existing one, created by \code{GetCurrWrd()}.

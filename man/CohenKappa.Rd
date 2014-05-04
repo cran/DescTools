@@ -40,7 +40,7 @@ The equal-spacing weights are defined by 1 - abs(i - j) / (r - 1), r number of c
 Fleiss-Cohen weights by 1 - abs(i - j)^2 / (r - 1)^2. The latter one attaches greater importance to near disagreements. 
 %%  ~~ If necessary, more details than the description above ~~
 }
-\note{The vector interface (x, y) is only supported for the calculation of unweighted kappa. For 2 factors with different levels we cannot ensure a reproducible contstruction of a confusion table, which is independent of the order of x and y. All weights would lead to inconsistent results.
+\note{The vector interface (x, y) is only supported for the calculation of unweighted kappa. For 2 factors with different levels we cannot ensure a reproducible construction of a confusion table, which is independent of the order of x and y. All weights would lead to inconsistent results.
 The function will raise an error in such cases.
 }
 

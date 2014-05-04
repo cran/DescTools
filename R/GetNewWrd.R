@@ -1,6 +1,6 @@
 GetNewWrd <-
 function(visible = TRUE, template = "Normal", header=FALSE
-  , main="Descriptive report") {
+                      , main="Descriptive report") {
   
   stopifnot(require(RDCOMClient))
   
@@ -17,9 +17,9 @@ function(visible = TRUE, template = "Normal", header=FALSE
   #        NewTemplate:=False, DocumentType:=0
   #
   newdoc <- wrd[["Documents"]]$Add(template, FALSE, 0)
-
+  
   # prepare word document, with front page, table of contents, footer ...
   if(header) .WrdPrepRep( wrd=wrd, main=main )
-
+  
   return( invisible( wrd ) )
 }

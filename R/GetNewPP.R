@@ -1,6 +1,6 @@
 GetNewPP <-
 function (visible = TRUE, template = "Normal") {
-
+  
   stopifnot(require(RDCOMClient))
   
   pp <- COMCreate("PowerPoint.Application")

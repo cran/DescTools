@@ -20,6 +20,7 @@ function(x, conf.level=0.95, na.rm=FALSE, type=c("pseudo","exact","boot"), R=100
             r <- wilcox.test(x, conf.int=TRUE, conf.level=conf.level)$conf.int[1:2]
           }
           , "exact" = { # this is the SAS-way to do it
+            # https://stat.ethz.ch/pipermail/r-help/2003-September/039636.html
             r <- SignTest(x)$conf.int
           }
           , "boot" = {

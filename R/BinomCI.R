@@ -67,25 +67,25 @@ function(x, n, conf.level = 0.95, method = c("wilson", "wald", "agresti-coull", 
             else
               CI.upper <- min(1, term1 + term2)
           }
-          , "modified jeffreys" = { 
-            est <- p.hat
-            if(x == 0)
-              CI.lower <- 1 - (alpha/2)^(1/n)
-            else{
-              if(x == 1)
-                CI.lower <- 0
-              else
-                CI.lower <- qbeta(alpha/2, x+0.5, n-x+0.5)
-            }
-            if(x == n)
-              CI.upper <- (alpha/2)^(1/n)
-            else{
-              if(x == n-1)
-                CI.upper <- 1
-              else
-                CI.upper <- qbeta(1-alpha/2, x+0.5, n-x+0.5)
-            }
-          }
+         , "modified jeffreys" = { 
+           est <- p.hat
+           if(x == n) 
+             CI.lower <- (alpha/2)^(1/n)
+           else {
+             if(x <= 1)
+               CI.lower <- 0
+             else
+               CI.lower <- qbeta(alpha/2, x+0.5, n-x+0.5)
+           }
+           if(x == 0)
+             CI.upper <- 1 - (alpha/2)^(1/n)
+           else{
+             if(x >= n-1)
+               CI.upper <- 1
+             else
+               CI.upper <- qbeta(1-alpha/2, x+0.5, n-x+0.5)
+           }
+         }
           , "clopper-pearson" = { 
             est <- p.hat
             CI.lower <- qbeta(alpha/2, x, n-x+1)

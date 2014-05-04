@@ -9,7 +9,7 @@ Describing an integer, means typically count data, is sometimes the same as desc
 when there are many levels, it is like describing a numeric value. 
 }
 \usage{
-\method{Desc}{integer}(x, xname = NULL, maxlevels = 12, 
+\method{Desc}{integer}(x, xname = NULL, maxrows = 12, freq = NULL,
              digits = 3, plotit = FALSE, ...)
 
 }
@@ -21,11 +21,11 @@ when there are many levels, it is like describing a numeric value.
   \item{xname}{the caption for the output.
 %%     ~~Describe \code{xname} here~~
 }
-  \item{maxlevels}{integer. Until how many levels should the detailed frequencies be reported. Default is 12. 
-  If there are more levels, then the output will fallback to the presentation of highest and lowest values as used in
-  for the representation of numeric variables.
+  \item{maxrows}{integer. This indicates, up to how many levels the detailed frequencies should be reported. Default is 12. 
   Set maxlevels to NA, if no restriction is to be applied, say the frequency table should contain all existing levels.
 %%     ~~Describe \code{maxlevels} here~~
+}
+  \item{freq}{logical, indicating if a frequency table should be plotted. Default is NULL, which means a frequency table will be printed, if there are less than 13 unique values. Else there will be a high-low description produced by \code{HighLow}.
 }
   \item{digits}{integer. With how many digits shoud the relative frequencies be formatted? Default is 3.
 %%     ~~Describe \code{digits} here~~

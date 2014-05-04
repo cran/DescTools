@@ -4,6 +4,8 @@ function(x, xname = NULL, maxrows = 10, digits = 3, plotit = FALSE, ... ) {
     # example:     cut( x, breaks="quarter" )  
     #              breaks: day, month, quarter, year	
 
+  opt <- options(digts=digits); on.exit(options(opt))
+
   if( is.null(xname)) xname <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), sep=", "))
   
   cat( paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), "\n" ) 
@@ -26,13 +28,16 @@ function(x, xname = NULL, maxrows = 10, digits = 3, plotit = FALSE, ... ) {
   
   if(length(x)==sum(is.na(x))) return()
   
-  cat(HighLow(x, nlow=4), "\n", sep="") 
+  cat(HighLow(x, nlow=4, na.rm=TRUE), "\n", sep="") 
     
   # weekdays in your current locale, Sunday : Saturday
   # format(ISOdate(2000, 1, 2:8), "%A")
   xd <- factor(format(x,"%A"), levels=format(ISOdate(2000, 1, 3:9), "%A"))
   r.chisq <- chisq.test(table(xd))
-  capture.output(x.frq <- Freq(xd), file="NUL")
+
+  x.frq <- Freq(xd)
+  capture.output(print(x.frq, digits=digits), file="NUL")
+
   x.frq[,c(3,5)] <- lapply(x.frq[,c(3,5)], round, digits=digits)
   ftab <- cbind( x.frq, exp=round(r.chisq$exp[], digits=1), res=round(r.chisq$res[], digits=1) )
   cat("\nWeekdays:\n")
@@ -48,7 +53,8 @@ function(x, xname = NULL, maxrows = 10, digits = 3, plotit = FALSE, ... ) {
       , levels=format(ISOdate(2000, 1:12, 1), "%B")  )))
    )
 
-  capture.output(x.frq <- Freq(xd), file="NUL")
+  x.frq <- Freq(xd)
+  capture.output(print(x.frq, digits=digits), file="NUL")
   x.frq[,c(3,5)] <- lapply(x.frq[,c(3,5)], round, digits=digits)
   ftab <- cbind( x.frq
          , exp=round(r.chisq$exp[], digits=1), prs.res=round(r.chisq$res[], digits=1)
@@ -80,7 +86,7 @@ function(x, xname = NULL, maxrows = 10, digits = 3, plotit = FALSE, ... ) {
   if(!is.null(hbreaks)){ 
     cat("\nTable by", hbreaks, ":\n")
     cat( gsub(pattern=" 0\\.", replacement="  \\.", x=capture.output(
-      Freq(x=x, breaks=hbreaks, digits=digits)) ), "\n", sep="\n")
+      Freq(x=x, breaks=hbreaks)) ), "\n", sep="\n")
   } else {
     cat("Warning:\n  No plausible breaks for years found!\n")
   }  

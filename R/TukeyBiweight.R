@@ -1,6 +1,5 @@
 TukeyBiweight <-
-function(x, const=9) {
-    y <- as.double(x[!is.na(x)])
-    .C("tbrm", y, as.integer(length(y)), as.double(const),
-       result=NaN, NAOK=TRUE, DUP=FALSE)$result
+function(x, const=9, na.rm = FALSE) {
+  if(na.rm) x <- na.omit(x)
+  .Call("tbrm", as.double(x[!is.na(x)]), const)
 }

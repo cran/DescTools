@@ -10,12 +10,16 @@ function(x, y, xname=deparse(substitute(x))
     ", valid: ", .fmt(vn), " (", round(vn/n*100, digits), "%)",
     ", missings: ", .fmt(n-vn), " (", round((n-vn)/n*100, digits), "%)\n\n"
 	, sep="" ) 
-
+  
   cat(sprintf(
     "\nPearson corr. : %.3f\nSpearman corr.: %.3f\nKendall corr. : %.3f\n"
     , cor(x, y, use="pairwise.complete.obs")
     , cor(x, y, method="spearman", use="pairwise.complete.obs")
-    , cor(x, y, method="kendall", use="pairwise.complete.obs")
+    , if(n < 5000){
+        cor(x, y, method="kendall", use="pairwise.complete.obs")
+      } else {
+        "NULL"
+      }  
   ))
 
   cat("\n")

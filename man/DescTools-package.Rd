@@ -21,8 +21,8 @@ Feedback, feature requests, bugreports and other suggestions are welcome!
 \tabular{ll}{
 Package: \tab DescTools\cr
 Type: \tab Package\cr
-Version: \tab 0.99.6\cr
-Date: \tab 2013-12-18\cr
+Version: \tab 0.99.7\cr
+Date: \tab 2014-05-03\cr
 Depends: \tab tcltk \cr
 Suggests: \tab RDCOMClient\cr
 Imports: \tab boot\cr
@@ -61,6 +61,7 @@ Operators, calculus, transformations:\tab\cr
 \link{Recode}      \tab            Recode a factor with altered levels  \cr
 \link{Rename}      \tab            Change name(s) of a named object \cr
 \link{Sort}      \tab            Sort extension for matrices and data.frames \cr
+\link{Large}, \link{Small}  \tab    Returns the kth largest, resp. smallest values\cr
 \link{Rev}      \tab            Reverses the order of rows and columns of a matrix \cr
 \link{Untable}      \tab            Recreates original list based on a n-dimensional frequency table \cr
 \link{Dummy}      \tab      Generate dummy codes for a factor \cr
@@ -86,11 +87,13 @@ String functions:\tab\cr
 \link{StrTrim}       \tab      Delete white spaces from a string \cr
 \link{StrTrunc}   \tab      Truncate string on a given length and add ellipses if it really \cr
 \tab was truncated  \cr
+\link{StrAbbr}       \tab      Abbreviates a string \cr
 \link{StrCap}      \tab            Capitalize the first letter of a string  \cr
 \link{StrDist}      \tab            Compute distances between strings \cr
-\link{StrRev}      \tab            Reverse a String \cr
+\link{StrRev}      \tab            Reverse a string \cr
 \link{StrCountW}      \tab            Count the words in a string \cr
 \link{StrChop}      \tab          Split a string by a fixed number of characters. \cr
+\link{StrVal}      \tab          Extract numeric values from a string \cr
 \cr\cr
 Conversion functions:\tab\cr 
 \link{AscToChar}, \link{CharToAsc}       \tab      Converts ASCII codes to characters and vice versa  \cr
@@ -129,6 +132,7 @@ Plots:\tab\cr
 \tab to place textlabels in a plot so that they do not overlap.\cr
 \link{AreaIdent}  \tab  Helps identifying all the points in a specific area.     \cr
 \link{identify.formula}  \tab  Formula interface for \code{\link{identify}}.     \cr
+\link{PtInPoly}  \tab  Identify all the points within a polygon. \cr
 \link{PlotACF}, \link{PlotMonth}    \tab  Create a combined plot of a time series and its autocorrelation\cr
 \tab and partial autocorrelation \cr
 \link{PlotArea}    \tab  Create an area plot \cr
@@ -151,6 +155,7 @@ Plots:\tab\cr
 \link{PlotTreemap}    \tab   Plot of a treemap.\cr
 \link{PlotVenn}    \tab  Plot a Venn diagram \cr
 \link{PlotViolin}    \tab   Plot violins instead of boxplots \cr
+\link{PlotQQ}    \tab  QQ-plot for an optional distribution\cr
 \link{PlotWeb}    \tab  Create a web plot \cr
 \cr\cr
 Statistics:\tab\cr 
@@ -184,6 +189,7 @@ Statistics:\tab\cr
 \link{Gini}, \link{Atkinson}  \tab   Gini- and Atkinson coefficient    \cr
 \link{Herfindahl}, \link{Rosenbluth}  \tab  Herfindahl- and Rosenbluth coefficient      \cr
 \link{BinomCI}, \link{MultinomCI}  \tab   Confidence intervals for binomial and multinomial proportions    \cr
+\link{BinomDiffCI}  \tab   Calculate confidence interval for a risk difference  \cr
 \link{MeanCI}, \link{MedianCI}  \tab    Confidence interval for the mean and median   \cr
 \link{MeanDiffCI}  \tab    Confidence interval for the difference of two means \cr
 \link{VarCI}  \tab    Confidence interval for the variance   \cr
@@ -214,6 +220,7 @@ Tests:\tab\cr
 Date functions:\tab\cr
 \link{AddMonths}  \tab  Add a number of months to a given date     \cr
 \link{IsDate} \tab  Check whether x is a date object     \cr
+\link{IsWeekend} \tab  Check whether x is falls on a weekend     \cr
 \link{Date}  \tab     Create a date from numeric representation of year, month, day   \cr
 \link{Day}, \link{Month}, \link{Year}  \tab     Extract part of a date  \cr
 \link{Week}, \link{Weekday}  \tab    Returns ISO week and weekday of a date   \cr
@@ -226,6 +233,7 @@ GUI-Helpers:\tab\cr
 %% \link{DescDlg}    \tab  Display a Dialog Containing Univariate Descriptive Statistis and a Plot \cr
 \link{ImportDlg}    \tab  Get path of a data file to be opened \cr
 \link{SelectVarDlg}    \tab  Select elements of a set by click \cr
+\link{PasswordDlg}    \tab  Display a dialog containing an edit field, showing only ***. \cr
 \link{PlotPar}   \tab   Display the R plot parameters in a dialog    \cr
 \cr\cr
 Reporting:\tab\cr
@@ -271,7 +279,7 @@ Helsana Versicherungen AG, Health Sciences, Zurich\cr
 HWZ University of Applied Sciences in Business Administration Zurich.\cr
  
 Includes R source code and/or documentation previously published by (in alphabetical order): \cr
-Nanina Anderegg, Tomas Aragon, Antti Arppe, Ben Bolker, Stephane Champely, Daniel Chessel, Leanne Chhay, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Jeff Enos, Claus Ekstrom, Martin Elff, John Fox, Tal Galili, Matthias Gamer, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Michael Hoehle, Christian W. Hoffmann, Markus Huerzeler, Rob J. Hyndman, Pablo J. Villacorta Iglesias, David Kahle, Matthias Kohl, Mikko Korpela, Jim Lemon, Martin Maechler, Arni Magnusson, Daniel Malter, Alina Matei, David Meyer, Yongyi Min, Markus Naepflin, Derek Ogle, Sandrine Pavoine, Roland Rapold, William Revelle, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Yves Tille, Adrian Trapletti, Kevin Ushey, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Peter Wolf, Achim Zeileis
+Nanina Anderegg, Tomas Aragon, Antti Arppe, Ben Bolker, Stephane Champely, Daniel Chessel, Leanne Chhay, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Jeff Enos, Claus Ekstrom, Martin Elff, John Fox, Tal Galili, Matthias Gamer, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Michael Hoehle, Christian W. Hoffmann, Markus Huerzeler, Rob J. Hyndman, Pablo J. Villacorta Iglesias, David Kahle, Matthias Kohl, Mikko Korpela, Jim Lemon, Martin Maechler, Arni Magnusson, Daniel Malter, Alina Matei, David Meyer, Yongyi Min, Markus Naepflin, Derek Ogle, Sandrine Pavoine, Roland Rapold, William Revelle, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Peter Wolf, Achim Zeileis
 
 Thank you all!
 
@@ -308,7 +316,7 @@ text( x=min(d.pizza$date + .5, na.rm=TRUE), y=cumsum(tab[2,])-2.5,
 
 
 # dotchart with confidence intervals  
-x <- do.call("rbind", tapply( d.pizza$temperatur, d.pizza$driver, MeanCI, na.rm=TRUE))
+x <- do.call("rbind", tapply( d.pizza$temperature, d.pizza$driver, MeanCI, na.rm=TRUE))
 rownames(x) <- levels(d.pizza$driver)
 PlotDotCI(x)
 

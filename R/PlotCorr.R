@@ -1,6 +1,6 @@
 PlotCorr <-
 function(x, cols = colorRampPalette(c("red", "white", "blue"), space = "rgb")(20)
-  , breaks = seq(-1, 1, length = length(cols)+1)
+  , breaks = seq(-1, 1, length = length(cols)+1), border=NA, lwd=1
   , args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"), cex.axis = 0.8, las = 2        
   , mar = c(3,8,8,8), ...){
   
@@ -29,4 +29,15 @@ function(x, cols = colorRampPalette(c("red", "white", "blue"), space = "rgb")(20
 
     do.call("ColorLegend", args.colorlegend1)
   }
+  
+  if(!is.na(border)) {
+    usr <- par("usr")
+    rect(xleft=0.5, xright=nrow(x)+0.5, ybottom=0.5, ytop=nrow(x)+0.5, 
+         lwd=lwd, border=border)
+    usr <- par("usr")
+    clip(0.5, nrow(x)+0.5, 0.5, nrow(x)+0.5)
+    abline(h=seq(-2, nrow(x)+1,1)-0.5, v=seq(1,nrow(x)+1,1)-0.5, col=border,lwd=lwd)
+    do.call("clip", as.list(usr))
+  }
+    
 }

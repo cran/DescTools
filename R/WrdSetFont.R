@@ -1,6 +1,6 @@
 WrdSetFont <-
 function(fontname = "Consolas", fontsize = 7, bold = FALSE, italic = FALSE, wrd = getOption("lastWord") ) {
-
+  
   wrdSel <- wrd[["Selection"]]
   wrdFont <- wrdSel[["Font"]]
   
@@ -10,10 +10,10 @@ function(fontname = "Consolas", fontsize = 7, bold = FALSE, italic = FALSE, wrd 
     bold = wrdFont[["Bold"]] ,
     italic = wrdFont[["Italic"]] 
   )  
-
+  
   wrdFont[["Name"]] <- fontname
   wrdFont[["Size"]] <- fontsize
-
+  
   invisible(currfont)
   
 }

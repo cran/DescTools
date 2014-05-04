@@ -1,0 +1,61 @@
+
+
+DescTools 0.99.7 (2014-05-03)
+-----------------------------
+
+NEW FUNCTIONS ADDED:
+   * MoveAvg calculates the moving average of a vector x.
+   * WrdInsTab creates a table in a MS-Word document (Windows only).
+   * Large/Small return the kth largest/smallest values of a vector x.
+   * PtInPoly checks whether points lie within a defined polygon or not. (credits to SDMTools)
+   * IsWeekend does what you'd expect it to.
+   * StrAbbr abbreviates strings from the right while ensuring that they remain unique.
+   * PalDescTools collects a few more palettes.
+   * BinomDiffCI yields the confidence interval for a difference of proportions.
+   * Outlier returns a vector of values marked as outliers in boxplot.
+   * StrVal extracts all numbers out of a string.
+   * SampleTwins draws a sample with comparable strata properties.
+   * PasswordDlg brings up a dialog to enter a password while displaying only ***.
+   * KendallW calculates Kendall's coefficient of concordance.
+   * KrippAlpha calculates Krippendorfs' Alpha reliability coefficient. 
+   * PlotQQ plots a QQ-plot for a variable with an assumed distribution.
+   
+   
+UPDATED FUNCTIONS:
+   * PlotGACF will not plot ACF(0) any more. Lags instead of phases will be used for ts-objects as x-axis.
+   * Desc.integer looses its maxlevels argument and gains "maxrows" and "freq". See help.
+   * TukeyBiweight gains a na.rm argument and has been changed to use .Call instead of old .C function.
+   * MeanDiffCI gains a formula interface.
+   * HighLow uses a more efficient algorithm, based on the function Large/Small.
+   * PlotWeb gains a couple of new arguments, making it more flexible.
+   * AreaIdent gains a new argument poly. With poly=TRUE a polygon instead of a
+     rectangle can be used to select the interesting points.
+   * PlotCorr gains a border and lwd argument, allowing a grid being added.	 
+   * ZTest has been extended with the option to handle 2 sample tests in the same manner as t.test.
+     Moreover a formula interface has been added.
+   * PpAddSlide will now set a newly inserted slide as active slide.
+   * The artificial data.frame d.pizza has been given more structure between the variables.
+    
+
+BUGFIXES:
+   * AddLm(x, y, ...) created the wrong formula x ~ y instead of the correct y ~ x model.  
+   * Corrected bug in function StrDist: wrong initialisation for Levenshtein distance.
+   * Corrected a bug in BinomCI identified by Steven Kern in the modified Jeffreys interval for binomial proportions.
+   * AddConnLines confused the space argument between horiz=FALSE and horiz=TRUE.
+   * shapiro.test would have stopped the Desc procedure, if a variable had only identical values.
+     This has been corrected so, that the error message will be printed, while the function Desc will 
+	 proceed to describe remaining variables.
+   * PoissonCI was not yet fully implemented.	 
+  
+
+OTHER NOTES:
+   * Updated the NEWS file.
+  
+
+
+DescTools 0.99.6 (2014-01-07)
+-----------------------------
+
+   * first version published on CRAN - 07.01.2014
+
+

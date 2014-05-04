@@ -1,8 +1,7 @@
 Freq <-
 function(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE
-                 , digits = 3
                  , ord = c("level","desc","asc","name")
-                 , useNA = c("no", "ifany", "always"), print = TRUE, ... ) {
+                 , useNA = c("no", "ifany", "always"), ... ) {
   
   # coerce x to factor if it's a character vector
   if(inherits(x, "character")) x <- factor(x)
@@ -45,8 +44,11 @@ function(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE
   
   class(lst) <- c("Freq", "data.frame")
   
-  if(print) print(lst, digits = digits)
+#  if(print) print(lst, digits = digits)
+#  opt <- options("digits"=digits); on.exit(options(opt)) 
+  
   # return full precision
-  invisible(lst)
+  return(lst)  
+  # invisible(lst)
   
 }

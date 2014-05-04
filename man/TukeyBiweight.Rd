@@ -5,13 +5,16 @@
   This calculates a robust average that is unaffected by outliers.
 }
 \usage{
-TukeyBiweight(x, const = 9)
+TukeyBiweight(x, const = 9, na.rm = FALSE)
 }
 \arguments{
   \item{x}{ a \code{numeric} vector }
   \item{const}{ a constant. \code{\var{const}} is preassigned a value of 9
     according to the Cook reference below but other values are
     possible. }
+  \item{na.rm}{logical, indicating whether NA values should be stripped before the computation proceeds. Defaults to FALSE. 
+}
+  
 }
 \details{
   This is a one step computation that follows the Affy whitepaper below,
