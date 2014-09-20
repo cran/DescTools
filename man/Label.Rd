@@ -60,7 +60,6 @@ A more elaborated version can be found in package \pkg{Hmisc} \code{\link[Hmisc]
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 # add a descriptive label to a variable
 Label(d.diamonds$colour) <- "The rating scale applied to diamonds ranges from colorless
 to yellow, as any other color is extremely rare."
@@ -73,7 +72,6 @@ Desc(d.diamonds$colour)
 
 # The label can be deleted by setting it to NULL
 Label(d.diamonds$colour) <- NULL
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

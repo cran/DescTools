@@ -63,7 +63,6 @@ structures to a polygon.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 # Draw 4 triangles (nv = 3) with different rotation angles
 plot(c(0,1),c(0,1), asp=1, type="n", xaxt="n", yaxt="n", xlab="", ylab="")
 DrawRegPolygon(x = 0.5, y = 0.5, rot = (1:4)*pi/6, radius.x = 0.5, nv = 3, 
@@ -108,9 +107,6 @@ pts <- DrawRegPolygon(radius.x=c(0.7, 0.5), nv = c(100, 6), plot=FALSE )
 # combine the 2 shapes and plot the new structure
 polygon(x = unlist(lapply(pts, "[", "x")), 
   y=unlist(lapply(pts, "[", "y")), col="green", border=FALSE)
-
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

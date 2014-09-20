@@ -21,5 +21,5 @@ StrCap(c("Hello", "bob", "daN"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ manip }
-\keyword{ character }% __ONLY ONE__ keyword per line
+\keyword{character}
+\keyword{utilities}

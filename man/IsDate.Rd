@@ -38,7 +38,6 @@ IsDate(x, what = c("either", "both", "timeVaries"))
 IsDate(as.Date("2013-04-10"))
 
 IsDate(31002)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

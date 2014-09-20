@@ -42,7 +42,6 @@ Rename(x, \dots, gsub = FALSE, fixed = TRUE, warn = TRUE)
 }
 
 \examples{
-
 x <- c(a=1, b=2)
 Rename(x, a="A", b="B")
 
@@ -54,7 +53,5 @@ str(Rename( iris,
             ))
 
 str(Rename(iris, .="_", gsub=TRUE))
-
-
 }
 \keyword{manip}

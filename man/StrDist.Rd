@@ -53,3 +53,6 @@ attr(d, "TraceBackMatrix")
 StrDist(x, y, method="hamming")
 }
 \keyword{math}
+\keyword{character}
+\keyword{utilities}
+

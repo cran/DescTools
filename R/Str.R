@@ -1,7 +1,11 @@
 Str <-
 function(x, ...){
   if(class(x)=="data.frame"){
-    out <- capture.output(str(x, ...))
+    
+    args <- list(...)
+    if(is.null(args["strict.width"])) args["strict.width"] <- "cut"
+    
+    out <- capture.output(do.call(str, c(list(object=x), args)))
     idx <- format(1:length(grep(pattern="^ \\$", out)))
     i <- 1
     j <- 1

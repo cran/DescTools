@@ -79,7 +79,6 @@ Freq(d.pizza$driver, ord="desc")
 
 # sorted by name, including NAs
 Freq(d.pizza$driver, ord="name", useNA="ifany")
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 \keyword{ univar }

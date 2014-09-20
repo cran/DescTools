@@ -53,7 +53,6 @@ Andri Signorell <andri@signorell.net>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 DecToBin(c(17, 25))
 BinToDec(c(101, 11101))
 
@@ -62,7 +61,6 @@ OctToDec(c(11, 77))
 
 DecToHex(c(17, 25))
 HexToDec(c("FF", "AA", "ABC"))
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

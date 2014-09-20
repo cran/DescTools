@@ -28,27 +28,15 @@ function(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE
   # define rowname if NAs are to be included
   names(tab)[is.na(names(tab))] <- "<NA>"
   lst <- data.frame( 
-    level=names(tab)
-    , freq=unname(tab[])
-    , perc=unname(ptab[])
-    , cumfreq=cumsum(unname(tab[]))
-    , cumperc=cumsum(unname(ptab[]))
+      level = names(tab)
+    , freq = as.vector(tab[])
+    , perc = as.vector(ptab[])
+    , cumfreq = cumsum(tab[])
+    , cumperc = cumsum(ptab[])
   )
   rownames(lst) <- 1:nrow(lst)
-  
-  # old version:
-  # print rounded with 3 digits
-  # lst.out <- lst
-  # lst.out[,c(3,5)] <- lapply( lst.out[,c(3,5)], round, digits)
-  # print(lst.out)
-  
   class(lst) <- c("Freq", "data.frame")
   
-#  if(print) print(lst, digits = digits)
-#  opt <- options("digits"=digits); on.exit(options(opt)) 
-  
-  # return full precision
   return(lst)  
-  # invisible(lst)
   
 }

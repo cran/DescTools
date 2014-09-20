@@ -30,9 +30,7 @@ Andri Signorell <andri@signorell.net>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 \dontrun{ # Windows-specific example
-
 wrd <- GetNewWrd()
 # insert a title in level 1
 WrdCaption("My First Caption level 1", stylename=wdConst$wdStyleHeading1, wrd=wrd)
@@ -43,9 +41,7 @@ sapply( 1:5, function(i)
              stylename=eval(parse(text=gettextf("wdConst$wdStyleHeading%s", i))), 
              wrd=wrd)
 )
-
 }
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

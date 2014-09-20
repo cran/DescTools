@@ -9,21 +9,21 @@ and variability.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-\method{Desc}{numeric}(x, xname = NULL, highlow = TRUE, plotit = FALSE, ...)
+\method{Desc}{numeric}(x, main = NULL, highlow = TRUE, plotit = getOption("plotit", FALSE), ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a single numeric vector to be described.
 %%     ~~Describe \code{x} here~~
 }
-  \item{xname}{the caption for the output.
-%%     ~~Describe \code{xname} here~~
+  \item{main}{the caption for the output.
+%%     ~~Describe \code{main} here~~
 }
    \item{highlow}{boolean. Should the highest and the lowest values be reported. This is usually a good idea and so the default is \code{TRUE}.
 %%     ~~Describe \code{highlow} here~~
 }
   \item{plotit}{boolean. Should a plot be created? The vector would be plotted by means of \code{\link{PlotDesc.numeric}}, which again basically is 
-  \code{\link{PlotFdist}}. Default is \code{FALSE}.
+  \code{\link{PlotFdist}}. Default can be defined by option "plotit", if it does not exist then it's set to \code{FALSE}.
 %%     ~~Describe \code{plotit} here~~
 }
   \item{\dots}{further argument to be passed to methods.}
@@ -60,12 +60,10 @@ A list containing the following components:
 \seealso{\code{\link{Desc}}, \code{\link{PlotDesc}}
 }
 \examples{
-
 Desc(d.pizza$temperature)
 
 # contains all results of:
 quantile(d.pizza$temperature, na.rm=TRUE)
-
 }
 \keyword{ univar }
 

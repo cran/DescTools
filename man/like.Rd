@@ -37,7 +37,6 @@ x \%like\% pattern
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 # find names ending on "or"
 names(d.pizza) \%like\% "\%or"
 
@@ -52,7 +51,6 @@ which(names(d.pizza) \%like\% "\%er\%")
 
 # what do they look like?
 names(d.pizza)[names(d.pizza) \%like\% "\%er\%"]
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -1,7 +1,8 @@
 PlotCirc <-
 function(tab, acol = rainbow(sum(dim(tab))), aborder = "darkgrey",
                      rcol = SetAlpha(acol[1:nrow(tab)], 0.5), rborder = "darkgrey", 
-                     gap = 5, main = "", labels = NULL, cex.lab = 1.0){
+                     gap = 5, main = "", labels = NULL, cex.lab = 1.0, 
+                     las = 1, adj = NULL, dist = 2){
   
   ribbon <- function( angle1.beg, angle1.end, angle2.beg, angle2.end, 
                       radius1 = 1, radius2 = radius1, col = "blue", 
@@ -40,9 +41,7 @@ function(tab, acol = rainbow(sum(dim(tab))), aborder = "darkgrey",
                     col=acol, border=aborder)
   
   if(is.null(labels)) labels <- rev(c(rownames(tab), colnames(tab)))
-  text(PolToCart(r = 12, theta=filter(mpts, rep(1/2,2))[seq(1,(nrow+ncol)*2, by=2)])
-       , labels=labels, cex=cex.lab) 
-       
+  
   ttab <- rbind(Rev(tab, direction="column") / n * (pi - ncol * d), d)
   pts.left <- (c(0, cumsum(as.vector(ttab)))) 
   
@@ -59,5 +58,19 @@ function(tab, acol = rainbow(sum(dim(tab))), aborder = "darkgrey",
       ribbon( angle1.beg=rang[,2], angle1.end=lang[,1], angle2.beg=rang[,1], angle2.end=lang[,2], 
               radius1 = 10, radius2 = 9, col = rcol[j], border = rborder[j])
     }}
+
+  out <- PolToCart(r = 10 + dist, theta=filter(mpts, rep(1/2,2))[seq(1,(nrow+ncol)*2, by=2)])
+  
+  if(las == 2){
+    if(is.null(adj)) adj <- c(rep(1, nrow), rep(0,ncol))
+    adj <- rep(adj, length_out=length(labels))
+    sapply(seq_along(labels), 
+           function(i) text(out$x[i], out$y[i], labels=labels[i], cex=cex.lab, 
+                            srt=RadToDeg(atan(out$y[i]/out$x[i])), adj=adj[i]))
+  } else {
+    text(out, labels=labels, cex=cex.lab, srt=ifelse(las==3, 90, 0), adj=adj)
+  }
+    
+  invisible(out)
   
 }

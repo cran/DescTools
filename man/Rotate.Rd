@@ -39,7 +39,6 @@ Andri Signorell <andri@signorell.net>
 }
 
 \examples{
-
 # let's have a triangle
 Canvas(main="Rotation")
 x <- DrawRegPolygon(nv=3)[[1]]
@@ -51,8 +50,6 @@ sapply( (0:3) * pi/6, function(theta) {
 } )
 
 abline(v=0,h=0)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

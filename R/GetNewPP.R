@@ -3,7 +3,7 @@ function (visible = TRUE, template = "Normal") {
   
   stopifnot(require(RDCOMClient))
   
-  pp <- COMCreate("PowerPoint.Application")
+  pp <- RDCOMClient::COMCreate("PowerPoint.Application")
   if (visible == TRUE) { pp[["Visible"]] <- TRUE }
   
   newpres <- pp[["Presentations"]]$Add(TRUE)

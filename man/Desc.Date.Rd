@@ -3,21 +3,21 @@
 
 \title{Describe a Date Vector }
 
-\description{Description interface for dates. We do here what seems resonable for describing dates.
+\description{Description interface for dates. We do here what seems reasonable for describing dates.
 We start with a short summary about length, number of NAs and extreme values, before we describe the 
 frequencies of the weekdays and months, rounded up by a chi-square test. 
 }
 
 \usage{
-\method{Desc}{Date}(x, xname = NULL, maxrows = 10, 
-          digits = 3, plotit = FALSE, ...)
+\method{Desc}{Date}(x, main = NULL, maxrows = 10, 
+          digits = 3, plotit = getOption("plotit", FALSE), ...)
       
 }
 
 \arguments{
   \item{x}{the Date vector to be described.
 }
-  \item{xname}{the caption of the output. 
+  \item{main}{the caption of the output. 
 }
   \item{maxrows}{numeric. Defines the maximum number of rows to be reported. Default is 10 (most
   frequent ones).
@@ -40,6 +40,5 @@ frequencies of the weekdays and months, rounded up by a chi-square test.
 }
 \examples{
 Desc(d.pizza$date)
-
 }
 \keyword{ univar}

@@ -1,8 +1,8 @@
 HoeffD <-
-function(x, y)
-{
-  phoeffd <- function(d, n)
-  {
+function(x, y) {
+  
+  phoeffd <- function(d, n)  {
+    
     d <- as.matrix(d); n <- as.matrix(n)
     b <- d + 1/36/n
     z <- .5*(pi^4)*n*b

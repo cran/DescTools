@@ -50,7 +50,6 @@ Andri Signorell <andri@signorell.net>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 \dontrun{ # Windows-specific example
 
 wrd <- GetNewWrd()
@@ -59,7 +58,6 @@ Desc(d.pizza[,1:4], wrd=wrd)
 wrd <- GetNewWrd(header=TRUE)
 Desc(d.pizza[,1:4], wrd=wrd)
 }
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

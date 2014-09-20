@@ -41,8 +41,6 @@ Frac(x)
 
 # multiply by 10^4
 Frac(x, dpwr=4)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

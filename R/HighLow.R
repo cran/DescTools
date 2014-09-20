@@ -34,6 +34,6 @@ function (x, nlow = 5, nhigh = nlow, na.rm = FALSE) {
     lowtxt <- ""
     hightxt <- ""
   }
-  return(paste("lowest : ", lowtxt, "\n", "highest: ", hightxt, 
-               "\n", sep = ""))
+  return(paste("lowest : ", lowtxt, "\n", 
+               "highest: ", hightxt, "\n", sep = ""))
 }

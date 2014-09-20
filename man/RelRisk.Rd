@@ -15,10 +15,9 @@ RelRisk(x, y = NULL, conf.level = NA,
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{x is a 2x2-table, with 
-%%     ~~Describe \code{x} here~~
+  \item{x}{a numeric vector or a 2x2 numeric matrix, resp. table.
 }
-  \item{y}{NULL (default) or a vector with compatible dimensions to \code{x}. If y is provided, \code{table(x, y, ...)} is calculated.
+  \item{y}{NULL (default) or a vector with compatible dimensions to \code{x}. If y is provided, \code{table(x, y, ...)} will be calculated.
 }
   \item{conf.level}{confidence level. Default is NA, meaning no confidence intervals will be
   reported.
@@ -89,8 +88,6 @@ mm
 RelRisk(t(mm), conf.level=0.95)
 RelRisk(t(mm), conf.level=0.95, method="wald")
 RelRisk(t(mm), conf.level=0.95, method="use.or")
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

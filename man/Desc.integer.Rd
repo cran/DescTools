@@ -9,8 +9,8 @@ Describing an integer, means typically count data, is sometimes the same as desc
 when there are many levels, it is like describing a numeric value. 
 }
 \usage{
-\method{Desc}{integer}(x, xname = NULL, maxrows = 12, freq = NULL,
-             digits = 3, plotit = FALSE, ...)
+\method{Desc}{integer}(x, main = NULL, maxrows = 12, freq = NULL,
+             digits = 3, plotit = getOption("plotit", FALSE), ...)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -18,8 +18,8 @@ when there are many levels, it is like describing a numeric value.
   \item{x}{a single integer vector to be described.
 %%     ~~Describe \code{x} here~~
 }
-  \item{xname}{the caption for the output.
-%%     ~~Describe \code{xname} here~~
+  \item{main}{the caption for the output.
+%%     ~~Describe \code{main} here~~
 }
   \item{maxrows}{integer. This indicates, up to how many levels the detailed frequencies should be reported. Default is 12. 
   Set maxlevels to NA, if no restriction is to be applied, say the frequency table should contain all existing levels.
@@ -67,7 +67,6 @@ A list containing the following components:
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 # default
 Desc(d.pizza$count)
 
@@ -77,7 +76,6 @@ Desc(d.pizza$count, maxlevels=15)
 # Result object
 res <- Desc(d.pizza$count, maxlevels=15)
 res
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

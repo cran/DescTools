@@ -25,12 +25,10 @@ Returns the colorvalue in #rrggbb" or #rrggbbaa" format. (character)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 ColToHex(c("lightblue", "salmon"))
 
 x <- ColToRgb("darkmagenta")
 x[2,] <- x[2,] + 155
 RgbToCol(x)
-
 }
 \keyword{color }

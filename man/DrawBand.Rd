@@ -33,7 +33,6 @@ DrawBand(x, y, col = SetAlpha("grey", 0.5), border = NA)
 %% ~~objects to See Also as , ~~~
 }
 \examples{
-
 set.seed(18)
 x <- rnorm(15)
 y <- x + rnorm(15)
@@ -49,8 +48,6 @@ DrawBand(y = c(pred.w.clim[,2], rev(pred.w.clim[,3])),
   x=c(new, rev(new)), col= SetAlpha("grey80", 0.5))
 
 abline(lm(y~x), col="brown")
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

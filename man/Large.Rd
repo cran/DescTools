@@ -9,6 +9,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
+Small(x, k = 1, unique = FALSE, na.rm = FALSE)
 Large(x, k = 1, unique = FALSE, na.rm = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -26,7 +27,7 @@ Large(x, k = 1, unique = FALSE, na.rm = FALSE)
 %%     ~~Describe \code{na.rm} here~~
 }
 }
-\details{There are several points discussed about that out there. This implementation uses the function sort(partial), which is'nt the fastest, but a fairly fast one.
+\details{There are several points of this problem discussed out there. This implementation uses the function \code{sort(..., partial)}, which isn't the fastest solution, but a fairly fast one.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{either a vector with the k most extreme values, if unique is set to FALSE
@@ -43,21 +44,18 @@ or a list, containing the k most extreme values and their respective frequency.
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{\code{\link{max}}, \code{\link{HighLow}}
+\seealso{\code{\link{max}}, \code{\link{max}}, \code{\link{HighLow}}, \code{\link{sort}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 x <- sample(1:10, 1000, rep=TRUE)
 Large(x, 3)
 Large(x, k=3, unique=TRUE)
 
-# works fine up to 1 M
+# works fine up to x ~ 1e6
 x <- runif(1000000)
 Small(x, 3, unique=TRUE)
 Small(x, 3, unique=FALSE)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

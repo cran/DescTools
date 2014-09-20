@@ -36,13 +36,11 @@ Champely, S. and Chessel, D. (2002) Measuring biological diversity using Euclide
 \author{Sandrine Pavoine \email{pavoine@biomserv.univ-lyon1.fr}
 }
 \examples{
-
 # data(ecomor)
 # dtaxo <- dist.taxo(ecomor$taxo)
 # DivCoef(ecomor$habitat, dtaxo)
 
 # data(humDNAm)
 # DivCoef(humDNAm$samples, sqrt(humDNAm$distances))
-
 }
 \keyword{multivariate}

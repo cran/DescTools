@@ -93,7 +93,6 @@ Conover, W. J. (1980): \emph{Practical Nonparametric Statistics, 2nd ed}. Wiley,
 }
 
 \examples{
-
 x <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
 y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
 
@@ -118,7 +117,6 @@ wilcox.test(x=d, mu = 4, conf.int = TRUE, alternative="less")
 SignTest(x=d, mu = 4, alternative="greater")
 wilcox.test(x=d, mu = 4, conf.int = TRUE, alternative="greater")
 
-
 # test die interfaces
 x <- runif(10)
 y <- runif(10)
@@ -130,8 +128,5 @@ SignTest(xx ~ g)
 SignTest(x, y)
 
 SignTest(x - y)
-
-
-        
 }
 \keyword{htest}

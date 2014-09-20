@@ -13,23 +13,23 @@ The general intention is to simplify the description process for lazy typers and
 Desc(x, ..., wrd = NULL)
 \method{Desc}{default}(x, \dots)
 }
-% \method{Desc}{logical}(x, xname = deparse(substitute(x)), digits = 3, conf.level = 0.95)
-% \method{Desc}{factor}(x, xname=deparse(substitute(x)), ord=c("desc","asc","name","level"), maxrows=10, digits=3)
+% \method{Desc}{logical}(x, main = deparse(substitute(x)), digits = 3, conf.level = 0.95)
+% \method{Desc}{factor}(x, main=deparse(substitute(x)), ord=c("desc","asc","name","level"), maxrows=10, digits=3)
 % \method{Desc}{ordered}(x, \dots)
-% \method{Desc}{integer}(x, xname=deparse(substitute(x)), maxrows=10, maxlevels=10, digits=3, width=7)
-% \method{Desc}{numeric}(x, xname=deparse(substitute(x)), digits=3, highlow=TRUE)
-% \method{Desc}{Date}(x, xname=deparse(substitute(x)), maxrows=10, digits=3)
-% \method{Desc}{table}(x, xname=deparse(substitute(x)))
+% \method{Desc}{integer}(x, main=deparse(substitute(x)), maxrows=10, maxlevels=10, digits=3, width=7)
+% \method{Desc}{numeric}(x, main=deparse(substitute(x)), digits=3, highlow=TRUE)
+% \method{Desc}{Date}(x, main=deparse(substitute(x)), maxrows=10, digits=3)
+% \method{Desc}{table}(x, main=deparse(substitute(x)))
 
 % \method{Desc}{data.frame}(x, sep=paste(rep("-",110), collapse=""), \dots)
 % \method{Desc}{list}(x, \dots)
 % \method{Desc}{formula}(x, \dots)
 
-% \method{Desc}{factor.factor}(x, grp, rfrq="100", show.mutinf=FALSE, xname=deparse(substitute(x)),
+% \method{Desc}{factor.factor}(x, grp, rfrq="100", show.mutinf=FALSE, main=deparse(substitute(x)),
 %       grpname=deparse(substitute(grp)))
 % \method{Desc}{numeric.factor}(x, grp, digits=c(NA,NA,NA,NA,0,3,0,0), width=getOption("width"), 
 %       use.na = c("no", "ifany", "always") )
-% \method{Desc}{numeric.numeric}(x, y, xname=deparse(substitute(x)), yname=deparse(substitute(y)))
+% \method{Desc}{numeric.numeric}(x, y, main=deparse(substitute(x)), yname=deparse(substitute(y)))
 
 
 %- maybe also 'usage' for other objects documented here.
@@ -39,7 +39,13 @@ Desc(x, ..., wrd = NULL)
   \item{\dots}{the dots are passed to the specific function.}
   
 }
-\details{More details can be found in the type-specific help texts.
+\details{
+Desc is a generic function. It dispatches to one of the methods above depending on the class of its first argument. Typing ?Desc
++ TAB at the prompt should present a choice of links: the help pages for each of these Desc methods (at least if you're using RStudio, which anyway is recommended).
+You don't need to use the full name of the method although you may if you wish; i.e.,
+Desc(x) is idiomatic R but you can bypass method dispatch by going direct if you wish:
+Desc.numeric(x).
+More details about the results of the methods can be found in the type-specific help texts.
 }
 \value{partly results are returned}
 \author{Andri Signorell}
@@ -51,8 +57,6 @@ Desc(x, ..., wrd = NULL)
 \code{\link{DescFactFact}}, \code{\link{DescNumFact}}, \code{\link{DescNumNum}}
 }
 \examples{
-data(d.pizza)
-
 # implemented classes:
 Desc(d.pizza$wrongpizza)     # logical
 Desc(d.pizza$driver)         # factor
@@ -61,7 +65,7 @@ Desc(d.pizza$week)           # integer
 Desc(d.pizza$delivery_min)   # numeric
 Desc(d.pizza$date)           # Date
 
-Desc(d.pizza$wrongpizza, xname="The wrong pizza delivered", digits=5)  
+Desc(d.pizza$wrongpizza, main="The wrong pizza delivered", digits=5)  
 
     
 # just selected bivariate analysis on the console
@@ -87,7 +91,6 @@ Desc( delivery_min + weekday ~ driver, data=d.pizza )
 
 # without defining data-parameter
 Desc( d.pizza$delivery_min ~ d.pizza$driver)           
-# Desc( d.pizza$delivery_min + d.pizza$operator ~ d.pizza$driver, show.mutinf=TRUE)
 
 
 # with functions and interactions
@@ -108,8 +111,5 @@ Desc.numeric( d.pizza$count, highlow=TRUE )
 DescNumFact( x=d.pizza$delivery_min, grp=d.pizza$operator )
 DescFactFact( x=d.pizza$driver, grp=d.pizza$operator)
 DescNumNum( x=d.pizza$delivery_min, y=d.pizza$price )
-
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ print }

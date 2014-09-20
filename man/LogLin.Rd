@@ -61,7 +61,6 @@ lines( LogLin(x, a=2) ~ x, col="brown" )
 lines( LogLin(x, a=0.5) ~ x, col="steelblue" )
 
 lines( LogGen(x, a=1) ~ x, col="orange" )
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

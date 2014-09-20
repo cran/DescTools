@@ -12,7 +12,7 @@ The reason for creating a new function for the job is the automated calculation 
 PlotDotCI(x, xlim = NULL, 
           pch = 21, pch.cex = 1, pch.col = "black", pch.bg = "grey50",
           lcol = "grey40", lwd = 2,
-          args.legend = NULL, code = 3,
+          args.legend = NULL, code = 3, lend = "butt", 
           mar = c(7.1, 4.1, 4.1, 2.1), ...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -41,6 +41,9 @@ PlotDotCI(x, xlim = NULL,
   \item{lwd}{the widths for the segments.
 %%     ~~Describe \code{lwd} here~~
 }
+  \item{lend}{the line end style. This can be specified as an integer or string, \code{0: "round"}, \code{1: "butt"}, \code{2: "square"}
+%%     ~~Describe \code{lwd} here~~
+}
   \item{args.legend}{list of additional arguments to be passed to the \code{legend} function. 
   Use args.legend = \code{NA} if no legend should be added. 
 %%     ~~Describe \code{args.legend} here~~
@@ -66,13 +69,11 @@ PlotDotCI(x, xlim = NULL,
 \seealso{\code{\link{PlotDotCIp}}
 }
 \examples{
-
 xci <- do.call(rbind, tapply( d.pizza$delivery_min, d.pizza$driver, 
   MeanCI, conf.level=0.99, na.rm=TRUE))
 
 PlotDotCI(xci, main="delivery_min ~ driver", 
   args.legend=list(y=-1.5, legend=c("estimate", "99\%-CI")))
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

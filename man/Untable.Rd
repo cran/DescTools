@@ -1,6 +1,6 @@
 \name{Untable}
 \alias{Untable}
-\title{Untable}
+\title{Recover Original Data From Contingency Table}
 
 \description{Recreates the data.frame out of a contingency table x.
 }
@@ -36,7 +36,6 @@ Untable(x, dimnames = NULL, type = NULL, rownames = NULL, colnames = NULL)
 \seealso{ \code{\link{expand.grid}}, \code{\link{rep}}, \code{\link{gl}}, \code{\link{xtabs}}
 }
 \examples{
-
 d.titanic <- Untable(Titanic)
 str(d.titanic)
 
@@ -68,7 +67,6 @@ Untable(c(1,4,5), dimnames=list(c("Zurich","Berlin","London")))
 Untable(c(1,4,5), dimnames=list(c(5,10,15)), type="as.numeric")[,]
 # ... which again is nothing else than
 rep(times=c(1,4,5), x=c(5,10,15))
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

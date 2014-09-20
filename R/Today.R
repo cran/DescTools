@@ -1,0 +1,2 @@
+Today <-
+function() Sys.Date()

@@ -10,7 +10,7 @@ function(x, y = NULL, conf.level = NA, ...){
   # author:   Michael Smithson
   # http://psychology3.anu.edu.au/people/smithson/details/CIstuff/Splusnonc.pdf
   
-  lochi <- function(chival,df,conf) {
+  lochi <- function(chival, df, conf) {
     ulim <- 1 - (1-conf)/2
     #  This first part finds a lower value from which to start.
     lc <- c(.001,chival/2,chival)
@@ -22,20 +22,20 @@ function(x, y = NULL, conf.level = NA, ...){
     #	This next part finds the lower limit for the ncp.
     diff <- 1
     while(diff > .00001) {
-      if(pchisq(chival,df,lc[2])<ulim) 
+      if(pchisq(chival, df, lc[2]) < ulim) 
         lc <- c(lc[1],(lc[1]+lc[2])/2,lc[2]) 
       else lc <- c(lc[2],(lc[2]+lc[3])/2,lc[3])
       diff <- abs(pchisq(chival,df,lc[2]) - ulim)
       ucdf <- pchisq(chival,df,lc[2])
     }
-    c(lc[2],ucdf)
+    c(lc[2], ucdf)
   }
   
   hichi <- function(chival,df,conf) {
     #	This first part finds upper and lower startinig values.
-    uc <- c(chival,2*chival,3*chival)
+    uc <- c(chival, 2*chival, 3*chival)
     llim <- (1-conf)/2
-    while(pchisq(chival,df,uc[1])<llim) {
+    while(pchisq(chival, df, uc[1]) < llim) {
       uc <- c(uc[1]/4,uc[1],uc[3])
     }
     while(pchisq(chival,df,uc[3])>llim) {
@@ -44,13 +44,13 @@ function(x, y = NULL, conf.level = NA, ...){
     #	This next part finds the upper limit for the ncp.
     diff <- 1
     while(diff > .00001) {
-      if(pchisq(chival,df,uc[2])<llim) 
+      if(pchisq(chival,df,uc[2]) < llim) 
         uc <- c(uc[1],(uc[1]+uc[2])/2,uc[2]) 
       else uc <- c(uc[2],(uc[2]+uc[3])/2,uc[3])
       diff <- abs(pchisq(chival,df,uc[2]) - llim)
       lcdf <- pchisq(chival,df,uc[2])
     }
-    c(uc[2],lcdf)
+    c(uc[2], lcdf)
   }
   
   
@@ -62,11 +62,14 @@ function(x, y = NULL, conf.level = NA, ...){
 
   if (is.na(conf.level)) {
     res <- v  
+
   } else {  
-    
     ci <- c(lochi(chisq.hat, df, conf.level)[1], hichi(chisq.hat, df, conf.level)[1]) 
-    ci <- unname(sqrt( (ci + df) / (sum(x) * (min(dim(x)) - 1)) ))
-    res <- c("Cramer V"=v, lwr.ci=ci[1], upr.ci=ci[2])
+# corrected by michael smithson, 17.5.2014:
+#    ci <- unname(sqrt( (ci + df) / (sum(x) * (min(dim(x)) - 1)) ))
+    ci <- unname(sqrt( (ci) / (sum(x) * (min(dim(x)) - 1)) ))
+    res <- c("Cramer V"=v, lwr.ci=max(0, ci[1]), upr.ci=min(1, ci[2]))
+
   }    
 
   return(res)

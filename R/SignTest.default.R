@@ -62,13 +62,12 @@ function(x, y = NULL, alternative = c("two.sided", "less", "greater"),
   d <- (x - mu)
 
   # Naive version:
-  n.valid <- sum(d>0)+sum(d<0)
-  if(n.valid>0) {
-    RVAL <- binom.test( x = sum(d>0), n=n.valid, p=0.5, alternative = alternative, conf.level = conf.level ) 
+  n.valid <- sum(d > 0) + sum(d < 0)
+  if(n.valid > 0) {
+    RVAL <- binom.test(x=sum(d > 0), n=n.valid, p=0.5, alternative = alternative, conf.level = conf.level ) 
   } else {
-    RVAL=binom.test(x = 1, n = 1)
+    RVAL <- binom.test(x=1, n=1)
   }
-  # RVAL <- c(RVAL, list(STRanks = STRank, MeanRanks = c(mean(ranks0), mean(ranks1))))
   
   RVAL$method <- METHOD
   RVAL$data.name <- DNAME
@@ -79,7 +78,7 @@ function(x, y = NULL, alternative = c("two.sided", "less", "greater"),
   names(RVAL$parameter) <- "number of differences"
   mci <- MedianCI_Binom(d + mu, conf.level=conf.level, alternative=alternative, na.rm=TRUE) 
   RVAL$conf.int <- mci
-  attr(RVAL$conf.int, "conf.level") = round(attr(mci,"conf.level"),3)
+  attr(RVAL$conf.int, "conf.level") = round(attr(mci,"conf.level"), 3)
 
   names(RVAL$estimate) <- "median of the differences"
   RVAL$null.value <- mu

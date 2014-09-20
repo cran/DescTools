@@ -75,7 +75,6 @@ documentation partly from Greg Snow <greg.snow@imail.org>}
 
 \seealso{ \code{\link{t.test}}, \code{\link{print.htest}} }
 \examples{
-
 x <- rnorm(25, 100, 5)
 ZTest(x, mu=99, sd_pop=5)
 
@@ -96,7 +95,6 @@ with(d.tyres, ZTest(A, B, sd_pop=3, paired=TRUE))
 d.oxen <- data.frame(ext=c(2.7,2.7,1.1,3.0,1.9,3.0,3.8,3.8,0.3,1.9,1.9),
                      int=c(6.5,5.4,8.1,3.5,0.5,3.8,6.8,4.9,9.5,6.2,4.1))
 with(d.oxen, ZTest(int, ext, sd_pop=1.8, paired=FALSE))
-
 }
 \keyword{ htest }
 

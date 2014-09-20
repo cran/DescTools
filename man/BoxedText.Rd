@@ -88,14 +88,10 @@ BoxedText(x, y = NULL, labels = seq_along(x), adj = NULL, pos = NULL, offset = 0
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 Canvas(xpd=TRUE)
 
 BoxedText(0, 0, adj=0, label="This is boxed text", srt=seq(0,360,20), xpad=.3, ypad=.3)
 points(0,0, pch=15)
-
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -46,7 +46,6 @@ Numeric value of the area under the curve.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 AUC(x=c(1,3), y=c(1,1))
 
 AUC(x=c(1,2,3), y=c(1,2,4), method="trapezoid")
@@ -58,7 +57,6 @@ lines(x=c(1,2,2.5), y=c(1,2,4), type="s", col="red")
 x <- seq(0, pi, length.out=200)
 AUC(x=x, y=sin(x)) 
 AUC(x=x, y=sin(x), method="spline") 
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

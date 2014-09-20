@@ -4,6 +4,7 @@
 \alias{PercTable.table}
 \alias{PercTable.formula}
 \alias{PercTable.matrix}
+\alias{MarginTable}
 
 \title{Percentage Table
 }
@@ -20,6 +21,8 @@ All the frequencies are nested into one single table.
           stdres = FALSE, margins = NULL, \dots)
 
 \method{PercTable}{formula}(formula, data, subset, na.action, \dots)
+
+MarginTable(tab)
 
 }
 
@@ -74,12 +77,13 @@ All the frequencies are nested into one single table.
 %%     ~~Describe \code{\dots} here~~
 }
 }
-\details{The absolute and relative frequencies are nested into one flat table by means of \code{ftable}. 
+\details{PercTable prints a 2-dimensional table. The absolute and relative frequencies are nested into one flat table by means of \code{ftable}. 
 By means of \code{row.vars}, resp. \code{col.vars}, the structure of the table can be defined. \code{row.vars} can either be the names of
 the dimensions (included percentages are named \code{"idx"}) or numbers (1:3, where 1 is the first dimension of the table, 
 2 the second and 3 the percentages). \cr
-\cr
 Use \code{Sort()} if you want to have your table sorted by rows.
+
+MarginTable returns a list containing all the margin tables of a n-dimensional table along all dimensions. It does not much more than \code{\link{margin.table}} besides add percentages and do the job for all the dimensions.
 
 %%  ~~ If necessary, more details than the description above ~~
 }
@@ -108,8 +112,6 @@ lacking some of the flexibility we needed here. \cr
 
 }
 \examples{
-
-data(d.pizza)
 tab <- table(d.pizza$driver, d.pizza$area)
 
 PercTable(tab=tab, col.vars=2)
@@ -150,7 +152,8 @@ PercTable(x=d.pizza$driver, y=d.pizza$area, margins=c(1,2), rfrq="000", useNA="i
 # one dimensional x falls back to the function Freq()
 PercTable(x=d.pizza$driver)
 
-
+# the margin tables
+MarginTable(Titanic)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

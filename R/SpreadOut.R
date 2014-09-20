@@ -27,7 +27,7 @@ function(x, mindist) {
     while(start > 1 && goodx[start] - goodx[start-1] < mindist) start <- start-1
     while(end < gxlen && goodx[end+1] - goodx[end] < mindist) end <- end+1
     if(start < end) {
-      nsqueezed <- 1+end-start
+      nsqueezed <- 1 + end - start
       newx <- sum(goodx[start:end]) / nsqueezed - mindist * (nsqueezed %/% 2 - (nsqueezed / 2 == nsqueezed %/% 2) * 0.5)
       for(stretch in start:end) {
         goodx[stretch] <- newx

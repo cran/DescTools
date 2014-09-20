@@ -35,6 +35,8 @@ WhichCharacters(d.frm)
 \code{WhichNumerics} returns all numeric columns. Whether integers should be included or not can be defined by \code{type}. Default is \code{"all"}. \cr
 \code{WhichCharacters} returns the names of all character vectors in a data.frame.\cr
 
+The functions yield the names of the variables. Use \code{\link{match}} to get the positions and \code{\%in\%} to get and boolean index vector (see examples).
+
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{a character vector with the names of the specific columns
@@ -56,6 +58,12 @@ WhichNumerics(d.pizza)
 WhichNumerics(d.pizza, type="numeric")
 WhichNumerics(d.pizza, type="integer")
 
+
+# get the positions
+match(WhichNumerics(d.pizza), names(d.pizza))
+
+# get an index vector
+names(d.pizza) \%in\% WhichNumerics(d.pizza)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

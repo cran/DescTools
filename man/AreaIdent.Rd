@@ -46,7 +46,6 @@ The coordinates are returned as text in the attribute \code{"cond"}.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 \dontrun{ 
 # run the example via copy and paste
 
@@ -66,7 +65,6 @@ d.pizza$grp <- seq(nrow(d.pizza)) \%in\% idx
 # try the polygon option
 idx <- AreaIdent(temperature ~ delivery_min, data=d.pizza, poly=TRUE)
 points(temperature ~ delivery_min, data = d.pizza[idx,], col="red")
-
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -49,6 +49,5 @@ KendallW(anxiety, TRUE)
 
 # with test results
 KendallW(anxiety, TRUE, test=TRUE)
-
 }
-\keyword{agreement}
+\keyword{multivar}

@@ -7,7 +7,8 @@
 \description{A more flexible implementation of plotting horizontal bars with definable start and end points.
 }
 \usage{
-PlotHorizBar(from, to, grp = 1, col = "lightgrey", border = "black", ...)
+PlotHorizBar(from, to, grp = 1, col = "lightgrey", border = "black", 
+             height = 0.6, add = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,6 +26,12 @@ PlotHorizBar(from, to, grp = 1, col = "lightgrey", border = "black", ...)
 %%     ~~Describe \code{col} here~~
 }
   \item{border}{the border color of the bars. Default ist "black". Set this to NA if no border is to be printed.
+%%     ~~Describe \code{col} here~~
+}
+  \item{height}{the height of the bars. Defaults to 0.6.
+%%     ~~Describe \code{col} here~~
+}
+  \item{add}{logical, if TRUE (default) add bars to current plot.
 %%     ~~Describe \code{col} here~~
 }
   \item{\dots}{the dots are passed to plot.new.
@@ -45,6 +52,5 @@ PlotHorizBar(from, to, grp = 1, col = "lightgrey", border = "black", ...)
 }
 \examples{
 PlotHorizBar( 1:5, 3:8)
-
 }
 \keyword{ hplot}

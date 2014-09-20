@@ -71,7 +71,6 @@ The function invisibly returns a list of the calculated coordinates for all shap
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 par(mfrow=c(1,2))
 
 Canvas()
@@ -86,9 +85,6 @@ eig.vec <- eig$vectors
 
 DrawEllipse(x=mean(cars$speed), y=mean(cars$dist), radius.x=eig.val[1] , radius.y=eig.val[2]
   , rot=acos(eig.vec[1,1]), border="blue", lwd=3)
-
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

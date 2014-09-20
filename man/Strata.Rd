@@ -50,7 +50,6 @@ Use, for example, \code{data[order(data$state, data$region), ]}.
 } % \code{\link{mstage}}}
 
 \examples{
-
 # Example from An and Watts (New SAS procedures for Analysis of Sample Survey Data)
 # generates artificial data (a 235X3 matrix with 3 columns: state, region, income).
 # the variable "state" has 2 categories ('nc' and 'sc'). 
@@ -97,7 +96,5 @@ data.frame(income=m[s$id, "income"], s)
 
 # see the result using a contigency table
 table(s$region, s$state)
-
-
 }
 \keyword{survey}

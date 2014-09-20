@@ -3,10 +3,7 @@ function(x, y = NULL, base = 2, ...) {
 
   # x is either a table or a vector if y is defined
   
-  if(!is.null(y)) { 
-    x <- table(x, y, ...)
-  }
-    
+  if(!is.null(y)) { x <- table(x, y, ...) }
   x <- as.matrix(x)
 
   ptab <- x / sum(x)

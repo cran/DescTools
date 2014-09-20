@@ -31,8 +31,6 @@ Clockwise(x, start = 0)
 \seealso{\code{\link{PlotPolar}}
 }
 \examples{
-
 Clockwise( c(0, pi/4, pi/2, pi))
-
 }
 \keyword{ dplot }

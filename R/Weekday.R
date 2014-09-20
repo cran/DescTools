@@ -1,5 +1,7 @@
 Weekday <-
 function (x, format = c("num", "abbr", "full"), lang = c("local", "engl"), stringsAsFactors = TRUE) {
+
+  x <- as.Date(x)
   
   switch(match.arg(arg = format, choices = c("num", "abbr", "full")), 
          num = { res <- ifelse((wd <- as.integer(format(x, "%w"))) == 0, 7, wd) }, 

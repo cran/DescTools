@@ -96,7 +96,6 @@ GoodmanKruskalTauA(tab, direction="row", conf.level=0.95)
 GoodmanKruskalTauA(tab, direction="column", conf.level=0.95)
 # reduces to:
 Phi(tab)^2
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

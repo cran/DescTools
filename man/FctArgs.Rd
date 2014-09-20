@@ -35,12 +35,10 @@ argument names.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 formalArgs(PlotFdist)
 
 # compare:
 FctArgs(PlotFdist)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

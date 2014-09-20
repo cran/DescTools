@@ -30,9 +30,7 @@ WrdPlot(type = "png", append.cr = TRUE, crop = c(0, 0, 0, 0),
 \seealso{\code{\link{WrdText}}, \code{\link{WrdCaption}}, \code{\link{GetNewWrd}}}
 
 \examples{
-
 \dontrun{ # Windows-specific example
-
 # let's have some graphics 
 plot(1,type="n", axes=FALSE, xlab="", ylab="", xlim=c(0,1), ylim=c(0,1))
 rect(0,0,1,1,col="black")
@@ -57,8 +55,6 @@ WrdPlot(wrd=wrd, height=5, crop=c(9,9,0,0))
 
 wpic <- WrdPlot(wrd=wrd, height=5, crop=c(9,9,0,0))
 wpic
-
 }
-
 }
 \keyword{ print }

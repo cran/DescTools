@@ -17,12 +17,13 @@ function(x, stylename = wdConst$wdStyleHeading1, wrd = getOption("lastWord") ) {
   wrdSel$TypeText(x)
   wrdSel$TypeParagraph()
   
-  wrdSel[["Style"]] <- "Standard"
+  wrdSel[["Style"]] <- wdConst$wdStyleNormal
   
   # Restore old font
   wrdFont[["Name"]] <- currfont[["name"]]
   wrdFont[["Size"]] <- currfont[["size"]]
   wrdFont[["Bold"]] <- currfont[["bold"]]
   wrdFont[["Italic"]] <- currfont[["italic"]]
+  invisible()
   
 }

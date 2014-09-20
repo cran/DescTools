@@ -41,7 +41,6 @@ PairApply(x, FUN = NULL, ..., symmetric = TRUE)
 %%  ~~who you are~~
 }
 \examples{
-
 PairApply(d.diamonds[,c("colour","clarity","cut","polish")], FUN = CramerV)
 
 # user defined functions are ok as well
@@ -68,8 +67,6 @@ PairApply(m, FUN = CramerV)
 # ... and the list interface
 lst <- as.list(dfrm)
 PairApply(lst, FUN = CramerV)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

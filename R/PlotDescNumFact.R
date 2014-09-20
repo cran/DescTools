@@ -21,5 +21,6 @@ function( formula, data, main=deparse(formula), notch=FALSE,
   title(main=main, outer=TRUE)
   
   if(!is.null(wrd)) WrdPlot(width=15, height=7, dfact=2.2, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
+  invisible()
   
 }

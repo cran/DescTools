@@ -1,9 +1,12 @@
+
+#include <R.h> 
+#include <Rdefines.h>
+
 #include <limits.h>
 #include <stddef.h>
-#include "exactsum.h"
 
 
-SEXP concordance1(SEXP y, SEXP wt2,  SEXP indx2, SEXP ntree2) {
+SEXP conc(SEXP y, SEXP wt2,  SEXP indx2, SEXP ntree2) {
     int i, j, k, index;
     int child, parent;
     int n, ntree;

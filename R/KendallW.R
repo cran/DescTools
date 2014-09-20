@@ -2,6 +2,9 @@ KendallW <-
 function(ratings, correct=FALSE, test=FALSE) {
  
   # see also old Jim Lemon function kendall.w
+  # other solution: library(irr);  kendall(ratings, correct = TRUE)
+  # http://www.real-statistics.com/reliability/kendalls-w/
+  
   
   dname <- deparse(substitute(ratings))
     ratings <- as.matrix(na.omit(ratings))

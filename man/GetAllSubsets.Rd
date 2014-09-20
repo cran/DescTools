@@ -33,14 +33,12 @@ GetAllSubsets(x, min.n = 1, max.n = length(x))
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 x <- LETTERS[1:6]
 
 GetAllSubsets(x)
 
 #get all sets of size 2 and 3
 GetAllSubsets(x, min.n = 2, max.n = 3)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

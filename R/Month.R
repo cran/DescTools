@@ -1,5 +1,7 @@
 Month <-
 function (x, format = c("num", "abbr", "full"), lang = c("local", "engl"), stringsAsFactors = TRUE) {
+
+  x <- as.Date(x)
   
   switch(match.arg(arg = format, choices = c("num", "abbr", "full")), 
          num = { res <- as.integer(format(x, "%m")) }, 

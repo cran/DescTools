@@ -45,7 +45,6 @@ RDCOMClient is available here: \url{http://www.omegahat.org}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 \dontrun{# Windows-specific example
 XLView(d.diamonds)
 
@@ -58,7 +57,6 @@ d.frm <- read.table(fn, header=TRUE, quote="", sep=";")
 fn <- XLView()
 # ... and read it into a data.frame when in R again
 d.set <- read.table(fn, header=TRUE, quote="", sep=";")
-
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

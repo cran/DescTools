@@ -29,8 +29,8 @@ StrVal(x=c("week 1", "week 3", "week 4", "week 5"))
 
 # several numbers per element
 StrVal(x=c("This is 1. place: 45.2", "none", "12.1 but -2.7 follow, 10.2e23 "))
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{character}
+\keyword{utilities}

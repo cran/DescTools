@@ -70,7 +70,6 @@ UncertCoef(m, conf.level=0.95)
 
 UncertCoef(m, direction="row")
 UncertCoef(m, direction="column")
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

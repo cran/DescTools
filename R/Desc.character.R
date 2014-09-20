@@ -1,4 +1,6 @@
 Desc.character <-
-function(x, xname = NULL, ...){  
-  Desc.factor( x = factor(x), xname = xname, ord = "level", ...)  
+function(x, main = NULL, ...){  
+  Desc.factor( x = factor(x), main = main, ord = "level", ...)  
+  invisible()
+  
 }

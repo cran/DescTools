@@ -66,7 +66,6 @@ Andri Signorell <andri@signorell.net>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 \dontrun{ # Windows-specific example
 
 XLGetRange(file="C:\My Documents\data.xls", 
@@ -78,7 +77,6 @@ XLGetRange(file="C:\My Documents\data.xls",
 # and run:
 d.set <- XLGetRange(range=NULL, header=TRUE)
 }
-
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

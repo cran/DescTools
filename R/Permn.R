@@ -1,74 +1,32 @@
 Permn <-
-function(x){
-
-#' Determine all permutations of a set.
-#'
-#' An implementation of the Steinhaus-Johnson-Trotter permutation algorithm.
-#' 
-#' @param set a set
-#' @return a matrix whose rows are the permutations of set
-#' @export
-#' @examples
-#' permutations(1:3)
-#' permutations(c('first','second','third'))
-#' permutations(c(1,1,3))
-#' apply(permutations(letters[1:6]), 1, paste, collapse = '')
-# author: David Kahle <david.kahle@gmail.com>
-# package: mpoly 
-# original function name: permutations
-
-  insert <- function(elem, slot, v){
-    n <- length(v)
-    if(slot == 1) return( c(elem, v) )
-    if(slot == n+1) return( c(v, elem) )      
-    c(v[1:(slot-1)], elem, v[slot:n])    
-  }
-
-  r <- length(x)
-  if(r == 1) return(as.matrix(x))
-    
-  row2diag <- function(row, direction){
-    np1 <- length(row) + 1
-    mat <- matrix(nrow = np1, ncol = np1)
-    if(direction == -1){
-      for(k in 1:np1){
-        mat[k,] <- insert(np1, np1-k+1, row)
-      }      
-    } 
-    if(direction == +1){
-      for(k in 1:np1){
-        mat[k,] <- insert(np1, k, row)
-      }
+function(x, sort = FALSE) {
+  
+  # by F. Leisch
+  
+  n <- length(x)
+  
+  if (n == 1) 
+    return(matrix(1))
+  else if (n < 2) 
+    stop("n must be a positive integer")
+  z <- matrix(1)
+  for (i in 2:n) {
+    y <- cbind(z, i)
+    a <- c(1:i, 1:(i - 1))
+    z <- matrix(0, ncol = ncol(y), nrow = i * nrow(y))
+    z[1:nrow(y), ] <- y
+    for (j in 2:i - 1) {
+      z[j * nrow(y) + 1:nrow(y), ] <- y[, a[1:i + j]]
     }
-    mat
-  } 
-  
-  stepUp <- function(mat){ # an r x c matrix
-    c <- ncol(mat)
-    m <- NULL
-    for(k in 1:nrow(mat)){
-      m <- rbind(m, row2diag(mat[k,],(-1)^k))
-    }    
-    m    
   }
+  dimnames(z) <- NULL
   
-  # iterate stepUp
-  out <- matrix(1)
-  for(k in 1:(r-1)){
-    out <- stepUp(out)
-  }
+  m <- apply(z, 2, function(i) x[i])
   
-  # substitute set values
-  for(k in 1:r){
-    out[out==k] <- paste('_', x[k], sep = '')
-  }
-  out <- gsub('_', '', out) # clear PH
-  if(is.numeric(x)){
-    d <- dim(out)
-    out <- as.numeric(out)
-    dim(out) <- d
-  }
+  if(any(duplicated(x))) 
+    m <- unique(m)
   
-  # return
-  unique(out)
+  if(sort) m <- Sort(m)
+  return(m)
+  
 }

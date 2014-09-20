@@ -8,7 +8,8 @@ function(x, FUN = mean, na.rm = FALSE) {
     # overwrite function name in FUN, which has to be character
     fct <- FUN
     FUN <- "fct"
+    FUN <- gettextf("%s(x)", FUN)
   }
   # Calculates the mean absolute deviation from the sample mean.  
-  return(eval(parse(text = gettextf("mean(abs(x - %s(x)))", FUN))))  
+  return(eval(parse(text = gettextf("mean(abs(x - %s))", FUN))))  
 }

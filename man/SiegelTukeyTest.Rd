@@ -91,7 +91,6 @@ published on: \url{http://www.r-statistics.com/2010/02/siegel-tukey-a-non-parame
 
 }
 \examples{
-
 # Duller, S. 183
 x <- c(12, 13, 29, 30)
 y <- c(15, 17, 18, 24, 25, 26)
@@ -154,6 +153,5 @@ SiegelTukeyTest(x ~ id)
 x <- c(85,106,96, 105, 104, 108, 86)
 id <- c(0,0,1,1,1,1,1)
 SiegelTukeyTest(x ~ id)
-
 }
 \keyword{ htest }

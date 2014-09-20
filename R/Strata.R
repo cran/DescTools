@@ -215,7 +215,7 @@ function (data, stratanames = NULL, size,
 #          colnames(result) = c(stratanames, "ID_unit", "Prob", "Stratum")
 #     else colnames(result) = c(stratanames, "ID_unit", "Prob", "Stratum")
 
-    colnames(result) = c(stratanames, "id", "prob", "stratum")
+    colnames(result) <- c(stratanames, "id", "prob", "stratum")
     
     if (description) {
       cat("Number of strata ", nrow(x1), "\n")

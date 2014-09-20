@@ -23,7 +23,11 @@ Gsd(x, na.rm = FALSE)
 }
 }
 \details{
-The geometric mean and sd are restricted to positive inputs (because otherwise the answer can have an imaginary component).\cr
+The geometric mean and geometric sd are restricted to positive inputs (because otherwise the answer can have an imaginary component). Hence if any argument is negative, then the result is NA. If any argument is zero, then the geometric mean is zero.\cr
+It is defined as 
+\deqn{
+\sqrt[n]{x_{1}\cdot x_{2}\cdot x_{3} \ldots \cdot x_{n}}
+}
 Use \code{\link{sapply}} to calculate the measures from data frame, resp. from a matrix. \cr
 }
 \value{a numeric value. 
@@ -36,7 +40,6 @@ Use \code{\link{sapply}} to calculate the measures from data frame, resp. from a
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 x <- runif(5)
 Gmean(x)
 
@@ -44,7 +47,6 @@ m <- matrix(runif(50), nrow = 10)
 apply(m, 2, Gmean)
 
 sapply(as.data.frame(m), Gmean)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -8,9 +8,10 @@ function(x, sep=paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), .
     # cat( "\n", sep, "\n", sep="") 
     # Alternative mit Fensterbreite:
     # cat( paste(rep("-",getOption("width")-2),collapse=""), "\n")
-    xname <- paste( match(cx, colnames(x)), " - ", cx, " (", paste(class(x[,cx]), collapse=" "),")", sep="" )
-    Desc( x[,cx], xname=xname, ...)
+    main <- paste( match(cx, colnames(x)), " - ", cx, " (", paste(class(x[,cx]), collapse=" "),")", sep="" )
+    Desc( x[,cx], main = main, ...)
   }
   cat("\n")
-
+  invisible()
+  
 }

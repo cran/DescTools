@@ -1,6 +1,7 @@
 BoxCox <-
 function (x, lambda) {
-# Author: Rob J Hyndman}
+
+# Author: Rob J Hyndman
 # origin: library(forecast)
     if (lambda < 0) 
         x[x < 0] <- NA
@@ -10,4 +11,17 @@ function (x, lambda) {
     if (!is.null(colnames(x))) 
         colnames(out) <- colnames(x)
     return(out)
+    
+# Greg Snow's Variant
+# BoxCox <- function (x, lambda) 
+# {
+# ### Author: Greg Snow
+# ### Source: Teaching Demos
+# xx <- exp(mean(log(x)))
+# if (lambda == 0) 
+# return(log(x) * xx)
+# res <- (x^lambda - 1)/(lambda * xx^(lambda - 1))
+# return(res)
+# }
+    
 }

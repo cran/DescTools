@@ -60,7 +60,6 @@ Andri Signorell <andri@signorell.net>
 \code{\link{plot}}, \code{\link{points}}, \code{\link{density}}, \code{\link{layout}} 
 }
 \examples{
-
 # best seen with: x11(7.5, 4.7)
 
 # just one variable with marginal densities
@@ -77,6 +76,5 @@ PlotMarDens( y=d.pizza$temperature, x=d.pizza$delivery_min, grp=d.pizza$area
   , panel.first=list( grid() )
   , main = "temperature ~ delivery_min | area"
 )
-
 }
 \keyword{ hplot }

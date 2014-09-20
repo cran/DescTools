@@ -28,12 +28,10 @@ Andri Signorell <andri@signorell.net>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 \dontrun{ # Windows-specific example
 # get a handle to a new excel instance
 xl <- GetNewXL()
 }
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

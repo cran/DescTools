@@ -43,7 +43,6 @@ ExpFreq(x, freq = c("abs", "rel"))
 ExpFreq(Titanic)
 
 ExpFreq(UCBAdmissions, freq="r")
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

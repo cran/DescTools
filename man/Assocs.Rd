@@ -1,5 +1,6 @@
 \name{Assocs}
 \alias{Assocs}
+\alias{print.Assocs}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Association Measures
 %%  ~~function to do ... ~~
@@ -8,20 +9,24 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Assocs(x, conf.level = 0.95, digits = 4)
+Assocs(x, conf.level = 0.95)
+
+\method{print}{Assocs}(x, digits = 4, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a 2 dimensional contingency table or a matrix.
 %%     ~~Describe \code{x} here~~
 }
-  \item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated. 
+  \item{conf.level}{confidence level of the interval. If set to NA no confidence interval will be calculated. Default is 0.95.
 
 %%     ~~Describe \code{conf.level} here~~
 }
   \item{digits}{integer which determines the number of digits used in formatting the measures of association.
 %%     ~~Describe \code{digits} here~~
 }
+  \item{\dots}{further arguments to be passed to or from methods.}
+
 }
 \details{This function wraps the association measures phi, contingency coefficient, Cramer's V, Goodman Kruskal's Gamma, Kendall's Tau-b,
 Stuart's Tau-c, Somers' Delta, Pearson and Spearman correlation, Guttman's Lambda, Theil's Uncertainty Coefficient and the mutual information.
@@ -41,7 +46,6 @@ the first column contains the estimate, the second the lower confidence interval
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 # Example taken from: SAS/STAT(R) 9.2 User's Guide, Second Edition, The FREQ Procedure
 # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
 # Hair-Eye-Color pp. 1816
@@ -54,7 +58,6 @@ tob <- as.table(matrix(c(
 
 Desc(tob)
 Assocs(tob)
-
 
 # Example taken from: http://www.math.wpi.edu/saspdf/stat/chap28.pdf
 # pp. 1349
@@ -69,8 +72,6 @@ pain <- as.table(matrix(c(
 
 Desc(pain)
 Assocs(pain)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

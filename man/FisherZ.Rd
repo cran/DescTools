@@ -32,7 +32,6 @@ rho, lower and upper confidence intervals (CorCI) \\
 }
 
 \examples{
-
 cors <- seq(-.9,.9,.1)
 
 zs <- FisherZ(cors)
@@ -47,7 +46,6 @@ p <- (1-pt(t,n-2))/2
 r.rc <- data.frame(r=r, z=FisherZ(r), lower=rc[,2], upper=rc[,3], t=t, p=p)
 
 round(r.rc,2)
-
 }
 
 \keyword{ multivariate }% at least one, from doc/KEYWORDS

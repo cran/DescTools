@@ -1,20 +1,21 @@
 Desc.integer <-
-function(x, xname = NULL, maxrows = 12, freq = NULL
-  , digits = 3, plotit = FALSE, ... ) {
+function(x, main = NULL, maxrows = 12, freq = NULL
+  , digits = 3, plotit=getOption("plotit", FALSE), ... ) {
 
 
-  if( is.null(xname)) xname <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), collapse=", "))
+  if( is.null(main)) main <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), collapse=", "))
+  
   uvals <- length(unique(na.omit(x)))
   
   if(is.null(freq)) freq <- uvals <= 12
   
   if(uvals == 2) {
     # if there are only 2 unique values, describe it as dichotomous variable
-    lres <- Desc.logical(x, xname=gsub(pattern="integer)", replacement="integer - dichotomous)", x=xname)) 
+    lres <- Desc.logical(x, main=gsub(pattern="integer)", replacement="integer - dichotomous)", x=main)) 
 
   } else {
     # produce the numeric summary
-    lres <- Desc.numeric(x, xname=xname, highlow = FALSE) 
+    lres <- Desc.numeric(x, main=main, highlow = FALSE) 
     
 #   old:  if(length(na.omit(x))>0){  # following only if there are valid values
 #    but we need not recalculate...
@@ -44,7 +45,7 @@ function(x, xname = NULL, maxrows = 12, freq = NULL
     }
   }
   
-  if(plotit) PlotDesc.integer(x, main=xname, maxrows=maxrows)
+  if(plotit) PlotDesc.integer(x, main=main, maxrows=maxrows)
 
   invisible(lres)
   

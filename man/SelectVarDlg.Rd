@@ -57,7 +57,6 @@ Andri Signorell <andri@signorell.net>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 \dontrun{ 
 data(d.pizza)
 SelectVarDlg(x = d.pizza, T)
@@ -66,7 +65,6 @@ SelectVarDlg(x = d.pizza$driver )
 x <- replicate(10, paste( sample(LETTERS, 5, replace = TRUE), collapse="") )
 SelectVarDlg(x)
 }
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

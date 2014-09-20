@@ -28,12 +28,10 @@ ImportDlg(fmt = 1)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 \dontrun{ 
 # choose a file
 fn <- ImportDlg()
 print(gettextf("You chose the file: \%s ", fn))
-
 
 # the path and filename can as well be nested in a command,
 #   done here to build a read.table command that can be well inserted into the code:
@@ -41,12 +39,7 @@ ImportDlg(fmt="d.\%fname\% <- read.table(file = \"\%path\%\\\%fname\%.\%fxt\%\",
   header = TRUE, sep = \";\", na.strings = c(\"NA\",\"NULL\"), strip.white = TRUE)")
 
 # go to your editor and paste...
-
-
-
 }
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

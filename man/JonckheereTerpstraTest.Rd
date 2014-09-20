@@ -70,7 +70,6 @@ x[1:2] <- mean(x[1:2]) # tied data
 JonckheereTerpstraTest(x, g)
 JonckheereTerpstraTest(x, g, nperm=5000)
 
-
 # Duller, S. 222
 coffee <- data.frame(
   time=c(
@@ -80,10 +79,8 @@ coffee <- data.frame(
   grp=Untable(c(4,6,5), type="ordered")[,1]
 )  
 
-JonckheereTerpstraTest(coffee$time, coffee$grp)
-
-
-
+# the formula interface:
+JonckheereTerpstraTest(time ~ grp, data=coffee)
 }
 
 \references{

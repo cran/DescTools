@@ -35,6 +35,5 @@ RgbToLong(col)}
 RgbToCol(matrix(c(162,42,42), nrow=3))
 
 RgbToLong(matrix(c(162,42,42), nrow=3))
-
 }
 \keyword{ color }

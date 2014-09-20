@@ -2,6 +2,7 @@
 \alias{Desc.formula}
 \alias{DescFactFact}
 \alias{DescNumFact}
+\alias{DescFactNum}
 \alias{DescNumNum}
 
 \title{Describe Variables by Groups
@@ -10,7 +11,8 @@
 }
 
 \usage{
-\method{Desc}{formula}(formula, data = parent.frame(), subset = TRUE, ...)
+\method{Desc}{formula}(formula, data = parent.frame(), subset, 
+     plotit = getOption("plotit", FALSE), ...)
 }
 
 \arguments{
@@ -19,12 +21,15 @@
   \item{data}{an optional matrix or data frame containing the variables in the formula \code{formula}. 
     By default the variables are taken from \code{environment(formula)}.}  
   \item{subset}{an optional vector specifying a subset of observations to be used.}  
+  \item{plotit}{boolean. Should a plot be created? The plot type will be chosen according to the classes of variables (roughly following a numeric-numeric, numeric-categorical, categorical-categorical logic). Default is \code{FALSE}.
+%%     ~~Describe \code{plotit} here~~
+}
   \item{\dots}{further argument to be passed to methods.}
 }
 
-\details{The formula interface accepts the formula operators +, :, *, I(), 1 and evaluates any function. 
+\details{The formula interface accepts the formula operators \code{+}, \code{:}, \code{*}, \code{I()}, \code{1} and evaluates any function. 
 The left hand side and right hand side of the formula are evaluated the same way.
-The variable pairs are processed in dependency of their classes by the functions DescFactFact, DescNumFact and DescNumNum.
+The variable pairs are processed in dependency of their classes by the functions \code{\link{DescFactFact}}, \code{\link{DescNumFact}}, \code{\link{DescFactNum}} and \code{\link{DescNumNum}}.
 }
 \value{just printed summary, no value returned
 }
@@ -46,7 +51,6 @@ Desc(temperature ~ driver, data=d.pizza, digits=1)
 
 # functions are evaluated
 Desc(I(temperature^2) + sqrt(temperature) ~ interaction(driver, area), data=d.pizza, digits=1)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

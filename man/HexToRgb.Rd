@@ -25,6 +25,5 @@ HexToRgb(hex)
 }
 \examples{
 HexToRgb(c("#ADD8E6", "#FA1572"))
-
 }
 \keyword{ color }

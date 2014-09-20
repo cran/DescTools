@@ -1,5 +1,5 @@
 MedianCI <-
-function(x, conf.level=0.95, na.rm=FALSE, type=c("pseudo","exact","boot"), R=1000) {
+function(x, conf.level=0.95, na.rm=FALSE, method=c("exact","boot"), R=999) {
   if(na.rm) x <- na.omit(x)
   
   # alte Version, ziemlich grosse Unterschiede zu wilcox.test:
@@ -10,15 +10,7 @@ function(x, conf.level=0.95, na.rm=FALSE, type=c("pseudo","exact","boot"), R=100
   # x[ qbinom(1-alpha/2,length(x),0.5) ] ### upper limit
   # ) )
     
-  switch( match.arg(arg=type, choices=c("pseudo","exact","boot"))
-          , "pseudo" = { 
-            # Der folgende Ansatz stammt aus: The R cookbook, S. 206
-            # liefert aber ein CI für den "Pseudomedian", der nicht mit dem Median
-            # median(x) übereinstimmt....
-            # Was tun?? 
-            # 28.11.2011 - Andri
-            r <- wilcox.test(x, conf.int=TRUE, conf.level=conf.level)$conf.int[1:2]
-          }
+  switch( match.arg(arg=method, choices=c("exact","boot"))
           , "exact" = { # this is the SAS-way to do it
             # https://stat.ethz.ch/pipermail/r-help/2003-September/039636.html
             r <- SignTest(x)$conf.int

@@ -47,12 +47,9 @@ WrdInsTab(nrow = 1, ncol = 1, heights = NULL, widths = NULL, wrd = getOption("la
 }
 \examples{
 \dontrun{ # Windows-specific example
-
 wrd <- GetNewWrd()
 WrdInsTab(nrow=3, ncol=3, wrd=wrd)
-
 }
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -9,7 +9,7 @@ Confidence Interval for the Mean
 Calculates the confidence interval for the mean either the classical way or with the bootstrap approach. 
 }
 \usage{
-MeanCI(x, trim = 0, type = c("classic", "norm", "basic", "stud", "perc", "bca"), 
+MeanCI(x, trim = 0, method = c("classic", "norm", "basic", "stud", "perc", "bca"), 
        conf.level = 0.95, na.rm = FALSE, R = 999) 
  
 }
@@ -21,7 +21,7 @@ MeanCI(x, trim = 0, type = c("classic", "norm", "basic", "stud", "perc", "bca"),
   \item{trim}{a (non-empty) numeric vector of data values.
 %%     ~~Describe \code{x} here~~
 }
-  \item{type}{A vector of character strings representing the type of intervals required. The value should be any subset of the values \code{"norm"}, \code{"basic"},  \code{"stud"},  \code{"perc"},  \code{"bca"}.
+  \item{method}{A vector of character strings representing the type of intervals required. The value should be any subset of the values \code{"classic"}, \code{"norm"}, \code{"basic"},  \code{"stud"},  \code{"perc"},  \code{"bca"}.
   See \code{\link{boot.ci}}.
 %%     ~~Describe \code{x} here~~
 }
@@ -58,16 +58,15 @@ MeanCI(x, na.rm=TRUE)
 MeanCI(x, conf.level=0.99, na.rm=TRUE)
 
 # the different types of bootstrap confints
-MeanCI(x, type="norm", na.rm=TRUE)
-MeanCI(x, type="norm", trim=0.1, na.rm=TRUE)
-MeanCI(x, type="basic", trim=0.1, na.rm=TRUE)
-# MeanCI(x, type="stud", trim=0.1, na.rm=TRUE), this needs some more information
-MeanCI(x, type="perc", trim=0.1, na.rm=TRUE)
-MeanCI(x, type="bca", trim=0.1, na.rm=TRUE)
+MeanCI(x, method="norm", na.rm=TRUE)
+MeanCI(x, method="norm", trim=0.1, na.rm=TRUE)
+MeanCI(x, method="basic", trim=0.1, na.rm=TRUE)
+# MeanCI(x, method="stud", trim=0.1, na.rm=TRUE), this needs some more information
+MeanCI(x, method="perc", trim=0.1, na.rm=TRUE)
+MeanCI(x, method="bca", trim=0.1, na.rm=TRUE)
 
 
 # Getting the MeanCI for more than 1 column
 round( do.call("rbind", lapply(d.pizza[,1:4],  MeanCI, na.rm=TRUE)), 3)
-
 }
 \keyword{univar }

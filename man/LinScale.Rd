@@ -38,7 +38,6 @@ LinScale(x, low = NULL, high = NULL, newlow = 0, newhigh = 1)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 # transform the temperature from Celsius to Fahrenheit
 LinScale(d.pizza[1:20, "temperature"], 0, 100, -17.8, 37.8 )
 
@@ -51,15 +50,12 @@ LinScale(d.pizza[1:20, c("temperature", "price")],
 
 
 \dontrun{ 
-
 par(mfrow=c(3,1), mar=c(0,5,0,3), oma=c(5,0,5,0))
 plot(LinScale(d.frm[,1]), ylim=c(-2,2), xaxt="n", ylab="LinScale")
 plot(RobScale(d.frm[,1]), ylim=c(-2,2), xaxt="n", ylab="RobScale")
 plot(scale(d.frm[,1]), ylim=c(-2,2), ylab="scale")
 title("Compare scales", outer = TRUE)
-
 }
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

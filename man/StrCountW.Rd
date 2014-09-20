@@ -48,9 +48,8 @@ StrCountW("And what about numbers 8899 or special characters $$$/*?")
 StrCountW("   Starting'n ending with some whitespace  ")
 
 StrCountW(c("This is a", "text in more", "than one line."))
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ character}% __ONLY ONE__ keyword per line
+\keyword{character}
+\keyword{utilities}

@@ -37,7 +37,6 @@ Rev(x, ...)
 \seealso{\code{\link{rev}}, \code{\link{order}}, \code{\link{sort}}, \code{\link{seq}}
 }
 \examples{
-
 tab <- matrix( c( 1, 11, 111,
                   2, 22, 222,
                   3, 33, 333), byrow=TRUE, nrow=3)
@@ -47,7 +46,5 @@ Rev(tab, direction="column")
 
 # abbreviations are accepted
 Rev(tab, direction="b")                  
-
-
 }
 \keyword{ manip }

@@ -1,5 +1,7 @@
 \name{WrdTable}
 \alias{WrdTable}
+\alias{WrdTable.Freq}
+\alias{WrdTable.default}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Produces a Table in Word
 %%  ~~function to do ... ~~
@@ -8,7 +10,12 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-WrdTable(tab, wrd = getOption("lastWord"), row.names = FALSE)
+
+WrdTable(tab, wrd = getOption("lastWord"), row.names = FALSE, \dots)
+
+\method{WrdTable}{Freq}(tab, wrd = getOption("lastWord"), row.names = FALSE, \dots)
+\method{WrdTable}{default}(tab, wrd = getOption("lastWord"), row.names = FALSE, \dots)
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +29,7 @@ WrdTable(tab, wrd = getOption("lastWord"), row.names = FALSE)
   \item{row.names}{
 %%     ~~Describe \code{row.names} here~~
 }
+  \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{A tricky problem, still unsolved... This is experimental code.
 %%  ~~ If necessary, more details than the description above ~~
@@ -32,10 +40,4 @@ WrdTable(tab, wrd = getOption("lastWord"), row.names = FALSE)
 
 \seealso{\code{\link{GetNewWrd}}
 }
-\examples{
-# No example
-
-}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ print }

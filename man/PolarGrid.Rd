@@ -51,7 +51,6 @@ PolarGrid(nr = NULL, ntheta = NULL, col = "lightgray", lty = "dotted", lwd = par
 
 \seealso{\code{\link{PlotPolar}}}
 \examples{
-
 Canvas(xlim=c(-5,5), xpd=TRUE)
 PolarGrid()
 
@@ -60,8 +59,6 @@ PolarGrid(nr=0:5, ntheta=6)
 
 Canvas(xlim=c(-5,5), xpd=TRUE)
 PolarGrid(ntheta=36, rlabels=NA, lblradians=TRUE)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

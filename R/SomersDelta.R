@@ -6,6 +6,14 @@ function(x,  y = NULL, direction=c("row","column"), conf.level = NA, ...) {
   
   # tab is a matrix of counts   
   x <- ConDisPairs(tab)
+
+# use .DoCount
+#   if(is.na(conf.level)) {
+#     d.tab <- as.data.frame.table(tab)
+#     x <- .DoCount(d.tab[,1], d.tab[,2], d.tab[,3])
+#   } else {  
+#     x <- ConDisPairs(tab)
+#   }
   
   m <- min(dim(tab))
   n <- sum(tab)

@@ -46,13 +46,10 @@ The matrix might have a 4th row if an alpha channel is requested.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 ColToRgb("peachpuff")
 ColToRgb(c(blu = "royalblue", reddish = "tomato")) # names kept
 
 ColToRgb(1:8)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

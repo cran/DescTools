@@ -22,7 +22,7 @@ Mround(x, multiple)
 \details{Mround rounds up, away from zero, if the remainder of dividing number by multiple is greater than or equal to half the value of multiple.
 %%  ~~ If necessary, more details than the description above ~~
 }
-\value{the rounded value,
+\value{the rounded value
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -46,7 +46,6 @@ Mround(1.3, 0.2)  # Rounds 1.3 to a nearest multiple of 0.2 (1.4)
 Mround(5, -2)     # Returns an error, because -2 and 5 have different signs    
 
 Mround(c(1.92, 45.38, 0.831125), 0.05)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

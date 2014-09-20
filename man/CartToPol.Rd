@@ -40,7 +40,6 @@ Andri Signorell <andri@signorell.net>
 }
 
 \examples{
-
 CartToPol(x=1, y=1)
 CartToPol(x=c(1,2,3), y=c(1,1,1))
 CartToPol(x=c(1,2,3), y=1)
@@ -48,9 +47,6 @@ CartToPol(x=c(1,2,3), y=1)
 
 PolToCart(r=1, theta=pi/2)
 PolToCart(r=c(1,2,3), theta=pi/2)
-
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

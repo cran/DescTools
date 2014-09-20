@@ -84,7 +84,5 @@ salary <- array(
 
 # common odds ratio = 4.028269
 BreslowDayTest(salary, OR = 4.02)
-
-
 }
 \keyword{htest}

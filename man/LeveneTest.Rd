@@ -64,7 +64,6 @@ returns an object meant to be printed showing the results of the test.
     adapted from a response posted by Brian Ripley to the r-help email list.}
 
 \examples{
-
 ## example from ansari.test:
 ## Hollander & Wolfe (1973, p. 86f):
 ## Serum iron determination using Hyland control sera
@@ -90,7 +89,6 @@ LeveneTest(conformity ~ fcategory * partner.status, data = Moore, center = mean,
 
 LeveneTest(lm(conformity ~ fcategory*partner.status, data = Moore))
 }
-
 }        
 
 \keyword{htest}

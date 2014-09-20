@@ -48,8 +48,8 @@ StrAbbr(x=levels(d.pizza$driver), minchar=2, method="fix")
 x <- c("Aaron", "Aaramis", "Berta", "Bello", "Claudia", "Cardinale", "Doretta", "Emilia")
 StrAbbr(x, minchar=2, method="left")
 StrAbbr(x, minchar=2, method="fix")
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{character}
+\keyword{utilities}

@@ -8,15 +8,12 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Midx(x, first = NULL)
+Midx(x)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{the numeric vector
 %%     ~~Describe \code{x} here~~
-}
-  \item{first}{number which is to be inserted in the very beginning of the vector. Default is NULL, meaning nothing will be inserted. 
-%%     ~~Describe \code{first} here~~
 }
 }
 \value{numeric vector with the calculated midpoins
@@ -33,8 +30,6 @@ Midx(x, first = NULL)
 \examples{
 x <- c(1,3,6,7)
 Midx(x)
-Midx(x, 0)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

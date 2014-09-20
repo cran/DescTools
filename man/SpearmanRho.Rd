@@ -60,8 +60,6 @@ Conover W. J. (1999) \emph{Practical Nonparametric Statistics (3rd edition)}. Wi
 SpearmanRho(d.diamonds$clarity, d.diamonds$cut)
 
 SpearmanRho(d.diamonds$clarity, d.diamonds$cut, conf.level = 0.95)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

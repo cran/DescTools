@@ -5,7 +5,7 @@ function(visible = TRUE, template = "Normal", header=FALSE
   stopifnot(require(RDCOMClient))
   
   # Starts the Word application with wrd as handle
-  wrd <- COMCreate("Word.Application", existing=FALSE)
+  wrd <- RDCOMClient::COMCreate("Word.Application", existing=FALSE)
   options(lastWord = wrd)
   
   if( visible == TRUE ) wrd[["Visible"]] <- TRUE 

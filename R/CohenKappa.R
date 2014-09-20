@@ -1,11 +1,13 @@
 CohenKappa <-
 function (x, y = NULL, weights = c("Unweighted", "Equal-Spacing", "Fleiss-Cohen"), conf.level = NA, ...) {
 
+  if (is.character(weights)) weights <- match.arg(weights)
+
   if(!is.null(y)) {
     # we can not ensure a reliable weighted kappa for 2 factors with different levels
     # so refuse trying it... (unweighted is no problem)
     
-    if(weights != "Unweighted") stop("Vector interface for weighted Kappa is not supported. Provide confusion matrix.")
+    if( !identical(weights, "Unweighted")) stop("Vector interface for weighted Kappa is not supported. Provide confusion matrix.")
     
     # x and y must have the same levels in order to build a symmetric confusion matrix
     x <- factor(x)
@@ -33,8 +35,6 @@ function (x, y = NULL, weights = c("Unweighted", "Equal-Spacing", "Fleiss-Cohen"
 
   k <- kappa(po, pc)
   s <- std(po, pc)
-
-  if (is.character(weights)) weights <- match.arg(weights)
   
   W <- if (is.matrix(weights)) 
     weights

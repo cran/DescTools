@@ -38,7 +38,6 @@ for calculating the overlapping time: \code{\link{difftime}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 c(Date(2012,1,3), Date(2012,2,3)) \%overlaps\% c(Date(2012,3,1), Date(2012,3,3))
 c(Date(2012,1,3), Date(2012,2,3)) \%overlaps\% c(Date(2012,1,15), Date(2012,1,21))
 
@@ -50,7 +49,6 @@ Date(2012,1,3) \%overlaps\% c(Date(2012,3,1), Date(2012,3,3))
 
 # works with numerics as well
 c(1, 18) \%overlaps\% c(10, 45)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

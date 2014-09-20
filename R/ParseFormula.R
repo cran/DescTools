@@ -1,7 +1,7 @@
 ParseFormula <-
-function(formula, data=parent.frame(), subset=TRUE, drop = TRUE) {
+function(formula, data=parent.frame(), drop = TRUE) {
   
-  xhs <- function(formula, data = parent.frame(), subset=TRUE, na.action=na.pass){
+  xhs <- function(formula, data = parent.frame(), na.action=na.pass){
     
     # get all variables out of the formula
     vars <- attr(terms(formula, data=data), "term.labels")
@@ -11,12 +11,12 @@ function(formula, data=parent.frame(), subset=TRUE, drop = TRUE) {
     m <- match(c("formula", "data", "na.action"), names(mf), 0) 
     mf <- mf[c(1, m)] 
     mf$na.action <- na.action
-    mf$subset <- subset
     mf$drop.unused.levels <- TRUE 
     mf[[1]] <- as.name("model.frame") 
+    
     mf.rhs <- eval.parent(mf) 
     
-    # model frame does not evaluate interaction, so let't do that here
+    # model frame does not evaluate interaction, so let's do that here
     d.tmp <- mf.rhs[,FALSE] # create a new data.frame
     for(x in vars){
       if( length(grep(":", x))>0 )      # there's a : in the variable
@@ -33,7 +33,10 @@ function(formula, data=parent.frame(), subset=TRUE, drop = TRUE) {
   }
 
   f1 <- formula
-  
+
+  # evaluate subset
+  m <- match.call(expand.dots = FALSE)
+
   # do not support . on both sides of the formula
   if( (length(grep("^\\.$", all.vars(f1[[2]])))>0) && (length(grep("^\\.$", all.vars(f1[[3]])))>0) )
     stop("dot argument on both sides of the formula are not supported")

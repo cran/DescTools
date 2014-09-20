@@ -15,18 +15,17 @@ Calculates descriptive statistics for x and uses Word as reporting tool.
 }
 \usage{
 
-\method{DescWrd}{default}(x, wrd, caption = deparse(substitute(x)), \dots)
-\method{DescWrd}{data.frame}(x, wrd, caption = deparse(substitute(x)), 
-                 univar = TRUE, colpairs = FALSE, notch = TRUE, 
-                 col0 = "#9A0941FF", col1 = "#8296C4FF", width = 100, 
-                 fontname = "Consolas", fontsize = 7, \dots)
-\method{DescWrd}{formula}(formula, data = parent.frame(), wrd, \dots)
+\method{DescWrd}{default}(x, wrd, main = deparse(substitute(x)), \dots)
+
+\method{DescWrd}{data.frame}(x, wrd, \dots)
+
+\method{DescWrd}{formula}(formula, data = parent.frame(), subset = TRUE, wrd, \dots)
 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{the object to be described.}
-  \item{caption}{the title of the decription. Default is name and class of the variable.}
+  \item{main}{the title of the decription. Default is name and class of the variable.}
   \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()} 
   or an existing one, created by \code{GetCurrWrd()}.
   Default is the last created pointer stored in \code{getOption("lastWord")}.}
@@ -36,15 +35,7 @@ Calculates descriptive statistics for x and uses Word as reporting tool.
   \item{data}{an optional matrix or data frame containing the variables in the formula \code{formula}. 
     By default the variables are taken from \code{environment(formula)}.}  
 
-  \item{univar}{logical. Specifying if only univariate descriptions should be produced. Defaults to TRUE.}
-  \item{colpairs}{logical. Specifying if pairwise bivariate descriptions should be produced. Defaults to FALSE.}
-  \item{notch}{if notch is TRUE, a notch is drawn in each side of the boxes in a boxplot. See \code{\link{boxplot}} for the details.}
-  \item{col0}{the first color used in mosaicplots.}
-  \item{col1}{the last color used in mosaicplots. }
-  \item{width}{integer. The linewidth of the results in characters. Defaults to 80.  }
-  \item{fontname}{the font of the text.}
-  \item{fontsize}{the fontsize of the text.}
-
+  \item{subset}{an optional vector specifying a subset of observations to be used.}  
   
   \item{\dots}{further argument to be passed to methods.}
 
@@ -64,7 +55,6 @@ Andri Signorell <andri@signorell.net>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 # Output into word document ---------------------------------------------------------
 
 \dontrun{# Windows-specific example
@@ -105,7 +95,6 @@ Desc.numeric(d.pizza$count, highlow=TRUE)
 DescNumFact( x=d.pizza$delivery_min, grp=d.pizza$operator )
 DescFactFact( x=d.pizza$driver, grp=d.pizza$operator)
 DescNumNum( x=d.pizza$delivery_min, y=d.pizza$price )
-
 }
 
 }

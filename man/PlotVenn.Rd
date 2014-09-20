@@ -61,7 +61,6 @@ PlotVenn(x=x[1:4], col=SetAlpha(c("blue","red","yellow","green","lightblue"), 0.
 
 r.venn <- PlotVenn(x=x[1:5], col=SetAlpha(c("blue","red","yellow","green","lightblue"), 0.2))
 r.venn
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

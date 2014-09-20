@@ -34,13 +34,11 @@ AllDuplicated(x)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 x <- c(1:10, 4:6)
 
 AllDuplicated(x)
 
 x[!AllDuplicated(x)]
-
 
 # union, intersect and friends...
 A <- c(sort(sample(1:20, 9)),NA)
@@ -76,8 +74,6 @@ tab[tab>1]
 sum(tab>1)
 # count tied groups
 sum(tab[tab>1])
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -34,12 +34,11 @@ Primes(n)
  \code{\link{Factorize}}
 }
 \examples{
-
 (p1 <- Primes(100))
 system.time(p1k <- Primes(1000)) # still lightning ..
 
 stopifnot(length(p1k) == 168)
- 
+
 }
 \keyword{math}
 \keyword{arith}

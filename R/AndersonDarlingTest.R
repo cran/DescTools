@@ -1,29 +1,92 @@
 AndersonDarlingTest <-
-function (x) {
-
-    DNAME <- deparse(substitute(x))
-    x <- sort(x[complete.cases(x)])
-    n <- length(x)
-    if (n < 8) 
-        stop("sample size must be greater than 7")
-    p <- pnorm((x - mean(x))/sd(x))
-    h <- (2 * seq(1:n) - 1) * (log(p) + log(1 - rev(p)))
-    A <- -n - mean(h)
-    AA <- (1 + 0.75/n + 2.25/n^2) * A
-    if (AA < 0.2) {
-        pval <- 1 - exp(-13.436 + 101.14 * AA - 223.73 * AA^2)
-    }
-    else if (AA < 0.34) {
-        pval <- 1 - exp(-8.318 + 42.796 * AA - 59.938 * AA^2)
-    }
-    else if (AA < 0.6) {
-        pval <- exp(0.9177 - 4.279 * AA - 1.38 * AA^2)
-    }
-    else {
-        pval <- exp(1.2937 - 5.709 * AA + 0.0186 * AA^2)
-    }
-    RVAL <- list(statistic = c(A = A), p.value = pval, method = "Anderson-Darling normality test", 
-        data.name = DNAME)
-    class(RVAL) <- "htest"
-    return(RVAL)
+function(x, null="punif", ..., nullname) {
+  
+  .recogniseCdf <- function(s="punif") {
+    if(!is.character(s) || length(s) != 1) return(NULL)
+    if(nchar(s) <= 1 || substr(s,1,1) != "p") return(NULL)
+    root <- substr(s, 2, nchar(s))
+    a <- switch(root,
+                beta     = "beta",
+                binom    = "binomial",
+                birthday = "birthday coincidence",
+                cauchy   = "Cauchy",
+                chisq    = "chi-squared",
+                exp      = "exponential",
+                f        = "F",
+                gamma    = "Gamma",
+                geom     = "geometric",
+                hyper    = "hypergeometric",
+                lnorm    = "log-normal",
+                logis    = "logistic",
+                nbinom   = "negative binomial",
+                norm     = "Normal",
+                pois     = "Poisson",
+                t        = "Student's t",
+                tukey    = "Tukey (Studentized range)",
+                unif     = "uniform",
+                weibull  = "Weibull",
+                NULL)
+    if(!is.null(a))
+      return(paste(a, "distribution"))
+    b <- switch(root,
+                AD     = "Anderson-Darling",
+                CvM    = "Cramer-von Mises",
+                wilcox = "Wilcoxon Rank Sum",
+                NULL)
+    if(!is.null(b))
+      return(paste("null distribution of", b, "Test Statistic"))
+    return(NULL)
+  }
+  
+  
+  xname <- deparse(substitute(x))
+  nulltext <- deparse(substitute(null))
+  if(is.character(null)) nulltext <- null
+  if(missing(nullname) || is.null(nullname)) {
+    reco <- .recogniseCdf(nulltext)
+    nullname <- if(!is.null(reco)) reco else 
+      paste("distribution", sQuote(nulltext))
+  }
+  stopifnot(is.numeric(x))
+  x <- as.vector(x)
+  n <- length(x)
+  F0 <- if(is.function(null)) null else
+    if(is.character(null)) get(null, mode="function") else
+      stop("Argument 'null' should be a function, or the name of a function")
+  U <- F0(x, ...)
+  if(any(U < 0 | U > 1))
+    stop("null distribution function returned values outside [0,1]")
+  U <- sort(U)
+  k <- seq_len(n)
+  ## call Marsaglia C code
+  z <- .C("ADtestR",
+          x = as.double(U),
+          n = as.integer(n),
+          adstat = as.double(numeric(1)),
+          pvalue = as.double(numeric(1))
+  )
+  STATISTIC <- z$adstat
+  names(STATISTIC) <- "An"
+  PVAL <- z$pvalue
+  METHOD <- c("Anderson-Darling test of goodness-of-fit",
+              paste("Null hypothesis:", nullname))
+  extras <- list(...)
+  parnames <- intersect(names(extras), names(formals(F0)))
+  if(length(parnames) > 0) {
+    pars <- extras[parnames]
+    pard <- character(0)
+    for(i in seq_along(parnames))
+      pard[i] <- paste(parnames[i], "=", paste(pars[[i]], collapse=" "))
+    pard <- paste("with",
+                  ngettext(length(pard), "parameter", "parameters"),
+                  "  ", 
+                  paste(pard, collapse=", "))
+    METHOD <- c(METHOD, pard)
+  }
+  out <- list(statistic = STATISTIC,
+              p.value = PVAL,
+              method = METHOD,
+              data.name = xname)
+  class(out) <- "htest"
+  return(out)
 }

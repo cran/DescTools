@@ -20,6 +20,9 @@ Hmean(x, na.rm = FALSE)
 }
 }
 \details{
+If any argument is negative, then the result will be NA.
+If any argument is zero, then the harmonic mean is zero. Otherwise, the harmonic mean is the reciprocal of the arithmetic mean of the reciprocals of the values.
+\cr
 Use \code{\link{sapply}} to calculate the measures from data frame, resp. from a matrix. \cr
 }
 \value{
@@ -32,7 +35,6 @@ a numeric value.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 x <- runif(5)
 Hmean(x)
 
@@ -40,7 +42,6 @@ m <- matrix(runif(50), nrow = 10)
 apply(m, 2, Hmean)
 
 sapply(as.data.frame(m), Hmean)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

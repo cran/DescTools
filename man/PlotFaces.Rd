@@ -65,8 +65,6 @@ PlotFaces(longley[1:9,])
 
 set.seed(17)
 PlotFaces(matrix(sample(1:1000,128,),16,8),main="random faces")
-
-
 }
 
 \keyword{ hplot }

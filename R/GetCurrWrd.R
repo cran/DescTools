@@ -7,7 +7,7 @@ function() {
   stopifnot(require(RDCOMClient))
   
   # there's no "get"-function in RDCOMClient, so just create a new here..
-  hwnd <- COMCreate("Word.Application", existing=TRUE)
+  hwnd <- RDCOMClient::COMCreate("Word.Application", existing=TRUE)
   if(is.null(hwnd)) warning("No running Word application found!")
   
   options(lastWord = hwnd)

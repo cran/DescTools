@@ -55,10 +55,7 @@ TukeyBiweight(x, const = 9, na.rm = FALSE)
 
 \seealso{ \code{\link{HuberM}}, \code{\link{RobRange}}, \code{\link{RobScale}} }
 \examples{
-
 TukeyBiweight(rnorm(100))
-
-
 }
 \keyword{ robust }
 \keyword{ univar }

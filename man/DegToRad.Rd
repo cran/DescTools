@@ -36,11 +36,9 @@ RadToDeg returns a vector of the same length as \code{rad} with the angles in de
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \examples{
-
 DegToRad(c(90,180,270))
 
 RadToDeg( c(0.5,1,2) * pi)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -1,17 +1,21 @@
 Desc.table <-
-function(x, xname=NULL, rfrq = NULL, margins = c(1,2), 
-                       plotit = FALSE, verb = c("med","lo","hi"), ... ){
+function(x, main=NULL, rfrq = NULL, margins = c(1,2), 
+                       plotit=getOption("plotit", FALSE), verbose = c("medium","low","high"), ... ){
 
+  if(length(dim(x)) > 2) Desc.default(x)  # no more than 2 dimensions for a table
+  
   # define verbosity
-  verb <- match.arg(verb, c("med","lo","hi"))
-  verb <- match(verb, c("lo","med","hi"), nomatch=2)
+  verbose <- match.arg(verbose, c("medium","low","high"))
+  verbose <- match(verbose, c("low","medium","high"), nomatch=2)
   
-  if(is.null(rfrq)) rfrq <- ifelse(verb>1, "111","000")
+  if(is.null(rfrq)) rfrq <- ifelse(verbose > 1, "111","000")
   
-  if( is.null(xname)) xname <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), sep=", "))
+  if(is.null(main)) main <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), collapse=", "))
   
-  cat( paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), "\n" ) 
-  if(!is.na(xname))  cat(xname)
+  if(!identical(main, NA)) {
+    cat( paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), "\n" ) 
+    cat(main, "\n")
+  }  
   if( !is.null(attr(x,"label")) ) cat(" :", strwrap(attr(x,"label"), indent=2, exdent=2), sep="\n" )
 
   # Pairs summary
@@ -19,7 +23,7 @@ function(x, xname=NULL, rfrq = NULL, margins = c(1,2),
 #  vn <- sum(complete.cases(x,grp))
 #  digits <- format.info(signif((n-vn)/n*100,3))[2]-2    ### hier 3 signifikante Stellen für beide Angaben bestimmen
   if(length(dim(x))==1) {       # 1-dim table ****
-    cat("\n\nSummary: \n",
+    cat("\nSummary: \n",
         "n: ", n,
         ", rows: ", dim(x)[1]  
         , "\n\n", sep="" ) 
@@ -30,7 +34,7 @@ function(x, xname=NULL, rfrq = NULL, margins = c(1,2),
     
   } else {                   # n-dim tabl *****
 
-      cat("\n\nSummary: \n",
+      cat("\nSummary: \n",
       "n: ", n,
       ", rows: ", dim(x)[1],  
       ", columns: ", dim(x)[2]  
@@ -38,7 +42,7 @@ function(x, xname=NULL, rfrq = NULL, margins = c(1,2),
   
     if(dim(x)[1] == 2 & dim(x)[2] == 2 ){
       cat("Fisher's exact test ", capture.output( fisher.test(x))[5], "\n", sep="")
-      if(verb>1){ # print only with verbosity > 1
+      if(verbose > 1){ # print only with verbosity > 1
         cat("", capture.output( mcnemar.test(x))[5], "\n\n", sep="")
         m <- ftable(format(rbind(
            "odds ratio    " = OddsRatio(x, conf.level=0.95)
@@ -54,7 +58,7 @@ function(x, xname=NULL, rfrq = NULL, margins = c(1,2),
       r.chisq <- chisq.test(x)
       cat("Pearson's Chi-squared test:\n  "
         , capture.output(r.chisq)[5], "\n", sep="")
-      if(verb>1){ # print only with verbosity > 1
+      if(verbose > 1){ # print only with verbosity > 1
         
         # Log-likelihood chi-squared (G2) test of independence (homogeneity)
         lhrat <- 2 * sum(r.chisq$observed * log(r.chisq$observed/r.chisq$expected), na.rm=TRUE)
@@ -69,7 +73,7 @@ function(x, xname=NULL, rfrq = NULL, margins = c(1,2),
       }
     }
   
-    switch(verb
+    switch(verbose
       , "1" = { cat("\n")
               }     
       , "2" = {
@@ -92,6 +96,7 @@ function(x, xname=NULL, rfrq = NULL, margins = c(1,2),
   print(PercTable(x, rfrq=rfrq, margins=margins, ...))
   cat("\n")
   
-  if(plotit) PlotDesc.table(x, main=xname)
-  
+  if(plotit) PlotDesc.table(x, main=main)
+  invisible()
+
 }

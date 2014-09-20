@@ -93,7 +93,6 @@ as alternative when not all curves should be plotted in the same plot.
 \seealso{\code{\link{PlotViolin}}, \code{\link{density}}
 }
 \examples{
-
 x <- rnorm(1000,0,1)
 y <- rnorm(1000,0,2)
 z <- rnorm(1000,2,1.5)
@@ -123,9 +122,6 @@ PlotMultiDens(x=split(d.pizza$temperature, d.pizza$driver)[1],
                      args.dens = list(bw=c(1:5)), na.rm=TRUE,
                      args.legend=NA, main="Compare bw")
 legend(x="topright", legend=gettextf("bw = \%s", 1:5), fill=rainbow(5))
-
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

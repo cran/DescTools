@@ -39,7 +39,6 @@ We'll wait for definitive results and enjoy the function's comfort so far...
 }
 \examples{
 median(d.pizza$quality, na.rm=TRUE)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

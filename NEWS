@@ -1,5 +1,83 @@
 
 
+DescTools 0.99.8 (2014-09-20)
+-----------------------------
+
+NEW FUNCTIONS ADDED:
+   * Outside operators, e.g. %][%, are checking if values lie outside a given range.
+   * StrPos gives the first found position of a string in another string.
+   * LOF yields the local outlier factor (Breuning, 2000) of a matrix using k neighbours.
+   * NPV and IRR calculate the Net Present Value and the Internal Rate of Return.
+     OPR calculates the one period simple or log returns.
+   * DiffDays360 calculates the difference of two dates using the 360-days algorithm.
+   * Vigenere implements a simple vigenere encryption algorithm.
+   * Some more time functions added: Now, Today, Hour, Min, Sec.
+   * IsLeapYear tests what it promises to.
+   * HmsToSec, SecToHms convert h:m:s times to seconds and vice versa.
+   * UnitConv convert some commonly used units.
+   * MixColor gets a mixture of two colors.
+   * Trim cuts extreme values from a vector x as used for calculating a trimmed mean.
+   * Stuart-Maxwell computes a marginal homogeneity test. LehmacherTest does the same.
+   * ScheffeTest returns the results of a multiple comparisons Scheffe test.
+     NewmanKeulsTest does the same based on Tukey's HSD test.
+   * PostHocTest is a wrapper for the most frequently used post hoc tests in ANOVA, 
+     including FisherLSD, Bonferroni (Dunn), TukeyHSD, (Student-)Newman-Keuls and Scheffe.
+   * New function EtaSq calculates the effect sizes for ANOVAs.	 
+   * Several new tests added: HotellingsT2Test, BartelsRankTest.
+   * Keywords reports the keywords of a manual page.
+   * SysInfo displays some information about system and environment.
+   * Recyle recyles a list of elements to the maximal dimension found in the whole list.
+   * The function Explore(data.frame) allows a little bit of interactive plotting.
+   * PlotFct helps to plot mathematical expressions or functions.
+   * ToLong, ToWide are two simple functions for reshaping a vector.
+   * Mar allows to set single plot margins while leaving the others unchanged.
+   * New data: d.period contains the Periodic System of the Elements.
+   * ParseSASDatalines reads SAS datalines in a data.frame.
+   * MarginTable wraps margin.table and calculates all of them, percentages included.
+
+   
+UPDATED FUNCTIONS:
+   * PlotHorizBars gains new arguments "height" and "add".
+   * PlotQQ includes a qqline now.
+   * Bivariate Desc-functions gain a plotit argument.
+   * Between operators will accept multiple ranges making them more flexible.
+   * The runs test has been extended to 2 samples (Wald-Wolfowitz-Test). The p-value is 
+     now calculated exact for small sample sizes.
+   * Kurt and Skew, computing kurtosis and skewness, are running 15-times faster using C-code.	 
+   * Lorenz curves will now report Gini coefficient.
+   * The function "AddErrBars" has been renamed to "ErrBars".
+   * The function "AddLm" has been redesigned to "lines.lm".
+   * The function "AddLoess" has been redesigned to "lines.loess".
+   * AddConnLines has been renamed to "ConnLines" and gains a new argument xalign, which allows
+	 to add lines to a barplot which are aligned to the middle of the bars.
+   * The argument "quant" in CutQ has been renamed to "probs", according to the naming in quantile.
+   * PlotFdist has a new option "curve" to be used to add e.g. a normal density curve to the histogram.
+   * AndersonDarlingTest calculation logic was replaced with the newer Marsaglia approach.
+     (I'm not sure, whether this was wise. Tell me what you think about that!)
+   * JarqueBeraTest gains a new argument *robust*, calculation a robust version of the test.
+   * StrPad has been given recycling power for all arguments. The "str" argument has been renamed to "pad".
+   * The argument "type" in MeanCI, MeanDiffCI, MedianCI, VarCI has been renamed to "method" 
+     such as to be consistent with others CIs.
+   * The argument verb in Desc.table has been renamed to "verbose" and its allowed values to "medium",
+     "low" and "high". Anyhow this change will not break existing code, as abbreviation is allowed.
+   * Desc-functions have been cleared out, resulting in better consistency and faster and more robust behaviour.
+   * LOCF gets a faster implementation.
+    
+   
+BUGFIXES:
+   * Bug corrected for Cramer's V confidence intervals. 
+     Credits to Steven J. Pierce for spotting the problem and to Michael Smithson for fixing it.
+   * The icon file for the PasswordDlg could not be found resulting in the dialog not being displayed.
+   * PlotFdist did not handle args.boxplot = NA correctly, meaning no boxplot being displayed.
+   * Hmean will report NA if any x < 0.
+   * LsFct did not only list the functions but all objects of a package.
+   * StrChop did not chop the last part of the string correctly.
+   * DescWrd would not have run on Word versions other than German because of a local template name.
+     This should be fixed for all language versions now.
+
+
+
+
 DescTools 0.99.7 (2014-05-03)
 -----------------------------
 

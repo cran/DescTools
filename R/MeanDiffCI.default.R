@@ -1,13 +1,13 @@
 MeanDiffCI.default <-
-function (x, y, type = c("classic", "norm","basic","stud","perc","bca"), 
+function (x, y, method = c("classic", "norm","basic","stud","perc","bca"), 
                     conf.level = 0.95, na.rm = FALSE, R=999, ...) {
   
   if (na.rm) {
     x <- na.omit(x)
     y <- na.omit(y)
   }  
-  type <- match.arg(type, c("classic", "norm","basic","stud","perc","bca"))
-  if(type == "classic"){
+  method <- match.arg(method, c("classic", "norm","basic","stud","perc","bca"))
+  if(method == "classic"){
       a <- t.test(x, y, conf.level = conf.level)
       res <- c(meandiff = mean(x) - mean(y), lwr.ci = a$conf.int[1], upr.ci = a$conf.int[2])
     
@@ -24,8 +24,8 @@ function (x, y, type = c("classic", "norm","basic","stud","perc","bca"),
     m <- cbind(c(x,y), c(rep(1,length(x)), rep(2,length(y))))
     
     boot.fun <- boot(m, diff.means, R=R, stype="f", strata = m[,2])
-    ci <- boot.ci(boot.fun, conf=conf.level, type=type)
-    if(type == "norm"){
+    ci <- boot.ci(boot.fun, conf=conf.level, type=method)
+    if(method == "norm"){
       res <- c(meandiff=boot.fun$t0, lwr.ci=ci[[4]][2], upr.ci=ci[[4]][3])
     } else {
       res <- c(meandiff=boot.fun$t0, lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])

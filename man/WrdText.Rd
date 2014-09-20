@@ -53,9 +53,7 @@ Returns a list of the attributes of the font in the current cursor position.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 \dontrun{ # Windows-specific example
-
 # Let's write a story
 data(d.diamonds)
 
@@ -126,7 +124,6 @@ WrdText("Back again")
 wrd[["Selection"]]$EndKey(wdConst$wdStory)
 
 }
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

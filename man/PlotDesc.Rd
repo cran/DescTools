@@ -9,9 +9,11 @@
 \alias{PlotDesc.data.frame}
 \alias{PlotDesc.logical}
 \alias{PlotDesc.Date}
+\alias{PlotDesc.flags}
 
 \alias{PlotDescFactFact}
 \alias{PlotDescNumFact}
+\alias{PlotDescFactNum}
 \alias{PlotDescNumNum}
 
 
@@ -21,7 +23,7 @@ Display descriptive plots
 %%  ~~function to do ... ~~
 }
 \description{
-Specific descriptive plots depending on the class of x.
+Specific descriptive plots depending on the class of x. These will typically be called by the Desc routines with the plotit argument set to TRUE.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -33,23 +35,38 @@ PlotDesc(x, ..., wrd = NULL)
 \method{PlotDesc}{integer}(x, main = deparse(substitute(x)),  
          ord = c("val_asc","val_desc","frq_asc","frq_desc"), 
          maxrows = 10, ... , wrd = NULL)
+         
 \method{PlotDesc}{numeric}(x, main = deparse(substitute(x)), ..., 
          wrd = NULL)
+         
 \method{PlotDesc}{factor}(x, main = deparse(substitute(x)), 
          ord = c("desc", "level", "name", "asc", "none"), 
          maxrows = 10, lablen = 25, type = c("bar","dot"), 
-         col = hblue, ..., wrd = NULL)
-\method{PlotDesc}{table}(x, col0 = hred, col1=hblue, 
+         col = getOption("col1", hblue), ..., wrd = NULL)
+         
+\method{PlotDesc}{table}(x, col1 = getOption("col1", hblue), 
+         col2 = getOption("col2", hred),
          horiz = TRUE,  main="", ..., wrd = NULL)
+         
 \method{PlotDesc}{ordered}(x, ..., wrd = NULL)
+
 \method{PlotDesc}{data.frame}(x, ..., wrd = NULL)
-\method{PlotDesc}{logical}(x, xlab = "", col0 = hblue, col1 = hred, ..., 
-         wrd = NULL)
-\method{PlotDesc}{Date}(x, breaks = "month", ..., wrd = NULL)
+
+\method{PlotDesc}{logical}(x, main = deparse(substitute(x)), xlab = "", 
+        col1 = getOption("col1", hblue), 
+        col2 = getOption("col2", hred), ..., wrd = NULL)
+        
+\method{PlotDesc}{Date}(x, main = deparse(substitute(x)), breaks = NULL, ..., wrd = NULL)
+
+\method{PlotDesc}{flags}(x, ..., wrd = NULL)
 
 PlotDescNumFact(formula, data, main=deparse(formula), notch=FALSE,
                 add_ni = TRUE, ..., wrd = NULL)
-PlotDescNumNum(form1, form2, data, ..., wrd = NULL)
+                
+PlotDescFactNum(x, y, ptab, main=NULL, notch=FALSE,
+                add_ni = TRUE, ... , wrd=NULL)
+
+PlotDescNumNum(form1, form2, data, main = NULL, xlab = NULL, ylab = NULL, ..., wrd = NULL)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -60,9 +77,10 @@ PlotDescNumNum(form1, form2, data, ..., wrd = NULL)
   \item{maxrows}{the maximum number of rows to be displayed for a factor. }
   \item{lablen}{the maximum numbe of characters for a factor level to be displayed, before the level is truncated and ... are added. }
   \item{type}{the type of plot to be used for describing factors. Can be \code{"bar"} for a horizontal barchart or \code{"dot"} for a dotchart. }
-  \item{col0, col1}{two colors to be chosen for doing mosaicplots. }
+  \item{col1, col2}{two colors to be chosen for doing mosaicplots and logic plots. }
   \item{col}{color of the points used in a dotchart, typically for integers. Defaults to lightblue.}
-  \item{xlab}{the xlab for the logical plot. }
+  \item{xlab}{the label for the x-axis.}
+  \item{ylab}{the label for the y-axis.}
   \item{breaks}{vector of limits to bin a date.}
   \item{horiz}{logical, indicating if the two mosaicplots should be arranged horizontally (default is \code{TRUE}).}
   
@@ -75,8 +93,9 @@ PlotDescNumNum(form1, form2, data, ..., wrd = NULL)
   \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()} 
   or an existing one, created by \code{GetCurrWrd()}.
   Default is the last created pointer stored in \code{getOption("lastWord")}.}
-  
-  \item{\dots}{
+  \item{y}{the response variable}
+  \item{ptab}{the proportions table for the deciles of x used in PlotDesc.flags.}
+  \item{\dots}{further arguments
 }
 }
 \details{See the detailed description for informations about specific plots.
@@ -93,11 +112,10 @@ PlotDescNumNum(form1, form2, data, ..., wrd = NULL)
 }
 
 \examples{
-
 PlotDesc(x=na.omit(d.pizza$delivery_min))    # numeric
-PlotDesc(x=na.omit(d.pizza$week))                         # integer
-PlotDesc(x=na.omit(d.pizza$driver))                       # factor
-PlotDesc(x=na.omit(d.pizza$quality))                      # ordered factor
+PlotDesc(x=na.omit(d.pizza$week))            # integer
+PlotDesc(x=na.omit(d.pizza$driver))          # factor
+PlotDesc(x=na.omit(d.pizza$quality))         # ordered factor
 PlotDesc(x=na.omit(d.pizza$wrongpizza))      # logical
 PlotDesc(x=na.omit(d.pizza$date))            # Date
 
@@ -106,7 +124,6 @@ d.frm <- d.frm[complete.cases(d.frm),]
 PlotDescNumFact(temperature ~ driver, data=d.pizza)       # numeric ~ factor
 
 PlotDesc(table(d.pizza$driver, d.pizza$operator))         # factor ~ factor 
-
 }
 \keyword{ hplot}
 

@@ -63,7 +63,6 @@ legend("topright", legend=c("observed","expected"), fill=c(hred, hblue),
 
 ## SMR, Welsh Nickel workers
 PoissonCI(x=137, n=24.19893)
-
 }
 \keyword{ univar }
 

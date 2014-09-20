@@ -1,4 +1,4 @@
-\name{CramerV}
+\name{Association measures}
 \alias{Phi}
 \alias{ContCoef}
 \alias{CramerV}
@@ -73,7 +73,7 @@ Smithson, M.J. (2003) \emph{Confidence Intervals, Quantitative Applications in t
 
 }
 \author{
-Andri Signorell <andri@signorell.net>, Michael Smithson (confidence interval for Cramer V)
+Andri Signorell <andri@signorell.net>, Michael Smithson <michael.smithson@anu.edu.au>  (confidence interval for Cramer V)
 }
 
 \seealso{
@@ -123,7 +123,6 @@ quantile(v, probs=c(0.025,0.975))
 
 # compare this to the analytical ones
 CramerV(tab, conf.level=0.95)
-
 }
 
 \keyword{ multivariate }

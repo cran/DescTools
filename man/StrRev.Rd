@@ -30,11 +30,8 @@ Andri Signorell <andri@signorell.net>}
 }
 
 \examples{
-
 StrRev("home")
 StrRev("Anna")
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

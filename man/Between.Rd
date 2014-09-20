@@ -4,11 +4,17 @@
 \alias{\%(]\%}
 \alias{\%[)\%}
 \alias{\%[]\%}
+
+\alias{\%][\%}
+\alias{\%)[\%}
+\alias{\%](\%}
+\alias{\%)(\%}
+
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Between Operators Check, if a Value Lies Within a Given Range
 }
 \description{
-The between operators are used to check, whether given values x lie within a defined range. The values can be numbers, text or dates. 
+The between and outside operators are used to check, whether a vector of given values x lie within a defined range (or outside respectively). The values can be numbers, text or dates. 
 Ordered factors are supported.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
@@ -17,6 +23,12 @@ x \%()\% rng
 x \%(]\% rng
 x \%[)\% rng
 x \%[]\% rng
+
+x \%][\% rng
+x \%](\% rng
+x \%)[\% rng
+x \%)(\% rng
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,14 +37,18 @@ x \%[]\% rng
 %%     ~~Describe \code{x} here~~
 }
   \item{rng}{
-  a vector of two values, defining the minimum and maximum of the range for x
+  a vector of two values or a matrix with 2 columns, defining the minimum and maximum of the range for x. \cr If rng is a matrix, x or rng will be recycled.
 %%     ~~Describe \code{rng} here~~
 }
 }
 \details{The between operators basically combine two conditional statements into one and simplify so the query process.\cr
-They are merely a wrapper for:   \code{ifelse (x >= rng[1] & x <= rng[2], TRUE, FALSE)}, 
+They are merely a wrapper for:   \code{x >= rng[1] & x <= rng[2]}, 
 where the round bracket  \code{(}  means "strictly greater than >" and the square bracket  \code{[}  means ">=".  Numerical values of x will be handled by C-code, which is significantly faster than two comparisons in R (especially when x is huge).  
 .\cr
+\%][\% is the negation of \%()\%, meaning all values lying outside the given range. Elements on the limits will return TRUE.
+\cr
+Both arguments will be recycled to the highest dimension, which is either the length of the vector or the number of rows of the matrix.
+\cr
 SQL-guys might like these kind of thinking.
 %%  ~~ If necessary, more details than the description above ~~
 }
@@ -51,9 +67,13 @@ Andri Signorell <andri@signorell.net> based on C-code by Kevin Ushey <kevinushey
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 x <- 1:9
 x \%[]\% c(3,5)
+
+# outside
+x <- 1:9
+x \%][\% c(3,5)
+
 c(x,NA) \%[]\% c(3,5)
 
 x \%(]\% c(3,5)
@@ -83,6 +103,12 @@ d.diamonds[d.diamonds$price \%[]\% c(2400,2510),]
 #   symmetry between G (included) and X (excluded).
 mean(d.diamonds[d.diamonds$symmetry \%[)\% c("G","X"),"price"])
 
+
+# use multiple ranges 
+2 \%[]\% cbind(1:4,2:5)
+
+# both arguments are recycled
+c(2,3) \%[]\% cbind(1:4,2:5)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

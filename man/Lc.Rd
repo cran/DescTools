@@ -2,14 +2,18 @@
 \alias{Lc}
 \alias{plot.Lc}
 \alias{lines.Lc}
+\alias{Desc.Lc}
 \title{Lorenz Curve}
 \description{
- Computes the (empirical) ordinary and generalized Lorenz curve of a vector x}
+Lc computes the (empirical) ordinary and generalized Lorenz curve of a vector x. Desc calculates some key figures for a Lorenz curve and produces a quick description.}
 \usage{
 Lc(x, n = rep(1, length(x)), na.rm = FALSE, plot = FALSE)
 
 \method{plot}{Lc}(x, general = FALSE, lwd = 2, type = "l", xlab = "p", ylab = "L(p)", 
         main = "Lorenz curve", las = 1, ...)
+
+\method{Desc}{Lc}(x, main = NULL, p = c(0.8, 0.9, 0.95, 0.99), 
+   plotit = getOption("plotit", FALSE), ...)
        
 }
 \arguments{
@@ -23,6 +27,12 @@ Lc(x, n = rep(1, length(x)), na.rm = FALSE, plot = FALSE)
  \item{xlab, ylab}{Label of the x-, resp. y-axis.}
  \item{main}{main title of the plot.}
  \item{las}{las of the axis.}
+  \item{p}{a numeric vector with percent points, at which the Lorenz curve will be calculated.
+%%     ~~Describe \code{p} here~~
+}
+  \item{plotit}{boolean. Should a plot be created? Default is \code{FALSE}.
+%%     ~~Describe \code{plotit} here~~
+}
  \item{\dots}{further argument to be passed to methods.}
 
 }
@@ -63,7 +73,6 @@ inequality measures \code{\link[ineq]{Gini}()}, \code{\link[ineq]{Atkinson}()}
 }
 
 \examples{
-data(d.pizza)
 priceCarpenter <- d.pizza$price[d.pizza$driver=="Carpenter"]
 priceMiller <- d.pizza$price[d.pizza$driver=="Miller"]
 
@@ -121,8 +130,13 @@ abline(h=0.6, v=y0$y, col="red")
 text(x=0.1, y=0.65, label=expression(L^{-1}*(0.6) == 0.8), col="red")
 text(x=0.65, y=0.2, label=expression(L(0.55) == 0.275))
 
+# input of frequency tables with midpoints of classes
+fl <- c(2.5,7.5,15,35,75,150)     # midpoints
+n  <- c(25,13,10,5,5,2)           # frequencies
 
+lx <- Lc(fl, n)
 
+Desc(lx)
 }
 \keyword{univar}
 

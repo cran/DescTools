@@ -1,6 +1,8 @@
 Lc <-
 function(x, n = rep(1, length(x)), na.rm = FALSE, plot = FALSE) {
 
+  g <- Gini(x, n, na.rm=na.rm)
+  
   if(na.rm) x <- na.omit(x)
   if (any(is.na(x))) return(NA_real_)
   
@@ -14,8 +16,8 @@ function(x, n = rep(1, length(x)), na.rm = FALSE, plot = FALSE) {
   p <- c(0,p)
   L <- c(0,L)
   L2 <- L * mean(x)
-  Lc <- list(p,L,L2)
-  names(Lc) <- c("p", "L", "L.general")
+  Lc <- list(p, L, L2, g)
+  names(Lc) <- c("p", "L", "L.general", "Gini")
   class(Lc) <- "Lc"
   
   if(plot) plot(Lc)

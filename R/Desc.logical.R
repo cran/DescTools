@@ -1,11 +1,11 @@
 Desc.logical <-
-function(x, xname=NULL, digits=3, conf.level=0.95, plotit = FALSE, ...) {
+function(x, main=NULL, digits=3, conf.level=0.95, plotit=getOption("plotit", FALSE), ...) {
 
   #    if( nrow(tab) <=2 ) only 2 levels, this is a flag
-  if( is.null(xname)) xname <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), collapse=", "))
+  if( is.null(main)) main <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), collapse=", "))
   
   cat( paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), "\n" ) 
-  if(!is.na(xname))  cat( xname )
+  if(!identical(main, NA))  cat( main )
   if( !is.null(attr(x,"label")) ) cat(" :", strwrap(attr(x,"label"), indent=2, exdent=2), sep="\n" )
 
   # format values according to defined pretty nums
@@ -17,7 +17,9 @@ function(x, xname=NULL, digits=3, conf.level=0.95, plotit = FALSE, ...) {
   cat( "\n\n")
   cat( paste(.txtline(lfmt, width=width, ind="  ", space=" "), collapse="\n" ), "\n")
 
-  tab <- table(x, ...)
+  # think we dont need dots here...(?), this will raise an error if ... can not be interpreted by table!
+  # tab <- table(x, ...)
+  tab <- table(x)
 
   # don't display obsolete cumulative freqs if there are only two levels...
   # calculate Wilson confidence intervals instead
@@ -34,7 +36,7 @@ function(x, xname=NULL, digits=3, conf.level=0.95, plotit = FALSE, ...) {
   cat( gettextf("\n%s %s%s-CI Wilson\n\n", Coalesce(getOption("footnote1"),"'"), 
                 conf.level * 100, "%") )  
   
-  if(plotit) PlotDesc.logical(x, main=xname)
+  if(plotit) PlotDesc.logical(x, main=main)
 
   invisible(lres)
   

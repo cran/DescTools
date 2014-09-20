@@ -52,12 +52,10 @@ A matrix with a column for each color. The three rows of the matrix indicate hue
 \seealso{\code{\link{rgb2hsv}}, \code{\link{ColToRgb}}
 }
 \examples{
-
 ColToHsv("peachpuff")
 ColToHsv(c(blu = "royalblue", reddish = "tomato")) # names kept
 
 ColToHsv(1:8)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -48,7 +48,6 @@ PlotWeb(m, col = c("red", "blue"), lty = par("lty"), args.legend=NULL,
 \examples{
 m <- cor(d.pizza[,WhichNumerics(d.pizza)[-c(1:2)]], use="pairwise.complete.obs")
 PlotWeb(m=m, col=c("red","blue"), main="Pizza Correlation")
-
 }
 \keyword{ hplot }
 \keyword{ multivariate }

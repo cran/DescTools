@@ -53,7 +53,6 @@ The plot type can also be used to display other types of opposed bar charts with
 \seealso{\code{\link{barplot}}
 }
 \examples{
-
 d.sda <- data.frame(
   kt_x =  c("ZH","BL","ZG","SG","LU","AR","SO","GL","SZ",
             "NW","TG","UR","AI","OW","GR","BE","SH","AG",
@@ -99,7 +98,6 @@ PlotPyramid(c(1,3,5,2,0.5), c(2,4,6,1,0),
             ylab = LETTERS[1:5], space = 0.3, col = rep(rainbow(5), each=2),   
             xlim=c(-10,10), args.grid=NA, cex.names=1.5, adj=1,
             lxlab="Group A", rxlab="Group B", gapwidth=0, ylab.x=-8, xaxt="n")
-
 } 
 
 \keyword{ hplot }

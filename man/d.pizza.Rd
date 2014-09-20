@@ -39,6 +39,5 @@ str(d.pizza)
 head(d.pizza)
 
 Desc(d.pizza)
-
 }
 \keyword{datasets}

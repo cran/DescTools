@@ -36,7 +36,6 @@ Cover Thomas M. and Thomas Joy A. (1991) \emph{Elements of Information Theory}. 
 \seealso{\code{\link{DivCoef}}, \code{\link{Entropy}}, \code{\link{Gini}}, \code{\link{Herfindahl}} 
 }
 \examples{
-
 x <- c(261,29,33,15,39,28,95,5,6,28,69,8,105,38,15)
 
 GiniSimpson(x)
@@ -45,7 +44,6 @@ GiniSimpson(x)
 1 - Herfindahl(x)
 
 GiniSimpson(c(783,121,112,70,201,153,425,19,37,126,325,51,442,193,41))
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

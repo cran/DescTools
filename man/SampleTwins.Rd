@@ -53,7 +53,6 @@ The function produces an object, which contains the following information:
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 m <- rbind(matrix(rep("nc",165), 165, 1, byrow=TRUE), 
            matrix(rep("sc", 70), 70, 1, byrow=TRUE))
 m <- cbind.data.frame(m, c(rep(1, 100), rep(2,50), rep(3,15), 
@@ -68,7 +67,6 @@ s <- SampleTwins(data = m, stratanames=c("state","region"), twins = d.smp, metho
 
 d.twin <- m[s$id,]
 d.twin
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -26,8 +26,6 @@ Mbind(...)
 \seealso{\code{\link{CatTable}}, \code{\link{matrix}}
 }
 \examples{
-data(d.pizza)
-
 m1 <- do.call("rbind", lapply( d.pizza[,c("delivery_min","temperature")], 
   tapply, d.pizza$area, mean, na.rm=TRUE))
 names(dimnames(m1)) <- c("vname","area")
@@ -52,8 +50,6 @@ Mbind( alpha=matrix(letters[1:4], nrow=2), num=matrix(1:4, nrow=2))
 
 # matrices with different dimensions are not allowed, following would raise an error:
 # Mbind( matrix(letters[1:4], nrow=2), matrix(1:9, nrow=3))
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

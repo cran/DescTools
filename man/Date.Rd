@@ -31,12 +31,9 @@ an overkill, if only dates are needed.
 \seealso{\code{\link{ISOdate}}
 }
 \examples{
-
 Date(2011, 3, 1:15)
 
 Date(20120305:20120315)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

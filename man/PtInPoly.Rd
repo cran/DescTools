@@ -40,5 +40,4 @@ head(out)
 
 #identify points not in the polygon with an X
 points(out[which(out$pip==0), 1:2], pch='X')
-
 }

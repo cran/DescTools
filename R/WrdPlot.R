@@ -5,12 +5,28 @@ function( type="png", append.cr=TRUE, crop=c(0,0,0,0),
   # height, width in cm!
   # scale will be overidden, if height/width defined
   
+  
   # Example: WrdPlot(picscale=30)
   #          WrdPlot(width=8)
   
   .CentimetersToPoints <- function(x) x * 28.35
   .PointsToCentimeters <- function(x) x / 28.35
   # http://msdn.microsoft.com/en-us/library/bb214076(v=office.12).aspx
+  
+  # handle missing height or width values
+  if (is.na(width) ){
+    if (is.na(height)) {
+      width <- 14
+      height <- par("pin")[2] / par("pin")[1] * width
+    } else {
+      width <- par("pin")[1] / par("pin")[2] * height
+    }
+  } else {
+    if (is.na(height) ){
+        height <- par("pin")[2] / par("pin")[1] * width
+    }
+  }
+  
   
   # get a [type] tempfilename:
   fn <- paste( tempfile(pattern = "file", tmpdir = tempdir()), ".", type, sep="" )
@@ -25,6 +41,7 @@ function( type="png", append.cr=TRUE, crop=c(0,0,0,0),
   wrdDoc <- wrd[["ActiveDocument"]]
   pic <- wrdDoc[["InlineShapes"]]$Item( wrdDoc[["InlineShapes"]][["Count"]] )
   
+  pic[["LockAspectRatio"]] <- -1  # = msoTrue
   picfrmt <- pic[["PictureFormat"]]
   picfrmt[["CropBottom"]] <- .CentimetersToPoints(crop[1])
   picfrmt[["CropLeft"]] <- .CentimetersToPoints(crop[2])

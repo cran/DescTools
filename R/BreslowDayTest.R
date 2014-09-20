@@ -1,7 +1,6 @@
 BreslowDayTest <-
 function(x, OR = NA, correct = FALSE) {
   
-  # 
   # Function to perform the Breslow and Day (1980) test including
   # the corrected test by Tarone
   # Uses the equations in Lachin (2000) p. 124-125.

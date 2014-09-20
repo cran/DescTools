@@ -45,11 +45,9 @@ Andri Signorell <andri@signorell.net>
 \seealso{\code{\link{PlotDotCI}} }
 
 \examples{
-
 tab <- table(d.pizza$driver, d.pizza$wine_delivered)
 
 PlotDotCIp(x=tab[,2], n=apply(tab,1,sum), ord="abs", dec=TRUE)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

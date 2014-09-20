@@ -1,2 +1,2 @@
 Day <-
-function(x){ as.integer( format(x, "%d") ) }
+function(x){ as.integer(format(as.Date(x), "%d") ) }

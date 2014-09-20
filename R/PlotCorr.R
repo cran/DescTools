@@ -22,7 +22,7 @@ function(x, cols = colorRampPalette(c("red", "white", "blue"), space = "rgb")(20
   if(yaxt!="n") axis(side=2, at=1:ncol(x), labels=colnames(x), cex.axis=cex.axis, las=las, lwd=-1) 
 
   if((is.list(args.colorlegend) || is.null(args.colorlegend))){
-    args.colorlegend1 <- list( labels=sprintf("%.1f", seq(1,-1, length=length(cols)+1))
+    args.colorlegend1 <- list( labels=sprintf("%.1f", seq(1,-1, length=length(cols)/2+1))
       , x=nrow(x)+0.5 + nrow(x)/20, y=ncol(x)+0.5
       , width=nrow(x)/20, height=ncol(x), cols=cols, cex=0.8 )
     if ( !is.null(args.colorlegend) ) { args.colorlegend1[names(args.colorlegend)] <- args.colorlegend }

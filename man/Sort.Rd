@@ -49,8 +49,6 @@ and usually confusing for unordered factors, whose levels may be defined in the 
 \seealso{\code{\link{sort}}, \code{\link{order}}}
 
 \examples{
-
-data(d.pizza, package="DescTools")
 d.frm <- d.pizza[1:10, c("driver","temperature","delivery_min")]
 
 Sort(d.frm[,1])
@@ -75,8 +73,6 @@ Sort(x=tab, ord=2, decreasing=TRUE)
 
 # partial matching ok:
 Sort(tab, o=1, d=TRUE)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

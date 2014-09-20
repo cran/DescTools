@@ -2,10 +2,10 @@
 \alias{Desc.data.frame}
 \alias{Desc.list}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Describe a data.frame, a list or a matrix
+\title{Describe a data.frame Or a List
 %%  ~~function to do ... ~~
 }
-\description{Describes all the columns of a data.frame or a matrix, resp. all elements of a list, according to their class.
+\description{Describes all the columns of a data.frame, resp. all the elements of a list, according to their class.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -36,9 +36,9 @@
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 Desc(d.pizza[,c("temperature","count","driver","date","wine_delivered")] )
 
+Desc(as.list(d.pizza[,c("temperature","count","driver","date","wine_delivered")]) )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -37,7 +37,6 @@ qqnorm(BoxCox(x, 0), main="BoxCox(lambda=0)")
 hist(BoxCox(x, 0))
 
 bx <- BoxCox( x, lambda = BoxCoxLambda(x) )
-
 }
 \keyword{univar}
 

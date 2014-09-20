@@ -33,7 +33,6 @@ Vector with the same length as \code{col}, giving the rgb-values extended by the
 
 }
 \examples{
-
 SetAlpha("yellow", 0.2)
 SetAlpha(2, 0.5)   # red
 
@@ -44,8 +43,6 @@ x <- rnorm(15000)
 par(mfrow=c(1,2))
 plot(x, type="p", col="blue" )
 plot(x, type="p", col=SetAlpha("blue", .2), main="Better insight with alpha channel" )
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -57,7 +57,6 @@ Other association measures: \cr
 
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }\examples{
-
 # example in: 
 # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
 # pp. S. 1821
@@ -65,8 +64,6 @@ Other association measures: \cr
 tab <- as.table(rbind(c(26,26,23,18,9),c(6,7,9,14,23)))
 
 KendallTauB(tab, conf.level=0.95)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

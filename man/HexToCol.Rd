@@ -35,6 +35,5 @@ HexToCol(PalHelsana())
 x <- ColToRgb("darkmagenta")
 x[2,] <- x[2,] + 155
 RgbToCol(x)
-
 }
 \keyword{color}

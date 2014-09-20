@@ -90,9 +90,6 @@ Arni Magnusson <arnima@hafro.is>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
-data(d.pizza)
-
 # PlotArea with stapled areas
 tab <- table( d.pizza$date, d.pizza$driver )  
 PlotArea(x=as.Date(rownames(tab)), y=tab, xaxt="n", xlab="Date", ylab="Pizzas delivered" )  
@@ -125,9 +122,6 @@ PlotArea(austres)
 PlotArea(Seatbelts[,c("drivers","front","rear")],
          ylab="Killed or seriously injured")
 abline(v=1983+1/12, lty=3)
-
-  
-  
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -34,11 +34,9 @@ Still the paste syntax is clumsy in daily life and so \%c\% might spare some key
 \seealso{\code{\link{Between}}, \code{\link{\%like\%}}
 }
 \examples{
-
 "foo" \%c\% "bar"
 
 # works with numerics as well
 345 \%c\% 457
-
 }
 \keyword{ manip }

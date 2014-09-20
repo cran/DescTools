@@ -44,7 +44,6 @@ Earl F. Glynn, Stowers Institute for Medical Research, 2004
 }
 
 \examples{
-
 # works fine for grays
 PlotArea( y=matrix(rep(1, times=3, each=8), ncol=8), x=1:3, 
   col=gray(1:8 / 8), ylab="", xlab="", axes=FALSE )
@@ -62,6 +61,6 @@ PlotArea( y=matrix(rep(1, times=3, each=12), ncol=12), x=1:3,
   col=rainbow(12), ylab="", xlab="", axes=FALSE, main="method = Sonego" )
 text( x=2, y=1:12-0.5, levels(d.pizza$driver), 
   col=TextContrastColor(rainbow(12), method="sonego"))
-  
+ 
 }
 \keyword{color}

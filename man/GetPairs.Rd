@@ -37,14 +37,12 @@ Andri Signorell <andri@signorell.net>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 GetPairs(letters[1:4])
 GetPairs(x = letters[1:4], y = LETTERS[1:2])
 
 data(d.pizza)
 # get all pairs of combinations between factors and numerics out of a data.frame
 GetPairs(WhichNumerics(d.pizza), WhichFactors(d.pizza))
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

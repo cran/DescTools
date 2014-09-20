@@ -29,14 +29,12 @@ CharToAsc(x)
  \code{AscToChar} and \code{CharToAsc} return a
   vector of the same length as their argument.
 }
-\author{unknown guy out there, help text partly taken from M. Maechler's \pkg{sfmisc}.
+\author{unknown guy out there, help text partly taken from M. Maechler's \pkg{sfsmisc}.
 }
 
 \examples{
-
 (x <- CharToAsc("Silvia"))
 paste(AscToChar(x), collapse="")
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

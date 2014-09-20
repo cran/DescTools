@@ -7,6 +7,7 @@
 }
 \usage{
 ICC(x, missing = TRUE, alpha = 0.05)
+
 \method{print}{ICC}(x, digits = 2, ...)
 
 }
@@ -65,7 +66,6 @@ sf <- matrix(c(
 
 sf  #example from Shrout and Fleiss (1979)
 ICC(sf)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

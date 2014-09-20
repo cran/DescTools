@@ -1,64 +1,72 @@
 \name{AndersonDarlingTest}
 \alias{AndersonDarlingTest}
-\title{Anderson-Darling test for normality}
-\description{
-  Performs the Anderson-Darling test for  the composite hypothesis of normality, 
-  see e.g. Thode (2002, Sec. 5.1.4).
+\title{
+  Anderson-Darling Test of Goodness-of-Fit
 }
-  
+\description{
+  Performs the Anderson-Darling test
+  of goodness-of-fit to a specified continuous univariate
+  probability distribution.
+}
 \usage{
-AndersonDarlingTest(x)
+AndersonDarlingTest(x, null = "punif", ..., nullname)
 }
 \arguments{
-  \item{x}{a numeric vector of data values, the number of 
-  which must be greater than 7. Missing values are allowed.}
+  \item{x}{
+    Numeric vector of data values.
+  }
+  \item{null}{
+    A function, or a character string giving the name of a function,
+    to compute the cumulative distribution function for the
+    null distribution.
+  }
+  \item{\dots}{
+    Additional arguments for the cumulative distribution function.
+  }
+  \item{nullname}{
+    Optional character string describing the null distribution.
+    The default is \code{"uniform distribution"}.
+  }
 }
-\details{The Anderson-Darling test is an EDF omnibus test for the composite hypothesis of normality. 
-The test statistic is 
-\deqn{
-A = -n -\frac{1}{n} \sum_{i=1}^{n} [2i-1] 
-[\ln(p_{(i)}) + \ln(1 - p_{(n-i+1)})],
-}
-where \eqn{p_{(i)} = \Phi([x_{(i)} - \overline{x}]/s)}. Here, 
-\eqn{\Phi} is the cumulative distribution function 
-of the standard normal distribution, and \eqn{\overline{x}} and \eqn{s} 
-are mean and standard deviation of the data values. 
-The p-value is computed from the modified statistic 
-\eqn{Z=A (1.0 + 0.75/n +2.25/n^{2})}\ according to Table 4.9 in 
-Stephens (1986). 
-
+\details{
+  This command performs the Anderson-Darling test
+  of goodness-of-fit to the distribution specified by the argument
+  \code{null}. It is assumed that the values in \code{x} are
+  independent and identically distributed random values, with some
+  cumulative distribution function \eqn{F}.
+  The null hypothesis is that \eqn{F} is the function
+  specified by the argument \code{null}, while the alternative
+  hypothesis is that \eqn{F} is some other function.
 }
 \value{
-  A list with class \dQuote{htest} containing the following components: 
-  \item{statistic}{the value of the Anderson-Darling statistic.}
-  \item{p.value}{the p-value for the test.}
-  \item{method}{the character string \dQuote{Anderson-Darling normality test}.}
-  \item{data.name}{a character string giving the name(s) of the data.} 
+  An object of class \code{"htest"} representing the result of
+  the hypothesis test.
 }
-\references{Stephens, M.A. (1986) \emph{Tests based on EDF statistics. In:
-D'Agostino, R.B. and Stephens, M.A., eds.: Goodness-of-Fit Techniques}.
-Marcel Dekker, New York.
+\references{
+  Anderson, T.W. and Darling, D.A. (1952)
+  Asymptotic theory of certain 'goodness-of-fit' criteria based
+  on stochastic processes.
+  \emph{Annals of Mathematical Statistics} \bold{23}, 193--212.
 
-Thode Jr., H.C. (2002) \emph{Testing for  Normality}. Marcel Dekker, New York.
+  Anderson, T.W. and Darling, D.A. (1954)
+  A test of goodness of fit.
+  \emph{Journal of the American Statistical Association} \bold{49}, 765--769.
+
+  Marsaglia, G. and Marsaglia, J. (2004)
+  Evaluating the Anderson-Darling Distribution.
+  \emph{Journal of Statistical Software} \bold{9} (2), 1--5.
+  February 2004. 
+  \url{http://www.jstatsoft.org/v09/i02}
 }
-
-\note{The Anderson-Darling test is the recommended EDF test by Stephens (1986). Compared to the 
-Cramer-von Mises test (as second choice) it gives more weight to the tails of the distribution.}
-
-\note{ This function was previously published as \code{ad.test()} in the  \pkg{nortest} package and has been integrated here without logical changes. 
+\author{
+  Original C code by George Marsaglia and John Marsaglia. 
+  \R interface by Adrian Baddeley.
 }
-
-\author{Juergen Gross <gross@statistik.uni-dortmund.de>}
-
-
-\seealso{\code{\link{shapiro.test}} for performing the Shapiro-Wilk test for normality. 
-\code{\link{CramerVonMisesTest}}, \code{\link{LillieTest}}, 
-\code{\link{PearsonTest}}, \code{\link{ShapiroFranciaTest}} for performing further tests for normality.
-\code{\link{qqnorm}} for producing a normal quantile-quantile plot.}
-
+\seealso{
+  \code{\link{shapiro.test}} and all other tests for normality.
+}
 \examples{
-AndersonDarlingTest(rnorm(100, mean = 5, sd = 3))
-AndersonDarlingTest(runif(100, min = 2, max = 4))
-
+x <- rnorm(10, mean=2, sd=1)
+AndersonDarlingTest(x, "pnorm", mean=2, sd=1)
 }
 \keyword{htest}

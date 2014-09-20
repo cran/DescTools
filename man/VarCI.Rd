@@ -8,7 +8,7 @@ Calculates the confidence interval for the variance either the classical way or 
 
 }
 \usage{
-VarCI(x, type = c("classic", "norm", "basic", "stud", "perc", "bca"), 
+VarCI(x, method = c("classic", "norm", "basic", "stud", "perc", "bca"), 
       conf.level = 0.95, na.rm = FALSE, R = 999)
 
 }
@@ -17,7 +17,7 @@ VarCI(x, type = c("classic", "norm", "basic", "stud", "perc", "bca"),
   \item{x}{a (non-empty) numeric vector of data values.
 %%     ~~Describe \code{x} here~~
 }
-  \item{type}{A vector of character strings representing the type of intervals required. The value should be any subset of the values \code{"norm"}, \code{"basic"},  \code{"stud"},  \code{"perc"},  \code{"bca"}.
+  \item{method}{A vector of character strings representing the type of intervals required. The value should be any subset of the values \code{"classic"}, \code{"norm"}, \code{"basic"},  \code{"stud"},  \code{"perc"},  \code{"bca"}.
   See \code{\link{boot.ci}}.
 %%     ~~Describe \code{x} here~~
 }
@@ -52,7 +52,6 @@ Andri Signorell <andri@signorell.net>
 }
 
 \examples{
-
 VarCI(d.pizza$price, na.rm=TRUE)
 VarCI(d.pizza$price, conf.level=0.99, na.rm=TRUE)
 
@@ -67,9 +66,9 @@ VarCI(x, conf.level=0.9)
 sqrt(VarCI(x, conf.level=0.9))
 
 # some bootstrap intervals
-VarCI(x, type="norm")
-VarCI(x, type="perc")
-VarCI(x, type="bca")
+VarCI(x, method="norm")
+VarCI(x, method="perc")
+VarCI(x, method="bca")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

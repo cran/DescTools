@@ -48,7 +48,6 @@ Andri Signorell <andri@signorell.net>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 Canvas(7, main="Use of function FindColor()")
 
 # get some data
@@ -65,7 +64,6 @@ text(x=1, y=c(3), labels="Color coding of x:")
 text(x=1.5, y=c(-5,-2,1), labels=x)
 DrawRegPolygon(x=3, y=c(-5,-2,1), nv=4, rot=pi/4, col=xcols)
 text(x=6, y=c(-5,-2,1), labels=xcols)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

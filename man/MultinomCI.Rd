@@ -73,8 +73,6 @@ MultinomCI(x, method="cplus1")
 
 # compare to
 BinomCI(x, n=sum(x))
-
-
 }
 
 \keyword{univar}

@@ -1,6 +1,6 @@
 PtInPoly <-
-function(pnts, poly.pnts)  
-{
+function(pnts, poly.pnts)  {
+  
   #check if pnts & poly is 2 column matrix or dataframe
   pnts = as.matrix(pnts); poly.pnts = as.matrix(poly.pnts)
   if (!(is.matrix(pnts) & is.matrix(poly.pnts))) stop('pnts & poly.pnts must be a 2 column dataframe or matrix')

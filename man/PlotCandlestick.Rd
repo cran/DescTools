@@ -47,7 +47,6 @@ If the security closed higher than it opened, the body is white or unfilled, wit
 \seealso{\code{\link{PlotBubble}}, \code{\link{stars}}
 }
 \examples{
-
 nov <- rbind(
  "2013-05-28"= c(70.99,71.82,70.49,71.49),
  "2013-05-29"= c(71.13,71.90,70.81,71.57),
@@ -72,7 +71,6 @@ nov <- rbind(
 colnames(nov) <- c("open","high","low","close")
 
 PlotCandlestick(x=as.Date(rownames(nov)), y=nov, border=NA, las=1, ylab="")
-
 }
 \keyword{ hplot }
 

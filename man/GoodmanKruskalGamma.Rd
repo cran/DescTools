@@ -6,7 +6,7 @@
 }
 \description{Calculate Goodman Kruskal's Gamma statistic, a measure of
 association for ordinal factors in a two-way table.\cr
-}
+The function has interfaces for a table (matrix) and for single vectors.}
 \usage{
 GoodmanKruskalGamma(x, y = NULL, conf.level = NA, ...)
 }
@@ -27,8 +27,8 @@ GoodmanKruskalGamma(x, y = NULL, conf.level = NA, ...)
 }
 \details{The estimator of \eqn{\gamma}{gamma} is based only on the number of concordant and discordant pairs of observations. It ignores tied pairs (that is, pairs of observations that have equal values of X or equal values of Y). Gamma is appropriate only when both variables lie on an ordinal scale. \cr
 It has the range [-1, 1]. If the two variables are independent, then the estimator of gamma tends to be close to zero. 
-For 2x2 tables, gamma is equivalent to Yule's Q (\code{\link{YuleQ}}). \cr
-Gamma is estimated by G = (P-Q)/(P+Q), where P equals twice the number of concordances and Q twice the number of discordances. 
+For \eqn{2 \times 2}{2 x 2} tables, gamma is equivalent to Yule's Q (\code{\link{YuleQ}}). \cr
+Gamma is estimated by \deqn{ G = \frac{P-Q}{P+Q}} where P equals twice the number of concordances and Q twice the number of discordances. 
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
@@ -82,7 +82,6 @@ tab <- as.table(rbind(
   )
 
 GoodmanKruskalGamma(tab, conf.level=0.95)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

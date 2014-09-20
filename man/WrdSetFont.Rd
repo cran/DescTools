@@ -44,9 +44,7 @@ Andri Signorell <andri@signorell.net>
 \seealso{\code{\link{WrdText}}, \code{\link{WrdPlot}}, \code{\link{GetNewWrd}}, \code{\link{GetCurrWrd}}
 }
 \examples{
-
 \dontrun{ # Windows-specific example
-
 # start word
 wrd <- GetNewWrd()
 
@@ -58,9 +56,7 @@ for( i in seq(10, 24, 2)) {
   WrdText(gettextf("This is Times size \%s \n", i), appendCR=FALSE, 
     fontname="Times", fontsize=i)
 }
-
 }
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

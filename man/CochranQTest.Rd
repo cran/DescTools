@@ -81,7 +81,6 @@ d.long <- reshape(d.frm, varying=1:3, times=names(d.frm)[c(1:3)],
 
 # after having done the hard work of data organisation, performing the test is a piece of cake....
 CochranQTest(resp ~ time | id, data=d.long)
-
 }
 
 

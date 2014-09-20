@@ -9,6 +9,11 @@ function(x, tol = .Machine$double.eps^0.5, na.rm=FALSE) {
   # an alternative in cwhmisc :
   #   whole.number <- function (x) all((x%%1) == 0)
   
-  if(na.rm) x <- na.omit(x)  
-  abs(x - round(x)) < tol
+  if (na.rm) 
+    x <- na.omit(x)
+  if(is.numeric(x))
+    abs(x - round(x)) < tol
+  else
+    FALSE
+  
 }

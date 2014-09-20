@@ -6,7 +6,7 @@
 }
 \description{Calculate Somers' Delta statistic, a measure of
 association for ordinal factors in a two-way table.\cr
-The function has interfaces for a table, a matrix, a data.frame and for single vectors.
+The function has interfaces for a table (matrix) and for single vectors.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -14,7 +14,7 @@ SomersDelta(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{a numeric vector, matrix or data.frame.
+  \item{x}{a numeric vector or a table. A matrix will be treated as table.
 %%     ~~Describe \code{x} here~~
 }
   \item{y}{NULL (default) or a vector with compatible dimensions to \code{x}. If y is provided, \code{table(x, y, \dots)} is calculated.
@@ -85,7 +85,6 @@ other association measures: \cr
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 # example in: 
 # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
 # pp. S. 1821
@@ -96,7 +95,6 @@ tab <- as.table(rbind(c(26,26,23,18,9),c(6,7,9,14,23)))
 SomersDelta(tab, direction="column", conf.level=0.95)
 # Somers' D R|C
 SomersDelta(tab, direction="row", conf.level=0.95)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

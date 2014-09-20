@@ -46,7 +46,6 @@ Venables, W N and Ripley, B D (2002): \emph{Modern Applied Statistics with S}. F
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 x <- c("red","blue","green","blue","green","red","red","blue") 
 Dummy(x) 
 Dummy(x, base = 2)
@@ -73,7 +72,6 @@ m <- Dummy(y)
 m
 z <- apply(m, 1, function(x) ifelse(sum(x)==0, attr(m,"base"), colnames(m)[x==1]))
 z
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

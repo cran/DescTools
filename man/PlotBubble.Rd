@@ -51,7 +51,6 @@ This behaviour is the same as in \code{\link{symbols}}.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 PlotBubble( x=d.pizza$delivery_min, y=d.pizza$temperature, area=d.pizza$price, 
   xlab="delivery time", ylab="temperature", 
   col=SetAlpha(as.numeric(d.pizza$area)+2, .5), border="darkgrey", 
@@ -62,7 +61,6 @@ PlotBubble(d.world$x, d.world$y, area=d.world$pop/90, col=SetAlpha("steelblue",0
   border="darkblue", xlab="", ylab="", panel.first=grid(), 
   main="World population")
 text(d.world$x, d.world$y, labels=d.world$country, cex=0.7, adj=0.5)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

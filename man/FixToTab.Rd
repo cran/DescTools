@@ -47,12 +47,9 @@ be accepted as column delimiter.
 }
 
 \examples{
-
 # let's get some tabbed text
 txt <- matrix(capture.output(Titanic[,,2,1]))
 FixToTab(txt[-1,])
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

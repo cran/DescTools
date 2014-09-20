@@ -8,7 +8,8 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Canvas(xlim = NULL, ylim = xlim, xpd=par("xpd"), mar=c(5.1,5.1,5.1,5.1), asp = 1, ...)
+Canvas(xlim = NULL, ylim = xlim, xpd=par("xpd"), mar=c(5.1,5.1,5.1,5.1), 
+       asp = 1, bg = par("bg"), ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +23,9 @@ Canvas(xlim = NULL, ylim = xlim, xpd=par("xpd"), mar=c(5.1,5.1,5.1,5.1), asp = 1
 %%     ~~Describe \code{xlim} here~~
 }
   \item{asp}{numeric, giving the aspect ratio y/x. (See \code{\link{plot.window}} for details. Default is 1. 
+%%     ~~Describe \code{xlim} here~~
+}
+  \item{bg}{the background color of the plot, defaults to par("bg"), which usually will be "white".
 %%     ~~Describe \code{xlim} here~~
 }
   \item{\dots}{additional arguments are passed to the \code{plot()} command.
@@ -40,7 +44,6 @@ Canvas(xlim = NULL, ylim = xlim, xpd=par("xpd"), mar=c(5.1,5.1,5.1,5.1), asp = 1
 \examples{
 Canvas(7)
 text(0, 0, "Hello world!", cex=5)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

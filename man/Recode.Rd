@@ -16,15 +16,16 @@ Recode(x, newlevels, elselevel = NA, use.empty = FALSE)
   \item{x}{the factor whose levels are to be altered.
 %%     ~~Describe \code{x} here~~
 }
-  \item{newlevels}{a list with the oldlevels combined by \code{c}() and named with the name of the new level. See examples.
+  \item{newlevels}{a list with the oldlevels combined by \code{c}() and named with the name of the new level:  
+  \code{list(newlevel_a=c("old_a", "old_b"), }\code{newlevel_b=c("old_c", "old_d"))}. See examples.
 %%     ~~Describe \code{newlevels} here~~
 }
-  \item{elselevel}{how should the levels, which are not matched by newlevels' list be named. 
+  \item{elselevel}{how should the levels, which are not matched by newlevel's list be named. 
   Set this to \code{NULL}, if elselevels should be left unchanged.
   Defaults to \code{NA}.
 %%     ~~Describe \code{elselevel} here~~
 }
-  \item{use.empty}{logical. Defines, if newlevels which don't match with x should be left in the levels' list. The default is FALSE, 
+  \item{use.empty}{logical. Defines how a new level, which can't be found in x, should be handled.  Should it be left in the level's list or be dropped? The default is FALSE, 
    which drops empty levels.
 %%     ~~Describe \code{newlevels} here~~
 }
@@ -43,7 +44,6 @@ There's another possible solution in the package car.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 x <- factor(sample(letters, 20))
 
 y <- Recode( x, newlevels=list( 
@@ -69,7 +69,6 @@ data.frame(z1, z2, z3, z4, z5)
 table(z4, useNA="ifany")
 # but not in z5
 table(z5, useNA="ifany")
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

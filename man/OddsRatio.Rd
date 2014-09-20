@@ -21,7 +21,7 @@ OddsRatio(x, y = NULL, conf.level = NA, method = c("wald", "mle", "midp"),
   \item{x}{a numeric vector or a 2x2 numeric matrix, resp. table.
 %%     ~~Describe \code{x} here~~
 }
-  \item{y}{NULL (default) or a vector with compatible dimensions to \code{x}. If y is provided, \code{table(x, y, \dots)} is calculated.
+  \item{y}{NULL (default) or a vector with compatible dimensions to \code{x}. If y is provided, \code{table(x, y, \dots)} will be calculated.
 %%     ~~Describe \code{y} here~~
 }
   \item{method}{
@@ -100,7 +100,6 @@ OddsRatio(x, y = NULL, conf.level = NA, method = c("wald", "mle", "midp"),
 }
 
 \examples{
-
 # Case-control study assessing whether exposure to tap water
 #   is associated with cryptosporidiosis among AIDS patients
 
@@ -115,7 +114,6 @@ OddsRatio(tab[c(1,3),])
 OddsRatio(tab[1:2,], method="mle")
 OddsRatio(tab[1:2,], method="midp")
 OddsRatio(tab[1:2,], method="wald", conf.level=0.95)
-
 }
 
 \keyword{models}

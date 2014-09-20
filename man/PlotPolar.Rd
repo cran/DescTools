@@ -80,8 +80,6 @@ So is it also possible to create spider webs or radar plots.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
-
 testlen <- c(sin(seq(0, 1.98*pi, length=100))+2+rnorm(100)/10)
 testpos <- seq(0, 1.98*pi, length=100)
 
@@ -149,8 +147,6 @@ d.car <- scale(mtcars[1:6,1:7], center=FALSE)
 cols <- SetAlpha(colorRampPalette(c("red","yellow","blue"), space = "rgb")(6), 0.25)
 PlotPolar(d.car, type="l", fill=cols, main="Cars in radar")
 PolarGrid(nr=NA, ntheta=ncol(d.car), alabels=colnames(d.car), lty="solid", col="black")
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

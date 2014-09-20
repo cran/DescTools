@@ -50,7 +50,7 @@ easily in the mind.
 }
 \note{The names of the function alludes to Tukey's idea of "started logs".
 }
-\author{Werner A. Stahel, ETH Zurich
+\author{Werner A. Stahel, ETH Zurich, slight modifications Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~
 }
 
@@ -60,7 +60,6 @@ easily in the mind.
 %% ~~objects to See Also as , ~~~
 }
 \examples{
-
 dd <- c(seq(0,1,0.1), 5 * 10^rnorm(100, 0, 0.2))
 dd <- sort(dd)
 r.dl <- LogSt(dd)
@@ -70,7 +69,6 @@ abline(v=attr(r.dl, "threshold"), lty=2)
 x <- rchisq(df=3, n=100)
 # should give 0 (or at least something small):
 LogStInv(LogSt(x)) - x
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

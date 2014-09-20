@@ -36,11 +36,8 @@ StrChop(x, len)
 \seealso{\code{\link{FixToTab}}
 }
 \examples{
-
 x <- paste(letters, collapse="")
 StrChop(x=x, len = c(3,5,2))
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

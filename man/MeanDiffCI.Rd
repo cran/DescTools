@@ -12,7 +12,7 @@
 \usage{
 MeanDiffCI(x, ...)
 
-\method{MeanDiffCI}{default}(x, y, type = c("classic", "norm", "basic", "stud", "perc", "bca"), 
+\method{MeanDiffCI}{default}(x, y, method = c("classic", "norm", "basic", "stud", "perc", "bca"), 
            conf.level = 0.95, na.rm = FALSE, R = 999, ...)
            
 \method{MeanDiffCI}{formula}(formula, data, subset, na.action, ...)
@@ -26,8 +26,8 @@ MeanDiffCI(x, ...)
   \item{y}{a (non-empty) numeric vector of data values.
 %%     ~~Describe \code{y} here~~
 }
-  \item{type}{a vector of character strings representing the type of intervals required. The value should be any subset of the values 
-  \code{"norm"}, \code{"basic"}, \code{"stud"}, \code{"perc"}, \code{"bca"}.
+  \item{method}{a vector of character strings representing the type of intervals required. The value should be any subset of the values 
+  \code{"classic"}, \code{"norm"}, \code{"basic"}, \code{"stud"}, \code{"perc"}, \code{"bca"}.
   See \code{\link{boot.ci}}.
 %%     ~~Describe \code{x} here~~
 }
@@ -71,17 +71,16 @@ MeanDiffCI(x, y, na.rm=TRUE)
 MeanDiffCI(x, y, conf.level=0.99, na.rm=TRUE)
 
 # the different types of bootstrap confints
-MeanDiffCI(x, y, type="norm", na.rm=TRUE)
-MeanDiffCI(x, y, type="basic", na.rm=TRUE)
-# MeanDiffCI(x, y, type="stud", na.rm=TRUE)
-MeanDiffCI(x, y, type="perc", na.rm=TRUE)
-MeanDiffCI(x, y, type="bca", na.rm=TRUE)
+MeanDiffCI(x, y, method="norm", na.rm=TRUE)
+MeanDiffCI(x, y, method="basic", na.rm=TRUE)
+# MeanDiffCI(x, y, method="stud", na.rm=TRUE)
+MeanDiffCI(x, y, method="perc", na.rm=TRUE)
+MeanDiffCI(x, y, method="bca", na.rm=TRUE)
 
 # the formula interface
 MeanDiffCI(price ~ driver, data=d.pizza, subset=driver \%in\% c("Carter","Miller"))
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{univar }% __ONLY ONE__ keyword per line
+\keyword{univar }
+

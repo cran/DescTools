@@ -100,8 +100,6 @@ b <- PlotViolin(len ~ supp*dose, data = ToothGrowth,
 )
 # use points, if the medians deserve special attention
 points(x=1:6, y=b$stats[3,], pch=21, bg="white", col="black", cex=1.2)
-
-
 }
 
 \keyword{ multivariate }

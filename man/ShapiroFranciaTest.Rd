@@ -46,6 +46,5 @@ from the standard normal distribution are approximated by
 \examples{
 ShapiroFranciaTest(rnorm(100, mean = 5, sd = 3))
 ShapiroFranciaTest(runif(100, min = 2, max = 4))
-
 }
 \keyword{htest}

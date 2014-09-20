@@ -41,9 +41,9 @@ function( x, y=NULL, cols=rev(heat.colors(100)), labels=NULL
     rect( xleft=left, xright=left+width/ncols*seq(ncols,0,-1), ytop=top, ybottom=top-height, 
       col=cols, border=border)
     if(!is.null(labels)){
-      if(cntrlbl) xlbl <- x+width/(2*ncols)+(width-width/ncols)/(nlbls-1) * seq(0,nlbls-1,1)
-        else xlbl <- left+width/(nlbls-1) * seq(0,nlbls-1,1)
-      text(y=top-(height + max(strheight(labels, cex=cex)) * 1.2)
+      if(cntrlbl) xlbl <- left + width/(2*ncols)+(width-width/ncols)/(nlbls-1) * seq(0,nlbls-1,1)
+        else xlbl <- left + width/(nlbls-1) * seq(0,nlbls-1,1)
+      text(y=top - (height + max(strheight(labels, cex=cex)) * 1.2)
         # Gleiche Korrektur wie im vertikalen Fall
         # , x=x+width/(2*ncols)+(width-width/ncols)/(nlbls-1) * seq(0,nlbls-1,1)
         , x=xlbl, labels=labels, adj=adj, cex=cex, ...) 	
@@ -57,8 +57,8 @@ function( x, y=NULL, cols=rev(heat.colors(100)), labels=NULL
         # sondern wirklich am Rand des strips
         # alt: , y=y-height/(2*ncols)- (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)
         #, y=y-height/(2*ncols)- (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)
-      if(cntrlbl) ylbl <- y-height/(2*ncols)- (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)
-        else ylbl <- top-height/(nlbls-1) * seq(0, nlbls-1, 1)
+      if(cntrlbl) ylbl <- top - height/(2*ncols) - (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)
+        else ylbl <- top - height/(nlbls-1) * seq(0, nlbls-1, 1)
       text(x=left + width + strwidth("0", cex=cex) + max(strwidth(labels, cex=cex)) * adj[1] 
         , y=ylbl, labels=labels, adj=adj, cex=cex, ... ) 	
     }    

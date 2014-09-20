@@ -9,5 +9,6 @@ void wgt_himed  (double *x, Sint *n, double *w, double *res);
 
 double whimed_i(double *a, int *iw, int n,
 		double *acand, double *a_srt, int *iw_cand);
+
 double whimed(double *a, double *w, int n,
 	      double *acand, double *a_srt, double *w_cand);

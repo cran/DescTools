@@ -40,13 +40,9 @@ The numeric centering and scalings used (if any) are returned as attributes "sca
 \seealso{\code{scale}, \code{sweep}
 }
 \examples{
-
 x <- d.pizza$temperature
 plot(x=seq_along(x), y=RobScale(x), xlim=c(0,100))
 points(x=seq_along(x), y=scale(x), col="red" )
-
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -25,11 +25,9 @@ Daniel Chessel  \cr
 Stephane Dray \email{dray@biomserv.univ-lyon1.fr}
 }
 \examples{
-
 w <- matrix(runif(10000), 100, 100)
 w <- dist(w)
 summary(w)
 IsEuclid (w) # TRUE
-
 }
 \keyword{arith}

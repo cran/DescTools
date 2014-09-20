@@ -1,15 +1,15 @@
 Desc.Date <-
-function(x, xname = NULL, maxrows = 10, digits = 3, plotit = FALSE, ... ) {
+function(x, main = NULL, maxrows = 10, digits = 3, plotit=getOption("plotit", FALSE), ... ) {
     # time aggregation already in the definition of the variable:
     # example:     cut( x, breaks="quarter" )  
     #              breaks: day, month, quarter, year	
 
   opt <- options(digts=digits); on.exit(options(opt))
 
-  if( is.null(xname)) xname <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), sep=", "))
+  if( is.null(main)) main <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), collapse=", "))
   
   cat( paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), "\n" ) 
-  if(!is.na(xname))  cat( xname )
+  if(!identical(main, NA))  cat( main )
   if( !is.null(attr(x,"label")) ) cat(" :", strwrap(attr(x,"label"), indent=2, exdent=2), sep="\n" )
  
     # format values according to defined pretty nums
@@ -94,6 +94,7 @@ function(x, xname = NULL, maxrows = 10, digits = 3, plotit = FALSE, ... ) {
   # Die Breaks werden nicht gut dargestellt: What now?
   # Freq( as.integer(format(x,"%Y")), breaks=as.integer(format(hbreaks,"%Y")))
   
-  if(plotit) PlotDesc.Date(x, main=xname)
+  if(plotit) PlotDesc.Date(x, main=main)
+  invisible()
   
 }

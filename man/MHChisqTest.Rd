@@ -58,8 +58,6 @@ Job <- matrix(c(1,2,1,0, 3,3,6,1, 10,10,14,9, 6,7,12,11), 4, 4,
        )
 
 MHChisqTest(Job, srow=c(7.5,20,32.5,60))
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

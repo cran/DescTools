@@ -76,7 +76,6 @@ Each data element contained in a treemap is represented with a rectangle, or a c
 }
 
 \examples{
-
 set.seed(1789)
 N <- 20
 area <- rlnorm(N)
@@ -104,7 +103,6 @@ mid <- do.call(rbind, lapply(lapply(b, "[", 1), data.frame))
 # and draw some visible text
 BoxedText( x=mid$grp.x, y=mid$grp.y, labels=LETTERS[1:3], cex=3, border=NA, 
   col=SetAlpha("white",0.7) )
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

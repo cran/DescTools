@@ -39,6 +39,5 @@ RobRange(x)
 
 # compared to:
 range(x)
-
 }
 \keyword{ robust }

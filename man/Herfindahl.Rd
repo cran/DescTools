@@ -24,7 +24,7 @@ The same measure is usually known as the Simpson index in ecology, and as the He
   the value of the concentration measure
 }
 \note{ These functions were previously published as \code{conc()} in the  \pkg{ineq} package and have been
-integrated here without logical changes. NA and weights support was added.
+integrated here without logical changes. NA and weights support were added.
 }
 
 \references{Cowell, F. A. (2000) Measurement of Inequality, in Atkinson, A. B., Bourguignon, F.  \emph{Handbook of Income Distribution}. (Eds) Amsterdam
@@ -51,7 +51,6 @@ Rosenbluth(x)
 # Some more examples
 Herfindahl(c(261,29,33,15,39,28,95,5,6,28,69,8,105,38,15))
 Herfindahl(c(783,121,112,70,201,153,425,19,37,126,325,51,442,193,41))
-
 }
 \keyword{univar}
 

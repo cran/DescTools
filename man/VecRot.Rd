@@ -34,11 +34,9 @@ VecRot(x, n)
 }
 
 \examples{
-
 VecRot(c(1,1,0,0,3,4,8), 3)
 
 VecRot(letters[1:10], 3)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

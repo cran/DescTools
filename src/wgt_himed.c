@@ -72,3 +72,6 @@ void wgt_himed(double *x, Sint *n, double *w, double *res)
     *res = whimed(x, w, nn, a_cand, a_srt, w_cand);
     vmaxset(vmax);
 }
+
+
+

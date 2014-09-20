@@ -34,7 +34,6 @@ StrIsNumeric(x)
 \examples{
 x <- c("123", "-3.141", "foobar123")
 StrIsNumeric(x)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

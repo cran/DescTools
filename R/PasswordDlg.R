@@ -16,18 +16,23 @@ function() {
   }
   
   # create window
-
-  geom <- gettextf('%sx%s+%s+%s'
-     , 200, 110
-     , as.numeric(substr(capture.output(system("wmic desktopmonitor get screenwidth", 
-                                               intern=TRUE)), 24,34))/2 - 50 
-     , as.numeric(substr(capture.output(system("wmic desktopmonitor get screenheight", 
-                                               intern=TRUE)), 25,34))/2 - 25
-     )
   
   tclServiceMode(on = FALSE) 
   
   root <- tktoplevel()
+  
+  geom <- gettextf('%sx%s+%s+%s'
+                   , 200, 110
+                   , as.integer(tkwinfo("screenwidth", root)) / 2 - 50 
+                   , as.integer(tkwinfo("screenheight", root)) /2 - 25
+  )
+  # old:
+  #   , as.numeric(substr(capture.output(system("wmic desktopmonitor get screenwidth", 
+  #                                             intern=TRUE)), 24,34))/2 - 50 
+  #   , as.numeric(substr(capture.output(system("wmic desktopmonitor get screenheight", 
+  #                                             intern=TRUE)), 25,34))/2 - 25
+  tkwm.geometry(root, geom)
+  
   tkwm.title(root, "Login")
   tkwm.resizable(root, FALSE, FALSE)
   tkwm.iconbitmap(root, file.path(find.package("DescTools"), "data", "key.ico"))
@@ -45,7 +50,6 @@ function() {
   tkgrid(tfButOK, column=0, row=2, ipadx=15)
   tkgrid(tfButCanc, column=2, row=2, ipadx=5)
   
-  tkwm.geometry(root, geom)
               
   # binding event-handler
   tkbind(tfEntrPW, "<Return>", OnOK)

@@ -1,2 +1,2 @@
 Year <-
-function(x){ as.integer( format(x, "%Y") ) }
+function(x){ as.integer( format(as.Date(x), "%Y") ) }

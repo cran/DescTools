@@ -45,8 +45,6 @@ AddMonths(201301, -5)
 
 AddMonths(as.Date("2013-01-31"), 1)
 AddMonths(as.Date("2013-01-31"), -2)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

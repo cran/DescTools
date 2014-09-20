@@ -65,7 +65,6 @@ DrawAnnulusSector(x = 0, y = x, radius.in = 1, radius.out = 2,
 %% ~~objects to See Also as , ~~~
 }
 \examples{
-
 par(mfrow=c(1,2))
 
 angles <- seq( 0,2 * pi, pi/4)  # the angles
@@ -88,9 +87,6 @@ Canvas(xlim=c(-100,100), main="Number of visitors to web site for each hour of a
 PolarGrid(nr=c(0,90), ntheta=24, rlabels=NA, alabels=c(6:0, 23:7) )      
 DrawAnnulusSector(radius.in=0, radius.out=x, angle.beg = angles[-1], 
   angle.end = angles[-length(angles)], col=rainbow(24))
-      
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

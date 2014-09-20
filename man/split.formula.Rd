@@ -36,7 +36,6 @@ Defaults to FALSE.}
 }
 \examples{
 split(extra ~ group, data = sleep)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

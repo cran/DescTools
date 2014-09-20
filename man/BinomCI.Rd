@@ -86,7 +86,6 @@ BinomCI(x, n, conf.level = 0.95,
 
 \seealso{\code{\link[stats]{binom.test}}, \code{\link[Hmisc]{binconf}}, \code{\link{MultinomCI}} }
 \examples{
-
 BinomCI(x=37, n=43, method=c("wald", "wilson", "agresti-coull", "jeffreys", 
   "modified wilson", "modified jeffreys", "clopper-pearson", "arcsine", "logit", "witting")
 ) 
@@ -101,6 +100,5 @@ binom.test(x=42, n=43)$conf.int
 # all arguments are being recycled:
 BinomCI(x=c(42, 35, 23, 22), n=43, method="wilson")
 BinomCI(x=c(42, 35, 23, 22), n=c(50, 60, 70, 80), method="jeffreys") 
-
 }
 \keyword{univar}

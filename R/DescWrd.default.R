@@ -1,5 +1,5 @@
 DescWrd.default <-
-function(x, wrd, caption=deparse(substitute(x)), ...) {
+function(x, wrd, main = deparse(substitute(x)), ...) {
   
   .plotReset <- function(){
     layout(matrix(1))
@@ -34,7 +34,7 @@ function(x, wrd, caption=deparse(substitute(x)), ...) {
   }
   
   
-  if(!is.null(caption)) WrdCaption(x=caption, wrd=wrd)
+  if(!is.null(main)) WrdCaption(x=main, wrd=wrd)
   
   txt <- capture.output(Desc(x, ...))[-(1:2)]
   
@@ -66,5 +66,7 @@ function(x, wrd, caption=deparse(substitute(x)), ...) {
   # get out of tablerange
   wrd[["Selection"]]$MoveRight( wdConst$wdCharacter, 2, 0 )
   wrd[["Selection"]]$TypeParagraph()
+
+  invisible()
   
 }

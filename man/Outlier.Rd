@@ -4,7 +4,7 @@
 \title{Outlier 
 %%  ~~function to do ... ~~
 }
-\description{Return outliers following the Tukey's boxplot definition.
+\description{Return outliers following Tukey's boxplot definition.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -41,7 +41,6 @@ Outlier(x, na.rm = FALSE, method = c("boxplot"))
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 Outlier(d.pizza$temperature, na.rm=TRUE)
 
 # find the corresponding rows
@@ -53,7 +52,6 @@ tapply(d.pizza$temperature, d.pizza$driver, Outlier, na.rm=TRUE)
 
 # see also
 boxplot(temperature ~ driver, d.pizza)$out
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

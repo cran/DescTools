@@ -1,4 +1,5 @@
 Desc.matrix <-
-function(x, xname=NULL, rfrq = NULL, margins = c(1,2), plotit = FALSE, verb = c("med","lo","hi"), ... ){
-  Desc.table(x, xname=xname, rfrq = rfrq, margins = margins, plotit = plotit, verb = verb, ... )
+function(x, main=NULL, rfrq = NULL, margins = c(1,2), plotit=getOption("plotit", FALSE), verbose = c("medium","low","high"), ... ){
+  Desc.table(x, main=main, rfrq = rfrq, margins = margins, plotit = plotit, verbose = verbose, ... )
+  invisible()
 }

@@ -1,6 +1,6 @@
 PlotMultiDens.formula <-
-function (formula, data = NULL, subset, ...) 
-{
+function (formula, data = NULL, subset, ...) {
+  
     if (missing(formula) || (length(formula) != 3)) 
         stop("formula missing or incorrect")
         

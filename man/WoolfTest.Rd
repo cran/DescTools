@@ -37,7 +37,6 @@ Woolf, B. 1955: On estimating the relation between blood group and
 disease. \emph{Ann. Human Genet.} (London) \bold{19}, 251-253.
 }
 \examples{
-
 migraine <- xtabs(freq ~ ., 
             cbind(expand.grid(treatment=c("active","placebo"), 
                                response=c("better","same"), 
@@ -46,6 +45,5 @@ migraine <- xtabs(freq ~ .,
             )
 
 WoolfTest(migraine)
-
 }
 \keyword{htest}

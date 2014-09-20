@@ -4,7 +4,7 @@
 \title{Password Dialog
 %%  ~~function to do ... ~~
 }
-\description{A tcltk dialog for entering passwords with ****.
+\description{A tcltk dialog centered on the screen for entering passwords with ****.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -34,4 +34,4 @@ PasswordDlg()
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{util }
+\keyword{utilities }

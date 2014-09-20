@@ -1,6 +1,5 @@
 DivCoefMax <-
-function(dis, epsilon = 1e-008, comment = FALSE)
-{
+function(dis, epsilon = 1e-008, comment = FALSE) {
 
 # inititalisation
     if(!inherits(dis, "dist")) stop("Distance matrix expected")

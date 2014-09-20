@@ -34,7 +34,6 @@ Cohen, J. (1960), A coefficient of agreement for nominal scales. \emph{Education
 
 \author{Andri Signorell <andri@signorell.net>, based on code of Harold C. Doran}
 \examples{
-
 set.seed(1234)
 tmp <- data.frame(
   item1 = sample(c(0,1), 20, replace=TRUE), 
@@ -58,7 +57,6 @@ res <- boot(datafile, cronbach.boot, 1000)
 quantile(res$t, c(0.025,0.975))   # two-sided bootstrapped confidence interval of Cronbach's alpha
 boot.ci(res, type="bca")          # adjusted bootstrap percentile (BCa) confidence interval (better)
 }
-
 }
 
 \keyword{multivar}

@@ -47,10 +47,8 @@ Ndec <- function(x) {
 \seealso{\code{\link{format.info}}, \code{\link{Frac}}
 }
 \examples{
-
 x <- c("0.0000", "0", "159.283", "1.45e+10", "1.4599E+10" )
 Ndec(x)
-
 }
 \keyword{ arith }
 

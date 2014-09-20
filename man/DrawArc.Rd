@@ -65,10 +65,8 @@ Be sure to use an aspect ratio of 1 as shown in the example to avoid distortion.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 curve(sin(x), 0, pi, col="blue", asp=1)
 DrawArc( x = pi/2, y = 0, radius.x = 1, angle.beg = pi/4, angle.end = 3*pi/4, col="red")
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

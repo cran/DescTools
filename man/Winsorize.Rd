@@ -7,7 +7,7 @@ Winsorize(x, minval = quantile(x = x, probs = probs[1], na.rm = na.rm),
           probs = c(0.05, 0.95), na.rm = FALSE)          
 }
 \arguments{
-  \item{x}{a numeric vector to be cleaned.}
+  \item{x}{a numeric vector to be winsorized.}
 
   \item{minval}{the low border, all values being lower than this will be replaced by this value. 
   The default is set to the 5\%-quantile of x.}
@@ -50,7 +50,6 @@ x[1] <- x[1] * 10  # introduce outlier
 ## Winsorize data
 x
 Winsorize(x)
-
 }
 \author{
   Andri Signorell <andri@signorell.net>, based on code by Gabor Grothendieck <ggrothendieck@gmail.com>

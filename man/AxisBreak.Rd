@@ -37,12 +37,10 @@
 \author{Jim Lemon and Ben Bolker}
 
 \examples{
-
 plot(3:10, main="Axis break test")
 
 # put a break at the default axis and position
 AxisBreak()
 AxisBreak(2, 2.9, style="zigzag")
-
 }
 \keyword{aplot}

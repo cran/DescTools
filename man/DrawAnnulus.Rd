@@ -51,11 +51,9 @@ DrawAnnulus(x = 0, y = x, radius.in = 1, radius.out = 2, nv = 100,
 \seealso{\code{\link{polygon}}, \code{\link{DrawRegPolygon}}, \code{\link{DrawCircle}}, \code{\link{DrawArc}}
 }
 \examples{
-
 Canvas(0.5)
 DrawRegPolygon(nv=4, rot=pi/4, col="lightblue")
 DrawAnnulus(radius.in=0.3, radius.out=0.45, col="lightgrey", border="darkgrey", lwd=5)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

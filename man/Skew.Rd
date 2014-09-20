@@ -1,4 +1,4 @@
-\name{Skew}
+\name{Measures of Shape}
 \alias{Skew}
 %%\alias{Skew.default}
 %%\alias{Skew.matrix}
@@ -70,6 +70,7 @@ The type of kurtosis can either be:\cr
   type = 2 is used in SAS and SPSS.  \cr
   type = 3 is used in MINITAB and BMDP. \cr
 
+Skew and Kurtosis are comparably fast, as the expensive sums are coded in C.
 
 }
 \note{
@@ -96,8 +97,6 @@ Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and Kur
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-data(d.pizza)
-
 Skew(d.pizza$price, na.rm=TRUE)
 Kurt(d.pizza$price, na.rm=TRUE)
 
@@ -106,7 +105,6 @@ sapply(d.pizza[,c("temperature","price","delivery_min")], Skew, na.rm=TRUE)
 
 # or apply to do that columnwise with a matrix
 apply(as.matrix(d.pizza[,c("temperature","price","delivery_min")]), 2, Skew, na.rm=TRUE)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

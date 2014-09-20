@@ -13,9 +13,9 @@ Still the function remains flexible as all possible arguments can be passed to t
 \usage{
 PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
           do.hist = !(all(IsWhole(x, na.rm = TRUE)) & length(unique(na.omit(x))) < 13),
-          args.hist = NULL, args.rug = NA, args.dens = NULL,
+          args.hist = NULL, args.rug = NA, args.dens = NULL, args.curve = NA, 
           args.boxplot = NULL, args.ecdf = NULL, heights = NULL,
-          pdist = c(0,0), na.rm = FALSE)
+          pdist = NULL, na.rm = FALSE, cex.axis = NULL, cex.main = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -43,8 +43,12 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
       Use \code{args.rug = NA} if no rug should be added. This is the default. Use \code{args.rug = NULL} to add rug with reasonable default values. 
   %%     ~~Describe \code{args.rug} here~~
 }
-  \item{args.dens}{list of additional arguments to be passed to \code{density()}.
+  \item{args.dens}{list of additional arguments to be passed to \code{density}.
   Use \code{args.dens = NA} if no density curve should be drawn. The defaults are taken from \code{\link{density}}.
+%%     ~~Describe \code{args.dens} here~~
+}
+  \item{args.curve}{list of additional arguments to be passed to \code{\link{curve}}.
+  This argument allows to add a fitted distribution curve to the histogram. By default no curve will be added (args.curve = NA). If the argument is set to NULL, a normal curve with mean(x) and sd(x) will be drawn. See examples for more details.
 %%     ~~Describe \code{args.dens} here~~
 }
   \item{args.boxplot}{list of additional arguments to be passed to the boxplot \code{boxplot()}.
@@ -68,6 +72,9 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
   but the density-function refuses to plot with missings. Defaults to \code{FALSE}.
 %%     ~~Describe \code{na.rm} here~~
 }
+\item{cex.axis}{character extension factor for the axes.}
+\item{cex.main}{character extension factor for the main title. Must be set in dependence of the plot parts in order to get a harmonic view.}
+
 }
 
 \author{Andri Signorell <andri@signorell.net>
@@ -79,7 +86,6 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 # create a new window and do the plot 
 PlotFdist(x=d.pizza$delivery_min, na.rm=TRUE)
 
@@ -99,9 +105,16 @@ PlotFdist(x=d.pizza$delivery_min, na.rm=TRUE, args.dens=NA, args.ecdf=NA,
   args.hist=list(xaxt="s"),  # display x-axis on the histogram
   args.rug=TRUE, heights=c(3, 2.5), pdist=2.5, main="Delivery time")
 
-# alpha channel on rug is cool, but take its time for being drawn...
+# alpha channel on rug is cool, but takes its time for being drawn...
 PlotFdist(x=d.pizza$temperature, args.rug=list(col=SetAlpha("black", 0.1)), na.rm=TRUE)
 
+# plot a normal density curve
+x <- rnorm(1000) 
+PlotFdist(x, args.curve = NULL, args.boxplot=NA, args.ecdf=NA)
+
+# compare with a t-distribution
+PlotFdist(x, args.curve = list(expr="dt(x, df=2)", col="darkgreen"), 
+          args.boxplot=NA, args.ecdf=NA)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

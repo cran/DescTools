@@ -66,6 +66,5 @@ the same result as the S-PLUS function call \code{chisq.gof((x-mean(x))/sqrt(var
 \examples{
 PearsonTest(rnorm(100, mean = 5, sd = 3))
 PearsonTest(runif(100, min = 2, max = 4))
-
 }
 \keyword{htest}

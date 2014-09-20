@@ -29,6 +29,5 @@ HighLow(x, nlow = 5, nhigh = nlow, na.rm = FALSE)
 }
 \examples{
 cat(HighLow(d.pizza$temperature, na.rm=TRUE))
-
 }
 \keyword{ arith }

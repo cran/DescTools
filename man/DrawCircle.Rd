@@ -67,7 +67,6 @@ The function invisibly returns a list of the calculated coordinates for all shap
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 Canvas(xlim=c(-5,5))
 DrawCircle( radius=4:1, col=c("white","steelblue2","white","red"), lwd=3, nv=300)
 
@@ -82,6 +81,15 @@ sapply( (0:12) * pi/6, function(theta) {
   DrawCircle( x=xy$x, y=xy$y, radius=2.4, border="white", col="transparent" )
 } )
 
+
+Canvas(bg="lightgrey", main="Yin ~ Yang")
+DrawCircle(col="white")
+clip(0, 2, 2, -2)
+DrawCircle(col="black")
+clip(-2, 2, 2, -2)
+DrawCircle(y = c(-0.5,0.5), radius = 0.5, col=c("black","white"), border=NA)
+DrawCircle(y = c(-0.5,0.5), radius = 0.1, col=c("white","black"), border=NA)
+DrawCircle(col=NA)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

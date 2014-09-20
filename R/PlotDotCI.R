@@ -1,6 +1,6 @@
 PlotDotCI <-
 function( x, xlim = NULL, pch = 21, pch.cex = 1.0, pch.col = "black", pch.bg = "grey50"
-  , lcol = "grey40", lwd = 2, args.legend = NULL , code = 3
+  , lcol = "grey40", lwd = 2, args.legend = NULL , code = 3, lend="butt"
   , mar = c(7.1,4.1,4.1,2.1), ... ) {
 
   # example:
@@ -9,7 +9,7 @@ function( x, xlim = NULL, pch = 21, pch.cex = 1.0, pch.col = "black", pch.bg = "
   # PlotDotCI( xx, pch.cex=1.2 )
   
   usr <- par("usr");  on.exit( par(usr) ) 
-  par(mar=mar)
+  par(mar=mar, lend=lend)
   
   # we need xlim here, as all segments should be completely displayed 
   if( missing("xlim") ) xlim <- range(pretty(x))

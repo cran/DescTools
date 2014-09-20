@@ -32,7 +32,6 @@ The idea is borrowed from SQL. Might sometimes be useful when preparing data in 
 
 
 \examples{
-
 Coalesce(c(NA, NA, NA, 5, 3))
 Coalesce(c(NA, NULL, "a"))
 Coalesce(NULL, 5, 3)
@@ -51,6 +50,5 @@ Coalesce(list(d.frm[,1], d.frm[,2]))
 
 # returns the first finite element
 Coalesce(d.frm, method="is.finite")
-
 }
 \keyword{ manip }

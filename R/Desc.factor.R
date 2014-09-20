@@ -1,7 +1,7 @@
 Desc.factor <-
-function(x, xname = NULL, ord=c("desc","asc","name","level"), 	
+function(x, main = NULL, ord=c("desc","asc","name","level"), 	
   maxrows = 12, 		# how many levels should be displayed, set NA if all wanted
-  digits = 3, plotit = FALSE, ...) {
+  digits = 3, plotit=getOption("plotit", FALSE), ...) {
   
   # example:
   #   data(d.pizza, package="DescTools")
@@ -9,16 +9,16 @@ function(x, xname = NULL, ord=c("desc","asc","name","level"),
   
   opt <- options(digts=digits); on.exit(options(opt))
   
-  if( is.null(xname)) xname <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), collapse=", "))
+  if( is.null(main)) main <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), collapse=", "))
   
   # if only 2 levels it's a flag, use Desc.logical instead
   if( nlevels(x)==2 ) { 
-    Desc.logical(x, xname=gsub(pattern="factor)", replacement="factor - dichotomous)", x=xname)) 
+    Desc.logical(x, main=gsub(pattern="factor)", replacement="factor - dichotomous)", x=main)) 
     return(invisible())
   } 
 
   cat( paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), "\n" ) 
-  if(!is.na(xname))  cat( xname )
+  if(!identical(main, NA))  cat( main )
   if( !is.null(attr(x,"label")) ) cat(" :", strwrap(attr(x,"label"), indent=2, exdent=2), sep="\n" )
   
   # format values according to defined pretty nums
@@ -35,7 +35,7 @@ function(x, xname = NULL, ord=c("desc","asc","name","level"),
   width <- max( c( unlist(lapply(lfmt, nchar)), unlist(lapply(names(lfmt), nchar))))  
 
   cat( "\n\n")
-  cat( paste(.txtline(lfmt, width=width, ind="  ", space=" "), collapse="\n" ), "\n")
+  cat( paste(.txtline(lfmt, width=width, ind="  ", space=" "), collapse="\n" ))
 
   # calculate the frequencies
   lres$frq <- Freq( x=x 
@@ -59,7 +59,7 @@ function(x, xname = NULL, ord=c("desc","asc","name","level"),
   cat(txt.frq, sep="\n")
   if( maxrows < nlevels(x) ) cat("... etc.\n [list output truncated]\n\n")  else cat("\n")
 
-  if(plotit) PlotDesc.factor(x, main=xname, maxrows = maxrows)
+  if(plotit) PlotDesc.factor(x, main=main, maxrows = maxrows)
   
   invisible(lres)
   

@@ -2,7 +2,7 @@ PalDescTools <-
 function(pal, n=100){
   
   palnames <- c("RedToBlack","RedBlackGreen","SteeblueWhite","RedWhiteGreen",
-                "RedWhiteBlue0","RedWhiteBlue1","RedWhiteBlue2","RedWhiteBlue3","Helsana","Tibco")
+                "RedWhiteBlue0","RedWhiteBlue1","RedWhiteBlue2","RedWhiteBlue3","Helsana","Tibco","RedGreen1")
   
   if(is.numeric(pal)){
     pal <- palnames[pal]
@@ -24,5 +24,13 @@ function(pal, n=100){
            156,205,36, 244,198,7, 254,130,1, 
            96,138,138, 178,113,60
          ), ncol=3, byrow=TRUE), 1, function(x) rgb(x[1], x[2], x[3], maxColorValue=255))
+         , RedGreen1= col <- c(rgb(227,0,11, maxColorValue=255), rgb(227,0,11, maxColorValue=255),
+                     rgb(230,56,8, maxColorValue=255), rgb(234,89,1, maxColorValue=255),
+                     rgb(236,103,0, maxColorValue=255), rgb(241,132,0, maxColorValue=255),
+                     rgb(245,158,0, maxColorValue=255), rgb(251,184,0, maxColorValue=255),
+                     rgb(253,195,0, maxColorValue=255), rgb(255,217,0, maxColorValue=255),
+                     rgb(203,198,57, maxColorValue=255), rgb(150,172,98, maxColorValue=255),
+                     rgb(118,147,108, maxColorValue=255))
+         
   ) 
 }

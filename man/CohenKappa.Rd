@@ -71,7 +71,6 @@ David Meyer <david.meyer@r-project.org>, some slight changes Andri Signorell <an
 \seealso{ \code{\link{CronbachAlpha}}, \code{\link{Kappam}}
 }
 \examples{
-
 # from Bortz et. al (1990) Verteilungsfreie Methoden in der Biostatistik, Springer, pp. 459
 m <- matrix(c(53,5,2,  11,14,5,  1,6,3), nrow=3, byrow=TRUE,
             dimnames = list(rater1 = c("V","N","P"), rater2 = c("V","N","P")) )
@@ -125,7 +124,6 @@ weights <- matrix(c(
  ), ncol=3)
  
 CohenKappa(fleiss, weights)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

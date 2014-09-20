@@ -44,7 +44,6 @@ Light, R.J. (1971): Measures of response agreement for qualitative data: Some ge
 \seealso{\code{\link{CohenKappa}}
 }
 \examples{
-
 statement <- data.frame(
   A=c(2,3,1,3,1,2,1,2,3,3,3,3,3,2,1,3,3,2,2,1,
       2,1,3,3,2,2,1,2,1,1,2,3,3,3,3,3,1,2,1,1),
@@ -74,7 +73,5 @@ Kappam(statement, method="Conger")   # Exact Kappa
 Kappam(statement, conf.level=0.95)   # Fleiss' Kappa and confidence intervals
 
 Kappam(statement, method="Light")   # Exact Kappa
-
-
 }
 \keyword{multivar}

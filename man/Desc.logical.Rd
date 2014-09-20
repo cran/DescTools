@@ -9,8 +9,8 @@ with only two unique values.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-\method{Desc}{logical}(x, xname = NULL, digits = 3, 
-     conf.level = 0.95, plotit = FALSE, ...)
+\method{Desc}{logical}(x, main = NULL, digits = 3, 
+     conf.level = 0.95, plotit = getOption("plotit", FALSE), ...)
         
 }
 %- maybe also 'usage' for other objects documented here.
@@ -18,8 +18,8 @@ with only two unique values.
   \item{x}{the dichotomous vector to be described. 
 %%     ~~Describe \code{x} here~~
 }
-  \item{xname}{the caption for the output.
-%%     ~~Describe \code{xname} here~~
+  \item{main}{the caption for the output.
+%%     ~~Describe \code{main} here~~
 }
   \item{digits}{integer. With how many digits shoud the relative frequencies be formatted? Default is 3.
 %%     ~~Describe \code{digits} here~~
@@ -55,9 +55,7 @@ A list containing the following components:
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
 Desc(d.pizza$wine_delivered)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -10,7 +10,7 @@ variables.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-ParseFormula(formula, data = parent.frame(), subset = TRUE, drop = TRUE)
+ParseFormula(formula, data = parent.frame(), drop = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,9 +21,6 @@ ParseFormula(formula, data = parent.frame(), subset = TRUE, drop = TRUE)
   \item{data}{an optional data frame, list or environment (or object coercible by as.data.frame to a data frame) 
   containing the variables in the model. If not found in data, the variables are taken from environment(formula), typically the environment from which lm is called.
 %%     ~~Describe \code{data} here~~
-}
-  \item{subset}{an optional vector specifying a subset of observations to be used.
-%%     ~~Describe \code{subset} here~~
 }
   \item{drop}{if \code{drop} is \code{TRUE}, unused factor levels are dropped from the result when creating interaction terms. 
   The default is to drop all unused factor levels.
@@ -55,7 +52,6 @@ ParseFormula(formula, data = parent.frame(), subset = TRUE, drop = TRUE)
 Used in: \code{\link{Desc.formula}}
 }
 \examples{
-
 set.seed(17)
 piz <- d.pizza[sample(nrow(d.pizza),10), c("temperature","price","driver","weekday")]
 
@@ -77,7 +73,6 @@ ParseFormula(f5, data=piz)
 ParseFormula(f6, data=piz)
 ParseFormula(f7, data=piz)
 ParseFormula(f8, data=piz)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

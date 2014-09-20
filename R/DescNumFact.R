@@ -1,6 +1,8 @@
 DescNumFact <-
-function( x, grp, digits = NULL, width=getOption("width")
-  , use.na = c("no", "ifany", "always") ) {
+function( x, grp, digits = NULL 
+  , xname=deparse(substitute(x)), grpname=deparse(substitute(grp))
+  , width=getOption("width")
+  , use.na = c("no", "ifany", "always"), plotit=getOption("plotit", FALSE)) {
 
   if( is.null(digits) ) { 
     digits <- c(NA,NA,NA,NA,0,3,0,0) 
@@ -13,8 +15,8 @@ function( x, grp, digits = NULL, width=getOption("width")
   
 		out <- paste(paste( formatC( x, width=width, digits=digits, format="f" ), collapse=" "),"")
 		if(markext==TRUE) {
-		  for( i in which(x==min(x))*(width+1) ) substr(out,i,i) <- Coalesce(getOption("footnote1"),"'")
-		  for( i in which(x==max(x))*(width+1) ) substr(out,i,i) <- Coalesce(getOption("footnote2"),'"')
+		  for( i in which(x==min(x))*(width+1) ) substr(out,i,i) <- getOption("footnote1","'")
+		  for( i in which(x==max(x))*(width+1) ) substr(out,i,i) <- getOption("footnote2",'"')
 		} 
 		return(out)
 	}
@@ -101,4 +103,12 @@ function( x, grp, digits = NULL, width=getOption("width")
       , sum(is.na(grp)), signif(sum(is.na(grp))/length(grp), digits=3)*100), "%).\n", sep="")
 
   cat( "\n")
+
+  if(plotit){
+    PlotDescNumFact( formula=formula("x ~ grp"), data=data.frame(x=x, grp=grp), 
+                     main=paste(xname, " ~ ", grpname, sep="") )
+    # main would be nice here...
+  }
+  invisible()
+
 }

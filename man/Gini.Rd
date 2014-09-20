@@ -117,8 +117,6 @@ Gini(x=c(10,0), n=c(2,3), unbiased=FALSE)
 
 # perfect balance
 Gini(c(10,10,10))
-
-
 }
 \keyword{univar}
 

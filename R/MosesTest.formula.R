@@ -1,6 +1,6 @@
 MosesTest.formula <-
-function (formula, data, subset, na.action, ...) 
-{
+function (formula, data, subset, na.action, ...) {
+  
   # this is a taken analogue to wilcox.test.formula  
 
   if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]), 

@@ -46,7 +46,6 @@ WrdUpdateBookmark(name, text, what = wdConst$wdGoToBookmark, wrd = getOption("la
 }
 \examples{
 \dontrun{ # Windows-specific example
-
 wrd <- GetNewWrd()
 WrdText("a)\n\n\nb)", fontname=WrdGetFont()$name, fontsize=WrdGetFont()$size)
 WrdInsertBookmark("chap_b")
@@ -54,9 +53,7 @@ WrdText("\n\n\nc)\n\n\n", fontname=WrdGetFont()$name, fontsize=WrdGetFont()$size
 
 WrdGoto("chap_b")
 WrdUpdateBookmark("chap_b", "Goto chapter B and set text")
-
 }
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

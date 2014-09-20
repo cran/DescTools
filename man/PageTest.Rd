@@ -149,7 +149,6 @@ score <- matrix(c(
   ), nrow=6, byrow=TRUE) 
 
 PageTest(score)
- 
 }
 
 \keyword{htest}

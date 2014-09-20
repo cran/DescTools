@@ -37,7 +37,6 @@ MeanSE(d.pizza$price, na.rm=TRUE)
 
 # evaluate data.frame
 sapply(d.pizza[,1:4], MeanSE, na.rm=TRUE)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

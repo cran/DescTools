@@ -42,7 +42,6 @@
   the x- and y-axes and the data of the plot.
 }
 \examples{
-
 \dontrun{
 ## Copy and try in an interactive R session
 
@@ -54,7 +53,6 @@ identify(y ~ x, data=df)
 \seealso{
   \code{identify}, \code{\link{locator}}, \code{\link{text}}\cr
   \url{http://www.rforge.net/NCStats/files/}
-
 }
 \keyword{hplot}
 
