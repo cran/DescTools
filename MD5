@@ -1,4 +1,4 @@
-aa497578f4812834cec312150c1a9066 *DESCRIPTION
+04b12ab543454c1b690bfebf0a25b0ee *DESCRIPTION
 583f45a644e393f091666b0c8cec78a3 *NAMESPACE
 339175c7bb4353ddc7096ea33285243e *NEWS
 d84cbde1920dc4b7807c40e9fb590949 *R/AUC.R
@@ -75,7 +75,7 @@ d4469a3f41fdafd410bf14142da2722e *R/DescFactFact.R
 a9392f07e1db8cc37506934d34e7aacc *R/DescFactNum.R
 122cbde42d85b16c8eb73304447320fa *R/DescNumFact.R
 f98b0d309eb59d19f787f047d79d66e0 *R/DescNumNum.R
-18b89dc6e69be794fd82a0f105efa8db *R/DescTools-internal.R
+15e7e5974768a198926bb3eab5fc33b7 *R/DescTools-internal.R
 75955498eded6187586736d44ddc4c89 *R/DescToolsOptions.R
 08d999e4cdf7d7a72de09fb9a5126d91 *R/DescWrd.data.frame.R
 7a32c5f3b5b9173a4f1267711f8262c3 *R/DescWrd.default.R
@@ -470,9 +470,9 @@ b1b808bce0a89f9b97f646b6caf7a019 *data/horange.rda
 67bf3962a23797defd7355e75fc991b8 *demo/describe.r
 56b17a9a3f8cd321b1cdeb4cbbe307b7 *demo/plots.R
 00a25be15da838534c12aaf9959b8e0b *inst/doc/DescTools.Rnw
-d398a5b86d76909960138faa8fc93a98 *inst/doc/DescTools.pdf
+8ea1d89a868d62aa9426a77a0010b49b *inst/doc/DescTools.pdf
 1a98c5eb5a055d3fe36772a020fd8563 *inst/doc/DescToolsCompanion.Rnw
-a768ab2760fe15ab5413f8878eca7b2f *inst/doc/DescToolsCompanion.pdf
+d57fe60a602e71f434cbcd258a7d2711 *inst/doc/DescToolsCompanion.pdf
 54a8efa1a5d048c9cd6061b5d5e0cea5 *inst/extdata/key.ico
 978ac0802b460b96b3096d9567053053 *man/AUC.Rd
 130defa065e24e51a94d17b454eb8723 *man/AddAlpha.Rd
@@ -530,7 +530,7 @@ f33212c5feeeb4a614bb37803cdbdf79 *man/Desc.flags.Rd
 bc78b3e8991e4b837b22810c41e7d3c0 *man/Desc.numeric.Rd
 7cd84002a487d9638b9030cf9e380bb7 *man/Desc.table.Rd
 3e24db09f8bd99a8557afedb66b178f0 *man/DescTools-internal.Rd
-b15efe1ef6751c368ea604f531edaa4f *man/DescTools-package.Rd
+b2b124a2a7c2df6622b9b22821d5bcdf *man/DescTools-package.Rd
 877966e4bb1c21edc70e729cf78ed5cf *man/DescWrd.Rd
 00e687a79a452fc8e7b383c03f49a7cb *man/DivCoef.Rd
 d7b438777bbd12f47bc39f6d74f30e31 *man/DivCoefMax.Rd
@@ -768,7 +768,7 @@ a91c025627e5dd4c2f1fa8ad08c289d4 *src/fdwilcox.c
 4e562a4570979794f333a4b0e2f70a11 *src/hoeffd.f
 2ffebcbeb56e537bffbcb29329c7911c *src/jtpdf.f
 f4d5ba5b6f594f142aa85ce2b8654b53 *src/moments.c
-17a56aa113dd35ff38e367019edfbc4e *src/pointinpolygon.c
+a1156b84c75e65b51d9078ff9ce7bd3d *src/pointinpolygon.c
 f698976ca9ef8a852edd2c37939b66a2 *src/ranksort.c
 46eb7a57d8a66e46c30303ef90df51d0 *src/robustbase.h
 4126ec9207aaaca7e324917a93d5af7c *src/tbrm.c

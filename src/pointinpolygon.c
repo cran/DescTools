@@ -57,7 +57,7 @@ SEXP pip(SEXP pntx, SEXP pnty, SEXP pntn, SEXP polyx, SEXP polyy, SEXP polyn)
 			angle += dtheta;
 		}
 		//write out if point is in polygon
-		if (abs(angle) < PI) { out[ii] = 0; } else { out[ii] = 1; }
+		if (fabs(angle) < PI) { out[ii] = 0; } else { out[ii] = 1; }
 	}
 	
 	//return the output data

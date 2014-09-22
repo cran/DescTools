@@ -22,17 +22,17 @@ Feedback, feature requests, bugreports and other suggestions are welcome!
 \tabular{ll}{
 Package: \tab DescTools\cr
 Type: \tab Package\cr
-Version: \tab 0.99.8\cr
-Date: \tab 2014-09-20\cr
-Depends: \tab tcltk \cr
-Suggests: \tab RDCOMClient\cr
-Imports: \tab boot\cr
+Title: \tab Tools for descriptive statistics\cr
+Version: \tab 0.99.8.1\cr
+Date: \tab 2014-12-21\cr
+Suggests: \tab RDCOMClient, manipulate\cr
+Depends: \tab R (>= 3.1.0)\cr
+Imports: \tab boot, tcltk\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 LazyData: \tab yes\cr
 ByteCompile: \tab yes\cr
 NeedsCompilation: \tab yes\cr
-
 }
 
 
