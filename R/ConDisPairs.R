@@ -4,7 +4,7 @@ function(x){
   # tab is a matrix of counts   
   # Based on code of Michael Friendly and Laura Thompson
 
-  # slooooow because of 2 nested for clauses
+  # slooooow because of 2 nested for clauses O(n^2)
   # this is NOT faster when implemented with a mapply(...)
 
   # Lookin for alternatives in C

@@ -1,7 +1,7 @@
 \name{IsOdd}
 \alias{IsOdd}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Checks if an integer is even or odd
+\title{Checks If An Integer Is Even Or Odd
 %%  ~~function to do ... ~~
 }
 \description{Checks if the integers in a vector are even (FALSE) or odd (TRUE)

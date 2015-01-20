@@ -8,16 +8,16 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Outlier(x, na.rm = FALSE, method = c("boxplot"))
+Outlier(x, method = c("boxplot"), na.rm = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a (non-empty) numeric vector of data values.
 }
-  \item{na.rm}{logical. Should missing values be removed? Defaults to FALSE.
-}
   \item{method}{the method to be used. So far only Tukey's boxplot rule is implemented.
 %%     ~~Describe \code{method} here~~
+}
+  \item{na.rm}{logical. Should missing values be removed? Defaults to FALSE.
 }
 }
 \details{Outlier detection is a tricky problem and should be handled with care. We implement only Tukey's boxplot rule as a rough idea of spotting extreme values.

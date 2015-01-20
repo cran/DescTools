@@ -1,7 +1,10 @@
 PlotRCol <-
 function(ord=c("hsv","default"), label=c("text","hex","dec")) {
+  
+  usr <- par(no.readonly=TRUE);  on.exit(par(usr)) 
+  
   # plots all named colors:   PlotRCol(lbel="hex") hat noch zuviele Bezeichnungen
-  if( ! is.null(dev.list()) ){ 
+  if( !is.null(dev.list()) ){ 
     curwin <- dev.cur()
     on.exit(dev.set(curwin))
   } 

@@ -56,10 +56,15 @@
 
 }
 
-\references{ \cite{Anderson, T.W. (2003), \emph{An introduction to
-multivariate analysis}, New Jersey: Wiley. }  }
+\references{ 
+Nordhausen K., Sirkia S., Oja H. and Tyler D. E. (2012) ICSNP: Tools for
+  Multivariate Nonparametrics. R package version 1.0-9.\cr
+  \url{http://CRAN.R-project.org/package=ICSNP}
 
-\author{Klaus Nordhausen, \email{klaus.nordhausen@uta.fi}}
+Anderson, T.W. (2003), \emph{An introduction to
+multivariate analysis}, New Jersey: Wiley.  }
+
+\author{Klaus Nordhausen, <klaus.nordhausen@uta.fi>}
 
 \examples{ 
 math.teach <- data.frame(

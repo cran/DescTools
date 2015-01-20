@@ -42,7 +42,7 @@ PlotDesc(x, ..., wrd = NULL)
 \method{PlotDesc}{factor}(x, main = deparse(substitute(x)), 
          ord = c("desc", "level", "name", "asc", "none"), 
          maxrows = 10, lablen = 25, type = c("bar","dot"), 
-         col = getOption("col1", hblue), ..., wrd = NULL)
+         col = NULL, border = NULL, ..., wrd = NULL)
          
 \method{PlotDesc}{table}(x, col1 = getOption("col1", hblue), 
          col2 = getOption("col2", hred),
@@ -60,11 +60,12 @@ PlotDesc(x, ..., wrd = NULL)
 
 \method{PlotDesc}{flags}(x, ..., wrd = NULL)
 
-PlotDescNumFact(formula, data, main=deparse(formula), notch=FALSE,
+PlotDescNumFact(formula, data, main = deparse(formula), notch=FALSE,
                 add_ni = TRUE, ..., wrd = NULL)
                 
-PlotDescFactNum(x, y, ptab, main=NULL, notch=FALSE,
-                add_ni = TRUE, ... , wrd=NULL)
+PlotDescFactNum(x, y, ptab, 
+                col1 = getOption("col1", hblue), col2 = getOption("col2", hred),
+                main=NULL, notch=FALSE, add_ni = TRUE, ... , wrd=NULL)
 
 PlotDescNumNum(form1, form2, data, main = NULL, xlab = NULL, ylab = NULL, ..., wrd = NULL)
 
@@ -79,6 +80,7 @@ PlotDescNumNum(form1, form2, data, main = NULL, xlab = NULL, ylab = NULL, ..., w
   \item{type}{the type of plot to be used for describing factors. Can be \code{"bar"} for a horizontal barchart or \code{"dot"} for a dotchart. }
   \item{col1, col2}{two colors to be chosen for doing mosaicplots and logic plots. }
   \item{col}{color of the points used in a dotchart, typically for integers. Defaults to lightblue.}
+  \item{border}{the color of the border, if the plottype is barplot or dotplot}
   \item{xlab}{the label for the x-axis.}
   \item{ylab}{the label for the y-axis.}
   \item{breaks}{vector of limits to bin a date.}

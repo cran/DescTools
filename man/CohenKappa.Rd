@@ -20,10 +20,10 @@ CohenKappa(x, y = NULL, weights = c("Unweighted", "Equal-Spacing", "Fleiss-Cohen
 %%     ~~Describe \code{x} here~~
 }
  \item{y}{NULL (default) or a vector with compatible dimensions to \code{x}. If y is provided, \code{table(x, y, \dots)} is calculated. In order to get a square matrix, x and y are 
- coerced to factors with synchronized levels.
+ coerced to factors with synchronized levels. (Note, that the vector interface can not be used together with weights.) 
 %%     ~~Describe \code{y} here~~
 }
-  \item{weights}{either one of the character strings given in the default value, or a user-specified matrix with same dimensions as x.
+  \item{weights}{either one out of \code{"Unweighted"}, \code{"Equal-Spacing"}, \code{"Fleiss-Cohen"}, which will calculate the weights accordingly, or a user-specified matrix having the same dimensions as x containing the weights for each cell.
 
 %%     ~~Describe \code{weights} here~~
 }
@@ -36,25 +36,22 @@ CohenKappa(x, y = NULL, weights = c("Unweighted", "Equal-Spacing", "Fleiss-Cohen
 
 }
 \details{Cohen's kappa is the diagonal sum of the (possibly weighted) relative frequencies, corrected for expected values and standardized by its maximum value. \cr
-The equal-spacing weights are defined by 1 - abs(i - j) / (r - 1), r number of columns/rows, and the \cr
-Fleiss-Cohen weights by 1 - abs(i - j)^2 / (r - 1)^2. The latter one attaches greater importance to near disagreements. 
+The equal-spacing weights are defined by \deqn{1 - \frac{|i - j|}{r - 1}} \code{r} being the number of columns/rows, and the Fleiss-Cohen weights by \deqn{1 - \frac{(i - j)^2}{(r - 1)^2}} The latter one attaches greater importance to near disagreements.\cr 
+\cr
+Data can be passed to the function either as matrix or data.frame in \code{x}, or as two numeric vectors \code{x} and \code{y}. In the latter case \code{table(x, y, ...)} is calculated. Thus \code{NA}s are handled the same way as \code{\link{table}} does. Note that tables are by default calculated \bold{without} NAs. The specific argument \code{useNA} can be passed via the ... argument.\cr
+The vector interface \code{(x, y)} is only supported for the calculation of unweighted kappa. For 2 factors with different levels we cannot ensure a reproducible construction of a confusion table, which is independent of the order of x and y. All weights might lead to inconsistent results.
+Thus the function will raise an error in such cases.
 %%  ~~ If necessary, more details than the description above ~~
 }
-\note{The vector interface (x, y) is only supported for the calculation of unweighted kappa. For 2 factors with different levels we cannot ensure a reproducible construction of a confusion table, which is independent of the order of x and y. All weights would lead to inconsistent results.
-The function will raise an error in such cases.
+
+\value{if no confidence intervals are requested:  
+the estimate as numeric value\cr\cr
+else a named numeric vector with 3 elements 
+\item{kappa}{estimate}
+\item{lwr.ci}{lower confidence interval}
+\item{upr.ci}{upper confidence interval}
 }
 
-\value{
-a single numeric value if no confidence intervals are requested,\cr 
-and otherwise a numeric vector with 3 elements for the estimate, the lower and the upper confidence interval
- 
-
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
 \references{
 Cohen, J. (1960) A coefficient of agreement for nominal scales. \emph{Educational and Psychological Measurement}, 20, 37-46. 
 
@@ -68,11 +65,13 @@ David Meyer <david.meyer@r-project.org>, some slight changes Andri Signorell <an
 }
 
 
-\seealso{ \code{\link{CronbachAlpha}}, \code{\link{Kappam}}
+\seealso{ \code{\link{CronbachAlpha}}, \code{\link{KappaM}}
 }
 \examples{
 # from Bortz et. al (1990) Verteilungsfreie Methoden in der Biostatistik, Springer, pp. 459
-m <- matrix(c(53,5,2,  11,14,5,  1,6,3), nrow=3, byrow=TRUE,
+m <- matrix(c(53,  5, 2,  
+              11, 14, 5,  
+               1,  6, 3), nrow=3, byrow=TRUE,
             dimnames = list(rater1 = c("V","N","P"), rater2 = c("V","N","P")) )
 
 # confusion matrix interface
@@ -92,7 +91,7 @@ rating <- data.frame(
   rtr6 = c(4,5,5,5,4, 3,5,4,4,5, 4,4,3,4,5, 5,5,2,4,5, 5,4,5,4,5, 4,5,4,3,5)
 )
 
-PairApply(rating, FUN=CohenKappa)
+PairApply(rating, FUN=CohenKappa, symmetric=TRUE)
 
 # Weighted Kappa
 cats <- c("<10\%", "11-20\%", "21-30\%", "31-40\%", "41-50\%", ">50\%")
@@ -111,9 +110,9 @@ CohenKappa(m, weight=wm, conf.level=0.95)
 
 # however, Fleiss, Cohen and Everitt weight similarities
 fleiss <- matrix(c(
-  106, 10,4,
-  22,28, 10,
-  2, 12,  6
+  106, 10,  4,
+  22,  28, 10,
+   2,  12,  6
   ), ncol=3, byrow=TRUE)
 
 #Fleiss weights the similarities

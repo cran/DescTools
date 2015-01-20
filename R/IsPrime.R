@@ -8,7 +8,7 @@ function(x) {
   n <- length(x)
   X <- x[1:n]
   L <- logical(n)
-  p <- Primes(ceiling(sqrt(max(x))))
+  p <- DescTools::Primes(ceiling(sqrt(max(x))))
   for (i in 1:n) {
     L[i] <- all(X[i] %% p[p < X[i]] != 0)
   }

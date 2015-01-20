@@ -1,6 +1,6 @@
 Str <-
 function(x, ...){
-  if(class(x)=="data.frame"){
+  if(identical(class(x), "data.frame")) {
     
     args <- list(...)
     if(is.null(args["strict.width"])) args["strict.width"] <- "cut"

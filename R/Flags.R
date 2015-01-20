@@ -1,6 +1,6 @@
 Flags <-
 function(x){
-  res <- x[, WhichFlags(x)]
+  res <- x[, sapply(x, IsDichotomous)]
   class(res) <- "flags"
   return(res)
 }

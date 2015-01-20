@@ -5,7 +5,8 @@
 %%   ~~ data name/kind ... ~~
 }
 \description{An artificial dataset inspired by a similar dataset pizza.sav in \emph{Arbeitsbuch zur deskriptiven und induktiven Statistik} by Toutenburg et.al.\cr
-The dataset contains data of three pizza services in three districts. Every record defines an order and the according properties. A pizza is supposed to taste good, if it's temperature is high enough, say 45 Celsius. So it might be interesting for the pizza delivery service to minimize the delivery time.
+The dataset contains data of a pizza delivery service in London, delivering pizzas to three areas. Every record defines one order/delivery and the according properties. A pizza is supposed to taste good, if it's temperature is high enough, say 45 Celsius. So it might be interesting for the pizza delivery service to minimize the delivery time.\cr
+The dataset is designed to be possibly evil. It contains the most used datatypes as numerics, factors, ordered factors, integers, logicals and a date. NAs are scattered everywhere, besides in the index.
 }
 \usage{data(d.pizza)}
 \format{
@@ -15,18 +16,18 @@ The dataset contains data of three pizza services in three districts. Every reco
     \item{\code{date}}{Date, the delivery date}
     \item{\code{week}}{integer, the weeknumber}
     \item{\code{weekday}}{integer, the weekday}
-    \item{\code{area}}{factor with levels \code{Westminster} \code{Kensington} \code{Notting Hill}}
+    \item{\code{area}}{factor, the three London districts: \code{Brent}, \code{Camden}, \code{Westminster} }
     \item{\code{count}}{integer, the number of pizzas delivered}
-    \item{\code{rabate}}{numeric, a potential rabate }
+    \item{\code{rabate}}{logical, TRUE if a rabate has been given }
     \item{\code{price}}{numeric, the total price of delivered pizza(s) }
-    \item{\code{operator}}{a factor with levels \code{Allanah} \code{Christal} \code{Rhonda}}
+    \item{\code{operator}}{a factor with levels \code{Allanah} \code{Maria} \code{Rhonda}}
     \item{\code{driver}}{a factor with levels \code{Carpenter} \code{Carter} \code{Taylor} \code{Butcher} \code{Hunter} \code{Miller} \code{Farmer}}
     \item{\code{delivery_min}}{numeric, the delivery time in minutes (decimal)}
     \item{\code{temperature}}{numeric, the temperature of the pizza in degrees Celsius when delivered to the customer }
-    \item{\code{wine_ordered}}{boolean, TRUE if wine was ordered}
-    \item{\code{wine_delivered}}{boolean, TRUE if wine was delivered}
+    \item{\code{wine_ordered}}{integer, 1 if wine was ordered, 0 if not}
+    \item{\code{wine_delivered}}{integer, 1 if wine was delivered, 0 if not}
     \item{\code{wrongpizza}}{logical, TRUE if a wrong pizza was delivered }
-    \item{\code{quality}}{ordered factor with levels \code{low} < \code{mid} < \code{hot}, defining the quality of the pizza when delivered}
+    \item{\code{quality}}{ordered factor with levels \code{low} < \code{medium} < \code{high}, defining the quality of the pizza when delivered}
   }
 }
 \details{The dataset contains NAs randomly scattered.

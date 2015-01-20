@@ -1,17 +1,20 @@
 \name{UnitConv}
 \alias{UnitConv}
 \alias{d.units}
+\alias{d.prefix}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Unit Conversion
 %%  ~~function to do ... ~~
 }
-\description{Simple function for common unit conversions.
+\description{
+Convert a number from one measurement system to another. The function can translate a table of distances in miles to a table of distances in kilometers.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 UnitConv(x, from_unit, to_unit)
 
 data(d.units)
+data(d.prefix)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -27,45 +30,78 @@ data(d.units)
 }
 }
 \details{
-The following units can be choosen. If a conversion can't be found the function will return NA.
+The following units can be chosen. Conversions will work with units within the group. NA wil be returned if a conversion can't be found. \cr
+The multipliers can be found in the dataset \code{d.units}.
 
-\tabular{ll}{
-unit    \tab description  \cr
-a    \tab year (assuming 365.25 days per year)  \cr
-AA    \tab 1 angstrom = 100 pm  \cr
-atm    \tab atmosphere (standard)  \cr
-bar    \tab bar  \cr
-cal    \tab calorie  \cr
-C    \tab Celsius  \cr
-d    \tab day  \cr
-eV    \tab electronvolt  \cr
-F    \tab Fahrenheit  \cr
-ft    \tab foot = 12 inches  \cr
-g    \tab gram, the SI unit of mass (although the definition is based on kg)  \cr
-gal    \tab U.S. Gallon  \cr
-h    \tab hour  \cr
-hp    \tab horsepower (metric)  \cr
-in    \tab inch (strangely, some people still use these)  \cr
-J    \tab Joule, the Si unit of energy  \cr
-l    \tab litre  \cr
-lb    \tab international avoirdupois pound  \cr
-m    \tab metre, the SI unit of length  \cr
-m3    \tab cubic metre  \cr
-mi    \tab mile = 5280 feet  \cr
-min    \tab minute  \cr
-oz    \tab ounce  \cr
-Pa    \tab Pascal, the SI unit of pressure  \cr
-psi    \tab pound-force per square inch  \cr
-s    \tab second, the SI unit of time  \cr
-tn    \tab metric ton  \cr
-toe    \tab 1 toe = 1000 kgoe = 1000 kg * 35 MJ/kg = 35000 MJ (energy as tons of oil equivalent)  \cr
-ton    \tab metric ton  \cr
-W    \tab Watt, the SI unit of power  \cr
-Wh    \tab 1 Wh = 1 Wh * 3600 s/h = 3600 Ws = 3600 MJ  \cr
-yd    \tab yard (basic unit of length)  \cr
+\tabular{lll}{
+\cr\cr
+\bold{Weight and mass}\tab \tab\cr
+Gram  \tab g \tab metric\cr
+Slug  \tab sg \cr
+Pound mass (avoirdupois)  \tab lbm \cr
+U (atomic mass unit)  \tab u \cr
+Ounce mass (avoirdupois)  \tab ozm \cr
+\cr\bold{Distance}\tab \cr
+Meter  \tab  m \tab metric \cr
+Statute mile  \tab mi \cr
+Nautical mile  \tab Nmi \cr
+Inch  \tab in \cr
+Foot  \tab ft \cr
+Yard  \tab yd \cr
+Angstrom  \tab ang \tab metric \cr
+Pica  \tab pica \cr
+  \tab  \cr
+\cr\bold{Time}\tab \cr
+Year  \tab yr \cr
+Day  \tab day \cr
+Hour  \tab hr \cr
+Minute  \tab mn \cr
+Second  \tab sec \cr
+\cr\bold{Pressure}\tab \cr
+Pascal  \tab Pa (or p) \cr
+Atmosphere  \tab atm (or at) \cr
+mm of Mercury  \tab mmHg \cr
+  \tab  \cr
+\cr\bold{Force}\tab \cr
+Newton  \tab N \tab metric \cr
+Dyne  \tab dyn (or dy) \cr
+Pound force  \tab lbf \cr
+\cr\bold{Energy}\tab \cr
+Joule  \tab J \tab metric \cr
+Erg  \tab e \cr
+Thermodynamic calorie  \tab c \cr
+IT calorie  \tab cal \tab metric \cr
+Electron volt  \tab eV (or ev) \tab metric \cr
+Horsepower-hour  \tab HPh (or hh) \cr
+Watt-hour  \tab Wh (or wh) \tab metric \cr
+Foot-pound  \tab flb \cr
+BTU  \tab BTU (or btu) \cr
+  \tab  \cr
+\cr\bold{Power}\tab \cr
+Horsepower  \tab HP (or h) \cr
+Watt  \tab W (or w) \tab metric \cr
+\cr\bold{Magnetism}\tab \cr
+Tesla  \tab T \tab metric \cr
+Gauss  \tab ga \tab metric \cr
+  \tab  \cr
+\cr\bold{Temperature}\tab \cr
+Degree Celsius  \tab C (or cel) \cr
+Degree Fahrenheit  \tab F (or fah) \cr
+Kelvin  \tab K (or kel) \tab metric \cr
+\cr\bold{Liquid measure}\tab \cr
+Teaspoon  \tab tsp \cr
+Tablespoon  \tab tbs \cr
+Fluid ounce  \tab oz \cr
+Cup  \tab cup \cr
+U.S. pint  \tab pt (or us_pt) \cr
+U.K. pint  \tab uk_pt \cr
+Quart  \tab qt \cr
+Gallon  \tab gal \cr
+Liter  \tab l (or lt) \tab metric \cr
 }
 
-All the details can be found in the d.units data.frame.
+
+All the details can be found in the \code{d.units} data.frame.
 
 %%  ~~ If necessary, more details than the description above ~~
 }

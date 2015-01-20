@@ -2,7 +2,8 @@ Desc.flags <-
 function(x, i=1, plotit=getOption("plotit", FALSE), ...){
   
   cat( paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), "\n" ) 
-  cat( "Multiple dichotomous variables" )
+  main <- InDots(..., arg="main", default = "Multiple dichotomous variables")
+  cat(main)
   if( !is.null(attr(x,"label")) ) cat(" :", strwrap(attr(x,"label"), indent=2, exdent=2), sep="\n" )
   cat("\n")
   
@@ -17,7 +18,7 @@ function(x, i=1, plotit=getOption("plotit", FALSE), ...){
   ))
   out <- data.frame( do.call(rbind,  lapply(d.sub, function(x) cbind(NAs=sum(is.na(x)), n=length(x)- sum(is.na(x)))))
                      , flags)
-  out[,5:7] <- apply(out[,5:7],2, FormatFix, after=3)
+  out[,5:7] <- apply(out[,5:7],2, Format, digits=3)
   
   print(out, quote=FALSE)
   cat("\n")  

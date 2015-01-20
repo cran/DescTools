@@ -1,5 +1,5 @@
-\name{AreaIdent}
-\alias{AreaIdent}
+\name{IdentifyA}
+\alias{IdentifyA}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Identify Points in Plot Lying within a Rectangle or Polygon
 %%  ~~function to do ... ~~
@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-AreaIdent(formula, data, subset, poly = FALSE)
+IdentifyA(formula, data, subset, poly = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -50,7 +50,7 @@ The coordinates are returned as text in the attribute \code{"cond"}.
 # run the example via copy and paste
 
 plot(temperature ~ delivery_min, data=d.pizza)
-idx <- AreaIdent(temperature ~ delivery_min, data=d.pizza)
+idx <- IdentifyA(temperature ~ delivery_min, data=d.pizza)
 
 # you selected the following points
 d.pizza[idx,]
@@ -63,7 +63,7 @@ attr(idx, "cond")
 d.pizza$grp <- seq(nrow(d.pizza)) \%in\% idx 
 
 # try the polygon option
-idx <- AreaIdent(temperature ~ delivery_min, data=d.pizza, poly=TRUE)
+idx <- IdentifyA(temperature ~ delivery_min, data=d.pizza, poly=TRUE)
 points(temperature ~ delivery_min, data = d.pizza[idx,], col="red")
 }
 }

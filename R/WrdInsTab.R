@@ -1,5 +1,5 @@
 WrdInsTab <-
-function(nrow = 1, ncol = 1, heights = NULL, widths = NULL, wrd = getOption("lastWord")){
+function(nrow = 1, ncol = 1, heights = NULL, widths = NULL, main = NULL, wrd = getOption("lastWord")){
   
   .CentimetersToPoints <- function(x) x * 28.35
   
@@ -21,5 +21,13 @@ function(nrow = 1, ncol = 1, heights = NULL, widths = NULL, wrd = getOption("las
       tcol[["Height"]] <- .CentimetersToPoints(heights[i])
     }  
   }
+  
+  if(!is.null(main)){
+    # insert caption
+    sel <- wrd$Selection()  # "Abbildung"
+    sel$InsertCaption(Label=wdConst$wdCaptionTable, Title=main)
+    sel$TypeParagraph()
+  }
+    
   invisible(res)
 }

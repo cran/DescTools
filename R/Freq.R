@@ -20,7 +20,16 @@ function(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE
                    # "level" = {} is default
            )  
          }
-         , "ordered" =  tab <- table(x, useNA=useNA)
+         , "ordered" =  {
+           tab <- table(x, useNA=useNA)
+           # how should the factors be sorted, by name, level or frq? (NULL means "level")
+           switch( match.arg(ord)
+                   , "name" = { tab <- tab[ order(rownames(tab)) ] }
+                   , "asc" = { tab <- sort(tab) }
+                   , "desc" = { tab <- -sort(-tab) }
+                   # "level" = {} is default
+           )  
+         }
          , "logic" =  tab <- table(x, useNA=useNA)
          , tab <- table(cut( x, breaks=breaks, include.lowest=include.lowest, ... ), useNA=useNA)
   )

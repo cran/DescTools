@@ -60,8 +60,11 @@ function(x, wrd, main = deparse(substitute(x)), ...) {
   wrd[["Selection"]]$MoveRight( wdConst$wdCell, 1, 0)
   
   .plotReset()
-  PlotDesc(x, main="", ..., wrd=wrd )
   
+  # corr 8.11.2014: not sure if we need the dots here, anyway they can produce errors
+  # PlotDesc(x, main="", ..., wrd=wrd)
+  PlotDesc(x, main="", wrd=wrd)
+
   wrd[["Selection"]]$EndOf( wdConst$wdTable )
   # get out of tablerange
   wrd[["Selection"]]$MoveRight( wdConst$wdCharacter, 2, 0 )

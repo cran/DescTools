@@ -40,14 +40,36 @@ PlotWeb(m, col = c("red", "blue"), lty = par("lty"), args.legend=NULL,
 %%     ~~Describe \code{\dots} here~~
 }
 }
+\value{
+A list of x and y coordinates, giving the coordinates of all the points drawn, useful for adding to the graph.
+}
+
 \author{Andri Signorell <andri@signorell.net>
 }
 
 \seealso{\code{\link{PlotCorr}}
 }
 \examples{
-m <- cor(d.pizza[,WhichNumerics(d.pizza)[-c(1:2)]], use="pairwise.complete.obs")
+m <- cor(d.pizza[, which(sapply(d.pizza, IsNumeric, na.rm=TRUE))[-c(1:2)]], 
+         use="pairwise.complete.obs")
 PlotWeb(m=m, col=c("red","blue"), main="Pizza Correlation")
+
+
+# let's describe only the significant corrs and start with a dataset
+d.m <- d.pizza[, which(sapply(d.pizza, IsNumeric, na.rm=TRUE))[-c(1:2)]]
+
+# get the correlation matrix
+m <- cor(d.m, use="pairwise.complete.obs")
+
+# let's get rid of all non significant correlations
+ctest <- PairApply(d.m,  function(x, y) cor.test(x, y)$p.value, symmetric=TRUE) 
+
+# ok, got all the p-values, now replace > 0.05 with NAs
+m[ctest > 0.05] <- NA
+# How does that look like now?
+noquote(Format(m, na.form = ". ", leading="drop", digits=3, align = "right"))
+
+PlotWeb(m)
 }
 \keyword{ hplot }
 \keyword{ multivariate }

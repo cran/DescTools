@@ -1,3 +1,104 @@
+DescTools 0.99.9 (2014-11-29)
+-----------------------------
+
+NEW FUNCTIONS ADDED:
+   * CollapseTable collapses levels within a table.
+   * Distributions dBenford and dRevGumbel have been added.
+   * PlotTernary creates triangle plots.
+   * CartToSph, SphToCart convert cartesian coordinates into spherical ones.
+   * LastDayOfMonth returns the date of the last day of the month.
+   * YuenTTest computes a robust t-Test by Yuen, using trimmed means and
+     winsorized variances.
+   * FindCorr finds strong correlations in a dataset.
+   * Exec wraps eval and parse and executes code given as text.
+   * ZeroIfNA replaces NAs by 0 (like the SQL function "zeroifnull")
+   * Impute will fill gaps with any desired value.
+   * PartitionBy mimics the SQL OLAP functions FUN(x) OVER (PARTITION BY grp).
+   * DenseRank calculates consecutive ranks without ties.
+   * XLKill kills a hidden XL task, which can't be closed otherwise.
+   * Agree quantifies the agreement of several raters.
+   * PostHocTest gets a new interface for tables, performing pairwise ChiSq-tests
+     with the option to adjust p-values for multiple testing.
+   * PostHocTest gains a new option "duncan", computing Duncan's MRT   
+   * Dunn's test of multiple comparisons using rank sums added (DunnTest).
+   * DunnettTest performs a Dunnett multiple comparisons test.
+   * lines.smooth.spline does for this smoother, what lines.loess did for loess.	 
+   * RndPairs returns pairs of correlated random numbers.
+   * BubbleLegend creates a legend for bubble plots.
+   * Format combines the functionality of the old functions FormatFix and FormatSig 
+     and adds some extensions like leading zeros and dates.
+   * CCC calculates Lin's concordance correlation coefficient for agreement.
+   * CoefVar yields the coefficient of variation and its confidence limits.
+   * CohenD calculates Cohen's effect size d and its confidence limits.
+   * BinomRatioCI calculates confidence intervals for the ratio of binomial and 
+     multinomial proportions. 
+   * The new function Overlap returns the extent of the overlapping part of two ranges.	 
+   
+   
+UPDATED FUNCTIONS:
+   * Min has been renamed to Minute and Sec to Second.
+   * Hour, Minute, Second do accept POSIXct times now. 
+   * CorCI loses the argument *twotailed* and gains the argument *alternative*.
+     This is following the logic in other test- and CI-functions.
+   * Assocs has been redesigned to run faster (but it still has accelerating potential..)
+   * Untable has been extended to support frequency form of tables (a data.frame 
+     with levels of the factors and a "Freq" column).
+   * XLGetRange returns the full call statement as attribute.
+   * OddsRatio will be calculated as log OR instead of simple OR, allowing bigger n.
+     (Well, David Meyer has been there long before, as I noticed lately...)
+   * AddMonths accepts a vector of dates.
+   * Trim accepts integer values on the argument trim. The function returns NA instead
+     of median(x), if trim is set to a value > 0.5, resp. n/2.
+   * Desc.table now reports missing values, if there are any.	 
+   * Desc.data.frame accepts a main vector, allowing the user to define his own main captions.
+   * Lorenz curve function Lc gains a formula interface for creating groupwise curves.
+   * PlotBubble gains a formula interface and some more arguments, e.g. args.legend.
+   * Mround has been renamed to RoundM, and gains a new argument FUN which allows 
+     to define the rounding function (ceiling, floor, ..).
+   * EtaSq has been extended by Daniel Wollschlaeger (thanks).
+   * BinomCI uses rownames now. It gains further a new method "pratt".
+   * PlotVenn gains a new argument "labels". The argument "plot" has been renamed to "plotit" 
+     (to be consistent with the package naming rules). 
+   * Fibonacci has been redesigned to run faster.
+   * Kappam has been renamed to KappaM.
+   * TheilU's argument "method" has been renamed to "type".
+   * ICC gains a new argument "type" to choose a specific type of ICC.
+   * Agreement functions KendallW, KappaM, ICC, CronbachAlpha etc. have been harmonised.
+   * AreaIdent has been renamed to IdentifyA (which seems to be more intuitive).
+   * MeanCI has been enhanced to calculate confidence intervals for trimmed means.
+   * StrVal gains two new arguments paste and as.numeric.
+   * Many smaller changes on the documentation and helpfiles.
+   * PairApply argument "symmetric" gets another default value: "FALSE" instead of "TRUE". 
+     This seems more robust, as the other way round potential errors are more likely.
+   
+   
+DEFUNCT:
+   * WhichNumerics, WhichFactors, WhichFlags are not needed anymore. 
+     which(sapply(x, IsNumeric)), sapply(x, IsDichotmous), sapply(x, is.factor) do the job.
+   * DescFactFact is a relict and obsolete. Use of Desc.formula or Desc.table is recommended.
+   * FormatFix and FormatSig have been replaced by the new function Format.
+   * Explore has been removed because of its dependency for the package "manipulate"
+     (which is not on CRAN). It might be added again built on tcltk down the road.
+   
+   
+BUGFIXES:
+   * plotit was not correctly interpreted in Desc.factor (credits to Thomas Schlesinger). 	 
+   * PlotVenn did not correctly place the figures in the 2-sample case (credits to Andrew Marritt).
+   
+
+DescTools 0.99.8.2 (2014-12-23)
+-------------------------------
+   
+UPDATED FUNCTIONS:
+   * Outlier has been changed to strictly following the boxplot logic.
+   * DescToolsOptions gains a default argument allowing to reset the options.
+   * WrdText allows to set some paragraph format and text color now.
+
+BUGFIXES:
+   * anyNA is only defined for R >= 3.1, the according dependency has been defined.
+   * the key.ico file has been placed in /extdata directory and should now definitely 
+     be found now by the function PasswordDlg().  (shame on me..)
+
 
 
 DescTools 0.99.8 (2014-09-20)

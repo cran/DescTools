@@ -1,5 +1,6 @@
 MeanSE <-
-function(x, na.rm = FALSE) {
+function(x, sd = NULL, na.rm = FALSE) {
   if(na.rm) x <- na.omit(x)
-  sd(x)/sqrt(length(x))
+  if(is.null(sd)) s <- sd(x)
+  s/sqrt(length(x))
 }

@@ -1,20 +1,16 @@
 SecToHms <-
-function(x) {
-
-  l1 <- FALSE
-  if (length(x) == 1) {
-    x <- c(x, 0)
-    l1 <- TRUE
-  } 
+function(x, digits=NULL) {
+  
+  x <- as.numeric(x)
+  
   h <- floor(x/3600)
   m <- floor((x-h*3600)/60)
-  s <- x-(m*60 + h*3600)
-  pad <- function(x) sprintf("%02d", as.numeric(x))
+  s <- floor(x-(m*60 + h*3600))
+  b <- x-(s + m*60 + h*3600)
   
-  out <- apply(apply(cbind(h, m, s), 2, pad), 1, paste, collapse=":")
+  if(is.null(digits)) digits <- ifelse(all(b < .Machine$double.eps^0.5),0, 2)
+  if(digits==0) f <- "" else f <- gettextf(paste(".%0", digits, "d", sep=""), round(b*10^digits, 0))  
 
-  if (l1) {
-    out <- out[1]
-  }
-  out
+  gettextf("%02d:%02d:%02d%s", h, m, s, f)
+  
 }

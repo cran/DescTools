@@ -1,5 +1,5 @@
 PlotDescFactNum <-
-function( x, y, ptab, main=NULL, notch=FALSE,
+function( x, y, ptab, col1=getOption("col1", hblue), col2=getOption("col2", hred), main=NULL, notch=FALSE,
                             add_ni = TRUE, ... , wrd=NULL){
   
   if(is.null(main)) main <- paste(deparse(substitute(y)), " ~ ", deparse(substitute(x)), sep="")
@@ -21,7 +21,7 @@ function( x, y, ptab, main=NULL, notch=FALSE,
     if(ncol(ptab) > 6) { lines(loess(p ~ x, data.frame(p=ptab[2,], x=1:ncol(ptab)))) }
   } else {
     Mar(,,1,)
-    mosaicplot(t(ptab), las=1, cex=1, col=TRUE, main=NA)
+    mosaicplot(t(ptab), las=1, cex=1, col=colorRampPalette(c(col1, "white", col2), space = "rgb")(nrow(ptab)), main=NA)
   }
   
   title(main=main, outer=TRUE)

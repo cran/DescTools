@@ -34,7 +34,7 @@ UncertCoef(x, y = NULL, direction = c("symmetric", "row", "column"),
 %%     ~~Describe \code{\dots} here~~
 }
 }
-\details{The uncertainty coefficient is computed as U(C|R) = (H(X) + H(Y) - H(XY)) / H(Y) and 
+\details{The uncertainty coefficient is computed as \deqn{U(C|R) = \frac{H(X) + H(Y) - H(XY)}{H(Y)} } and 
 ranges from [0, 1]. \cr
 %%  ~~ If necessary, more details than the description above ~~
 }

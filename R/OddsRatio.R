@@ -9,15 +9,19 @@ function(x, y = NULL, conf.level = NA, method=c("wald", "mle", "midp")
     stop("'x' is not a 2x2 numeric matrix")
   
   switch( match.arg( arg = method, choices = c("wald", "mle", "midp") )
-          , "wald" = { 
-            if(is.na(conf.level)){
-              res <- (x[1,1]*x[2,2])/(x[1,2]*x[2,1])
-            } else {
-              or <- (x[1,1]*x[2,2])/(x[1,2]*x[2,1])
-              sigma2lor <- sum(1/x)
-              ci <- or * exp(c(1,-1) * qnorm((1-conf.level)/2) * sqrt(sigma2lor))
-              res <- c("odds ratio"=or, lwr.ci=ci[1], upr.ci=ci[2])
-            }    
+          , "wald" = {
+              lx <- x
+              if (any(lx == 0)) lx <- lx + 0.5
+              lx <- log(x)
+              or <- exp(lx[1, 1] + lx[2, 2] - lx[1, 2] - lx[2, 1])
+              
+              if(is.na(conf.level)){
+                res <- or
+              } else {
+                sigma2lor <- sum(1/x)
+                ci <- or * exp(c(1,-1) * qnorm((1-conf.level)/2) * sqrt(sigma2lor))
+                res <- c("odds ratio"=or, lwr.ci=ci[1], upr.ci=ci[2])
+              }    
           }
           , "mle" = { 
               if(is.na(conf.level)){

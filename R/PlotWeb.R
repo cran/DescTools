@@ -11,9 +11,9 @@ function(m, col=c("red","blue"), lty=par("lty"), args.legend=NULL, pch=21, pt.ce
   w <- 4
   par("xpd"=TRUE, lend="butt")
 
-  Canvas(w, ...)  
+  DescTools::Canvas(w, ...)  
   angles <- seq(0, 2*pi, length=nrow(m)+1)[-1]
-  xy <- PolToCart(r=3, theta=angles)
+  xy <- DescTools::PolToCart(r=3, theta=angles)
   cbind(1, (angles %[]% c(pi/2, 3*pi/2))*1)
   text(x=xy$x, y=round(xy$y,3), labels=colnames(m), pos=(!angles %[]% c(pi/2, 3*pi/2))*2 + 2, offset=1 )
   #text(x=xy$x, y=round(xy$y,3), labels="x", pos=(!angles %[]% c(pi/2, 3*pi/2))*2+2   )
@@ -27,7 +27,7 @@ function(m, col=c("red","blue"), lty=par("lty"), args.legend=NULL, pch=21, pt.ce
   b <- 15
   d.m$d.sc <- (b-a) * (min(d.m$d)-a) + (b-a) /diff(range(d.m$d)) * d.m$d       
   
-  d.m$d.sc <- LinScale(abs(d.m$d), newlow=0.5, newhigh=10 )
+  d.m$d.sc <- DescTools::LinScale(abs(d.m$d), newlow=0.5, newhigh=10 )
   col <- rep(col, length.out=2)
   segments( x0=d.m$from.x, y0=d.m$from.y, x1 = d.m$to.x, y1 = d.m$to.y,
          col = col[((sign(d.m$d)+1)/2)+1], lty = lty, lwd = d.m$d.sc, lend= 1)
@@ -40,5 +40,7 @@ function(m, col=c("red","blue"), lty=par("lty"), args.legend=NULL, pch=21, pt.ce
   if(!is.null(args.legend)) if(all(is.na(args.legend))) {add.legend <- FALSE} 
   
   if(add.legend) do.call("legend", args.legend1)
+  
+  invisible(xy)
   
 }

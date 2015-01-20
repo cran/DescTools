@@ -2,17 +2,20 @@
 \alias{CronbachAlpha}
 \title{Cronbach's Coefficient Alpha}
 \description{
-  Computes Cronbach's alpha. 
+  Compute Cronbach's alpha. 
   Cronbach's alpha determines the internal consistency or average correlation of items in a survey instrument to gauge its reliability. 
   This reduces to KR-20 when the columns of the data matrix are dichotomous.
 }
 \usage{
-CronbachAlpha(x, conf.level = NA, cond = FALSE)
+CronbachAlpha(x, conf.level = NA, cond = FALSE, na.rm = FALSE)
 }
 \arguments{
-  \item{x}{A data frame or matrix with item responses. }
+  \item{x}{\eqn{n \times m}{k x m} matrix or dataframe with item responses, k subjects (in rows) m items (in columns).  }
   \item{conf.level}{confidence level of the interval. If set to \code{NA} (which is the default) no confidence interval will be calculated.}
   \item{cond}{logical. If set to \code{TRUE}, alpha is additionally calculated for the dataset with each item left out. }
+    \item{na.rm}{
+  logical, indicating whether \code{NA} values should be stripped before the computation proceeds. If set to \code{TRUE} only the complete cases of the ratings will be used. Defaults to \code{FALSE}.
+}
 }
 
 \value{
@@ -25,7 +28,7 @@ a list containing the following components, if the argument \code{cond} is set t
 }
 
 
-\seealso{ \code{\link{CohenKappa}}, \code{\link{Kappam}}
+\seealso{ \code{\link{CohenKappa}}, \code{\link{KappaM}}
 }
 \references{
 Cohen, J. (1960), A coefficient of agreement for nominal scales. \emph{Educational and Psychological Measurement}, 20, 37-46. 

@@ -2,6 +2,7 @@
 
 \alias{DescWrd}
 \alias{DescWrd.data.frame}
+\alias{DescWrd.list}
 \alias{DescWrd.default}
 \alias{DescWrd.formula}
 
@@ -17,7 +18,9 @@ Calculates descriptive statistics for x and uses Word as reporting tool.
 
 \method{DescWrd}{default}(x, wrd, main = deparse(substitute(x)), \dots)
 
-\method{DescWrd}{data.frame}(x, wrd, \dots)
+\method{DescWrd}{data.frame}(x, wrd, main = NULL, enum = TRUE, \dots)
+
+\method{DescWrd}{list}(x, wrd, main = NULL, enum = TRUE, \dots)
 
 \method{DescWrd}{formula}(formula, data = parent.frame(), subset = TRUE, wrd, \dots)
 
@@ -25,7 +28,9 @@ Calculates descriptive statistics for x and uses Word as reporting tool.
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{the object to be described.}
-  \item{main}{the title of the decription. Default is name and class of the variable.}
+\item{main}{the title of the decription or a vector with the main titles for the description of the variables. If this is left blank, the
+title will be composed as: number - variablename (class(es)).}
+\item{enum}{logical, determining if the number should be included or not. Default is TRUE. The numbers may be redundant or inconsistent, if a Word report with enumerated headings is created. }
   \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()} 
   or an existing one, created by \code{GetCurrWrd()}.
   Default is the last created pointer stored in \code{getOption("lastWord")}.}

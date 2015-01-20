@@ -1,5 +1,5 @@
 WrdPlot <-
-function( type="png", append.cr=TRUE, crop=c(0,0,0,0),
+function( type="png", append.cr=TRUE, crop=c(0,0,0,0), main = NULL,
                      picscale=100, height=NA, width=NA, res=300, dfact=1.6, wrd = getOption("lastWord") ){
   
   # height, width in cm!
@@ -64,9 +64,16 @@ function( type="png", append.cr=TRUE, crop=c(0,0,0,0),
   } else { 
     wrd[["Selection"]]$MoveRight(wdConst$wdCharacter, 1, 0)
   }
-  
+    
   if( file.exists(fn) ) { file.remove(fn) }
   
-  invisible( pic ) 
+  if(!is.null(main)){
+    # insert caption
+    sel <- wrd$Selection()  # "Abbildung"
+    sel$InsertCaption(Label=wdConst$wdCaptionFigure, Title=main)
+    sel$TypeParagraph()
+  }
+  
+  invisible(pic) 
   
 }

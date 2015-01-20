@@ -35,7 +35,7 @@ function() {
   
   tkwm.title(root, "Login")
   tkwm.resizable(root, FALSE, FALSE)
-  tkwm.iconbitmap(root, file.path(find.package("DescTools"), "data", "key.ico"))
+  tkwm.iconbitmap(root, file.path(find.package("DescTools"), "extdata", "key.ico"))
   
   # define widgets
   content = tkframe(root, padx=5, pady=10)

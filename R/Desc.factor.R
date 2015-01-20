@@ -7,13 +7,15 @@ function(x, main = NULL, ord=c("desc","asc","name","level"),
   #   data(d.pizza, package="DescTools")
   #   Desc.factor(d.pizza$driver)
   
-  opt <- options(digts=digits); on.exit(options(opt))
+  opt <- options(digits=digits); on.exit(options(opt))
+  
+  ord <- match.arg(arg=ord, choices=c("desc","asc","name","level"))
   
   if( is.null(main)) main <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), collapse=", "))
   
   # if only 2 levels it's a flag, use Desc.logical instead
   if( nlevels(x)==2 ) { 
-    Desc.logical(x, main=gsub(pattern="factor)", replacement="factor - dichotomous)", x=main)) 
+    Desc.logical(x, main=gsub(pattern="factor)", replacement="factor - dichotomous)", x=main), plotit=plotit) 
     return(invisible())
   } 
 
@@ -39,7 +41,7 @@ function(x, main = NULL, ord=c("desc","asc","name","level"),
 
   # calculate the frequencies
   lres$frq <- Freq( x=x 
-             , ord=match.arg( arg=ord, choices=c("desc","asc","name","level")) 
+             , ord=ord 
              , digits=digits, print = FALSE)      
   
   if(is.na(maxrows)) { maxrows <- nrow(lres$frq) }
@@ -59,7 +61,7 @@ function(x, main = NULL, ord=c("desc","asc","name","level"),
   cat(txt.frq, sep="\n")
   if( maxrows < nlevels(x) ) cat("... etc.\n [list output truncated]\n\n")  else cat("\n")
 
-  if(plotit) PlotDesc.factor(x, main=main, maxrows = maxrows)
+  if(plotit) PlotDesc.factor(x, main=main, maxrows = maxrows, ord=ord, ...)
   
   invisible(lres)
   

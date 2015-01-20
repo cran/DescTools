@@ -1,19 +1,19 @@
 Desc.list <-
-function(x, sep=paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), ...) {
-#   if(is.null(main)) main <- names(x)
-#   for(i in 1:length(x)){
-#     Desc(x[[i]], main=main[i], ...)
-#   }  
-  
-  cat( "\n", sep, "\n", sep="" )
-  cat( capture.output(Str(x, list.len=Inf)), sep="\n")  	# Overview
+function(x, sep=paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), 
+                      main = NULL, enum = TRUE, ...) {
 
+  cat("\n", sep, "\n", sep="")
+  cat(capture.output(Str(x, list.len=Inf)), sep="\n")  	# Overview
+  cat("\n")
+  
+  if(is.null(main))
+    main <- paste(if(enum) paste(seq_along(names(x)) , "- "), names(x),
+                  " (", lapply(lapply(x, class), paste, collapse=", "), ")", sep="")
+  else
+    main <- rep(main, length.out = length(x))
+  
   for( i in 1:length(x) ){
-    # cat( "\n", sep, "\n", sep="") 
-    # Alternative mit Fensterbreite:
-    # cat( paste(rep("-",getOption("width")-2),collapse=""), "\n")
-    main <- paste( i, " - ", names(x)[i], " (", paste(class(x[[i]]), collapse=" "),")", sep="" )
-    Desc(x[[i]], main=main, ...)
+    Desc(x[[i]], main=main[i], ...)
   }
   cat("\n")
   invisible()

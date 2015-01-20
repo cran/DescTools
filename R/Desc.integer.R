@@ -11,11 +11,12 @@ function(x, main = NULL, maxrows = 12, freq = NULL
   
   if(uvals == 2) {
     # if there are only 2 unique values, describe it as dichotomous variable
-    lres <- Desc.logical(x, main=gsub(pattern="integer)", replacement="integer - dichotomous)", x=main)) 
+    lres <- Desc.logical(x, main=gsub(pattern="integer)", replacement="integer - dichotomous)", 
+                                      x=main), plotit=FALSE) 
 
   } else {
     # produce the numeric summary
-    lres <- Desc.numeric(x, main=main, highlow = FALSE) 
+    lres <- Desc.numeric(x, main=main, highlow = FALSE, plotit = FALSE) 
     
 #   old:  if(length(na.omit(x))>0){  # following only if there are valid values
 #    but we need not recalculate...

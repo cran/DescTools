@@ -25,7 +25,7 @@ various multiple correlations, and then correlating these residuals.  The matrix
 \references{ Revelle, W. \emph{An introduction to psychometric theory with applications in R} Springer. \cr (working draft available at  \url{http://personality-project.org/r/book/} 
 }
 \author{ William Revelle }
-
+\seealso{\code{\link{cor}}}
 \examples{
 # example from Bortz, J. (1993) Statistik fuer Sozialwissenschaftler, Springer, pp. 413 
 

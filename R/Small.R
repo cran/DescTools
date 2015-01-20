@@ -1,5 +1,5 @@
 Small <-
-function(x, k = 1, unique = FALSE, na.rm = FALSE){
+function(x, k = 5, unique = FALSE, na.rm = FALSE){
   if(na.rm) x <- na.omit(x)
   if(unique){
     ux <- unique(x)

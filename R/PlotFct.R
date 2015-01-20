@@ -11,6 +11,8 @@ function(FUN, args=NULL, from=NULL, to=NULL, by=NULL, xlim=NULL,
 #   # the dot arguments which DO NOT match PercTable.table
 #   par.args <- dot.args[names(dot.args) %nin% names(formals(PlotFct))]
   
+  # see also Hmisc::minor.tick 
+  
   
   vars <- all.vars(FUN)
   vars <- vars[vars %nin% names(args)]
@@ -52,10 +54,10 @@ function(FUN, args=NULL, from=NULL, to=NULL, by=NULL, xlim=NULL,
   }
 
   if(is.null(xlim)){
-    xlim <- range(pretty(range(x)))
+    xlim <- range(pretty(range(x[is.finite(x)])))
   }
   if(is.null(ylim)){
-    ylim <- range(pretty(range(y)))
+    ylim <- range(pretty(range(y[is.finite(y)])))
   }
   
   # define plot parameters

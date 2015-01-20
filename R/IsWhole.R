@@ -9,6 +9,8 @@ function(x, tol = .Machine$double.eps^0.5, na.rm=FALSE) {
   # an alternative in cwhmisc :
   #   whole.number <- function (x) all((x%%1) == 0)
   
+  # other idea: floor(n) != ceiling(n)
+  
   if (na.rm) 
     x <- na.omit(x)
   if(is.numeric(x))

@@ -1,7 +1,7 @@
 \name{BoxCoxLambda}
 \alias{BoxCoxLambda}
-\title{Automatic selection of Box Cox transformation parameter}
-\usage{BoxCoxLambda(x, method=c("guerrero","loglik"), lower=-1, upper=2)
+\title{Automatic Selection of Box Cox Transformation Parameter}
+\usage{BoxCoxLambda(x, method = c("guerrero", "loglik"), lower = -1, upper = 2)
 }
 \arguments{
 \item{x}{a numeric vector or time series}
@@ -28,7 +28,7 @@ Guerrero, V.M. (1993) Time-series analysis supported by power transformations. \
 \author{Leanne Chhay and Rob J Hyndman}
 \examples{
 
-lambda <- BoxCoxLambda(AirPassengers,lower=0)
+lambda <- BoxCoxLambda(AirPassengers, lower=0)
 
 }
 \keyword{ts}

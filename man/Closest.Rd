@@ -4,9 +4,9 @@
 \title{Find the Closest Value 
 %%  ~~function to do ... ~~
 }
-\description{Find the closest value of a number in a vector x.}
+\description{Find the closest value(s) of a number in a vector x. Multiple values will be reported, if the differences are the same.}
 \usage{
-Closest(x, a, na.rm = FALSE)
+Closest(x, a, which = FALSE, na.rm = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -16,11 +16,12 @@ Closest(x, a, na.rm = FALSE)
   \item{a}{the reference value
 %%     ~~Describe \code{a} here~~
 }
-  \item{na.rm}{
+\item{which}{a logical value defining if the index position or the value should be returned. By default will the value be returned.}
+  \item{na.rm}{a logical value indicating whether NA values should be stripped before the computation proceeds.
 %%     ~~Describe \code{na.rm} here~~
 }
 }
-\value{the value in x which is closest to a
+\value{the value or index in x which is closest to a
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -41,6 +42,12 @@ set.seed(8)
 x <- sample(10, size=10, replace=TRUE)
 
 Closest(x, 6)
+Closest(x, 6, which=TRUE)
+
+
+Closest(c(2, 3, 4, 5), 3.5)
+
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

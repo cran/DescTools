@@ -9,7 +9,7 @@ Compute confidence intervals for binomial proportions following the most popular
 BinomCI(x, n, conf.level = 0.95, 
         method = c("wilson", "wald", "agresti-coull", "jeffreys", 
                    "modified wilson", "modified jeffreys", 
-                   "clopper-pearson", "arcsine", "logit", "witting"), 
+                   "clopper-pearson", "arcsine", "logit", "witting", "pratt"), 
         rand = 123)
 }
 \arguments{
@@ -19,7 +19,7 @@ BinomCI(x, n, conf.level = 0.95,
   \item{method}{ character string specifing which method to use; this can be one out of: 
   \code{"wald"}, \code{"wilson"}, \code{"agresti-coull"}, \code{"jeffreys"}, 
   \code{"modified wilson"}, \code{"modified jeffreys"}, \code{"clopper-pearson"}, 
-  \code{"arcsine"}, \code{"logit"} or \code{"witting"}. Defaults to \code{"wilson"}.
+  \code{"arcsine"}, \code{"logit"}, \code{"witting"} or \code{"pratt"}. Defaults to \code{"wilson"}.
   Abbreviation of method are accepted. See details. }
   \item{rand}{ seed for random number generator; see details. }
 }
@@ -78,16 +78,28 @@ BinomCI(x, n, conf.level = 0.95,
   \emph{American Statistician}, \bold{52}, pp. 119-126.  
 
   L.D. Brown, T.T. Cai and A. Dasgupta (2001) Interval estimation for a binomial
-  proportion. \emph{Statistical Science}, \bold{16}(2), pp. 101-133.
+  proportion \emph{Statistical Science}, \bold{16}(2), pp. 101-133.
 
-  H. Witting (1985). \emph{Mathematische Statistik I}. Stuttgart: Teubner.
+  H. Witting (1985) \emph{Mathematische Statistik I}. Stuttgart: Teubner.
+  
+  Pratt, J. W. (1968) A normal approximation for binomial, F, Beta, and other
+common, related tail probabilities \emph{Journal of the American Statistical Association}, 63, 1457-
+1483.
+
+Wilcox, R. R. (2005) \emph{Introduction to robust estimation and hypothesis testing}. Elsevier Academic Press
+
 }
-\author{ Matthias Kohl <Matthias.Kohl@stamats.de>, Andri Signorell <andri@signorell.net> (interface issues) }
+\author{ Matthias Kohl <Matthias.Kohl@stamats.de>
+
+Rand R. Wilcox (Pratt's method)
+
+Andri Signorell <andri@signorell.net> (interface issues) }
 
 \seealso{\code{\link[stats]{binom.test}}, \code{\link[Hmisc]{binconf}}, \code{\link{MultinomCI}} }
 \examples{
 BinomCI(x=37, n=43, method=c("wald", "wilson", "agresti-coull", "jeffreys", 
-  "modified wilson", "modified jeffreys", "clopper-pearson", "arcsine", "logit", "witting")
+  "modified wilson", "modified jeffreys", "clopper-pearson", "arcsine", "logit", 
+  "witting", "pratt")
 ) 
 
 

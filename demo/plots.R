@@ -90,7 +90,7 @@ PlotFaces(m, main = "Driver's characteristics")
 
 
 # PlotWeb
-m <- cor(d.pizza[,WhichNumerics(d.pizza)], use="pairwise.complete.obs")
+m <- cor(d.pizza[, sapply(d.pizza, IsNumeric, na.rm=TRUE)], use="pairwise.complete.obs")
 PlotWeb(m, xpd=TRUE, main="Pizza Correlations" )
 
 PlotCorr(m, cols=colorRampPalette(c("red", "black", "green"), space = "rgb")(20))

@@ -1,5 +1,5 @@
 Trim <-
-function(x, trim=0.1, na.rm=FALSE){
+function(x, trim = 0.1, na.rm = FALSE){
   
   if (na.rm) x <- na.omit(x)
   
@@ -13,9 +13,15 @@ function(x, trim=0.1, na.rm=FALSE){
       stop("trim is not defined for complex data")
     if (anyNA(x)) 
       return(NA_real_)
-    if (trim >= 0.5) 
-      return(stats::median(x, na.rm = FALSE))
-    lo <- floor(n * trim) + 1
+    if (trim >= 0.5 && trim < 1) 
+      return(NA_real_)
+    if(trim < 1)
+      lo <- floor(n * trim) + 1
+    else{
+      lo <- trim + 1
+      if (trim >= (n/2)) 
+        return(NA_real_)
+    }  
     hi <- n + 1 - lo
     x <- sort.int(x, partial = unique(c(lo, hi)))[lo:hi]
   }

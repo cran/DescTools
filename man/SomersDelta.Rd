@@ -32,13 +32,15 @@ SomersDelta(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
 }
 }
 \details{
-Somers' D(C | R) and Somers' D(R | C) are asymmetric modifications of tau-b. C | R indicates that
+Somers' D(C | R) and Somers' D(R | C) are asymmetric modifications of \eqn{\tau_b}. C | R indicates that
 the row variable x is regarded as the independent variable and the column variable y is regarded
 as dependent. Similarly, R | C indicates that the column variable y is regarded as the independent 
 variable and the row variable x is regarded as dependent. \cr
 Somers' D differs from tau-b in that it uses a correction only for pairs that are tied on the independent variable. Somers' D is appropriate only when both variables lie on an ordinal scale.\cr 
-The range of Somers' D is [-1, 1] and is computed as\cr
-D(C | R) = (P-Q)/(n^2 - sum(rowSums(tab)^2)), where P equals twice the number of concordances and Q twice the number of discordances. 
+Somers' D is computed as\cr
+\deqn{ D(C | R) = \frac{P-Q}{n^2 - \sum(n_i.^2)}}
+%% D(C | R) = (P-Q)/(n^2 - sum(rowSums(tab)^2))
+where P equals twice the number of concordances and Q twice the number of discordances and \eqn{n_i.} rowSums(tab). Its range lies [-1, 1].
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{

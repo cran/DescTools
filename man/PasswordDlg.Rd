@@ -4,14 +4,14 @@
 \title{Password Dialog
 %%  ~~function to do ... ~~
 }
-\description{A tcltk dialog centered on the screen for entering passwords with ****.
+\description{Brings up a tcltk dialog centered on the screen, designed for entering passwords while displaying only ****.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 PasswordDlg()
 }
 %- maybe also 'usage' for other objects documented here.
-\value{the entered password characters
+\value{the entered password
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -29,8 +29,8 @@ PasswordDlg()
 }
 \examples{
 \dontrun{
-PasswordDlg()
-}
+pw <- PasswordDlg()
+pw}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

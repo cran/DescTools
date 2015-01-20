@@ -1,6 +1,8 @@
 exportPattern("^[^\\.]")
 
 importFrom("boot", "boot", "boot.ci", "corr")
+importFrom("mvtnorm", "qmvt")
+
 import(tcltk)
 
 useDynLib(DescTools)

@@ -8,15 +8,14 @@
   Create a factor variable using the quantiles of a continous variable.
 }
 \usage{
-CutQ(x, probs = seq(0, 1, by = 0.25), labels = NULL, 
-     na.rm = FALSE, ...)
+CutQ(x, breaks = quantile(x, seq(0, 1, by = 0.25), na.rm = TRUE), 
+     labels = NULL, na.rm = FALSE, ...)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
   \item{x}{ continous variable. }
-  \item{probs}{ vector of quantiles used for creating groups. Defaults to
-    \code{seq(0, 1, by=0.25)}.  See \code{\link{quantile}} for details. }
-  \item{labels}{labels for the levels of the resulting category. By default, labels are defined as \code{Q1}, \code{Q2} to the length of probs - 1. The parameter ist passed to \code{\link{cut}}, so if \code{labels} are set to \code{FALSE}, simple integer codes are returned instead of a factor.
+  \item{breaks}{ the breaks for creating groups. By default the quartiles will be used, say \code{quantile} \code{seq(0, 1, by = 0.25)} quantiles. See \code{\link{quantile}} for details. }
+  \item{labels}{labels for the levels of the resulting category. By default, labels are defined as \code{Q1}, \code{Q2} to the length of breaks - 1. The parameter ist passed to \code{\link{cut}}, so if \code{labels} are set to \code{FALSE}, simple integer codes are returned instead of a factor.
 %%     ~~Describe \code{labels} here~~
 }
 
@@ -39,7 +38,7 @@ CutQ(x, probs = seq(0, 1, by = 0.25), labels = NULL,
   Factor variable with one level for each quantile interval given by \code{q}.
 }
 
-\author{Gregory R. Warnes <greg@warnes.net>}
+\author{Gregory R. Warnes <greg@warnes.net>, some slight modifications Andri Signorell <andri@signorell.net>}
 
 \seealso{ \code{\link{cut}}, \code{\link{quantile}} }
 

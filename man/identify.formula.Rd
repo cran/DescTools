@@ -2,13 +2,17 @@
 \alias{identify.formula}
 \title{Identify points in a plot using a formula.}
 \usage{
-  \method{identify}{formula} (x, data = NULL, ...)
+  \method{identify}{formula} (formula, data, subset, na.action, \dots)
 }
 \arguments{
-  \item{x}{A formula of the form \code{y ~ x}.}
+    \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}  
 
-  \item{data}{The data frame from which the formula should
+\item{data}{The data frame from which the formula should
   be evaluated.}
+  
+  \item{subset}{an optional vector specifying a subset of observations to be used.}  
+  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to 
+\code{getOption("na.action")}.}  
 
   \item{\dots}{Other arguments to be passed to
   \code{\link{identify}}.}
@@ -44,10 +48,8 @@
 \examples{
 \dontrun{
 ## Copy and try in an interactive R session
-
-df <- data.frame(x=runif(10), y=runif(10), grp=factor(rep(c("Yes","No"), each=5)))
-plot(y ~ x, data=df)
-identify(y ~ x, data=df)
+plot(dist ~ speed, data = cars, subset = speed < 17)
+identify(dist ~ speed, data = cars, subset = speed < 17)
 }
 }
 \seealso{

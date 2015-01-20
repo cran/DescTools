@@ -2,7 +2,7 @@
 \alias{LogSt}
 \alias{LogStInv}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Started Logarithmic Transformation and It's Inverse
+\title{Started Logarithmic Transformation and Its Inverse
 %%  ~~function to do ... ~~
 }
 \description{Transforms the data by a log10 transformation, modifying small and zero observations such that the

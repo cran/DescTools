@@ -41,15 +41,13 @@ function (file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
   }
   
   lst <- list()
-  #  for(i in 1:length(range)){  # John Chambers prefers this: (why actually?)
+  #  for(i in 1:length(range)){  # John Chambers prefers seq_along: (why actually?)
   for(i in seq_along(range)){
     zs <- A1ToZ1S1(range[i])
     rr <- xl$Range(xl$Cells(zs[[1]][1], zs[[1]][2]), xl$Cells(zs[[2]][1], zs[[2]][2]) )
     lst[[i]] <- rr[["Value2"]]
     names(lst)[i] <- range[i]
   }
-  
-  if(!is.null(file)) xl$Quit()  # only quit, if a new XL-instance was created before
   
   # replace NULL values by NAs, as NULLs are evil while coercing to data.frame!
   if(as.data.frame){
@@ -72,6 +70,19 @@ function (file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
   
   # just return a single object (for instance data.frame) if only one range was supplied
   if(length(lst)==1) lst <- lst[[1]]
+  
+  opt <- options(useFancyQuotes=FALSE); on.exit(options(opt))
+  attr(lst,"call") <- gettextf("XLGetRange(file = %s, sheet = %s, 
+     range = c(%s), 
+     as.data.frame = %s, header = %s, stringsAsFactors = %s)", 
+     gsub("\\\\", "\\\\\\\\", 
+        dQuote(paste(xl$ActiveWorkbook()$Path(), 
+                     xl$ActiveWorkbook()$Name(), sep="\\"))), 
+     dQuote(xl$ActiveSheet()$Name()), 
+     gettextf(paste(dQuote(names(lst)),collapse=",")),
+     as.data.frame, header, stringsAsFactors)
+
+  if(!is.null(file)) xl$Quit()  # only quit, if a new XL-instance was created before
   
   return(lst)
 }

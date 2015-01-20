@@ -27,5 +27,4 @@ function() {
   
   invisible(all.info)
   
-  
 }

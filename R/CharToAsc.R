@@ -8,5 +8,9 @@ function(x) {
   # ASCII[128:159] <- c("€","","‚","ƒ","„","…","†","‡","ˆ","‰","Š","‹","Œ","","Ž","","","‘","’","“","”","•","–","—","˜","™","š","›","œ","","ž","Ÿ")
   # return( as.vector(sapply(strsplit(x,NULL), match, ASCII) - 1 ))
   
-  strtoi(charToRaw(x), 16L) 
+  if(length(x) == 1) 
+    strtoi(charToRaw(x), 16L)
+  else
+    sapply(x, function(x) strtoi(charToRaw(x), 16L))
+  
 }

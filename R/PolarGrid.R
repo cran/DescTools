@@ -38,7 +38,7 @@ function(nr = NULL, ntheta = NULL, col = "lightgray"
       if( lblradians == FALSE ){
         alabels <- RadToDeg(at.ang[-length(at.ang)])   # standard values in degrees
       } else {
-        alabels <- FormatFix(at.ang[-length(at.ang)], 2)   # standard values in radians
+        alabels <- Format(at.ang[-length(at.ang)], digits=2)   # standard values in radians
       }    
     if(!all(is.na(alabels))) 
       BoxedText( x=par("usr")[2]*1.07*cos(at.ang)[-length(at.ang)], y=par("usr")[2]*1.07*sin(at.ang)[-length(at.ang)]

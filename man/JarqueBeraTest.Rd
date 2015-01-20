@@ -2,7 +2,7 @@
 \alias{JarqueBeraTest}
 \title{(Robust) Jarque Bera Test}
 \description{
-This function performs the robust and classical Jarque-Bera tests of normality.
+This function performs the Jarque-Bera tests of normality either the robust or the classical way.
 }
 \usage{
 JarqueBeraTest(x, robust = TRUE, method = c("chisq", "mc"), 
@@ -12,19 +12,17 @@ JarqueBeraTest(x, robust = TRUE, method = c("chisq", "mc"),
   \item{x}{a numeric vector of data values.}
   \item{robust}{defines, whether the robust version should be used. 
   Default is TRUE.}
-  \item{method}{a character string specifying how the critical 
-                 values should be obtained, i.e. approximated by the
-                 chisq-distribution (default) or empirically (\code{chisq} or \code{mc}).}
+  \item{method}{a character string out of \code{chisq} or \code{mc}, specifying how the critical 
+                 values should be obtained. Default is approximated by the
+                 chisq-distribution or empirically via Monte Carlo.}
   \item{N}{number of Monte Carlo simulations for the empirical critical values}
   \item{na.rm}{defines if NAs should be omitted. Default is FALSE.}
 }
 \details{
 The test is based on a joint statistic using skewness and kurtosis
-coefficients. The Robust Jarque-Bera (RJB) is the robust version of
-the Jarque-Bera (JB) test of normality. In particular, RJB utilizes
-the robust standard deviation (namely the Average Absolute Deviation
-from the Median (MAAD)) to estimate sample kurtosis and skewness
-(default option). For more details see Gel and Gastwirth (2006).
+coefficients. The robust Jarque-Bera (RJB) version of utilizes
+the robust standard deviation (namely the mean absolute deviation
+from the Median (\code{\link{MeanAD}}) to estimate sample kurtosis and skewness. For more details see Gel and Gastwirth (2006).
 \cr
 Users can also choose to perform the classical Jarque-Bera test (see
 Jarque, C. and Bera, A (1980)).
@@ -38,8 +36,7 @@ A list with class htest containing the following components:
   \item{data.name}{a character string giving the name of the data.}
 }
 
-\note{Modified from 'jarque.bera.test' (in 'tseries' package).}
-\note{This is an exact copy of \code{rjb.test} from the package \code{lawstat}.}
+\note{This function is melted from the \code{jarque.bera.test} (in \code{tseries} package) and the \code{rjb.test} from the package \code{lawstat}.}
 \references{
 Gastwirth, J. L.(1982) \emph{Statistical Properties of A Measure
 of Tax Assessment Uniformity}, Journal of Statistical Planning
@@ -53,16 +50,17 @@ normality, homoscedasticity and serial independence of regression
 residuals}, Economics Letters 6, 255-259.
 }
 \author{W. Wallace Hui, Yulia R. Gel, Joseph L. Gastwirth, Weiwen Miao}
-\seealso{
-\code{\link{shapiro.test}} for performing the Shapiro-Wilk test for normality. 
-\code{\link{AndersonDarlingTest}}, \code{\link{CramerVonMisesTest}}, \code{\link{LillieTest}}, \code{\link{PearsonTest}}, \code{\link{ShapiroFranciaTest}} for performing further tests for normality.
-\code{\link{qqnorm}}, \code{\link{qqline}} for producing a normal quantile-quantile plot.
+\seealso{Alternative tests for normality as
+\code{\link{shapiro.test}}, 
+\code{\link{AndersonDarlingTest}}, \code{\link{CramerVonMisesTest}}, \code{\link{LillieTest}}, \code{\link{PearsonTest}}, \code{\link{ShapiroFranciaTest}}
+
+\code{\link{qqnorm}}, \code{\link{qqline}} for producing a normal quantile-quantile plot
 }
 \examples{
-x <- rnorm(100)  # null
+x <- rnorm(100)    # null hypothesis
 JarqueBeraTest(x)
 
-x <- runif(100)  # alternative
+x <- runif(100)    # alternative hypothesis
 JarqueBeraTest(x, robust=TRUE)
 }
 \keyword{htest}

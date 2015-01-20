@@ -73,6 +73,7 @@ OddsRatio(x, y = NULL, conf.level = NA, method = c("wald", "mle", "midp"),
 %  reference level and test of independence two-sided p values are
 %  calculated using mid-p exact, Fisher's Exact, Monte Carlo simulation,
 %  and the chi-square test. 
+In case of zero entries, 0.5 will be added to the table.
 }
 
 
@@ -114,6 +115,12 @@ OddsRatio(tab[c(1,3),])
 OddsRatio(tab[1:2,], method="mle")
 OddsRatio(tab[1:2,], method="midp")
 OddsRatio(tab[1:2,], method="wald", conf.level=0.95)
+
+# in case of zeros consider using glm for calculating OR
+dp <- data.frame (a=c(20,7,0,0), b=c(0,0,0,12), t=c(1,0,1,0))
+fit <- glm(cbind(a,b) ~ t, binomial, dp)
+
+exp(coef(fit))
 }
 
 \keyword{models}

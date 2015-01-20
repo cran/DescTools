@@ -16,9 +16,10 @@ function (x, y = NULL, weights = c("Unweighted", "Equal-Spacing", "Fleiss-Cohen"
     x <- factor(x, levels=lvl)
     y <- factor(y, levels=lvl)
     x <- table(x, y, ...)
+    
   } else {
     d <- dim(x)
-    if (d[1L] != d[2L]) stop("x must be square matrix if provided a confusion matrix")
+    if (d[1L] != d[2L]) stop("x must be square matrix if provided as confusion matrix")
   }  
 
   d <- diag(x)

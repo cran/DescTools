@@ -1,5 +1,5 @@
 PairApply <-
-function(x, FUN = NULL, ..., symmetric = TRUE){
+function(x, FUN = NULL, ..., symmetric = FALSE){
   
   if(is.function(FUN)) { 
     # if FUN is a function, then save it under new name and 

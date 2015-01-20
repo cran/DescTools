@@ -28,13 +28,12 @@ TschuprowT(x, y = NULL, \dots)
 \arguments{
   \item{x}{can be a numeric vector, a matrix or a table. 
 }
-  \item{y}{NULL (default) or a vector with compatible dimensions to \code{x}. If y is provided, \code{table(x, y)} is calculated.
+  \item{y}{NULL (default) or a vector with compatible dimensions to \code{x}. If y is provided, \code{table(x, y, ...)} is calculated.
 }
   \item{conf.level}{confidence level of the interval. This is only implemented for Cramer's V. If set to \code{NA} (which is the       default) no confidence interval will be calculated. \cr
   See examples for how to compute bootstrap intervals. 
 }
-  \item{correct}{logical. The argument is only used by \code{ContCoef} and indicates, whether the Sakoda's adjusted Pearson's C should be returned or not. 
-  Default is \code{FALSE}.
+  \item{correct}{logical. This argument only applies for \code{ContCoef} and indicates, whether the Sakoda's adjusted Pearson's C should be returned. Default is \code{FALSE}.
 }
   \item{\dots}{further arguments are passed to the function \code{\link{table}}, allowing i.e. to set \code{useNA}.
   }
@@ -43,14 +42,14 @@ TschuprowT(x, y = NULL, \dots)
 For x either a matrix or two vectors \code{x} and \code{y} are expected. In latter case \code{table(x, y, ...)} is calculated.
 The function handles NAs the same way the \code{table} function does, so tables are by default calculated with NAs omitted. \cr\cr
 A provided matrix is interpreted as a contingency table, which seems in the case of frequency data the natural interpretation 
-(this is what \code{chisq.test} expects). \cr\cr
+(this is e.g. also what \code{\link{chisq.test}} expects). \cr\cr
 Use the function \code{\link{PairApply}} (pairwise apply) if the measure should be calculated pairwise for all columns. 
 This allows matrices of association measures to be calculated the same way \code{cor} does. NAs are by default omitted pairwise, 
 which corresponds to the pairwise.complete option of \code{\link{cor}}.
 Use \code{\link{complete.cases}}, if only the complete cases of a data.frame are to be used. (see examples)
 
 
-The maximum value for Phi is sqrt(min(r, c) - 1), for the corrected contingency coefficient and for Cramer's V it's 1. 
+The maximum value for Phi is \eqn{sqrt(min(r, c) - 1)}, for the corrected contingency coefficient and for Cramer's V it's 1. \cr A Cramer's V in the range of [0, 0.3] is considered as weak, [0.3,0.7] as medium and > 0.7 as strong.
 The minimum value for all is 0 under statistical independence.
 }
 \value{
@@ -77,12 +76,10 @@ Andri Signorell <andri@signorell.net>, Michael Smithson <michael.smithson@anu.ed
 }
 
 \seealso{
-\code{\link{table}}, \code{\link{PlotCorr}}, \code{\link{PairApply}}
+\code{\link{table}}, \code{\link{PlotCorr}}, \code{\link{PairApply}}, \code{\link{Assocs}}
 %\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is outdated...
 }
 \examples{
-data(d.pizza)
-
 tab <- table(d.pizza$driver, d.pizza$wine_delivered)
 Phi(tab)
 ContCoef(tab)
@@ -93,14 +90,15 @@ TschuprowT(tab)
 CramerV(d.pizza$driver, d.pizza$wine_delivered)
 
 # data.frame
-PairApply(d.pizza[,c("driver","operator","area")], CramerV) 
+PairApply(d.pizza[,c("driver","operator","area")], CramerV, symmetric = TRUE) 
 
 
 # useNA is passed to table
-PairApply(d.pizza[,c("driver","operator","area")], CramerV, useNA="ifany")
+PairApply(d.pizza[,c("driver","operator","area")], CramerV, 
+          useNA="ifany", symmetric = TRUE)
 
 d.frm <- d.pizza[,c("driver","operator","area")]
-PairApply(d.frm[complete.cases(d.frm),], CramerV)
+PairApply(d.frm[complete.cases(d.frm),], CramerV, symmetric = TRUE)
 
 
 m <- as.table(matrix(c(2,4,1,7), nrow=2))

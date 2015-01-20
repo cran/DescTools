@@ -11,7 +11,8 @@ function(x, useIndex = FALSE, ...){
     }
     txt <- paste("c(", paste(xsel, collapse=","),")", sep="")  
 
-    writeClipboard(txt)
+    # utils::writeClipboard(txt)
+    .writeCB(txt)
     options(op)
 
     invisible(txt)

@@ -5,7 +5,8 @@
   This calculates a robust average that is unaffected by outliers.
 }
 \usage{
-TukeyBiweight(x, const = 9, na.rm = FALSE)
+TukeyBiweight(x, const = 9, na.rm = FALSE, 
+              conf.level = NA, ci.type = "bca", R=1000, ...)
 }
 \arguments{
   \item{x}{ a \code{numeric} vector }
@@ -14,7 +15,20 @@ TukeyBiweight(x, const = 9, na.rm = FALSE)
     possible. }
   \item{na.rm}{logical, indicating whether NA values should be stripped before the computation proceeds. Defaults to FALSE. 
 }
-  
+   \item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated. 
+%%     ~~Describe \code{conf.level} here~~
+}
+  \item{ci.type}{The type of confidence interval required. The value should be any subset 
+ of the values \code{"basic"}, \code{"stud"}, \code{"perc"}, \code{"bca"} or simply \code{"all"} 
+ which will compute all four types of intervals. 
+}
+\item{R}{The number of bootstrap replicates. Usually this will be a single positive integer. For importance resampling, 
+ some resamples may use one set of weights and others use a different set of weights. In this case \code{R} would be a vector 
+ of integers where each component gives the number of resamples from each of the rows of weights.
+}
+\item{\dots}{the dots are passed to the function \code{\link{boot}}, when confidence intervalls are calculated.
+}
+
 }
 \details{
   This is a one step computation that follows the Affy whitepaper below,

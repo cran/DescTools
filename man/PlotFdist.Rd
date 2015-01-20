@@ -115,6 +115,8 @@ PlotFdist(x, args.curve = NULL, args.boxplot=NA, args.ecdf=NA)
 # compare with a t-distribution
 PlotFdist(x, args.curve = list(expr="dt(x, df=2)", col="darkgreen"), 
           args.boxplot=NA, args.ecdf=NA)
+legend(x="topright", legend=c("kernel density", "t-distribution (df=2)"), 
+       fill=c(hred, "darkgreen"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

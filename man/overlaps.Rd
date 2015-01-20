@@ -1,6 +1,7 @@
 \name{\%overlaps\%}
 \alias{\%overlaps\%}
 \alias{Interval}
+\alias{Overlap}
 
 \title{Determines If And How Extensively Two Date Ranges Overlap
 %%  ~~function to do ... ~~
@@ -10,19 +11,39 @@ Interval returns the number of days of the overlapping part of the
 two date periods. Inspired by the eponymous SQL-functions.
 }
 \usage{
-xp \%overlaps\% yp
+x \%overlaps\% y
 
-Interval(xp, yp)
+Overlap(x, y)
+
+Interval(x, y)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{xp}{range 1, consisting of 2 numeric values, typically of type Date.
+  \item{x}{range 1, vector of 2 numeric values or matrix with 2 columns, the first defining the left point the second the right point of the range.
 }
-  \item{yp}{range 2, consisting of 2 numeric values, typically of type Date.
+  \item{y}{range 2, vector of 2 numeric values or matrix with 2 columns, the first defining the left point the second the right point of the range.
 }
 }
+\details{
+\code{\%overlaps\%} returns TRUE or FALSE depending on if the two ranges overlap. The function \code{Overlap} returns the range of the overlapping region as numeric value. This will be 0, if the ranges do not overlap. \cr 
+\code{Interval} returns the width of the empty space between 2 ranges. Again this will be 0 if the ranges overlap.
+
+To handle overlapping ranges there are 4 cases to consider:
+\preformatted{
+range a:     |--------------|
+range b:  |-----|
+range c:              |--------|
+range d:           |-----|
+          1  2  3  4  5  6  7  8}
+
+Ranges a and b overlap, the function \code{Overlap} will return the absolute value of the overlapping region (which will be 3 - 2 = 1 in this case). The result will be the same for \code{Overlap(a, b)} and \code{Overlap(b, a)}.\cr \code{Interval} will have a direction. Ranges b and c do not overlap, \code{Overlap} will return 0, \code{\%overlaps\%} FALSE. \code{Interval} will return 2 for the case \code{Interval(a, b)} and -2 for \code{Interval(b, a)}.
+
+This functions can be of value, if one has to decide, whether confidence intervals overlap or not.
+
+}
+
 \value{ returns a logical vector (match or not for each element of x). \cr
-Interval returns an integer value.
+Interval and Overlap return a numeric vector.
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}

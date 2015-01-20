@@ -6,11 +6,12 @@ Confidence Interval for the Mean
 %%  ~~function to do ... ~~
 }
 \description{
-Calculates the confidence interval for the mean either the classical way or with the bootstrap approach. 
+Collection of several approaches to determine confidence intervals for the mean. Both, the classical way and bootstrap intervals are implemented for normal and trimmed means. 
 }
+
 \usage{
-MeanCI(x, trim = 0, method = c("classic", "norm", "basic", "stud", "perc", "bca"), 
-       conf.level = 0.95, na.rm = FALSE, R = 999) 
+MeanCI(x, sd = NULL, trim = 0, method = c("classic", "boot"), 
+       conf.level = 0.95, na.rm = FALSE, ...) 
  
 }
 %- maybe also 'usage' for other objects documented here.
@@ -18,25 +19,28 @@ MeanCI(x, trim = 0, method = c("classic", "norm", "basic", "stud", "perc", "bca"
   \item{x}{a (non-empty) numeric vector of data values.
 %%     ~~Describe \code{x} here~~
 }
-  \item{trim}{a (non-empty) numeric vector of data values.
+\item{sd}{the standard deviation of x. If provided it's interpreted as sd of the population and the normal quantiles will be used for constructing the confidence intervals. If left to \code{NULL} (default) the sample sd(x) will be used in combination with the t-distribution.}
+
+  \item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each end of x before the mean is computed. Values of trim outside that range are taken as the nearest endpoint.\cr 
+  For trimmed means there are no classic confidence intervals available and bootstrap method must be used. Avoid using studentized boostrap method for trimmed means (use rather type \code{perc} or \code{bca}).
 %%     ~~Describe \code{x} here~~
 }
-  \item{method}{A vector of character strings representing the type of intervals required. The value should be any subset of the values \code{"classic"}, \code{"norm"}, \code{"basic"},  \code{"stud"},  \code{"perc"},  \code{"bca"}.
+  \item{method}{A vector of character strings representing the type of intervals required. The value should be any subset of the values \code{"classic"}, \code{"boot"}. 
   See \code{\link{boot.ci}}.
 %%     ~~Describe \code{x} here~~
 }
   \item{conf.level}{confidence level of the interval.
 %%     ~~Describe \code{conf.level} here~~
 }
-  \item{na.rm}{logical. Should missing values be removed? Defaults to FALSE.
+  \item{na.rm}{a logical value indicating whether NA values should be stripped before the computation proceeds. Defaults to FALSE.
 %%     ~~Describe \code{na.rm} here~~
 }
-  \item{R}{The number of bootstrap replicates. Usually this will be a single positive integer. For importance resampling, some resamples may use one set of weights and others use a different set of weights. In this case R would be a vector of integers where each component gives the number of resamples from each of the rows of weights.
-  See \code{\link{boot}}.
-%%     ~~Describe \code{x} here~~
+  \item{...}{further arguments are passed to the \code{\link{boot}} function. Supported arguments are \code{type} (\code{"norm"}, \code{"basic"}, \code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel} and the number of bootstrap replicates \code{R}. If not defined those will be set to their defaults, being \code{"basic"} for \code{type},  option \code{"boot.parallel"} (and if that is not set, \code{"no"}) for \code{parallel}
+ and \code{999} for \code{R}.%%     ~~Describe \code{x} here~~
 }
 }
-\details{Interfaces for data.frames are widely deprecated nowadays and so we abstained to implement one. 
+\details{The confidence intervals for the trimmed means use winsorized variances as described in the references. 
+ 
 Use \code{\link{do.call}}, \code{\link{rbind}} and \code{\link{lapply}} for getting a 
 matrix with estimates and confidence intervals for more than 1 column. (See examples!)
 %%  ~~ If necessary, more details than the description above ~~
@@ -48,6 +52,12 @@ matrix with estimates and confidence intervals for more than 1 column. (See exam
 }
 \author{Andri Signorell <andri@signorell.net>}
 
+\references{
+Wilcox, R. R., Keselman  H. J. (2003) Modern robust data analysis methods: measures of central tendency \emph{Psychol Methods}, 8(3):254-74
+
+Wilcox, R. R. (2005) \emph{Introduction to robust estimation and hypothesis testing} Elsevier Academic Press
+}
+
 \seealso{\code{\link{MeanDiffCI}}, \code{\link{MedianCI}}, \code{\link{VarCI}}
 }
 
@@ -57,13 +67,17 @@ x <- d.pizza$price[1:20]
 MeanCI(x, na.rm=TRUE)
 MeanCI(x, conf.level=0.99, na.rm=TRUE)
 
+MeanCI(x, sd=25, na.rm=TRUE)
+
 # the different types of bootstrap confints
-MeanCI(x, method="norm", na.rm=TRUE)
-MeanCI(x, method="norm", trim=0.1, na.rm=TRUE)
-MeanCI(x, method="basic", trim=0.1, na.rm=TRUE)
-# MeanCI(x, method="stud", trim=0.1, na.rm=TRUE), this needs some more information
-MeanCI(x, method="perc", trim=0.1, na.rm=TRUE)
-MeanCI(x, method="bca", trim=0.1, na.rm=TRUE)
+MeanCI(x, method="boot", type="norm", na.rm=TRUE)
+MeanCI(x, trim=0.1, method="boot", type="norm", na.rm=TRUE)
+MeanCI(x, trim=0.1, method="boot", type="basic", na.rm=TRUE)
+MeanCI(x, trim=0.1, method="boot", type="stud", na.rm=TRUE)
+MeanCI(x, trim=0.1, method="boot", type="perc", na.rm=TRUE)
+MeanCI(x, trim=0.1, method="boot", type="bca", na.rm=TRUE)
+
+MeanCI(x, trim=0.1, method="boot", type="bca", R=1999, na.rm=TRUE)
 
 
 # Getting the MeanCI for more than 1 column

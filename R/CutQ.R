@@ -1,5 +1,5 @@
 CutQ <-
-function(x, probs=seq(0, 1, by=0.25), labels=NULL, na.rm = FALSE, ...){
+function(x, breaks=quantile(x, seq(0, 1, by=0.25), na.rm=TRUE), labels=NULL, na.rm = FALSE, ...){
   
   # old version:
   #  cut(x, breaks=probsile(x, breaks=probs, na.rm = na.rm), include.lowest=TRUE, labels=labels)
@@ -9,15 +9,15 @@ function(x, probs=seq(0, 1, by=0.25), labels=NULL, na.rm = FALSE, ...){
   
   if(na.rm) x <- na.omit(x)
   
-  if(is.null(labels)) labels <- gettextf("Q%s", 1:(length(probs)-1))
+  if(is.null(labels)) labels <- gettextf("Q%s", 1:(length(breaks)-1))
   
-  probs <- quantile(x, probs)
-  dups <- duplicated(probs)
+  # probs <- quantile(x, probs)
+  dups <- duplicated(breaks)
   if(any(dups)) {
     
-    flag <- x %in% unique(probs[dups])
+    flag <- x %in% unique(breaks[dups])
     retval <- ifelse(flag, paste("[", as.character(x), "]", sep=''), NA)
-    uniqs <- unique(probs)
+    uniqs <- unique(breaks)
     
     # move cut points over a bit...
     reposition <- function(cut) {
@@ -68,7 +68,7 @@ function(x, probs=seq(0, 1, by=0.25), labels=NULL, na.rm = FALSE, ...){
     levels(retval) <- levs
     
   } else
-    retval <- cut( x, probs, include.lowest=TRUE,  labels=labels, ... )
+    retval <- cut( x, breaks, include.lowest=TRUE,  labels=labels, ... )
   
   return(retval)
   

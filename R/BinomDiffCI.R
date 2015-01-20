@@ -1,6 +1,6 @@
 BinomDiffCI <-
-function(x1, n1, x2, n2, conf.level = 0.95, method=c("wald", 
-                                                                    "waldcor", "ac","exact","newcombe","newcombecor","fm","ha")){
+function(x1, n1, x2, n2, conf.level = 0.95, 
+                        method=c("wald", "waldcor", "ac","exact","newcombe","newcombecor","fm","ha")) {
   #   .Wald #1 
   #   .Wald (Corrected) #2 
   #   .Exact 

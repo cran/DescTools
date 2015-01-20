@@ -20,10 +20,10 @@ function(x, ord = NULL, decreasing = FALSE, factorsAsCharacter = TRUE,
   # old: d.ord <- x[,lgp$ord, drop=FALSE]  # preserve data.frame with drop = FALSE
   d.ord <- data.frame(rn=rownames(x),x)[, lgp$ord, drop = FALSE] # preserve data.frame with drop = FALSE
   if(factorsAsCharacter){
-    for( xn in WhichFactors(d.ord) ){ d.ord[,xn] <- factor(d.ord[,xn], levels=sort(levels(d.ord[,xn]))) }
+    for( xn in which(sapply(d.ord, is.factor)) ){ d.ord[,xn] <- factor(d.ord[,xn], levels=sort(levels(d.ord[,xn]))) }
   }  
   
-  d.ord[,WhichCharacters(d.ord)] <- lapply(d.ord[,WhichCharacters(d.ord), drop=FALSE], factor)
+  d.ord[, which(sapply(d.ord, is.character))] <- lapply(d.ord[,which(sapply(d.ord, is.character)), drop=FALSE], factor)
   d.ord <- data.frame(lapply(d.ord, as.numeric))
   d.ord[lgp$decreasing] <- lapply(d.ord[lgp$decreasing], "-")
   

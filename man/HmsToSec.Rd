@@ -4,11 +4,12 @@
 \title{Convert h:m:s To/From Seconds}
 \usage{
 HmsToSec(x)
-SecToHms(x)
+SecToHms(x, digits = NULL)
 }
 \arguments{
 \item{x}{A vector of times in h:m:s (for \code{HmsToSec}) or seconds (for
-\code{SecToHms}) .}
+\code{SecToHms}).}
+\item{digits}{the number of digits to use for potential fractions of seconds.}
 }
 \value{
 \code{HmsToSec} - Returns a vector of times in seconds.
@@ -29,6 +30,5 @@ SecToHms(c(256, 3456, 56565))
 \seealso{
 \code{\link[chron]{times}}
 }
-\keyword{conversion}
 \keyword{chron}
 

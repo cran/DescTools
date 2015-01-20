@@ -91,7 +91,7 @@ PlotPolar(testlen, -(testpos - pi/2), type="p", main="Test Polygon",
           col="green", pch=16)
           
 PolarGrid(ntheta = rev(seq(0, 2*pi, by=2*pi/9) + pi/2), 
-          alabels=FormatFix(seq(0, 2*pi, by=2*pi/9),2)[-10], col="grey", 
+          alabels=Format(seq(0, 2*pi, by=2*pi/9), digits=2)[-10], col="grey", 
           lty="solid", lblradians=TRUE) 
 
 

@@ -2,6 +2,8 @@ PlotPar <-
 function(){
   # plots the most used plot parameters
 
+  usr <- par(no.readonly=TRUE);  on.exit(par(usr)) 
+  
   if( ! is.null(dev.list()) ){ 
     curwin <- dev.cur()
     on.exit(dev.set(curwin))
@@ -28,4 +30,7 @@ function(){
   }
   points( x=18:25, y=rep(1,8), col=1:8, pch=15, cex=2 )
   text( x=18:25, y=0, adj=c(0.5,0.5), labels=1:8, cex=0.8 )  
+  
+  
+  
 }

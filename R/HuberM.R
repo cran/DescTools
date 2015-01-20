@@ -2,7 +2,7 @@ HuberM <-
 function(x, k = 1.5, weights = NULL, tol = 1e-06,
 	     mu = if(is.null(weights)) median(x) else wgt.himedian(x, weights),
 	     s = if(is.null(weights)) mad(x, center=mu) else wgt.himedian(abs(x - mu), weights),
-	     se = FALSE, warn0scale = getOption("verbose")) {
+	     se = FALSE, warn0scale = getOption("verbose"), na.rm = FALSE, stats = FALSE) {
        
     # Author: Martin Maechler, Date: 6 Jan 2003, ff
     
@@ -14,13 +14,13 @@ function(x, k = 1.5, weights = NULL, tol = 1e-06,
       # ******************************************************************************
       # Author: Rene Locher Update: R. Frisullo 23.4.02;  M.Maechler (as.log(); s, resid)
       inr <- abs(resid) <= k
-      psi  <- ifelse(inr, resid, sign(resid)*k)                #### psi (x)
+      psi  <- ifelse(inr, resid, sign(resid)*k)                 #### psi (x)
       psiP <- as.logical(inr) # = ifelse(abs(resid) <= k, 1, 0) #### psi'(x)
       length(x) * sum(psi^2) / sum(psiP)^2
     }
 
-    wgt.himedian <- function(x, weights = rep(1,n))
-    {
+    wgt.himedian <- function(x, weights = rep(1,n)) {
+      
         # Purpose: weighted hiMedian of x
         # Author: Martin Maechler, Date: 14 Mar 2002
         n <- length(x <- as.double(x))
@@ -32,13 +32,19 @@ function(x, k = 1.5, weights = NULL, tol = 1e-06,
            x, n, weights,
            res = double(1))$res
     }
-
     
-    # implicit 'na.rm = TRUE':
-    if(any(i <- is.na(x))) {
+    
+    # Andri: introduce na.rm
+    # old: implicit 'na.rm = TRUE'
+    if(na.rm) {
+        i <- is.na(x)
         x <- x[!i]
         if(!is.null(weights)) weights <- weights[!i]
+    } else {
+      if(anyNA(x)) return(NA)
     }
+    
+    
     n <- length(x)
     sum.w <-
         if(!is.null(weights)) {
@@ -52,6 +58,7 @@ function(x, k = 1.5, weights = NULL, tol = 1e-06,
 
     if(se && !is.null(weights))
 	stop("Std.error computation not yet available for the case of 'weights'")
+  
     if (s <= 0) {
         if(s < 0) stop("negative scale 's'")
         if(warn0scale && n > 1)
@@ -59,6 +66,7 @@ function(x, k = 1.5, weights = NULL, tol = 1e-06,
     }
     else {
         wsum <- if(is.null(weights)) sum else function(u) sum(u * weights)
+        
 	repeat {
 	    it <- it + 1L
             y <- pmin(pmax(mu - k * s, x), mu + k * s)
@@ -68,6 +76,13 @@ function(x, k = 1.5, weights = NULL, tol = 1e-06,
 	    mu <- mu1
 	}
     }
-    list(mu = mu, s = s, it = it,
-         SE = if(se) s * sqrt(tauHuber(x, mu=mu, s=s, k=k) / n) else NA.)
+  
+  if(stats)
+    res <- list(mu = mu, s = s, it = it,
+             SE = if(se) s * sqrt(tauHuber(x, mu=mu, s=s, k=k) / n) else NA.)
+  else 
+    res <- mu
+  
+  return(res)
+  
 }

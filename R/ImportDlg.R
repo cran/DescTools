@@ -22,7 +22,9 @@ function(fmt=1) {
 
   rcmd <- gsub("%fname%", fname, gsub("%fxt%", fxt, gsub( "%path%", path, fmt)))
 
-  writeClipboard(rcmd)
+  # utils::writeClipboard(rcmd)
+  .writeCB(rcmd)
+  
   options(op)
 
   invisible(rcmd) 

@@ -2,9 +2,8 @@
 \alias{AddMonths}
 \title{Add a Month to a Date
 }
-\description{Add a number of months to a date. In case the number is negative, the months will be subtracted. 
-A ceiling to the last available day of the month can be set. The function will then
-yield as.Date('2013-01-31') + 1 month = '2013-02-28'. 
+\description{Simple adding a number of months to a date can lead to invalid dates, think of e.g. 2012-01-30 + 1 month. This function offers a ceiling option to make sure that the result is always a valid date. The function would then
+yield as.Date("2013-01-31"") + 1 month = "2013-02-28". If number \code{n} is negative, the months will be subtracted.  
 }
 \usage{
 AddMonths(x, n, ceiling = TRUE)
@@ -45,6 +44,9 @@ AddMonths(201301, -5)
 
 AddMonths(as.Date("2013-01-31"), 1)
 AddMonths(as.Date("2013-01-31"), -2)
+
+AddMonths(as.Date(c("2014-10-12","2013-01-31","2011-12-05")), 3)
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

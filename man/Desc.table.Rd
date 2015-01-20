@@ -2,17 +2,18 @@
 \alias{Desc.table}
 \alias{Desc.matrix}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Describe a 2-dimensional Contingency Table
+\title{Describe a n-dimensional Contingency Table
 %%  ~~function to do ... ~~
 }
 \description{A 2-dimensional table will be described with it's relative frequencies, a short summary containing the total cases, 
-the dimensions of the table, chi-square tests and some association measures as phi-coefficient, contingency coefficient and Cramer's V.
+the dimensions of the table, chi-square tests and some association measures as phi-coefficient, contingency coefficient and Cramer's V. \cr Tables with higher dimensions will simply be printed as flat table, with marginal sums for the first and for the last dimension.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 \method{Desc}{table}(x, main = NULL, rfrq = NULL, 
      margins = c(1, 2), plotit = getOption("plotit", FALSE), 
      verbose = c("medium","low","high"), ...)
+     
 \method{Desc}{matrix}(x, main = NULL, rfrq = NULL,  
      margins = c(1,2), plotit = getOption("plotit", FALSE), 
      verbose = c("medium","low","high"), ...)
@@ -20,7 +21,7 @@ the dimensions of the table, chi-square tests and some association measures as p
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{a 2-dimensional table or matrix
+  \item{x}{a n-dimensional table or matrix
 %%     ~~Describe \code{x} here~~
 }
   \item{main}{the main caption for the output.
@@ -78,5 +79,8 @@ Desc(tab, verbose="low")
 
 # talkative  
 Desc(tab, verbose="high", expected=TRUE, res=TRUE)
+
+# higher dimensional tables
+Desc(Titanic)
 }
 \keyword{ multivariate }

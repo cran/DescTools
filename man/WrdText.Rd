@@ -8,7 +8,10 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-WrdText(txt, fontname = "Consolas", fontsize = 7, bold = FALSE, italic = FALSE, 
+WrdText(txt, fixedfont = TRUE, fontname = NULL, fontsize = NULL, 
+        bold = FALSE, italic = FALSE, col = NULL,
+        alignment = c("left","right","center"), spaceBefore=0, spaceAfter=0,
+        lineSpacingRule = wdConst$wdLineSpaceSingle, 
         appendCR = TRUE, wrd = getOption("lastWord"))
 }
 %- maybe also 'usage' for other objects documented here.
@@ -16,16 +19,35 @@ WrdText(txt, fontname = "Consolas", fontsize = 7, bold = FALSE, italic = FALSE,
   \item{txt}{the text to be inserted.
 %%     ~~Describe \code{txt} here~~
 }
-  \item{fontname}{the font of the text.
+  \item{fixedfont}{should a fixedfont be used. Default is \code{TRUE}.
+%%     ~~Describe \code{txt} here~~
+}
+  \item{fontname}{the font of the text. If left to \code{NULL} the \code{fixedfont} will be used, and 
+  if the option does not exist it will be set to \code{Consolas}. 
 %%     ~~Describe \code{fontname} here~~
 }
-  \item{fontsize}{the fontsize of the text.
+  \item{fontsize}{the fontsize of the text. If left to \code{NULL} the \code{fixedfontsize} will be used, and if the option does not exist it will be set to \code{7}. 
 %%     ~~Describe \code{fontsize} here~~
 }
   \item{bold}{should the text be bold?
 %%     ~~Describe \code{bold} here~~
 }
   \item{italic}{should the text be italic?
+%%     ~~Describe \code{italic} here~~
+}
+  \item{col}{the text color, defaults to black.
+%%     ~~Describe \code{italic} here~~
+}
+ \item{alignment}{alignment of the paragraph, can be one out of \code{left}, \code{right}, \code{center}
+%%     ~~Describe \code{italic} here~~
+}
+ \item{spaceBefore}{space before the paragraph in pts as set in Word.
+%%     ~~Describe \code{italic} here~~
+}
+\item{spaceAfter}{space after the paragraph in pts as set in Word.
+%%     ~~Describe \code{italic} here~~
+}
+\item{lineSpacingRule}{spacing in pts
 %%     ~~Describe \code{italic} here~~
 }
   \item{appendCR}{should a carriage return be appended to the text. Default is TRUE.

@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-PlotVenn(x, col = "transparent", plot = TRUE)
+PlotVenn(x, col = "transparent", plotit = TRUE, labels = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,8 +18,9 @@ PlotVenn(x, col = "transparent", plot = TRUE)
   \item{col}{the colors for the sets on the plot.
 %%     ~~Describe \code{col} here~~
 }
-  \item{plot}{logical. Should a plot be produced or just the results be calculated.
-%%     ~~Describe \code{plot} here~~
+  \item{plotit}{logical. Should a plot be produced or just the results be calculated.
+}
+  \item{labels}{special labels for the plot. By default the names of the list x will be used. If those are missing, the LETTERS A..E will be chosen. Set this argument to NA, if no labels at all should be plotted.
 }
 }
 
@@ -55,7 +56,10 @@ GroupD <- sample(group, 300, replace=FALSE)
 x <- list(GroupA, GroupB, GroupC, GroupD)
 x
 
-PlotVenn(x=x[1:2])
+PlotVenn(x=list(GroupA, GroupB))
+PlotVenn(x=list(Set_1=GroupA, Set_2=GroupB))
+PlotVenn(x=list(GroupA, GroupB), labels=c("English","Spanish"))
+
 PlotVenn(x=x[1:3])
 PlotVenn(x=x[1:4], col=SetAlpha(c("blue","red","yellow","green","lightblue"), 0.2))
 

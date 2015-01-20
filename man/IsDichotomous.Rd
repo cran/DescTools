@@ -34,4 +34,4 @@ IsDichotomous(sample(10, 5, replace=TRUE))
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ calc }
+\keyword{ arith }

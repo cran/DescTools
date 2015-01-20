@@ -1,9 +1,9 @@
 DescFactNum <-
 function(x, y, xname=deparse(substitute(x))
-                       , yname=deparse(substitute(y)), plotit=getOption("plotit", FALSE), ...) {
+                       , yname=deparse(substitute(y)), plotit=getOption("plotit", FALSE), digits = NULL, ...) {
   
   # use the other way round first
-  DescNumFact(x = y, grp = x, plotit=FALSE, ... )
+  DescNumFact(x = y, grp = x, plotit=FALSE, digits=digits, ... )
   
   xy <- na.omit(data.frame(x=x, y=y))
   

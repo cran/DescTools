@@ -1,5 +1,6 @@
 \name{Ndec}
 \alias{Ndec}
+\alias{Prec}
 
 \title{Count Decimal Places of a Number
 }
@@ -8,6 +9,7 @@
 }
 \usage{
 Ndec(x)
+Prec(x)
 }
 
 \arguments{
@@ -49,6 +51,7 @@ Ndec <- function(x) {
 \examples{
 x <- c("0.0000", "0", "159.283", "1.45e+10", "1.4599E+10" )
 Ndec(x)
+Prec(as.numeric(x))
 }
 \keyword{ arith }
 

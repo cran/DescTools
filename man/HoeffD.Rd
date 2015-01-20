@@ -62,15 +62,12 @@ Vanderbilt University
 
 }
 \references{
-Hoeffding W. (1948): A non-parametric test of independence.  \emph{Ann Math Stat}
-19:546--57.
+Hoeffding W. (1948) A non-parametric test of independence.  \emph{Ann Math Stat} 19:546--57.
 
-
-Hollander M. and Wolfe D.A. (1973):   \emph{Nonparametric Statistical Methods},
+Hollander M., Wolfe D.A. (1973)   \emph{Nonparametric Statistical Methods},
 pp. 228--235, 423. New York: Wiley.
 
-
-Press WH, Flannery BP, Teukolsky SA, Vetterling, WT (1988): \emph{Numerical
+Press W.H., Flannery B.P., Teukolsky S.A., Vetterling, W.T. (1988) \emph{Numerical
 Recipes in C} Cambridge: Cambridge University Press.
 }
 \seealso{

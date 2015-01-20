@@ -47,10 +47,8 @@ where the round bracket  \code{(}  means "strictly greater than >" and the squar
 .\cr
 \%][\% is the negation of \%()\%, meaning all values lying outside the given range. Elements on the limits will return TRUE.
 \cr
-Both arguments will be recycled to the highest dimension, which is either the length of the vector or the number of rows of the matrix.
-\cr
-SQL-guys might like these kind of thinking.
-%%  ~~ If necessary, more details than the description above ~~
+Both arguments will be recycled to the highest dimension, which is either the length of the vector or the number of rows of the matrix.\cr
+See also the routines used to check, whether two ranges overlap (\code{\link{Overlap}}, \code{\link{Interval}}).
 }
 \value{
 A logical vector of the same length as x. 
@@ -63,9 +61,9 @@ Andri Signorell <andri@signorell.net> based on C-code by Kevin Ushey <kevinushey
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{if}}, \code{\link{ifelse}}, \code{\link{Comparison}}
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+\code{\link{if}}, \code{\link{ifelse}}, \code{\link{Comparison}}, 
+\code{\link{Overlap}}, \code{\link{Interval}}  }
+
 \examples{
 x <- 1:9
 x \%[]\% c(3,5)

@@ -1,6 +1,6 @@
 PlotCorr <-
-function(x, cols = colorRampPalette(c("red", "white", "blue"), space = "rgb")(20)
-  , breaks = seq(-1, 1, length = length(cols)+1), border=NA, lwd=1
+function(x, cols = colorRampPalette(c(getOption("col1", hred), "white", getOption("col2", hblue)), space = "rgb")(20)
+  , breaks = seq(-1, 1, length = length(cols)+1), border="grey", lwd=1
   , args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"), cex.axis = 0.8, las = 2        
   , mar = c(3,8,8,8), ...){
   

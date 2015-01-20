@@ -17,13 +17,13 @@ CochranArmitageTest(x, alternative = c("two.sided", "increasing", "decreasing"))
   \item{x}{a frequency table or a matrix. 
 %%     ~~Describe \code{x} here~~
 }
-  \item{alternative}{alternative}{a character string specifying the alternative hypothesis, must be one of \code{"two.sided"} (default), \code{"increasing"} or \code{"decreasing"}. You can specify just the initial letter.
+  \item{alternative}{a character string specifying the alternative hypothesis, must be one of \code{"two.sided"} (default), \code{"increasing"} or \code{"decreasing"}. You can specify just the initial letter.
 %%     ~~Describe \code{alternative} here~~
 }
 }
 
 \value{A list of class \code{htest}, containing the following components:
-  \item{statistic}{ the Z-statistic of the test.}
+  \item{statistic}{ the z-statistic of the test.}
   \item{parameter}{ the dimension of the table.}                  
   \item{p.value}{   the p-value for the test.}
   \item{alternative}{a character string describing the alternative hypothesis.}
@@ -55,6 +55,7 @@ Eric Lecoutre <lecoutre@stat.ucl.ac.be>\cr
 # http://www.lexjansen.com/pharmasug/2007/sp/sp05.pdf, pp. 4 
 dose <- matrix(c(10,9,10,7, 0,1,0,3), byrow=TRUE, nrow=2, dimnames=list(resp=0:1, dose=0:3)) 
 Desc(dose)
+
 CochranArmitageTest(dose, "increasing")
 CochranArmitageTest(dose)
 CochranArmitageTest(dose, "decreasing")

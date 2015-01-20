@@ -30,7 +30,7 @@ BinomDiffCI(x1, n1, x2, n2, conf.level = 0.95,
   A vector with 3 elements for estimate, lower confidence intervall and upper for the upper one.  
  }
 \references{
-Fagerland M W, Lydersen S and Laake P (2011) Recommended confidence intervals for two independent binomial proportions, Statistical Methods in Medical Research 0(0) 1-31
+Fagerland M W, Lydersen S and Laake P (2011) Recommended confidence intervals for two independent binomial proportions, \emph{Statistical Methods in Medical Research} 0(0) 1-31
 
 \url{http://support.sas.com/documentation/cdl/en/statug/63033/HTML/default/viewer.htm#statug_freq_a0000000642.htm#statug.freq.freqbincp}
 %% ~put references to the literature/web site here ~

@@ -9,7 +9,7 @@ function(x) {
 #   }
 #   return(x)
 
-  # faster solution from Daniel Wollschläger:
+  # faster solution from Daniel Wollschlaeger:
   rep(x[!is.na(x)], diff(c(which(!is.na(x)), length(x)+1)))
   
 }

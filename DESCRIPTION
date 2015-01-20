@@ -1,19 +1,20 @@
 Package: DescTools
 Type: Package
-Title: Tools for descriptive statistics
-Version: 0.99.8.1
-Date: 2014-09-21
-Author: Andri Signorell. Includes R source code and/or documentation previously published by (in alphabetical order): Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Jeff Enos, Claus Ekstrom, Martin Elff, John Fox, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Michael Hoehle, Christian W. Hoffmann, Markus Huerzeler, Wallace W. Hui, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Detlew Labes, Friederich Leisch, Jim Lemon, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Yongyi Min, Markus Naepflin, Daniel Navarro, Klaus Nordhausen, Derek Ogle, Nick Parsons, Sandrine Pavoine, Roland Rapold, William Revelle, Tyler Rinker, Caroline Rodriguez, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Peter Wolf, Daniel Wollschlaeger, Achim Zeileis
+Title: Tools for Descriptive Statistics
+Version: 0.99.9
+Date: 2015-01-18
+Author: Andri Signorell. Includes R source code and/or documentation previously published by (in alphabetical order): Ken Aho, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Jeff Enos, Claus Ekstrom, Martin Elff, John Fox, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Michael Hoehle, Christian W. Hoffmann, Markus Huerzeler, Wallace W. Hui, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Yongyi Min, Markus Naepflin, Daniel Navarro, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Mark Stevenson, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis
 Maintainer: Andri Signorell <andri@signorell.net>
-Description: DescTools contains a bunch of basic statistic functions and convenience wrappers for efficiently describing data, creating specific plots, doing reports using MS Word, Excel or PowerPoint. The package's intention is to offer a toolbox, which facilitates the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results. Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, NA handling, recycling rules etc. are concerned. Google style guides were used as naming rules (in absence of convincing alternatives). The 'camel style' was consequently applied to functions borrowed from contributed R packages as well.
-Suggests: RDCOMClient, manipulate
+Description: A collection of basic statistic functions and convenience wrappers for efficiently describing data. The author's intention was to create a toolbox, which facilitates the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results. The package contains as well functions to produce documents using MS Word (or PowerPoint) and functions to import data from Excel. Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, NA handling, recycling rules etc. are concerned. Google style guides were used as naming rules (in absence of convincing alternatives). The 'camel style' was consequently applied to functions borrowed from contributed R packages as well.
+Suggests: RDCOMClient
 Depends: R (>= 3.1.0)
-Imports: boot, tcltk
+Imports: boot, mvtnorm, tcltk
 License: GPL (>= 2)
 LazyLoad: yes
 LazyData: yes
 ByteCompile: yes
 NeedsCompilation: yes
-Packaged: 2014-09-21 16:25:49 UTC; Andri
+Additional_repositories: http://www.stats.ox.ac.uk/pub/RWin/
+Packaged: 2015-01-20 08:37:46 UTC; Andri
 Repository: CRAN
-Date/Publication: 2014-09-22 08:06:30
+Date/Publication: 2015-01-20 10:40:15

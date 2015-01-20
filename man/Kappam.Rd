@@ -1,14 +1,14 @@
-\name{Kappam}
-\alias{Kappam}
+\name{KappaM}
+\alias{KappaM}
 \title{Kappa for m raters}
 \description{
 Computes kappa as an index of interrater agreement between m raters on categorical data. 
 }
 \usage{
-Kappam(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA)
+KappaM(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA)
 }
 \arguments{
-  \item{x}{n*m matrix or dataframe, n subjects m raters.}
+  \item{x}{\eqn{n \times m}{n x m} matrix or dataframe, n subjects m raters.}
   \item{method}{a logical indicating whether the exact Kappa (Conger, 1980), the Kappa described by Fleiss (1971) or Light's Kappa (1971) should be computed.}
 \item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence intervals will be calculated. 
 }
@@ -54,24 +54,14 @@ statement <- data.frame(
   D=c(2,2,2,1,1,2,1,2,3,3,2,3,3,3,3,3,2,2,2,2,
       3,1,3,2,2,2,1,2,2,1,2,3,3,3,3,3,3,2,2,1),
   E=c(2,2,2,3,3,2,3,1,3,3,2,3,3,3,3,3,2,2,2,3,
-      2,3,3,2,2,2,3,2,1,3,2,3,3,1,3,3,3,2,2,1),
-  F=c(2,3,3,1,1,2,1,2,3,3,3,3,1,3,2,1,2,1,1,3,
-      2,1,1,3,2,2,1,2,1,3,2,3,3,2,1,3,3,2,2,1),
-  G=c(2,2,3,2,1,2,1,3,3,3,2,1,3,3,3,2,3,3,2,3,
-      2,2,3,3,2,2,2,2,1,1,2,2,3,2,3,3,3,2,2,1),
-  H=c(2,2,2,2,1,2,1,1,1,3,2,2,3,2,1,2,1,2,1,1,
-      2,1,3,2,2,2,2,2,1,3,2,3,3,1,3,2,3,2,2,1),
-  I=c(2,2,2,2,1,2,1,2,3,3,2,2,1,1,1,2,2,2,2,2,
-      2,1,3,3,2,2,1,2,1,1,2,3,3,2,1,2,2,2,2,1),
-  J=c(2,2,2,2,3,2,1,2,3,3,2,3,1,3,2,2,2,2,2,3,
-      2,1,3,3,2,2,1,2,1,1,2,3,3,2,3,3,1,3,2,1)
+      2,3,3,2,2,2,3,2,1,3,2,3,3,1,3,3,3,2,2,1)
 )
 
-Kappam(statement)
+KappaM(statement)
 
-Kappam(statement, method="Conger")   # Exact Kappa
-Kappam(statement, conf.level=0.95)   # Fleiss' Kappa and confidence intervals
+KappaM(statement, method="Conger")   # Exact Kappa
+KappaM(statement, conf.level=0.95)   # Fleiss' Kappa and confidence intervals
 
-Kappam(statement, method="Light")   # Exact Kappa
+KappaM(statement, method="Light")   # Exact Kappa
 }
 \keyword{multivar}

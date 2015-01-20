@@ -1,38 +1,38 @@
 \name{DescTools-package}
 \alias{DescTools-package}
 \alias{DescTools}
-\alias{options}
 \docType{package}
 \title{ Tools for Efficient Descriptive Statistics
 }
 \description{ 
-DescTools contains a bunch of basic statistic functions and convenience wrappers for efficiently describing data, creating specific plots and using MS-Office (Word, Excel or PowerPoint) for doing reports.\cr 
-The package's intention is to assemble a toolbox with basic functions to facilitate the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results.
-Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, 
-was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function 
-and arguments naming, NA handling, recycling rules etc. are concerned. In this sense this is my "Best-of"-collection of R-functions, I've happened to need in recent years. 
+A collection of basic statistic functions and convenience wrappers for efficiently describing data. The author's intention was to create a toolbox, which facilitates the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results. There are as well functions to produce documents using MS Word (or PowerPoint) and functions to import data from Excel.\cr
+Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, NA handling, recycling rules etc. are concerned. 
+In this sense this is my "Best-of-Collection" of R-functions, I've happened to need in recent years.
+
+Google style guides were used as naming rules (in absence of convincing alternatives). The 'CamelStyle' was consequently applied to functions borrowed from contributed R packages as well.
 \cr
-Google styleguides were used  as naming rules (in absence of convincing alternatives). The 'CamelStyle' was consequently 
-applied to functions borrowed from contributed R packages as well. 
 
 Feedback, feature requests, bugreports and other suggestions are welcome!
+(We're approaching version 1.0, so take the opportunity...)
 
 }
 \details{
 \tabular{ll}{
-Package: \tab DescTools\cr
-Type: \tab Package\cr
-Title: \tab Tools for descriptive statistics\cr
-Version: \tab 0.99.8.1\cr
-Date: \tab 2014-12-21\cr
-Suggests: \tab RDCOMClient, manipulate\cr
-Depends: \tab R (>= 3.1.0)\cr
-Imports: \tab boot, tcltk\cr
-License: \tab GPL (>= 2)\cr
-LazyLoad: \tab yes\cr
-LazyData: \tab yes\cr
-ByteCompile: \tab yes\cr
-NeedsCompilation: \tab yes\cr
+Package: \tab DescTools \cr
+Type: \tab Package \cr
+Title: \tab Tools for Descriptive Statistics \cr
+Version: \tab  0.99.9 \cr
+Date:  \tab 2015-01-18 \cr
+Maintainer: \tab  Andri Signorell <andri@signorell.net> \cr
+Suggests:  \tab RDCOMClient \cr
+Depends:  \tab R (>= 3.1.0) \cr
+Imports:  \tab boot, mvtnorm, tcltk \cr
+License:  \tab GPL (>= 2) \cr
+LazyLoad: \tab  yes \cr
+LazyData: \tab  yes \cr
+ByteCompile:  \tab yes \cr
+NeedsCompilation: \tab  yes \cr
+Additional_repositories:  \tab http://www.stats.ox.ac.uk/pub/RWin/ \cr
 }
 
 
@@ -41,11 +41,13 @@ A grouped list of the functions:
 \tabular{ll}{
 \cr\cr
 \bold{Operators, calculus, transformations:}\tab\cr
-\link{\%()\%}    \tab      Between operators: \%()\%, \%(]\%, \%[)\%, \%[]\% \cr
-\link{\%)(\%}    \tab      and their negations: \%)(\%, \%](\%, \%)[\%, \%][\% \cr
+\link{\%()\%}    \tab      Between operators determine if a value lies within a range [a,b] \cr
+\link{\%)(\%}    \tab      Outside operators: \%)(\%, \%](\%, \%)[\%, \%][\% \cr
 \link{\%nin\%}    \tab     "not in" operator \cr
-\link{\%overlaps\%}    \tab     Determines whether two collections have common elements \cr
+\link{\%overlaps\%}    \tab     Do two collections have common elements? \cr
 \link{\%like\%}    \tab     Simple operator to search for a specified pattern \cr
+\link{Interval}       \tab    Calculate the number of days of the overlapping part \cr
+             \tab of two date periods \cr
 \link{AUC}        \tab      Calculate area under the curve \cr
 \link{Primes}     \tab      Find all primes less than n \cr
 \link{Factorize}  \tab      Prime factorization of integers \cr
@@ -55,34 +57,57 @@ A grouped list of the functions:
 \link{Fibonacci}  \tab      Generates single Fibonacci numbers or a Fibonacci sequence\cr
 \link{Frac}       \tab      Return the fractional part of a numeric value \cr
 \link{Ndec}       \tab      Count decimal places of a number \cr
-\link{BoxCox}, \link{BoxCoxInv}     \tab      Box Cox transformation and inverse transformation \cr
+\link{BoxCox}, \link{BoxCoxInv}     \tab      Box Cox transformation and its inverse transformation \cr
+\link{BoxCoxLambda}       \tab      Return the optimal lambda for a BoxCox transformation \cr
 \link{LogGen}, \link{LogLin}     \tab      Log linear hybrid, generalized log \cr
 \link{LogSt}, \link{LogStInv}      \tab      Calculate started logarithmic transformation and it's inverse\cr
 \link{Logit}, \link{LogitInv}      \tab      Generalized logit and inverse logit function \cr
 \link{Winsorize}  \tab      Data cleaning by winsorization \cr
 \link{Trim}  \tab      Trim data by omitting outlying observations \cr
+\link{CutQ}       \tab     Cut a numeric variable into quartiles \cr
 \link{Recode}      \tab            Recode a factor with altered levels  \cr
 \link{Rename}      \tab            Change name(s) of a named object \cr
 \link{Sort}      \tab            Sort extension for matrices and data.frames \cr
+\link{SortMixed}, \link{OrderMixed}    \tab Mixed sort order \cr
+\link{DenseRank}       \tab      Calculate ranks in consecutive order (no ties)  \cr
+\link{RoundM}       \tab Round to a multiple \cr
 \link{Large}, \link{Small}  \tab    Returns the kth largest, resp. smallest values\cr
+\link{HighLow} \tab Combines \code{Large} and \code{Small}.\cr
 \link{Rev}      \tab            Reverses the order of rows and columns of a matrix \cr
 \link{Untable}      \tab            Recreates original list based on a n-dimensional frequency table \cr
+\link{CollapseTable}       \tab      Collapse some rows/columns in a table. \cr
 \link{Dummy}      \tab      Generate dummy codes for a factor \cr
 \link{FisherZ}, \link{FisherZInv}      \tab      Fisher's z-transformation and its inverse \cr
+\link{Midx}       \tab Calculate sequentially the midpoints of the elements of a vector\cr
+\link{UnitConv}       \tab      Return the most common unit conversions \cr
+\link{Vigenere}       \tab      Implements a Vigenere cypher, both encryption and decryption  \cr
+
 \cr\cr
 \bold{Information and manipulation functions:}\tab\cr
+\link{AllDuplicated}       \tab Find all values involved in ties \cr
+\link{Closest}       \tab Return the value in a vector being closest to a given one\cr
+\link{Coalesce}       \tab      Return the first value in a vector not being NA \cr
+\link{ZeroIfNA}       \tab   Replace NAs by 0 \cr
+\link{Impute}       \tab   Replace NAs by the median or another value \cr
 \link{GetAllSubsets}       \tab      Generates all possible subsets out of a list of elements \cr
 \link{GetPairs}      \tab            Generates all pairs out of one or two sets of elements \cr
-\link{WhichFlags}   \tab      Returns the names of dichotomous columns of a data.frame  \cr
-\link{WhichFactors}      \tab            Returns the names of factors in a given data.frame  \cr
-\link{WhichNumerics}      \tab            Returns the names of numerical columns of a data.frame \cr
+%%\link{WhichFlags}   \tab      Returns the names of dichotomous columns of a data.frame  \cr
+%%\link{WhichFactors}      \tab            Returns the names of factors in a given data.frame  \cr
+%%\link{WhichNumerics}      \tab            Returns the names of numerical columns of a data.frame \cr
 \link{IsWhole}      \tab            Is x a whole number? \cr
+\link{IsDichotomous}       \tab   Check if x contains exactly 2 values \cr
+%%\link{ IsEuclid}       \tab  \cr
+\link{IsOdd}       \tab    Is x even or odd? \cr
+\link{IsPrime}       \tab  Is x a prime number? \cr
+\link{IsZero}       \tab   Is numeric(x) == 0, say x < machine.eps? \cr
 \link{Label}      \tab            Get or set the label attribute of an object \cr
 \link{Mbind}  \tab  Bind matrices to 3-dimensional arrays     \cr
 \link{VecRot}  \tab  Shift the elements of a vector in a circular mode to the right \cr
 \tab or to the left by n characters.     \cr
-\link{LOCF}      \tab         Imputation of data following the "last observation \cr
+\link{Clockwise}       \tab      Transform angles from counter clock into clockwise mode \cr
+\link{LOCF}      \tab         Imputation of datapoints following the "last observation \cr
 \tab carried forward" rule \cr
+%% \link{ToLong}, \link{ToWide}     \tab Simple reshaping of a vector \cr
 \cr\cr
 \bold{String functions:}\tab\cr
 \link{StrTrim}       \tab      Delete white spaces from a string \cr
@@ -90,7 +115,8 @@ A grouped list of the functions:
 \tab was truncated  \cr
 \link{StrAbbr}       \tab      Abbreviates a string \cr
 \link{StrCap}      \tab            Capitalize the first letter of a string  \cr
-\link{StrDist}      \tab            Compute distances between strings \cr
+\link{StrPad}       \tab      Fill a string with defined characters to fit a given length\cr
+\link{StrDist}      \tab            Compute Levenshtein or Hamming distance between strings \cr
 \link{StrRev}      \tab            Reverse a string \cr
 \link{StrCountW}      \tab            Count the words in a string \cr
 \link{StrChop}      \tab          Split a string by a fixed number of characters. \cr
@@ -103,18 +129,21 @@ A grouped list of the functions:
 \link{DecToBin}, \link{BinToDec}   \tab      Converts numbers from binmode to decimal and vice versa  \cr 
 \link{DecToHex}, \link{HexToDec}   \tab      Converts numbers from hexmode to decimal and vice versa  \cr 
 \link{DecToOct}, \link{OctToDec}   \tab      Converts numbers from octmode to decimal and vice versa  \cr
-\link{DegToRad}, \link{RadToDeg}      \tab            Convert Degrees to Radians and vice versa  \cr
-\link{CartToPol}, \link{PolToCart}     \tab            Transform Cartesian to Polar Coordinates and vice versa \cr
+\link{DegToRad}, \link{RadToDeg}      \tab            Convert degrees to radians and vice versa  \cr
+\link{CartToPol}, \link{PolToCart}     \tab            Transform cartesian to polar coordinates and vice versa \cr
+\link{CartToSph}, \link{SphToCart}     \tab            Transform cartesian to spherical coordinates and vice versa \cr
 \cr\cr
 \bold{Colors:}\tab\cr
-\link{SetAlpha}   \tab  Add an alpha channel to a color.     \cr
+\link{SetAlpha}   \tab  Add transperancy (alpha channel) to a color.     \cr
 \link{ChooseColorDlg}  \tab   Display the system's color dialog to choose a color     \cr
 \link{PlotRCol}    \tab  Display R colors in a dialog\cr
 \link{ColorLegend}  \tab   Add a color legend to a plot    \cr
 \link{ColToGray}, \link{ColToGrey}  \tab  Convert colors to gcrey/grayscale     \cr
 \link{ColToHex}, \link{HexToCol}  \tab   Convert a color into hex string    \cr
+\link{HexToRgb} \tab  \cr
 \link{ColToHsv}  \tab   R color to HSV conversion  \cr
 \link{ColToRgb}, \link{RgbToCol}  \tab    Color to RGB conversion and back   \cr
+\link{RgbToLong}       \tab Convert a rgb color to a long number\cr
 \link{FindColor}  \tab   Get color on a defined color range    \cr
 \link{MixColor}  \tab   Get the mix of two colors  \cr
 \link{TextContrastColor} \tab   Choose textcolor depending on background color    \cr
@@ -123,7 +152,9 @@ A grouped list of the functions:
 \bold{Plots:}\tab\cr
 \link{Canvas}  \tab    Canvas for geometric plotting   \cr
 \link{Mar}  \tab    Set margins more comfortably.  \cr
-\link{lines.loess}   \tab    Add a loess smoother to an existing plot   \cr
+\link{lines.loess}   \tab    Add a loess smoother and its CIs to an existing plot   \cr
+\link{lines.lm}       \tab    Add the prediction of linear model and its CIs to a plot\cr
+\link{lines.smooth.spline}       \tab  Add the prediction of a smooth.spline and its CIs to a plot   \cr
 \link{ErrBars}   \tab    Add horizontal or vertical error bars to an existing plot   \cr
 \link{DrawArc}, \link{DrawRegPolygon}  \tab  Draw elliptic, circular arc(s) or regular polygon(s)     \cr
 \link{DrawCircle}, \link{DrawEllipse}  \tab  Draw a circle, ellipse   \cr
@@ -135,9 +166,11 @@ A grouped list of the functions:
 \link{SpreadOut}  \tab  Spread out a vector of numbers so that there is a minimum \cr
 \tab interval between any two elements. This can be used \cr
 \tab to place textlabels in a plot so that they do not overlap.\cr
-\link{AreaIdent}  \tab  Helps identifying all the points in a specific area.     \cr
+\link{IdentifyA}  \tab  Helps identifying all the points in a specific area.     \cr
 \link{identify.formula}  \tab  Formula interface for \code{\link{identify}}.     \cr
 \link{PtInPoly}  \tab  Identify all the points within a polygon. \cr
+\link{ConnLines}       \tab   Calculate and insert connecting lines in a barplot \cr
+\link{AxisBreak}       \tab      Place a break mark on an axis \cr
 \link{PlotACF}, \link{PlotMonth}    \tab  Create a combined plot of a time series and its autocorrelation\cr
 \tab and partial autocorrelation \cr
 \link{PlotArea}    \tab  Create an area plot \cr
@@ -163,24 +196,42 @@ A grouped list of the functions:
 \link{PlotViolin}    \tab   Plot violins instead of boxplots \cr
 \link{PlotQQ}    \tab  QQ-plot for an optional distribution\cr
 \link{PlotWeb}    \tab  Create a web plot \cr
+\link{PlotTernary}    \tab  Create a triangle or ternary plot \cr
+\cr\cr
+\bold{Distributions:}\tab\cr 
+\link{pBenf}   \tab      Benford distribution, including \link{qBenf}, \link{dBenf}, \link{rBenf}\cr
+\link{pRevGumbel}       \tab      Reverse Gumbel distribution, including \link{qRevGumbel},\cr \tab\link{dRevGumbel}, \link{rRevGumbel} \cr
+\link{qRevGumbelExp}       \tab      Expontial reverse Gumbel distribution (quantile only)\cr
 \cr\cr
 \bold{Statistics:}\tab\cr 
 \link{Freq}  \tab    Frequency table   \cr
 \link{PercTable}  \tab    Two dimensional percentage table   \cr
+\link{MarginTable}       \tab      Return the (extended) margin tables of a table \cr
+\link{ExpFreq}       \tab      Calculate the expected frequencies of a nxm-table \cr
 \link{Mode}  \tab     Mode, the most frequent value   \cr
 \link{Gmean}, \link{Gsd}  \tab  Geometric mean and geometric standard deviation     \cr
 \link{Hmean}  \tab    Harmonic Mean   \cr
+\link{median.factor}       \tab   Interface for the median of ordered factors \cr
 \link{HuberM}, \link{TukeyBiweight}  \tab    Huber M-estimator of location and Tukey's biweight robust mean   \cr
-\link{MeanAD}  \tab    Mean absolute deviation   \cr
+\link{HodgesLehmann}       \tab Return the Hodges-Lehmann estimator\cr
+\link{HoeffD}       \tab   Return Hoeffding's D statistic \cr
 \link{MeanSE}  \tab   Standard error of mean    \cr
+\link{MeanCI}, \link{MedianCI}  \tab    Confidence interval for the mean and median   \cr
+\link{MeanDiffCI}  \tab    Confidence interval for the difference of two means \cr
+\link{MoveAvg}       \tab  Calculate a moving average \cr
+\link{MeanAD}  \tab    Mean absolute deviation   \cr
+\link{VarCI}  \tab    Confidence interval for the variance   \cr
+\link{CoefVar} \tab Coefficient of variation and its confidence interval \cr
+\link{RobScale}  \tab   Robust data standardization  \cr
+\link{RobRange}  \tab   Robust range  \cr
+\link{BinomCI}, \link{MultinomCI}  \tab   Confidence intervals for binomial and multinomial proportions    \cr
+\link{BinomDiffCI}  \tab   Calculate confidence interval for a risk difference  \cr
+\link{BinomRatioCI}  \tab   Calculate confidence interval for the ratio of binomial proportions.  \cr
+\link{PoissonCI}       \tab  Confidence interval for a Poisson lambda \cr
 \link{Skew}, \link{Kurt} \tab   Skewness and kurtosis    \cr
 \link{YuleQ}, \link{YuleY}  \tab  Yule's Q and Yule's Y      \cr
 \link{TschuprowT}  \tab  Tschuprow's T     \cr
 \link{Phi}, \link{ContCoef}, \link{CramerV}  \tab   Phi, Pearson's Contingency Coefficient and Cramer's V    \cr
-\link{CohenKappa}, \link{Kappam}  \tab Cohen's Kappa and weighted Kappa and Kappa for \cr
-\tab more than 2 raters      \cr
-\link{CronbachAlpha}  \tab  Cronbach's alpha     \cr
-\link{ICC}  \tab  Intraclass correlations   \cr
 \link{GoodmanKruskalTauA}  \tab  Goodman Kruskal's tau-a     \cr
 \link{GoodmanKruskalGamma}  \tab  Goodman Kruskal's gamma     \cr
 \link{KendallTauB}  \tab  Kendall's tau-b     \cr
@@ -188,20 +239,29 @@ A grouped list of the functions:
 \link{SomersDelta}  \tab  Somers' delta     \cr
 \link{Lambda}  \tab  Goodman Kruskal's lambda     \cr
 \link{UncertCoef}  \tab  Uncertainty coefficient     \cr
-\link{TheilU} \tab  Theil's U1 and U2 coefficient     \cr
 \link{Entropy}, \link{MutInf}  \tab  Shannon's entropy, mutual information     \cr
+\link{TheilU} \tab  Theil's U1 and U2 coefficient     \cr
+\link{Assocs}       \tab  Combines the association measures above.  \cr
 \link{OddsRatio}, \link{RelRisk}  \tab   Odds ratio and relative risk    \cr  
+\link{CohenKappa}, \link{KappaM}  \tab Cohen's Kappa, weighted Kappa and Kappa for \cr
+\tab more than 2 raters      \cr
+\link{CronbachAlpha}  \tab  Cronbach's alpha     \cr
+\link{ICC}  \tab  Intraclass correlations   \cr
+\link{KrippAlpha}   \tab  Return Kripp's alpha coefficient \cr
+\link{KendallW}     \tab  Compute the Kendall coefficient of concordance \cr
 \link{Lc}  \tab   Calculate and plot Lorenz curve    \cr
 \link{Gini}, \link{Atkinson}  \tab   Gini- and Atkinson coefficient    \cr
 \link{Herfindahl}, \link{Rosenbluth}  \tab  Herfindahl- and Rosenbluth coefficient      \cr
-\link{BinomCI}, \link{MultinomCI}  \tab   Confidence intervals for binomial and multinomial proportions    \cr
-\link{BinomDiffCI}  \tab   Calculate confidence interval for a risk difference  \cr
-\link{MeanCI}, \link{MedianCI}  \tab    Confidence interval for the mean and median   \cr
-\link{MeanDiffCI}  \tab    Confidence interval for the difference of two means \cr
-\link{VarCI}  \tab    Confidence interval for the variance   \cr
+\link{GiniSimpson}       \tab      Compute Gini-Simpson Coefficient \cr
 \link{CorCI}  \tab    Confidence interval for Pearson's correlation coefficient \cr
-\link{RobScale}  \tab   Robust data standardization  \cr
-\link{RobRange}  \tab   Robust range  \cr
+\link{PartCor}       \tab      Find the correlations for a set x of variables with set y removed \cr
+\link{SpearmanRho}       \tab      Spearman rank correlation and its confidence intervals \cr
+\link{ConDisPairs}       \tab  Return concordant and discordant pairs of two vectors \cr
+\link{FindCorr}       \tab      Determine highly correlated variables \cr
+\link{CohenD}       \tab      Cohen's Effect Size \cr
+\link{EtaSq}       \tab      Effect size calculations for ANOVAs \cr
+\link{Contrasts}       \tab      Generate pairwise contrasts for using in a post-hoc test \cr
+\link{Strata}       \tab      Stratified sampling with equal/unequal probabilities \cr
 \link{Outlier}  \tab   Outliers following Tukey's boxplot definition  \cr
 \link{LOF}  \tab  Local Outlier Factor  \cr
 \cr\cr
@@ -212,11 +272,12 @@ A grouped list of the functions:
 \link{PageTest}    \tab  Page test for ordered alternatives\cr
 \link{CochranQTest}    \tab  Cochran's Q-test\cr
 \link{SiegelTukeyTest}    \tab  Siegel-Tukey test for equality in variability \cr
+\link{SiegelTukeyRank}     \tab Calculate Siegel-Tukey's ranks (auxiliary function)\cr
 \link{LeveneTest}    \tab  Levene's test for homogeneity of variance\cr
 \link{MosesTest}    \tab  Moses Test of extreme reactions\cr
 \link{RunsTest}    \tab  Runs test for randomness\cr
 \link{BartelsRankTest}    \tab  Bartels rank test for randomness\cr
-\link{JarqueBeraTest}    \tab  Jarque--Bera Test\cr
+\link{JarqueBeraTest}    \tab  Jarque-Bera Test\cr
 \link{AndersonDarlingTest}    \tab  Anderson-Darling test for normality\cr
 \link{CramerVonMisesTest}    \tab  Cramer-von Mises test for normality\cr
 \link{LillieTest}    \tab  Lilliefors (Kolmogorov-Smirnov) test for normality\cr
@@ -229,16 +290,22 @@ A grouped list of the functions:
 \link{BreslowDayTest}, \link{WoolfTest}   \tab  Test for homogeneity on 2x2xk tables over strata\cr
 \link{PostHocTest}    \tab  Post hoc tests by Scheffe, LSD, Tukey for a aov-object\cr
 \link{ScheffeTest}   \tab  Multiple comparisons Scheffe test\cr
+\link{DunnTest}   \tab  Dunn's test of multiple comparisons\cr
+\link{DunnettTest}   \tab  Dunnett's test of multiple comparisons\cr
 \link{HotellingsT2Test}   \tab  Hotelling's T2 test for the one and two sample case.\cr
+\link{YuenTTest}       \tab Yuen's robust t-Test with trimmed means and winsorized variances\cr
 \cr\cr
 \bold{Date functions:}\tab\cr
+\link{day.name}, \link{day.abb} \tab Defined names of the days \cr
 \link{AddMonths}  \tab  Add a number of months to a given date     \cr
 \link{IsDate} \tab  Check whether x is a date object     \cr
 \link{IsWeekend} \tab  Check whether x falls on a weekend     \cr
 \link{IsLeapYear} \tab  Check whether x is a leap year     \cr
+\link{LastDayOfMonth}       \tab Return the last day of the month of the date x \cr
+\link{DiffDays360}       \tab  Calculate the difference of two dates using the 360-days system \cr
 \link{Date}  \tab     Create a date from numeric representation of year, month, day   \cr
 \link{Day}, \link{Month}, \link{Year}  \tab     Extract part of a date  \cr
-\link{Hour}, \link{Min}, \link{Sec}  \tab     Extract part of time   \cr
+\link{Hour}, \link{Minute}, \link{Second}  \tab     Extract part of time   \cr
 \link{Week}, \link{Weekday}  \tab    Returns ISO week and weekday of a date   \cr
 \link{Quarter}  \tab  Quarter of a date     \cr
 \link{YearDay}, \link{YearMonth}  \tab  The day in the year of a date     \cr
@@ -258,49 +325,73 @@ A grouped list of the functions:
 \link{SelectVarDlg}    \tab  Select elements of a set by click \cr
 \link{PasswordDlg}    \tab  Display a dialog containing an edit field, showing only ***. \cr
 \link{PlotPar}   \tab   Display the R plot parameters in a dialog    \cr
-\link{Explore}   \tab   A breeze of interactive plotting \cr
+%%\link{Explore}   \tab   A breeze of interactive plotting \cr
 \cr\cr
-\bold{Reporting:}\tab\cr
+\bold{Reporting, InOut:}\tab\cr
 \link{CatTable}  \tab  Print a table with the option to have controlled linebreaks \cr
-\link{FormatFix}  \tab  Format a figure with a fixed number of digits      \cr
+\link{Format}  \tab  Easy format for numbers and dates      \cr
 \link{Desc}  \tab   Produce a rich description of an object    \cr
 \link{DescWrd}  \tab       Produce the same description as above but send the results to \cr
 \tab a Word document and add an adequate graphic representation \cr
-\link{GetCurrWrd}    \tab  Get a handle to a running Word instance \cr
-\link{GetNewWrd}    \tab   Create a new Word Instance  \cr
+\link{GetNewWrd}, \link{GetNewXL}, \link{GetNewPP}     \tab   Create a new Word, Excel or PowerPoint Instance  \cr
+\link{GetCurrWrd}, \link{GetCurrXL}, \link{GetCurrPP}    \tab  Get a handle to a running Word, Excel or PowerPoint instance \cr
+\link{IsValidWrd}       \tab  Check if the handle to a Word instance is valid or outdated \cr
 \link{WrdCaption}    \tab Insert a title in Word   \cr
 \link{WrdPlot}    \tab   Insert the active plot to Word \cr
 \link{WrdR}    \tab  Insert an R command and its output in a Word document \cr
-\link{WrdSetFont}    \tab  Set the font in Word \cr
-\link{WrdTable}    \tab  Insert a table in Word  \cr
+\link{WrdGetFont}, \link{WrdSetFont}    \tab  Get, resp. set the font on the current cursorposition in Word \cr
+\link{WrdInsTab}       \tab      Create a table in Word \cr
+\link{WrdTable}    \tab  Insert a R-table into Word  \cr
 \link{WrdText}    \tab  Insert normal text to Word \cr
 \link{WrdInsertBookmark}    \tab Insert a new bookmark in a Word document \cr
 \link{WrdGoto}    \tab Place cursor to a specific bookmark, or another text position. \cr
 \link{WrdUpdateBookmark}    \tab Update the text of a bookmark's range\cr
-\link{GetNewXL}    \tab  Create a new Excel instance \cr
 \link{XLGetRange}    \tab  Get the values of one or several cell range(s) in Excel \cr
 \link{XLGetWorkbook}    \tab  Get the values of all sheets of an Excel workbook \cr
 \link{XLView}    \tab   Use Excel as viewer for a data.frame \cr
-\link{GetNewPP}    \tab  Create a new PowerPoint instance \cr
 \link{PpPlot}    \tab   Insert active plot to PowerPoint \cr
+\link{PpAddSlide}       \tab      Adds a slide to a PowerPoint presentation \cr
+\link{PpText}       \tab      Adds a textbox with text to a PP-presentation \cr
+\link{ParseSASDatalines}       \tab      Parse a SAS "datalines"" statement to read data \cr
 \cr\cr
 \bold{Tools:}\tab\cr
+\link{PairApply}       \tab  Helper for calculating functions pairwise \cr
 \link{LsFct}, \link{LsData}, \link{LsObj}      \tab  List the functions (or the data, all objects) of a package \cr
 \link{FctArgs}      \tab            Retrieve the arguments of a functions \cr
+\link{InDots}       \tab  Check if an argument is contained in ... argument and return it's value \cr
 \link{ParseFormula}      \tab     Parse a formula and return the splitted parts of if \cr
+\link{Recycle}       \tab      Recycle a list of elements to the maximal found dimension \cr
 \link{Keywords}    \tab  Get the keywords of a man page\cr
+\link{Exec}       \tab      Execute a R-command given as text \cr
 \link{SysInfo}    \tab  Get some more information about system and environment\cr
 \link{DescToolsOptions}    \tab  Get the DescTools specific options\cr
+\cr
+\link{ClipToVect}       \tab      Return \cr
+\link{DivCoef}, \link{DivCoefMax}    \tab      Return \cr
+\link{FixToTab}       \tab      Return \cr
+\link{Flags}       \tab      Return \cr
+\link{LinScale}       \tab      Return \cr
+
+\link{PlotBagPairs}       \tab      Return \cr
+\link{PlotGACF}       \tab      Return \cr
+\link{PlotHorizBar}       \tab      Return \cr
+\link{PlotMatrix}       \tab      Return \cr
+
+\link{Ray}       \tab      Return \cr
+\link{reorder.factor}       \tab      Return \cr
+\link{SampleTwins}       \tab      Return \cr
+\link{split.formula}       \tab      Return \cr
+
 }
 }
 
 \section{MS-Office}{To make use of MS-Office features you must have Office in one of its variants installed. 
 All Wrd*, XL* and Pp* functions require as well the package RDCOMClient to be installed. Hence the use of these functions is restricted to Windows systems.
-RDCOMClient is available at: \cr\url{http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/3.0/}.
+RDCOMClient is available at: \cr\url{http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/3.2/}.
 RDCOMClient does not exist for Mac or Linux, sorry.
 }
 
-\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected by the dawn of 2015) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.}
+\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in mid of 2015) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.}
 
 
 \author{
@@ -309,18 +400,28 @@ Helsana Versicherungen AG, Health Sciences, Zurich\cr
 HWZ University of Applied Sciences in Business Administration Zurich.\cr
  
 Includes R source code and/or documentation previously published by (in alphabetical order): \cr
-Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Jeff Enos, Claus Ekstrom, Martin Elff, John Fox, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Michael Hoehle, Christian W. Hoffmann, Markus Huerzeler, Wallace W. Hui, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Detlew Labes, Friederich Leisch, Jim Lemon, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Yongyi Min, Markus Naepflin, Daniel Navarro, Klaus Nordhausen, Derek Ogle, Nick Parsons, Sandrine Pavoine, Roland Rapold, William Revelle, Tyler Rinker, Caroline Rodriguez, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Peter Wolf, Daniel Wollschlaeger, Achim Zeileis
+Ken Aho, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Jeff Enos, Claus Ekstrom, Martin Elff, John Fox, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Michael Hoehle, Christian W. Hoffmann, Markus Huerzeler, Wallace W. Hui, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Yongyi Min, Markus Naepflin, Daniel Navarro, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Mark Stevenson, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis
 
 Thank you all!
 
 Special thanks go to Daniel Wollschlaeger for his valuable contributions.
+
+The good things come from all these guys, any problems are likely due to my tweaking.
 
 
 Maintainer: Andri Signorell <andri@signorell.net>
 
 }
 
-
+\examples{
+# ******************************************************
+# There are no examples defined here. But see the demos: 
+#
+# demo(describe)
+# demo(plots))
+#
+# ******************************************************
+}
 \keyword{ package }
 
 

@@ -1,5 +1,5 @@
 WrdTable <-
-function(tab, wrd = getOption("lastWord"), row.names = FALSE, ...){
+function(tab, main = NULL, wrd = getOption("lastWord"), row.names = FALSE, ...){
   UseMethod("WrdTable")
   
 }

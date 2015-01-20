@@ -17,6 +17,18 @@ GetNewXL(visible = TRUE)
 %%     ~~Describe \code{visible} here~~
 }
 }
+
+\details{
+Here's a list of some frequently used commands.\cr
+Let's assume:
+\preformatted{xl <- GetNewXL()
+}
+\tabular{ll}{
+workbooks \tab \code{xl$workbooks()$count()} \cr
+quit excel \tab \code{xl$quit()} \cr
+}
+
+}
 \author{
 Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~

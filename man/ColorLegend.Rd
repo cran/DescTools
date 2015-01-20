@@ -1,8 +1,9 @@
 \name{ColorLegend}
 \alias{ColorLegend}
+
 \title{ Add a ColorLegend to a Plot
 }
-\description{Add a color legend, an image of a sequence of colors, to a plot.  }
+\description{Add a color legend, an image of a sequence of colors, to a plot. }
 
 \usage{
 ColorLegend(x, y = NULL, cols = rev(heat.colors(100)), labels = NULL,
@@ -45,6 +46,7 @@ ColorLegend(x, y = NULL, cols = rev(heat.colors(100)), labels = NULL,
   
   \item{cex}{character extension for the labels, default 1.0. }
   
+
   \item{\dots}{further arguments are passed to the function \kbd{text}. }
 }
 
@@ -58,7 +60,7 @@ The location may also be specified by setting x to a single keyword from the lis
 \author{Andri Signorell <andri@signorell.net>
 }
 
-\seealso{\code{\link{legend}}, \code{\link{FindColor}}
+\seealso{\code{\link{legend}}, \code{\link{FindColor}}, \code{\link{BubbleLegend}}
 }
 \examples{
 plot(1:15,, xlim=c(0,10), type="n", xlab="", ylab="", main="Colorstrips")
@@ -90,6 +92,7 @@ ColorLegend(x=1, y=12, width=6, height=1, col=colorRampPalette(c("red","yellow",
   "green","blue","black"), space = "rgb")(10), horiz=TRUE, border="black")
 
 text(x = c(8,0.5,2.5,4.5,0.5,0.5,0.5)+.2, y=c(14,9,9,9,2,14,12), LETTERS[1:7], cex=2)
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -22,8 +22,8 @@ MHChisqTest(x, srow = 1:nrow(x), scol = 1:ncol(x))
 %%     ~~Describe \code{scol} here~~
 }
 }
-\details{The statistic is computed as Q_MH = (n-1)r^2 , where r^2 is the Pearson correlation between the row variable and the column variable. The Mantel-Haenszel chi-square statistic use the scores specified by srow and scol.
-Under the null hypothesis of no association, Q_MH has an asymptotic chi-square distribution with one degree of freedom. 
+\details{The statistic is computed as \eqn{ Q_{MH} = (n-1) \cdot r^2}, where \eqn{r^2} is the Pearson correlation between the row variable and the column variable. The Mantel-Haenszel chi-square statistic use the scores specified by srow and scol.
+Under the null hypothesis of no association, \eqn{Q_{MH}} has an asymptotic chi-square distribution with one degree of freedom. 
 
 %%  ~~ If necessary, more details than the description above ~~
 }

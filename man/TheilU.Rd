@@ -8,29 +8,29 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-TheilU(a, p, method = c(2, 1), na.rm = FALSE)
+TheilU(a, p, type = c(2, 1), na.rm = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{a}{a numeric vector with the actual values.
+  \item{a}{a numeric vector with the actual observed values.
 %%     ~~Describe \code{x} here~~
 }
   \item{p}{a numeric vector containing the predictions.
 %%     ~~Describe \code{y} here~~
 }
-  \item{method}{method defining the type of Theil's two U measures, see Details. Default is 2.
+  \item{type}{defining the type of Theil's two U measures, see Details. Default is 2.
 %%     ~~Describe \code{y} here~~
 }
 \item{na.rm}{
-  logical, indicating whether NA values should be stripped before the computation proceeds. If set to TRUE complete.cases out of cbind(x,y) will be used. Defaults to FALSE.
+  logical, indicating whether \code{NA} values should be stripped before the computation proceeds. If set to \code{TRUE} complete cases of \code{cbind(x, y)} will be used. Defaults to \code{FALSE}.
   %%     ~~Describe \code{na.rm} here~~
 }
 }
 
 \details{Theil proposed two error measures, but at different times and under the same symbol U, which has caused some confusion. 
-U method=1 is taken from Theil  (1958, pp. 31-42). a represents the actual observations and p the corresponding predictions. He left it open whether a and p should be used as absolute values or as observed and predicted changes. 
-Theil (1966, chapter 2) proposed U method=2 as a measure of forecast quality, "where Ai and Pi stand for a pair of predicted and observed changes." 
-As U_1 has some serious disadvantages (see Bliemel 1973) it is recommended to use U_2 (default).
+U \code{type = 1} is taken from Theil  (1958, pp. 31-42). The argument \code{a} represents the actual observations and \code{p} the corresponding predictions. He left it open whether \code{a} and \code{p} should be used as absolute values or as observed and predicted changes. \cr
+Theil (1966, chapter 2) proposed U \code{type = 2} as a measure of forecast quality: \emph{"...where \eqn{A_i} and \eqn{P_i} stand for a pair of predicted and observed changes. ..."} \cr
+As \eqn{U_1} has some serious disadvantages (see Bliemel 1973) it is recommended to use \eqn{U_2}.
 %%  ~~ If necessary, more details than the description above ~~
 }
 
@@ -53,8 +53,8 @@ Bliemel, F. (1973): Theil's Forecast Accuracy Coefficient: A Clarification, \emp
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-TheilU(1:10, 2:11, method=1)
-TheilU(1:10, 2:11, method=2)
+TheilU(1:10, 2:11, type=1)
+TheilU(1:10, 2:11, type=2)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

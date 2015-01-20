@@ -17,7 +17,7 @@ Permn(x, sort = FALSE)
   \item{x}{a vector of numeric values or characters. Characters need not be unique.
 %%     ~~Describe \code{x} here~~
 }
-  \item{sort}{logical, defining if the result set shouldb be sorted. Default is FALSE.
+  \item{sort}{logical, defining if the result set should be sorted. Default is FALSE.
 %%     ~~Describe \code{x} here~~
 }
 }
@@ -25,7 +25,7 @@ Permn(x, sort = FALSE)
 automatically be filtered for unique sets, if the same element is given twice or more.}
 \value{a data.frame with all possible permutations of the values in x. 
 }
-\author{Friederich Leisch <Friedrich.Leisch@boku.ac.at>, small changes Andri Signorell <andri@signorell.net> 
+\author{Friederich Leisch <Friedrich.Leisch@boku.ac.at>\cr some editorial amendments Andri Signorell <andri@signorell.net> 
 %%  ~~who you are~~
 }
 
@@ -36,7 +36,7 @@ automatically be filtered for unique sets, if the same element is given twice or
 Permn(letters[2:5])
 Permn(2:5)
 
-Permn(c("a","b","c","a"))
+Permn(c("a", "b", "c", "a"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

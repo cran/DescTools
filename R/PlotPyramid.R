@@ -23,10 +23,7 @@ function(lx, rx = NA, ylab = "",
   at.right <- axTicks(1)[axTicks(1)>=0] + gapwidth/2
 
   # grid: define default arguments 
-  add.grid <- TRUE
-  if(!is.null(args.grid)) if(all(is.na(args.grid))) {add.grid <- FALSE} 
-
-  if(add.grid){
+  if(!identical(args.grid, NA)){    # add grid
     args.grid1 <- list(col="grey", lty="dotted") 
     # override default arguments with user defined ones
     if (!is.null(args.grid)) { 

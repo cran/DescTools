@@ -1,2 +1,2 @@
 PolToCart <-
-function(r, theta) xy.coords(r*cos(theta), r*sin(theta), xlab="x", ylab="y")
+function(r, theta) list(x=r*cos(theta), y=r*sin(theta))

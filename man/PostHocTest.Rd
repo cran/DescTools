@@ -1,6 +1,8 @@
 \name{PostHocTest}
 \alias{PostHocTest}
 \alias{PostHocTest.aov}
+\alias{PostHocTest.table}
+\alias{PostHocTest.matrix}
 \alias{print.PostHocTest}
 \alias{plot.PostHocTest}
 
@@ -15,9 +17,14 @@
 PostHocTest(x, ...)
 
 \method{PostHocTest}{aov}(x, which = NULL, 
-            method = c("hsd","bonf","lsd","scheffe","newmankeuls"), 
+            method = c("hsd", "bonferroni", "lsd", "scheffe", "newmankeuls", "duncan"), 
             conf.level = 0.95, ordered = FALSE, ...)
-           
+
+\method{PostHocTest}{table}(x, method = c("none", "fdr", "BH", "BY", "bonferroni",
+                          "holm", "hochberg", "hommel"), 
+            conf.level = 0.95, ...)
+
+
 \method{print}{PostHocTest}(x, digits = getOption("digits"), ...)
 \method{plot}{PostHocTest}(x, ...)
 }
@@ -26,7 +33,7 @@ PostHocTest(x, ...)
   \item{x}{an aov object.
 %%     ~~Describe \code{x} here~~
 }
-  \item{method}{one of \code{"hsd"}, \code{"bonf"}, \code{"lsd"}, \code{"scheffe"}, \code{"newmankeuls"}, defining the method for the pairwise comparisons.
+  \item{method}{one of \code{"hsd"}, \code{"bonf"}, \code{"lsd"}, \code{"scheffe"}, \code{"newmankeuls"}, defining the method for the pairwise comparisons.\cr For the post hoc test of tables the methods of \code{\link{p.adjust}} can be supplied. See the detail there.
 %%     ~~Describe \code{method} here~~
 }
   \item{which}{a character vector listing terms in the fitted model for which the intervals should be calculated. Defaults to all the terms.
@@ -78,6 +85,9 @@ Because this test does give us the capacity to look at complex comparisons, it e
 This test has less power than the HSD when you are making Pairwise (simple) comparisons, but it has more power than HSD when you are making Complex comparisons.
 In general, only use this when you want to make many Post Hoc complex comparisons (e.g. more than K-1).
 
+
+Tables\cr
+For tables pairwise chi-square test can be performed, either without correction or with correction for multiple testing following the logic in \code{\link{p.adjust}}.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{an object of type "PostHocTest", which will either be \cr

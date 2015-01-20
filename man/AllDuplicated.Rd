@@ -6,8 +6,8 @@
 %%  ~~function to do ... ~~
 }
 \description{Returns an index vector of all the values in x which are involved in ties. \cr
-So \code{!AllDuplicated} determines all values in a vector x, which
- appear only once (frequency 1).
+So \code{!AllDuplicated} determines all those elements of a vector x, which
+ appear exactly once (frequency 1).
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -30,6 +30,7 @@ AllDuplicated(x)
 \code{\link{intersect}} returns all elements which appear in A and in B\cr
 \code{\link{setdiff}}(A, B) returns all elements appearing in A but not in B \cr
 \code{\link{setequal}}(A, B) returns TRUE if A contains exactly the same elements as B\cr
+\code{\link{split}}(A, A) returns a list with all the tied values in A (see examples)\cr
 
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }

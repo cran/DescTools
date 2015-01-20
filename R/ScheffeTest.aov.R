@@ -86,6 +86,7 @@ function(x, which=NULL, contrasts = NULL, conf.level=0.95, ...){
   attr(out, "conf.level") <- conf.level
   attr(out, "ordered") <- FALSE
   attr(out, "method") <- "Scheffe Test"
+  attr(out, "method.str") <- gettextf("\n  Posthoc multiple comparisons of means : %s \n", attr(out, "method"))
 
 
   return(out)

@@ -12,15 +12,15 @@ function (x, robust=TRUE, method=c("chisq", "mc"), N=0, na.rm=FALSE) {
   
   DNAME <- deparse(substitute(x))
   
-  ### Calculate the first 4 central moments ###
+  ## Calculate the first 4 central moments
   n <- length(x)
   m1 <- sum(x)/n
   m2 <- sum((x - m1)^2)/n
   m3 <- sum((x - m1)^3)/n
   m4 <- sum((x - m1)^4)/n
   
-  ### User can choose the Standard Jarque Bera Test or Robust Jarque Bera Test ###
-  ### Robust Jarque Bera Test is default ###
+  ## User can choose the Standard Jarque Bera Test or Robust Jarque Bera Test 
+  ## Robust Jarque Bera Test is default 
   if(!robust) {
     b1 <- (m3/m2^(3/2))^2;
     b2 <- (m4/m2^2);
@@ -40,7 +40,7 @@ function (x, robust=TRUE, method=c("chisq", "mc"), N=0, na.rm=FALSE) {
   
   if(method == "mc"){
     if(!robust) {
-      #### computes empirical critical values for the JB statistic####
+      ## computes empirical critical values for the JB statistic
       
       jb<-double(N)
       
@@ -78,7 +78,7 @@ function (x, robust=TRUE, method=c("chisq", "mc"), N=0, na.rm=FALSE) {
       }
       
     } else {
-      #### computes empirical critical values for the RJB statistic####
+      ## computes empirical critical values for the RJB statistic
       rjb <- double(N)
       
       for (k in 1:N) {

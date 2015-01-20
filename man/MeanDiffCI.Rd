@@ -3,7 +3,7 @@
 \alias{MeanDiffCI.formula}
 \alias{MeanDiffCI.default}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Confidence Intervals for Difference of Means
+\title{Confidence Interval For Difference of Means
 %%  ~~function to do ... ~~
 }
 \description{Calculates the confidence interval for the difference of two means either the classical way or with the bootstrap approach.

@@ -34,9 +34,8 @@ GoodmanKruskalTauA(x, y = NULL, direction = c("row", "column"), conf.level = NA,
 \details{
 Goodman and Kruskal's tau-a is a measure of categorical association which is based entirely on the observed data and possesses a clear interpretation in terms of proportional reduction in error.
 It gives the probabilities of correctly assigning cases to one set of categories improved by the knowledge of another set of categories. The statistic is asymmetric and yields different results predicting row assignments based on columns than from column assignments based on rows.\cr
-The range of Goodman Kruskal's tau is [0, 1] and is computed as\cr
-TauA(C|R) = (P-Q)/(n(n-1)/2)), where P equals twice the number of concordances and Q twice the number of discordances. 
-Goodman Kruskal tau reduces to Phi^2 in the 2x2-table case.\cr
+Goodman Kruskal's tau-a is computed as \deqn{ \tau_a(C|R) = \frac{P-Q}{\frac{1}{2} n(n-1))}} 
+where P equals twice the number of concordances and Q twice the number of discordances. It's range is [0, 1]. Goodman Kruskal tau reduces to \eqn{\phi^2} (see: \code{\link{Phi}}) in the 2x2-table case.\cr
 (Note that Goodman Kruskal tau-a does not take into consideration any ties, which makes it unpractical.)   
 %%  ~~ If necessary, more details than the description above ~~
 }

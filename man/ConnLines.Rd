@@ -59,8 +59,9 @@ ConnLines(tab, beside=FALSE, horiz=FALSE, lcol="grey50", lwd=1, lty=2)
 # set some labels
 txt <- tab
 txt[] <- gsub(pattern="^0", "", t(tab))       # do not print 0s
-text(x=b, y=t(apply(rbind(0,tab), 2, Midx)), labels=txt,
-     col=(matrix(rep(TextContrastColor(cols), each=ncol(tab)), nrow=nrow(tab), byrow=FALSE )))
+text(x=b, y=t(apply(apply(rbind(0,tab), 2, Midx), 2, cumsum)), labels=txt,
+     col=(matrix(rep(TextContrastColor(cols), each=ncol(tab)), 
+          nrow=nrow(tab), byrow=FALSE )))
 
 # align to the middle of the bars
 barplot(tab, beside=FALSE, space=1.2) 

@@ -29,9 +29,9 @@ StuartTauC(x, y = NULL, conf.level = NA, ...)
 }
 \details{Stuart's tau-c makes an adjustment for table size in addition to a correction for ties. Tau-c is
 appropriate only when both variables lie on an ordinal scale. \cr
-The range of tau-c is [-1, 1]. Stuart's tau-c is estimated by \cr
-tau-c = m (P-Q) / (n^2 (m-1)), \cr
-where P equals twice the number of concordances and Q twice the number of discordances, n is the total amount of observations and m = min(R,C).\cr
+Stuart's tau-c is estimated by \cr
+\deqn{ \tau_c = \frac{m(P-Q)}{n^2 (m-1)}}
+where P equals twice the number of concordances and Q twice the number of discordances, n is the total amount of observations and m = min(R,C). The range of \eqn{\tau_c} is [-1, 1]. \cr
 See \url{http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf}, pp. 1739 for the estimation of the asymptotic variance.
 
 %%  ~~ If necessary, more details than the description above ~~

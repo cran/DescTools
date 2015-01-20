@@ -1,9 +1,10 @@
 \name{lines.loess}
 \alias{lines.loess}
+\alias{lines.smooth.spline}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Add a Loess Smoother 
+Add a Loess or a Spline Smoother
 }
 \description{
 Add a loess smoother to an existing plot. The function first calculates the prediction of a loess object for a reasonable amount of points, then adds the line to the plot and inserts a polygon with the confidence intervals.
@@ -11,13 +12,16 @@ Add a loess smoother to an existing plot. The function first calculates the pred
 }
 \usage{
 \method{lines}{loess}(x, col = getOption("col1", hblue), lwd = 2, lty = "solid", 
-     type = "l", n = 100, conf.level = 0.95, args.band = NULL, ...)
+      type = "l", n = 100, conf.level = 0.95, args.band = NULL, ...)
+
+\method{lines}{smooth.spline}(x, col = getOption("col1", hblue), lwd = 2, lty = "solid", 
+      type = "l", conf.level = 0.95, args.band = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{the loess object to be plotted.
+  \item{x}{the loess or smooth.spline object to be plotted.
 }
-  \item{col}{linecolor of the smoother. Default is DescTools's lightblue.
+  \item{col}{linecolor of the smoother. Default is DescTools's \code{col1}.
 %%     ~~Describe \code{col} here~~
 }
   \item{lwd}{line width of the smoother.
@@ -53,7 +57,7 @@ Andri Signorell <andri@signorell.net>
 }
 
 \seealso{
-\code{\link{loess}}, \code{\link{scatter.smooth}}
+\code{\link{loess}}, \code{\link{scatter.smooth}}, \code{\link{smooth.spline}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
@@ -64,17 +68,16 @@ y <- rnorm(100)
 plot(x, y)
 lines(loess(y~x))
 
-data(d.pizza)
 plot(temperature ~ delivery_min, data=d.pizza)
 lines(loess(temperature ~ delivery_min, data=d.pizza))
 
 plot(temperature ~ delivery_min, data=d.pizza)
 lines(loess(temperature ~ delivery_min, data=d.pizza), conf.level = 0.99, 
-         args.band = list(col=SetAlpha("red", 0.4), border="black") )
+            args.band = list(col=SetAlpha("red", 0.4), border="black") )
 
 # the default values from scatter.smooth
 lines(loess(temperature ~ delivery_min, data=d.pizza, 
-         span=2/3, degree=1, family="symmetric"), col="red")
+            span=2/3, degree=1, family="symmetric"), col="red")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

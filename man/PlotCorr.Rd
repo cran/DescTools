@@ -8,9 +8,10 @@
 The cells of the matrix can be shaded or colored to show the correlation value.
 }
 \usage{
-PlotCorr(x, cols = colorRampPalette(c("red", "white", "blue"), space = "rgb")(20), 
+PlotCorr(x, cols = colorRampPalette(c(getOption("col1", hred), "white", 
+                                      getOption("col2", hblue)), space = "rgb")(20), 
          breaks = seq(-1, 1, length = length(cols) + 1), 
-         border = NA, lwd = 1,
+         border = "grey", lwd = 1,
          args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"), 
          cex.axis = 0.8, las = 2, mar = c(3, 8, 8, 8), ...)
 }
@@ -19,14 +20,14 @@ PlotCorr(x, cols = colorRampPalette(c("red", "white", "blue"), space = "rgb")(20
   \item{x}{x is a correlation matrix to be visualized.
 %%     ~~Describe \code{x} here~~
 }
-  \item{cols}{the colors for shading the matrix
+  \item{cols}{the colors for shading the matrix. Uses the package's option \code{"col1"} and \code{"col2"} as default.
 %%     ~~Describe \code{cols} here~~
 }
  \item{breaks}{a set of breakpoints for the colours: must give one more breakpoint than colour. These are passed to \code{image()} function.
  If breaks is specified then the algorithm used follows \code{\link{cut}}, so intervals are closed on the right and open on the left except for the lowest interval.
 %%     ~~Describe \code{cols} here~~
 }
-  \item{border}{color for borders. The default is \code{NA}, which means borders are omitted.
+  \item{border}{color for borders. The default is \code{grey}. Set this argument to \code{NA} if borders should be omitted.
 }
   \item{lwd}{line width for borders. Default is 1.
 %%     ~~Describe \code{lwd} here~~
@@ -68,13 +69,13 @@ PlotCorr(x, cols = colorRampPalette(c("red", "white", "blue"), space = "rgb")(20
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-m <- cor(d.pizza[,WhichNumerics(d.pizza)], use="pairwise.complete.obs")
+m <- cor(d.pizza[,sapply(d.pizza, IsNumeric)], use="pairwise.complete.obs")
 
 PlotCorr(m, cols=colorRampPalette(c("red", "black", "green"), space = "rgb")(20))
 PlotCorr(m, cols=colorRampPalette(c("red", "black", "green"), space = "rgb")(20), 
          args.colorlegend=NA)
 
-m <- PairApply(d.diamonds[,WhichFactors(d.diamonds)], CramerV)
+m <- PairApply(d.diamonds[, sapply(d.diamonds, is.factor)], CramerV, symmetric=TRUE)
 PlotCorr(m, cols = colorRampPalette(c("white", "steelblue"), space = "rgb")(20),
          breaks=seq(0, 1, length=21), border="black",
          args.colorlegend = list(labels=sprintf("\%.1f", seq(1, 0, length = 11)), frame=TRUE)
@@ -90,7 +91,7 @@ PlotCorr(csp)
 
 # some more colors
 PlotCorr(cor(mtcars), col=PalDescTools("RedWhiteBlue1", 100), border="grey",
-         args.colorlegend=list(labels=FormatFix(seq(1,-1,-.25), 2), frame="grey"))
+         args.colorlegend=list(labels=Format(seq(1,-1,-.25), digits=2), frame="grey"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

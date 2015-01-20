@@ -32,7 +32,7 @@ MutInf(x, y, base = 2, \dots)
 
 }
 \details{The Shannon entropy equation provides a way to estimate the average minimum number of bits needed to encode a string of symbols, based on the frequency of the symbols.\cr 
-It is given by the formula H = - sum(pi log(pi)) where pi is the 
+It is given by the formula \eqn{H = - \sum(\pi log(\pi))} where \eqn{\pi} is the 
 probability of character number i showing up in a stream of characters of the given "script".\cr
 The entropy is ranging from 0 to Inf.
 %%  ~~ If necessary, more details than the description above ~~

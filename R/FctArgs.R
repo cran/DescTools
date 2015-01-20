@@ -3,7 +3,8 @@ function(name, sort=FALSE) {
   
   # got that somewhere, but don't know from where...
 
-  a <- formals(get(as.character(substitute(name)), pos=1))
+  if(is.function(name)) name <- as.character(substitute(name))
+  a <- formals(get(name, pos=1))
   if(is.null(a))
     return(NULL)
   arg.labels <- names(a)

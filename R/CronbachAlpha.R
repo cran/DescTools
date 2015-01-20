@@ -1,5 +1,5 @@
 CronbachAlpha <-
-function(x, conf.level = NA, cond = FALSE){
+function(x, conf.level = NA, cond = FALSE, na.rm = FALSE){
   
   i.CronbachAlpha <- function(x, conf.level = NA){
     nc <- ncol(x)
@@ -14,6 +14,10 @@ function(x, conf.level = NA, cond = FALSE){
     }    
     return(res)
   }
+  
+  
+  x <- as.matrix(x)
+  if(na.rm) x <- na.omit(x)
   
   res <- i.CronbachAlpha(x = x, conf.level = conf.level)
   

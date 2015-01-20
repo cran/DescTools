@@ -4,10 +4,10 @@
 \title{Confidence Intervals for Multinomial Proportions}
 
 \description{
-Calculate simultaneous confidence intervals for multinomial proportions either according to the method of Sison and Glaz or according
+Confidence intervals for multinomial proportions are often approximated by single binomial confidence intervals, which might in practice often yield satisfying results, but is properly speaking not correct. This function calculates simultaneous confidence intervals for multinomial proportions either according to the method of Sison and Glaz or according
 to Goodman's method.
 }
-\author{Pablo J. Villacorta Iglesias <pjvi@decsai.ugr.es>
+\author{Pablo J. Villacorta Iglesias <pjvi@decsai.ugr.es>\cr
 Department of Computer Science and Artificial Intelligence, University of Granada (Spain) 
 (Sison-Glaz)
 
@@ -36,8 +36,12 @@ Sison and Glaz (1995). The R code has been translated from the SAS code written 
 
 }
 \value{
-A matrix with 3 elements columns for estimate, lower confidence intervall and upper for the upper one. 
-The rows correspond to the dimension of x. 
+A matrix with 3 columns: 
+  \item{est}{estimate}
+  \item{lwr.ci}{lower bound of the confidence interval}
+  \item{upr.ci}{upper bound of the confidence interval}
+
+The number of rows correspond to the dimension of x. 
 
 }
 \references{
@@ -55,17 +59,17 @@ Paper and code available at \url{http://www.jstatsoft.org/v05/i06}.
 }
 
 \examples{
-# Multinomial distribution with 3 classes, from which 79 samples 
+# Multinomial distribution with 3 classes, from which a sample of 79 elements 
 # were drawn: 23 of them belong to the first class, 12 to the 
 # second class and 44 to the third class. Punctual estimations 
 # of the probabilities from this sample would be 23/79, 12/79 
 # and 44/79 but we want to build 95% simultaneous confidence intervals 
 # for the true probabilities
 
-MultinomCI(c(23,12,44), conf.level=0.95)
+MultinomCI(c(23, 12, 44), conf.level=0.95)
 
 
-x <- c(35,74,22,69)
+x <- c(35, 74, 22, 69)
 
 MultinomCI(x, method="goodman")
 MultinomCI(x, method="sisonglaz")

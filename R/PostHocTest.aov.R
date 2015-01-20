@@ -1,6 +1,6 @@
 PostHocTest.aov <-
 function (x, which = NULL, 
-                         method=c("hsd","bonf","lsd","scheffe","newmankeuls"),
+                         method=c("hsd","bonferroni","lsd","scheffe","newmankeuls","duncan"),
                          conf.level = 0.95, ordered = FALSE, ...) {
   
   method <- match.arg(method)
@@ -42,7 +42,7 @@ function (x, which = NULL,
         n <- rep.int(n, length(means))
       
       # this will be ignored for bonferroni, lsd
-      if (method %in% c("hsd","newmankeuls") & as.logical(ordered)) {
+      if (method %in% c("hsd", "newmankeuls", "duncan") & as.logical(ordered)) {
         ord <- order(means)
         means <- means[ord]
         n <- n[ord]
@@ -55,7 +55,7 @@ function (x, which = NULL,
       center <- center[keep]
       
       switch(method
-             ,"bonf" = {     
+             ,"bonferroni" = {     
                width <-  qt(1 - (1 - conf.level)/(length(means) * (length(means) - 1)), x$df.residual) * 
                  sqrt(MSE * outer(1/n, 1/n, "+"))[keep]
                est <- center/sqrt(MSE * outer(1/n, 1/n, "+")[keep])
@@ -93,8 +93,31 @@ function (x, which = NULL,
                method.str <- "Newman-Keuls"
                
              }
+             ,"duncan" = {
+               # same as newmankeuls, but with bonferroni corrected alpha
+               nmean <- (abs(outer(rank(means), rank(means), "-")) + 1)[keep]
+
+               width <- qtukey(conf.level^(nmean-1), nmean, x$df.residual) *
+                 sqrt((MSE/2) * outer(1/n, 1/n, "+"))[keep]
+               
+               est <- center/(sqrt((MSE/2) * outer(1/n, 1/n, "+"))[keep])
+               pvals <- 1-(1-ptukey(abs(est), nmean, x$df.residual, 
+                                    lower.tail = FALSE))^(1/(nmean - 1))
+ 
+               method.str <- "Duncan's new multiple range test"
+               
+             }
              ,"dunnet" = {
                method.str <- "Dunnet"
+             }
+             ,"scottknott" = {
+               method.str <- "Scott Knott"
+             }
+             ,"waller" = {
+               method.str <- "Waller"
+             }
+             ,"gabriel" = {
+               method.str <- "Gabriel"
              }
       )    
       
@@ -118,6 +141,8 @@ function (x, which = NULL,
     attr(out, "conf.level") <- conf.level
     attr(out, "ordered") <- ordered
     attr(out, "method") <- method.str
+    attr(out, "method.str") <- gettextf("\n  Posthoc multiple comparisons of means : %s \n", attr(out, "method"))
+    
   }
   
   return(out)

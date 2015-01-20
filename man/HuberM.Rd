@@ -11,9 +11,9 @@
 HuberM(x, k = 1.5, weights = NULL, tol = 1e-06,
        mu = if(is.null(weights)) median(x) else wgt.himedian(x, weights),
        s =  if(is.null(weights)) mad(x, center=mu)
-	    else wgt.himedian(abs(x - mu), weights),
+	            else wgt.himedian(abs(x - mu), weights),
        se = FALSE,
-       warn0scale = getOption("verbose"))
+       warn0scale = getOption("verbose"), na.rm = FALSE, stats = FALSE)
 }
 \arguments{
   \item{x}{numeric vector.}
@@ -29,6 +29,9 @@ HuberM(x, k = 1.5, weights = NULL, tol = 1e-06,
     when \code{weights} is \code{NULL}.}
   \item{warn0scale}{logical; if true, and \code{s} is 0 and
     \code{length(x) > 1}, this will be warned about.}
+  \item{na.rm}{logical, indicating whether NA values should be stripped before the computation proceeds. Defaults to FALSE. }
+  \item{stats}{logical, should all the details be returned or only the estimate. Defaults to FALSE. }
+  
 }
 \value{
   list of location and scale parameters, and number of iterations used.
@@ -70,20 +73,18 @@ x <- c(round(rnorm(1000),1), round(rnorm(50, m=10, sd = 10)))
 t.x <- table(x) # -> unique values and multiplicities
 x.uniq <- as.numeric(names(t.x)) ## == sort(unique(x))
 x.mult <- unname(t.x)
-str(Hx  <- HuberM(x.uniq, weights = x.mult), digits = 7)
-str(Hx. <- HuberM(x, s = Hx$s, se=TRUE), digits = 7) ## should be ~= Hx
+str(Hx  <- HuberM(x.uniq, weights = x.mult, stats=TRUE), digits = 7)
+str(Hx. <- HuberM(x, s = Hx$s, se=TRUE, stats=TRUE), digits = 7) ## should be ~= Hx
 stopifnot(all.equal(Hx[-4], Hx.[-4]))
 str(Hx2 <- HuberM(x, se=TRUE), digits = 7)## somewhat different, since 's' differs
 
 ## Confirm correctness of std.error :
-\donttest{
-system.time(
-SS <- replicate(10000, vapply(HuberM(rnorm(400), se=TRUE), as.double, 1.))
-) # ~ 12.2 seconds
-rbind(mean(SS["SE",]), sd(SS["mu",]))# both ~ 0.0508
-stopifnot(all.equal(mean(SS["SE",]),
-                    sd ( SS["mu",]), tol= 0.002))
-}
+# system.time(
+# SS <- replicate(10000, vapply(HuberM(rnorm(400), se=TRUE), as.double, 1.))
+# ) # ~ 12.2 seconds
+# rbind(mean(SS["SE",]), sd(SS["mu",]))# both ~ 0.0508
+# stopifnot(all.equal(mean(SS["SE",]),
+#                    sd ( SS["mu",]), tol= 0.002))
 }
 \keyword{univar}
 \keyword{robust}

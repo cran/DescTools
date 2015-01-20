@@ -109,7 +109,6 @@ Desc.numeric( d.pizza$count, highlow=FALSE )
 Desc.numeric( d.pizza$count, highlow=TRUE )
  
 DescNumFact( x=d.pizza$delivery_min, grp=d.pizza$operator )
-DescFactFact( x=d.pizza$driver, grp=d.pizza$operator)
 DescNumNum( x=d.pizza$delivery_min, y=d.pizza$price )
 }
 \keyword{ print }

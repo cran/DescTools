@@ -53,6 +53,12 @@ function(x, y = NULL, conf.level = NA, ...){
     c(uc[2], lcdf)
   }
   
+  # Remark Andri 18.12.2014:
+  # lochi and hichi could be replaced with:
+  #   optimize(function(x) abs(pchisq(chival, DF, x)  - (1-(1-conf.level)/2)), c(0, chival))
+  #   optimize(function(x) abs(pchisq(chival, DF, x)  - (1-conf.level)/2), c(0, 3*chival))
+  #
+  # ... which would run ~ 25% faster and be more exact  
   
   # what can go wrong while calculating chisq.stat?
   # we don't need test results here, so we suppress those warnings

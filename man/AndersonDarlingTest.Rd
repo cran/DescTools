@@ -24,7 +24,7 @@ AndersonDarlingTest(x, null = "punif", ..., nullname)
     Additional arguments for the cumulative distribution function.
   }
   \item{nullname}{
-    Optional character string describing the null distribution.
+    Optional character string describing the null distribution.\cr
     The default is \code{"uniform distribution"}.
   }
 }

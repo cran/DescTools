@@ -52,7 +52,7 @@ There are print and plot methods for class \code{"PostHocTest"}. The plot method
 \references{
 Robert O. Kuehl, Steel R. (2000) \emph{Design of experiments}. Duxbury
 
-Torri J., Dickey D. (1997) \emph{Principles and Procedures of Statistics, A Biometrical Approach} pp. 189 
+Steel R.G.D., Torrie J.H., Dickey, D.A. (1997) \emph{Principles and Procedures of Statistics, A Biometrical Approach}. McGraw-Hill
 }
 \author{Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~

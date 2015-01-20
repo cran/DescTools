@@ -9,4 +9,5 @@ function(i) {
   # new and far more elegant
   # ref: http://datadebrief.blogspot.ch/search/label/R
   rawToChar(as.raw(i))
+  
 }

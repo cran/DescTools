@@ -16,8 +16,8 @@ StrCountW(x)
 %%     ~~Describe \code{x} here~~
 }
 }
-\details{This is just a wrapper for a fine regexpr. It uses the expression \\b\\W+\\b to separate the 
-words. The code \\W is equivalent to [^[:alnum:]_]) wheras [:alnum:] contains [:alpha:] and [:digit:].
+\details{This is just a wrapper for a fine regexpr. It uses the expression \code{\\b\\W+\\b} to separate the 
+words. The code \code{\\W} is equivalent to \code{[^[:alnum:]_])} wheras \code{[:alnum:]} contains \code{[:alpha:]} and \code{[:digit:]}.
 So everything that is not an alphanumeric character, a digit or a _ (underscore) is used as separator for the words to be counted.
 %%  ~~ If necessary, more details than the description above ~~
 }

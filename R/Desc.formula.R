@@ -77,7 +77,20 @@ function(formula, data = parent.frame(), subset, plotit=getOption("plotit", FALS
             do.call( DescFactNum, args=append( list(x=x, y=grp, xname=resp, yname=pred, plotit=plotit), dotargs.factor.numeric ))
             
           } else if ( class(grp)[1] %in% c("factor","ordered")){
-            tab <- table(x, grp, dnn=c(resp, pred))
+            useNA <- InDots(..., arg="useNA", default="no")
+            tab <- table(x, grp, dnn=c(resp, pred), useNA=useNA)
+            
+            if(useNA == "no"){  # add missing info only if there are any (depends on useNA)
+              n <- max(length(x),length(grp))
+              idcomp <- complete.cases(x, grp)  # cases
+              vn <- sum(idcomp)                 # valid n pairs
+              missn <- paste("total pairs: ", .fmt(n), 
+    #                          ", valid: ", .fmt(vn), " (", round(vn/n*100, 3), "%)",
+                             ", missings: ", .fmt(n-vn), " (", round((n-vn)/n*100, 3), "%)",
+                             sep="")
+              attr(tab, "missings") <- missn
+            }  
+
             main <- gettextf("%s ~ %s", resp, pred)
             do.call( Desc, args=append( list(x=tab, xname="", grpname="", plotit=FALSE, main=NA), dotargs.factor.factor) ) 
             if(plotit) PlotDesc.table(tab, main=main)

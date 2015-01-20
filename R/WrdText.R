@@ -1,5 +1,14 @@
 WrdText <-
-function(txt, fontname="Consolas", fontsize=7, bold=FALSE, italic=FALSE, appendCR=TRUE, wrd=getOption("lastWord") ){
+function(txt, fixedfont=TRUE, fontname=NULL, 
+                    fontsize=NULL, bold=FALSE, italic=FALSE, col=NULL,
+                    alignment = c("left","right","center"), spaceBefore=0, spaceAfter=0,
+                    lineSpacingRule = wdConst$wdLineSpaceSingle, 
+                    appendCR=TRUE, wrd=getOption("lastWord") ){
+  
+  if(fixedfont){
+    fontname <- Coalesce(fontname, getOption("fixedfont", "Consolas")) 
+    fontsize <- Coalesce(fontsize, getOption("fixedfontsize", 7))
+  }
   
   if (!inherits(txt, "character"))  txt <- capture.output(txt)
   
@@ -10,13 +19,26 @@ function(txt, fontname="Consolas", fontsize=7, bold=FALSE, italic=FALSE, appendC
     name = wrdFont[["Name"]] ,
     size = wrdFont[["Size"]] ,
     bold = wrdFont[["Bold"]] ,
-    italic = wrdFont[["Italic"]] 
+    italic = wrdFont[["Italic"]],
+    color = wrdFont[["Color"]]
   )  
   
-  wrdFont[["Name"]] <- fontname
-  wrdFont[["Size"]] <- fontsize
+  if(!is.null(fontname)) wrdFont[["Name"]] <- fontname
+  if(!is.null(fontsize)) wrdFont[["Size"]] <- fontsize
   wrdFont[["Bold"]] <- bold
   wrdFont[["Italic"]] <- italic
+  wrdFont[["Color"]] <- Coalesce(col, wdConst$wdColorBlack)
+ 
+  alignment <- switch(match.arg(alignment), 
+                      "left"= wdConst$wdAlignParagraphLeft,
+                      "right"= wdConst$wdAlignParagraphRight,
+                      "center"= wdConst$wdAlignParagraphCenter
+  )      
+                      
+  wrdSel[["ParagraphFormat"]][["Alignment"]] <- alignment
+  wrdSel[["ParagraphFormat"]][["SpaceBefore"]]  <- spaceBefore
+  wrdSel[["ParagraphFormat"]][["SpaceAfter"]]  <- spaceAfter
+  wrdSel[["ParagraphFormat"]][["LineSpacingRule"]] <- lineSpacingRule
   
   wrdSel$TypeText( paste(txt,collapse="\n") )
   if(appendCR) wrdSel$TypeParagraph()
@@ -26,6 +48,7 @@ function(txt, fontname="Consolas", fontsize=7, bold=FALSE, italic=FALSE, appendC
   wrdFont[["Size"]] <- currfont[["size"]]
   wrdFont[["Bold"]] <- currfont[["bold"]]
   wrdFont[["Italic"]] <- currfont[["italic"]]
+  wrdFont[["Color"]] <- currfont[["color"]]
   
   invisible(currfont) 
   

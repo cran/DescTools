@@ -4,7 +4,7 @@
 \title{Pairwise Contrasts
 %%  ~~function to do ... ~~
 }
-\description{Generate pairwise contrasts for using in a post-hoc test, e.g. ScheffeTest.
+\description{Generate all pairwise contrasts for using in a post-hoc test, e.g. ScheffeTest.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -16,10 +16,7 @@ Contrasts(levs)
 %%     ~~Describe \code{levs} here~~
 }
 }
-\details{Describe the contrasts - TODO
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{A matrix with all possible pairwise contrasts.
+\value{A matrix with all possible pairwise contrasts, that can be built with the given levels.
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -36,7 +33,15 @@ Contrasts(levs)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-# Placeholder
+Contrasts(LETTERS[1:5])
+
+#   B-A C-A D-A E-A C-B D-B E-B D-C E-C E-D
+# A  -1  -1  -1  -1   0   0   0   0   0   0
+# B   1   0   0   0  -1  -1  -1   0   0   0
+# C   0   1   0   0   1   0   0  -1  -1   0
+# D   0   0   1   0   0   1   0   1   0  -1
+# E   0   0   0   1   0   0   1   0   1   1
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

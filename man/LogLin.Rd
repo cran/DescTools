@@ -26,14 +26,14 @@ The generalized log and log-linear hybrid transformations were introduced in the
 
 The function LogLin is currently defined as:\cr
 \preformatted{
-function (x, a) {\cr
-  x[x<=a] <- x[x<=a] / a + log(a) - 1\cr 
-  x[x>a] <- log(x[x>a])\cr
-  return(x)\cr
+function (x, a) {
+  x[x<=a] <- x[x<=a] / a + log(a) - 1 
+  x[x>a] <- log(x[x>a])
+  return(x)
 } }
 
 and LogGen as:
-\preformatted{function (x, a) {\cr
+\preformatted{function (x, a) {
  return(log((x + sqrt(x^2 + a^2)) / 2))
 }}
 
@@ -49,18 +49,18 @@ Rocke DM, Durbin B (2003): Approximate variance-stabilizing transformations for 
 Andri Signorell <andri@signorell.net>
 }
 
-\seealso{\code{\link{log}}
+\seealso{\code{\link{LogSt}}, \code{\link{log}}
 }
 
 \examples{
 x <- seq(-10, 50, 0.1 )
 
-plot( LogLin(x, a=5) ~ x, type="l" )
+plot(LogLin(x, a=5) ~ x, type="l")
 grid()
-lines( LogLin(x, a=2) ~ x, col="brown" )
-lines( LogLin(x, a=0.5) ~ x, col="steelblue" )
+lines(LogLin(x, a=2) ~ x, col="brown")
+lines(LogLin(x, a=0.5) ~ x, col="steelblue")
 
-lines( LogGen(x, a=1) ~ x, col="orange" )
+lines(LogGen(x, a=1) ~ x, col="orange")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

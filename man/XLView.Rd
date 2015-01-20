@@ -1,5 +1,7 @@
 \name{XLView}
 \alias{XLView}
+\alias{XLKill}
+
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Use Excel as Viewer for a Data.Frame
@@ -11,6 +13,8 @@ Use Excel as Viewer for a Data.Frame
 }
 \usage{
 XLView(x, col.names = TRUE, row.names = TRUE)
+
+XLKill()
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -27,8 +31,9 @@ XLView(x, col.names = TRUE, row.names = TRUE)
 The data.frame will be exported in CSV format and then imported in Excel.\cr
 Take care: Changes to the data made in Excel will NOT automatically be updated in the original data.frame. 
 The user will have to read the csv-file into R again.
-See examples how to get this done.
-
+See examples how to get this done.\cr\cr
+\code{XLKill} will kill a running XL instance (which might be invisible). Background is the fact, that the simple XL$quit() command
+would not terminate a running XL task, but only set it invisible (observe the TaskManager). This ghost version may sometimes confuse XLView and hinder to create a new instance. In such cases you have to do the garbage collection...
 }
 \value{the name/path of the temporary file edited in Excel. 
 }
