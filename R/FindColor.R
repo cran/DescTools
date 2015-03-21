@@ -2,7 +2,7 @@ FindColor <-
 function(x, cols=rev(heat.colors(100)), min.x=min(pretty(x)), max.x=max(pretty(x)), 
                       all.inside = FALSE){
 
-	# Korrektur von min und max, wenn nicht standardmässig 
+	# Korrektur von min und max, wenn nicht standardmaessig 
 	colrange <- range( pretty(c(min.x,max.x)) )
 
 	# Berechnung des entsprechenden Farb-Index

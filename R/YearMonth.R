@@ -1,5 +1,6 @@
 YearMonth <-
 function(x){
   # returns the yearmonth representation of a date x
-  return(Year(x)*100 + Month(x))
+  x <- as.POSIXlt(x)
+  return((x$year + 1900)*100 + x$mon + 1)
 }

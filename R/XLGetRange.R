@@ -79,7 +79,8 @@ function (file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
         dQuote(paste(xl$ActiveWorkbook()$Path(), 
                      xl$ActiveWorkbook()$Name(), sep="\\"))), 
      dQuote(xl$ActiveSheet()$Name()), 
-     gettextf(paste(dQuote(names(lst)),collapse=",")),
+#     gettextf(paste(dQuote(names(lst)), collapse=",")),
+     gettextf(paste(dQuote(range), collapse=",")),
      as.data.frame, header, stringsAsFactors)
 
   if(!is.null(file)) xl$Quit()  # only quit, if a new XL-instance was created before

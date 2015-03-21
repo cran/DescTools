@@ -1,7 +1,7 @@
 CatTable <-
 function( tab, wcol, nrepchars, width=getOption("width") ) {
 
-  # Wie viele Datenspalten haben vollständig Platz auf einer Linie?
+  # Wie viele Datenspalten haben vollstaendig Platz auf einer Linie?
   ncols <- ( width - nrepchars ) %/% wcol
   # Wieviele Zeilen ergeben sich?
   nrows <- ((nchar(tab[1]) - nrepchars) %/% wcol) / ncols + 

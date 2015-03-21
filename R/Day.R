@@ -1,2 +1,2 @@
 Day <-
-function(x){ as.integer(format(as.Date(x), "%d") ) }
+function(x){ as.POSIXlt(x)$mday }

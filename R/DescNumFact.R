@@ -25,7 +25,7 @@ function( x, grp, digits = NULL
   n <- length(x)
   idcomp <- complete.cases(x, grp)
   vn <- sum(idcomp)
-  dig <- format.info(signif((n-vn)/n*100,3))[2]-2    # hier 3 signifikante Stellen für beide Angaben bestimmen
+  dig <- format.info(signif((n-vn)/n*100,3))[2]-2    # hier 3 signifikante Stellen fuer beide Angaben bestimmen
   
   d.res <- data.frame(
       mean= tapply( x, grp, FUN=mean, na.rm=T ) 
@@ -66,7 +66,7 @@ function( x, grp, digits = NULL
   # d.fmt$width[6] <- max( nchar(formatC(d.res[,6], format="f", digits=d.fmt$digits[6])) )
   
   wmax <- max(c( max(d.fmt$width)   # die maximale Breite der Zahlen
-    , nchar(rownames(d.res))) )     # die maximale Breite der Überschriften
+    , nchar(rownames(d.res))) )     # die maximale Breite der ueberschriften
   lenrowname <- max(nchar(rname))	
   
 	out <- vector(mode="character", length=ncol(d.res)+1)
@@ -87,7 +87,7 @@ function( x, grp, digits = NULL
   cat(gettextf("%s min, %s max\n", Coalesce(getOption("footnote1"),"'"), Coalesce(getOption("footnote2"),'"'))) 
   
   # cat("\nKruskal-Wallis rank sum test:\n  "
-	#   , capture.output( kruskal.test( x ~ grp, na.action = "na.omit" ))[5], "\n", sep="") 
+	#   , .CaptOut( kruskal.test( x ~ grp, na.action = "na.omit" ))[5], "\n", sep="") 
 
   res <- tryCatch(kruskal.test( x ~ grp, na.action = "na.omit"), error=function(e) {e})  
   
@@ -95,7 +95,7 @@ function( x, grp, digits = NULL
     cat(gettextf("\nError in kruskal.test(x) : %s\n\n", res$message))  
   } else {
     cat(gettextf("\nKruskal-Wallis rank sum test:\n  %s", 
-                 capture.output(res)[5], "\n\n", sep=""))
+                 .CaptOut(res)[5], "\n\n", sep=""))
   }
 
   if((sum(is.na(grp)) > 0) & (length(grep("NA",cname))==0))

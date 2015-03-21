@@ -3,6 +3,11 @@ function(x, srow=1:nrow(x), scol=1:ncol(x)){
   
   # calculates Mantel-Haenszel Chisquare test
   
+  # check for rxc 2-dim matrix
+  p <- (d <- dim(x))[1L]
+  if(!is.numeric(x) || length(d) != 2L)
+    stop("'x' is not a rxc numeric matrix")
+
   DNAME <- deparse(substitute(x))
   
   STATISTIC <- (sum(x) - 1) * corr(d=GetPairs(srow, scol), as.vector(x))^2

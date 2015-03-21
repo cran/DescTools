@@ -29,7 +29,7 @@ function(x, main=NULL, digits=3, conf.level=0.95, plotit=getOption("plotit", FAL
   conf_x <- gsub("0\\.", "\\.", format(conf.level, nsmall=2))
   colnames(ci) <- gettextf(c("lci%s","uci%s"), conf_x)
 
-  txt <- gsub(pattern=" 0\\.", replacement="  \\.", x=capture.output(
+  txt <- gsub(pattern=" 0\\.", replacement="  \\.", x=.CaptOut(
       round(rbind( cbind( freq=tab, perc=prop.table(tab), ci)), digits)) )
   
   cat( paste(txt[1], Coalesce(getOption("footnote1"),"'"), sep=""), txt[-1], sep="\n")

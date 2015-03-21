@@ -22,7 +22,7 @@ function (x, main = NULL, p = c(0.8,0.9,0.95,0.99), plotit=getOption("plotit", F
   
   txt <- d.frm
   txt[,2] <- round(txt[,2], 3)
-  txt <- capture.output(txt)
+  txt <- .CaptOut(txt)
   txt <- gsub(pattern = "0\\.", replacement = " \\.", txt)
   
   lres <- list(l1 = list(n = n, `0s` = max(x$p[x$L==0]), Gini=x$Gini))

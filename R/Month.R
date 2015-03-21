@@ -1,12 +1,12 @@
 Month <-
-function (x, format = c("num", "abbr", "full"), lang = c("local", "engl"), stringsAsFactors = TRUE) {
+function (x, fmt = c("m", "mm", "mmm"), lang = c("local", "engl"), stringsAsFactors = TRUE) {
 
-  x <- as.Date(x)
+  res <- as.POSIXlt(x)$mon + 1
   
-  switch(match.arg(arg = format, choices = c("num", "abbr", "full")), 
-         num = { res <- as.integer(format(x, "%m")) }, 
-         abbr = {
-           res <- as.integer(format(x, "%m"))
+  switch(match.arg(arg = fmt, choices = c("m", "mm", "mmm")), 
+         m = { res }, 
+         mm = {
+           # res <- as.integer(format(x, "%m"))
            switch(match.arg(arg = lang, choices = c("local", "engl")), 
              local = {
                # months in current locale:  format(ISOdate(2000, 1:12, 1), "%b")
@@ -17,8 +17,8 @@ function (x, format = c("num", "abbr", "full"), lang = c("local", "engl"), strin
              })
            if(!stringsAsFactors) res <- as.character(res)
          }, 
-         full = {
-           res <- as.integer(format(x, "%m"))
+         mmm = {
+           # res <- as.integer(format(x, "%m"))
            switch(match.arg(arg = lang, choices = c("local", "engl")), 
                   local = {
                     # months in current locale:  format(ISOdate(2000, 1:12, 1), "%b")

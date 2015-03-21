@@ -9,8 +9,8 @@ frequencies of the weekdays and months, rounded up by a chi-square test.
 }
 
 \usage{
-\method{Desc}{Date}(x, main = NULL, maxrows = 10, 
-          digits = 3, plotit = getOption("plotit", FALSE), ...)
+\method{Desc}{Date}(x, main = NULL, maxrows = 10, digits = 3, dprobs = NULL, mprobs = NULL, 
+     plotit = getOption("plotit", FALSE), ...)
       
 }
 
@@ -26,6 +26,9 @@ frequencies of the weekdays and months, rounded up by a chi-square test.
 }
   \item{digits}{integer. With how many digits shoud the relative frequencies be formatted? Default is 3.
 }
+\item{dprobs}{a vector with the probabilities for the chisq.test of the days. If this is left to \code{NULL} (default) then a uniform distribution 
+will be used.}
+\item{mprobs}{a vector with the probabilities for the chisq.test of the months. If this is left to \code{NULL} (default) then the distribution of days will be used (p = c(31/365, 28/365, 31/365, ...).}
   \item{plotit}{boolean. Should a plot be created? The factor is plotted with the factor interface of \code{\link{PlotDesc}}. Default is FALSE.
   
 }

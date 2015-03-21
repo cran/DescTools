@@ -11,24 +11,25 @@ function (x, nlow = 5, nhigh = nlow, na.rm = FALSE) {
   if ((nlow + nhigh) != 0) {
     frqs <- Small(x, k=nlow, unique=TRUE, na.rm=na.rm)
     frql <- Large(x, k=nhigh, unique=TRUE, na.rm=na.rm)
-    frq <- c(frqs, frql)
+    frq <- c(frqs$lengths, frql$lengths)
     
-    vals <- do.call("c", sapply(frq, "[", "val"))
-    n <- unlist(lapply(frq, "[", "n"))
+    vals <- c(frqs$values, frql$values)
     if (is.numeric(x)) {
       vals <- prettyNum(vals, big.mark = "'")
     }
     else {
       vals <- vals
     }
-    frqtxt <- paste(" (", n, ")", sep = "")
-    frqtxt[n < 2] <- ""
+    frqtxt <- paste(" (", frq, ")", sep = "")
+    frqtxt[frq < 2] <- ""
+    
+#     txt <- StrTrim(paste(vals, frqtxt, sep = ""))
+#     lowtxt <- paste(head(txt, nlow), collapse = ", ")
+#     hightxt <- paste(tail(txt, nhigh), collapse = ", ")
+
     txt <- StrTrim(paste(vals, frqtxt, sep = ""))
-    lowtxt <- paste(head(txt, nlow), collapse = ", ")
-    hightxt <- paste(tail(txt, nhigh), collapse = ", ")
-    txt <- StrTrim(paste(vals, frqtxt, sep = ""))
-    lowtxt <- paste(head(txt, min(length(frqs), nlow)), collapse = ", ")
-    hightxt <- paste(tail(txt, min(length(frql), nhigh)), collapse = ", ")
+    lowtxt <- paste(head(txt, min(length(frqs$lengths), nlow)), collapse = ", ")
+    hightxt <- paste(tail(txt, min(length(frql$lengths), nhigh)), collapse = ", ")
   }
   else {
     lowtxt <- ""

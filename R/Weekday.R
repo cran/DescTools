@@ -1,13 +1,14 @@
 Weekday <-
-function (x, format = c("num", "abbr", "full"), lang = c("local", "engl"), stringsAsFactors = TRUE) {
+function (x, fmt = c("d", "dd", "ddd"), lang = c("local", "engl"), stringsAsFactors = TRUE) {
 
-  x <- as.Date(x)
+  # x <- as.Date(x)
+  res <- as.POSIXlt(x)$wday
+  res <- replace(res, res==0, 7)
   
-  switch(match.arg(arg = format, choices = c("num", "abbr", "full")), 
-         num = { res <- ifelse((wd <- as.integer(format(x, "%w"))) == 0, 7, wd) }, 
-         abbr = {
+  switch(match.arg(arg = fmt, choices = c("d", "dd", "ddd")), 
+         d = { res }, 
+         dd = {
            # weekdays in current locale, Sunday : Saturday, format(ISOdate(2000, 1, 2:8), "%A")
-           res <- ifelse((wd <- as.integer(format(x, "%w"))) == 0, 7, wd) 
            switch(match.arg(arg = lang, choices = c("local", "engl")), 
                   local = {
                     # months in current locale:  format(ISOdate(2000, 1:12, 1), "%b")
@@ -18,9 +19,8 @@ function (x, format = c("num", "abbr", "full"), lang = c("local", "engl"), strin
                   })
            if(!stringsAsFactors) res <- as.character(res)
          }, 
-         full = {
+         ddd = {
            # weekdays in current locale, Sunday : Saturday, format(ISOdate(2000, 1, 2:8), "%A")
-           res <- ifelse((wd <- as.integer(format(x, "%w"))) == 0, 7, wd) 
            switch(match.arg(arg = lang, choices = c("local", "engl")), 
                   local = {
                     # months in current locale:  format(ISOdate(2000, 1:12, 1), "%b")

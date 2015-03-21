@@ -1,5 +1,5 @@
 PlotQQ <-
-function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, args.qqline=NULL, ...){
+function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, args.qqline=NULL,  ...){
 
   # qqplot for an optional distribution
 
@@ -8,20 +8,35 @@ function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, args.qqline=NULL, ...){
   # PlotQQ(y, function(p) qexp(p, rate=1/10))
   
   y <- sort(x)
-  x <- ppoints(y)
-  x <- qdist(x)
+  p <- ppoints(y)
+  x <- qdist(p)
   
   if(is.null(main)) main <- gettextf("Q-Q-Plot", qdist)
   if(is.null(xlab)) xlab <- "Theoretical Quantiles"
   if(is.null(ylab)) ylab <- "Sample Quantiles"
   
-  plot(x=x, y, main=main, xlab=xlab, ylab=ylab)
+  plot(x=x, y, main=main, xlab=xlab, ylab=ylab, ...)
+
+  
+# John Fox implements a envelope option in car::qqplot, in the sense of:
+#   (unfortunately using ddist...)
+# 
+#   # add qqline if desired
+#   if(!identical(args.band, NA)) {
+#     n <- length(x)
+#     zz <- qnorm(1 - (1 - args.band$conf.level) / 2)
+#     SE <- (slope / d.function(z, ...)) * sqrt(p * (1 - p) / n)
+#     fit.value <- int + slope * z
+#     
+#     upper <- fit.value + zz * SE
+#     lower <- fit.value - zz * SE
+#     
+#     lines(z, upper, lty = 2, lwd = lwd, col = col.lines)
+#     lines(z, lower, lty = 2, lwd = lwd, col = col.lines)
+#   }
 
   # add qqline if desired
-  add.qqline <- TRUE
-  if(!is.null(args.qqline)) if(all(is.na(args.qqline))) {add.qqline <- FALSE} 
-  
-  if(add.qqline) {
+  if(!identical(args.qqline, NA)) {
 
     # define default arguments for ci.band
     args.qqline1 <- list(probs = c(0.25, 0.75), qtype=7, col=par("fg"), lwd=par("lwd"), lty=par("lty")) 

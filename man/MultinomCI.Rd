@@ -45,17 +45,20 @@ The number of rows correspond to the dimension of x.
 
 }
 \references{
-Sison, C.P and Glaz, J. (1995): Simultaneous confidence intervals and sample size determination
+Sison, C.P and Glaz, J. (1995) Simultaneous confidence intervals and sample size determination
 for multinomial proportions. \emph{Journal of the American Statistical Association}, 90:366-369.
 
 \url{http://tx.liberal.ntu.edu.tw/~purplewoo/Literature/!Methodology/!Distribution_SampleSize/SimultConfidIntervJASA.pdf}
 
-Glaz, J., Sison, C.P. (1999): Simultaneous confidence intervals for multinomial proportions. 
+Glaz, J., Sison, C.P. (1999) Simultaneous confidence intervals for multinomial proportions. 
 \emph{Journal of Statistical Planning and Inference} 82:251-262. 
 
-May, W.L., Johnson, W.D.(2000): Constructing two-sided simultaneous confidence intervals for 
+May, W.L., Johnson, W.D.(2000) Constructing two-sided simultaneous confidence intervals for 
 multinomial proportions for small counts in a large number of cells. \emph{Journal of Statistical Software} 5(6) .
 Paper and code available at \url{http://www.jstatsoft.org/v05/i06}.
+
+Goodman, L. A. (1965) On Simultaneous Confidence Intervals for Multinomial
+Proportions \emph{Technometrics}, 7, 247-254.
 }
 
 \examples{

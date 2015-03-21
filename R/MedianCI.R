@@ -3,7 +3,7 @@ function(x, conf.level=0.95, na.rm=FALSE, method=c("exact","boot"), R=999) {
   if(na.rm) x <- na.omit(x)
   
   # alte Version, ziemlich grosse Unterschiede zu wilcox.test:
-  # Bosch: Formelsammlung Statistik (bei Markus Näpflin), S. 95 
+  # Bosch: Formelsammlung Statistik (bei Markus Naepflin), S. 95 
   # x <- sort(x)
   # return( c( 
   # x[ qbinom(alpha/2,length(x),0.5) ], ### lower limit

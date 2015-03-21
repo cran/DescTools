@@ -26,7 +26,7 @@ function(x, which=NULL, contrasts = NULL, conf.level=0.95, ...){
     contrasts <- data.frame(contrasts)
   }
   
-  nm <- "tension"
+  # nm <- "tension"
   for (nm in names(tabs)) {
     tab <- tabs[[nm]]
     means <- as.vector(tab)
@@ -46,7 +46,7 @@ function(x, which=NULL, contrasts = NULL, conf.level=0.95, ...){
     sscoeff <- apply(contrasts * contrasts / n, 2, sum)
     mspsi <- (psi * psi) / sscoeff
     
-# Korrektur von Daniel Wollschläger 9.9.2014:
+# Korrektur von Daniel Wollschlaeger 9.9.2014:
 #     psi <- contrasts %*% means
 #     sscoeff <- contrasts * contrasts %*% (1/n)
     

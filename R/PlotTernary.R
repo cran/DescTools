@@ -26,7 +26,7 @@ function(x, y = NULL, z = NULL, args.grid=NULL, lbl = NULL, main = "", ...){
   
   # grid: define default arguments 
   if(!identical(args.grid, NA)){
-    args.grid1 <- list(col="grey", lty="dotted", nx=10) 
+    args.grid1 <- list(col="grey", lty="dotted", nx=5) 
     # override default arguments with user defined ones
     if (!is.null(args.grid)) { 
       args.grid1[names(args.grid)] <- args.grid 
@@ -36,6 +36,7 @@ function(x, y = NULL, z = NULL, args.grid=NULL, lbl = NULL, main = "", ...){
     x0 <- -sq3 + (1) * d
     segments(x0 = x0, y0 = -0.5, x1 = x0 + sq3 - d*.5, y1 = 1- d * sq3, col=args.grid1$col, lty=args.grid1$lty)
     segments(x0 = x0, y0 = -0.5, x1 = -rev(x0 + sq3 - d*.5), y1 = rev(1- d * sq3), col=args.grid1$col, lty=args.grid1$lty)
+    segments(x0 = x0 + sq3 - d*.5, y0 = 1- d * sq3, x1 = rev(x0 -d*.5), y1 = 1- d * sq3, col=args.grid1$col, lty=args.grid1$lty)
   }
   
   DrawRegPolygon(nv = 3, rot = pi/2, radius.x = 1, col=NA)

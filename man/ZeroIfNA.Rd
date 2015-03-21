@@ -12,7 +12,7 @@
 \usage{
 ZeroIfNA(x)
 
-Impute(x, FUN = median)
+Impute(x, FUN = function(x) median(x, na.rm = TRUE))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

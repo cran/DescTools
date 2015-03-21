@@ -121,6 +121,16 @@ dp <- data.frame (a=c(20,7,0,0), b=c(0,0,0,12), t=c(1,0,1,0))
 fit <- glm(cbind(a,b) ~ t, binomial, dp)
 
 exp(coef(fit))
+
+# calculation of log oddsratios in a 2x2xk table
+migraine <- xtabs(freq ~ ., 
+                  cbind(expand.grid(treatment=c("active","placebo"), 
+                                    response=c("better","same"), 
+                                    gender=c("female","male")),
+                        freq=c(16,5,11,20,12,7,16,19))
+)
+ 
+log(apply(migraine, 3, OddsRatio))
 }
 
 \keyword{models}

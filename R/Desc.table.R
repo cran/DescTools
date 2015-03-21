@@ -27,32 +27,34 @@ function(x, main=NULL, rfrq = NULL, margins = c(1,2),
         "n: ", n, ", ", length(dim(x)), "-dim table: ", paste(dim(x), collapse=" x ")  
         , "\n\n", sep="" ) 
         
-    r.chisq <- chisq.test(x)
-    cat("Pearson's Chi-squared test:\n  "
-        , capture.output(r.chisq)[5], "\n", sep="")
-    if(verbose > 1){ # print only with verbosity > 1
-      
-      # Log-likelihood chi-squared (G2) test of independence (homogeneity)
-      lhrat <- 2 * sum(r.chisq$observed * log(r.chisq$observed/r.chisq$expected), na.rm=TRUE)
-      alpha <- pchisq(lhrat, df=r.chisq$parameter, lower.tail = FALSE)
-      cat(gettextf("Likelihood Ratio:\n  X-squared = %s, df = %s, p-value = %s\n",
-                   round(lhrat, 4), r.chisq$parameter, format.pval(alpha, digits=4)))
-      # Mantel-Haenszel ChiSquared (linear hypothesis)
-      mh <- MHChisqTest(x)
-      alpha <- mh$p.value
-      cat(gettextf("Mantel-Haenszel Chi-squared:\n  X-squared = %s, df = %s, p-value = %s\n\n",
-                   round(mh$statistic, 4), 1, format.pval(alpha, digits=4)))
-    }
+# 2005-03-14: chisq.test stops to accept multdim tables, so we skip this too
+#             (has it never been correct?) 
+# 
+#     r.chisq <- chisq.test(x)
+#     cat("Pearson's Chi-squared test:\n  "
+#         , .CaptOut(r.chisq)[5], "\n", sep="")
+#     if(verbose > 1){ # print only with verbosity > 1
+#       
+#       # Log-likelihood chi-squared (G2) test of independence (homogeneity)
+#       lhrat <- 2 * sum(r.chisq$observed * log(r.chisq$observed/r.chisq$expected), na.rm=TRUE)
+#       alpha <- pchisq(lhrat, df=r.chisq$parameter, lower.tail = FALSE)
+#       cat(gettextf("Likelihood Ratio:\n  X-squared = %s, df = %s, p-value = %s\n",
+#                    round(lhrat, 4), r.chisq$parameter, format.pval(alpha, digits=4)))
+#       # Mantel-Haenszel ChiSquared (linear hypothesis)
+#       mh <- MHChisqTest(x)
+#       alpha <- mh$p.value
+#       cat(gettextf("Mantel-Haenszel Chi-squared:\n  X-squared = %s, df = %s, p-value = %s\n\n",
+#                    round(mh$statistic, 4), 1, format.pval(alpha, digits=4)))
+#     }
     
     print(ftable(addmargins(x, c(1, length(dim(x))))))
     cat("\n")
-    
-    
+
     
   } else {  # 2-dimensional table
   
   #  vn <- sum(complete.cases(x,grp))
-  #  digits <- format.info(signif((n-vn)/n*100,3))[2]-2    ### hier 3 signifikante Stellen für beide Angaben bestimmen
+  #  digits <- format.info(signif((n-vn)/n*100,3))[2]-2    ### hier 3 signifikante Stellen fuer beide Angaben bestimmen
     if(length(dim(x))==1) {       # 1-dim table ****
       cat("\nSummary: \n",
           "n: ", n,
@@ -61,7 +63,7 @@ function(x, main=NULL, rfrq = NULL, margins = c(1,2),
       
       r.chisq <- chisq.test(x)
       cat("Pearson's Chi-squared test (1-dim uniform):\n  "
-          , capture.output(r.chisq)[5], "\n\n", sep="")
+          , .CaptOut(r.chisq)[5], "\n\n", sep="")
       
     } else {                   # n-dim tabl *****
   
@@ -80,10 +82,10 @@ function(x, main=NULL, rfrq = NULL, margins = c(1,2),
       if(dim(x)[1] == 2 & dim(x)[2] == 2 ){
         r.chisq <- chisq.test(x)
         cat("Pearson's Chi-squared test:\n  "
-            , capture.output(r.chisq)[5], "\n", sep="")
-        cat("Fisher's exact test ", capture.output( fisher.test(x))[5], "\n", sep="")
+            , .CaptOut(r.chisq)[5], "\n", sep="")
+        cat("Fisher's exact test ", .CaptOut( fisher.test(x))[5], "\n", sep="")
         if(verbose > 1){ # print only with verbosity > 1
-          cat("", capture.output( mcnemar.test(x))[5], "\n\n", sep="")
+          cat("", .CaptOut( mcnemar.test(x))[5], "\n\n", sep="")
           m <- ftable(format(rbind(
              "odds ratio    " = OddsRatio(x, conf.level=0.95)
             , "rel. risk (col1)  " = RelRisk(x, conf.level=0.95, method="wald", delta=0)
@@ -97,7 +99,7 @@ function(x, main=NULL, rfrq = NULL, margins = c(1,2),
       } else {
         r.chisq <- chisq.test(x)
         cat("Pearson's Chi-squared test:\n  "
-          , capture.output(r.chisq)[5], "\n", sep="")
+          , .CaptOut(r.chisq)[5], "\n", sep="")
         if(verbose > 1){ # print only with verbosity > 1
           
           # Log-likelihood chi-squared (G2) test of independence (homogeneity)
@@ -138,7 +140,10 @@ function(x, main=NULL, rfrq = NULL, margins = c(1,2),
   
   }
 
-  if(plotit) PlotDesc.table(x, main=main)
+  if(plotit) {
+    horiz <- InDots(..., arg="horiz", default=FALSE)
+    PlotDesc.table(x, main=main, horiz = horiz)
+  }  
   invisible()
 
 }

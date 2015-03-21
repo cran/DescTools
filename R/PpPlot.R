@@ -11,16 +11,31 @@ function( type="png", crop=c(0,0,0,0),
   .CentimetersToPoints <- function(x) x * 28.35
   .PointsToCentimeters <- function(x) x / 28.35
   # http://msdn.microsoft.com/en-us/library/bb214076(v=office.12).aspx
+
+  # handle missing height or width values
+  if (is.na(width) ){
+    if (is.na(height)) {
+      width <- 14
+      height <- par("pin")[2] / par("pin")[1] * width
+    } else {
+      width <- par("pin")[1] / par("pin")[2] * height
+    }
+  } else {
+    if (is.na(height) ){
+      height <- par("pin")[2] / par("pin")[1] * width
+    }
+  }
+  
   
   # get a [type] tempfilename:
   fn <- paste( tempfile(pattern = "file", tmpdir = tempdir()), ".", type, sep="" )
   # this is a problem for RStudio....
   # savePlot( fn, type=type )
   # png(fn, width=width, height=height, units="cm", res=300 )
-  dev.copy(png, fn, width=width*dfact, height=height*dfact, res=res, units="cm")
+  dev.copy(eval(parse(text=type)), fn, width=width*dfact, height=height*dfact, res=res, units="cm")
   d <- dev.off()
+
   
-  # add it to our word report
   # slide <- pp[["ActivePresentation"]][["Slides"]]$Item(1)
   slide <- pp$ActiveWindow()$View()$Slide()
   pic <- slide[["Shapes"]]$AddPicture(fn, FALSE, TRUE, x, y)

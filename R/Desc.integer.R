@@ -26,7 +26,7 @@ function(x, main = NULL, maxrows = 12, freq = NULL
         frq <- Freq(x = as.factor(x))
   
         opt <- options(digits=digits)
-        txt.frq <- capture.output(frq)
+        txt.frq <- .CaptOut(frq)
         options(opt)
         
         txt.frq <- paste(substr(txt.frq, 0, regexpr("level", txt.frq[1]) + 5), 

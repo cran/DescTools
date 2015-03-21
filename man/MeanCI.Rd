@@ -19,14 +19,13 @@ MeanCI(x, sd = NULL, trim = 0, method = c("classic", "boot"),
   \item{x}{a (non-empty) numeric vector of data values.
 %%     ~~Describe \code{x} here~~
 }
-\item{sd}{the standard deviation of x. If provided it's interpreted as sd of the population and the normal quantiles will be used for constructing the confidence intervals. If left to \code{NULL} (default) the sample sd(x) will be used in combination with the t-distribution.}
+\item{sd}{the standard deviation of x. If provided it's interpreted as sd of the population and the normal quantiles will be used for constructing the confidence intervals. If left to \code{NULL} (default) the sample sd(x) will be calculated and used in combination with the t-distribution.}
 
-  \item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each end of x before the mean is computed. Values of trim outside that range are taken as the nearest endpoint.\cr 
-  For trimmed means there are no classic confidence intervals available and bootstrap method must be used. Avoid using studentized boostrap method for trimmed means (use rather type \code{perc} or \code{bca}).
+  \item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each end of x before the mean is computed. Values of \code{trim} outside that range are taken as the nearest endpoint. 
 %%     ~~Describe \code{x} here~~
 }
   \item{method}{A vector of character strings representing the type of intervals required. The value should be any subset of the values \code{"classic"}, \code{"boot"}. 
-  See \code{\link{boot.ci}}.
+  See \code{\link{boot.ci}}. 
 %%     ~~Describe \code{x} here~~
 }
   \item{conf.level}{confidence level of the interval.

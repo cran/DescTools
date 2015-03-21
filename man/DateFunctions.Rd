@@ -28,11 +28,11 @@
 \usage{
 Year(x)
 Quarter(x)
-Month(x, format = c("num", "abbr", "full"), lang = c("local", "engl"), 
+Month(x, fmt = c("m", "mm", "mmm"), lang = c("local", "engl"), 
       stringsAsFactors = TRUE)
-Week(x)
+Week(x, method = c("iso", "us"))
 Day(x)
-Weekday(x, format = c("num", "abbr", "full"), lang = c("local", "engl"), 
+Weekday(x, fmt = c("d", "dd", "ddd"), lang = c("local", "engl"), 
         stringsAsFactors = TRUE)
 YearDay(x)
 YearMonth(x)
@@ -59,7 +59,7 @@ LastDayOfMonth(x)
   \item{x}{the date to be evaluated.
 %%     ~~Describe \code{x} here~~
 }
-  \item{format}{defines how the month or the weekday are to be formatted. Defaults to \kbd{"num"}  and can be abbreviated. Is ignored for other functions.
+  \item{fmt}{format string, defines how the month or the weekday are to be formatted. Defaults to \kbd{"m"}, resp. \kbd{"d"}. Is ignored for other functions.
 %%     ~~Describe \code{format} here~~
 }
   \item{value}{new value
@@ -113,16 +113,16 @@ Andri Signorell <andri@signorell.net>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-x <- Today()    # the same as Sys.Date() but easier to remember..  
+x <- Today()    # the same as Sys.Date() but maybe easier to remember..  
 
 Year(x)
 Quarter(x)
 
 Month(x)
-Month(x, format = "abb", lang="engl")
-Month(x, format = "abb", lang="local")
-Month(x, format = "full", lang="engl")
-Month(x, format = "full", lang="local")
+Month(x, fmt = "mm", lang="engl")
+Month(x, fmt = "mm", lang="local")
+Month(x, fmt = "mmm", lang="engl")
+Month(x, fmt = "mmm", lang="local")
 
 Week(x)
 
@@ -131,10 +131,10 @@ Day(x) <- 20
 x
 
 Weekday(x)
-Weekday(x, format = "abb", lang="engl")
-Weekday(x, format = "abb", lang="local")
-Weekday(x, format = "full", lang="engl")
-Weekday(x, format = "full", lang="local")
+Weekday(x, fmt = "dd", lang="engl")
+Weekday(x, fmt = "dd", lang="local")
+Weekday(x, fmt = "ddd", lang="engl")
+Weekday(x, fmt = "ddd", lang="local")
 
 YearDay(x)
 
@@ -143,7 +143,7 @@ IsWeekend(x)
 IsLeapYear(x)
 
 # let's generate a time sequence by weeks
-Month(seq(from=as.Date(Sys.Date()), to=Sys.Date()+150, by="weeks"), format="a")
+Month(seq(from=as.Date(Sys.Date()), to=Sys.Date()+150, by="weeks"), fmt="mm")
 
 LastDayOfMonth(as.Date(c("2014-10-12","2013-01-31","2011-12-05")))
 

@@ -69,24 +69,23 @@ Desc(d.pizza$wrongpizza, main="The wrong pizza delivered", digits=5)
 
     
 # just selected bivariate analysis on the console
-Desc( price ~ operator, data=d.pizza)                  # numeric ~ factor
-Desc( driver ~ operator, data=d.pizza)                 # factor ~ factor 
-Desc( driver ~ area + operator, data=d.pizza)          # factor ~ several factors
-Desc( driver + area ~ operator, data=d.pizza)          # several factors ~ factor
-Desc( driver ~ week, data=d.pizza )                    # factor ~ integer will be changed 
-                                                       #   into:   week (int) ~ driver (fact)
+Desc(price ~ operator, data=d.pizza)                  # numeric ~ factor
+Desc(driver ~ operator, data=d.pizza)                 # factor ~ factor 
+Desc(driver ~ area + operator, data=d.pizza)          # factor ~ several factors
+Desc(driver + area ~ operator, data=d.pizza)          # several factors ~ factor
+Desc(driver ~ week, data=d.pizza)                     # factor ~ integer 
 
-Desc( driver ~ operator, data=d.pizza, rfrq=("111"))   # alle rel. frequencies
-# Desc( driver ~ operator, data=d.pizza
-#  , rfrq=("000"), show.mutinf=TRUE)                   # no rel. frequencies, but mutual information
+Desc(driver ~ operator, data=d.pizza, rfrq=("111"))   # alle rel. frequencies
+Desc(driver ~ operator, data=d.pizza, rfrq=("000"), 
+     verbose="high")                                  # no rel. frequencies 
 
-Desc( price ~ delivery_min, data=d.pizza )             # numeric ~ numeric
-Desc( price + delivery_min ~ operator + driver + wrongpizza
-  , data=d.pizza, digits=c(2,2,2,2,0,3,0,0) ) 
+Desc(price ~ delivery_min, data=d.pizza)              # numeric ~ numeric
+Desc(price + delivery_min ~ operator + driver + wrongpizza,
+     data=d.pizza, digits=c(2,2,2,2,0,3,0,0) ) 
 
-Desc( week ~ driver, data=d.pizza, digits=c(2,2,2,2,0,3,0,0) )   # define digits
+Desc(week ~ driver, data=d.pizza, digits=c(2,2,2,2,0,3,0,0))   # define digits
 
-Desc( delivery_min + weekday ~ driver, data=d.pizza ) 
+Desc(delivery_min + weekday ~ driver, data=d.pizza) 
 
 
 # without defining data-parameter
@@ -100,15 +99,15 @@ Desc( log(price+1) ~ cut(delivery_min, breaks=seq(10,90,10))
 
 
 # internal functions (not meant to be used by the enduser):
-Desc.factor( d.pizza$driver, ord="n" )  # ordered by name
-Desc.factor( d.pizza$driver, ord="l" )  # ordered by level
+Desc.factor(d.pizza$driver, ord="n")  # ordered by name
+Desc.factor(d.pizza$driver, ord="l")  # ordered by level
 Desc.logical(d.pizza$wrongpizza)
-Desc.integer( d.pizza$weekday)
-Desc.integer( d.pizza$weekday, maxlevels=3 )
-Desc.numeric( d.pizza$count, highlow=FALSE )
-Desc.numeric( d.pizza$count, highlow=TRUE )
+Desc.integer(d.pizza$weekday)
+Desc.integer(d.pizza$weekday, maxlevels=3)
+Desc.numeric(d.pizza$count, highlow=FALSE)
+Desc.numeric(d.pizza$count, highlow=TRUE)
  
-DescNumFact( x=d.pizza$delivery_min, grp=d.pizza$operator )
-DescNumNum( x=d.pizza$delivery_min, y=d.pizza$price )
+DescNumFact(x=d.pizza$delivery_min, grp=d.pizza$operator)
+DescNumNum(x=d.pizza$delivery_min, y=d.pizza$price)
 }
 \keyword{ print }

@@ -9,19 +9,19 @@ function( topic ) {
     file.show(file)
   } else {
     
-    ## Local copy of trim.character to avoid cyclic dependency with gdata ##
-    trim <-  function(s) {
-      
-      s <- sub(pattern="^[[:blank:]]+", replacement="", x=s)
-      s <- sub(pattern="[[:blank:]]+$", replacement="", x=s)
-      s
-    }
+#     ## Local copy of trim.character to avoid cyclic dependency with gdata ##
+#     trim <-  function(s) {
+#       
+#       s <- sub(pattern="^[[:blank:]]+", replacement="", x=s)
+#       s <- sub(pattern="[[:blank:]]+$", replacement="", x=s)
+#       s
+#     }
     
     kw <- scan(file=file, what=character(), sep="\n", quiet=TRUE)
     kw <- grep("&", kw, value=TRUE)
     kw <- gsub("&[^&]*$","", kw)
     kw <- gsub("&+"," ", kw)
-    kw <- na.omit(trim(kw))
+    kw <- na.omit(StrTrim(kw))
     
     ischar <- tryCatch(is.character(topic) && length(topic) ==
                          1L, error = identity)
@@ -32,7 +32,14 @@ function( topic ) {
     
     item <- paste("^",topic,"$", sep="")
     
-    topics <- function(k) help.search(keyword=k)$matches[,"topic"]
+    # old, replaced by suggestion of K. Hornik 23.2.2015
+    # topics <- function(k) help.search(keyword=k)$matches[,"topic"]
+    
+    topics <- function(k) {
+      matches <- help.search(keyword=k)$matches
+      matches[ , match("topic", tolower(colnames(matches)))]
+    }
+    
     matches <- lapply(kw, topics)
     names(matches) <- kw
     

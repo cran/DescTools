@@ -1,18 +1,25 @@
 SiegelTukeyRank <-
-function(x, g) {
+function(x, g, drop.median = TRUE) {
     
+    # they do not drop the median in:
+    # http://en.wikipedia.org/wiki/Siegel%E2%80%93Tukey_test
+    # A <- c(33,62,84,85,88,93,97); B <- c(4,16,48,51,66,98)
+    # this is wrong there, as the author did not leave the median out
+  
     ord.x <- order(x, g)
     sort.x <- x[ord.x]
     sort.id <- g[ord.x]
     
     n <- length(x)
-    if(n %% 2 > 0) {
-      # gonna have to drop the (first) median value
-      # as we sorted by the groupsize, this will be the one out of the bigger group (if existing)
-      fm <- which( sort.x == median(sort.x))[1]
-      sort.x <- sort.x[-fm]
-      sort.id <- sort.id[-fm]
-      n <- n-1
+    if(drop.median){
+      if(n %% 2 > 0) {
+        # gonna have to drop the (first) median value
+        # as we sorted by the groupsize, this will be the one out of the bigger group (if existing)
+        fm <- which( sort.x == median(sort.x))[1]
+        sort.x <- sort.x[-fm]
+        sort.id <- sort.id[-fm]
+        n <- n-1
+      }
     }
     
     base1 <- c(1, 4)

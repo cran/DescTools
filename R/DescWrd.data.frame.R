@@ -1,10 +1,10 @@
 DescWrd.data.frame <-
 function (x, wrd, main = NULL, enum = TRUE, ...) {
     
-  # Start report:     data.frame  Infos einfügen **************
+  # Start report:     data.frame  Infos einfuegen **************
   WrdCaption( "Describe data.frame", wrd=wrd )  
   wrd[["Selection"]]$TypeParagraph()
-  WrdText(capture.output(Str(x, list.len = Inf)), wrd = wrd)
+  WrdText(.CaptOut(Str(x, list.len = Inf)), wrd = wrd)
   wrd[["Selection"]]$TypeParagraph()
   wrd[["Selection"]]$TypeParagraph()
 

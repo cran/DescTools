@@ -4,7 +4,7 @@ function(x, y = NULL) {
   if( missing(y)) {  # kein y vorhanden, use x only
     data.frame( t(combn(x, 2)), stringsAsFactors=F )
   } else {  
-    # wenn y definiert ist, wird all.x zu all.y zurückgegeben
+    # wenn y definiert ist, wird all.x zu all.y zurueckgegeben
     expand.grid(x, y, stringsAsFactors=F )
   }  
 }

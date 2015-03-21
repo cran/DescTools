@@ -3,7 +3,7 @@ function(x, sep=paste(rep("-",(as.numeric(options("width"))-2)), collapse=""),
                       main = NULL, enum = TRUE, ...) {
 
   cat("\n", sep, "\n", sep="")
-  cat(capture.output(Str(x, list.len=Inf)), sep="\n")  	# Overview
+  cat(.CaptOut(Str(x, list.len=Inf)), sep="\n")  	# Overview
   cat("\n")
   
   if(is.null(main))

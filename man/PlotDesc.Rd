@@ -42,7 +42,7 @@ PlotDesc(x, ..., wrd = NULL)
 \method{PlotDesc}{factor}(x, main = deparse(substitute(x)), 
          ord = c("desc", "level", "name", "asc", "none"), 
          maxrows = 10, lablen = 25, type = c("bar","dot"), 
-         col = NULL, border = NULL, ..., wrd = NULL)
+         col = NULL, border = NULL, xlim=NULL, ecdf=FALSE, ..., wrd = NULL)
          
 \method{PlotDesc}{table}(x, col1 = getOption("col1", hblue), 
          col2 = getOption("col2", hred),
@@ -83,6 +83,8 @@ PlotDescNumNum(form1, form2, data, main = NULL, xlab = NULL, ylab = NULL, ..., w
   \item{border}{the color of the border, if the plottype is barplot or dotplot}
   \item{xlab}{the label for the x-axis.}
   \item{ylab}{the label for the y-axis.}
+  \item{xlim}{the limits of the x-axis in factor plots.}
+  \item{ecdf}{logical, defining if cumulative frequencies should be displayed in PlotDesc.factor. Defaults to FALSE.}
   \item{breaks}{vector of limits to bin a date.}
   \item{horiz}{logical, indicating if the two mosaicplots should be arranged horizontally (default is \code{TRUE}).}
   

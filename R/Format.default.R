@@ -19,67 +19,75 @@ function(x, digits = NULL, sci = getOption("scipen")
       fpat <- ""
       
       i <- 1
-      if(length(grep("\\bd{4}\\b", fmt)) > 0) {
+# we used here:
+#       if(length(grep("\\bd{4}\\b", fmt)) > 0) 
+# which found dddd only as separated string from others (\b ... blank)
+# this is not suitable for formats like yyyymmdd
+# hence this was changed to d{4}
+
+#      if(length(grep("\\bd{4}\\b", fmt)) > 0) {
+      if(length(grep("d{4}", fmt)) > 0) {
         fmt <- gsub(pattern = "dddd", replacement = paste("\\\\", i, sep=""), x = fmt)
         pat <- paste(pat, "(.+)-", sep="")
         fpat <- paste(fpat, "%A-", sep="")
         i <- i+1
       }  
-      if(length(grep("\\bd{3}\\b", fmt)) > 0) {
+#      if(length(grep("\\bd{3}\\b", fmt)) > 0) {
+      if(length(grep("d{3}", fmt)) > 0) {
         fmt <- gsub(pattern = "ddd", replacement = paste("\\\\", i, sep=""), x = fmt)
         pat <- paste(pat, "(.+)-", sep="")
         fpat <- paste(fpat, "%a-", sep="")
         i <- i+1
       }  
-      if(length(grep("\\bd{2}\\b", fmt)) > 0) {
+      if(length(grep("d{2}", fmt)) > 0) {
         fmt <- gsub(pattern = "dd", replacement = paste("\\\\", i, sep=""), x = fmt)
         pat <- paste(pat, "(.+)-", sep="")
         fpat <- paste(fpat, "%d-", sep="")
         i <- i+1
       }  
-      if(length(grep("\\bd{1}\\b", fmt)) > 0) {
+      if(length(grep("d{1}", fmt)) > 0) {
         fmt <- gsub(pattern = "d", replacement = paste("\\\\", i, sep=""), x = fmt)
         pat <- paste(pat, "0?(.+)-", sep="")
         fpat <- paste(fpat, "%d-", sep="")
         i <- i+1
       }  
-      if(length(grep("\\bm{4}\\b", fmt)) > 0) {
+      if(length(grep("m{4}", fmt)) > 0) {
         fmt <- gsub(pattern = "mmmm", replacement = paste("\\\\", i, sep=""), x = fmt)
         pat <- paste(pat, "(.+)-", sep="")
         fpat <- paste(fpat, "%B-", sep="")
         i <- i+1
       }  
-      if(length(grep("\\bm{3}\\b", fmt)) > 0) {
+      if(length(grep("m{3}", fmt)) > 0) {
         fmt <- gsub(pattern = "mmm", replacement = paste("\\\\", i, sep=""), x = fmt)
         pat <- paste(pat, "(.+)-", sep="")
         fpat <- paste(fpat, "%b-", sep="")
         i <- i+1
       }  
-      if(length(grep("\\bm{2}\\b", fmt)) > 0) {
+      if(length(grep("m{2}", fmt)) > 0) {
         fmt <- gsub(pattern = "mm", replacement = paste("\\\\", i, sep=""), x = fmt)
         pat <- paste(pat, "(.+)-", sep="")
         fpat <- paste(fpat, "%m-", sep="")
         i <- i+1
       }  
-      if(length(grep("\\bm{1}\\b", fmt)) > 0) {
+      if(length(grep("m{1}", fmt)) > 0) {
         fmt <- gsub(pattern = "m", replacement = paste("\\\\", i, sep=""), x = fmt)
         pat <- paste(pat, "0?(.+)-", sep="")
         fpat <- paste(fpat, "%m-", sep="")
         i <- i+1
       }  
-      if(length(grep("\\by{4}\\b", fmt)) > 0) {
+      if(length(grep("y{4}", fmt)) > 0) {
         fmt <- gsub(pattern = "yyyy", replacement = paste("\\\\", i, sep=""), x = fmt)
         pat <- paste(pat, "(.+)-", sep="")
         fpat <- paste(fpat, "%Y-", sep="")
         i <- i+1
       }  
-      if(length(grep("\\by{2}\\b", fmt)) > 0) {
+      if(length(grep("y{2}", fmt)) > 0) {
         fmt <- gsub(pattern = "yy", replacement = paste("\\\\", i, sep=""), x = fmt)
         pat <- paste(pat, "(.+)-", sep="")
         fpat <- paste(fpat, "%y-", sep="")
         i <- i+1
       }  
-      if(length(grep("\\by{1}\\b", fmt)) > 0) {
+      if(length(grep("y{1}", fmt)) > 0) {
         fmt <- gsub(pattern = "y", replacement = paste("\\\\", i, sep=""), x = fmt)
         pat <- paste(pat, "0?(.+)-", sep="")
         fpat <- paste(fpat, "%y-", sep="")

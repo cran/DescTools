@@ -26,7 +26,7 @@ function(x, col1=getOption("col1", hblue), col2=getOption("col2", hred),
       par(mfrow=c(1,2))
       par(mar=c(5.1,2.1,1.1,0.5), oma=c(0,0,ifelse(is.na(main), 0, 2),0))
     } else {  
-      width <- 8
+      width <- 7
       height <- 14  # dimension for 2 mosaicplots
       par(mfrow=c(2,1))
       par(mar=c(3.1,4.1,1.1,0.5), oma=c(0,0,ifelse(is.na(main), 0, 2),0))

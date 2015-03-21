@@ -5,7 +5,7 @@ function (txt, x=1, y=1, height=50, width=100, fontname = "Calibri", fontsize = 
   msoShapeRectangle <- 1
   
   if (class(txt) != "character") 
-    txt <- capture.output(txt)
+    txt <- .CaptOut(txt)
 #  slide <- pp[["ActivePresentation"]][["Slides"]]$Item(1)
   slide <- pp$ActiveWindow()$View()$Slide()
   shape <- slide[["Shapes"]]$AddShape(msoShapeRectangle, x, y, x + width, y+height)

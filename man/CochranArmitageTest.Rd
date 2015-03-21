@@ -43,7 +43,7 @@ Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons
 }
 \author{Andri Signorell <andri@signorell.net> strongly based on code from 
 Eric Lecoutre <lecoutre@stat.ucl.ac.be>\cr
-\url{http://tolstoy.newcastle.edu.au/R/help/05/07/9442.html}
+\url{https://stat.ethz.ch/pipermail/r-help/2005-July/076371.html}
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

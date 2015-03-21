@@ -12,7 +12,7 @@ function(x, maxlen = 20) {
   # 
   #   return(formatC(chopx, width = maxlen, flag = ifelse(justify == "left", "-", " ")) )
 
-  # this is all a bit clumsy, let's have it shorter:  ;-)
+  # ... but this is all a bit clumsy, let's have it shorter:  ;-)
   
   paste(substr(x, 0, maxlen), ifelse(nchar(x) > maxlen, "...", ""), sep="")
 }

@@ -41,7 +41,7 @@ either to the margins of the bars ("mar" which is the default) or to "mid". The 
 \examples{
 tab <- with( 
   subset(d.pizza, driver \%in\% c("Carpenter","Miller","Farmer","Butcher")), 
-  table(factor(driver), Weekday(date, "a", stringsAsFactor=TRUE))
+  table(factor(driver), Weekday(date, "dd", stringsAsFactor=TRUE))
 )
 tab
 

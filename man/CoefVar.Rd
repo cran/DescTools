@@ -15,8 +15,7 @@ CoefVar(x, unbiased = FALSE, conf.level = NA, na.rm = FALSE)
   \item{x}{a (non-empty) numeric vector of data values.
 %%     ~~Describe \code{x} here~~
 }
-  \item{unbiased}{logical. In order for the coefficient of variation to be an unbiased estimate of the true population value, 
-   calculated value is calculated as CV * ((1 - (1/(4*(n-1))) + (1/n) * CV^2) + (1/(2 * (n-1)^2))). Default is TRUE. %% Reference???
+  \item{unbiased}{logical value determining, if a bias correction should be used (see. details). Default is FALSE. %% Reference???
 %%     ~~Describe \code{unbiased} here~~
 }
   \item{conf.level}{confidence level of the interval.
@@ -26,6 +25,10 @@ CoefVar(x, unbiased = FALSE, conf.level = NA, na.rm = FALSE)
 %%     ~~Describe \code{na.rm} here~~
 }
  
+}
+\details{
+In order for the coefficient of variation to be an unbiased estimate of the true population value, 
+the coefficient of variation  is corrected as:   \deqn{ CV_{korr} = CV \cdot \left( 1 - \frac{1}{4\cdot(n-1)} + \frac{1}{n} \cdot CV^2 + \frac{1}{2 \cdot (n-1)^2} \right) }
 }
 \value{if no confidence intervals are requested:  
 the estimate as numeric value (without any name)\cr\cr

@@ -50,7 +50,7 @@ function(x, main = NULL, ord=c("desc","asc","name","level"),
 # restrict table to maxrows  
   lres$frq <- lres$frq[1:min(nrow(lres$frq), maxrows),]
 
-  txt.frq <- capture.output(lres$frq)
+  txt.frq <- .CaptOut(lres$frq)
   txt.frq <- paste(substr(txt.frq, 0, regexpr("level", txt.frq[1]) + 5), 
                    gsub(pattern="0\\.", replacement=" \\.", 
                         x=substr(txt.frq, regexpr("level", txt.frq[1])+5+1, nchar(txt.frq[1]))), 

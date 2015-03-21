@@ -8,7 +8,15 @@ function (x, sd = NULL, trim = 0, method = c("classic", "boot"),
     n <- length(x)
     # calculate the winsorized variance of x
     trn <- floor(trim * n) + 1
-    winvar <- var(Winsorize(x, minval=max(Small(x, trn)), maxval=min(Large(x, trn))))
+    
+# new 17.2.2015:
+    minval <- sort(x, partial = trn)[trn]
+    maxval <- sort(x, partial = max((n - trn + 1), 1))[max((n - trn + 1), 1)]
+    winvar <- var(Winsorize(x, minval = minval, maxval = maxval))
+    
+# This was an overkill, we need only the n-thest value here:
+# winvar <- var(Winsorize(x, minval=max(Small(x, trn)), maxval=min(Large(x, trn))))
+# 
     # degrees of freedom
     DF <- n - 2*(trn-1) - 1
     return(c(var=winvar, DF=DF))

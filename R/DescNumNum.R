@@ -4,7 +4,7 @@ function(x, y, xname=deparse(substitute(x))
 
   n <- length(x)
   vn <- sum(complete.cases(x,y))
-  digits <- format.info(signif((n-vn)/n*100,3))[2]-2    # hier 3 signifikante Stellen für beide Angaben bestimmen
+  digits <- format.info(signif((n-vn)/n*100,3))[2]-2    # hier 3 signifikante Stellen fuer beide Angaben bestimmen
   cat( "\nSummary: \n",
     "n pairs: ", .fmt(n), 
     ", valid: ", .fmt(vn), " (", round(vn/n*100, digits), "%)",
@@ -12,13 +12,13 @@ function(x, y, xname=deparse(substitute(x))
 	, sep="" ) 
   
   cat(sprintf(
-    "\nPearson corr. : %.3f\nSpearman corr.: %.3f\nKendall corr. : %.3f\n"
-    , cor(x, y, use="pairwise.complete.obs")
-    , cor(x, y, method="spearman", use="pairwise.complete.obs")
+    "\nPearson corr. : %s\nSpearman corr.: %s\nKendall corr. : %s\n"
+    , Format(cor(x, y, use="pairwise.complete.obs"), digits=3)
+    , Format(cor(x, y, method="spearman", use="pairwise.complete.obs"), digits=3)
     , if(n < 5000){
-        cor(x, y, method="kendall", use="pairwise.complete.obs")
+        Format(cor(x, y, method="kendall", use="pairwise.complete.obs"), digits=3)
       } else {
-        "NULL"
+        "(sample too large)"
       }  
   ))
 

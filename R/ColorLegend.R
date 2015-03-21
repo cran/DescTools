@@ -53,7 +53,7 @@ function( x, y=NULL, cols=rev(heat.colors(100)), labels=NULL
       col=rev(cols), border=border)
     if(!is.null(labels)){
         # Korrektur am 13.6:
-        # die grösste und kleinste Beschriftung sollen nicht in der Mitte der Randfarbkästchen liegen, 
+        # die groesste und kleinste Beschriftung sollen nicht in der Mitte der Randfarbkaestchen liegen, 
         # sondern wirklich am Rand des strips
         # alt: , y=y-height/(2*ncols)- (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)
         #, y=y-height/(2*ncols)- (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)

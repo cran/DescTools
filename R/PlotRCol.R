@@ -29,7 +29,7 @@ function(ord=c("hsv","default"), label=c("text","hex","dec")) {
   cols <- c(cols, rep(NA,3) ) # um 3 NULL-Werte erweitern
  
   zeilen <- 38; spalten <- 12 # 660 Farben 
-  farben.zahlen <- matrix( 1:spalten ,nrow=zeilen, ncol=spalten, byrow=T ) # Matrix für Punkte
+  farben.zahlen <- matrix( 1:spalten ,nrow=zeilen, ncol=spalten, byrow=T ) # Matrix fuer Punkte
 
   x_offset <- 0.5 
   x <- farben.zahlen[,1:spalten]  # x-Werte (Zahlen) 
@@ -38,7 +38,7 @@ function(ord=c("hsv","default"), label=c("text","hex","dec")) {
   par(mar=c(0,0,0,0), mex=0.001, xaxt="n", yaxt="n", ann=F)
   plot( x, y 
     , pch=22    # Punkttyp Rechteck 
-    , cex=2     # Vergrösserung Punkte 
+    , cex=2     # Vergroesserung Punkte 
     , bg=cols   # Hintergrundfarben 
     , bty="n"   # keine Box 
     , xlim=c(1,spalten+x_offset) # x-Wertebereich 

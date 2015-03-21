@@ -49,7 +49,7 @@ which corresponds to the pairwise.complete option of \code{\link{cor}}.
 Use \code{\link{complete.cases}}, if only the complete cases of a data.frame are to be used. (see examples)
 
 
-The maximum value for Phi is \eqn{sqrt(min(r, c) - 1)}, for the corrected contingency coefficient and for Cramer's V it's 1. \cr A Cramer's V in the range of [0, 0.3] is considered as weak, [0.3,0.7] as medium and > 0.7 as strong.
+The maximum value for Phi is \eqn{\sqrt(min(r, c) - 1)}, for the corrected contingency coefficient and for Cramer's V it's 1. \cr A Cramer's V in the range of [0, 0.3] is considered as weak, [0.3,0.7] as medium and > 0.7 as strong.
 The minimum value for all is 0 under statistical independence.
 }
 \value{
@@ -72,7 +72,8 @@ Smithson, M.J. (2003) \emph{Confidence Intervals, Quantitative Applications in t
 
 }
 \author{
-Andri Signorell <andri@signorell.net>, Michael Smithson <michael.smithson@anu.edu.au>  (confidence interval for Cramer V)
+Andri Signorell <andri@signorell.net>, \cr
+Michael Smithson <michael.smithson@anu.edu.au>  (confidence intervals for Cramer V)
 }
 
 \seealso{

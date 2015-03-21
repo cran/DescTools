@@ -1,17 +1,31 @@
 Small <-
-function(x, k = 5, unique = FALSE, na.rm = FALSE){
-  if(na.rm) x <- na.omit(x)
-  if(unique){
+function (x, k = 5, unique = FALSE, na.rm = FALSE) {
+  
+  if (na.rm) 
+    x <- na.omit(x)
+  
+  if (unique==TRUE) {
     ux <- unique(x)
     un <- length(ux)
-    lst <- lapply(sort(ux, partial=1:min(k,un))[1:min(k,un)], function(n) list(val=n, n=length(which(x == n))))
-  } else {
+    maxval <- sort(ux, partial = min(k, un))[min(k, un)]
+    
+    # we are using the rationale of rle here, as it turned out to be the fastest approach
+    x <- sort(x[x<=maxval])
     n <- length(x)
-    lst <- lapply(sort(x, partial=1:min(k,n))[1:min(k,n)], function(n) list(val=n, n=length(which(x == n))))
-#   lst <- as.vector(unlist(lapply(lst, "[", "val")))
-#   http://stackoverflow.com/questions/15659783/why-does-unlist-kill-dates-in-r
-    lst <- do.call("c", sapply(lst, "[", "val") )
-    names(lst) <- NULL
+    if (n == 0L) 
+      res <- list(lengths = integer(), values = x)
+
+    y <- x[-1L] != x[-n]
+    i <- c(which(y | is.na(y)), n)
+    res <- list(lengths = diff(c(0L, i)), values = x[i])
+
+    # res <- unclass(rle(sort(x[x<=maxval])))
   }
-  return(lst)
+  else {
+    n <- length(x)
+    res <- sort(x, partial = 1:min(k, n))[1:min(k, n)]
+    #   lst <- as.vector(unlist(lapply(lst, "[", "val")))
+    #   http://stackoverflow.com/questions/15659783/why-does-unlist-kill-dates-in-r
+  }
+  return(res)
 }

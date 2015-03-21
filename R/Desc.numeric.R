@@ -4,10 +4,15 @@ function(x, main = NULL
 
   # unique and HighLow (sort) are expensive!
   
-  # Kennzahlen für die Beschreibung von kardinalen Variablen
-  # na.rm = TRUE für die Kennzahlen, NAs werden ausgewiesen
+  # Kennzahlen fuer die Beschreibung von kardinalen Variablen
+  # na.rm = TRUE fuer die Kennzahlen, NAs werden ausgewiesen
   
-  if( !class(x) %in% c("numeric","integer") ) stop( gettextf("x must be numeric and has class %s", class(x)))
+  # if( !class(x) %in% c("numeric","integer") ) stop( gettextf("x must be numeric and has class %s", class(x)))
+  if (!any(class(x) %in% c("numeric", "integer"))) 
+    stop(gettextf("x must be numeric and has class%s %s", 
+                  ifelse(length(class(x))>1, "es:", ""), 
+                  paste(class(x), collapse=", "))    )
+  
   if( is.null(main)) main <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), collapse=", "))
   
   # store label attribute, as na.omit will kill it!!

@@ -2,7 +2,7 @@ PlotMar <-
 function(){ 
   print( "Not yet implemented...")
   # should plot margins
-  # die Umrechung in Linien-Abstände funktioniert so nicht 
+  # die Umrechung in Linien-Abstaende funktioniert so nicht 
 
   # par( mar=c(5,6,4,2)+0.1, mgp=c(3,2,1), xaxs="i")
   # par(xpd=TRUE,  mgp=c(3,2,1))

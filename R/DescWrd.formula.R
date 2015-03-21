@@ -70,12 +70,12 @@ function(formula, data = parent.frame(), subset = TRUE, wrd = NULL, ...) {
     if(class(x)[1] %in% c("numeric","integer")){
       
       if(class(grp)[1] %in% c("numeric","integer")){
-        WrdText( capture.output(
+        WrdText( .CaptOut(
           do.call( DescNumNum, args=append( list(x=grp, y=x, xname=pred, yname=resp, plotit=TRUE), dotargs.numeric.numeric)) ))
         WrdPlot(width=13, height=6.5, dfact=2.5, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
         
       } else if(class(grp)[1] %in% c("factor","ordered")){
-        WrdText( capture.output(
+        WrdText( .CaptOut(
           do.call( DescNumFact, args=append( list(x=x, grp=grp, xname=resp, grpname=pred, plotit=TRUE), dotargs.numeric.factor )) ))
         WrdPlot(width=13, height=6.5, dfact=2.5, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
         
@@ -86,13 +86,13 @@ function(formula, data = parent.frame(), subset = TRUE, wrd = NULL, ...) {
     } else if(class(x)[1] %in% c("factor","ordered")){
       
       if( class(grp)[1] %in% c("numeric","integer")){
-        WrdText( capture.output(
+        WrdText( .CaptOut(
           do.call( DescFactNum, args=append( list(x=x, y=grp, xname=resp, yname=pred, plotit=TRUE), dotargs.factor.numeric )) ))
         WrdPlot(width=13, height=6.5, dfact=2.5, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
         
       } else if ( class(grp)[1] %in% c("factor","ordered")){
         tab <- table(x, grp, dnn=c(resp, pred))
-        WrdText( capture.output(
+        WrdText( .CaptOut(
           do.call( Desc, args=append( list(x=tab, 
                                            xname="", grpname="", plotit=FALSE, 
                                            main=NA), dotargs.factor.factor) )

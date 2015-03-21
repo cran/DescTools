@@ -55,6 +55,10 @@ The following code will replace the \code{NULL} values by \code{NA} and coerce t
   d.lka <- data.frame(lapply(data.frame(xlrng), unlist))
 }
 This of course can be avoided by setting \code{as.data.frame} = \code{TRUE}.
+
+The function will return dates as integer values, because XL stores them as integers. 
+An Excel date can be converted with the (unusual) origin of 
+\code{as.Date(myDate, origin="1899-12-30")}.
 }
 \value{If as.data.frame is set to \code{TRUE}, a single data.frame or a list of data.frames will be returned. 
 If set to \code{FALSE} a list of the cell values in the specified Excel range, resp. a list of lists will be returned.

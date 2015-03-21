@@ -12,7 +12,7 @@ function(series, lag.max = 10*log10(length(series)), ...)  {
   ## ---
   ## Author: Markus Huerzeler, Date: 15 Jun 94
   ## Revision: Christian Keller, 5 May 98
-  ## Revision: Markus Hürzeler, 11. März 04
+  ## Revision: Markus Huerzeler, 11. Maerz 04
   
   if (!is.null(dim(series)))
     stop("f.acf is only implemented for univariate time series")

@@ -12,10 +12,10 @@ DrawBand(x, y, col = SetAlpha("grey", 0.5), border = NA)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{a vector with x coordinates for the band.
+  \item{x}{a vector or a matrix with x coordinates for the band. If x is given as matrix it must be a \eqn{2 \times n}{2 x n} matrix and the second column will be reversed. x will be recyled in the case y is a 2dimensional matrix.
 %%     ~~Describe \code{x} here~~
 }
-  \item{y}{a vector with y coordinates for the band.
+  \item{y}{a vector or a matrix with y coordinates for the band. If y is given as matrix it must be a \eqn{2 \times n}{2 x n} matrix and the second column will be reversed. y will be recyled in the case x is a 2dimensional matrix.
 %%     ~~Describe \code{y} here~~
 }
   \item{col}{the color of the band.

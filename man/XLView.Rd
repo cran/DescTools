@@ -40,8 +40,7 @@ would not terminate a running XL task, but only set it invisible (observe the Ta
 \author{
 Andri Signorell <andri@signorell.net>
 }
-\note{The function obviously works only in Windows and requires \bold{RDCOMClient} to be installed.\cr
-RDCOMClient is available here: \url{http://www.omegahat.org}
+\note{The function works only in Windows and requires \bold{RDCOMClient} to be installed (see: Additional_repositories in DESCRIPTION of the package).
 %%  ~~further notes~~
 }
 
@@ -62,6 +61,9 @@ d.frm <- read.table(fn, header=TRUE, quote="", sep=";")
 fn <- XLView()
 # ... and read it into a data.frame when in R again
 d.set <- read.table(fn, header=TRUE, quote="", sep=";")
+
+# Export a ftable object, quite elegant...
+XLView(format(ftable(Titanic), quote=FALSE), row.names = FALSE, col.names = FALSE)
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

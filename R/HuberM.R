@@ -8,7 +8,7 @@ function(x, k = 1.5, weights = NULL, tol = 1e-06,
     
     # Originally from  /u/ftp/NDK/Source-NDK-9/R/rg2-fkt.R :
     tauHuber <- function(x, mu, k=1.5, s = mad(x), resid = (x - mu)/s) {
-      # Purpose: Korrekturfaktor Tau für die Varianz von Huber-M-Schätzern
+      # Purpose: Korrekturfaktor Tau fuer die Varianz von Huber-M-Schaetzern
       # ******************************************************************************
       # Arguments: x = Daten mu = Lokations-Punkt k = Parameter der Huber Psi-Funktion
       # ******************************************************************************

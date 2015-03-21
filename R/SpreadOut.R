@@ -1,6 +1,9 @@
 SpreadOut <-
-function(x, mindist) {
+function(x, mindist = NULL, cex = 1.0) {
 
+  if(is.null(mindist)) 
+    mindist <- 0.9 * max(strheight(x, "inch", cex = cex))
+  
   if(sum(!is.na(x)) < 2) return(x)
   xorder <- order(x)
   goodx <- x[xorder][!is.na(x[xorder])]

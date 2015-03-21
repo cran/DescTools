@@ -1,4 +1,34 @@
-DescTools 0.99.9 (2014-11-29)
+DescTools 0.99.10 (2015-03-15)
+-----------------------------
+
+NEW FUNCTIONS ADDED:
+   * SaveAs brings up file.choose for saving a R object.
+   * Explore is back again, as the package "manipulate" is on CRAN meanwhile.
+   * DurbiWatsonTest for autocorrelation added
+ 
+   
+UPDATED FUNCTIONS:
+   * The date functions have been changed to use as.POSIXlt for better performance.
+   * DrawBand will accept matrices of coordinates.
+   * Impute gets other default values. Now the median(x, na.rm=TRUE) will be used.
+   * Small and Large have been redesigned to run faster.
+   * Calculation of winsorized variance, used for confidence intervals for trimmed
+     means in MeanCI, is much faster for large x.
+   * Format code restrictions for dates have been formulated more liberal such as 
+     to allow formats like "yyyymmdd".   
+   * Desc.numeric will not refuse to describe numeric vectors with additional classes.	  
+	 
+
+BUGFIXES:
+   * XLGetRange's call attribute would only have returned the header instead of the 
+     address(es) of the selected range(s).
+   * Desc.table for higher dimensional tables does not any more report 
+     erroneously ChiSquare-Test results 	 
+   * Correcting several issues with new R-Devel	 
+	 
+
+
+DescTools 0.99.9 (2015-01-20)
 -----------------------------
 
 NEW FUNCTIONS ADDED:
@@ -86,7 +116,7 @@ BUGFIXES:
    * PlotVenn did not correctly place the figures in the 2-sample case (credits to Andrew Marritt).
    
 
-DescTools 0.99.8.2 (2014-12-23)
+DescTools 0.99.8.1 (2014-09-22)
 -------------------------------
    
 UPDATED FUNCTIONS:
@@ -170,7 +200,7 @@ BUGFIXES:
      Credits to Steven J. Pierce for spotting the problem and to Michael Smithson for fixing it.
    * The icon file for the PasswordDlg could not be found resulting in the dialog not being displayed.
    * PlotFdist did not handle args.boxplot = NA correctly, meaning no boxplot being displayed.
-   * Hmean will report NA if any x < 0.
+   * Hmean will now report NA if any x < 0.
    * LsFct did not only list the functions but all objects of a package.
    * StrChop did not chop the last part of the string correctly.
    * DescWrd would not have run on Word versions other than German because of a local template name.

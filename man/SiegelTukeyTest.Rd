@@ -3,7 +3,7 @@
 \alias{SiegelTukeyRank}
 \alias{SiegelTukeyTest.default}
 \alias{SiegelTukeyTest.formula}
-\title{Siegel-Tukey Test for equality in variability
+\title{Siegel-Tukey Test For Equality In Variability
 }
 \description{
 Non-parametric Siegel-Tukey test for equality in variability. 
@@ -22,7 +22,7 @@ SiegelTukeyTest(x, ...)
 \method{SiegelTukeyTest}{formula}(formula, data, subset, na.action, \dots)
 
 
-SiegelTukeyRank(x, g)
+SiegelTukeyRank(x, g, drop.median = TRUE)
 
 }
 \arguments{
@@ -52,6 +52,8 @@ SiegelTukeyRank(x, g)
   \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}  
 
 \item{g}{a vector or factor object giving the group for the corresponding elements of x. 
+}
+\item{drop.median}{logical, defining whether the median of the combined samples should be left out, ensuring that there's an even number of elements (which is a requirement of the Siegel-Tukey test). Defaults to TRUE. 
 }
   \item{\dots}{further arguments to be passed to or from methods.}
 

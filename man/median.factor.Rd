@@ -35,7 +35,7 @@ We'll wait for definitive results and enjoy the function's comfort so far...
 \seealso{
 \url{https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html}
 
-\url{http://www.rqna.net/qna/nuiukm-idiomatic-method-of-finding-the-median-of-an-ordinal-in-r.html}
+\url{http://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}
 }
 \examples{
 median(d.pizza$quality, na.rm=TRUE)

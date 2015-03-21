@@ -23,7 +23,7 @@ function(x, main = deparse(substitute(x)), breaks = NULL, ..., wrd = NULL) {
   
   if(!is.null(wrd)) WrdPlot(width=6.5, height=5, dfact=2.5, wrd=wrd, append.cr=TRUE)
   
-  # Häufigkeiten normiert mit Anzahl Tagen im Monat
+  # Haeufigkeiten normiert mit Anzahl Tagen im Monat
   # par(mar=c(10.1,3.1,1.1,1.1))
 
   ydays <- factor( format(seq(from=as.Date("2010-01-01")

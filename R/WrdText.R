@@ -10,7 +10,7 @@ function(txt, fixedfont=TRUE, fontname=NULL,
     fontsize <- Coalesce(fontsize, getOption("fixedfontsize", 7))
   }
   
-  if (!inherits(txt, "character"))  txt <- capture.output(txt)
+  if (!inherits(txt, "character"))  txt <- .CaptOut(txt)
   
   wrdSel <- wrd[["Selection"]]
   wrdFont <- wrdSel[["Font"]]

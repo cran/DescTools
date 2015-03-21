@@ -9,9 +9,9 @@
 PlotTernary(x, y = NULL, z = NULL, args.grid = NULL, lbl = NULL, main = "",...)
 }
 \arguments{
-  \item{x}{vector of first variable.}
-  \item{y}{vector of second variable.}
-  \item{z}{vector of third variable.}
+  \item{x}{vector of first variable. Will be placed on top of the triangle.}
+  \item{y}{vector of second variable (the right corner).}
+  \item{z}{vector of third variable (on the left corner).}
   \item{args.grid}{list of additional arguments for the grid. Set this argument to NA if no grid should be drawn.  The usual color and linetype will be used.}
   \item{main}{overall title for the plot. }
   \item{lbl}{the labels for the corner points. Default to the names of x, y, z.}

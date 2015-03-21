@@ -79,10 +79,13 @@ dates    \tab   Dates can be formatted with the format codes \code{d}, \code{m} 
  \tab                 \code{yy ....}      year without century, with leading zero (00 - 99) \cr 
   \tab              \code{yyyy ..}    year with century. For example: 2005 \cr 
 \tab\cr
+}
+\tabular{ll}{
 percents \tab Setting \code{fmt = "\%"} will divide the given number by 100 and append the \%-sign (without separator).\cr
 \tab\cr
 p-values \tab \code{fmt = "p"} will wrap the function \code{\link{format.pval}}.\cr
 \tab\cr
+
 significance \tab The significance representation of a p-value consisting of *  and . will be produced by setting \code{fmt = "*"}.  \cr 
 \tab The breaks are set according to the used defaults e.g. in \code{lm} as  \cr 
 \tab [0, 0.001] = \code{***}  \cr 

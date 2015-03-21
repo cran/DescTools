@@ -27,9 +27,9 @@ function() {
                    , as.integer(tkwinfo("screenheight", root)) /2 - 25
   )
   # old:
-  #   , as.numeric(substr(capture.output(system("wmic desktopmonitor get screenwidth", 
+  #   , as.numeric(substr(.CaptOut(system("wmic desktopmonitor get screenwidth", 
   #                                             intern=TRUE)), 24,34))/2 - 50 
-  #   , as.numeric(substr(capture.output(system("wmic desktopmonitor get screenheight", 
+  #   , as.numeric(substr(.CaptOut(system("wmic desktopmonitor get screenheight", 
   #                                             intern=TRUE)), 25,34))/2 - 25
   tkwm.geometry(root, geom)
   

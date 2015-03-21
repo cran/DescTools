@@ -3,7 +3,7 @@ function(series, lag.max=10*log10(length(series)), type="cor", ylab=NULL, ...)
 {
   ## Author: Markus Huerzeler, Date:  6 Jun 94
   ## Revision: Christian Keller, 27 Nov 98
-  ## Revision: Markus Hürzeler, 11 Mar 02
+  ## Revision: Markus Huerzeler, 11 Mar 02
   ## Correction for axis labels with ts-objects and deletion of ACF(0), Andri/10.01.2014
   
   # original name g.plot.acf

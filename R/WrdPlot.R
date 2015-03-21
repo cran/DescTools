@@ -1,7 +1,10 @@
 WrdPlot <-
 function( type="png", append.cr=TRUE, crop=c(0,0,0,0), main = NULL,
                      picscale=100, height=NA, width=NA, res=300, dfact=1.6, wrd = getOption("lastWord") ){
-  
+
+  # png is considered a good choice for export to word (Smith)
+  # http://blog.revolutionanalytics.com/2009/01/10-tips-for-making-your-r-graphics-look-their-best.html
+    
   # height, width in cm!
   # scale will be overidden, if height/width defined
   

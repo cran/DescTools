@@ -3,7 +3,7 @@ function(x, type = "l", labels, xlab = "", ylab = deparse(substitute(x)), ...)
 #--
 # Funktion fuer univariate Zeitreihen, zeichnet die Monats- oder Saisoneffekte
 #
-# von S+5 übernommen und an R angepasst
+# von S+5 uebernommen und an R angepasst
 #
 # x muss eine univariate Zeitreihe sein
 #--
