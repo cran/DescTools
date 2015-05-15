@@ -12,28 +12,28 @@ LogitInv(x, min = 0, max = 1)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{value(s) to be transformed}
-  \item{min}{Lower end of logit interval}
-  \item{max}{Upper end of logit interval}
+  \item{min}{lower end of logit interval}
+  \item{max}{upper end of logit interval}
 }
 \details{
 
   The generalized logit function takes values on [min, max] and
-  transforms them to span [-Inf,Inf] it is defined as:
+  transforms them to span [-Inf, Inf]. \cr It is defined as:
 
-    \deqn{y = log(\frac{p}{(1-p)})}{y = log(p/(1-p))}
+    \deqn{y = log\left (\frac{p}{1-p} \right ) \;\;\;  \; \textup{where} \; \;\;  p=\frac{x-min}{max-min}}{y = log(p/(1-p)) where p=(x-min)/(max-min)}
 
-  where
-    
-    \deqn{p=\frac{(x-min)}{(max-min)}}{p=(x-min)/(max-min)}
 
-  The generized inverse logit function provides the inverse
+%s    \deqn{y = log(\frac{p}{(1-p)})}{y = log(p/(1-p))}
+%s
+%s  where
+%s    
+%s    \deqn{p=\frac{(x-min)}{(max-min)}}{p=(x-min)/(max-min)}
+
+  The generalized inverse logit function provides the inverse
   transformation:
     
-    \deqn{x = p' (max-min) + min}{x = p * (max-min) + min}
+    \deqn{x = p' \cdot (max-min) + min  \;\;\;  \; \textup{where} \; \;\;  p'=\frac{exp(y)}{1+exp(y)}}{x = p' * (max-min) + min   where  p' = exp(y)/(1+exp(y))}
 
-  where
-
-    \deqn{p'=\frac{exp(y)}{(1+exp(y))}}{exp(y)/(1+exp(y))}
 
 
 }
@@ -50,7 +50,7 @@ LogitInv(x, min = 0, max = 1)
   cbind(x,xt)
 
   y <- LogitInv(xt, min=0, max=10)
-  cbind(x,xt,y)  
+  cbind(x, xt, y)  
 
 }
 \keyword{math}

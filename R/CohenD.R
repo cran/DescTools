@@ -1,5 +1,5 @@
 CohenD <-
-function(x, y=NULL, pooled = FALSE, correct = FALSE, conf.level = NA, na.rm = FALSE) {
+function(x, y=NULL, pooled = TRUE, correct = FALSE, conf.level = NA, na.rm = FALSE) {
   
   if (na.rm) {
     x <- na.omit(x)
@@ -20,18 +20,18 @@ function(x, y=NULL, pooled = FALSE, correct = FALSE, conf.level = NA, na.rm = FA
   
     meanx <- mean(x)
     meany <- mean(y)
-    ssqx <- sum((x - meanx)^2)
-    ssqy <- sum((y - meany)^2)
+#     ssqx <- sum((x - meanx)^2)
+#     ssqy <- sum((y - meany)^2)
     nx <- length(x)
     ny <- length(y)
     
     DF <- nx + ny - 2
     d <- (meanx - meany) 
     
-    if(!pooled){
-      d <- d / sqrt(((nx - 1) * ssqx + (ny - 1) * ssqy) / DF)
+    if(pooled){
+      d <- d / sqrt(((nx - 1) * var(x) + (ny - 1) * var(y)) / DF)
     }else{
-      d <- d / sd(d)
+      d <- d / sd(c(x, y))
     }
     
     #  if(unbiased) d <- d * gamma(DF/2)/(sqrt(DF/2) * gamma((DF - 1)/2))

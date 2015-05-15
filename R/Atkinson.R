@@ -3,7 +3,7 @@ function(x, n = rep(1, length(x)), parameter = 0.5, na.rm = FALSE) {
 
   x <- rep(x, n)    # same handling as Lc and Gini
   if(na.rm) x <- na.omit(x)
-  if (any(is.na(x))) return(NA_real_)
+  if (any(is.na(x)) || any(x < 0)) return(NA_real_)
   
   if(is.null(parameter)) parameter <- 0.5
   if(parameter==1)

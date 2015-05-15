@@ -5,7 +5,7 @@ function (x, n, ceiling = TRUE) {
     # ref: http://stackoverflow.com/questions/14169620/add-a-month-to-a-date
     # Author: Antonio
     
-    #no ceiling
+    # no ceiling
     res <- sapply(x, seq, by = paste(n, "months"), length = 2)[2,]
     # sapply kills the Date class, so recreate here
     class(res) <- class(x)

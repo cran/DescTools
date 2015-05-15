@@ -51,7 +51,8 @@ McKay, A. T. (1932). Distribution of the coefficient of variation and the extend
 Smithson, M.J. (2003) \emph{Confidence Intervals, Quantitative Applications in the Social Sciences Series}, No. 140. Thousand Oaks, CA: Sage. pp. 39-41
 
 }
-\author{Andri Signorell <andri@signorell.net>, Michael Smithson <michael.smithson@anu.edu.au> (noncentral-t)
+\author{Andri Signorell <andri@signorell.net>, \cr
+Michael Smithson <michael.smithson@anu.edu.au> (noncentral-t)
 %%  ~~who you are~~
 }
 

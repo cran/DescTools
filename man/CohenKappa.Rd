@@ -36,7 +36,9 @@ CohenKappa(x, y = NULL, weights = c("Unweighted", "Equal-Spacing", "Fleiss-Cohen
 
 }
 \details{Cohen's kappa is the diagonal sum of the (possibly weighted) relative frequencies, corrected for expected values and standardized by its maximum value. \cr
-The equal-spacing weights are defined by \deqn{1 - \frac{|i - j|}{r - 1}} \code{r} being the number of columns/rows, and the Fleiss-Cohen weights by \deqn{1 - \frac{(i - j)^2}{(r - 1)^2}} The latter one attaches greater importance to near disagreements.\cr 
+The equal-spacing weights (see Cicchetti and Allison 1971) are defined by \deqn{1 - \frac{|i - j|}{r - 1}}  
+\code{r} being the number of columns/rows, and the Fleiss-Cohen weights by \deqn{1 - \frac{(i - j)^2}{(r - 1)^2}} 
+The latter attaches greater importance to near disagreements.\cr 
 \cr
 Data can be passed to the function either as matrix or data.frame in \code{x}, or as two numeric vectors \code{x} and \code{y}. In the latter case \code{table(x, y, ...)} is calculated. Thus \code{NA}s are handled the same way as \code{\link{table}} does. Note that tables are by default calculated \bold{without} NAs. The specific argument \code{useNA} can be passed via the ... argument.\cr
 The vector interface \code{(x, y)} is only supported for the calculation of unweighted kappa. For 2 factors with different levels we cannot ensure a reproducible construction of a confusion table, which is independent of the order of x and y. All weights might lead to inconsistent results.
@@ -59,6 +61,9 @@ Everitt, B.S. (1968), Moments of statistics kappa and weighted kappa. \emph{The 
 
 Fleiss, J.L., Cohen, J., and Everitt, B.S. (1969), Large sample standard errors of kappa and weighted kappa. \emph{Psychological Bulletin}, 72, 332-327. 
 
+Cicchetti, D.V., Allison, T. (1971) A New Procedure for Assessing Reliability
+of Scoring EEG Sleep Recordings \emph{American Journal of EEG Technology}, 11,
+101-109.
 }
 \author{
 David Meyer <david.meyer@r-project.org>, some slight changes Andri Signorell <andri@signorell.net> 

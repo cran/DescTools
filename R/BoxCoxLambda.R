@@ -1,5 +1,5 @@
 BoxCoxLambda <-
-function(x,method=c("guerrero","loglik"), lower=-1, upper=2) {
+function(x, method=c("guerrero","loglik"), lower=-1, upper=2) {
 
   # Guerrero extracts the required lambda
   # Input: x = original time series as a time series object

@@ -57,7 +57,11 @@ function( x, y=NULL, cols=rev(heat.colors(100)), labels=NULL
         # sondern wirklich am Rand des strips
         # alt: , y=y-height/(2*ncols)- (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)
         #, y=y-height/(2*ncols)- (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)
-      if(cntrlbl) ylbl <- top - height/(2*ncols) - (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)
+        
+      # 18.4.2015: reverse labels, as the logic below would misplace...
+      labels <- rev(labels)
+      
+      if(cntrlbl) ylbl <- top - height/(2*ncols) - (height- height/ncols)/(nlbls-1)  * seq(0, nlbls-1,1)
         else ylbl <- top - height/(nlbls-1) * seq(0, nlbls-1, 1)
       text(x=left + width + strwidth("0", cex=cex) + max(strwidth(labels, cex=cex)) * adj[1] 
         , y=ylbl, labels=labels, adj=adj, cex=cex, ... ) 	

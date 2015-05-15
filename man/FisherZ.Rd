@@ -31,7 +31,7 @@ CorCI(rho, n, conf.level = 0.95, alternative = c("two.sided", "less", "greater")
 
 \details{The  sampling distribution of  Pearson's r is not normally distributed. Fisher developed a transformation now called "Fisher's z-transformation" that converts Pearson's r's to the normally distributed variable z'. The formula for the transformation is:
 
-\deqn{z_r = tanh^{-1} = \frac{1}{2}log(\frac{1+r}{1-r})}
+\deqn{z_r = tanh^{-1} = \frac{1}{2}log\left ( \frac{1+r}{1-r}\right )}
 }
 
 \value{z value corresponding to r (in FisherZ) \cr

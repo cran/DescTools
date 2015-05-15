@@ -81,9 +81,12 @@ dates    \tab   Dates can be formatted with the format codes \code{d}, \code{m} 
 \tab\cr
 }
 \tabular{ll}{
-percents \tab Setting \code{fmt = "\%"} will divide the given number by 100 and append the \%-sign (without separator).\cr
+scientific \tab \code{fmt = "e"} forces scientific representation of x. The number of digits, alignment \cr \tab and zero values will be respected.\cr
 \tab\cr
-p-values \tab \code{fmt = "p"} will wrap the function \code{\link{format.pval}}.\cr
+
+percent \tab Setting \code{fmt = "\%"} will divide the given number by 100 and append the \%-sign (without separator).\cr
+\tab\cr
+p-value \tab \code{fmt = "p"} will wrap the function \code{\link{format.pval}}.\cr
 \tab\cr
 
 significance \tab The significance representation of a p-value consisting of *  and . will be produced by setting \code{fmt = "*"}.  \cr 
@@ -99,7 +102,7 @@ significance \tab The significance representation of a p-value consisting of *  
 
 }
 \value{the formatted values as characters. \cr
-If x was a matrix, then a the result will also be a matrix. (Hope that this will not surprise you...)
+If x was a matrix, then a the result will also be a matrix. (Hope this will not surprise you...)
 
 %%  ~Describe the value returned
 %%  If it is a LIST, use

@@ -2,10 +2,10 @@
 \alias{PlotACF}
 \alias{PlotGACF}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Combined Plot of a Time Series and it's ACF and PACF
+\title{Combined Plot of a Time Series and its ACF and PACF
 %%  ~~function to do ... ~~
 }
-\description{Combined plot of a time Series and it's autocorrelation and partial autocorrelation
+\description{Combined plot of a time Series and its autocorrelation and partial autocorrelation
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

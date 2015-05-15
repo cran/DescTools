@@ -1,10 +1,10 @@
 \name{Explore}
 \alias{Explore}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Interactive Explorer
+\title{Interactive Graphical Data Explorer
 %%  ~~function to do ... ~~
 }
-\description{Use RStudio's manipulator to explore a data.frame by creating some xy-scatterplots and numerical descriptions on the fly. 
+\description{Use RStudio's manipulator to explore a data.frame by dynamically creating xy-scatterplots, boxplots and others. Numerical descriptions can as well be produced on the fly.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

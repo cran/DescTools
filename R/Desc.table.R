@@ -2,6 +2,8 @@ Desc.table <-
 function(x, main=NULL, rfrq = NULL, margins = c(1,2), 
                        plotit=getOption("plotit", FALSE), verbose = c("medium","low","high"), ... ){
 
+  opt  <- options(scipen=4); on.exit(options(opt))
+  
   # define verbosity
   verbose <- match.arg(verbose, c("medium","low","high"))
   verbose <- match(verbose, c("low","medium","high"), nomatch=2)
@@ -80,9 +82,13 @@ function(x, main=NULL, rfrq = NULL, margins = c(1,2),
     	  , "\n\n", sep="" ) 
     
       if(dim(x)[1] == 2 & dim(x)[2] == 2 ){
+        
+        if(verbose=="high"){
+          r.chisq <- chisq.test(x, correct = FALSE)
+          cat("Pearson's Chi-squared test:\n  ", .CaptOut(r.chisq)[5], "\n", sep="")
+        }
         r.chisq <- chisq.test(x)
-        cat("Pearson's Chi-squared test:\n  "
-            , .CaptOut(r.chisq)[5], "\n", sep="")
+        cat("Pearson's Chi-squared test (cont. adj):\n  ", .CaptOut(r.chisq)[5], "\n", sep="")
         cat("Fisher's exact test ", .CaptOut( fisher.test(x))[5], "\n", sep="")
         if(verbose > 1){ # print only with verbosity > 1
           cat("", .CaptOut( mcnemar.test(x))[5], "\n\n", sep="")
@@ -97,9 +103,14 @@ function(x, main=NULL, rfrq = NULL, margins = c(1,2),
         }
         
       } else {
+        
+        if(verbose=="high"){
+          r.chisq <- chisq.test(x, correct = FALSE)
+          cat("Pearson's Chi-squared test:\n  ", .CaptOut(r.chisq)[5], "\n", sep="")
+        }
+        
         r.chisq <- chisq.test(x)
-        cat("Pearson's Chi-squared test:\n  "
-          , .CaptOut(r.chisq)[5], "\n", sep="")
+        cat("Pearson's Chi-squared test (cont. adj):\n  ", .CaptOut(r.chisq)[5], "\n", sep="")
         if(verbose > 1){ # print only with verbosity > 1
           
           # Log-likelihood chi-squared (G2) test of independence (homogeneity)
@@ -141,7 +152,7 @@ function(x, main=NULL, rfrq = NULL, margins = c(1,2),
   }
 
   if(plotit) {
-    horiz <- InDots(..., arg="horiz", default=FALSE)
+    horiz <- InDots(..., arg="horiz", default=TRUE)
     PlotDesc.table(x, main=main, horiz = horiz)
   }  
   invisible()

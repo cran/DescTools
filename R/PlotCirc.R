@@ -42,10 +42,10 @@ function(tab, acol = rainbow(sum(dim(tab))), aborder = "darkgrey",
   
   if(is.null(labels)) labels <- rev(c(rownames(tab), colnames(tab)))
   
-  ttab <- rbind(Rev(tab, direction="column") / n * (pi - ncol * d), d)
+  ttab <- rbind(Rev(tab, 2) / n * (pi - ncol * d), d)
   pts.left <- (c(0, cumsum(as.vector(ttab)))) 
   
-  ttab <- rbind(Rev(t(tab), direction="column")/ n * (pi - nrow * d), d)
+  ttab <- rbind(Rev(t(tab), 2)/ n * (pi - nrow * d), d)
   pts.right <- (c( cumsum(as.vector(ttab)))) + pi 
   
   pts <- c(pts.left, pts.right) + pi/2 + d/2
@@ -54,7 +54,7 @@ function(tab, acol = rainbow(sum(dim(tab))), aborder = "darkgrey",
   for( i in 1:ncol) {
     for( j in 1:nrow) {
       lang <- dpt[(i-1)*(nrow+1)+j,]
-      rang <- Rev(dpt[-nrow(dpt),])[(j-1)*(ncol+1) + i,]
+      rang <- Rev(dpt[-nrow(dpt),], c(1,2))[(j-1)*(ncol+1) + i,]
       ribbon( angle1.beg=rang[,2], angle1.end=lang[,1], angle2.beg=rang[,1], angle2.end=lang[,2], 
               radius1 = 10, radius2 = 9, col = rcol[j], border = rborder[j])
     }}

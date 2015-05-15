@@ -6,7 +6,10 @@ function(ord=c("hsv","default"), label=c("text","hex","dec")) {
   # plots all named colors:   PlotRCol(lbel="hex") hat noch zuviele Bezeichnungen
   if( !is.null(dev.list()) ){ 
     curwin <- dev.cur()
-    on.exit(dev.set(curwin))
+    on.exit({
+      dev.set(curwin)
+      par(usr)
+    })
   } 
   
   # this does not work and CRAN does not allow windows()

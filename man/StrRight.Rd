@@ -1,4 +1,4 @@
-\name{StrRight}
+\name{StrLeft, StrRight}
 \alias{StrRight}
 \alias{StrLeft}
 %- Also NEED an '\alias' for EACH other topic documented here.

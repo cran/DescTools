@@ -5,6 +5,7 @@
 \alias{PlotDesc.numeric}
 \alias{PlotDesc.factor}
 \alias{PlotDesc.table}
+\alias{PlotDesc.matrix}
 \alias{PlotDesc.ordered}
 \alias{PlotDesc.data.frame}
 \alias{PlotDesc.logical}
@@ -45,6 +46,9 @@ PlotDesc(x, ..., wrd = NULL)
          col = NULL, border = NULL, xlim=NULL, ecdf=FALSE, ..., wrd = NULL)
          
 \method{PlotDesc}{table}(x, col1 = getOption("col1", hblue), 
+         col2 = getOption("col2", hred),
+         horiz = TRUE,  main="", ..., wrd = NULL)
+\method{PlotDesc}{matrix}(x, col1 = getOption("col1", hblue), 
          col2 = getOption("col2", hred),
          horiz = TRUE,  main="", ..., wrd = NULL)
          

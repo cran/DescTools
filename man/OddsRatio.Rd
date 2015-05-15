@@ -5,10 +5,10 @@
 \title{Odds Ratio Estimation and Confidence Intervals}
 
 \description{
-  Calculates odds ratio by unconditional maximum likelihood estimation (wald),
-  conditional maximum likelihood estimation (mle) and median-unbiased estimation (midp). 
-  Confidence intervals are calculated using normal approximation (wald) and exact methods
-  (midp, mle).  
+  Calculates odds ratio by unconditional maximum likelihood estimation (\code{wald}),
+  conditional maximum likelihood estimation (\code{mle}) or median-unbiased estimation (\code{midp}). 
+  Confidence intervals are calculated using normal approximation (\code{wald}) and exact methods
+  (\code{midp}, \code{mle}).  
 }
 
 \usage{
@@ -18,25 +18,25 @@ OddsRatio(x, y = NULL, conf.level = NA, method = c("wald", "mle", "midp"),
 
 \arguments{
   
-  \item{x}{a numeric vector or a 2x2 numeric matrix, resp. table.
+  \item{x}{a vector or a \eqn{2 \times 2}{2 x 2} numeric matrix, resp. table.
 %%     ~~Describe \code{x} here~~
 }
   \item{y}{NULL (default) or a vector with compatible dimensions to \code{x}. If y is provided, \code{table(x, y, \dots)} will be calculated.
 %%     ~~Describe \code{y} here~~
 }
   \item{method}{
-    method for calculating odds ratio and confidence interval. Can be one out of
-    "wald", "mle", "midp". Default is "wald" (not because it is the best, but 
+    method for calculating odds ratio and confidence intervals. Can be one out of
+    "\code{wald}", "\code{mle}", "\code{midp}". Default is \code{"wald"} (not because it is the best, but 
     because it is the most commonly used.)
   }
-  \item{conf.level}{confidence level. Default is NA, meaning no confidence intervals will be
+  \item{conf.level}{confidence level. Default is \code{NA}, meaning no confidence intervals will be
   reported.}
   \item{interval}{
-    interval for the \code{\link{uniroot}} that finds the
-    odds ratio median-unbiased estimate and mid-p exact confidence
+    interval for the function \code{\link{uniroot}} that finds the
+    odds ratio median-unbiased estimate and \code{midp} exact confidence
     interval.
   }
-   \item{\dots}{further arguments are passed to the function \code{\link{table}}, allowing i.e. to set useNA. This refers only to the vector interface.
+   \item{\dots}{further arguments are passed to the function \code{\link{table}}, allowing i.e. to set \code{useNA}. This refers only to the vector interface.
 %%     ~~Describe \code{\dots} here~~
 }
 
@@ -44,13 +44,13 @@ OddsRatio(x, y = NULL, conf.level = NA, method = c("wald", "mle", "midp"),
 
 \details{
 
-  If a 2x2 table is provided the following table structure is preferred:
+  If a \eqn{2 \times 2}{2 x 2} table is provided the following table structure is preferred:
   \preformatted{
                     disease=0   disease=1
     exposed=0 (ref)    n00         n01
     exposed=1          n10         n11	
   }
-  however, for odds ratios from 2x2 tables, the following table is
+  however, for odds ratios the following table is
   equivalent:
   \preformatted{
                     disease=1   disease=0
@@ -58,12 +58,9 @@ OddsRatio(x, y = NULL, conf.level = NA, method = c("wald", "mle", "midp"),
     exposed=0          n01         n00	
   }
   If the table to be  provided to this function is not in the
-  preferred form, just use the function \code{\link{Rev}()} to "reverse" the table rows,
-  -columns, or both. 
-  
-  If a data.frame is provided the odds ratios are calculated pairwise and returned as numeric square matrix 
-  with the dimension of ncol(data.frame).
-  
+  preferred form, the function \code{\link{Rev}()} can be used to "reverse" the table rows, resp.
+  -columns. Reversing columns or rows (but not both) will lead to the inverse of the odds ratio.
+
 %  If you are providing categorical variables (factors
 %  or character vectors), the first level of the "exposure" variable is
 %  treated as the reference. However, you can set the reference of a
@@ -73,14 +70,14 @@ OddsRatio(x, y = NULL, conf.level = NA, method = c("wald", "mle", "midp"),
 %  reference level and test of independence two-sided p values are
 %  calculated using mid-p exact, Fisher's Exact, Monte Carlo simulation,
 %  and the chi-square test. 
+
 In case of zero entries, 0.5 will be added to the table.
 }
 
 
 \value{
- If conf.level is not NA then the result will be
-  a vector with 3 elements for estimate, lower confidence intervall and upper for the upper one.
-  Else the odds ratio will be reported as a single value. 
+ a single numeric value if conf.level is set to \code{NA}\cr
+ a numeric vector with 3 elements for estimate, lower and upper confidence interval if conf.level is provided 
 }
 
 \references{

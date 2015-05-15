@@ -3,7 +3,7 @@ function(x, n = rep(1, length(x)), unbiased = TRUE, conf.level = NA, R = 1000, t
 
   x <- rep(x, n)    # same handling as Lc
   if(na.rm) x <- na.omit(x)
-  if (any(is.na(x))) return(NA_real_)
+  if (any(is.na(x)) || any(x < 0)) return(NA_real_)
   
   i.gini <- function (x, unbiased = TRUE){
     n <- length(x)

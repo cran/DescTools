@@ -1,5 +1,6 @@
 OrderMixed <-
 function(x) {
+# $Id: SortMixed.R 1774 2014-03-01 20:02:08Z warnes $
   
   # - Split each each character string into an vector of strings and
   #   numbers

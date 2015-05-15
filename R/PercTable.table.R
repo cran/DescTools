@@ -34,6 +34,13 @@ function(tab, row.vars=NULL, col.vars = 2
       if(!is.null(margins)) px <- addmargins(px, if(length(dim(x))==1) {1} else {3 - margins} )  
     }    
     px[] <- sprintf(fmt=fmt, w, px[] * pfactor)
+    # set 100% margins to some zero value
+    zero <- sprintf("%*s",  w, ".")
+    if(perc==1 & (1 %in% margins)) px[, ncol(px)] <- zero
+    if(perc==2 & (1 %in% margins)) px[, ncol(px)] <- zero
+    if(perc==1 & (2 %in% margins)) px[nrow(px), ] <- zero
+    if(perc==2 & (2 %in% margins)) px[nrow(px), ] <- zero
+    
     px
   }  
   

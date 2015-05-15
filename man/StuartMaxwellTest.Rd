@@ -4,8 +4,8 @@
 \title{Stuart-Maxwell Marginal Homogeneity Test
 %%  ~~function to do ... ~~
 }
-\description{This function computes the marginal homogeneity test for a CxC matrix of assignments of objects to C categories or an nx2 or 2xn matrix of category scores for n data objects by two raters. The statistic is distributed as Chi-square with C-1 degrees of freedom. \cr
-It can be viewed as an extention of McNemar test to r by r table (r>2). 
+\description{This function computes the marginal homogeneity test for a \eqn{k \times  k}{k x k} matrix of assignments of objects to k categories or an \eqn{n \times 2 \times k}{n x 2} matrix of category scores for n data objects by two raters. The statistic is distributed as chi-square with k-1 degrees of freedom. \cr
+It can be viewed as an extention of McNemar test to \eqn{k \times k}{k x k} table. 
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -13,7 +13,7 @@ StuartMaxwellTest(x, y = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{either a two-dimensional contingency table in matrix form, or a factor object.
+  \item{x}{either a 2-way contingency table in matrix form, or a factor object.
 %%     ~~Describe \code{x} here~~
 }
   \item{y}{a factor object; ignored if x is a matrix.

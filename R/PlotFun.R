@@ -1,4 +1,4 @@
-PlotFct <-
+PlotFun <-
 function(FUN, args=NULL, from=NULL, to=NULL, by=NULL, xlim=NULL, 
                     ylim = NULL, polar = FALSE, type="l",
                     col = par("col"), lwd= par("lwd"), lty=par("lty"), pch=NA,
@@ -9,7 +9,7 @@ function(FUN, args=NULL, from=NULL, to=NULL, by=NULL, xlim=NULL,
 #   # the dot arguments which match PercTable.table
 #   # pt.args <- dot.args[names(dot.args) %in% names(formals(PercTable.table))]
 #   # the dot arguments which DO NOT match PercTable.table
-#   par.args <- dot.args[names(dot.args) %nin% names(formals(PlotFct))]
+#   par.args <- dot.args[names(dot.args) %nin% names(formals(PlotFun))]
   
   # see also Hmisc::minor.tick 
   

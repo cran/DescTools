@@ -1,4 +1,4 @@
-\name{ToWide}
+\name{ToLong, ToWide}
 \alias{ToWide}
 \alias{ToLong}
 %- Also NEED an '\alias' for EACH other topic documented here.

@@ -27,18 +27,18 @@ Kurt(x, na.rm = FALSE, method = 3, conf.level = NA, ci.type = "bca", R = 1000, .
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-  a numeric vector, matrix or data frame. An object which is not a vector, matrix or data frame is coerced (if possible) by as.vector.
+  a numeric vector. An object which is not a vector is coerced (if possible) by \code{as.vector}.
 %%     ~~Describe \code{x} here~~
 }
   \item{na.rm}{
-  logical, indicating whether NA values should be stripped before the computation proceeds. Defaults to FALSE.
+  logical, indicating whether \code{NA} values should be stripped before the computation proceeds. Defaults to \code{FALSE}.
   %%     ~~Describe \code{na.rm} here~~
 }
   \item{method}{
-  integer out of 1, 2 or 3. Default ist 3. See Details.
+  integer out of 1, 2 or 3 (default). See Details.
   %%     ~~Describe \code{na.rm} here~~
 }
- \item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated. 
+ \item{conf.level}{confidence level of the interval. If set to \code{NA} (which is the default) no confidence interval will be calculated. 
 %%     ~~Describe \code{conf.level} here~~
 }
   \item{ci.type}{The type of confidence interval required. The value should be any subset 
@@ -53,17 +53,14 @@ Kurt(x, na.rm = FALSE, method = 3, conf.level = NA, ci.type = "bca", R = 1000, .
 
 }
 
-\details{
-If x is a matrix or a data frame, a vector of the skewness, resp. kurtosis, of the columns is returned. \cr
+\details{If \code{na.rm} is \code{TRUE} then missing values are removed before computation proceeds. \cr
 
-If na.rm is TRUE then missing values are removed before computation proceeds. \cr
-
-The method of skewness can either be:\cr
+The methods for calculating the skewness can either be:\cr
   \code{method = 1:   g_1 = m_3 / m_2^(3/2) } \cr
   \code{method = 2:   G_1 = g_1 * sqrt(n(n-1)) / (n-2) }\cr
   \code{method = 3:   b_1 = m_3 / s^3 = g_1 ((n-1)/n)^(3/2) } \cr
 
-The method of kurtosis can either be:\cr
+and the ones for the kurtosis:\cr
   \code{method = 1:  g_2 = m_4 / m_2^2 - 3 }  \cr
   \code{method = 2:  G_2 = ((n+1) g_2 + 6) * (n-1) / ((n-2)(n-3)) }  \cr
   \code{method = 3:  b_2 = m_4 / s^4 - 3 = (g_2 + 3) (1 - 1/n)^2 - 3 } \cr
@@ -72,26 +69,30 @@ The method of kurtosis can either be:\cr
   method = 2 is used in SAS and SPSS.  \cr
   method = 3 is used in MINITAB and BMDP. \cr
 
-Skew and Kurtosis are comparably fast, as the expensive sums are coded in C.
+Cramer et al. (1997) mention the asymptotic standard error of the skewness, resp. kurtosis: \cr
+\preformatted{ASE.skew = sqrt( 6n(n-1)/((n-2)(n+1)(n+3)) )
+ASE.kurt = sqrt( (n^2 - 1)/((n-3)(n+5)) )} to be used for calculating the confidence intervals. This is implemented here with \code{ci.type="classic"}. However, Joanes and Gill (1998) advise against this approach, pointing out that the normal assumptions would virtually always be violated. 
+They suggest using the bootstrap method. That's why the default method for the confidence interval type is set to \code{"bca"}.\cr  
+
+This implementation of the two functions is comparably fast, as the expensive sums are coded in C.
 
 }
-\note{
-Cramer et al. (1997) mention the asymptotic standard error of the skewness \cr
-\preformatted{ASE.skew = sqrt( 6n(n-1)/((n-2)(n+1)(n+3)) ), resp. 
-ASE.kurt = sqrt( (n^2 - 1)/((n-3)(n+5)) )} for the kurtosis, to be used for calculating the confidence intervals. This is implemented with \code{ci.type="classic"}.\cr
-Joanes and Gill advise against that, pointing out that the normal assumptions would virtually always be violated. 
-They suggest using the bootstrap method. That's why the default method is set to \code{"bca"}.\cr  
+
+\value{
+If \code{conf.level} is set to \code{NA} then the result will be  
+\item{}{a single numeric value} and 
+if a \code{conf.level} is provided, a named numeric vector with 3 elements:
+  \item{skew, kurt}{the specific estimate, either skewness or kurtosis}
+  \item{lwr.ci}{lower bound of the confidence interval}
+  \item{upr.ci}{upper bound of the confidence interval}
 }
 
-\value{For a data frame or for a matrix, a named vector with the appropriate method being applied column by column. 
-}
 \author{Andri Signorell <andri@signorell.net>, David Meyer <david.meyer@r-project.org> (method = 3) }
 
 \references{
 Cramer, D. (1997): \emph{Basic Statistics for Social Research} Routledge.
 
-Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and Kurt. \emph{The Statistician}, 47, 183-189.\cr
-
+Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and Kurt. \emph{The Statistician}, 47, 183-189.
 }
 
 \seealso{

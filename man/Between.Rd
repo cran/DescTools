@@ -1,4 +1,4 @@
-\name{Between}
+\name{Between, Outside}
 \alias{Between}
 \alias{\%()\%}
 \alias{\%(]\%}
@@ -11,7 +11,7 @@
 \alias{\%)(\%}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Between Operators Check, if a Value Lies Within a Given Range
+\title{Operators To Check, If a Value Lies Within Or Outside a Given Range
 }
 \description{
 The between and outside operators are used to check, whether a vector of given values x lie within a defined range (or outside respectively). The values can be numbers, text or dates. 

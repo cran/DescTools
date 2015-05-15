@@ -4,22 +4,21 @@
 \description{Stratified sampling with equal/unequal probabilities.}
 
 \usage{
-Strata(data, stratanames = NULL, size, 
+Strata(x, stratanames = NULL, size, 
        method = c("srswor", "srswr", "poisson", "systematic"), 
        pik, description = FALSE)}
 
 \arguments{
-\item{data}{data frame or data matrix; its number of rows is N, the population size.}
+\item{x}{a data frame or a matrix; its number of rows is n, the population size.}
 
 \item{stratanames}{vector of stratification variables.}
 
 \item{size}{vector of stratum sample sizes (in the order in which the strata are given in the input
 data set).}
 
-\item{method}{method to select units; the following methods are implemented: simple random 
-sampling without replacement (srswor), simple random sampling with replacement (srswr), 
-Poisson sampling (poisson), systematic sampling (systematic); if "method" is missing, 
-the default method is "srswor".}
+\item{method}{method to select units; implemented are: a) simple random 
+sampling without replacement (\code{"srswor"}), b) simple random sampling with replacement (\code{"srswr"}), 
+c) Poisson sampling (\code{"poisson"}), d) systematic sampling (\code{"systematic"}) (default is \code{"srswor"}).}
 
 \item{pik}{vector of inclusion probabilities or auxiliary information used to compute them; 
 this argument is only used for unequal probability sampling (Poisson and systematic). If an
@@ -38,16 +37,12 @@ The function produces an object, which contains the following information:
 \item{stratum}{the unit stratum.}
 \item{prob}{the final unit inclusion probability.}
 }
-\details{
-The data should be sorted in ascending order by the columns given in the stratanames argument before applying the function. 
-Use, for example, \code{data[order(data$state, data$region), ]}. 
-}
-\note{This function has been taken from the library \pkg{sampling} without logical changes.}
-\author{Yves Tille <yves.tille@unine.ch>, Alina Matei <alina.matei@unine.ch>}
+
+\author{Andri Signorell <andri@signorell.net>
+\cr rewritten based on the ideas of Yves Tille <yves.tille@unine.ch> and Alina Matei <alina.matei@unine.ch>}
 
 \seealso{
-\code{\link{sample}}
-} % \code{\link{mstage}}}
+\code{\link{sample}} }
 
 \examples{
 # Example from An and Watts (New SAS procedures for Analysis of Sample Survey Data)
@@ -60,8 +55,8 @@ Use, for example, \code{data[order(data$state, data$region), ]}.
 m <- rbind(matrix(rep("nc",165), 165, 1, byrow=TRUE), 
            matrix(rep("sc", 70), 70, 1, byrow=TRUE))
 m <- cbind.data.frame(m, c(rep(1, 100), rep(2,50), rep(3,15), 
-                      rep(1,30), rep(2,40)), 1000*runif(235))
-names(m) <- c("state","region","income")
+                      rep(1, 30), rep(2, 40)), 1000 * runif(235))
+names(m) <- c("state", "region", "income")
 
 # computes the population stratum sizes
 table(m$region, m$state)
@@ -76,7 +71,7 @@ table(m$region, m$state)
 # the sample stratum sizes are 10,5,10,4,6, respectively
 # the method is 'srswor' (equal probability, without replacement)
 
-s <- Strata(m, c("region","state"), size=c(10,5,10,4,6), method="srswor")
+s <- Strata(m, c("region", "state"), size=c(10, 5, 10, 4, 6), method="srswor")
 
 # extracts the observed data
 data.frame(income=m[s$id, "income"], s)
@@ -88,7 +83,7 @@ table(s$region, s$state)
 # The same data as in Example 1
 # the method is 'systematic' (unequal probability, without replacement)
 # the selection probabilities are computed using the variable 'income'
-s <- Strata(m,c("region","state"), size=c(10,5,10,4,6), 
+s <- Strata(m,c("region", "state"), size=c(10, 5, 10, 4, 6), 
             method="systematic", pik=m$income)
 
 # extracts the observed data

@@ -63,8 +63,8 @@ function(x, wrd, main = deparse(substitute(x)), ...) {
   
   # corr 8.11.2014: not sure if we need the dots here, anyway they can produce errors
   # PlotDesc(x, main="", ..., wrd=wrd)
-  if(any(class(x)=="table")){
-    horiz <- InDots(..., arg="horiz", default = TRUE)
+  if(any(class(x)=="table" || class(x)=="matrix")){
+    horiz <- InDots(..., arg="horiz", default = FALSE)
     PlotDesc(x, main="", wrd=wrd, horiz=horiz)  # 2.2.2015: table might need the horiz argument, that's clearly a hack...
     # ...  rises a warning for disregarding other arguments, as verbose for example
     #  ******* KEEP AN EYE ON ME *****************    

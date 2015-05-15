@@ -1,5 +1,5 @@
 Stamp <-
-function(txt, pwd=FALSE, time=FALSE) {
+function(txt, pwd=FALSE, time=FALSE, srt=0) {
   
   stamp <- function(string = Sys.time(), print = TRUE, plot = TRUE)
   {
@@ -22,7 +22,7 @@ function(txt, pwd=FALSE, time=FALSE) {
       ycoord <- 10^(ycoord)
     
     ## Print the text on the current plot
-    text(xcoord, ycoord, string, adj=1)
+    text(xcoord, ycoord, string, adj=1, srt=srt)
     invisible(string)
   }
   

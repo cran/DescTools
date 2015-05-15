@@ -71,6 +71,7 @@ function (x, g, method = c("holm","hochberg","hommel","bonferroni","BH","BY","fd
   }
   
   class(out) <- c("DunnTest")
+  attr(out, "main") <- gettextf("Dunn's test of multiple comparisons using rank sums : %s ", method.str)
   attr(out, "method") <- method.str
   attr(out, "out.list") <- out.list
   

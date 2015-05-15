@@ -5,8 +5,8 @@
 Frequency Table
 }
 \description{
-Calculates absolute and relative frequencies of a vector x. Continuous variables 
-will be cut using the logic applied by the function \code{\link{hist}}. 
+Calculates absolute and relative frequencies of a vector x. Continuous (numeric) variables 
+will be cut using the same logic as used by the function \code{\link{hist}}. 
 Categorical variables will be aggregated by \code{\link{table}}. The result will contain single and cumulative frequencies for both, absolute values and percentages.
  
 }
@@ -19,34 +19,33 @@ Freq(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE,
 
 }
 
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{the variable to be described, x can be numeric or a(n) (ordered) factor.
+  \item{x}{the variable to be described, can be any atomic type. 
 }
   \item{breaks}{either a numeric vector of two or more cut points or a single number (greater than or equal to 2) 
     giving the number of intervals into which x is to be cut. Default taken from the function \kbd{hist()}.
-    This is ignored if x is a factor.
+    This is ignored if x is not of numeric type.
 }
-  \item{include.lowest}{logical, indicating if an x[i] equal to the lowest (or highest, for \code{right = FALSE}) \code{"breaks"} value should be included.
+  \item{include.lowest}{logical, indicating if an x[i] equal to the lowest (or highest, for \code{right = FALSE}) \code{"breaks"} value should be included. Ignored if x is not of numeric type.
 }
-  \item{ord}{how should the result be ordered? Default is \kbd{"level"}, other choices are by frequency (\kbd{"descending"} or \kbd{"ascending"}) 
-    or by name of the levels (\kbd{"name"}). The argument can be abbreviated. This is ignored if x is numeric.
+  \item{ord}{how should the result be ordered? Default is \kbd{"level"}, other choices are 'by frequency' (\kbd{"descending"} or \kbd{"ascending"}) 
+    or 'by name of the levels' (\kbd{"name"}). The argument can be abbreviated. This is ignored if x is numeric.
 }
-  \item{useNA}{one out of \code{"no"}, \code{"ifany"}, \code{"always"}. Defines whether to include extra NA levels in the table. 
+  \item{useNA}{one out of \code{"no"}, \code{"ifany"}, \code{"always"}. Defines whether to include extra \code{NA} levels in the table. 
    Defaults to \code{"no"} which is the \code{\link{table}()} default too.
 }
   \item{digits}{integer, determining the number of digits used to format the relative frequencies.
 }
 
   \item{\dots}{further arguments are passed to the function \code{\link{cut}()}. Use \code{dig.lab} to control the format of numeric group names. Use the argument \code{right} to define if the intervals should be closed on the right (and open on the left) or vice versa. \cr
-  In print.Freq the dots are not used.
+  In \code{print.Freq} the dots are not used.
 }
 }
 \details{
-When breaks is specified as a single number, the range of the data is divided into breaks pieces of equal length, 
-and then the outer limits are moved away by 0.1% of the range to ensure that the extreme values both fall 
+If \code{breaks} is specified as a single number, the range of the data is divided into breaks pieces of equal length, 
+and then the outer limits are moved away by 0.1\% of the range to ensure that the extreme values both fall 
 within the break intervals. 
-(If x is a constant vector, equal-length intervals are created that cover the single value.) 
+(If \code{x} is a constant vector, equal-length intervals are created that cover the single value.) 
 }
 \value{an object of type \code{"Freq"}, which is basically a data.frame with 5 columns (earning a specific print routine), containing the following components:
   \item{level}{ factor. The levels of the grouping variable.}
@@ -80,6 +79,5 @@ Freq(d.pizza$driver, ord="desc")
 # sorted by name, including NAs
 Freq(d.pizza$driver, ord="name", useNA="ifany")
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
 \keyword{ univar }
 

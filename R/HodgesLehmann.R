@@ -25,8 +25,7 @@ function(x, y = NULL, conf.level = NA, na.rm = FALSE) {
 #     names(.r) <- c("estimate","lower","upper")
 #     .r
 #   }
-  
-  
+
   
   # inspired by package ICSNP, function hl.loc
   

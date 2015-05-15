@@ -28,7 +28,7 @@ function (x, na.rm = FALSE, method = 3, conf.level = NA, ci.type = "bca", R=1000
   } else {
     if(ci.type == "classic") {
       res <- i.kurt(x, method=method)
-      res <- c(kurtosis=res[1], lwr.ci=pnorm(1-(1-conf.level)/2) * sqrt(res[2]), upr.ci=pnorm(1-(1-conf.level)/2) * sqrt(res[2]))
+      res <- c(kurtosis=res[1], lwr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]), upr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]))
       
     } else {
       
@@ -46,7 +46,7 @@ function (x, na.rm = FALSE, method = 3, conf.level = NA, ci.type = "bca", R=1000
         upr.ci <- ci[[4]][5]
       }  
       
-      res <- c(kurt=boot.kurt$t0, lwr.ci=lwr.ci, upr.ci=upr.ci)
+      res <- c(kurt=boot.kurt$t0[1], lwr.ci=lwr.ci, upr.ci=upr.ci)
     }
   }
   

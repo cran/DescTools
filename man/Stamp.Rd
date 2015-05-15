@@ -7,13 +7,14 @@ corner. Optionally add the current working directory and arbitrary other
 text to the stamp.
 }
 \usage{
-Stamp(txt, pwd = FALSE, time = FALSE)
+Stamp(txt, pwd = FALSE, time = FALSE, srt = 0)
 }
 \arguments{
   \item{txt}{an optional single text string}
   \item{pwd}{set to \code{TRUE} to add the current working directory
 	name to the stamp}
   \item{time}{set to \code{FALSE} to use the date without the time}
+  \item{srt}{string rotation}
 }
 \details{
   For \R results may not be satisfactory if \code{par(mfrow=)} is in effect.

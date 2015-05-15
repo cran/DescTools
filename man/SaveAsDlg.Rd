@@ -1,14 +1,14 @@
-\name{SaveAs}
-\alias{SaveAs}
+\name{SaveAsDlg}
+\alias{SaveAsDlg}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Save R Objects By Choosing a File Interactively
 %%  ~~function to do ... ~~
 }
-\description{\code{SaveAs} displays the \code{\link{file.choose}} dialog to get a path/filename and uses \code{\link{save}} to write an external representation of R objects to the specified file
+\description{\code{SaveAsDlg} displays the \code{\link{file.choose}} dialog to get a path/filename and uses \code{\link{save}} to write an external representation of R objects to the specified file
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-SaveAs(x, filename)
+SaveAsDlg(x, filename)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

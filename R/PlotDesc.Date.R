@@ -10,7 +10,7 @@ function(x, main = deparse(substitute(x)), breaks = NULL, ..., wrd = NULL) {
   # par(mar=c(10.1,3.1,4.1,1.1), oma=c(0,9,0,0), mfrow=c(1,1))
   par(oma=c(0,9,0,0))
   
-  tab <- table( factor( format( x, "%A"), levels=format(ISOdate(2000, 1, 3:9), "%A"), ordered=TRUE) )
+  tab <- c(table( factor( format( x, "%A"), levels=format(ISOdate(2000, 1, 3:9), "%A"), ordered=TRUE) ))
   r.chi <- chisq.test(rev(tab))
 
   dotchart( as.numeric(r.chi$exp[]), xlim=range(pretty(range(c(r.chi$exp[],r.chi$obs[]))))
@@ -28,8 +28,8 @@ function(x, main = deparse(substitute(x)), breaks = NULL, ..., wrd = NULL) {
 
   ydays <- factor( format(seq(from=as.Date("2010-01-01")
     ,to=as.Date("2010-12-31"), by="day"), "%B"), levels=format(ISOdate(2000, 1:12, 1), "%B") )
-  r.chi <- chisq.test( rev(table(factor(format(x, "%B"),levels=levels(ydays))))
-    , p=prop.table( rev( table(ydays))) )
+  r.chi <- chisq.test( rev(c(table(factor(format(x, "%B"),levels=levels(ydays)))))
+    , p=prop.table( rev( c(table(ydays)))) )
   month_xlim <- range(pretty(range(c(r.chi$exp[],r.chi$obs[]))))  
   dotchart( as.numeric(r.chi$exp[]), xlim=month_xlim
     , color="black", bg="white", pch=21, cex=0.8, xpd=TRUE  )

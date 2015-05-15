@@ -13,35 +13,33 @@ Gini(x, n = rep(1, length(x)), unbiased = TRUE,
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{a vector containing at least non-negative elements.
+  \item{x}{a vector containing at least non-negative elements. The result will be \code{NA}, if x contains negative elements.
 %%     ~~Describe \code{x} here~~
 }
   \item{n}{a vector of frequencies (weights), must be same length as x.
 %%     ~~Describe \code{n} here~~
 }
   \item{unbiased}{logical. In order for G to be an unbiased estimate of the true population value, 
-   calculated gini is multiplied by n/(n-1). Default is TRUE. (See Dixon, 1987)
+   calculated gini is multiplied by \eqn{n/(n-1)}{n/(n-1)}. Default is TRUE. (See Dixon, 1987)
 %%     ~~Describe \code{unbiased} here~~
 }
-  \item{conf.level}{confidence level for the returned confidence interval, restricted to lie between 0 and 1.\cr
-  If set to TRUE the bootstrap confidence intervals are calculated.\cr
-  If set to NA, which is the default, no confidence intervals are returned. 
+  \item{conf.level}{confidence level for the confidence interval, restricted to lie between 0 and 1. 
+  If set to \code{TRUE} the bootstrap confidence intervals are calculated.
+  If set to \code{NA} (default) no confidence intervals are returned. 
   
 %%     ~~Describe \code{conf.level} here~~
 }
-  \item{R}{The number of bootstrap replicates. Usually this will be a single positive integer. 
+  \item{R}{number of bootstrap replicates. Usually this will be a single positive integer. 
   For importance resampling, some resamples may use one set of weights and others use a different set of weights. In this case R would be a vector of 
   integers where each component gives the number of resamples from each of the rows of weights.\cr
   This is ignored if no confidence intervals are to be calculated.
   
 %%     ~~Describe \code{R} here~~
 }
-  \item{type}{A vector of character strings representing the type of intervals required. 
-  The value should be any subset of the values c(\code{"norm"},\code{"basic"}, \code{"stud"}, 
-  \code{"perc"}, \code{"bca"}) 
-  or simply \code{"all"} which will compute all five types of intervals.
-  \cr
-  This is ignored if no confidence intervals are to be calculated.
+  \item{type}{character string representing the type of interval required. 
+  The value should be one out of the c(\code{"norm"},\code{"basic"}, \code{"stud"}, 
+  \code{"perc"} or \code{"bca"}).\cr
+  This argument is ignored if no confidence intervals are to be calculated.
 %%     ~~Describe \code{type} here~~
 }
   \item{na.rm}{logical. Should missing values be removed? Defaults to FALSE.
@@ -60,9 +58,15 @@ this produces values very closed to conventional bias corrected intervals.\cr
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-If conf.level is NA then the result will be a single numeric value.\cr
-If conf.level is provided the result will be a vector with 3 elements for estimate, lower confidence intervall and upper for the upper one.
-  }
+If \code{conf.level} is set to \code{NA} then the result will be  
+\item{}{a single numeric value} and 
+if a \code{conf.level} is provided, a named numeric vector with 3 elements:
+  \item{gini}{Gini coefficient}
+  \item{lwr.ci}{lower bound of the confidence interval}
+  \item{upr.ci}{upper bound of the confidence interval}
+}
+
+  
 \references{
 Cowell, F. A. (2000) Measurement of Inequality in Atkinson, A. B. / Bourguignon, F. (Eds): \emph{Handbook of Income Distribution}. Amsterdam.
 
@@ -101,22 +105,23 @@ x <- c(541, 1463, 2445, 3438, 4437, 5401, 6392, 8304, 11904, 22261)
 Gini(x)
 
 # working with weights
-fl <- c(2.5,7.5,15,35,75,150)    # midpoints of classes
-n  <- c(25,13,10,5,5,2)          # frequencies
+fl <- c(2.5, 7.5, 15, 35, 75, 150)    # midpoints of classes
+n  <- c(25, 13, 10, 5, 5, 2)          # frequencies
 
+# with confidence intervals
 Gini(fl, n, conf.level=0.95, unbiased=FALSE)
 
 # some special cases
-x <- c(10,10,0,0,0)
+x <- c(10, 10, 0, 0, 0)
 plot(Lc(x))
 
 Gini(x, unbiased=FALSE)
 
 # the same with weights
-Gini(x=c(10,0), n=c(2,3), unbiased=FALSE)
+Gini(x=c(10, 0), n=c(2,3), unbiased=FALSE)
 
 # perfect balance
-Gini(c(10,10,10))
+Gini(c(10, 10, 10))
 }
 \keyword{univar}
 

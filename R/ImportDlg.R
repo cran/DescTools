@@ -7,8 +7,8 @@ function(fmt=1) {
     fmt="d.%fname% <- read.table(file = \"%path%%fname%.%fxt%\", header = TRUE, sep = \";\", na.strings = c(\"NA\",\"NULL\"), strip.white = TRUE)"
   }}
 
-  # fn <- file.choose()
-  fn <- tclvalue(tkgetOpenFile()) 
+  fn <- file.choose()
+  # fn <- tcltk::tclvalue(tcltk::tkgetOpenFile()) 
   
   op <- options(useFancyQuotes = FALSE)
   # switch from backslash to slash

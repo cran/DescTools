@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-CohenD(x, y, pooled = FALSE, correct = FALSE, conf.level = NA, na.rm = FALSE)
+CohenD(x, y = NULL, pooled = TRUE, correct = FALSE, conf.level = NA, na.rm = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,7 +18,7 @@ CohenD(x, y, pooled = FALSE, correct = FALSE, conf.level = NA, na.rm = FALSE)
   \item{y}{a (non-empty) numeric vector of data values.
 %%     ~~Describe \code{y} here~~
 }
-  \item{pooled}{logical, indicating whether compute pooled standard deviation or the whole sample standard deviation. Default is FALSE.
+  \item{pooled}{logical, indicating whether compute pooled standard deviation or the whole sample standard deviation. Default is TRUE.
 %%     ~~Describe \code{pooled} here~~
 }
   \item{correct}{logical, indicating whether to apply the Hedges correction. (Default: FALSE)

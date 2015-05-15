@@ -1,7 +1,7 @@
 print.DunnTest <-
 function (x, digits = getOption("digits"), ...) {
   
-  cat(gettextf("\n  Dunn's test of multiple comparisons using rank sums : %s \n\n", attr(x, "method")))
+  cat("\n", attr(x, "main"), "\n\n")
   xx <- unclass(x)
   
   if(attr(x, "out.list")==TRUE) {

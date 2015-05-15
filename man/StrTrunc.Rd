@@ -19,12 +19,10 @@
  The string(s) passed as \samp{x} now with a maximum length of \samp{maxlen} + 3 (for the ellipsis).
 }
 
-\author{Andri Signorell, based on code of Jim Lemon}
+\author{Andri Signorell, \cr following an idea of Jim Lemon in \code{\link[prettyR]{truncString}()}}
 \seealso{String functions: 
 \code{\link{nchar}}, \code{\link{match}}, \code{\link{grep}}, \code{\link{regexpr}}, \code{\link{substr}}, \code{\link{sub}}, \code{\link{gsub}},
 \code{\link{StrTrim}}, \code{\link{StrDist}}  
-
-\code{\link[prettyR]{truncString}()} in the package \pkg{prettyR}
 }
 
 \examples{

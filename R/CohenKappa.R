@@ -43,7 +43,7 @@ function (x, y = NULL, weights = c("Unweighted", "Equal-Spacing", "Fleiss-Cohen"
     1 - abs(outer(1:nc, 1:nc, "-"))/(nc - 1)
   else # weightx == "Fleiss-Cohen"
     1 - (abs(outer(1:nc, 1:nc, "-"))/(nc - 1))^2
-
+  
   pow <- sum(W * x)/n
   pcw <- sum(W * colFreqs %o% rowFreqs)
 

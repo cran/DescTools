@@ -8,13 +8,13 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-SampleTwins(data, stratanames = NULL, twins, 
+SampleTwins(x, stratanames = NULL, twins, 
             method = c("srswor", "srswr", "poisson", "systematic"), 
             pik, description = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{data}{the data to draw the sample from
+  \item{x}{the data to draw the sample from
 %%     ~~Describe \code{data} here~~
 }
   \item{stratanames}{the stratanames to use
@@ -63,7 +63,7 @@ names(m) <- c("state","region","income")
 d.smp <- m[sample(nrow(m), size=10, replace=TRUE),]
 
 # draw the sample
-s <- SampleTwins(data = m, stratanames=c("state","region"), twins = d.smp, method="srswor")
+s <- SampleTwins(x = m, stratanames=c("state","region"), twins = d.smp, method="srswor")
 
 d.twin <- m[s$id,]
 d.twin

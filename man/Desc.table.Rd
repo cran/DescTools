@@ -27,7 +27,7 @@ the dimensions of the table, chi-square tests and some association measures as p
   \item{main}{the main caption for the output.
 %%     ~~Describe \code{main} here~~
 }
-  \item{rfrq}{a string with 3 characters, each of them being \code{1} or \code{0}. The first position is interpreted as total 
+  \item{rfrq}{a string with 3 characters, each of them being \code{1} or \code{0}, defining which percentages should be reported. The first position is interpreted as total 
     percentages, the second as row percentages and the third as column percentages. \cr
     "\code{011}" hence produces a table output with row and column percentages. If set to \code{NULL} \code{rfrq} is defined in 
     dependency of \code{verbose} (\code{verbose = "low"} sets \code{rfrq} to \code{"000"} and else to \code{"111"}, latter meaning all percentages will be reported.)
@@ -40,12 +40,12 @@ the dimensions of the table, chi-square tests and some association measures as p
   \item{plotit}{logical. Should a plot be created? The table will be plotted by \code{\link{PlotDesc.table}}, which creates two mosaicplots. Default is \code{FALSE}. 
 %%     ~~Describe \code{plotit} here~~
 }
-  \item{verbose}{character defining the verbosity of the reported results. One out of \code{c("medium","low","high")}, "medium" being the default. Can be abbreviated.
+  \item{verbose}{character defining the verbosity of the reported results. One out of \code{c("medium", "low", "high")}, "medium" being the default. Can be abbreviated.
 }
   \item{\dots}{the dots are passed to the function \code{\link{PercTable}}, allowing to set futher arguments like expected values etc.}
 }
 \details{Note that NAs cannot be handled by this interface, as tables in general come in "as.is", say basically as a matrix without any 
-further information about potentially cleared NAs.
+further information about potentially previously cleared NAs.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{no results are returned.
@@ -74,7 +74,7 @@ tab <- as.matrix(read.table(text="
 
 tab
 
-# taciturn 
+# taciturn ("Ripley style")
 Desc(tab, verbose="low")  
 
 # talkative  

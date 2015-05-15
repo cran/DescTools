@@ -1,4 +1,4 @@
-SaveAs <-
+SaveAsDlg <-
 function(x, filename){
   if(missing(filename))
     filename <- file.choose()

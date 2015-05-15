@@ -1,6 +1,7 @@
 \name{WrdTable}
 \alias{WrdTable}
 \alias{WrdTable.Freq}
+\alias{WrdTable.ftable}
 \alias{WrdTable.default}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Produces a Table in Word
@@ -14,6 +15,8 @@
 WrdTable(tab, main = NULL, wrd = getOption("lastWord"), row.names = FALSE, \dots)
 
 \method{WrdTable}{Freq}(tab, main = NULL, wrd = getOption("lastWord"), row.names = FALSE, \dots)
+
+\method{WrdTable}{ftable}(tab, main = NULL, wrd = getOption("lastWord"), row.names = FALSE, \dots)
 
 \method{WrdTable}{default}(tab, main = NULL, wrd = getOption("lastWord"), row.names = FALSE, 
          fmt = NULL, fontsize = NULL,\dots)

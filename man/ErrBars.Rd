@@ -9,8 +9,8 @@
 }
 \usage{
 ErrBars(from, to = NULL, pos = NULL, mid = NULL, horiz = FALSE, col = par("fg"), 
-           lty = par("lty"), lwd = par("lwd"), code = 3, length = 0.05,
-           pch = NA, cex.pch = par("cex"), col.pch = par("fg"), bg.pch = par("bg") )
+        lty = par("lty"), lwd = par("lwd"), code = 3, length = 0.05,
+        pch = NA, cex.pch = par("cex"), col.pch = par("fg"), bg.pch = par("bg") )
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -27,7 +27,7 @@ ErrBars(from, to = NULL, pos = NULL, mid = NULL, horiz = FALSE, col = par("fg"),
   \item{mid}{numeric, position of midpoints. Defaults to the mean of from and to.
 %%     ~~Describe \code{col} here~~
 }
-  \item{horiz}{boolean, TRUE (default) if horizontal error bars are needed.
+  \item{horiz}{logical, determining whether horizontal error bars are needed (default is FALSE).
 %%     ~~Describe \code{col} here~~
 }
   \item{col}{the line color.
@@ -50,9 +50,10 @@ ErrBars(from, to = NULL, pos = NULL, mid = NULL, horiz = FALSE, col = par("fg"),
   \item{pch}{plotting character for the midpoints. No points will be plotted if this is set to NA, 
   which is the default.
 }
-  \item{cex.pch}{the character extension for the plotting characters. Default is par("cex")}
-  \item{col.pch}{the color of the plotting characters. Default is par("fg")}
-  \item{bg.pch}{the background color of the plotting characters (if pch is set to 21:25). Default is par("bg")}
+  \item{cex.pch}{the character extension for the plotting characters. Default is \code{par("cex")}.}
+  \item{col.pch}{the color of the plotting characters. Default is \code{par("fg")}.
+  }
+  \item{bg.pch}{the background color of the plotting characters (if pch is set to 21:25). Default is \code{par("bg")}.}
 
   \item{\dots}{the dots are passed to the \code{\link{arrows}} function.
 %%     ~~Describe \code{\dots} here~~

@@ -8,50 +8,41 @@
   returns an error.
 }
 \usage{
-HuberM(x, k = 1.5, weights = NULL, tol = 1e-06,
-       mu = if(is.null(weights)) median(x) else wgt.himedian(x, weights),
-       s =  if(is.null(weights)) mad(x, center=mu)
-	            else wgt.himedian(abs(x - mu), weights),
-       se = FALSE,
-       warn0scale = getOption("verbose"), na.rm = FALSE, stats = FALSE)
+HuberM(x, k = 1.5, mu = median(x), s = mad(x, center = mu), 
+       na.rm = FALSE, conf.level = NA, ci.type = c("wald", "boot"), ...)
+       
 }
 \arguments{
   \item{x}{numeric vector.}
   \item{k}{positive factor; the algorithm winsorizes at \code{k}
     standard deviations.}
-  \item{weights}{numeric vector of non-negative weights of same length
-    as \code{x}, or \code{NULL}.}
-  \item{tol}{convergence tolerance.}
   \item{mu}{initial location estimator.}
   \item{s}{scale estimator held constant through the iterations.}
-  \item{se}{logical indicating if the standard error should be computed
-    and returned (as \code{SE} component).  Currently only available
-    when \code{weights} is \code{NULL}.}
-  \item{warn0scale}{logical; if true, and \code{s} is 0 and
-    \code{length(x) > 1}, this will be warned about.}
-  \item{na.rm}{logical, indicating whether NA values should be stripped before the computation proceeds. Defaults to FALSE. }
-  \item{stats}{logical, should all the details be returned or only the estimate. Defaults to FALSE. }
-  
+  \item{na.rm}{logical, indicating whether NA values should be stripped before the computation proceeds. Defaults to FALSE.}
+ \item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated. }
+ \item{ci.type}{The type of confidence interval required. The value should be any subset 
+ of the values \code{"classic"}, \code{"norm"}, \code{"basic"}, \code{"stud"}, \code{"perc"} or \code{"bca"}  (\code{"all"} 
+ which would compute all five types of intervals, is not supported). 
 }
-\value{
-  list of location and scale parameters, and number of iterations used.
-  \item{mu}{location estimate}
-  \item{s}{the \code{s} argument, typically the \code{\link{mad}}.}
-  \item{it}{the number of \dQuote{Huber iterations} used.}
+\item{\dots}{ the dots are passed to the function \code{\link{boot}}, when confidence intervalls are calculated.}
 }
-\details{
-  Note that currently, when non-\code{NULL} \code{weights} are
-  specified, the default for initial location \code{mu} and scale
-  \code{s} is \code{wgt.himedian}, where strictly speaking a
-  weighted \dQuote{non-hi} median should be used for consistency.
-  Since \code{s} is not updated, the results slightly differ, see the
-  examples below.
 
-  When \code{se = TRUE}, the standard error is computed using the
-  \eqn{\tau} correction factor but no finite sample correction.
+\details{
+   The standard error is computed using the \eqn{\tau} correction factor but no finite sample correction.
   % and as if \code{s} was not estimated from the data.
 }
-\author{Martin Maechler, building on the MASS code mentioned.}
+
+\value{
+If \code{conf.level} is set to \code{NA} then the result will be  
+\item{}{a single numeric value} and 
+if a \code{conf.level} is provided, a named numeric vector with 3 elements:
+  \item{huberm}{the estimate}
+  \item{lwr.ci}{lower bound of the confidence interval}
+  \item{upr.ci}{upper bound of the confidence interval}
+}
+
+\author{Martin Maechler, building on the MASS code mentioned.\cr
+Andri Signorell <andri@signorell.net> (confidence intervals and interface)}
 \references{
   Huber, P. J. (1981)
   \emph{Robust Statistics.}
@@ -64,27 +55,22 @@ HuberM(x, k = 1.5, weights = NULL, tol = 1e-06,
 \examples{
 HuberM(c(1:9, 1000))
 mad   (c(1:9, 1000))
-mad   (rep(9, 100))
-HuberM(rep(9, 100))
 
-## When you have "binned" aka replicated observations:
 set.seed(7)
-x <- c(round(rnorm(1000),1), round(rnorm(50, m=10, sd = 10)))
-t.x <- table(x) # -> unique values and multiplicities
-x.uniq <- as.numeric(names(t.x)) ## == sort(unique(x))
-x.mult <- unname(t.x)
-str(Hx  <- HuberM(x.uniq, weights = x.mult, stats=TRUE), digits = 7)
-str(Hx. <- HuberM(x, s = Hx$s, se=TRUE, stats=TRUE), digits = 7) ## should be ~= Hx
-stopifnot(all.equal(Hx[-4], Hx.[-4]))
-str(Hx2 <- HuberM(x, se=TRUE), digits = 7)## somewhat different, since 's' differs
+x <- c(round(rnorm(1000), 1), round(rnorm(50, m=10, sd = 10)))
+HuberM(x, conf.level=0.95)
 
-## Confirm correctness of std.error :
-# system.time(
-# SS <- replicate(10000, vapply(HuberM(rnorm(400), se=TRUE), as.double, 1.))
-# ) # ~ 12.2 seconds
-# rbind(mean(SS["SE",]), sd(SS["mu",]))# both ~ 0.0508
-# stopifnot(all.equal(mean(SS["SE",]),
-#                    sd ( SS["mu",]), tol= 0.002))
+
+\dontrun{
+
+# scale zero
+HuberM(rep(9, 100))
+mad   (rep(9, 100))
+
+# bootstrap confidence intervals
+HuberM(x, conf.level=0.95, ci.type="boot")
+}
+ 
 }
 \keyword{univar}
 \keyword{robust}

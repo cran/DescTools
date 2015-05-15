@@ -107,6 +107,11 @@ Desc(d.pizza[,1:4], wrd=wrd)
 
 wrd <- GetNewWrd(header=TRUE)
 Desc(d.pizza[,1:4], wrd=wrd)
+
+# enumerate all bookmarks in active document
+for(i in 1:wrd[["ActiveDocument"]][["Bookmarks"]]$count()){
+  print(wrd[["ActiveDocument"]][["Bookmarks"]]$Item(i)$Name())
+}
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

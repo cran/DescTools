@@ -14,7 +14,7 @@ function(x, const=9, na.rm = FALSE, conf.level = NA, ci.type = "bca", R=1000, ..
     # adjusted bootstrap percentile (BCa) interval  
     boot.tbw <- boot(x, function(x, d) .Call("tbrm", as.double(x[d]), const), R=R, ...)
     ci <- boot.ci(boot.tbw, conf=conf.level, type=ci.type)
-    res <- c(kurt=boot.tbw$t0, lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])
+    res <- c(tbw=boot.tbw$t0, lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])
   }
   
   return(res)

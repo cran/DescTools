@@ -1,0 +1,46 @@
+\name{as.matrix.xtabs}
+\alias{as.matrix.xtabs}
+%- Also NEED an '\alias' for EACH other topic documented here.
+\title{Xtabs to Matrix
+%%  ~~function to do ... ~~
+}
+\description{This function turns an xtabs object into a matrix.
+%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+}
+\usage{
+\method{as.matrix}{xtabs}(x, ...)
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{x}{an object of class \code{xtabs}
+%%     ~~Describe \code{x} here~~
+}
+  \item{\dots}{additional arguments to be passed to or from methods.
+%%     ~~Describe \code{\dots} here~~
+}
+}
+\details{\code{\link{xtabs}} is indeed already a matrix, but won't be converted to a pure matrix by as.matrix.default function, as its classes will remain unchanged. Some functions expecting a pure matrix may fail, when fed with a xtabs object.
+This function will only kill the classes and the call attribute. 
+%%  ~~ If necessary, more details than the description above ~~
+}
+\author{Andri Signorell <andri@signorell.net>
+%%  ~~who you are~~
+}
+
+%% ~Make other sections like Warning with \section{Warning }{....} ~
+
+\seealso{\code{\link{as.matrix}}, \code{\link{xtabs}}
+%% ~~objects to See Also as \code{\link{help}}, ~~~
+}
+\examples{
+tab <- xtabs( ~ driver + operator, data=d.pizza)
+
+str(tab)
+class(tab)
+
+str(as.matrix(tab))
+class(as.matrix(tab))
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{ manipulate }% __ONLY ONE__ keyword per line

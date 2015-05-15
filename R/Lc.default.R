@@ -4,7 +4,7 @@ function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
   g <- Gini(x, n, na.rm=na.rm)
   
   if(na.rm) x <- na.omit(x)
-  if (any(is.na(x))) return(NA_real_)
+  if (any(is.na(x)) || any(x < 0)) return(NA_real_)
   
   k <- length(x)
   o <- order(x)

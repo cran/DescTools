@@ -17,7 +17,6 @@ citEntry(entry="Manual",
                "). DescTools: Tools for descriptive statistics. ",
                vers, ".", sep=""))
 
-citFooter("We have invested a lot of time and effort in creating this package, please cite it when using it for data analysis.")
  
 
 

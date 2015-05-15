@@ -1,9 +1,13 @@
 Rev.table <-
-function(x, direction = c("row","column","both"), ...) {
+function(x, margin, ...) {
   
-  direction <- match.arg(direction, choices=c("row","column","both"))
+  if (!is.array(x)) 
+    stop("'x' is not an array")
   
-  if(direction != "row") x <- x[, ncol(x):1L]
-  if(direction != "column") x <- x[nrow(x):1L,]
-  return(x)  
+  newdim <- rep("", length(dim(x)))
+  newdim[margin] <- paste(dim(x), ":1", sep="")[margin]
+  z <- eval(parse(text=gettextf("x[%s]", paste(newdim, sep="", collapse=","))))
+  class(z) <- oldClass(x)  
+  return(z)
+  
 }

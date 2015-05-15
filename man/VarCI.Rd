@@ -39,9 +39,6 @@ VarCI(x, method = c("classic", "norm", "basic", "stud", "perc", "bca"),
   \item{upr.ci}{upper bound of the confidence interval}
 }
 
-\references{
-\url{http://wiki.stat.ucla.edu/socr/index.php/AP_Statistics_Curriculum_2007_Estim_Var}
-}
 \author{
 Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~

@@ -4,37 +4,31 @@
 \title{Parse a SAS Dataline Command
 %%  ~~function to do ... ~~
 }
-\description{A parser for simple SAS dataline command texts. A data.frame is being built with the columnnames listed in the input section. Further format codes or similar are not supported.
+\description{A parser for simple SAS dataline command texts. A \code{data.frame} is being built with the columnnames listed in the input section. The data object will be created in the given environment.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-ParseSASDatalines(x)
+ParseSASDatalines(x, env = .GlobalEnv, overwrite = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{the SAS text 
-%%     ~~Describe \code{x} here~~
+  \item{x}{the SAS text }
+  \item{env}{environment in which the dataset should be created.}
+  \item{overwrite}{logical. If set to TRUE, the function will silently overwrite a potentially existing object in \code{env} with the same name as declared in the SAS \code{DATA} section. If set to \code{FALSE} (default) an error will be raised if there already exists an object with the same name. }
+  
+
 }
-}
-\details{The function is designed for quickly import SAS data. More complex command structures in the INPUT-section are not supported.
+\details{The SAS function \code{DATA} is designed for quickly creating a dataset from scratch. The whole step  normally consists out of the \code{DATA} part defining the name of the dataset, an \code{INPUT} line declaring the variables and a \code{DATALINES} command followed by the values.\cr
+The default delimiter used to separate the different variables is a space (thus each variable should be one word). The $ after the variable name indicates that the variable preceding contain character values and not numeric values. Without specific instructions, SAS assumes that variables are numeric. The function will fail, if it encounters a character in the place of an expected numeric value.\cr
+Each new row in datalines will create a corresponding unique row in the dataset. Notice that a ; is not needed after every row, rather it is included at the end of the entire data step.
+
+More complex command structures, i.e. other delimiters (dlm), in the \code{INPUT}-section are not (yet) supported.
 %%  ~~ If necessary, more details than the description above ~~
 }
-\value{a data.frame
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\author{Andri Signorell <andri@signorell.net>
-%%  ~~who you are~~
-}
+\value{a data.frame}
+\author{Andri Signorell <andri@signorell.net>}
+\seealso{ \code{\link{scan}}}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{ \code{\link{scan}}
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
 txt <- " 
 DATA survey; 

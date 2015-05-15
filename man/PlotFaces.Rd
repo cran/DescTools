@@ -6,7 +6,7 @@
      }
 \usage{
 PlotFaces(xy, which.row, fill = FALSE, nrow, ncol, 
-          scale = TRUE, byrow = FALSE, main, labels)
+          scale = TRUE, byrow = FALSE, main, labels, print.info=FALSE, col=NA)
 }
 \arguments{
   \item{xy}{   \code{xy} data matrix, rows represent individuals and columns attributes.  }
@@ -19,6 +19,8 @@ PlotFaces(xy, which.row, fill = FALSE, nrow, ncol,
   \item{byrow}{   \code{if(byrow==TRUE)}, \code{x} will be transposed.   }
   \item{main}{   title.   }
   \item{labels}{   character strings to use as names for the faces.   }
+  \item{print.info}{if \code{TRUE} information about usage of variables for face elements are printed.}
+  \item{col}{a vector of colors used for the parts of the faces. Default is NA, which will omit colors.}
 }
 \details{The features paramters of this implementation are:
 \itemize{

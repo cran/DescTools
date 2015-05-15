@@ -25,8 +25,7 @@ Lambda(x, y = NULL, direction = c("symmetric", "row", "column"), conf.level = NA
   \item{conf.level}{confidence level for the returned confidence interval, restricted to lie between 0 and 1.
 %%     ~~Describe \code{conf.level} here~~
 }
-  \item{\dots}{further arguments are passed to the function \code{\link{table}}, allowing i.e. to set \code{useNA = c("no",
-    "ifany", "always")}.
+  \item{\dots}{further arguments are passed to the function \code{\link{table}}, allowing i.e. to set \cr \code{useNA = c("no", "ifany", "always")}.
 %%     ~~Describe \code{\dots} here~~
 }
 }
@@ -56,7 +55,7 @@ York: Springer-Verlag (contains articles appearing in \emph{J. Amer. Statist. As
 
 %% ~put references to the literature/web site here ~
 }
-\author{Andri Signorell <andri@signorell.net> based on code from Antti Arppe <antti.arppe@helsinki.fi>, Nanina Anderegg (confidence interval symmetric lambda)
+\author{Andri Signorell <andri@signorell.net> based on code from Antti Arppe <antti.arppe@helsinki.fi>, \cr Nanina Anderegg (confidence interval symmetric lambda)
 }
 
 \seealso{\code{\link{GoodmanKruskalGamma}}, \code{\link{SomersDelta}}, \code{\link{StuartTauC}}, 

@@ -102,6 +102,244 @@ function(x, digits=3, sdigits=7, big.mark="'") {
     formatC(x)
   }  
 }
+.ImportSPSS <-
+function(datasetname = "dataset") {
+# read.spss
+# function (file, use.value.labels = TRUE, to.data.frame = FALSE, 
+#           max.value.labels = Inf, trim.factor.names = FALSE, trim_values = TRUE, 
+#           reencode = NA, use.missings = to.data.frame) 
+  e1 <- environment()
+  env.dsname <- character()
+  env.use.value.labels <- logical()
+  env.to.data.frame <- logical()
+  env.max.value.labels <- character()
+  env.trim.factor.names <- logical()
+  env.trim.values <- logical()
+  env.reencode <- character()
+  env.use.missings <- logical()
+  lst <- NULL
+  
+  OnOK <- function() {
+    assign("lst", list(), envir = e1)
+    assign("env.dsname", tcltk::tclvalue(dsname), envir = e1)
+    assign("env.use.value.labels", tcltk::tclvalue(use.value.labels), envir = e1)
+    assign("env.to.data.frame", tcltk::tclvalue(to.data.frame), envir = e1)
+    assign("env.max.value.labels", tcltk::tclvalue(max.value.labels), envir = e1)
+    assign("env.trim.factor.names", tcltk::tclvalue(trim.factor.names), envir = e1)
+    assign("env.trim.values", tcltk::tclvalue(trim.values), envir = e1)
+    assign("env.reencode", tcltk::tclvalue(reencode), envir = e1)
+    assign("env.use.missings", tcltk::tclvalue(use.missings), envir = e1)
+    tcltk::tkdestroy(top)
+  }
+  
+  top <- .InitDlg(350, 300, main="Import SPSS Dataset")
+  
+  dsname <- tcltk::tclVar(datasetname)
+  dsnameFrame <- tcltk::tkframe(top, padx = 10, pady = 10)
+  entryDsname <- tcltk::ttkentry(dsnameFrame, width=30, textvariable=dsname)
+  
+  optionsFrame <- tcltk::tkframe(top, padx = 10, pady = 10)
+  
+  use.value.labels <- tcltk::tclVar("1")
+  use.value.labelsCheckBox <- tcltk::ttkcheckbutton(optionsFrame, text="Use value labels", variable=use.value.labels)
+
+  to.data.frame <- tcltk::tclVar("1")
+  to.data.frameCheckBox <- tcltk::ttkcheckbutton(optionsFrame, 
+                                            text="Convert value labels to factor levels", variable=to.data.frame)
+  max.value.labels <- tcltk::tclVar("Inf")
+  entryMaxValueLabels <- tcltk::ttkentry(optionsFrame, width=30, textvariable=max.value.labels)
+  
+  trim.values <- tcltk::tclVar("1")
+  trim.valuesCheckBox <- tcltk::ttkcheckbutton(optionsFrame, text="Ignore trailing spaces when matching"
+                                         , variable=trim.values)
+  trim.factor.names <- tcltk::tclVar("1")
+  trim.factor.namesCheckBox <- tcltk::ttkcheckbutton(optionsFrame, text="Trim trailing spaces from factor levels"
+                                               , variable=trim.factor.names)
+  reencode <- tcltk::tclVar("")
+  entryReencode <- tcltk::ttkentry(optionsFrame, width=30, textvariable=reencode)
+
+  use.missings <- tcltk::tclVar("1")
+  use.missingsCheckBox <- tcltk::ttkcheckbutton(optionsFrame, text="Use missings", 
+                                                variable=use.missings)
+  
+  tcltk::tkgrid(tcltk::tklabel(dsnameFrame, text="Enter name for data set:  "), entryDsname, sticky="w")
+  tcltk::tkgrid(dsnameFrame, columnspan=2, sticky="w")
+  tcltk::tkgrid(use.value.labelsCheckBox, sticky="w")
+  tcltk::tkgrid(to.data.frameCheckBox, sticky="nw")
+  tcltk::tkgrid(tcltk::ttklabel(optionsFrame, text="Maximal value label:"), sticky="nw")
+  tcltk::tkgrid(entryMaxValueLabels, padx=20, sticky="nw")
+  tcltk::tkgrid(trim.valuesCheckBox, sticky="w")
+  tcltk::tkgrid(trim.factor.namesCheckBox, sticky="w")
+  tcltk::tkgrid(tcltk::ttklabel(optionsFrame, text="Reencode character strings to the current locale:"), sticky="nw")
+  tcltk::tkgrid(entryReencode, padx=20, sticky="nw")
+  tcltk::tkgrid(use.missingsCheckBox, sticky="w")
+  tcltk::tkgrid(optionsFrame, sticky="w")
+  
+  buttonsFrame <- tcltk::tkframe(top, padx = 10, pady = 10)
+  tfButOK <- tcltk::tkbutton(buttonsFrame, text = "OK", command = OnOK, width=10)
+  tfButCanc <- tcltk::tkbutton(buttonsFrame, width=10, text = "Cancel", command = function() tcltk::tkdestroy(top))
+  
+  tcltk::tkgrid(tfButOK, tfButCanc)
+  tcltk::tkgrid.configure(tfButCanc, padx=c(6,6))
+  tcltk::tkgrid.columnconfigure(buttonsFrame, 0, weight=2)
+  tcltk::tkgrid.columnconfigure(buttonsFrame, 1, weight=1)
+  
+  tcltk::tkgrid(buttonsFrame, sticky="ew")
+  tcltk::tkwait.window(top)
+  
+  if(!is.null(lst)){
+    lst <- list(dsname=env.dsname, use.value.labels=as.numeric(env.use.value.labels), 
+                to.data.frame=as.numeric(env.to.data.frame), 
+                max.value.labels=env.max.value.labels, trim.factor.names=as.numeric(env.trim.factor.names),
+                trim.values=as.numeric(env.trim.values), reencode=env.reencode, use.missings=as.numeric(env.use.missings)  )
+  }
+  return(lst)
+  
+}
+.ImportStataDlg <-
+function(datasetname = "dataset") {
+  
+#   function (file, convert.dates = TRUE, convert.factors = TRUE, 
+#             missing.type = FALSE, convert.underscore = FALSE, warn.missing.labels = TRUE) 
+
+  e1 <- environment()
+  env.dsname <- character()
+  env.convert.dates <- logical()
+  env.convert.factors <- logical()
+  env.convert.underscore <- logical()
+  env.missing.type <- logical()
+  env.warn.missing.labels <- logical()
+  lst <- NULL
+  
+  OnOK <- function() {
+    assign("lst", list(), envir = e1)
+    assign("env.dsname", tcltk::tclvalue(dsname), envir = e1)
+    assign("env.convert.dates", tcltk::tclvalue(convert.dates), envir = e1)
+    assign("env.convert.factors", tcltk::tclvalue(convert.factors), envir = e1)
+    assign("env.convert.underscore", tcltk::tclvalue(convert.underscore), envir = e1)
+    assign("env.missing.type", tcltk::tclvalue(missing.type), envir = e1)
+    assign("env.warn.missing.labels", tcltk::tclvalue(warn.missing.labels), envir = e1)
+    tcltk::tkdestroy(top)
+  }
+  
+  top <- .InitDlg(350, 220, main="Import Stata Dataset")
+  
+  dsname <- tcltk::tclVar(datasetname)
+  dsnameFrame <- tcltk::tkframe(top, padx = 10, pady = 10)
+  entryDsname <- tcltk::ttkentry(dsnameFrame, width=30, textvariable=dsname)
+  
+  optionsFrame <- tcltk::tkframe(top, padx = 10, pady = 10)
+  
+  convert.factors <- tcltk::tclVar("1")
+  convert.factorsCheckBox <- tcltk::ttkcheckbutton(optionsFrame, 
+                                     text="Convert value labels to factor levels", variable=convert.factors)
+  convert.dates <- tcltk::tclVar("1")
+  convert.datesCheckBox <- tcltk::ttkcheckbutton(optionsFrame, text="Convert dates to R format", variable=convert.dates)
+
+  missing.type <- tcltk::tclVar("1")
+  missing.typeCheckBox <- tcltk::ttkcheckbutton(optionsFrame, text="Multiple missing types (>=Stata 8)"
+                                          , variable=missing.type)
+  convert.underscore <- tcltk::tclVar("1")
+  convert.underscoreCheckBox <- tcltk::ttkcheckbutton(optionsFrame, text="Convert underscore to period"
+                                                , variable=convert.underscore)
+  warn.missing.labels <- tcltk::tclVar("1")
+  warn.missing.labelsCheckBox <- tcltk::ttkcheckbutton(optionsFrame, text="Warn on missing labels", 
+                                                variable=warn.missing.labels)
+  
+  tcltk::tkgrid(tcltk::tklabel(dsnameFrame, text="Enter name for data set:  "), entryDsname, sticky="w")
+  tcltk::tkgrid(dsnameFrame, columnspan=2, sticky="w")
+  tcltk::tkgrid(convert.datesCheckBox, sticky="w")
+  tcltk::tkgrid(convert.factorsCheckBox, sticky="nw")
+  tcltk::tkgrid(missing.typeCheckBox, sticky="w")
+  tcltk::tkgrid(convert.underscoreCheckBox, sticky="w")
+  tcltk::tkgrid(warn.missing.labelsCheckBox, sticky="w")
+  tcltk::tkgrid(optionsFrame, sticky="w")
+  
+  buttonsFrame <- tcltk::tkframe(top, padx = 10, pady = 10)
+  tfButOK <- tcltk::tkbutton(buttonsFrame, text = "OK", command = OnOK, width=10)
+  tfButCanc <- tcltk::tkbutton(buttonsFrame, width=10, text = "Cancel", command = function() tcltk::tkdestroy(top))
+  
+  tcltk::tkgrid(tfButOK, tfButCanc)
+  tcltk::tkgrid.configure(tfButCanc, padx=c(6,6))
+  tcltk::tkgrid.columnconfigure(buttonsFrame, 0, weight=2)
+  tcltk::tkgrid.columnconfigure(buttonsFrame, 1, weight=1)
+  
+  tcltk::tkgrid(buttonsFrame, sticky="ew")
+  tcltk::tkwait.window(top)
+
+  if(!is.null(lst)){
+    lst <- list(dsname=env.dsname, convert.factors=as.numeric(env.convert.factors), 
+                convert.dates=as.numeric(env.convert.dates), convert.underscore=as.numeric(env.convert.underscore),
+                missing.type=as.numeric(env.missing.type), warn.missing.labels=as.numeric(env.warn.missing.labels)  )
+  }
+  return(lst)
+  
+}
+.ImportSYSTAT <-
+function(datasetname = "dataset") {
+
+  e1 <- environment()
+  env.dsname <- character()
+  env.to.data.frame <- logical()
+  lst <- NULL
+  
+  top <- .InitDlg(350, 140, main="Import SYSTAT Dataset")
+
+  OnOK <- function() {
+    assign("lst", list(), envir = e1)
+    assign("env.dsname", tcltk::tclvalue(dsname), envir = e1)
+    assign("env.to.data.frame", tcltk::tclvalue(to.data.frame ), envir = e1)
+    tcltk::tkdestroy(top)
+  }
+
+  dsname <- tcltk::tclVar(datasetname)
+  dsnameFrame <- tcltk::tkframe(top, padx = 10, pady = 10)
+  entryDsname <- tcltk::ttkentry(dsnameFrame, width=30, textvariable=dsname)
+  
+  optionsFrame <- tcltk::tkframe(top, padx = 10, pady = 10)
+  to.data.frame <- tcltk::tclVar("1")
+  to.data.frameCheckBox <- tcltk::ttkcheckbutton(optionsFrame, 
+                                            text="Convert dataset to data.frame", variable=to.data.frame)
+
+  tcltk::tkgrid(tcltk::tklabel(dsnameFrame, text="Enter name for data set:  "), entryDsname, sticky="w")
+  tcltk::tkgrid(dsnameFrame, columnspan=2, sticky="w")
+  tcltk::tkgrid(to.data.frameCheckBox, sticky="w")
+  tcltk::tkgrid(optionsFrame, sticky="w")
+  
+  buttonsFrame <- tcltk::tkframe(top, padx = 10, pady = 10)
+  tfButOK <- tcltk::tkbutton(buttonsFrame, text = "OK", command = OnOK, width=10)
+  tfButCanc <- tcltk::tkbutton(buttonsFrame, width=10, text = "Cancel", command = function() tcltk::tkdestroy(top))
+  
+  tcltk::tkgrid(tfButOK, tfButCanc)
+  tcltk::tkgrid.configure(tfButCanc, padx=c(6,6))
+  tcltk::tkgrid.columnconfigure(buttonsFrame, 0, weight=2)
+  tcltk::tkgrid.columnconfigure(buttonsFrame, 1, weight=1)
+  
+  tcltk::tkgrid(buttonsFrame, sticky="ew")
+  tcltk::tkwait.window(top)
+  
+  if(!is.null(lst)){
+    lst <- list(dsname=env.dsname, to.data.frame=as.numeric(env.to.data.frame))
+  }
+  return(lst)
+  
+}
+.InitDlg <-
+function(width, height, x=NULL, y=NULL, resizex=FALSE, resizey=FALSE, main="Dialog", ico="R"){
+  
+  top <- tcltk::tktoplevel()
+  
+  if(is.null(x)) x <- as.integer(tcltk::tkwinfo("screenwidth", top))/2 - 50
+  if(is.null(y)) y <- as.integer(tcltk::tkwinfo("screenheight", top))/2 - 25
+  geom <- gettextf("%sx%s+%s+%s", width, height, x, y)
+  tcltk::tkwm.geometry(top, geom)
+  tcltk::tkwm.title(top, main)
+  tcltk::tkwm.resizable(top, resizex, resizey)
+  tcltk::tkwm.iconbitmap(top, file.path(find.package("DescTools"), "extdata", paste(ico, "ico", sep=".")))  
+  
+  return(top)
+  
+}
 .nctCI <-
 function(tval.1, df, conf) {       
   
@@ -1017,132 +1255,131 @@ structure(list(NA_real_, NA_real_, k3 = c(0.166666666666667,
 "k6", "k7", "k8", "k9", "k10", "k11", "k12", "k13", "k14", "k15"
 ))
 .Random.seed <-
-c(403L, 10L, 768819836L, 63960767L, 1118404501L, -1779484756L, 
-683165058L, 1992846173L, -1749227945L, 306328894L, -1730796168L, 
--391326117L, 349413817L, -1603804152L, -2001068362L, -970502671L, 
-1638433827L, 1244372082L, -1224753468L, -964372345L, 1985756253L, 
--1656774060L, 1913878650L, -122168379L, 139521311L, -385467226L, 
-878669360L, -1704225581L, -554460431L, 507267616L, 1393896638L, 
-1803729097L, -1919948165L, 1433395274L, 1351839916L, 630876079L, 
-938496869L, -2062137060L, -2092125838L, 2074677741L, -1114507737L, 
-294843982L, -379675992L, 1635973291L, 1221919177L, 3100120L, 
-105405574L, -747830943L, 1993360627L, -1661301918L, -596130348L, 
--486944553L, -533642547L, -2011667868L, 714422346L, -1133032011L, 
-6459663L, 1952247318L, 1707075776L, -342499709L, -1452336479L, 
--789787504L, -410515602L, -188710631L, -1495416405L, 567541658L, 
-842452828L, 1015119455L, 1648881205L, 1141362124L, 253611298L, 
--1998686339L, 2064649335L, 1405784478L, 1768171608L, -1398581829L, 
--1500390567L, -1125267224L, 1628326166L, 219519633L, -1752246461L, 
--2039651758L, -89807644L, 1049956135L, 513862525L, 309579380L, 
--193933222L, 1748437157L, 1812781759L, -1506041530L, -1698441264L, 
-956367347L, 1838099729L, 1356122432L, -725247714L, -1731699223L, 
--1132736741L, 1258920234L, 1017246284L, -428601841L, 1235493189L, 
--201880836L, 1786896722L, 717801165L, 811040391L, 1201359214L, 
--1435942072L, -360319157L, -1404158295L, -762616840L, 377649958L, 
-887450689L, 534207955L, 1734446978L, -2135882828L, -1823720649L, 
-1154472493L, 1858902852L, -1933512598L, -1923200299L, -826108817L, 
--1673851530L, -1233217888L, 1867191139L, -709920767L, -1726839952L, 
-1097689870L, -751401607L, -795156213L, -1833590214L, 1855322428L, 
-604362367L, 942210517L, -1355631636L, -569957054L, 773290653L, 
--1629317353L, 390903422L, -1834600904L, -1028206309L, 1800238713L, 
--1716227384L, -1747844362L, -1245312207L, 1034369891L, 1602785586L, 
--2064010620L, 202759879L, -1562204771L, 640266516L, -127803462L, 
--1314973179L, -1360499745L, 23151206L, 1919434224L, 759630611L, 
--1311009615L, 536078176L, -895081218L, -989043575L, 1672496059L, 
--280859254L, 621800556L, 295355887L, -2065818075L, -899941668L, 
--595447630L, -199621715L, 1868986215L, -736115570L, 410829160L, 
-1509409131L, 77886217L, -39328360L, 175297734L, 2109353505L, 
-519278259L, -1010338782L, 1013837332L, -2019188073L, -456655731L, 
--1253068380L, -387736694L, 896333813L, 1533032015L, 2074857814L, 
--1917699072L, 1782281539L, -1944291103L, 1361613392L, -1202327890L, 
--1047446951L, 1209844331L, -2088294438L, 1246873756L, -92484961L, 
-1227221237L, 1818734988L, -1888011166L, 652102717L, -164856137L, 
--1136550562L, -893320040L, 543649787L, -139086439L, 1543423528L, 
--6848810L, -1980621999L, 114245123L, -1932549742L, 535691044L, 
--1893928473L, -1155277251L, 1325205684L, 1985896218L, 1848415333L, 
--658514689L, 630410630L, 1654686480L, -1233168461L, 869612625L, 
-685826048L, -880242466L, 1389964073L, -1277094181L, -1847720470L, 
--1581232756L, 1960714959L, 445357701L, 268551284L, -1565722104L, 
-1637274042L, 1759664592L, 1797084140L, -1945872492L, -1138019118L, 
--1148989344L, -121329332L, 495488800L, 1168855682L, 1811976680L, 
--729893908L, 747216444L, 335495794L, -1735407760L, -72408796L, 
-1040322104L, 1992777114L, 102528464L, 709857724L, 1169369748L, 
-920901250L, 2065971648L, 645406524L, 2017199760L, -595676382L, 
--1731604984L, 1031689996L, -1350164580L, -85686254L, -83790976L, 
-2134171412L, -1602299608L, 1139419194L, 1355376592L, -628579732L, 
--927435724L, -1508467566L, -569711264L, -414805684L, -179678752L, 
-1432389538L, -776147032L, 1352154252L, 1940052924L, 2042937458L, 
-1734054896L, -1681723324L, 781538392L, -1945683910L, 935776368L, 
-281356860L, 1895512852L, 1065832130L, -630522144L, 1859007612L, 
-2105680080L, -386624606L, 828416552L, -2020549364L, 2090331068L, 
--997626574L, -806243136L, 629177908L, -801139000L, 2140081850L, 
--253925232L, 2127276780L, 571626068L, 2098206354L, -526775520L, 
-608586700L, 1384621280L, -103191870L, 171139112L, 616833964L, 
--2128493892L, -721187342L, 1276661296L, -1544812636L, -954448456L, 
-1118553946L, -114546544L, -1577303172L, -1995474156L, 1349206338L, 
-47436544L, -1548421188L, -1853897904L, 2141826338L, -195672504L, 
--1743845364L, 1499920476L, -33832494L, -787209728L, 1774877012L, 
-389686504L, 959642874L, 1160675024L, 445248812L, -943671052L, 
-240819602L, -1775759008L, -1737175028L, 115353312L, -609203614L, 
-1023346344L, 1306310220L, -449903748L, 1452873010L, -936511888L, 
--1127683260L, 220672984L, 2007674746L, -212907472L, -704734276L, 
-1511703124L, -997792702L, 664707232L, -1705137476L, -400347696L, 
--1655343262L, 846424808L, 272757964L, 782564860L, -1528600078L, 
-838682240L, 1353172468L, -1525304696L, 452497210L, 1602957136L, 
--796771220L, -1961511532L, -1034005422L, -770450976L, -1789678388L, 
-1757485216L, 82819458L, 2035779816L, -924087572L, 1507587388L, 
-407139442L, -1214575504L, -448023516L, -1718091720L, -1720454374L, 
--1804655408L, -1292876996L, 277122964L, -346015870L, -279552576L, 
-453644860L, -74049136L, -1858493918L, -830112504L, -1790106996L, 
-1492985628L, 1132288146L, 2139228544L, 2021206548L, -1371835608L, 
--736117190L, 857637328L, -1040497300L, 1443830708L, 1853803538L, 
-1356823008L, 1475001292L, -1700661024L, 1889906722L, 1540500776L, 
-1702120972L, -1136481476L, 2116805618L, 1657999088L, 321917508L, 
-785256024L, -954387654L, 1312596464L, -1403928900L, -542782188L, 
-1264539330L, -1181280160L, -525482116L, -823235632L, -1229550302L, 
--1761306968L, -102487156L, 1072045244L, 974784306L, 1984240192L, 
-1056235700L, 268913224L, 898862522L, -1276370416L, -1939466516L, 
--2120174252L, -1509837550L, 920738208L, -181586228L, -1737929120L, 
--1353516094L, -59167960L, -2115667028L, 1106591548L, 242654578L, 
-413306672L, 503592228L, 661422904L, -1162985766L, -1004901488L, 
-244472572L, -357088364L, -1966432190L, -1061388032L, 199760956L, 
-1897878864L, 787837090L, -229595832L, -559658228L, -1674171684L, 
--363622062L, 1689766016L, -622252972L, -165297176L, 1416715514L, 
--198949352L, -1714107082L, -1982987325L, 1575332357L, -1602162270L, 
--1981377136L, 424678713L, -476274197L, 2058412764L, 1253000970L, 
--997422593L, 504520777L, 208120286L, 1195962764L, -2034913955L, 
--679916185L, 891367056L, 269037742L, -2146741925L, 2083177789L, 
--1493985366L, 1081815112L, -895629199L, 1311376867L, -1897512732L, 
-926174226L, 2056800231L, -1751797839L, -1142996490L, -236360684L, 
-407458597L, -287587281L, -182741528L, -123452730L, -972723341L, 
-1887065045L, 1051327410L, -857842304L, 549430633L, -1887647269L, 
-384594220L, -1382436038L, -1956409873L, -1496532871L, -122920178L, 
-116537052L, -604535475L, 1463507127L, 1909858880L, 789486366L, 
-1469972971L, 1279798637L, -1196051494L, 275862936L, -1551082495L, 
--819315277L, -1512299308L, 74592738L, 1454599287L, 569438657L, 
-1965517638L, 2104800900L, 830775349L, -900468705L, -1178093704L, 
--748958122L, -1895873821L, -1159273307L, -1547571902L, 913324848L, 
--1617633447L, -1439861557L, -1693080260L, 732295530L, 884038559L, 
-862893609L, -1211107138L, -1675263572L, 2062204669L, 1711336007L, 
-1617430832L, -1581911474L, -1751729541L, -374978083L, 1610162186L, 
--998973144L, -462913647L, 877670787L, 102518404L, -1477448526L, 
--714617849L, -729016239L, 1119496150L, 1738008244L, 1618802373L, 
--1450620913L, -826443640L, 779831718L, -1190842029L, 1803715253L, 
--432179182L, -2096940576L, -396211127L, -108561797L, 41435980L, 
-90113754L, 374422223L, 580414105L, -1856690514L, -1301777476L, 
--1170297811L, -1572346921L, 175344160L, 1799867262L, -1907387061L, 
--1971611827L, 1357356410L, 211640248L, 369370465L, 1346189587L, 
-1976971572L, -742945982L, 1833765719L, 1001777825L, -1584911514L, 
-1268794724L, 659837077L, 518349247L, -566504104L, -1417122954L, 
--1853404797L, 1318628293L, 662384866L, -782187184L, 215983225L, 
--2143668309L, 1453571356L, 848779850L, -1501266369L, 1783534217L, 
-2050045598L, 1465746252L, -311672035L, -1288039769L, 2116983248L, 
--2039115410L, 848296987L, -1342876291L, 1877418858L, 1797191176L, 
-1041550001L, -1304578781L, -249387484L, -297833262L, 551038247L, 
--1805269135L, 631498166L, 1635192148L, -664507419L, 819754479L, 
--1239687896L, -1012994682L, 1481370035L, 157656341L, 1657571186L, 
-1181426624L, -1729797079L, 2032955547L, -159982228L, -867673634L
-)
+c(403L, 10L, -1874989363L, 601474695L, -254291602L, 1551838024L, 
+-1542885557L, -1416350039L, 1161235448L, -1850985690L, 1933210689L, 
+-169241133L, -287664254L, -1083384908L, 337457975L, -789917139L, 
+834720580L, -554387350L, -976657707L, -1210966929L, 1282479478L, 
+530554528L, 64559971L, 335474689L, 1782258544L, -1393601778L, 
+-1190122119L, -308410101L, 1810430522L, -2086555332L, -1250484609L, 
+352683477L, 1540029420L, 721681730L, -694779235L, 926232343L, 
+-387297666L, 1829531192L, 441997595L, -1222771079L, -321799480L, 
+-395121930L, -1243126991L, -2131315869L, 630819122L, 334625412L, 
+-1806084409L, 457547165L, 875067668L, 609851322L, -1483783675L, 
+9147359L, 2004576870L, -477600272L, -772070637L, -452096847L, 
+-1825566880L, -434598658L, 28118153L, 461646779L, 1763083658L, 
+-749239188L, 1288183279L, -603777499L, 907293404L, 475916466L, 
+-2041664595L, 963506023L, -1898726258L, -372098712L, 1017014635L, 
+-1241879799L, 179092888L, 682077382L, -1462684127L, 1669207731L, 
+-1965409246L, -62175724L, 1842100887L, -1104612211L, 2009627044L, 
+1361863562L, 119132149L, -1903641009L, 1725548886L, -863341568L, 
+723647811L, 833122529L, -2008610224L, 785069742L, -1980464551L, 
+162900587L, 1758339034L, -1806344036L, 492180127L, 2114896117L, 
+649578892L, 1218208866L, 1320657981L, 1576781495L, -1430657698L, 
+541043864L, -580651013L, -1016742503L, 1621605928L, 324486870L, 
+1342935889L, 1358345731L, -565118574L, 2103904036L, -895981081L, 
+-1953708483L, -1562578764L, -389454054L, -1310372763L, 831276287L, 
+-1689180794L, -1949705456L, 1622843315L, 1174873169L, 560613376L, 
+1310841054L, -1291611351L, 1228705499L, 1243815402L, -1389107828L, 
+-377537841L, 183535237L, 148481340L, 628582418L, 1104824077L, 
+-1009474489L, -332102098L, 671248264L, -999675253L, -1490699159L, 
+-313843656L, 1357900006L, 1452937345L, -635328493L, 820494274L, 
+168904820L, -476635529L, 867467117L, -2009202684L, -441779414L, 
+710172821L, 929226543L, 777938486L, -1601715616L, -39173981L, 
+1807045569L, -1858232400L, -2033259826L, -495003591L, -1871520181L, 
+1163125754L, -1259729156L, 1629831999L, -268956651L, 1752622892L, 
+1644022786L, -587010339L, 1355136471L, -1849550658L, 992234232L, 
+1593561307L, 97047353L, 1268389512L, -1888853450L, 1595095665L, 
+1483030691L, -1992816142L, 2033903940L, 1675313671L, 1476775901L, 
+-875849516L, 256468986L, 899817285L, 997346207L, 2029060390L, 
+-821071440L, -1215157677L, 297768305L, -2146601824L, 454743102L, 
+-1262314679L, 1803799035L, -1921929782L, 29221676L, -1838183633L, 
+153506277L, -96969572L, -1629652750L, 831009133L, 976518823L, 
+-806571826L, -1797202392L, -666393045L, 1433939017L, -389845672L, 
+992334854L, -1860200991L, 791281523L, 579951586L, 489091924L, 
+1184210519L, -1174288819L, -939542044L, -81030198L, -551709131L, 
+-922305393L, 395744662L, 395782464L, 1686348803L, 1176327713L, 
+-1255325424L, 596881134L, -378711399L, -1078547669L, -1860274662L, 
+1010638044L, 617418975L, 1556692661L, -151013300L, -1011956574L, 
+-51489795L, -974876425L, -798738914L, 1138870516L, 756338066L, 
+1728680288L, 559271948L, 1483765472L, -1065342366L, -43784536L, 
+-1796569524L, -1408408708L, -1853102798L, 1688401520L, -1572304060L, 
+-1305181224L, -1437937798L, -641496528L, -1779962948L, 1901318740L, 
+-1616935870L, -1703706464L, 731200188L, -2144895536L, 1694975842L, 
+-661042456L, -362687284L, 1691422204L, -1886799374L, -2096228736L, 
+-245950988L, 383234696L, 1261477690L, -1089339568L, 471333996L, 
+802977172L, 1304085586L, 1855199712L, 1312517324L, -2106120032L, 
+-2079225470L, 1322768616L, -1226335508L, 681166140L, -1468152718L, 
+-1084617616L, 48337956L, 590827576L, 1322935066L, -1028496176L, 
+469963580L, 54206356L, 892213122L, -1881969216L, -302648772L, 
+467696016L, -1858579934L, 1614482696L, -505912692L, -1465317604L, 
+1098606738L, -404428416L, -1632065004L, -375594200L, -1879482822L, 
+-1842818608L, 1654764908L, 33516468L, 210897938L, 1211111904L, 
+-1126573108L, -230946592L, -2075852766L, -364835544L, 359738892L, 
+1575844668L, 1986692082L, 293756656L, -80010684L, -1163071912L, 
+-996834502L, -1908088336L, 960720572L, -1881264876L, -1829226814L, 
+-95881120L, -974841988L, -342705200L, 1828384034L, 1537312424L, 
+993041292L, 529165500L, 192497458L, -1572455872L, -293277516L, 
+-904603064L, 1338887610L, -1315778032L, 521434860L, -993458860L, 
+1003697426L, 1702767008L, 1772762828L, 1537056352L, -1180873790L, 
+-308942040L, 1172482988L, -1824817348L, 1753185650L, 1447423792L, 
+1641493796L, 238211896L, -188199206L, 375921552L, -457864452L, 
+787010452L, 1966530626L, 717820160L, -586818500L, -581380784L, 
+2132594850L, -475757240L, 30087948L, 80304860L, 36708690L, -22009728L, 
+-1673909164L, 1033442280L, 1428942074L, -2142589104L, 429160236L, 
+-244916876L, -1245462638L, 771501152L, 1170359692L, 308626272L, 
+-274684446L, 1513034664L, 1647335628L, -961637380L, -1118391886L, 
+-375210512L, 690659268L, 571476312L, 1832209786L, 2116155312L, 
+-1910841924L, -406432684L, 1810696130L, -1317574624L, -1091026756L, 
+205391440L, 1609086946L, 1608341608L, -319498164L, 1289446652L, 
+-80193550L, -516096768L, -353774220L, -1360445432L, -2089331782L, 
+-417016368L, 549736428L, 782624148L, 1175708114L, 1083332960L, 
+1599331148L, -1876250336L, 1072105346L, -2008580376L, -1097488148L, 
+-672724932L, 604847986L, 2110541424L, 440777764L, -2088841416L, 
+565886106L, 951304912L, 746442940L, -1184760172L, 747531906L, 
+-971996992L, -243620036L, 2018996368L, 811335202L, 834006024L, 
+881798412L, 473447580L, 1251062290L, 2088244096L, 613819924L, 
+154140200L, 1158462778L, 2054614480L, -764790676L, -1792785100L, 
+88525458L, 13762400L, -1840836788L, 1780996064L, 1086131106L, 
+672742312L, 1927801228L, 589458620L, 2025849202L, -35743504L, 
+1187010628L, -1494489768L, -498431430L, 1297239920L, -585298884L, 
+969323284L, -133351998L, -350421280L, 487336828L, -487406896L, 
+1013374114L, 1230790696L, 1664727308L, 1932032956L, -800707278L, 
+1754620352L, 1674615348L, -1707905080L, 1144204474L, 718090640L, 
+-567897620L, 36283988L, -383994734L, 1235206944L, 551363040L, 
+-1934830519L, 1612219003L, -1578972340L, 1570995930L, 1881805519L, 
+-1645972839L, 1319837358L, -321864772L, 1189807149L, 1137855447L, 
+936403488L, -1881840770L, 363670859L, -1106669747L, 1751508346L, 
+1032378296L, 1980468577L, -2036547309L, -1589823180L, -1811549374L, 
+-747347113L, -1175854431L, 1533154150L, 2036608356L, 197908629L, 
+-1874404929L, 1531743576L, 1359967094L, -1638723197L, -580693051L, 
+-801928990L, 1358867792L, -132121479L, 1900777387L, -506727140L, 
+-978779574L, 488179263L, 203070089L, 49364638L, 1414077260L, 
+1569241885L, -987641177L, -18415152L, 710224238L, -360164325L, 
+-2131624579L, -1651016854L, 1176174088L, -636210511L, -1042744029L, 
+310169124L, 759899346L, 1342760231L, 1696984945L, 895790518L, 
+-884501164L, -1380772891L, -964178449L, 773641512L, -1672977018L, 
+977617331L, -87646955L, -1764262030L, 1421528000L, -1480467415L, 
+1607248027L, 1577661804L, -1246515846L, 575135407L, -1694104135L, 
+-1784961074L, 1841743644L, -1462667635L, 1530541815L, 952711680L, 
+-2025290658L, 248252203L, -1027562451L, -1558252390L, -1501185960L, 
+298315713L, -2100002701L, 597014932L, -1587398622L, -1999851721L, 
+1797698049L, -1935480058L, 1905243972L, -1868215691L, -1378669601L, 
+711946040L, -1380746986L, -1323113181L, -1092233499L, -191320318L, 
+-765966992L, -1871858407L, 1749699851L, -803287556L, 1225713194L, 
+904457823L, -1995108887L, -1319399682L, -496955668L, -1099727299L, 
+557272583L, -487693840L, 1755406734L, 2060429243L, 250614173L, 
+1240633162L, 1268577128L, -1466342063L, 1201989187L, 1777142596L, 
+-1798907918L, -1705495097L, -1668211823L, -1390832874L, 1773119348L, 
+-1892010491L, -291848625L, 2007030344L, 1323764710L, -1222859501L, 
+-346916235L, -632928174L, -1734907232L, 2020800393L, 1856930747L, 
+-1758133236L, 1592844698L, 649863439L, 1093259097L, -510606866L, 
+-1972999044L, 1429215469L, -329986153L, -861013920L, 1183603262L, 
+-1595077877L, 11211149L, 1580866234L, -1131294472L, -375894367L, 
+-767859117L, 149330292L, 224517890L, -1745078377L, 1298889057L, 
+695370150L, 1168544676L, 1425436245L, -1705816321L, 1266119576L, 
+-345332554L, 1535521091L, -1308923771L, -758116062L, 49734160L, 
+-1569068615L, 615631467L, -677108388L, -9923446L, -10191745L, 
+-1859938871L, 1199369822L, -754684660L, -182748981L)
 .txtline <-
 function(txt, width, space="", ind="") {
   paste(

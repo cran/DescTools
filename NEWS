@@ -1,10 +1,51 @@
+
+DescTools 0.99.11 (2015-05-14)
+-----------------------------
+
+NEW FUNCTIONS ADDED:
+   * PlotDot is an extended version of dotchart with the option to draw error bars.
+   * CorPolychor returns the polychoric correlation.
+   * Nemenyi's test for multiple comparisons after a Kruskal-Wallis test has been added.
+   * Conf creates a confusion matrix of observed and predicted values.
+   * Sens and Spec return sensitivity and specificity of a confusion matrix.
+   * SplitPath will split a path in its components.
+   * ImportFileDlg will import files from SPSS, SAS etc by means of a dialog.
+   * power.chisq.test calculating the power of a ChiSquare test has been added.
+   * as.matrix.xtabs turns xtabs into an identifiable matrix.
+   * GTest for count data has been added.
+   
+UPDATED FUNCTIONS:
+   * PlotFct has been renamed to PlotFun which seems more intuitive.
+   * SaveAs has been renamed to SaveAsDlg to follow the packages naming conventions.
+   * PlotFaces gets a new col argument for using colours.
+   * MoveAvg gets a new argument "endrule" and the result will be the same class as x.
+   * ParseSASDatalines gets a new option to directly generate the dataset with the given 
+     data name in the global environment.
+   * Rev does now support higher dimensional tables or arrays. With this change the argument
+	 direction has been replaced by margin, which works in the same manner as in margin.table.
+	 The data.frame interface has been removed (practically not used).
+   * ToLong will now set rownames, expanded from columnnames and rownames of the original data.	
+   * HuberM gets a new interface, hiding some technical arguments and adding the option
+     for confidence intervals.   
+   * Strata has been partly rewritten, but some previously available methods are not 
+     yet implemented.
+   
+BUGFIXES:
+   * Bug in CohenD fixed.
+   * ColorLegend would erroneously have reversed the colour labels.
+   * WrdDesc.table did not correctly produce the plot.	
+   * tcltk has been moved from imports to suggests, as loading DescTools in RStudio under 
+     linux would sometimes have hung (credits to Henk Harmsen for telling).
+   * Classic confidence intervals for skewness and kurtosis used pnorm instead of qnorm.	 
+
+   
 DescTools 0.99.10 (2015-03-15)
 -----------------------------
 
 NEW FUNCTIONS ADDED:
    * SaveAs brings up file.choose for saving a R object.
    * Explore is back again, as the package "manipulate" is on CRAN meanwhile.
-   * DurbiWatsonTest for autocorrelation added
+   * DurbinWatsonTest for autocorrelation added.
  
    
 UPDATED FUNCTIONS:
@@ -23,8 +64,8 @@ BUGFIXES:
    * XLGetRange's call attribute would only have returned the header instead of the 
      address(es) of the selected range(s).
    * Desc.table for higher dimensional tables does not any more report 
-     erroneously ChiSquare-Test results 	 
-   * Correcting several issues with new R-Devel	 
+     erroneously ChiSquare-Test results. 	 
+   * Correcting several issues with new R-Devel.	 
 	 
 
 
@@ -126,7 +167,7 @@ UPDATED FUNCTIONS:
 
 BUGFIXES:
    * anyNA is only defined for R >= 3.1, the according dependency has been defined.
-   * the key.ico file has been placed in /extdata directory and should now definitely 
+   * the key.ico file has been placed in /extdata directory and should definitely 
      be found now by the function PasswordDlg().  (shame on me..)
 
 

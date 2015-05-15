@@ -11,6 +11,9 @@ function (x, varnames = NULL) {
   rownames(res) <- NULL
   if (is.null(varnames)) 
     varnames <- c("grp", "x")
+  
   colnames(res) <- varnames
+  rownames(res) <- do.call(paste, c(expand.grid(grpnames, rownames(x)), sep="."))
+  
   return(res)
 }

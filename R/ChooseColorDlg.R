@@ -1,2 +1,5 @@
 ChooseColorDlg <-
-function() return(as.character(tcl("tk_chooseColor", title="Choose a color")))
+function() {
+  requireNamespace("tcltk", quietly = FALSE)
+  return(as.character(tcltk::tcl("tk_chooseColor", title="Choose a color")))
+}

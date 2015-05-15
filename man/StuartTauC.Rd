@@ -1,10 +1,10 @@
 \name{StuartTauC}
 \alias{StuartTauC}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Stuart Tau C
+\title{Stuart \eqn{\tau_{c}}{Tau C}
 %%  ~~function to do ... ~~
 }
-\description{Calculate Stuart tau-c statistic, a measure of
+\description{Calculate Stuart's \eqn{\tau_{c}}{tau-c} statistic, a measure of
 association for ordinal factors in a two-way table.\cr
 The function has interfaces for a table (matrix) and for single vectors.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
@@ -27,11 +27,11 @@ StuartTauC(x, y = NULL, conf.level = NA, ...)
 %%     ~~Describe \code{\dots} here~~
 }
 }
-\details{Stuart's tau-c makes an adjustment for table size in addition to a correction for ties. Tau-c is
+\details{Stuart's \eqn{\tau_{c}}{tau-c} makes an adjustment for table size in addition to a correction for ties. \eqn{\tau_{c}}{Tau-c} is
 appropriate only when both variables lie on an ordinal scale. \cr
-Stuart's tau-c is estimated by \cr
-\deqn{ \tau_c = \frac{m(P-Q)}{n^2 (m-1)}}
-where P equals twice the number of concordances and Q twice the number of discordances, n is the total amount of observations and m = min(R,C). The range of \eqn{\tau_c} is [-1, 1]. \cr
+It is estimated by \cr
+\deqn{ \tau_{c} = \frac{m \cdot(P-Q)}{n^2 \cdot (m-1)}}{tau_c = m/n^2 * (P-Q)/(m-1)}
+where P equals twice the number of concordances and Q twice the number of discordances, n is the total amount of observations and m = min(R, C). The range of \eqn{\tau_{c}}{tau-c} is [-1, 1]. \cr
 See \url{http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf}, pp. 1739 for the estimation of the asymptotic variance.
 
 %%  ~~ If necessary, more details than the description above ~~
@@ -68,7 +68,7 @@ Association}, 58, 310-364.
 
 \seealso{\code{\link{ConDisPairs}} yields concordant and discordant pairs \cr
 other association measures: \cr
-\code{\link{GoodmanKruskalTauA}} (tau-a), \code{\link{cor}} (method="kendall") for tau-b, \code{\link{GoodmanKruskalGamma}}, \code{\link{SomersDelta}}\cr
+\code{\link{GoodmanKruskalTauA}} (\eqn{\tau_{a}}{tau-a}), \code{\link{cor}} (method="kendall") for \eqn{\tau_{b}}{tau-b}, \code{\link{GoodmanKruskalGamma}}, \code{\link{SomersDelta}}\cr
 \code{\link{Lambda}}, \code{\link{UncertCoef}}, \code{\link{MutInf}} 
 }
 

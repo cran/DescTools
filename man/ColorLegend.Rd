@@ -7,8 +7,8 @@
 
 \usage{
 ColorLegend(x, y = NULL, cols = rev(heat.colors(100)), labels = NULL,
-            width = NULL, height = NULL, horiz = FALSE, 
-            xjust = 0, yjust = 1, inset = 0, border = NA, frame = NA, cntrlbl = FALSE,
+            width = NULL, height = NULL, horiz = FALSE, xjust = 0, yjust = 1,
+            inset = 0, border = NA, frame = NA, cntrlbl = FALSE,
             adj = ifelse(horiz, c(0.5, 1), c(1, 0.5)), cex = 1, ...)
 }
 

@@ -1,6 +1,6 @@
 PlotFaces <-
 function( xy = rbind(1:3,5:3,3:5,5:7), which.row, fill = FALSE, nrow, ncol,
-              scale = TRUE, byrow = FALSE, main, labels){
+              scale = TRUE, byrow = FALSE, main, labels, print.info=FALSE, col=NA){
   
   #21:
   spline <- function(a, y, m=200, plot=FALSE){
@@ -27,7 +27,9 @@ function( xy = rbind(1:3,5:3,3:5,5:7), which.row, fill = FALSE, nrow, ncol,
     return(cbind(x,S.x))
   }
 
-    
+
+  if(!identical(col, NA)) col <- rep(col, length.out=11)
+      
   #4:
   n.char <- 15
   xy <- rbind(xy)
@@ -55,7 +57,8 @@ function( xy = rbind(1:3,5:3,3:5,5:7), which.row, fill = FALSE, nrow, ncol,
   face.orig <- list(
         eye   = rbind(c(12,0),c(19,8),c(30,8),c(37,0),c(30,-8),c(19,-8),c(12,0))
        ,iris  = rbind(c(20,0),c(24,4),c(29,0),c(24,-5),c(20,0))
-       ,lipso = rbind(c(0,-47),c( 7,-49),lipsiend=c( 16,-53),c( 7,-60),c(0,-62))
+       ,lipso = rbind(c(0,-47),c( 7,-49)
+                      ,lipsiend=c( 16,-53),c( 7,-60),c(0,-62))
        ,lipsi = rbind(c(7,-54),c(0,-54))                  # add lipsiend
        ,nose  = rbind(c(0,-6),c(3,-16),c(6,-30),c(0,-31))
        ,shape = rbind(c(0,44),c(29,40),c(51,22)
@@ -137,9 +140,12 @@ function( xy = rbind(1:3,5:3,3:5,5:7), which.row, fill = FALSE, nrow, ncol,
     invert <- function(x) cbind( -x[,1] ,x[,2] )
 
     face.obj <- list(
-          eyer = face$eye
-        , eyel = invert(face$eye)
+          hair = rbind(face$shape["hairend", ], face$hair, invert(face$hair[hair.refl.ind, ]), 
+                         invert(face$shape["hairend", , drop = FALSE]))
+        , shape = rbind(face$shape, invert(face$shape[shape.refl.ind, ]))
+        , eyer = face$eye
         , irisr = face$iris
+        , eyel = invert(face$eye)
         , irisl = invert(face$iris)
         , lipso = rbind(face$lipso, invert(face$lipso[lipso.refl.ind, ]))
         , lipsi = rbind(face$lipso["lipsiend", ], face$lipsi, 
@@ -148,9 +154,6 @@ function( xy = rbind(1:3,5:3,3:5,5:7), which.row, fill = FALSE, nrow, ncol,
         , earr = rbind(face$shape["earsta", ], face$ear, face$shape["earend", ])
         , earl = invert(rbind(face$shape["earsta", ], face$ear, face$shape["earend", ]))
         , nose = rbind(face$nose, invert(face$nose[nose.refl.ind, ]))
-        , hair = rbind(face$shape["hairend", ], face$hair, invert(face$hair[hair.refl.ind, ]), 
-                    invert(face$shape["hairend", , drop = FALSE]))
-        , shape = rbind(face$shape, invert(face$shape[shape.refl.ind, ]))
     )
     
     plot(1, type="n", xlim=c(-105,105) * 1.1, axes=FALSE, ylab="", ylim=c(-105,105) * 1.3 )
@@ -162,10 +165,33 @@ function( xy = rbind(1:3,5:3,3:5,5:7), which.row, fill = FALSE, nrow, ncol,
            xx <- spline(1:length(x), x, 40, FALSE)[,2]
            yy <- spline(1:length(y), y, 40, FALSE)[,2]
            
-           lines(xx,yy)
+           if(identical(col, NA)){
+             lines(xx, yy)
+           } else {
+             polygon(xx, yy, col=col[ind])
+           }   
     }
+
   }
+
+  info <- c(var1 = "height of face   ", var2 = "width of face    ", 
+            var3 = "structure of face", var4 = "height of mouth  ", 
+            var5 = "width of mouth   ", var6 = "smiling          ", 
+            var7 = "height of eyes   ", var8 = "width of eyes    ", 
+            var9 = "height of hair   ", var10 = "width of hair   ", 
+            var11 = "style of hair   ", var12 = "height of nose  ", 
+            var13 = "width of nose   ", var14 = "width of ear    ", 
+            var15 = "height of ear   ")
+  var.names <- dimnames(xy)[[2]]
+#   if (0 == length(var.names)) 
+#     var.names <- paste("Var", rows.orig, sep = "")
+  info <- cbind(`modified item` = info, Var = var.names[1:length(info)])
+  rownames(info) <- rep("", 15)
   
+  if(print.info){
+    cat("effect of variables:\n")
+    print(info)
+  }
     
   if(!missing(main)){
     par(opar)
@@ -173,6 +199,5 @@ function( xy = rbind(1:3,5:3,3:5,5:7), which.row, fill = FALSE, nrow, ncol,
     mtext(main, 3, 3, TRUE, 0.5)
     title(main)
   }
-
 
 }

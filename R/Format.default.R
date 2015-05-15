@@ -4,9 +4,25 @@ function(x, digits = NULL, sci = getOption("scipen")
                    , zero.form = NULL, na.form = NULL
                    , fmt = NULL, align = "left", width = NULL, ...){
   
+  
+#   We accept here a fmt class to be used as user templates
+#   example:
+#   
+#   fmt.int <- structure(list(
+#     digits = 5, sci = getOption("scipen"), big.mark = "", 
+#     leading = NULL, zero.form = NULL, na.form = NULL, 
+#     align = "left", width = NULL, txt="(%s), %s - CHF"), class="fmt"
+#   )
+#   
+#   Format(7845, fmt=fmt.int)
+  
+
+  # The defined decimal character:
   # getOption("OutDec")
   
+    
   if(is.null(fmt)) fmt <- ""
+  if(class(fmt) == "fmt") return(do.call(Format, c(fmt, x=x)))
   
   if(class(x) == "Date"){
     
@@ -108,8 +124,44 @@ function(x, digits = NULL, sci = getOption("scipen")
     res <- as.character(sapply(x, cut, breaks=breaks, labels=labels, include.lowest=TRUE))
     
   } else if(fmt=="p"){
-    res <- format.pval(x, digits = digits, na.form=na.form)
     
+    # format p-values  ********************************************************************
+     if(is.null(na.form)) na.form <- "NA"
+#     if(is.null(digits)) digits <- max(1L, getOption("digits") - 2L)
+#     
+#     res <- format.pval(x, digits = digits, na.form=na.form)
+
+      eps <- .Machine$double.eps
+      
+      if ((has.na <- any(ina <- is.na(x)))) 
+        x <- x[!ina]
+      r <- character(length(is0 <- x < eps))
+      if (any(!is0)) {
+        rr <- x <- x[!is0]
+        expo <- floor(log10(ifelse(x > 0, x, 1e-50)))
+        fixp <- (expo >= -3)
+        if (any(fixp)) 
+          rr[fixp] <- format(x[fixp], digits = 4)
+        if (any(!fixp)) 
+          rr[!fixp] <- format(x[!fixp], digits=3, scientific=TRUE)
+        r[!is0] <- rr
+      }
+      if (any(is0)) {
+        r[is0] <- gettextf("< %s", format(eps, digits = 2))
+      }
+      if (has.na) {
+        rok <- r
+        r <- character(length(ina))
+        r[!ina] <- rok
+        r[ina] <- na.form
+      }
+      
+      res <- r
+
+  } else if(fmt=="e"){
+    res <- formatC(x, digits = digits, width = width, format = "e",
+                   big.mark=big.mark)
+
   } else {  
     
     # handle percentages

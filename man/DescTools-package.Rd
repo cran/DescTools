@@ -5,36 +5,19 @@
 \title{ Tools for Efficient Descriptive Statistics
 }
 \description{ 
-A collection of basic statistic functions and convenience wrappers for efficiently describing data. The author's intention was to create a toolbox, which facilitates the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results. There are as well functions to produce documents using MS Word (or PowerPoint) and functions to import data from Excel.\cr
-Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, NA handling, recycling rules etc. are concerned. 
-In this sense this is my "Best-of-Collection" of R-functions, I've happened to need in recent years.
-
-Google style guides were used as naming rules (in absence of convincing alternatives). The 'CamelStyle' was consequently applied to functions borrowed from contributed R packages as well.
+A collection of basic statistic functions and convenience wrappers for efficiently describing data. The author's intention was to create a toolbox, which facilitates the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results. The package contains furthermore functions to produce documents using MS Word (or PowerPoint) and functions to import data from Excel. \cr
+Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, NA handling, recycling rules etc. are concerned. Google style guides were used as naming rules (in absence of convincing alternatives). The 'CamelStyle' was consequently applied to functions borrowed from contributed R packages as well.
 \cr
 
-Feedback, feature requests, bugreports and other suggestions are welcome!
+Feedback, feature requests, bugreports and other suggestions are welcome! Please report problems to Stack Overflow with keyword DescTools or directly to the maintainer.\cr
 (We're approaching version 1.0, so take the opportunity...)
 
 }
-\details{
-\tabular{ll}{
-Package: \tab DescTools \cr
-Type: \tab Package \cr
-Title: \tab Tools for Descriptive Statistics \cr
-Version: \tab  0.99.11 \cr
-Date:  \tab 2015-06-01 \cr
-Maintainer: \tab  Andri Signorell <andri@signorell.net> \cr
-Suggests:  \tab RDCOMClient \cr
-Depends:  \tab R (>= 3.1.0) \cr
-Imports:  \tab boot, mvtnorm, tcltk \cr
-License:  \tab GPL (>= 2) \cr
-LazyLoad: \tab  yes \cr
-LazyData: \tab  yes \cr
-ByteCompile:  \tab yes \cr
-NeedsCompilation: \tab  yes \cr
-Additional_repositories:  \tab http://www.stats.ox.ac.uk/pub/RWin/ \cr
+
+\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in mid of 2015) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.
 }
 
+\details{
 
 A grouped list of the functions:  
 
@@ -62,6 +45,7 @@ A grouped list of the functions:
 \link{LogGen}, \link{LogLin}     \tab      Log linear hybrid, generalized log \cr
 \link{LogSt}, \link{LogStInv}      \tab      Calculate started logarithmic transformation and it's inverse\cr
 \link{Logit}, \link{LogitInv}      \tab      Generalized logit and inverse logit function \cr
+\link{LinScale}       \tab      Simple linear scaling of a vector x \cr
 \link{Winsorize}  \tab      Data cleaning by winsorization \cr
 \link{Trim}  \tab      Trim data by omitting outlying observations \cr
 \link{CutQ}       \tab     Cut a numeric variable into quartiles \cr
@@ -105,6 +89,8 @@ A grouped list of the functions:
 \link{VecRot}  \tab  Shift the elements of a vector in a circular mode to the right \cr
 \tab or to the left by n characters.     \cr
 \link{Clockwise}       \tab      Transform angles from counter clock into clockwise mode \cr
+\link{split.formula}       \tab      A formula interface for the base function split \cr
+\link{reorder.factor}       \tab      Reorder the levels of a factor \cr
 \link{LOCF}      \tab         Imputation of datapoints following the "last observation \cr
 \tab carried forward" rule \cr
 %% \link{ToLong}, \link{ToWide}     \tab Simple reshaping of a vector \cr
@@ -123,6 +109,7 @@ A grouped list of the functions:
 \link{StrVal}      \tab          Extract numeric values from a string \cr
 \link{StrPos}       \tab      Find position of first occurrence of a string in another one \cr
 \link{StrIsNumeric}       \tab    Check whether a string does only contain numeric data \cr
+\link{FixToTab}       \tab      Create table out of a running text, by using columns of spaces as delimiter \cr
 \cr\cr
 \bold{Conversion functions:}\tab\cr 
 \link{AscToChar}, \link{CharToAsc}       \tab      Converts ASCII codes to characters and vice versa  \cr
@@ -188,7 +175,7 @@ A grouped list of the functions:
 \link{PlotMarDens}    \tab Scatterplot with marginal densities  \cr
 \link{PlotMultiDens}    \tab  Plot multiple density curves \cr
 \link{PlotPolar}    \tab Plot values on a circular grid \cr
-\link{PlotFct}    \tab Plot mathematical expression or a function \cr
+\link{PlotFun}    \tab Plot mathematical expression or a function \cr
 \link{PolarGrid}    \tab  Plot a grid in polar coordinates \cr
 \link{PlotPyramid}    \tab  Pyramid plot (back-back histogram) \cr
 \link{PlotTreemap}    \tab   Plot of a treemap.\cr
@@ -240,6 +227,7 @@ A grouped list of the functions:
 \link{Lambda}  \tab  Goodman Kruskal's lambda     \cr
 \link{UncertCoef}  \tab  Uncertainty coefficient     \cr
 \link{Entropy}, \link{MutInf}  \tab  Shannon's entropy, mutual information     \cr
+\link{DivCoef}, \link{DivCoefMax}    \tab   Rao's diversity coefficient ("quadratic entropy")\cr
 \link{TheilU} \tab  Theil's U1 and U2 coefficient     \cr
 \link{Assocs}       \tab  Combines the association measures above.  \cr
 \link{OddsRatio}, \link{RelRisk}  \tab   Odds ratio and relative risk    \cr  
@@ -323,6 +311,7 @@ A grouped list of the functions:
 \link{ChooseColorDlg}    \tab  Display color dialog to choose a color \cr
 %% \link{DescDlg}    \tab  Display a Dialog Containing Univariate Descriptive Statistis and a Plot \cr
 \link{ImportDlg}    \tab  Get path of a data file to be opened \cr
+\link{SaveAsDlg}    \tab  Save a data object by dialog \cr
 \link{SelectVarDlg}    \tab  Select elements of a set by click \cr
 \link{PasswordDlg}    \tab  Display a dialog containing an edit field, showing only ***. \cr
 \link{PlotPar}   \tab   Display the R plot parameters in a dialog    \cr
@@ -368,10 +357,7 @@ A grouped list of the functions:
 \link{DescToolsOptions}    \tab  Get the DescTools specific options\cr
 \cr
 \link{ClipToVect}       \tab      Return \cr
-\link{DivCoef}, \link{DivCoefMax}    \tab      Return \cr
-\link{FixToTab}       \tab      Return \cr
 \link{Flags}       \tab      Return \cr
-\link{LinScale}       \tab      Return \cr
 
 \link{PlotBagPairs}       \tab      Return \cr
 \link{PlotGACF}       \tab      Return \cr
@@ -379,9 +365,7 @@ A grouped list of the functions:
 \link{PlotMatrix}       \tab      Return \cr
 
 \link{Ray}       \tab      Return \cr
-\link{reorder.factor}       \tab      Return \cr
 \link{SampleTwins}       \tab      Return \cr
-\link{split.formula}       \tab      Return \cr
 
 }
 }
@@ -392,8 +376,6 @@ RDCOMClient is available at: \cr\url{http://www.stats.ox.ac.uk/pub/RWin/bin/wind
 RDCOMClient does not exist for Mac or Linux, sorry.
 }
 
-\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in mid of 2015) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.}
-
 
 \author{
 Andri Signorell\cr 
@@ -401,7 +383,7 @@ Helsana Versicherungen AG, Health Sciences, Zurich\cr
 HWZ University of Applied Sciences in Business Administration Zurich.\cr
  
 Includes R source code and/or documentation previously published by (in alphabetical order): \cr
-Ken Aho, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Clint Cummins, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Jeff Enos, Claus Ekstrom, Martin Elff, Richard W. Farebrother, John Fox, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Michael Hoehle, Christian W. Hoffmann, Torsten Hothorn, Markus Huerzeler, Wallace W. Hui, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Giovanni Millo, Yongyi Min, David Mitchell, Markus Naepflin, Daniel Navarro, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Mark Stevenson, Yves Tille, Adrian Trapletti, Simon Urbanek, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis
+Ken Aho, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Clint Cummins, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Jeff Enos, Claus Ekstrom, Martin Elff, Richard W. Farebrother, John Fox, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Michael Hoehle, Christian W. Hoffmann, Torsten Hothorn, Markus Huerzeler, Wallace W. Hui, Pete Hurd, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Giovanni Millo, Yongyi Min, David Mitchell, Markus Naepflin, Daniel Navarro, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Mark Stevenson, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis
 
 Thank you all!
 
