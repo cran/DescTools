@@ -12,7 +12,7 @@ Use Excel as Viewer for a Data.Frame
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-XLView(x, col.names = TRUE, row.names = TRUE)
+XLView(x, col.names = TRUE, row.names = TRUE, na = "")
 
 XLKill()
 }
@@ -21,21 +21,24 @@ XLKill()
   \item{x}{ is a data.frame to be transferred to Excel. If data is missing a new file will be created.
 %%     ~~Describe \code{data} here~~
 }
-  \item{row.names}{ either a logical value indicating whether the row names of x are to be written along with x, or 
+  \item{row.names}{ either a logical value indicating whether the row names of x are to be written along with x, or
   a character vector of row names to be written.}
-  \item{col.names}{either a logical value indicating whether the column names of x are to be written 
-  along with x, or a character vector of column names to be written. 
+  \item{col.names}{either a logical value indicating whether the column names of x are to be written
+  along with x, or a character vector of column names to be written.
   See the section on 'CSV files' \code{\link{write.table}} for the meaning of \code{col.names = NA}. }
+
+\item{na}{the string to use for missing values in the data.}
+
 }
 \details{
 The data.frame will be exported in CSV format and then imported in Excel.\cr
-Take care: Changes to the data made in Excel will NOT automatically be updated in the original data.frame. 
+Take care: Changes to the data made in Excel will NOT automatically be updated in the original data.frame.
 The user will have to read the csv-file into R again.
 See examples how to get this done.\cr\cr
 \code{XLKill} will kill a running XL instance (which might be invisible). Background is the fact, that the simple XL$quit() command
 would not terminate a running XL task, but only set it invisible (observe the TaskManager). This ghost version may sometimes confuse XLView and hinder to create a new instance. In such cases you have to do the garbage collection...
 }
-\value{the name/path of the temporary file edited in Excel. 
+\value{the name/path of the temporary file edited in Excel.
 }
 \author{
 Andri Signorell <andri@signorell.net>

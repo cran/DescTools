@@ -7,8 +7,8 @@
 \description{A more flexible implementation of plotting horizontal bars with definable start and end points.
 }
 \usage{
-PlotHorizBar(from, to, grp = 1, col = "lightgrey", border = "black", 
-             height = 0.6, add = FALSE, ...)
+PlotHorizBar(from, to, grp = 1, col = "lightgrey", border = "black",
+             height = 0.6, add = FALSE, xlim = NULL, ylim = NULL,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,8 +18,8 @@ PlotHorizBar(from, to, grp = 1, col = "lightgrey", border = "black",
   \item{to}{a numeric vector specifying the end of the bars.
 %%     ~~Describe \code{to} here~~
 }
-  \item{grp}{a grouping factor, determining on which line the bar will be printed. The groups 
-  start with y=1 and grow. 
+  \item{grp}{a grouping factor, determining on which line the bar will be printed. The groups
+  start with y=1 and grow.
 %%     ~~Describe \code{grp} here~~
 }
   \item{col}{a vector with the colors of the bars. Default is "lightgrey". This will be recyled if necessary.
@@ -32,6 +32,9 @@ PlotHorizBar(from, to, grp = 1, col = "lightgrey", border = "black",
 %%     ~~Describe \code{col} here~~
 }
   \item{add}{logical, if TRUE (default) add bars to current plot.
+%%     ~~Describe \code{col} here~~
+}
+  \item{xlim, ylim}{limits in x and y.
 %%     ~~Describe \code{col} here~~
 }
   \item{\dots}{the dots are passed to plot.new.

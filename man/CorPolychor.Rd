@@ -35,17 +35,17 @@ CorPolychor(x, y, ML = FALSE, control = list(), std.err = FALSE, maxcor=.9999)
 \value{
   If \code{std.err} is \code{TRUE}, 
   returns an object of class \code{"polycor"} with the following components:
-  \item{type}{set to \code{"CorPolychoric"}.}
+  \item{type}{set to \code{"polychoric"}.}
   \item{rho}{the CorPolychoric correlation.}
-  \item{row.cuts}{estimated thresholds for the row variable (\code{x}), for the ML estimate.}
-  \item{col.cuts}{estimated thresholds for the column variable (\code{y}), for the ML estimate.}
+%  \item{row.cuts}{estimated thresholds for the row variable (\code{x}), for the ML estimate.}
+%  \item{col.cuts}{estimated thresholds for the column variable (\code{y}), for the ML estimate.}
   \item{var}{the estimated variance of the correlation, or, for the ML estimate, 
     the estimated covariance matrix of the correlation and thresholds.}
   \item{n}{the number of observations on which the correlation is based.}
   \item{chisq}{chi-square test for bivariate normality.}
   \item{df}{degrees of freedom for the test of bivariate normality.}
   \item{ML}{\code{TRUE} for the ML estimate, \code{FALSE} for the two-step estimate.}
-  Othewise, returns the CorPolychoric correlation.
+  Othewise, returns the polychoric correlation.
 }
 
 \references{

@@ -5,13 +5,13 @@
 \title{Moses Test of Extreme Reactions
 }
 \description{
-Perform Moses test of extreme reactions, which can be used to determine the difference 
+Perform Moses test of extreme reactions, which can be used to determine the difference
 in range between two samples. The exact one-tailed probability is calculated. }
 \usage{
 MosesTest(x, ...)
 
 \method{MosesTest}{default}(x, y, extreme = NULL, \dots)
-         
+
 \method{MosesTest}{formula}(formula, data, subset, na.action, \dots)
 
 }
@@ -20,39 +20,39 @@ MosesTest(x, ...)
 }
   \item{y}{numeric vector of data values. y will be treated as experiment group. Non-finite (e.g. infinite or missing) values will be omitted.
 }
-  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}  
-  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}. 
-    By default the variables are taken from \code{environment(formula)}.}  
-  \item{subset}{an optional vector specifying a subset of observations to be used.}  
-  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}  
-\item{extreme}{integer, defines the number of extreme values to be dropped from the control group before calculating the 
+  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}
+  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}.
+    By default the variables are taken from \code{environment(formula)}.}
+  \item{subset}{an optional vector specifying a subset of observations to be used.}
+  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}
+\item{extreme}{integer, defines the number of extreme values to be dropped from the control group before calculating the
 span. Default (NULL) is the integer part of 0.05 * length(x) or 1, whichever is greater. If extreme is too large, it will be cut down to floor(length(x)-2)/2. }
   \item{\dots}{further arguments to be passed to or from methods.}
 %\item{g}{a vector or factor object giving the group for the corresponding elements of x. }
 
 }
 \details{
-For two independent samples from a continuous field, this tests whether extreme values 
-are equally likely in both populations or if they are more likely to occur in the population 
+For two independent samples from a continuous field, this tests whether extreme values
+are equally likely in both populations or if they are more likely to occur in the population
 from which the sample with the larger range was drawn.
 
-Note that the ranks are calculated in decreasing mode. 
+Note that the ranks are calculated in decreasing mode.
 
 }
 
 \value{
-  A list with class \dQuote{htest} containing the following components: 
+  A list with class \dQuote{htest} containing the following components:
   \item{statistic}{the value of the Moses Test statistic.}
   \item{p.value}{the p-value for the test.}
   \item{method}{the character string \dQuote{Moses Test of Extreme Reactions}.}
-  \item{data.name}{a character string giving the name(s) of the data.} 
+  \item{data.name}{a character string giving the name(s) of the data.}
 }
 
 
 \references{
 Moses, L.E. (1952) A Two-Sample Test, \emph{Psychometrika}, 17, 239-247.
 
-\url{http://publib.boulder.ibm.com/infocenter/spssstat/v20r0m0/index.jsp?topic=\%2Fcom.ibm.spss.statistics.help\%2Falg_nonparametric_independent_moses.htm}
+\url{http://www-01.ibm.com/support/knowledgecenter/SSLVMB_20.0.0/com.ibm.spss.statistics.help/alg_npar_tests_moses.htm}
 }
 \author{Andri Signorell <andri@signorell.net>
 }

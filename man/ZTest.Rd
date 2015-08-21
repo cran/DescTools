@@ -44,7 +44,7 @@ ZTest(x, ...)
 \details{
   Most introductory statistical texts introduce inference by using the z-test 
   and z-based confidence intervals based on knowing the population
-  standard deviation. Most statistical packages do not include
+  standard deviation. However statistical packages often do not include
   functions to do z-tests since the t-test is usually more appropriate
   for real world situations. This function is meant to be used during
   that short period of learning when the student is learning about
@@ -55,7 +55,16 @@ ZTest(x, ...)
   appropriate introductory step to learning \code{t.test}).
 }
 \value{
-  An object of class \code{htest} containing the results
+  A list with class "\code{htest}" containing the following components:
+    \item{statistic}{ the value of the z-statistic.}
+  \item{p.value}{   the p-value for the test}
+  \item{conf.int}{a confidence interval for the mean appropriate to the specified alternative hypothesis.}
+  \item{estimate}{the estimated mean or difference in means depending on whether it was a one-sample test or a two-sample test.}
+  \item{null.value}{the specified hypothesized value of the mean or mean difference depending on whether it was a one-sample test or a two-sample test.}
+  \item{alternative}{a character string describing the alternative hypothesis.}
+  \item{method}{  a character string indicating what type of test was performed.}
+  \item{data.name}{a character string giving the name(s) of the data.}
+
 }
 
 \references{
@@ -65,11 +74,6 @@ Stahel, W. (2002) \emph{Statistische Datenanalyse, 4th ed}, vieweg
 %\references{ ~put references to the literature/web site here ~ }
 \author{ Andri Signorell <andri@signorell.net>, based on R-Core code of \code{\link{t.test}},\cr
 documentation partly from Greg Snow <greg.snow@imail.org>}
-
-\note{ This function should be used for learning only, real data should
-  generally use \code{t.test}. }
-
-% ~Make other sections like Warning with \section{Warning }{....} ~
 
 
 

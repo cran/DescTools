@@ -29,7 +29,7 @@ PairApply(x, FUN = NULL, ..., symmetric = FALSE)
 \details{This code is based on the logic of \code{cor()} and extended for asymmetric functions.
 %%  ~~ If necessary, more details than the description above ~~
 }
-\seealso{\code{\link{outer}}, \code{\link{GetPairs}}, \code{\link{pairwise.table}} }
+\seealso{\code{\link{outer}}, \code{\link{CombPairs}}, \code{\link{pairwise.table}} }
 \value{a matrix with the results of FUN.
 %%  ~Describe the value returned
 %%  If it is a LIST, use

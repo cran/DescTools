@@ -8,9 +8,8 @@
   returns an error.
 }
 \usage{
-HuberM(x, k = 1.5, mu = median(x), s = mad(x, center = mu), 
+HuberM(x, k = 1.345, mu = median(x), s = mad(x, center = mu), 
        na.rm = FALSE, conf.level = NA, ci.type = c("wald", "boot"), ...)
-       
 }
 \arguments{
   \item{x}{numeric vector.}
@@ -21,14 +20,13 @@ HuberM(x, k = 1.5, mu = median(x), s = mad(x, center = mu),
   \item{na.rm}{logical, indicating whether NA values should be stripped before the computation proceeds. Defaults to FALSE.}
  \item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated. }
  \item{ci.type}{The type of confidence interval required. The value should be any subset 
- of the values \code{"classic"}, \code{"norm"}, \code{"basic"}, \code{"stud"}, \code{"perc"} or \code{"bca"}  (\code{"all"} 
- which would compute all five types of intervals, is not supported). 
+ of the values \code{"wald"}, \code{"boot"}. 
 }
 \item{\dots}{ the dots are passed to the function \code{\link{boot}}, when confidence intervalls are calculated.}
 }
 
 \details{
-   The standard error is computed using the \eqn{\tau} correction factor but no finite sample correction.
+   The standard error is computed using the \eqn{\tau} correction factor but no finite sample correction.\cr The original function is not exported, but can be accessed as \code{DescTools::.huberM}.
   % and as if \code{s} was not estimated from the data.
 }
 
@@ -36,7 +34,7 @@ HuberM(x, k = 1.5, mu = median(x), s = mad(x, center = mu),
 If \code{conf.level} is set to \code{NA} then the result will be  
 \item{}{a single numeric value} and 
 if a \code{conf.level} is provided, a named numeric vector with 3 elements:
-  \item{huberm}{the estimate}
+  \item{huberm}{the estimate for location}
   \item{lwr.ci}{lower bound of the confidence interval}
   \item{upr.ci}{upper bound of the confidence interval}
 }

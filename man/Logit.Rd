@@ -18,7 +18,7 @@ LogitInv(x, min = 0, max = 1)
 \details{
 
   The generalized logit function takes values on [min, max] and
-  transforms them to span [-Inf, Inf]. \cr It is defined as:
+  transforms them to span \eqn{[-\infty, \infty ]}{[-Inf, Inf]}. \cr It is defined as:
 
     \deqn{y = log\left (\frac{p}{1-p} \right ) \;\;\;  \; \textup{where} \; \;\;  p=\frac{x-min}{max-min}}{y = log(p/(1-p)) where p=(x-min)/(max-min)}
 

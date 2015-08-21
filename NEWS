@@ -1,3 +1,56 @@
+DescTools 0.99.12 (2015-08-14)
+-----------------------------
+
+NEW FUNCTIONS ADDED:
+   * TextToTable tries to turn a table like text into a table.
+   * New vignettes Tables in R, Combinatorics have been added.
+   * StrAlign will align strings on a specific character.
+   * CombSet generates all combinations of a set x with/without replacement, resp. order.
+   * CombN returns the number of combinations with/without replacement, resp. order.
+   * DoCall is a faster alternative for do.call. All formula interfaces and much other
+     functions will profit by it. PlotFdist runs 4 times faster for n ~ 1e6.
+   * SetRowNames, SetColNames do for rows and columns what setNames does for lists.
+   * PlotECDF plots empirical cumulative distribution function faster than plot.ecdf.
+   * Mbind has been replaced by Abind which is more flexible (and I was not aware of before).
+   * Format templates have been introduced for Desc functions. It now is possible to
+	   choose user defined number formats.
+   * TOne creates a simple first table, describing baseline characteristics.
+   * New imports from Rcpp.
+   * Eps returns Greenhouse-Geisser And Huynh-Feldt Epsilons.
+   * PlotMosaic creates a mosaicplot with reasonable labels (so far for a two-way table only).
+   * PDFManual gets a pdf manual ob a package from CRAN.
+
+
+UPDATED FUNCTIONS:
+   * Conf will additionally report F1-Score.
+   * Winsorize will run 40% faster not using pmin, pmax.
+   * HotellingsT2Test's interface underwent some slight changes.
+   * Desc.numeric will no longer report normal.test result, which always
+     had been debatable (discouraged by W. Stahel).
+   * GCD and LCM are coded in C++, making them considerably faster.
+   * As usual some adaptations to new R-Devel.
+   * StrPad's argument width gets a default value NULL, taking the maximum length of x.
+   * Desc has been fundamentally redesigned to avoid redundant calculations.
+     Expensive parts has been coded in C++. Some functions will run up to 10-times faster.
+
+
+BUGFIXES:
+   * DunnettTest would not have passed additional arguments from formula interface correctly.
+     (The same in DunnTest and NemenyiTest.)
+   * XL Selection()$Address would not always have returned all selected areas.
+   * OddsRatio didn't add 0.5 in case there were zeros as described in help.
+   * DecToOct would not have returned correct results, when x was submitted as character.
+   * Rev.data.frame is back, enabling PlotCirc to work correctly again.
+   * Format would not always have set the correct width.
+   * Stamp would not have set xpd=TRUE resulting in the text not being displayed.
+
+
+DEFUNCT:
+   * GetAllSubsets has been replaced by the more flexible function CombSet.
+   * GetPairs has been renamed to CombPairs, which seemed more intuitive.
+   * PlotDotCI and PlotDotCIp have been integrated in the more flexible PlotDot.
+     See examples for replacing.
+
 
 DescTools 0.99.11 (2015-05-14)
 -----------------------------
@@ -13,32 +66,32 @@ NEW FUNCTIONS ADDED:
    * power.chisq.test calculating the power of a ChiSquare test has been added.
    * as.matrix.xtabs turns xtabs into an identifiable matrix.
    * GTest for count data has been added.
-   
+
 UPDATED FUNCTIONS:
    * PlotFct has been renamed to PlotFun which seems more intuitive.
    * SaveAs has been renamed to SaveAsDlg to follow the packages naming conventions.
    * PlotFaces gets a new col argument for using colours.
    * MoveAvg gets a new argument "endrule" and the result will be the same class as x.
-   * ParseSASDatalines gets a new option to directly generate the dataset with the given 
+   * ParseSASDatalines gets a new option to directly generate the dataset with the given
      data name in the global environment.
    * Rev does now support higher dimensional tables or arrays. With this change the argument
-	 direction has been replaced by margin, which works in the same manner as in margin.table.
-	 The data.frame interface has been removed (practically not used).
-   * ToLong will now set rownames, expanded from columnnames and rownames of the original data.	
+	   direction has been replaced by margin, which works in the same manner as in margin.table.
+	   The data.frame interface has been removed (practically not used).
+   * ToLong will now set rownames, expanded from columnnames and rownames of the original data.
    * HuberM gets a new interface, hiding some technical arguments and adding the option
-     for confidence intervals.   
-   * Strata has been partly rewritten, but some previously available methods are not 
+     for confidence intervals.
+   * Strata has been partly rewritten, but some previously available methods are not
      yet implemented.
-   
+
 BUGFIXES:
    * Bug in CohenD fixed.
    * ColorLegend would erroneously have reversed the colour labels.
-   * WrdDesc.table did not correctly produce the plot.	
-   * tcltk has been moved from imports to suggests, as loading DescTools in RStudio under 
+   * WrdDesc.table did not correctly produce the plot.
+   * tcltk has been moved from imports to suggests, as loading DescTools in RStudio under
      linux would sometimes have hung (credits to Henk Harmsen for telling).
-   * Classic confidence intervals for skewness and kurtosis used pnorm instead of qnorm.	 
+   * Classic confidence intervals for skewness and kurtosis used pnorm instead of qnorm :-(
 
-   
+
 DescTools 0.99.10 (2015-03-15)
 -----------------------------
 
@@ -46,8 +99,8 @@ NEW FUNCTIONS ADDED:
    * SaveAs brings up file.choose for saving a R object.
    * Explore is back again, as the package "manipulate" is on CRAN meanwhile.
    * DurbinWatsonTest for autocorrelation added.
- 
-   
+
+
 UPDATED FUNCTIONS:
    * The date functions have been changed to use as.POSIXlt for better performance.
    * DrawBand will accept matrices of coordinates.
@@ -55,18 +108,19 @@ UPDATED FUNCTIONS:
    * Small and Large have been redesigned to run faster.
    * Calculation of winsorized variance, used for confidence intervals for trimmed
      means in MeanCI, is much faster for large x.
-   * Format code restrictions for dates have been formulated more liberal such as 
-     to allow formats like "yyyymmdd".   
-   * Desc.numeric will not refuse to describe numeric vectors with additional classes.	  
-	 
+   * Format code restrictions for dates have been formulated more liberal such as
+     to allow formats like "yyyymmdd".
+   * Desc.numeric will no longer refuse to describe numeric vectors with
+     additional classes.
+
 
 BUGFIXES:
-   * XLGetRange's call attribute would only have returned the header instead of the 
+   * XLGetRange's call attribute would only have returned the header instead of the
      address(es) of the selected range(s).
-   * Desc.table for higher dimensional tables does not any more report 
-     erroneously ChiSquare-Test results. 	 
-   * Correcting several issues with new R-Devel.	 
-	 
+   * Desc.table for higher dimensional tables does not any more report
+     erroneously ChiSquare-Test results.
+   * Correcting several issues with new R-Devel.
+
 
 
 DescTools 0.99.9 (2015-01-20)
@@ -90,29 +144,29 @@ NEW FUNCTIONS ADDED:
    * Agree quantifies the agreement of several raters.
    * PostHocTest gets a new interface for tables, performing pairwise ChiSq-tests
      with the option to adjust p-values for multiple testing.
-   * PostHocTest gains a new option "duncan", computing Duncan's MRT   
+   * PostHocTest gains a new option "duncan", computing Duncan's MRT
    * Dunn's test of multiple comparisons using rank sums added (DunnTest).
    * DunnettTest performs a Dunnett multiple comparisons test.
-   * lines.smooth.spline does for this smoother, what lines.loess did for loess.	 
+   * lines.smooth.spline does for this smoother, what lines.loess did for loess.
    * RndPairs returns pairs of correlated random numbers.
    * BubbleLegend creates a legend for bubble plots.
-   * Format combines the functionality of the old functions FormatFix and FormatSig 
+   * Format combines the functionality of the old functions FormatFix and FormatSig
      and adds some extensions like leading zeros and dates.
    * CCC calculates Lin's concordance correlation coefficient for agreement.
    * CoefVar yields the coefficient of variation and its confidence limits.
    * CohenD calculates Cohen's effect size d and its confidence limits.
-   * BinomRatioCI calculates confidence intervals for the ratio of binomial and 
-     multinomial proportions. 
-   * The new function Overlap returns the extent of the overlapping part of two ranges.	 
-   
-   
+   * BinomRatioCI calculates confidence intervals for the ratio of binomial and
+     multinomial proportions.
+   * The new function Overlap returns the extent of the overlapping part of two ranges.
+
+
 UPDATED FUNCTIONS:
    * Min has been renamed to Minute and Sec to Second.
-   * Hour, Minute, Second do accept POSIXct times now. 
+   * Hour, Minute, Second do accept POSIXct times now.
    * CorCI loses the argument *twotailed* and gains the argument *alternative*.
      This is following the logic in other test- and CI-functions.
    * Assocs has been redesigned to run faster (but it still has accelerating potential..)
-   * Untable has been extended to support frequency form of tables (a data.frame 
+   * Untable has been extended to support frequency form of tables (a data.frame
      with levels of the factors and a "Freq" column).
    * XLGetRange returns the full call statement as attribute.
    * OddsRatio will be calculated as log OR instead of simple OR, allowing bigger n.
@@ -120,16 +174,16 @@ UPDATED FUNCTIONS:
    * AddMonths accepts a vector of dates.
    * Trim accepts integer values on the argument trim. The function returns NA instead
      of median(x), if trim is set to a value > 0.5, resp. n/2.
-   * Desc.table now reports missing values, if there are any.	 
+   * Desc.table now reports missing values, if there are any.
    * Desc.data.frame accepts a main vector, allowing the user to define his own main captions.
    * Lorenz curve function Lc gains a formula interface for creating groupwise curves.
    * PlotBubble gains a formula interface and some more arguments, e.g. args.legend.
-   * Mround has been renamed to RoundM, and gains a new argument FUN which allows 
+   * Mround has been renamed to RoundM, and gains a new argument FUN which allows
      to define the rounding function (ceiling, floor, ..).
    * EtaSq has been extended by Daniel Wollschlaeger (thanks).
    * BinomCI uses rownames now. It gains further a new method "pratt".
-   * PlotVenn gains a new argument "labels". The argument "plot" has been renamed to "plotit" 
-     (to be consistent with the package naming rules). 
+   * PlotVenn gains a new argument "labels". The argument "plot" has been renamed to "plotit"
+     (to be consistent with the package naming rules).
    * Fibonacci has been redesigned to run faster.
    * Kappam has been renamed to KappaM.
    * TheilU's argument "method" has been renamed to "type".
@@ -139,27 +193,27 @@ UPDATED FUNCTIONS:
    * MeanCI has been enhanced to calculate confidence intervals for trimmed means.
    * StrVal gains two new arguments paste and as.numeric.
    * Many smaller changes on the documentation and helpfiles.
-   * PairApply argument "symmetric" gets another default value: "FALSE" instead of "TRUE". 
+   * PairApply argument "symmetric" gets another default value: "FALSE" instead of "TRUE".
      This seems more robust, as the other way round potential errors are more likely.
-   
-   
+
+
 DEFUNCT:
-   * WhichNumerics, WhichFactors, WhichFlags are not needed anymore. 
+   * WhichNumerics, WhichFactors, WhichFlags are not needed anymore.
      which(sapply(x, IsNumeric)), sapply(x, IsDichotmous), sapply(x, is.factor) do the job.
    * DescFactFact is a relict and obsolete. Use of Desc.formula or Desc.table is recommended.
    * FormatFix and FormatSig have been replaced by the new function Format.
    * Explore has been removed because of its dependency for the package "manipulate"
      (which is not on CRAN). It might be added again built on tcltk down the road.
-   
-   
+
+
 BUGFIXES:
-   * plotit was not correctly interpreted in Desc.factor (credits to Thomas Schlesinger). 	 
+   * plotit was not correctly interpreted in Desc.factor (credits to Thomas Schlesinger).
    * PlotVenn did not correctly place the figures in the 2-sample case (credits to Andrew Marritt).
-   
+
 
 DescTools 0.99.8.1 (2014-09-22)
 -------------------------------
-   
+
 UPDATED FUNCTIONS:
    * Outlier has been changed to strictly following the boxplot logic.
    * DescToolsOptions gains a default argument allowing to reset the options.
@@ -167,7 +221,7 @@ UPDATED FUNCTIONS:
 
 BUGFIXES:
    * anyNA is only defined for R >= 3.1, the according dependency has been defined.
-   * the key.ico file has been placed in /extdata directory and should definitely 
+   * the key.ico file has been placed in /extdata directory and should definitely
      be found now by the function PasswordDlg().  (shame on me..)
 
 
@@ -192,9 +246,9 @@ NEW FUNCTIONS ADDED:
    * Stuart-Maxwell computes a marginal homogeneity test. LehmacherTest does the same.
    * ScheffeTest returns the results of a multiple comparisons Scheffe test.
      NewmanKeulsTest does the same based on Tukey's HSD test.
-   * PostHocTest is a wrapper for the most frequently used post hoc tests in ANOVA, 
+   * PostHocTest is a wrapper for the most frequently used post hoc tests in ANOVA,
      including FisherLSD, Bonferroni (Dunn), TukeyHSD, (Student-)Newman-Keuls and Scheffe.
-   * New function EtaSq calculates the effect sizes for ANOVAs.	 
+   * New function EtaSq calculates the effect sizes for ANOVAs.
    * Several new tests added: HotellingsT2Test, BartelsRankTest.
    * Keywords reports the keywords of a manual page.
    * SysInfo displays some information about system and environment.
@@ -207,15 +261,15 @@ NEW FUNCTIONS ADDED:
    * ParseSASDatalines reads SAS datalines in a data.frame.
    * MarginTable wraps margin.table and calculates all of them, percentages included.
 
-   
+
 UPDATED FUNCTIONS:
    * PlotHorizBars gains new arguments "height" and "add".
    * PlotQQ includes a qqline now.
    * Bivariate Desc-functions gain a plotit argument.
    * Between operators will accept multiple ranges making them more flexible.
-   * The runs test has been extended to 2 samples (Wald-Wolfowitz-Test). The p-value is 
+   * The runs test has been extended to 2 samples (Wald-Wolfowitz-Test). The p-value is
      now calculated exact for small sample sizes.
-   * Kurt and Skew, computing kurtosis and skewness, are running 15-times faster using C-code.	 
+   * Kurt and Skew, computing kurtosis and skewness, are running 15-times faster using C-code.
    * Lorenz curves will now report Gini coefficient.
    * The function "AddErrBars" has been renamed to "ErrBars".
    * The function "AddLm" has been redesigned to "lines.lm".
@@ -228,16 +282,16 @@ UPDATED FUNCTIONS:
      (I'm not sure, whether this was wise. Tell me what you think about that!)
    * JarqueBeraTest gains a new argument *robust*, calculation a robust version of the test.
    * StrPad has been given recycling power for all arguments. The "str" argument has been renamed to "pad".
-   * The argument "type" in MeanCI, MeanDiffCI, MedianCI, VarCI has been renamed to "method" 
+   * The argument "type" in MeanCI, MeanDiffCI, MedianCI, VarCI has been renamed to "method"
      such as to be consistent with others CIs.
    * The argument verb in Desc.table has been renamed to "verbose" and its allowed values to "medium",
      "low" and "high". Anyhow this change will not break existing code, as abbreviation is allowed.
    * Desc-functions have been cleared out, resulting in better consistency and faster and more robust behaviour.
    * LOCF gets a faster implementation.
-    
-   
+
+
 BUGFIXES:
-   * Bug corrected for Cramer's V confidence intervals. 
+   * Bug corrected for Cramer's V confidence intervals.
      Credits to Steven J. Pierce for spotting the problem and to Michael Smithson for fixing it.
    * The icon file for the PasswordDlg could not be found resulting in the dialog not being displayed.
    * PlotFdist did not handle args.boxplot = NA correctly, meaning no boxplot being displayed.
@@ -267,10 +321,10 @@ NEW FUNCTIONS ADDED:
    * SampleTwins draws a sample with comparable strata properties.
    * PasswordDlg brings up a dialog to enter a password while displaying only ***.
    * KendallW calculates Kendall's coefficient of concordance.
-   * KrippAlpha calculates Krippendorfs' Alpha reliability coefficient. 
+   * KrippAlpha calculates Krippendorfs' Alpha reliability coefficient.
    * PlotQQ plots a QQ-plot for a variable with an assumed distribution.
-   
-   
+
+
 UPDATED FUNCTIONS:
    * PlotGACF will not plot ACF(0) any more. Lags instead of phases will be used for ts-objects as x-axis.
    * Desc.integer looses its maxlevels argument and gains "maxrows" and "freq". See help.
@@ -280,27 +334,27 @@ UPDATED FUNCTIONS:
    * PlotWeb gains a couple of new arguments, making it more flexible.
    * AreaIdent gains a new argument poly. With poly=TRUE a polygon instead of a
      rectangle can be used to select the interesting points.
-   * PlotCorr gains a border and lwd argument, allowing a grid being added.	 
+   * PlotCorr gains a border and lwd argument, allowing a grid being added.
    * ZTest has been extended with the option to handle 2 sample tests in the same manner as t.test.
      Moreover a formula interface has been added.
    * PpAddSlide will now set a newly inserted slide as active slide.
    * The artificial data.frame d.pizza has been given more structure between the variables.
-    
+
 
 BUGFIXES:
-   * AddLm(x, y, ...) created the wrong formula x ~ y instead of the correct y ~ x model.  
+   * AddLm(x, y, ...) created the wrong formula x ~ y instead of the correct y ~ x model.
    * Corrected bug in function StrDist: wrong initialisation for Levenshtein distance.
    * Corrected a bug in BinomCI identified by Steven Kern in the modified Jeffreys interval for binomial proportions.
    * AddConnLines confused the space argument between horiz=FALSE and horiz=TRUE.
    * shapiro.test would have stopped the Desc procedure, if a variable had only identical values.
-     This has been corrected so, that the error message will be printed, while the function Desc will 
+     This has been corrected so, that the error message will be printed, while the function Desc will
 	 proceed to describe remaining variables.
-   * PoissonCI was not yet fully implemented.	 
-  
+   * PoissonCI was not yet fully implemented.
+
 
 OTHER NOTES:
    * Updated the NEWS file.
-  
+
 
 
 DescTools 0.99.6 (2014-01-07)

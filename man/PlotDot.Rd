@@ -107,7 +107,23 @@ par(lend=1)
 PlotDot(VADeaths, main="Death Rates in Virginia - 1940", pch=NA, lcolor = hecru,
         args.errbars = list(from=VADeaths-2, to=VADeaths+2, mid=VADeaths, 
                             pch="|", col.pch=hred, cex=1.3, lwd=8, code=0, col=hgreen))
+
+# Error bars for binomial confidence intervals 
+tab <- table(d.pizza$driver, d.pizza$wine_delivered)
+xci <- SetRowNames(BinomCI(tab[,1], rowSums(tab)), rownames(tab))
+PlotDot(xci[,1], main="wine delivered ~ driver ", xlim=c(0,1),
+        args.errbars=list(from=xci[,-1], mid=xci[,1], pch=21))
+
+
+# Error bars for confidence intervals for means
+xci <- do.call(rbind, tapply(d.pizza$delivery_min, d.pizza$driver, 
+  MeanCI, conf.level=0.99, na.rm=TRUE))
+
+PlotDot(xci[,1], main="delivery_min ~ driver", 
+  args.errbars=list(from=xci[,-1]))
+
 }
+
 \keyword{hplot}
 
 

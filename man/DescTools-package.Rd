@@ -2,9 +2,9 @@
 \alias{DescTools-package}
 \alias{DescTools}
 \docType{package}
-\title{ Tools for Efficient Descriptive Statistics
+\title{ Tools for Descriptive Statistics and Exploratory Data Analysis
 }
-\description{ 
+\description{
 A collection of basic statistic functions and convenience wrappers for efficiently describing data. The author's intention was to create a toolbox, which facilitates the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results. The package contains furthermore functions to produce documents using MS Word (or PowerPoint) and functions to import data from Excel. \cr
 Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, NA handling, recycling rules etc. are concerned. Google style guides were used as naming rules (in absence of convincing alternatives). The 'CamelStyle' was consequently applied to functions borrowed from contributed R packages as well.
 \cr
@@ -14,16 +14,16 @@ Feedback, feature requests, bugreports and other suggestions are welcome! Please
 
 }
 
-\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in mid of 2015) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.
+\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in, well, end of 2015) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.
 }
 
 \details{
 
-A grouped list of the functions:  
+A grouped list of the functions:
 
 \tabular{ll}{
 \cr\cr
-\bold{Operators, calculus, transformations:}\tab\cr
+\strong{Operators, calculus, transformations:}\tab\cr
 \link{\%()\%}    \tab      Between operators determine if a value lies within a range [a,b] \cr
 \link{\%)(\%}    \tab      Outside operators: \%)(\%, \%](\%, \%)[\%, \%][\% \cr
 \link{\%nin\%}    \tab     "not in" operator \cr
@@ -73,8 +73,9 @@ A grouped list of the functions:
 \link{Coalesce}       \tab      Return the first value in a vector not being NA \cr
 \link{ZeroIfNA}       \tab   Replace NAs by 0 \cr
 \link{Impute}       \tab   Replace NAs by the median or another value \cr
-\link{GetAllSubsets}       \tab      Generates all possible subsets out of a list of elements \cr
-\link{GetPairs}      \tab            Generates all pairs out of one or two sets of elements \cr
+\link{CombN}       \tab      Returns the number of subsets out of a list of elements \cr
+\link{CombSet}       \tab      Generates all possible subsets out of a list of elements \cr
+\link{CombPairs}      \tab            Generates all pairs out of one or two sets of elements \cr
 %%\link{WhichFlags}   \tab      Returns the names of dichotomous columns of a data.frame  \cr
 %%\link{WhichFactors}      \tab            Returns the names of factors in a given data.frame  \cr
 %%\link{WhichNumerics}      \tab            Returns the names of numerical columns of a data.frame \cr
@@ -85,7 +86,7 @@ A grouped list of the functions:
 \link{IsPrime}       \tab  Is x a prime number? \cr
 \link{IsZero}       \tab   Is numeric(x) == 0, say x < machine.eps? \cr
 \link{Label}      \tab            Get or set the label attribute of an object \cr
-\link{Mbind}  \tab  Bind matrices to 3-dimensional arrays     \cr
+\link{Abind}  \tab  Bind matrices to n-dimensional arrays     \cr
 \link{VecRot}  \tab  Shift the elements of a vector in a circular mode to the right \cr
 \tab or to the left by n characters.     \cr
 \link{Clockwise}       \tab      Transform angles from counter clock into clockwise mode \cr
@@ -111,10 +112,10 @@ A grouped list of the functions:
 \link{StrIsNumeric}       \tab    Check whether a string does only contain numeric data \cr
 \link{FixToTab}       \tab      Create table out of a running text, by using columns of spaces as delimiter \cr
 \cr\cr
-\bold{Conversion functions:}\tab\cr 
+\bold{Conversion functions:}\tab\cr
 \link{AscToChar}, \link{CharToAsc}       \tab      Converts ASCII codes to characters and vice versa  \cr
-\link{DecToBin}, \link{BinToDec}   \tab      Converts numbers from binmode to decimal and vice versa  \cr 
-\link{DecToHex}, \link{HexToDec}   \tab      Converts numbers from hexmode to decimal and vice versa  \cr 
+\link{DecToBin}, \link{BinToDec}   \tab      Converts numbers from binmode to decimal and vice versa  \cr
+\link{DecToHex}, \link{HexToDec}   \tab      Converts numbers from hexmode to decimal and vice versa  \cr
 \link{DecToOct}, \link{OctToDec}   \tab      Converts numbers from octmode to decimal and vice versa  \cr
 \link{DegToRad}, \link{RadToDeg}      \tab            Convert degrees to radians and vice versa  \cr
 \link{CartToPol}, \link{PolToCart}     \tab            Transform cartesian to polar coordinates and vice versa \cr
@@ -167,8 +168,7 @@ A grouped list of the functions:
 \link{PlotCirc}    \tab  Create a circular plot \cr
 \link{PlotCorr}    \tab Plot a correlation matrix  \cr
 \link{PlotDesc}    \tab   Create a descriptive plot of a vector x dependent on its class  \cr
-\link{PlotDotCI}    \tab  Plot a dotchart with confidence intervals \cr
-\link{PlotDotCIp}    \tab   Plot a dotchart with binomial confidence intervals \cr
+\link{PlotDot}    \tab  Plot a dotchart with confidence intervals \cr
 \link{PlotFaces}    \tab  Produce a plot of Chernoff faces  \cr
 \link{PlotFdist}    \tab  Frequency distribution plot, combination of histogram, \cr
 \tab boxplot and ecdf.plot \cr
@@ -185,12 +185,12 @@ A grouped list of the functions:
 \link{PlotWeb}    \tab  Create a web plot \cr
 \link{PlotTernary}    \tab  Create a triangle or ternary plot \cr
 \cr\cr
-\bold{Distributions:}\tab\cr 
+\bold{Distributions:}\tab\cr
 \link{pBenf}   \tab      Benford distribution, including \link{qBenf}, \link{dBenf}, \link{rBenf}\cr
 \link{pRevGumbel}       \tab      Reverse Gumbel distribution, including \link{qRevGumbel},\cr \tab\link{dRevGumbel}, \link{rRevGumbel} \cr
 \link{qRevGumbelExp}       \tab      Expontial reverse Gumbel distribution (quantile only)\cr
 \cr\cr
-\bold{Statistics:}\tab\cr 
+\bold{Statistics:}\tab\cr
 \link{Freq}  \tab    Frequency table   \cr
 \link{PercTable}  \tab    Two dimensional percentage table   \cr
 \link{MarginTable}       \tab      Return the (extended) margin tables of a table \cr
@@ -230,7 +230,7 @@ A grouped list of the functions:
 \link{DivCoef}, \link{DivCoefMax}    \tab   Rao's diversity coefficient ("quadratic entropy")\cr
 \link{TheilU} \tab  Theil's U1 and U2 coefficient     \cr
 \link{Assocs}       \tab  Combines the association measures above.  \cr
-\link{OddsRatio}, \link{RelRisk}  \tab   Odds ratio and relative risk    \cr  
+\link{OddsRatio}, \link{RelRisk}  \tab   Odds ratio and relative risk    \cr
 \link{CohenKappa}, \link{KappaM}  \tab Cohen's Kappa, weighted Kappa and Kappa for \cr
 \tab more than 2 raters      \cr
 \link{CronbachAlpha}  \tab  Cronbach's alpha     \cr
@@ -243,6 +243,7 @@ A grouped list of the functions:
 \link{GiniSimpson}       \tab      Compute Gini-Simpson Coefficient \cr
 \link{CorCI}  \tab    Confidence interval for Pearson's correlation coefficient \cr
 \link{PartCor}       \tab      Find the correlations for a set x of variables with set y removed \cr
+\link{CorPolychor}  \tab    Polychoric correlation coefficient \cr
 \link{SpearmanRho}       \tab      Spearman rank correlation and its confidence intervals \cr
 \link{ConDisPairs}       \tab  Return concordant and discordant pairs of two vectors \cr
 \link{FindCorr}       \tab      Determine highly correlated variables \cr
@@ -253,7 +254,7 @@ A grouped list of the functions:
 \link{Outlier}  \tab   Outliers following Tukey's boxplot definition  \cr
 \link{LOF}  \tab  Local Outlier Factor  \cr
 \cr\cr
-\bold{Tests:}\tab\cr 
+\bold{Tests:}\tab\cr
 \link{SignTest}    \tab  Signtest\cr
 \link{ZTest}    \tab   Z--test for known population variance \cr
 \link{JonckheereTerpstraTest}    \tab  Jonckheere-Terpstra test\cr
@@ -342,7 +343,7 @@ A grouped list of the functions:
 \link{PpPlot}    \tab   Insert active plot to PowerPoint \cr
 \link{PpAddSlide}       \tab      Adds a slide to a PowerPoint presentation \cr
 \link{PpText}       \tab      Adds a textbox with text to a PP-presentation \cr
-\link{ParseSASDatalines}       \tab      Parse a SAS "datalines"" statement to read data \cr
+\link{ParseSASDatalines}       \tab      Parse a SAS "datalines" statement to read data \cr
 \cr\cr
 \bold{Tools:}\tab\cr
 \link{PairApply}       \tab  Helper for calculating functions pairwise \cr
@@ -370,7 +371,7 @@ A grouped list of the functions:
 }
 }
 
-\section{MS-Office}{To make use of MS-Office features you must have Office in one of its variants installed. 
+\section{MS-Office}{To make use of MS-Office features you must have Office in one of its variants installed.
 All Wrd*, XL* and Pp* functions require as well the package RDCOMClient to be installed. Hence the use of these functions is restricted to Windows systems.
 RDCOMClient is available at: \cr\url{http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/3.2/}.
 RDCOMClient does not exist for Mac or Linux, sorry.
@@ -378,10 +379,10 @@ RDCOMClient does not exist for Mac or Linux, sorry.
 
 
 \author{
-Andri Signorell\cr 
+Andri Signorell\cr
 Helsana Versicherungen AG, Health Sciences, Zurich\cr
 HWZ University of Applied Sciences in Business Administration Zurich.\cr
- 
+
 Includes R source code and/or documentation previously published by (in alphabetical order): \cr
 Ken Aho, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Clint Cummins, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Jeff Enos, Claus Ekstrom, Martin Elff, Richard W. Farebrother, John Fox, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Michael Hoehle, Christian W. Hoffmann, Torsten Hothorn, Markus Huerzeler, Wallace W. Hui, Pete Hurd, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Giovanni Millo, Yongyi Min, David Mitchell, Markus Naepflin, Daniel Navarro, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Mark Stevenson, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis
 
@@ -398,7 +399,7 @@ Maintainer: Andri Signorell <andri@signorell.net>
 
 \examples{
 # ******************************************************
-# There are no examples defined here. But see the demos: 
+# There are no examples defined here. But see the demos:
 #
 # demo(describe)
 # demo(plots))

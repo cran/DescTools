@@ -2,7 +2,7 @@
 \alias{AscToChar}
 \alias{CharToAsc}
 
-\title{Converts ASCII Codes to Characters and Vice Versa
+\title{Convert ASCII Codes to Characters and Vice Versa
 }
 \description{AscToChar returns a character for each ASCII code (integer) supplied.\cr
 CharToAsc returns integer codes in \code{0:255} for each (one byte) character in \code{strings}.

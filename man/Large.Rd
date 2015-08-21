@@ -1,4 +1,4 @@
-\name{Large}
+\name{Extremes}
 \alias{Large}
 \alias{Small}
 %- Also NEED an '\alias' for EACH other topic documented here.

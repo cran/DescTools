@@ -2,6 +2,7 @@
 \alias{Format}
 \alias{Format.default}
 \alias{Format.matrix}
+\alias{Format.table}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Format Numbers and Dates
@@ -12,21 +13,25 @@ This function wraps those functions and tries to offer a simpler, but still flex
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Format(x, digits = NULL, sci = getOption("scipen"), big.mark="", 
-       leading = NULL, zero.form = NULL, na.form = NULL, 
+Format(x, digits = NULL, sci = getOption("scipen"), big.mark="",
+       leading = NULL, zero.form = NULL, na.form = NULL,
        fmt = NULL, align = "left", width = NULL, ...)
-       
-\method{Format}{matrix}(x, digits = NULL, sci = getOption("scipen"), big.mark="", 
-       leading = NULL, zero.form = NULL, na.form = NULL, 
+
+\method{Format}{table}(x, digits = NULL, sci = getOption("scipen"), big.mark="",
+       leading = NULL, zero.form = NULL, na.form = NULL,
        fmt = NULL, align = "left", width = NULL, ...)
-       
-\method{Format}{default}(x, digits = NULL, sci = getOption("scipen"), big.mark="", 
-       leading = NULL, zero.form = NULL, na.form = NULL, 
+
+\method{Format}{matrix}(x, digits = NULL, sci = getOption("scipen"), big.mark="",
+       leading = NULL, zero.form = NULL, na.form = NULL,
        fmt = NULL, align = "left", width = NULL, ...)
+
+\method{Format}{default}(x, digits = NULL, sci = getOption("scipen"), big.mark="",
+       leading = NULL, zero.form = NULL, na.form = NULL,
+       fmt = NULL, align = NULL, width = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{an atomic numerical, typically a vector of real numbers or a matrix of numerical values. 
+  \item{x}{an atomic numerical, typically a vector of real numbers or a matrix of numerical values.
 %%     ~~Describe \code{x} here~~
 }
   \item{digits}{integer, the desired number of digits after the decimal point. Unlike formatC you will always get this number of digits even if the last digit is 0.
@@ -38,21 +43,21 @@ Format(x, digits = NULL, sci = getOption("scipen"), big.mark="",
   \item{big.mark}{character; if not empty used as mark between every big.interval decimals before (hence big) the decimal point.
 %%     ~~Describe \code{big.mark} here~~
 }
-  \item{leading}{character string that can be used for setting leading zeros. "000" would make sure that at least 3 digits on the left side will be printed. Setting leading to "" will yield results like ".452" for 0.452. The default \code{NULL} will leave the numbers as they are.
+  \item{leading}{character string that can be used for setting leading zeros. "000" would make sure that at least 3 digits on the left side will be printed. Setting leading to "drop" will yield results like ".452" for 0.452. The default \code{NULL} will leave the numbers as they are.
 %%     ~~Describe \code{drop0leading} here~~
 }
   \item{zero.form}{character, string specifying how zeros should be formatted specially. Useful for pretty printing 'sparse' objects.
   If set to NULL (default) no special action will be taken.
 %%     ~~Describe \code{pad} here~~
 }
-  \item{na.form}{character, string specifying how NAs should be formatted specially. 
+  \item{na.form}{character, string specifying how NAs should be formatted specially.
   If set to NULL (default) no special action will be taken.
 %%     ~~Describe \code{pad} here~~
 }
   \item{fmt}{a format string, allowing to flexibly define special formats. See Details.
 %%     ~~Describe \code{fmt} here~~
 }
-  \item{align}{one out of \code{"left"}, \code{"right"}, \code{"center"}, \code{"dec"}. The values will be aligned left (default), right, center or at the decimal point.
+  \item{align}{one out of \code{"left"}, \code{"right"}, \code{"center"}, \code{"dec"}. The values can be aligned left, right, center or at the decimal point. The default is \code{NULL} which would just leave the strings as they are.
 %%     ~~Describe \code{align} here~~
 }
   \item{width}{integer, the defined width of the strings.
@@ -60,24 +65,24 @@ Format(x, digits = NULL, sci = getOption("scipen"), big.mark="",
 }
 \item{\dots}{further arguments to be passed to or from methods. }
 }
-\details{The argument \code{fmt} can be used for defining several formats. \cr 
+\details{The argument \code{fmt} can be used for defining several formats. \cr
 
 
 
 \tabular{ll}{
-dates    \tab   Dates can be formatted with the format codes \code{d}, \code{m} and \code{y} for day, month or year. \cr 
-\tab Repeting the specific code defines the degree of abbreviation: \cr 
+dates    \tab   Dates can be formatted with the format codes \code{d}, \code{m} and \code{y} for day, month or year. \cr
+\tab Repeting the specific code defines the degree of abbreviation: \cr
 \tab  \code{d .....}  day of the month without leading zero (1 - 31) \cr
 \tab  \code{dd ....}  day of the month with leading zero (01 - 31)\cr
-\tab  \code{ddd ...} abbreviated name for the day of the week (e.g. Mon) in the current user's language  \cr 
- \tab                  \code{dddd ..}    full name for the day of the week (e.g. Monday) in the current user's language  \cr 
- \tab                  \code{m .....}  month without leading zero (1 - 12) \cr 
- \tab                  \code{mm ....}   month with leading zero (01 - 12) \cr 
- \tab                 \code{mmm ...}    abbreviated month name (e.g. Jan) in the current user's language \cr 
- \tab                \code{mmmm...}     full month name (e.g. January) in the current user's language \cr 
-  \tab              \code{y .....}   year without century, without leading zero (0 - 99) \cr 
- \tab                 \code{yy ....}      year without century, with leading zero (00 - 99) \cr 
-  \tab              \code{yyyy ..}    year with century. For example: 2005 \cr 
+\tab  \code{ddd ...} abbreviated name for the day of the week (e.g. Mon) in the current user's language  \cr
+ \tab                  \code{dddd ..}    full name for the day of the week (e.g. Monday) in the current user's language  \cr
+ \tab                  \code{m .....}  month without leading zero (1 - 12) \cr
+ \tab                  \code{mm ....}   month with leading zero (01 - 12) \cr
+ \tab                 \code{mmm ...}    abbreviated month name (e.g. Jan) in the current user's language \cr
+ \tab                \code{mmmm...}     full month name (e.g. January) in the current user's language \cr
+  \tab              \code{y .....}   year without century, without leading zero (0 - 99) \cr
+ \tab                 \code{yy ....}      year without century, with leading zero (00 - 99) \cr
+  \tab              \code{yyyy ..}    year with century. For example: 2005 \cr
 \tab\cr
 }
 \tabular{ll}{
@@ -89,16 +94,20 @@ percent \tab Setting \code{fmt = "\%"} will divide the given number by 100 and a
 p-value \tab \code{fmt = "p"} will wrap the function \code{\link{format.pval}}.\cr
 \tab\cr
 
-significance \tab The significance representation of a p-value consisting of *  and . will be produced by setting \code{fmt = "*"}.  \cr 
-\tab The breaks are set according to the used defaults e.g. in \code{lm} as  \cr 
-\tab [0, 0.001] = \code{***}  \cr 
-\tab (0.001, 0.01] = \code{**}  \cr 
-\tab (0.01, 0.05] = \code{*}  \cr 
-\tab (0.05, 0.1] = \code{.}  \cr 
+significance \tab The significance representation of a p-value consisting of *  and . will be produced by setting \code{fmt = "*"}.  \cr
+\tab The breaks are set according to the used defaults e.g. in \code{lm} as  \cr
+\tab [0, 0.001] = \code{***}  \cr
+\tab (0.001, 0.01] = \code{**}  \cr
+\tab (0.01, 0.05] = \code{*}  \cr
+\tab (0.05, 0.1] = \code{.}  \cr
 \tab (0.1,1] = \code{ }\cr
 }
 
-
+\code{fmt} can as well be an object of class \code{fmt} consisting of a list of all arguments of the function.
+This allows the format to be stored in a variable or as an option and be used as format template subsequently. If we would want to define an own format for counts, we would write:\cr\cr
+\code{fmt.count <- structure(list(digits=0, big.mark="'"), class="fmt")} \cr
+\code{Format(4231.2, fmt=fmt.count)} \cr \cr
+which again would return the same as \code{Format(4231.2, digits=0, big.mark="'")}.
 
 }
 \value{the formatted values as characters. \cr
@@ -129,7 +138,7 @@ Format(x, digits=4, sci=4, leading = "drop", width=9, align="dec")
 
 
 # format a matrix
-m <- matrix(runif(100), nrow=10, 
+m <- matrix(runif(100), nrow=10,
             dimnames=list(LETTERS[1:10], LETTERS[1:10]))
 
 Format(m, digits=1)

@@ -1,15 +1,18 @@
 \name{Frac}
 \alias{Frac}
+\alias{MaxDigits}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Return the Fractional Part of a Numeric Value 
+\title{Fractional Part and Maximal Digits of a Numeric Value
 %%  ~~function to do ... ~~
 }
-\description{Return the fractional part of a numeric value. 
+\description{\code{Frac} returns the fractional part of a numeric value. MaxDigits return the number of digits in x.
 
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 Frac(x, dpwr = NA)
+
+MaxDigits(x)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -41,6 +44,8 @@ Frac(x)
 
 # multiply by 10^4
 Frac(x, dpwr=4)
+
+MaxDigits(c(1.25, 1.8, 12.0, 1.00000))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

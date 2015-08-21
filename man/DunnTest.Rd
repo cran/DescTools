@@ -15,10 +15,7 @@ DunnTest(x, \dots)
                     "BY", "fdr", "none"), 
          out.list = TRUE, \dots)
 
-\method{DunnTest}{formula}(formula, data, subset, na.action, 
-         method = c("holm", "hochberg", "hommel", "bonferroni", "BH", 
-                    "BY", "fdr", "none"), 
-         out.list = TRUE, \dots)
+\method{DunnTest}{formula}(formula, data, subset, na.action, \dots)
 
 \method{print}{DunnTest}(x, digits = getOption("digits"), ...)
 

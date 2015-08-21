@@ -14,8 +14,8 @@ Still the function remains flexible as all possible arguments can be passed to t
 PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
           do.hist = !(all(IsWhole(x, na.rm = TRUE)) & length(unique(na.omit(x))) < 13),
           args.hist = NULL, args.rug = NA, args.dens = NULL, args.curve = NA, 
-          args.boxplot = NULL, args.ecdf = NULL, heights = NULL,
-          pdist = NULL, na.rm = FALSE, cex.axis = NULL, cex.main = NULL)
+          args.boxplot = NULL, args.ecdf = NULL, heights = NULL, pdist = NULL,
+          na.rm = FALSE, cex.axis = NULL, cex.main = NULL, mar = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -75,7 +75,12 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
 \item{cex.axis}{character extension factor for the axes.}
 \item{cex.main}{character extension factor for the main title. Must be set in dependence of the plot parts in order to get a harmonic view.}
 
+\item{mar}{A numerical vector of the form \code{c(bottom, left, top, right)} which gives the number of lines of outer margin to be specified on the four sides of the plot. The default is \code{c(0, 0, 3, 0)}.}
 }
+
+\details{If x is growing large (n > 1e5), the performance will suffer. Especially the density curve and the ecdf, but as well the boxplot (due to the chosen alpha channel) will take their time to calculate and plot.\cr
+In such cases consider taking a sample, i.e. \code{  PlotFdist(x[sample(length(x), size=5000)])}, the big picture of the distribution won't usually change much. 
+.}
 
 \author{Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~
@@ -93,12 +98,15 @@ PlotFdist(x=d.pizza$delivery_min, na.rm=TRUE)
 PlotFdist(d.pizza$delivery_min, args.hist=list(breaks=50), 
   args.dens=list(col="olivedrab4"), na.rm=TRUE )
 
+
 # do a "h"-plot instead of a histogram for integers 
 PlotFdist(d.pizza$weekday, na.rm=TRUE)
 
-# special arguments for ecdf
-PlotFdist(x=faithful$eruptions, args.ecdf=list(verticals=FALSE, 
-  do.points=TRUE, cex=1.2, pch=16, lwd=1), args.rug=NULL)
+# special arguments for hist, density and ecdf
+PlotFdist(x=faithful$eruptions, 
+          args.hist=list(breaks=20), args.dens=list(bw=.1),
+          args.ecdf=list(verticals=FALSE, do.points=TRUE, 
+            cex=1.2, pch=16, lwd=1), args.rug=TRUE)
 
 # no density curve, no ecdf but add rug instead, make boxplot a bit higher
 PlotFdist(x=d.pizza$delivery_min, na.rm=TRUE, args.dens=NA, args.ecdf=NA, 
@@ -116,7 +124,7 @@ PlotFdist(x, args.curve = NULL, args.boxplot=NA, args.ecdf=NA)
 PlotFdist(x, args.curve = list(expr="dt(x, df=2)", col="darkgreen"), 
           args.boxplot=NA, args.ecdf=NA)
 legend(x="topright", legend=c("kernel density", "t-distribution (df=2)"), 
-       fill=c(hred, "darkgreen"))
+       fill=c(getOption("col1", hred), "darkgreen"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

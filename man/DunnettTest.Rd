@@ -12,8 +12,7 @@ DunnettTest(x, \dots)
 
 \method{DunnettTest}{default}(x, g, control = NULL, conf.level = 0.95, \dots)
 
-\method{DunnettTest}{formula}(formula, data, subset, na.action, 
-            control = NULL, conf.level = 0.95, \dots)
+\method{DunnettTest}{formula}(formula, data, subset, na.action, \dots)
 
 }
 \arguments{
@@ -22,7 +21,7 @@ DunnettTest(x, \dots)
   \item{g}{a vector or factor object giving the group for the
     corresponding elements of \code{x}.  Ignored if \code{x} is a
     list.}
-  \item{control}{the level of the control group against which the others should be tested.} 
+  \item{control}{the level of the control group against which the others should be tested. If there are multiple levels the calculation will be performed for every one. } 
     \item{conf.level}{confidence level of the interval.
 %%     ~~Describe \code{conf.level} here~~
 }
@@ -88,8 +87,10 @@ g <- factor(rep(1:3, c(5, 4, 5)),
 
 DunnettTest(x, g)
 
-## Formula interface.
+## Formula interface
 boxplot(Ozone ~ Month, data = airquality)
 DunnettTest(Ozone ~ Month, data = airquality)
+
+DunnettTest(Ozone ~ Month, data = airquality, control="8", conf.level=0.9)
 }
 \keyword{htest}

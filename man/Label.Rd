@@ -5,6 +5,7 @@
 \alias{Label<-.default}
 \alias{Label.data.frame}
 \alias{Label<-.data.frame}
+\alias{SetLabel}
 
 \title{Label Attribute of an Object
 %%  ~~function to do ... ~~
@@ -25,6 +26,8 @@ Label(x, ...) <- value
 
 \method{Label}{data.frame}(x, self = TRUE, ...) <- value
 
+SetLabel(object = nm, nm)
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -40,6 +43,13 @@ Label(x, ...) <- value
   \item{self}{any object
 %%     ~~Describe \code{x} here~~
 }
+  \item{object}{an object for which a names attribute will be meaningful
+%%     ~~Describe \code{object} here~~
+}
+  \item{nm}{a character vector of names to assign to the object
+%%     ~~Describe \code{nm} here~~
+}
+
   \item{\dots}{the dots are passed to the specific function.
 %%     ~~Describe \code{} here~~
 }

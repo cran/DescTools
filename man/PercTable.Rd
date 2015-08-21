@@ -5,6 +5,8 @@
 \alias{PercTable.formula}
 \alias{PercTable.matrix}
 \alias{MarginTable}
+\alias{print.PercTable}
+
 
 \title{Percentage Table
 }
@@ -16,18 +18,19 @@ All the frequencies are nested into one single table.
 
 \method{PercTable}{default}(x, y = NULL, \dots)
 
-\method{PercTable}{table}(tab, row.vars = NULL, col.vars = 2, digits = 3, big.mark = "", pfmt = FALSE,  
-          freq = TRUE, rfrq = "100", expected = FALSE, residuals = FALSE, 
-          stdres = FALSE, margins = NULL, \dots)
+\method{PercTable}{table}(tab, row.vars = NULL, col.vars = 2, justify = "right",
+          freq = TRUE, rfrq = "100", expected = FALSE, residuals = FALSE,
+          stdres = FALSE, margins = NULL, vsep = NULL, \dots)
 
 \method{PercTable}{formula}(formula, data, subset, na.action, \dots)
+\method{print}{PercTable}(x, ...)
 
-MarginTable(tab)
+MarginTable(tab, ...)
 
 }
 
 \arguments{
-  \item{x, y}{objects which can be interpreted as factors (including character strings). 
+  \item{x, y}{objects which can be interpreted as factors (including character strings).
    x and y will be tabulated via \code{table(x, y)}.\cr
    If x is a matrix, it will be coerced to a table via as.table(x).
 %%     ~~Describe \code{x} here~~
@@ -41,13 +44,8 @@ MarginTable(tab)
   \item{col.vars}{a vector of column variables (see Details).
 %%     ~~Describe \code{col.vars} here~~
 }
-  \item{digits}{an integer defining with how many digits the percentages will be printed.
-%%     ~~Describe \code{digits} here~~
-}
-  \item{big.mark}{character. If not empty used as mark between every 3 decimals before the decimal point.
-%%     ~~Describe \code{digits} here~~
-}
- \item{pfmt}{logical. If set to TRUE the relative frequencies' format will be xx.xxx \%, with digits respected.
+  \item{justify}{either \code{"left"} or \code{"right"} for defining the alignment of the table cells.
+%%     ~~Describe \code{col.vars} here~~
 }
   \item{freq}{boolean. Should absolute frequencies be included? Defaults to TRUE.
 %%     ~~Describe \code{freq} here~~
@@ -60,28 +58,32 @@ MarginTable(tab)
 }
   \item{residuals}{the Pearson residuals, (observed - expected) / sqrt(expected).
 }
-  \item{stdres}{standardized residuals, (observed - expected) / sqrt(V), where V is the residual cell variance 
+  \item{stdres}{standardized residuals, (observed - expected) / sqrt(V), where V is the residual cell variance
     (for the case where x is a matrix, n * p * (1 - p) otherwise).
 }
-  \item{margins}{a vector, consisting out of 1 and/or 2. Defines the margin sums to be included. 
+  \item{margins}{a vector, consisting out of 1 and/or 2. Defines the margin sums to be included.
   1 stands for row margins, 2 for column margins, c(1,2) for both. Default is NULL (none).
 %%     ~~Describe \code{margins} here~~
 }
-   \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} will be tabled versus rhs (\code{table(lhs, rhs)}).}  
-  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}. 
-    By default the variables are taken from \code{environment(formula)}.}  
-  \item{subset}{an optional vector specifying a subset of observations to be used.}  
-  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}  
+   \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} will be tabled versus rhs (\code{table(lhs, rhs)}).}
+  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}.
+    By default the variables are taken from \code{environment(formula)}.}
+  \item{subset}{an optional vector specifying a subset of observations to be used.}
+  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}
 
-  \item{\dots}{the dots are passed from \code{PercTable.default()} to the \code{PercTable.table()}. 
+  \item{vsep}{logical, defining if an empty row should be introduced between the table rows. Default is FALSE, if only a table with one single description (either frequencies or percents) should be returned and TRUE in any other case.
+%%     ~~Describe \code{digits} here~~
+}
+  \item{\dots}{the dots are passed from \code{PercTable.default()} to \code{PercTable.table()} and from \code{MarginTable} to the function \code{\link{Freq}}.
 %%     ~~Describe \code{\dots} here~~
 }
 }
-\details{PercTable prints a 2-dimensional table. The absolute and relative frequencies are nested into one flat table by means of \code{ftable}. 
-By means of \code{row.vars}, resp. \code{col.vars}, the structure of the table can be defined. \code{row.vars} can either be the names of
-the dimensions (included percentages are named \code{"idx"}) or numbers (1:3, where 1 is the first dimension of the table, 
+\details{PercTable prints a 2-dimensional table. The absolute and relative frequencies are nested into one flat table by means of \code{ftable}.
+\code{row.vars}, resp. \code{col.vars}  can be used to define the structure of the table. \code{row.vars} can either be the names of
+the dimensions (included percentages are named \code{"idx"}) or numbers (1:3, where 1 is the first dimension of the table,
 2 the second and 3 the percentages). \cr
-Use \code{Sort()} if you want to have your table sorted by rows.
+Use \code{Sort()} if you want to have your table sorted by rows.\cr\cr
+The number format can be set via the options \code{"fmt.abs"} for the absolute values and \code{"fmt.per"} for the percentages. These options must be of class \code{"fmt"} which is basically a list containing any format information used in \code{\link{Format}}.
 
 MarginTable returns a list containing all the margin tables of a n-dimensional table along all dimensions. It does not much more than \code{\link{margin.table}} besides add percentages and do the job for all the dimensions.
 
@@ -107,7 +109,7 @@ Andri Signorell <andri@signorell.net>
 
 \seealso{
 \code{\link{Freq}}, \code{\link{table}}, \code{\link{ftable}}, \code{\link{prop.table}}, \code{\link{addmargins}}\cr
-There are similar functions in package \pkg{sfsmisc} \code{\link[sfsmisc]{printTable2}} and package \pkg{vcd} \code{\link[vcd]{table2d_summary}}, both 
+There are similar functions in package \pkg{sfsmisc} \code{\link[sfsmisc]{printTable2}} and package \pkg{vcd} \code{\link[vcd]{table2d_summary}}, both
 lacking some of the flexibility we needed here. \cr
 
 }
@@ -136,7 +138,7 @@ PercTable(tab=tab, rfrq="000", expected = TRUE, stdres = TRUE)
 # rearrange output such that freq are inserted as columns instead of rows
 PercTable(tab=tab, col.vars=c(3,2), rfrq="111")
 
-# putting the cities in rows 
+# putting the cities in rows
 PercTable(tab=tab, col.vars=c(3,1), rfrq="100", margins=c(1,2))
 
 # formula interface with subset
@@ -161,5 +163,5 @@ MarginTable(Titanic)
 
 \keyword{multivariate}
 
-           
+
 

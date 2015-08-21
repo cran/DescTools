@@ -5,33 +5,33 @@
 Frequency Table
 }
 \description{
-Calculates absolute and relative frequencies of a vector x. Continuous (numeric) variables 
-will be cut using the same logic as used by the function \code{\link{hist}}. 
+Calculates absolute and relative frequencies of a vector x. Continuous (numeric) variables
+will be cut using the same logic as used by the function \code{\link{hist}}.
 Categorical variables will be aggregated by \code{\link{table}}. The result will contain single and cumulative frequencies for both, absolute values and percentages.
- 
+
 }
 \usage{
 Freq(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE,
-     ord = c("level", "desc", "asc", "name"), 
+     ord = c("level", "desc", "asc", "name"),
      useNA = c("no", "ifany", "always"), ...)
-     
-\method{print}{Freq}(x, digits = 3, ...)
+
+\method{print}{Freq}(x, digits = NULL, ...)
 
 }
 
 \arguments{
-  \item{x}{the variable to be described, can be any atomic type. 
+  \item{x}{the variable to be described, can be any atomic type.
 }
-  \item{breaks}{either a numeric vector of two or more cut points or a single number (greater than or equal to 2) 
+  \item{breaks}{either a numeric vector of two or more cut points or a single number (greater than or equal to 2)
     giving the number of intervals into which x is to be cut. Default taken from the function \kbd{hist()}.
     This is ignored if x is not of numeric type.
 }
   \item{include.lowest}{logical, indicating if an x[i] equal to the lowest (or highest, for \code{right = FALSE}) \code{"breaks"} value should be included. Ignored if x is not of numeric type.
 }
-  \item{ord}{how should the result be ordered? Default is \kbd{"level"}, other choices are 'by frequency' (\kbd{"descending"} or \kbd{"ascending"}) 
+  \item{ord}{how should the result be ordered? Default is \kbd{"level"}, other choices are 'by frequency' (\kbd{"descending"} or \kbd{"ascending"})
     or 'by name of the levels' (\kbd{"name"}). The argument can be abbreviated. This is ignored if x is numeric.
 }
-  \item{useNA}{one out of \code{"no"}, \code{"ifany"}, \code{"always"}. Defines whether to include extra \code{NA} levels in the table. 
+  \item{useNA}{one out of \code{"no"}, \code{"ifany"}, \code{"always"}. Defines whether to include extra \code{NA} levels in the table.
    Defaults to \code{"no"} which is the \code{\link{table}()} default too.
 }
   \item{digits}{integer, determining the number of digits used to format the relative frequencies.
@@ -42,10 +42,10 @@ Freq(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE,
 }
 }
 \details{
-If \code{breaks} is specified as a single number, the range of the data is divided into breaks pieces of equal length, 
-and then the outer limits are moved away by 0.1\% of the range to ensure that the extreme values both fall 
-within the break intervals. 
-(If \code{x} is a constant vector, equal-length intervals are created that cover the single value.) 
+If \code{breaks} is specified as a single number, the range of the data is divided into breaks pieces of equal length,
+and then the outer limits are moved away by 0.1\% of the range to ensure that the extreme values both fall
+within the break intervals.
+(If \code{x} is a constant vector, equal-length intervals are created that cover the single value.)
 }
 \value{an object of type \code{"Freq"}, which is basically a data.frame with 5 columns (earning a specific print routine), containing the following components:
   \item{level}{ factor. The levels of the grouping variable.}
@@ -59,7 +59,7 @@ within the break intervals.
 }
 
 \seealso{
-\code{\link{PercTable}}, \code{\link{cut}}, \code{\link{hist}}, \code{\link{cumsum}}, \code{\link{table}}, 
+\code{\link{PercTable}}, \code{\link{cut}}, \code{\link{hist}}, \code{\link{cumsum}}, \code{\link{table}},
 \code{\link{prop.table}}
 }
 \examples{

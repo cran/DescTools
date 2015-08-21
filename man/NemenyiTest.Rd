@@ -16,8 +16,7 @@ NemenyiTest(x, ...)
 
 \method{NemenyiTest}{default}(x, g, dist = c("tukey", "chisq"), out.list = TRUE, ...)
 
-\method{NemenyiTest}{formula}(formula, data, subset, na.action, 
-            dist = c("tukey", "chisq"), out.list = TRUE, ...) 
+\method{NemenyiTest}{formula}(formula, data, subset, na.action, ...) 
 
 }
 %- maybe also 'usage' for other objects documented here.

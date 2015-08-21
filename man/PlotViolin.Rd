@@ -18,7 +18,7 @@ PlotViolin(x, ...)
 \method{PlotViolin}{default}(x, ..., horizontal = FALSE, bw = "SJ", na.rm = FALSE, 
            names = NULL, args.boxplot = NULL) 
 
-\method{PlotViolin}{formula}(formula, data = NULL, ..., subset) 
+\method{PlotViolin}{formula}(formula, data, subset, na.action, ...) 
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
@@ -33,7 +33,8 @@ PlotViolin(x, ...)
   \item{formula}{a formula, such as y ~ grp, where y is a numeric vector of data values to be split into groups according to the grouping variable grp (usually a factor).}
   \item{data}{a data.frame (or list) from which the variables in formula should be taken.}
   \item{subset}{an optional vector specifying a subset of observations to be used for plotting.}
-  \item{\dots}{The dots are passed to \code{\link{polygon}}. Notably, you can set the color to red with \code{col="red"}, and a border color with \code{border="blue"}}
+  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}  
+\item{\dots}{The dots are passed to \code{\link{polygon}}. Notably, you can set the color to red with \code{col="red"}, and a border color with \code{border="blue"}}
   \item{args.boxplot}{list of arguments for a boxplot to be superposed to the densityplot. By default (NULL) a 
   black boxplot will be drawn. Set this to \code{NA} to suppress the boxplot.}
 

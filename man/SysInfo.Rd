@@ -21,8 +21,12 @@ In some tables there are footnote signs used. They're named \code{footnote1}, \c
 \bold{2) plotit} \cr
 The option \code{plotit} can be used to make the Desc-procedures produce plots by default. \cr Set: \code{options(plotit=TRUE)}. Valid values are \code{TRUE} and \code{FALSE}.\cr
 \bold{3) Colors}\cr
-Three colors, that are used in many places can be set as options too. The options are \code{col1}, \code{col2} and \code{col3}. By default they're set to \code{hred}, \code{hblue} and \code{horange}. Change the values by defining \code{options(col1="pink", col2="blue", col2="yellow")}. Any color definition can be used here. 
-
+Three colors, that are used in many places can be set as options too. The options are \code{col1}, \code{col2} and \code{col3}. By default they're set to \code{hred}, \code{hblue} and \code{horange}. Change the values by defining \code{options(col1="pink", col2="blue", col2="yellow")}. Any color definition can be used here. \cr
+\bold{4) Format}\cr
+Two format definitions are currently used in the Desc routines. For integer values there's a format named "fmt.abs" and for percentages one named "fmt.perc". The format definitions must be of class "fmt" and may contain any argument used in the function \code{\link{Format}}.\cr
+\code{options(fmt.per=structure(list(digits=3, leading="drop"), class="fmt"))} would display percentages as .892\cr
+and \code{options(fmt.per=structure(list(digits=1, fmt="\%"), class="fmt"))} as 89.2\%\cr
+\code{options(fmt.abs=structure(list(digits=0, big.mark="'"), class="fmt"))} will display integers as 45'123\cr
 }
 \value{character string with all version and system information of the current R system}
 

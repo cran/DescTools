@@ -16,13 +16,17 @@ Calculates descriptive statistics for x and uses Word as reporting tool.
 }
 \usage{
 
-\method{DescWrd}{default}(x, wrd, main = deparse(substitute(x)), \dots)
+\method{DescWrd}{default}(x, wrd, main = deparse(substitute(x)),
+        plotit = getOption("plotit", FALSE), \dots)
 
-\method{DescWrd}{data.frame}(x, wrd, main = NULL, enum = TRUE, \dots)
+\method{DescWrd}{data.frame}(x, wrd, main = NULL,
+        plotit = getOption("plotit", FALSE), enum = TRUE, \dots)
 
-\method{DescWrd}{list}(x, wrd, main = NULL, enum = TRUE, \dots)
+\method{DescWrd}{list}(x, wrd, main = NULL,
+        plotit = getOption("plotit", FALSE), enum = TRUE, \dots)
 
-\method{DescWrd}{formula}(formula, data = parent.frame(), subset = TRUE, wrd, \dots)
+\method{DescWrd}{formula}(formula, data = parent.frame(), subset = TRUE, wrd,
+        plotit = getOption("plotit", FALSE), \dots)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -31,23 +35,28 @@ Calculates descriptive statistics for x and uses Word as reporting tool.
 \item{main}{the title of the decription or a vector with the main titles for the description of the variables. If this is left blank, the
 title will be composed as: number - variablename (class(es)).}
 \item{enum}{logical, determining if the number should be included or not. Default is TRUE. The numbers may be redundant or inconsistent, if a Word report with enumerated headings is created. }
-  \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()} 
+  \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()}
   or an existing one, created by \code{GetCurrWrd()}.
   Default is the last created pointer stored in \code{getOption("lastWord")}.}
 
-  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}  
+  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}
 
-  \item{data}{an optional matrix or data frame containing the variables in the formula \code{formula}. 
-    By default the variables are taken from \code{environment(formula)}.}  
+  \item{data}{an optional matrix or data frame containing the variables in the formula \code{formula}.
+    By default the variables are taken from \code{environment(formula)}.}
 
-  \item{subset}{an optional vector specifying a subset of observations to be used.}  
-  
+  \item{subset}{an optional vector specifying a subset of observations to be used.}
+
+  \item{plotit}{boolean. Should a plot be created? Default can be defined by option \code{plotit}, if it does not exist then it's set to \code{FALSE}.
+%%     ~~Describe \code{plotit} here~~
+}
+
+
   \item{\dots}{further argument to be passed to methods.}
 
 }
 
-\details{This function is not thought of being directly run by the enduser. It will normally be called automatically, when 
-a pointer to a Word instance is passed to the function \code{\link{Desc}}.\cr 
+\details{This function is not thought of being directly run by the enduser. It will normally be called automatically, when
+a pointer to a Word instance is passed to the function \code{\link{Desc}}.\cr
 However \code{DescWrd} takes some more specific arguments concerning the Word output (like font or fontsize), which can make it necessary to call the function directly.
 %%  ~~ If necessary, more details than the description above ~~
 }
@@ -70,22 +79,22 @@ wrd <- GetNewWrd(header=TRUE)    # create a new word instance and insert title a
 d.sub <- d.pizza[,c("driver","date","operator","price","wrongpizza")]
 
 # do just the univariate analysis
-Desc(d.sub, wrd=wrd) 
+Desc(d.sub, wrd=wrd)
 
 # do a full report
 Desc(d.sub, wrd=wrd, colpairs=TRUE)
 
 # do just bivariate analysis
-Desc( d.sub, univar=FALSE, colpairs=TRUE, wrd=wrd) 
+Desc( d.sub, univar=FALSE, colpairs=TRUE, wrd=wrd)
 
 # selected bivariate analysis into word document
-Desc(week ~ driver, data=d.pizza, wrd=wrd)   
-Desc(price ~ operator, data=d.pizza, digits=c(2,2,2,2,0,3,0,0), wrd=wrd ) 
-Desc(driver ~ operator, data=d.pizza, wrd=wrd) 
+Desc(week ~ driver, data=d.pizza, wrd=wrd)
+Desc(price ~ operator, data=d.pizza, digits=c(2,2,2,2,0,3,0,0), wrd=wrd )
+Desc(driver ~ operator, data=d.pizza, wrd=wrd)
 Desc(price ~ operator + driver + wrongpizza, data=d.pizza
-     , digits=c(2,2,2,2,0,3,0,0), wrd=wrd) 
+     , digits=c(2,2,2,2,0,3,0,0), wrd=wrd)
 
-Desc(price ~ delivery_min, data=d.pizza, wrd=wrd ) 
+Desc(price ~ delivery_min, data=d.pizza, wrd=wrd )
 
 
 # internal functions (not meant to be used by the enduser):
@@ -96,7 +105,7 @@ Desc.integer(d.pizza$weekday, maxlevels=NA)
 Desc.integer(d.pizza$weekday, maxlevels=3)
 Desc.numeric(d.pizza$count, highlow=FALSE)
 Desc.numeric(d.pizza$count, highlow=TRUE)
- 
+
 DescNumFact( x=d.pizza$delivery_min, grp=d.pizza$operator )
 DescFactFact( x=d.pizza$driver, grp=d.pizza$operator)
 DescNumNum( x=d.pizza$delivery_min, y=d.pizza$price )

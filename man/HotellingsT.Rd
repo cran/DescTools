@@ -8,24 +8,25 @@
   Hotelling's T2 test for the one and two sample case.
 }
 
-\usage{ HotellingsT2Test(X, \dots)
+\usage{ HotellingsT2Test(x, \dots)
 
-\method{HotellingsT2Test}{default}(X, Y = NULL, mu = NULL, test = "f",
-             na.action = na.fail, \dots)
+\method{HotellingsT2Test}{default}(x, y = NULL, mu = NULL, test = "f", \dots)
 
-\method{HotellingsT2Test}{formula}(formula, na.action = na.fail, \dots) }
+\method{HotellingsT2Test}{formula}(formula, data, subset, na.action, \dots) }
 
 \arguments{
-  \item{X}{a numeric data frame or matrix. }
-  \item{Y}{an optional numeric data frame or matrix for the two sample test. If NULL a one sample test is performed.}
+  \item{x}{a numeric data frame or matrix. }
+  \item{y}{an optional numeric data frame or matrix for the two sample test. If NULL a one sample test is performed.}
   \item{mu}{a vector indicating the hypothesized value of the mean (or difference
           in means if a two sample test is performed). NULL represents origin or no difference between the groups. }
   \item{test}{if 'f', the decision is based on the F-distribution, if 'chi' a chi-squared approximation is used. }
-  \item{formula}{a formula of the form \code{X ~ g} where \code{X}
-    is a numeric matrix giving the data values and \code{g} a factor
-    with two levels giving the corresponding groups.}
-  \item{na.action}{a function which indicates what should happen when the data
-          contain 'NA's. Default is to fail. }
+  \item{formula}{a formula of the form \code{x ~ g} where \code{x} is a numeric matrix giving  the data values and \code{g} a factor
+    with two levels giving the corresponding groups.}  
+  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}. 
+    By default the variables are taken from \code{environment(formula)}.}  
+  \item{subset}{an optional vector specifying a subset of observations to be used.}  
+  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}  
+          
   \item{\dots}{further arguments to be passed to or from methods.}
 
 }

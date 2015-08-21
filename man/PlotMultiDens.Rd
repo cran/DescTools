@@ -20,7 +20,7 @@ PlotMultiDens(x, ...)
               args.dens = NULL, args.legend = NULL,
               na.rm = FALSE, flipxy=FALSE, ...)
 
-\method{PlotMultiDens}{formula}(formula, data, subset, \dots)
+\method{PlotMultiDens}{formula}(formula, data, subset, na.action, \dots)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -61,6 +61,7 @@ PlotMultiDens(x, ...)
  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}. 
     By default the variables are taken from \code{environment(formula)}.}  
   \item{subset}{an optional vector specifying a subset of observations to be used.}  
+  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}  
 
   \item{\dots}{the dots are passed to \code{plot(...)}.
 %%     ~~Describe \code{\dots} here~~

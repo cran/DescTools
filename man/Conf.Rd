@@ -48,7 +48,7 @@ Spec(x, ...)
   \item{x}{a vector, normally a factor, of predicted classes (for the default method) or an object of class \code{\link{table}}.
   }
 \item{ref}{a vector, normally a factor, of classes to be used as the reference.}
-\item{pos}{a character string that defines the factor level corresponding to the "positive" results.}
+\item{pos}{a character string that defines the factor level corresponding to the "positive" results. Will be ignored, if for a \eqn{n \times n}{n x n} table n > 2.}
 \item{cutoff}{the cutoff point for separating the classes. This is only used if x is a glm-model and ignored else. }
 
   \item{main}{overall title for the plot. }
@@ -74,7 +74,7 @@ predictive value and negative predictive value is calculated using the
 data (unless passed in as an argument), the detection rate (the rate of true events also 
 predicted to be events) and the detection prevalence (the prevalence of predicted events).
 
-Suppose a 2x2 table with notation
+Suppose a \eqn{2 \times 2}{2 x 2} table with notation
 
  \tabular{rcc}{
                     \tab Reference \tab          \cr
@@ -91,6 +91,7 @@ The formulas used here are:
 \deqn{NPV = (specificity * (1-Prevalence))/(((1-sensitivity)*Prevalence) + ((specificity)*(1-Prevalence)))}
 \deqn{Detection Rate =  A/(A+B+C+D)}
 \deqn{Detection Prevalence =  (A+B)/(A+B+C+D)}
+\deqn{F-val Accuracy =  2 / (1/PPV + 1/Sensitivity)}
 
 See the references for discusions of the first five formulas.
 
@@ -121,6 +122,7 @@ a list with elements
 \references{
 Kuhn, M. (2008) Building predictive models in R using the caret package \emph{Journal of Statistical Software}, (\url{http://www.jstatsoft.org/v28/i05/}).
 
+Powers, David M W (2011) Evaluation: From Precision, Recall and F-Measure to ROC, Informedness, Markedness & Correlation (PDF). \emph{Journal of Machine Learning Technologies} 2 (1): 37-63.
 %% ~put references to the literature/web site here ~
 }
 \author{
@@ -135,21 +137,33 @@ rewritten based on the ideas of \code{\link[caret]{confusionMatrix}} by Max Kuhn
 }
 \examples{
 # let tab be a confusion table
-tab <- structure(c(233L, 29L, 56L, 74L), .Dim = c(2L, 2L), 
-          .Dimnames = structure(list(pred = c("0", "1"), obs = c("0", "1")), 
-             .Names = c("pred", "obs")))
-
-Conf(tab, pos="1")
+txt <- "
+   lo hi
+lo 23 13
+hi 10 18 "
+tab <- TextToTable(txt, dimnames=c("pred", "obs"))
+Conf(tab, pos="hi")
 
 
 pred <- Untable(tab)[,"pred"]
 obs <- Untable(tab)[,"obs"]
 
 Conf(x = pred, ref = obs)
-Conf(x = pred, ref = obs, pos="1")
+Conf(x = pred, ref = obs, pos="hi")
 
 Sens(tab)   # Sensitivity
 Spec(tab)   # Specificity
+
+txt <- "
+      terrible poor marginal clear
+terrible       10    4        1     0
+poor            5   10       12     2
+marginal        2    4       12     5
+clear           0    2        6    13
+"
+tab <- TextToTable(txt, dimnames=c("pred", "obs"))
+Conf(tab)
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

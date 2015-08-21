@@ -2,9 +2,8 @@
 \alias{Winsorize}
 \title{Winsorize}
 \usage{
-Winsorize(x, minval = quantile(x = x, probs = probs[1], na.rm = na.rm), 
-          maxval = quantile(x = x, probs = probs[2], na.rm = na.rm), 
-          probs = c(0.05, 0.95), na.rm = FALSE)          
+Winsorize(x, minval = NULL, maxval = NULL, probs = c(0.05, 0.95), 
+          na.rm = FALSE)          
 }
 \arguments{
   \item{x}{a numeric vector to be winsorized.}
@@ -55,7 +54,7 @@ Winsorize(x)
 Winsorize(x, minval=tail(Small(x, k=3), 1), maxval=head(Large(x, k=3), 1))
 }
 \author{
-  Andri Signorell <andri@signorell.net>, based on code by Gabor Grothendieck <ggrothendieck@gmail.com>
+  Andri Signorell <andri@signorell.net> %, based on code by Gabor Grothendieck <ggrothendieck@gmail.com>
 }
 
 \keyword{univar}

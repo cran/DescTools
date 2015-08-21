@@ -33,41 +33,41 @@ PlotDesc(x, ..., wrd = NULL)
 
 \method{PlotDesc}{default}(x, ...)
 
-\method{PlotDesc}{integer}(x, main = deparse(substitute(x)),  
-         ord = c("val_asc","val_desc","frq_asc","frq_desc"), 
-         maxrows = 10, ... , wrd = NULL)
-         
-\method{PlotDesc}{numeric}(x, main = deparse(substitute(x)), ..., 
+\method{PlotDesc}{integer}(x, main = deparse(substitute(x)),
+         ord = c("val_asc","val_desc","frq_asc","frq_desc"),
+         maxrows = 12, ... , wrd = NULL)
+
+\method{PlotDesc}{numeric}(x, main = deparse(substitute(x)), ...,
          wrd = NULL)
-         
-\method{PlotDesc}{factor}(x, main = deparse(substitute(x)), 
-         ord = c("desc", "level", "name", "asc", "none"), 
-         maxrows = 10, lablen = 25, type = c("bar","dot"), 
+
+\method{PlotDesc}{factor}(x, main = deparse(substitute(x)),
+         ord = c("desc", "level", "name", "asc", "none"),
+         maxrows = 12, lablen = 25, type = c("bar","dot"),
          col = NULL, border = NULL, xlim=NULL, ecdf=FALSE, ..., wrd = NULL)
-         
-\method{PlotDesc}{table}(x, col1 = getOption("col1", hblue), 
+
+\method{PlotDesc}{table}(x, col1 = getOption("col1", hblue),
          col2 = getOption("col2", hred),
          horiz = TRUE,  main="", ..., wrd = NULL)
-\method{PlotDesc}{matrix}(x, col1 = getOption("col1", hblue), 
+\method{PlotDesc}{matrix}(x, col1 = getOption("col1", hblue),
          col2 = getOption("col2", hred),
          horiz = TRUE,  main="", ..., wrd = NULL)
-         
+
 \method{PlotDesc}{ordered}(x, ..., wrd = NULL)
 
 \method{PlotDesc}{data.frame}(x, ..., wrd = NULL)
 
-\method{PlotDesc}{logical}(x, main = deparse(substitute(x)), xlab = "", 
-        col1 = getOption("col1", hblue), 
+\method{PlotDesc}{logical}(x, main = deparse(substitute(x)), xlab = "",
+        col1 = getOption("col1", hblue),
         col2 = getOption("col2", hred), ..., wrd = NULL)
-        
+
 \method{PlotDesc}{Date}(x, main = deparse(substitute(x)), breaks = NULL, ..., wrd = NULL)
 
 \method{PlotDesc}{flags}(x, ..., wrd = NULL)
 
 PlotDescNumFact(formula, data, main = deparse(formula), notch=FALSE,
                 add_ni = TRUE, ..., wrd = NULL)
-                
-PlotDescFactNum(x, y, ptab, 
+
+PlotDescFactNum(x, y, ptab,
                 col1 = getOption("col1", hblue), col2 = getOption("col2", hred),
                 main=NULL, notch=FALSE, add_ni = TRUE, ... , wrd=NULL)
 
@@ -91,14 +91,14 @@ PlotDescNumNum(form1, form2, data, main = NULL, xlab = NULL, ylab = NULL, ..., w
   \item{ecdf}{logical, defining if cumulative frequencies should be displayed in PlotDesc.factor. Defaults to FALSE.}
   \item{breaks}{vector of limits to bin a date.}
   \item{horiz}{logical, indicating if the two mosaicplots should be arranged horizontally (default is \code{TRUE}).}
-  
+
   \item{formula}{a formula, such as y ~ grp, where y is a numeric vector of data values to be split into groups according to the grouping variable grp (usually a factor). }
   \item{data}{a data.frame (or list) from which the variables in formula should be taken.}
   \item{notch}{if notch is TRUE, a notch is drawn in each side of the boxes. If the notches of two plots do not overlap this is 'strong evidence' that the two medians differ.
   }
   \item{add_ni}{logical. Indicates if the group length should be displayed in the boxplot.}
-  \item{form1, form2}{ the formula used for calculating the smoother.}  
-  \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()} 
+  \item{form1, form2}{ the formula used for calculating the smoother.}
+  \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()}
   or an existing one, created by \code{GetCurrWrd()}.
   Default is the last created pointer stored in \code{getOption("lastWord")}.}
   \item{y}{the response variable}
@@ -113,7 +113,7 @@ PlotDescNumNum(form1, form2, data, main = NULL, xlab = NULL, ylab = NULL, ..., w
 }
 
 
-\author{Andri Signorell <andri@signorell.net> 
+\author{Andri Signorell <andri@signorell.net>
 }
 
 \seealso{\code{\link{Desc}}
@@ -127,11 +127,13 @@ PlotDesc(x=na.omit(d.pizza$quality))         # ordered factor
 PlotDesc(x=na.omit(d.pizza$wrongpizza))      # logical
 PlotDesc(x=na.omit(d.pizza$date))            # Date
 
+PlotDesc(x=na.omit(d.pizza$driver), ecdf = TRUE)          # factor
+
 d.frm <- d.pizza[,c("price","operator")]
 d.frm <- d.frm[complete.cases(d.frm),]
 PlotDescNumFact(temperature ~ driver, data=d.pizza)       # numeric ~ factor
 
-PlotDesc(table(d.pizza$driver, d.pizza$operator))         # factor ~ factor 
+PlotDesc(table(d.pizza$driver, d.pizza$operator))         # factor ~ factor
 }
 \keyword{ hplot}
 

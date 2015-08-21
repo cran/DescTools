@@ -93,5 +93,3 @@ SEXP rkurt(SEXP x, SEXP mean)
 
 
 
-
-

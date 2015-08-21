@@ -1,2 +1,0 @@
-PercTable <-
-function (...) UseMethod("PercTable")

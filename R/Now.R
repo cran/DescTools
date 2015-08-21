@@ -1,2 +1,0 @@
-Now <-
-function() Sys.time()

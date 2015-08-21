@@ -2,7 +2,7 @@
 \alias{StrTrim}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Trim a string
+Remove Leading/Trailing Whitespace From A String
 %%  ~~function to do ... ~~
 }
 \description{
@@ -44,7 +44,7 @@ the string x without whitespaces}
 
 
 \seealso{ String functions: 
-\code{\link{nchar}}, \code{\link{match}}, \code{\link{grep}}, \code{\link{regexpr}}, \code{\link{substr}}, \code{\link{sub}}, \code{\link{gsub}},
+\code{\link{trimws}}, \code{\link{nchar}}, \code{\link{match}}, \code{\link{grep}}, \code{\link{regexpr}}, \code{\link{substr}}, \code{\link{sub}}, \code{\link{gsub}},
 \code{\link{StrTrunc}}, \code{\link{StrDist}}  
 
 }

@@ -11,7 +11,8 @@ Produce a stacked area plot, or add polygons to an existing plot.
 \usage{
 \method{PlotArea}{default}(x, y = NULL, prop = FALSE, add = FALSE, xlab = NULL,
          ylab = NULL, col = NULL, frame.plot = FALSE, \dots)
-\method{PlotArea}{formula}(formula, data, subset, na.action = NULL, \dots)
+
+\method{PlotArea}{formula}(formula, data, subset, na.action, \dots)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -59,11 +60,8 @@ Produce a stacked area plot, or add polygons to an existing plot.
   an optional vector specifying a subset of observations
     to be used.
 }
-  \item{na.action}{
-  a function which indicates what should happen when
-  the data contain \code{NA} values. The default is to ignore missing
-  values in the given variables.
-}
+  \item{na.action}{a function which indicates what should happen when the data contain \code{NA} values. Defaults to \code{getOption("na.action")}.}  
+
   \item{\dots}{further arguments are passed to \code{matplot} and
     \code{polygon}.
 }

@@ -9,13 +9,13 @@ with only two unique values.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-\method{Desc}{logical}(x, main = NULL, digits = 3, 
+\method{Desc}{logical}(x, main = NULL, digits = NULL,
      conf.level = 0.95, plotit = getOption("plotit", FALSE), ...)
-        
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{the dichotomous vector to be described. 
+  \item{x}{the dichotomous vector to be described.
 %%     ~~Describe \code{x} here~~
 }
   \item{main}{the caption for the output.
@@ -40,12 +40,12 @@ with only two unique values.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-A list containing the following components: 
+A list containing the following components:
   \item{length}{the length of the vector (n + NAs).}
   \item{n }{the valid entries (NAs are excluded)}
   \item{NAs}{number of NAs}
-  \item{unique}{number of unique values. } 
-  \item{frq}{a data.frame of absolute and relative frequencies given by \code{\link{Freq}} if maxlevels > unique values in the vector.} 
+  \item{unique}{number of unique values. }
+  \item{frq}{a data.frame of absolute and relative frequencies given by \code{\link{Freq}} if maxlevels > unique values in the vector.}
 }
 \author{Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~
