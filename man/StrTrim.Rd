@@ -6,9 +6,9 @@ Remove Leading/Trailing Whitespace From A String
 %%  ~~function to do ... ~~
 }
 \description{
-The function removes all spaces, tabs and newlines from the beginning and end of the supplied string. 
+The function removes all spaces, tabs and newlines from the beginning and end of the supplied string.
 If these whitespace characters occur in the middle of the string, they are preserved.\cr
-Trim with method "left" deletes only leading whitespaces, "right" only trailing. 
+Trim with method "left" deletes only leading whitespaces, "right" only trailing.
 Designed for users who were socialized by SQL...
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
@@ -43,9 +43,9 @@ the string x without whitespaces}
 }
 
 
-\seealso{ String functions: 
-\code{\link{trimws}}, \code{\link{nchar}}, \code{\link{match}}, \code{\link{grep}}, \code{\link{regexpr}}, \code{\link{substr}}, \code{\link{sub}}, \code{\link{gsub}},
-\code{\link{StrTrunc}}, \code{\link{StrDist}}  
+\seealso{ String functions:
+\code{trimws}, \code{\link{nchar}}, \code{\link{match}}, \code{\link{grep}}, \code{\link{regexpr}}, \code{\link{substr}}, \code{\link{sub}}, \code{\link{gsub}},
+\code{\link{StrTrunc}}, \code{\link{StrDist}}
 
 }
 

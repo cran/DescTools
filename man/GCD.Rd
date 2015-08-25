@@ -28,7 +28,7 @@ LCM(..., na.rm = FALSE)
 
   \code{n * m = GCD(n, m) * LCM(n, m)}
 }
-\author{Andri Signorell <andri@signorell.net>, \cr originally based on code in package \pkg{numbers} by Hans W Borchers <hwborchers@googlemail.com> }
+\author{Dirk Eddelbuettel <edd@debian.org> (RCPP part), Andri Signorell <andri@signorell.net>, originally based on code in package \pkg{numbers} by Hans W Borchers <hwborchers@googlemail.com> }
 
 
 \seealso{

@@ -1,8 +1,8 @@
-c4e0fdb851c5f0bb06b1ca574cddc6b7 *DESCRIPTION
-93f017fecabfc56f7ce05473a54c493b *NAMESPACE
-b1292ea9409554ce7989236f2533eb95 *NEWS
-d8f714a291399e832cd36557b73bf8b9 *R/DescTools.r
-f3a956192fc7f9efed43899961cadd0b *R/FastDesc.R
+a36ace1c177a750910a4095f1e54c96e *DESCRIPTION
+c68d0a7a30d61a77e43815e086a37b06 *NAMESPACE
+46fac89704a21b71bf959567ede772da *NEWS
+029677674fd670d2383d2e1a3df2bb5e *R/DescTools.r
+99c552c9183bcfd97b2f1cd9bf2ceb20 *R/FastDesc.R
 e6d352b11b4cbcc3df8883af8ea21e31 *R/PageDF.r
 8a913efe1a9a87fa26f7e1eb260e2ad5 *R/RcppExports.R
 341ce50805ada2941d0785ec244f76e7 *R/test.DescTools.r
@@ -104,7 +104,7 @@ f9987de3495e174990d66f7524c95095 *man/Desc.factor.Rd
 059dad7f8f7f28c45d16bf3e1f70adef *man/Desc.logical.Rd
 107cdf90f73cbd34a4dac0b6f3e38708 *man/Desc.numeric.Rd
 50a26348a8e3aff5a7ac320d810b30e6 *man/Desc.table.Rd
-311c5005b747b32ae8030233ed92ac3f *man/DescTools-package.Rd
+2cecdbc05b1d3cff88737ae368eff76b *man/DescTools-package.Rd
 c6d6d1d37455740153a26beafadf5c8a *man/DescWrd.Rd
 00e687a79a452fc8e7b383c03f49a7cb *man/DivCoef.Rd
 d7b438777bbd12f47bc39f6d74f30e31 *man/DivCoefMax.Rd
@@ -137,7 +137,7 @@ c6b6e6d385d141d997a0e3de90dfdc5d *man/Factorize.Rd
 c2ca3780eba60bae382f8e1bfc724bd8 *man/Format.Rd
 5931e8db8e75389b8ce92c169772a50d *man/Frac.Rd
 64b21c6a76e52697027db67733a901ed *man/Freq.Rd
-91fcc649349495b3b7a3a4ec4a0a4616 *man/GCD.Rd
+f12d977ce9c48e440ee62c8bde2ea3ba *man/GCD.Rd
 5cfe3220817b481428d4f9ad42da02c9 *man/GTest.Rd
 409170ca645949d9fdbd21f3d1d6e961 *man/GetCurrWrd.Rd
 3c687d0737f306e1a842df9eb7c25d3d *man/GetNewPP.Rd
@@ -298,7 +298,7 @@ ca64800c4638619a7e290eeef82dd0a9 *man/StrIsNumeric.Rd
 1369ff1adf593b5b1605aeb027def8a2 *man/StrPos.Rd
 252504a6a0f1d29a3d833073679b043f *man/StrRev.Rd
 b058ac3bf67f72aabb3cc8631a70a9c6 *man/StrRight.Rd
-8d986088ff054921f80a4f2d6c36f8d5 *man/StrTrim.Rd
+35ad1d9da099ff59e14f30467374bc64 *man/StrTrim.Rd
 93d4216c80ac7cd6907aac2fb31b0eaa *man/StrTrunc.Rd
 8ab18cc328c7c569c21de586a0225569 *man/StrVal.Rd
 b1e50d3588badab9c45830db670a2439 *man/Strata.Rd
@@ -357,7 +357,7 @@ c18ca24af8fe2df9959d168f026205e8 *man/split.formula.Rd
 ca3270c176ce09cd15243bf4df918aa9 *src/ADinf.c
 cd2de573b9344ec28682f59b81a2789c *src/AnDarl.c
 9fadc10ef4399dfe95c1e154c297f7ed *src/RcppExports.cpp
-10111f74191810f89ccf2254fa2f7b03 *src/aux_fct.cpp
+6cb67245715a80e052ac90d91fda30c0 *src/aux_fct.cpp
 ed52fe2a6e09e958cc30b6d7eefd6987 *src/basic.h
 83526df1a6954eeabc9572b327db8d19 *src/between.c
 3039407f96c6be280cc83bdfd00b5a92 *src/between.h

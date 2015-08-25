@@ -1,19 +1,26 @@
-DescTools 0.99.12 (2015-08-14)
+DescTools 0.99.13 (2015-10-14)
+-----------------------------
+
+BUGFIXES:
+   * Fix for a serious memory-access error (thanks to B. Ripley).
+
+
+DescTools 0.99.12 (2015-08-21)
 -----------------------------
 
 NEW FUNCTIONS ADDED:
    * TextToTable tries to turn a table like text into a table.
-   * New vignettes Tables in R, Combinatorics have been added.
+   * New vignettes "Tables in R", "Combinatorics" have been added.
    * StrAlign will align strings on a specific character.
    * CombSet generates all combinations of a set x with/without replacement, resp. order.
    * CombN returns the number of combinations with/without replacement, resp. order.
-   * DoCall is a faster alternative for do.call. All formula interfaces and much other
+   * DoCall is a faster alternative for do.call. All formula interfaces and many other
      functions will profit by it. PlotFdist runs 4 times faster for n ~ 1e6.
    * SetRowNames, SetColNames do for rows and columns what setNames does for lists.
    * PlotECDF plots empirical cumulative distribution function faster than plot.ecdf.
    * Mbind has been replaced by Abind which is more flexible (and I was not aware of before).
    * Format templates have been introduced for Desc functions. It now is possible to
-	   choose user defined number formats.
+     choose user defined number formats.
    * TOne creates a simple first table, describing baseline characteristics.
    * New imports from Rcpp.
    * Eps returns Greenhouse-Geisser And Huynh-Feldt Epsilons.
@@ -27,7 +34,7 @@ UPDATED FUNCTIONS:
    * HotellingsT2Test's interface underwent some slight changes.
    * Desc.numeric will no longer report normal.test result, which always
      had been debatable (discouraged by W. Stahel).
-   * GCD and LCM are coded in C++, making them considerably faster.
+   * GCD and LCM are coded in C++, making them considerably faster. (credits to Dirk Eddelbuettel)
    * As usual some adaptations to new R-Devel.
    * StrPad's argument width gets a default value NULL, taking the maximum length of x.
    * Desc has been fundamentally redesigned to avoid redundant calculations.

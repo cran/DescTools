@@ -35,76 +35,85 @@ int compute_LCM(int a, int b){
 // [[Rcpp::export]]
 List n_pow_sum(NumericVector x, double meanx) {
 
-  double sum2 = 0.0;
-  double sum3 = 0.0;
-  double sum4 = 0.0;
 
-  double d = 0.0;
-  double d2 = 0.0;
+  // x must be a nonempty sorted numeric vector with NAs omitted
 
-  int n = 0;
-  int zn = 0;
-  int un = 0;
+  double d = x[0] - meanx;
+  double d2 = d*d;
 
-  NumericVector small_val(5);
-  NumericVector small_freq(5);
+  double sum2 = d2;
+  double sum3 = d2*d;
+  double sum4 = d2*d2;
 
-  NumericVector large_val(5);
-  NumericVector large_freq(5);
+  int n = x.size();  // the vector size
+  int zn = 0;        // the number of zeros
+  int un = 1;        // the number of unique values
 
-  n = x.size();
-
-  for (int ii=0; ii < x.size(); ii++) {
+  for (int ii=1; ii < x.size(); ii++) {
 
     d = x[ii] - meanx;
 
     d2 = d*d;
-    sum2 += d2;
-    sum3 += d2*d;
-    sum4 += d2*d2;
+    sum2 += d2;     // sum of squares
+    sum3 += d2*d;   // sum of 3th powers
+    sum4 += d2*d2;  // sum of 4th powers
 
-    // unique values
-    if(x[ii] != x[ii+1]) un += 1;
-    // zero values
+    // number of unique values
+    if(x[ii] != x[ii-1]) un += 1;
+
+    // number of zero values
     if(x[ii] == 0) zn += 1 ;
 
   }
 
 
+  int ldim = 5;    // dimension of small/large values vectors
+  if(un < ldim) { ldim = un; }
+
+  NumericVector small_val(ldim);    // the 5 smallest values
+  NumericVector small_freq(ldim);   // the frequency of the 5 smallest values
+
+
   // the 5 smallest values and their frequencies
-  small_val[0] += x[0];
-  small_freq[0] += 1;
+
+  small_val[0] = x[0];
+  small_freq[0] = 1;
 
   int i = 1;
   int j = 0;
 
-  while(j < 5 && i < n) {
+  while((j < ldim) && (i < n)) {
 
     if(x[i] == x[i-1] ){
       small_freq[j] += 1 ;
     } else {
       j += 1 ;
-      small_val[j] += x[i] ;
-      small_freq[j] += 1 ;
+      small_val[j] = x[i] ;
+      small_freq[j] = 1 ;
     }
     i += 1 ;
   }
 
+
   // the 5 largest values and their frequencies
-  large_val[0] += x[n-1];
-  large_freq[0] += 1;
+
+  NumericVector large_val(ldim);
+  NumericVector large_freq(ldim);
+
+  large_val[0] = x[n-1];
+  large_freq[0] = 1;
 
   i = n-1;
   j = 0;
 
-  while(j < 5 && i >= 0) {
+  while((j < ldim) && (i >= 1)) {
 
     if(x[i] == x[i-1] ){
       large_freq[j] += 1 ;
     } else {
       j += 1 ;
-      large_val[j] += x[i-1] ;
-      large_freq[j] += 1 ;
+      large_val[j] = x[i-1] ;
+      large_freq[j] = 1 ;
     }
     i -= 1 ;
   }
@@ -120,6 +129,7 @@ List n_pow_sum(NumericVector x, double meanx) {
                             Rcpp::Named("large_val", large_val),
                             Rcpp::Named("large_freq", large_freq)
   );
+
 }
 
 

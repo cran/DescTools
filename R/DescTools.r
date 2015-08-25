@@ -505,170 +505,6 @@ CombPairs <- function(x, y = NULL) {
 }
 
 
-# GetAllSubsets <- function(x, min.n=1, max.n=length(x)){
-#   # returns a list with all subsets of x
-#   # CAUTION: this can be heavy for moderate length of x
-#   lst <- lapply( min.n:max.n, function(i) {
-#     m <- combn(x,i) # this is a matrix, split into it's columns
-#     lapply( seq_len(ncol(m)), function(k) m[,k])
-#   }  )
-#   # Alternative:
-#   # lst <- lapply(min.n:max.n, function(i) lapply(apply(combn(x,i),2,list),unlist))
-#   # flatten the list of lists to one single list
-#   lst <- split(unlist(lst), rep(1:length(idx <- rapply(lst, length)), idx))
-#   return(lst)
-# }
-
-
-
-# Permn <- function(x, sort = FALSE) {
-#
-#   # by F. Leisch
-#
-#   n <- length(x)
-#
-#   if (n == 1)
-#     return(matrix(1))
-#   else if (n < 2)
-#     stop("n must be a positive integer")
-#   z <- matrix(1)
-#   for (i in 2:n) {
-#     y <- cbind(z, i)
-#     a <- c(1:i, 1:(i - 1))
-#     z <- matrix(0, ncol = ncol(y), nrow = i * nrow(y))
-#     z[1:nrow(y), ] <- y
-#     for (j in 2:i - 1) {
-#       z[j * nrow(y) + 1:nrow(y), ] <- y[, a[1:i + j]]
-#     }
-#   }
-#   dimnames(z) <- NULL
-#
-#   m <- apply(z, 2, function(i) x[i])
-#
-#   if(any(duplicated(x)))
-#     m <- unique(m)
-#
-#   if(sort) m <- Sort(m)
-#   return(m)
-#
-# }
-
-
-# this was far too slow
-
-# Permn <- function(x){
-#
-# #' Determine all permutations of a set.
-# #'
-# #' An implementation of the Steinhaus-Johnson-Trotter permutation algorithm.
-# #'
-# #' @param set a set
-# #' @return a matrix whose rows are the permutations of set
-# #' @export
-# #' @examples
-# #' permutations(1:3)
-# #' permutations(c('first','second','third'))
-# #' permutations(c(1,1,3))
-# #' apply(permutations(letters[1:6]), 1, paste, collapse = '')
-# # author: David Kahle <david.kahle@gmail.com>
-# # package: mpoly
-# # original function name: permutations
-#
-#   insert <- function(elem, slot, v){
-#     n <- length(v)
-#     if(slot == 1) return( c(elem, v) )
-#     if(slot == n+1) return( c(v, elem) )
-#     c(v[1:(slot-1)], elem, v[slot:n])
-#   }
-#
-#   r <- length(x)
-#   if(r == 1) return(as.matrix(x))
-#
-#   row2diag <- function(row, direction){
-#     np1 <- length(row) + 1
-#     mat <- matrix(nrow = np1, ncol = np1)
-#     if(direction == -1){
-#       for(k in 1:np1){
-#         mat[k,] <- insert(np1, np1-k+1, row)
-#       }
-#     }
-#     if(direction == +1){
-#       for(k in 1:np1){
-#         mat[k,] <- insert(np1, k, row)
-#       }
-#     }
-#     mat
-#   }
-#
-#   stepUp <- function(mat){ # an r x c matrix
-#     c <- ncol(mat)
-#     m <- NULL
-#     for(k in 1:nrow(mat)){
-#       m <- rbind(m, row2diag(mat[k,],(-1)^k))
-#     }
-#     m
-#   }
-#
-#   # iterate stepUp
-#   out <- matrix(1)
-#   for(k in 1:(r-1)){
-#     out <- stepUp(out)
-#   }
-#
-#   # substitute set values
-#   for(k in 1:r){
-#     out[out==k] <- paste('_', x[k], sep = '')
-#   }
-#   out <- gsub('_', '', out) # clear PH
-#   if(is.numeric(x)){
-#     d <- dim(out)
-#     out <- as.numeric(out)
-#     dim(out) <- d
-#   }
-#
-#   # return
-#   unique(out)
-# }
-
-
-# the easy way by myself:
-#
-# Permn <- function(x) {
-  # m <- expand.grid( split( rep(x, each=length(x)), 1:length(x)) )
-  # attr(m, "out.attrs") <- NULL
-  # ### get rid of rows with duplicated elements
-  # m <- m[ apply( m, 1, FUN=function(x){ sum(duplicated(x)) } )==0, ]
-  # ### .. und sortiere noch sinnvoll
-  # m <- m[ do.call(order, m[colnames(m)]), ]
-  # rownames(m) <- 1:nrow(m)
-  # return(m)
-# }
-
-
-
-# Fibonacci <- function(n, sequence = TRUE) {
-#   if (!is.numeric(n) || length(n) != 1 || floor(n) != ceiling(n) || n < 0)
-#     stop("Argument 'n' must be a single integer >= 0.")
-#   if (n <= 1) return(c(1))
-#
-#   if (sequence) {
-#     if (n == 2) return(c(1, 2))
-#     fib <- numeric(n)
-#     fib[1:2] <- c(1, 2)
-#     for (k in 3:n) {
-#       fib[k] <- fib[k-1] + fib[k-2]
-#     }
-#   } else {
-#     if (n <= 1) {
-#       return(1)
-#     } else {
-#       fib = Fibonacci(n-1) + Fibonacci(n-2)
-#     }
-#   }
-#   return(fib)
-# }
-
-
 
 Fibonacci <- function(n) {
 
@@ -944,42 +780,6 @@ Large <- function (x, k = 5, unique = FALSE, na.rm = FALSE) {
   }
   return(res)
 }
-
-
-# Small <- function(x, k = 5, unique = FALSE, na.rm = FALSE){
-#   if(na.rm) x <- na.omit(x)
-#   if(unique){
-#     ux <- unique(x)
-#     un <- length(ux)
-#     lst <- lapply(sort(ux, partial=1:min(k,un))[1:min(k,un)], function(n) list(val=n, n=length(which(x == n))))
-#   } else {
-#     n <- length(x)
-#     lst <- lapply(sort(x, partial=1:min(k,n))[1:min(k,n)], function(n) list(val=n, n=length(which(x == n))))
-# #   lst <- as.vector(unlist(lapply(lst, "[", "val")))
-# #   http://stackoverflow.com/questions/15659783/why-does-unlist-kill-dates-in-r
-#     lst <- do.call("c", sapply(lst, "[", "val") )
-#     names(lst) <- NULL
-#   }
-#   return(lst)
-# }
-
-
-# Large <- function(x, k = 5, unique = FALSE, na.rm = FALSE){
-#   if(na.rm) x <- na.omit(x)
-#   if(unique){
-#     ux <- unique(x)
-#     un <- length(ux)
-#     lst <- lapply(sort(ux, partial=max((un-k+1), 1):un)[max((un-k+1),1):un], function(n) list(val=n, n=length(which(x == n))))
-#   } else {
-#     n <- length(x)
-#     lst <- lapply(sort(x, partial=max((n-k+1),1):n)[max((n-k+1),1):n], function(n) list(val=n, n=length(which(x == n))))
-# #   http://stackoverflow.com/questions/15659783/why-does-unlist-kill-dates-in-r
-# #    lst <- as.vector(unlist(lapply(lst, "[", "val")))
-#     lst <- do.call("c", sapply(lst, "[", "val") )
-#     names(lst) <- NULL
-#   }
-#   return(lst)
-# }
 
 
 
@@ -12649,7 +12449,7 @@ print.mtest <- function (x, digits = 4L, ...) {
   print.default(out, digits = 3, quote = FALSE, right = TRUE)
 
   cat("\n")
-  cat("---\nSignif. codes: 0 `***' 0.001 `**' 0.01 `*' 0.05 `.' 0.1 ` ' 1\n\n")
+  cat("---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n")
   invisible(x)
 }
 
@@ -13614,7 +13414,7 @@ print.PostHocTest <- function (x, digits = getOption("digits"), ...) {
     }
 
     print.default(xx, digits=digits, ...)
-    cat("---\nSignif. codes: 0 `***' 0.001 `**' 0.01 `*' 0.05 `.' 0.1 ` ' 1\n")
+    cat("---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n")
   } else {
     for(nm in names(xx)){
       xx[[nm]][] <- format.pval(xx[[nm]], 2, na.form = "-")
@@ -13786,7 +13586,7 @@ print.DunnTest <- function (x, digits = getOption("digits"), ...) {
     xx$"pval" <- format.pval(xx$"pval", digits=2, nsmall=4)
 
     print.data.frame(xx, digits=digits, ...)
-    cat("---\nSignif. codes: 0 `***' 0.001 `**' 0.01 `*' 0.05 `.' 0.1 ` ' 1\n")
+    cat("---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n")
   } else {
     xx[[1]][] <- format.pval(xx[[1]], 2, na.form = "-")
     #     attributes(pp) <- attributes(x$p.value)
