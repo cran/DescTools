@@ -45,9 +45,10 @@ List n_pow_sum(NumericVector x, double meanx) {
   double sum3 = d2*d;
   double sum4 = d2*d2;
 
-  int n = x.size();  // the vector size
-  int zn = 0;        // the number of zeros
-  int un = 1;        // the number of unique values
+  int n = x.size();   // the vector size
+  int zn = 0;
+  if(x[0]==0) {zn=1;};   // the number of zeros
+  int un = 1;         // the number of unique values
 
   for (int ii=1; ii < x.size(); ii++) {
 

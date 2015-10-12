@@ -5,7 +5,7 @@
 
 %%  ~~function to do ... ~~
 }
-\description{R color to RGB (red/green/blue) conversion. 
+\description{R color to RGB (red/green/blue) conversion.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -13,8 +13,8 @@ ColToRgb(col, alpha = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{col}{vector of any of the three kind of R colors, i.e., either a color name (an element of \code{\link{colors}}()), 
-  a hexadecimal string of the form "#rrggbb" or "#rrggbbaa", or an integer i meaning palette()[i]. 
+  \item{col}{vector of any of the three kind of R colors, i.e., either a color name (an element of \code{\link{colors}}()),
+  a hexadecimal string of the form "#rrggbb" or "#rrggbbaa", or an integer i meaning palette()[i].
   Non-string values are coerced to integer.
 
 %%     ~~Describe \code{col} here~~
@@ -27,7 +27,7 @@ ColToRgb(col, alpha = FALSE)
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-A matrix with a column for each color. The three rows of the matrix indicate red, green and blue value and are named "red", "green", and "blue" accordingly. 
+A matrix with a column for each color. The three rows of the matrix indicate red, green and blue value and are named "red", "green", and "blue" accordingly.
 The matrix might have a 4th row if an alpha channel is requested.
 
 %%  ~Describe the value returned
@@ -42,7 +42,7 @@ The matrix might have a 4th row if an alpha channel is requested.
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{\code{\link{col2rgb}}
+\seealso{\code{\link{col2rgb}}, \code{\link{RgbToCol}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

@@ -8,7 +8,7 @@
   Hotelling's T2 test for the one and two sample case.
 }
 
-\usage{ HotellingsT2Test(x, \dots)
+\usage{HotellingsT2Test(x, \dots)
 
 \method{HotellingsT2Test}{default}(x, y = NULL, mu = NULL, test = "f", \dots)
 

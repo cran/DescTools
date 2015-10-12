@@ -11,12 +11,14 @@ the dimensions of the table, chi-square tests and some association measures as p
 }
 \usage{
 \method{Desc}{table}(x, main = NULL, rfrq = NULL, margins = c(1, 2),
-     p = rep(1/length(x), length(x)), plotit = getOption("plotit", FALSE),
-     verbose = c("medium", "low", "high"), ...)
+     p = rep(1/length(x), length(x)), conf.level = 0.95,
+     verbose = c("medium", "low", "high"), plotit = getOption("plotit", FALSE),
+     ...)
 
 \method{Desc}{matrix}(x, main = NULL, rfrq = NULL, margins = c(1,2),
-     p = rep(1/length(x), length(x)), plotit = getOption("plotit", FALSE),
-     verbose = c("medium", "low", "high"), ...)
+     p = rep(1/length(x), length(x)), conf.level = 0.95,
+     verbose = c("medium", "low", "high"), plotit = getOption("plotit", FALSE),
+     ...)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -44,6 +46,9 @@ the dimensions of the table, chi-square tests and some association measures as p
 }
   \item{verbose}{character defining the verbosity of the reported results. One out of \code{c("medium", "low", "high")}, "medium" being the default. Can be abbreviated.
 }
+  \item{conf.level}{confidence level of the interval. If set to NA no confidence interval will be calculated. Default is 0.95.
+}
+
   \item{\dots}{the dots are passed to the function \code{\link{PercTable}}, allowing to set futher arguments like expected values etc.}
 }
 \details{Note that NAs cannot be handled by this interface, as tables in general come in "as.is", say basically as a matrix without any
@@ -93,5 +98,18 @@ Desc(area ~ driver, d.pizza, plotit=FALSE)
 options(fmt.abs=structure(list(digits=0, big.mark="'"), class="fmt"))
 options(fmt.per=structure(list(digits=3, leading="drop"), class="fmt"))
 Desc(area ~ driver, d.pizza, plotit=FALSE)
+
+
+# get more flexibility, create the table first
+tab <- as.table(apply(HairEyeColor, c(1,2), sum))
+tab <- tab[,c("Brown","Hazel","Green","Blue")]
+
+# diplay only absolute values, row and columnwise percentages
+Desc(tab, row.vars=c(3, 1), rfrq="011", plotit=FALSE)
+
+# do the plot by hand, while setting the colours for the mosaics
+cols1 <- SetAlpha(c("sienna4", "burlywood", "chartreuse3", "slategray1"), 0.6)
+cols2 <- SetAlpha(c("moccasin", "salmon1", "wheat3", "gray32"), 0.8)
+PlotDesc(tab, col1=cols1, col2=cols2)
 }
 \keyword{ multivariate }

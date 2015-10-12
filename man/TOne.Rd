@@ -38,8 +38,17 @@ TOne(x, grp = NA)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+
+opt <- options()
+
+options(fmt.num=structure(list(digits=1, big.mark="'"), class="fmt"))
+options(fmt.per=structure(list(digits=1, fmt="\%"), class="fmt"))
+options(fmt.abs=structure(list(digits=0, big.mark="'"), class="fmt"))
+
 TOne(x = d.pizza[, c("temperature","delivery_min","driver","wine_ordered")],
      grp=d.pizza$quality)
+
+options(opt)
 
 \dontrun{
 wrd <- GetNewWrd()

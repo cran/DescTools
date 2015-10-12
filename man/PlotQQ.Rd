@@ -4,12 +4,12 @@
 \title{QQ-Plot for Any Distribution
 %%  ~~function to do ... ~~
 }
-\description{Create a QQ-plot for a variable of any distribution. 
+\description{Create a QQ-plot for a variable of any distribution.
 The assumed underlying distribution can be defined as a function including all required parameters.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL,
+PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL, add = FALSE,
        args.qqline = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -18,7 +18,7 @@ PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL,
 %%     ~~Describe \code{x} here~~
 }
   \item{qdist}{the quantile function of the assumed distribution. Can either be given as simple function name or defined as own function using the required arguments. See examples.
-  
+
 %%     ~~Describe \code{qdist} here~~
 }
   \item{main}{the main title for the plot. This will be "Q-Q-Plot" by default
@@ -30,8 +30,9 @@ PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL,
   \item{ylab}{the ylab for the plot
 %%     ~~Describe \code{ylab} here~~
 }
-  \item{args.qqline}{arguments for the qqline. This will be estimated 
-   as a line through the 25\% and 75\% quantiles, which is the same procedure as qqline does for normal 
+\item{add}{logical specifying if the points should be added to an already existing plot; defaults to \code{FALSE}.}
+  \item{args.qqline}{arguments for the qqline. This will be estimated
+   as a line through the 25\% and 75\% quantiles, which is the same procedure as qqline does for normal
    distribution (instead of set it to abline(a = 0, b = 1)). The line defaults are set to col = par("fg"), lwd = par("lwd") and lty = par("lty").
    No line will be plotted if args.qqline is set to NA.
 }
@@ -64,6 +65,13 @@ z <- rchisq(100, df=5)
 PlotQQ(z, function(p) qchisq(p, df=5), args.qqline=list(col=2, probs=c(0.1,0.6)),
        main=expression("Q-Q plot for" ~~ {chi^2}[nu == 3]))
 abline(0,1)
+
+# add 20 random sets
+for(i in 1:20){
+  z <- rchisq(100, df=5)
+  PlotQQ(z, function(p) qchisq(p, df=5), add=TRUE, args.qqline = NA,
+         col="grey", lty="dotted")
+}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

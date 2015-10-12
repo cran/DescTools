@@ -1,18 +1,18 @@
 \name{identify.formula}
 \alias{identify.formula}
-\title{Identify points in a plot using a formula.}
+\title{Identify Points In a Plot Using a Formula.}
 \usage{
   \method{identify}{formula} (formula, data, subset, na.action, \dots)
 }
 \arguments{
-    \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}  
+    \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}
 
 \item{data}{The data frame from which the formula should
   be evaluated.}
-  
-  \item{subset}{an optional vector specifying a subset of observations to be used.}  
-  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to 
-\code{getOption("na.action")}.}  
+
+  \item{subset}{an optional vector specifying a subset of observations to be used.}
+  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to
+\code{getOption("na.action")}.}
 
   \item{\dots}{Other arguments to be passed to
   \code{\link{identify}}.}

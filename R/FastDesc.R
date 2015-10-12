@@ -277,10 +277,6 @@ Desc.factor <- function (x, main = NULL, ord = c("desc", "asc", "name", "level")
     }
     lfmt$frq <- z$frq[1:min(nrow(z$frq), maxrows), ]
     txt.frq <- .CaptOut(lfmt$frq)
-  #   txt1.frq <- paste(substr(txt.frq, 0, regexpr("level", txt.frq[1]) + 5),
-  #                         x = substr(txt.frq, regexpr("level", txt.frq[1]) + 5 + 1,
-  #                                    nchar(txt.frq[1])),
-  #                    sep = "")
     cat("\n")
     cat(txt.frq, sep = "\n")
     if (maxrows < z$levels)
@@ -420,16 +416,7 @@ Desc.integer <- function (x, main = NULL, maxrows = 12, freq = NULL, digits = NU
     if (lres$n > 0) {
       if (freq) {
         lres$frq <- Freq(x = as.factor(x))
-#         opt <- options(digits = digits)
         txt.frq <- .CaptOut(print(lres$frq, digits=digits))
-        # options(opt)
-#         txt.frq <- paste(substr(txt.frq, 0, regexpr("level", txt.frq[1]) + 5),
-#                          gsub(pattern = "0\\.", replacement = " \\.",
-#                               x = substr(txt.frq, regexpr("level", txt.frq[1]) + 5 + 1,
-#                                          nchar(txt.frq[1]))), sep = "")
-#         txt.frq <- paste(substr(txt.frq, 0, regexpr("level", txt.frq[1]) + 5),
-#                               x = substr(txt.frq, regexpr("level", txt.frq[1]) + 5 + 1,
-#                                          nchar(txt.frq[1])), sep = "")
         cat("\n")
         cat(txt.frq[1:min((maxrows + 1), length(txt.frq))],
             sep = "\n")
@@ -589,6 +576,382 @@ Desc.default <- function (x, ...) {
   }
 }
 
+
+
+Desc.matrix <- function(x, main=NULL, rfrq = NULL, margins = c(1,2), p = rep(1/length(x), length(x)), conf.level = 0.95,
+                        verbose = c("medium","low","high"), plotit=getOption("plotit", FALSE), ... ){
+  Desc.table(x, main=main, rfrq = rfrq, margins = margins, p = p, plotit = plotit, verbose = verbose, conf.level = conf.level, ... )
+  invisible()
+}
+
+
+Desc.table <- function(x, main=NULL, rfrq = NULL, margins = c(1,2), p = rep(1/length(x), length(x)), conf.level = 0.95,
+                       verbose = c("medium","low","high"), plotit=getOption("plotit", FALSE), ... ){
+
+  .warn <- function(x){
+    if(any(x$expected < 5) && is.finite(x$parameter)){
+      cat("\nWarning message:\n  Exp. counts < 5: Chi-squared approx. may be incorrect!!\n")
+    }
+  }
+
+  opt  <- options(scipen=4); on.exit(options(opt))
+
+  # define verbosity
+  verbose <- match.arg(verbose, c("medium","low","high"))
+  verbose <- match(verbose, c("low","medium","high"), nomatch=2)
+
+  if(is.null(rfrq)) rfrq <- ifelse(verbose > 1, "111","000")
+
+  if(is.null(main)) main <- gettextf("%s (%s)", deparse(substitute(x)), paste(class(x), collapse=", "))
+
+  if(!identical(main, NA)) {
+    cat( paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), "\n" )
+    cat(main)
+  }
+  if( !is.null(attr(x,"label")) ) cat(" :", strwrap(attr(x,"label"), indent=2, exdent=2), sep="\n" )
+  cat("\n")
+
+  # Pairs summary
+  n <- sum(x)
+
+  if(length(dim(x)) > 2) { # multdim table
+
+    cat("\nSummary: \n",
+        "n: ", n, ", ", length(dim(x)), "-dim table: ", paste(dim(x), collapse=" x ")
+        , "\n\n", sep="" )
+
+    print(ftable(addmargins(x, c(1, length(dim(x))))))
+    cat("\n")
+
+  } else {  # <= 2-dimensional table
+
+    if(length(dim(x))==1) {       # 1-dim table ****
+      cat("\nSummary: \n",
+          "n: ", n,
+          ", rows: ", dim(x)[1]
+          , "\n\n", sep="" )
+
+      suppressWarnings(r.chisq <- chisq.test(x, p=p))
+      cat("Pearson's Chi-squared test (1-dim uniform):\n  "
+          , .CaptOut(r.chisq)[5], "\n\n", sep="")
+      .warn(r.chisq)
+
+      # use Freq instead of PercTable for 1-d tables
+      f <- Freq(x)
+      f[,2] <- Format(f[,2], fmt=.fmt_abs())
+      f[,3] <- Format(f[,3], fmt=.fmt_per())
+      f[,4] <- Format(f[,4], fmt=.fmt_abs())
+      f[,5] <- Format(f[,5], fmt=.fmt_per())
+
+      if(InDots(..., arg="expected", default=FALSE))
+        f <- cbind(f, exp=Format(unname(r.chisq$expected), big.mark="'", digits=1))
+      if(InDots(..., arg="residuals", default=FALSE))
+        f <- cbind(f, res=Format(unname(as.matrix(r.chisq$residuals)), digits=1, big.mark="'"))
+      if(InDots(..., arg="stdres", default=FALSE))
+        f <- cbind(f, stdres=Format(unname(as.matrix(r.chisq$stdres)), digits=1))
+
+      print.data.frame(f, print.gap=2)
+
+    } else {                      # 2-dim tabl *****
+
+      if(!is.null(attr(x, "missings")))
+        missn <- paste(",", attr(x, "missings"), paste="")
+      else
+        missn <- ""
+
+      cat("\nSummary: \n",
+          "n: ", Format(n, fmt=.fmt_abs()),
+          ", rows: ", Format(dim(x)[1], fmt=.fmt_abs()),
+          ", columns: ", Format(dim(x)[2], fmt=.fmt_abs()),
+          missn
+          , "\n\n", sep="" )
+
+      if(dim(x)[1] == 2 & dim(x)[2] == 2 ){
+
+        if(verbose=="3"){
+          suppressWarnings(r.chisq <- chisq.test(x, p=p, correct = FALSE))
+          cat("Pearson's Chi-squared test:\n  ", .CaptOut(r.chisq)[5], "\n", sep="")
+        }
+        suppressWarnings(r.chisq <- chisq.test(x, p=p))
+        cat("Pearson's Chi-squared test (cont. adj):\n  ", .CaptOut(r.chisq)[5], "\n", sep="")
+        cat("Fisher's exact test ", .CaptOut( fisher.test(x))[5], "\n", sep="")
+
+        if(verbose > 1){ # print only with verbosity > 1
+          cat("", .CaptOut( mcnemar.test(x))[5], "\n", sep="")
+        }
+
+        .warn(r.chisq)
+
+        if(verbose > 1){ # print only with verbosity > 1
+          cat("\n")
+          m <- ftable(format(rbind(
+            "odds ratio    " = OddsRatio(x, conf.level=conf.level)
+            , "rel. risk (col1)  " = RelRisk(x, conf.level=conf.level, method="wald", delta=0)
+            , "rel. risk (col2)  " = RelRisk(x[,c(2,1)], conf.level=conf.level, method="wald", delta=0)
+          ), digits=3, nsmall=3))
+
+          attr(m, "col.vars")[[1]][1] <- "estimate"
+          txt <- capture.output(print(m))
+          txt[1] <- paste(txt[1], getOption("footnote1"), sep="")
+          cat(txt, sep="\n")
+          cat("\n")
+        }
+
+      } else {
+
+        # we report chisquare without cont-corr for rxc and with cont-corr for 2x2 by default
+        suppressWarnings(r.chisq <- chisq.test(x, p=p, correct = FALSE))
+        cat("Pearson's Chi-squared test:\n  ", .CaptOut(r.chisq)[5], "\n", sep="")
+
+        if(verbose=="3"){
+          suppressWarnings(r.chisq <- chisq.test(x, p=p))
+          cat("Pearson's Chi-squared test (cont. adj):\n  ", .CaptOut(r.chisq)[5], "\n", sep="")
+        }
+
+        if(verbose > 1){ # print only with verbosity > 1
+
+          # Log-likelihood chi-squared (G2) test of independence (homogeneity)
+          lhrat <- 2 * sum(r.chisq$observed * log(r.chisq$observed/r.chisq$expected), na.rm=TRUE)
+          alpha <- pchisq(lhrat, df=r.chisq$parameter, lower.tail = FALSE)
+          cat(gettextf("Likelihood Ratio:\n  X-squared = %s, df = %s, p-value = %s\n",
+                       round(lhrat, 4), r.chisq$parameter, format.pval(alpha, digits=4)))
+          # Mantel-Haenszel ChiSquared (linear hypothesis)
+          mh <- MHChisqTest(x)
+          alpha <- mh$p.value
+          cat(gettextf("Mantel-Haenszel Chi-squared:\n  X-squared = %s, df = %s, p-value = %s\n",
+                       round(mh$statistic, 4), 1, format.pval(alpha, digits=4)))
+
+        }
+
+        .warn(r.chisq)
+
+      }
+
+      switch(verbose
+             , "1" = { cat("\n")
+             }
+             , "2" = {
+               cat(sprintf(
+                 "\nPhi-Coefficient        %.3f\nContingency Coeff.     %.3f\nCramer's V             %.3f\n"
+                 , Phi(x)
+                 , ContCoef(x)
+                 , CramerV(x)
+               ) )
+               cat("\n")
+             }
+             , "3" = {
+               cat("\n")
+               txt <- capture.output(Assocs(x, conf.level = conf.level))
+               txt[1] <- paste(txt[1], getOption("footnote1"), sep="")
+               cat(txt, sep="\n")
+               cat("\n")
+             }
+      )
+
+      print(PercTable(x, rfrq=rfrq, margins=margins, ...))
+
+      if(verbose=="3" || (dim(x)[1]==2 & dim(x)[2]==2))
+        cat(gettextf("\n----------\n%s %s%s conf. level\n", getOption("footnote1"), conf.level*100, "%"))
+
+    }
+
+    cat("\n")
+
+  }
+
+  if(plotit) {
+    horiz <- InDots(..., arg="horiz", default=TRUE)
+    PlotDesc.table(x, main=main, horiz = horiz)
+  }
+  invisible()
+
+}
+
+
+
+Desc.Lc <- function (x, main = NULL, p = c(0.8,0.9,0.95,0.99), plotit=getOption("plotit", FALSE), ...) {
+
+  # describe a Lorenz curve
+
+  if (is.null(main))
+    main <- gettextf("%s (%s)", deparse(substitute(x)),
+                     paste(class(x), collapse = ", "))
+  n <- length(x$p)
+
+  cat(paste(rep("-", (as.numeric(options("width")) - 2)), collapse = ""),
+      "\n")
+  if (!identical(main, NA))
+    cat(main)
+  if (!is.null(attr(x, "label")))
+    cat(" :", strwrap(attr(x, "label"), indent = 2, exdent = 2),
+        sep = "\n")
+  cat("\n\n")
+
+  d.frm <- data.frame( (1-p), sapply(p, function(p){1 - approx(x=x$p, y=x$L, xout=p)$y}))
+  colnames(d.frm) <- c("1-p","1-L(p)")
+
+  txt <- d.frm
+  txt[,2] <- round(txt[,2], 3)
+  txt <- .CaptOut(txt)
+  txt <- gsub(pattern = "0\\.", replacement = " \\.", txt)
+
+  lres <- list(l1 = list(n = n, `0s` = max(x$p[x$L==0]), Gini=x$Gini))
+
+  lfmt <- lapply(lres, lapply, .fmt)
+  width <- max(c(unlist(lapply(lfmt, nchar)), unlist(lapply(lapply(lfmt, names), nchar))))
+  cat(paste(lapply(lfmt, .txtline, width = width, ind = "  ",
+                   space = " "), collapse = "\n"), "\n")
+
+  cat(txt, sep = "\n")
+
+  if (plotit)
+    if (lres$l1$n > 0)
+      plot(x, main = main)
+
+  invisible(lres)
+}
+
+
+
+
+Desc.flags <- function(x, i=1, plotit=getOption("plotit", FALSE), ...){
+
+  cat( paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), "\n" )
+  main <- InDots(..., arg="main", default = "Multiple dichotomous variables")
+  cat(main)
+  if( !is.null(attr(x,"label")) ) cat(" :", strwrap(attr(x,"label"), indent=2, exdent=2), sep="\n" )
+  cat("\n")
+
+  cat( "\nSummary: \n", "total n: ", nrow(x), "\n\n", sep="" )
+
+  d.sub <- x
+
+  flags <- do.call(rbind, lapply(d.sub, function(z) {
+    tab <- table(z)
+    data.frame(val = names(tab[i]), abs=tab[i], BinomCI(tab[i], sum(tab)))
+  }
+  ))
+  out <- data.frame( do.call(rbind,  lapply(d.sub, function(x) cbind(NAs=sum(is.na(x)), n=length(x)- sum(is.na(x)))))
+                     , flags)
+  out[,5:7] <- apply(out[,5:7],2, Format, digits=3)
+
+  print(out, quote=FALSE)
+  cat("\n")
+
+  if(plotit) PlotDesc(x)
+
+}
+
+
+
+Desc.formula <- function(formula, data = parent.frame(), subset, plotit=getOption("plotit", FALSE), ...) {
+
+  mf <- match.call(expand.dots = FALSE)
+
+  # parse dots.arguments, such as not to send unappropriate arguments to subfunctions
+  dotargs.factor.factor <- mf$...[ names(mf$...)[
+    !is.na(match(names(mf$...), names( formals( Desc.table) )))
+    ] ]
+  dotargs.numeric.factor <- mf$...[ names(mf$...)[
+    !is.na(match(names(mf$...), names( formals( DescNumFact) )))
+    ] ]
+  dotargs.factor.numeric <- mf$...[ names(mf$...)[
+    !is.na(match(names(mf$...), names( formals( DescFactNum) )))
+    ] ]
+  dotargs.numeric.numeric <- mf$...[ names(mf$...)[
+    !is.na(match(names(mf$...), names( formals( DescNumNum) )))
+    ] ]
+
+  subset.expr <- mf$subset
+  mf$subset <- NULL
+  if (!missing(subset)) {
+    s <- eval(subset.expr, data, parent.frame())
+    data <- data[s,]
+  }
+
+  mm <- ParseFormula(formula=formula, data=data)
+
+  # don't want AsIs (will come in case of I(...)) to proceed, so just coerce to vector an back again
+  # but don't use the following, as interaction names will be set to y.x instead of y:x
+  # mm$lhs$mf.eval <- data.frame(lapply(mm$lhs$mf.eval, as.vector))
+  # mm$rhs$mf.eval <- data.frame(lapply(mm$rhs$mf.eval, as.vector))
+  for(i in which(lapply(mm$lhs$mf.eval, class) == "AsIs")) {
+    mm$lhs$mf.eval[,i] <- as.vector(mm$lhs$mf.eval[,i])
+  }
+  for(i in which(lapply(mm$rhs$mf.eval, class) == "AsIs")) {
+    mm$rhs$mf.eval[,i] <- as.vector(mm$rhs$mf.eval[,i])
+  }
+
+  # start output
+  cat("\nCall:\n")
+  cat(paste(deparse(sys.call()), sep = "\n", collapse = "\n"),"\n\n", sep = "")
+
+  # start analysis
+  for(resp in mm$lhs$vars){         # for all response variables
+    for(pred in mm$rhs$vars){       # evalutate for all conditions
+      x <- mm$lhs$mf.eval[,resp]
+      grp <- mm$rhs$mf.eval[,pred]
+
+      cat( paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), "\n" )
+      cat( paste(resp, " ~ ", pred, sep="") )
+      if( !is.null(attr(x,"label")) ) cat(" :", strwrap(attr(x,"label"), indent=2, exdent=2), sep="\n" )
+      cat("\n")
+
+      # coerce logicals and characters to factors
+      #       if( class(x)[1] %in% c("logical","character")) x <- factor(x)
+      #       if( class(grp)[1] %in% c("logical","character")) grp <- factor(grp)
+      if( IsDichotomous(x)) x <- factor(x)
+      if( IsDichotomous(grp)) grp <- factor(grp)
+
+
+      if(class(x)[1] %in% c("numeric","integer")){
+
+        if(class(grp)[1] %in% c("numeric","integer")){
+          do.call( DescNumNum, args=append( list(x=grp, y=x, xname=pred, yname=resp, plotit=plotit), dotargs.numeric.numeric))
+
+        } else if(class(grp)[1] %in% c("factor","ordered")){
+          do.call( DescNumFact, args=append( list(x=x, grp=grp, xname=resp, grpname=pred, plotit=plotit), dotargs.numeric.factor ))
+
+        } else {
+          cat(gettextf("Don't know how to describe class: %s ~ %s!\n", paste(class(x), collapse=", "),
+                       paste(class(grp), collapse=", ")), "\n")
+        }
+      } else if(class(x)[1] %in% c("factor","ordered")){
+
+        if( class(grp)[1] %in% c("numeric","integer")){
+          do.call( DescFactNum, args=append( list(x=x, y=grp, xname=resp, yname=pred, plotit=plotit), dotargs.factor.numeric ))
+
+        } else if ( class(grp)[1] %in% c("factor","ordered")){
+          useNA <- InDots(..., arg="useNA", default="no")
+          tab <- table(x, grp, dnn=c(resp, pred), useNA=useNA)
+
+          if(useNA == "no"){  # add missing info only if there are any (depends on useNA)
+            n <- max(length(x),length(grp))
+            idcomp <- complete.cases(x, grp)  # cases
+            vn <- sum(idcomp)                 # valid n pairs
+            missn <- paste("total pairs: ", Format(n, fmt=.fmt_abs()),
+                           #                          ", valid: ", .fmt(vn), " (", round(vn/n*100, 3), "%)",
+                           #                           ... well, don't use .fmt_per() here, as it would not be understandable in the context
+                           ", missings: ", Format(n-vn, fmt=.fmt_abs()), " (", Format((n-vn)/n, digits=2, fmt="%"), ")",
+                           sep="")
+            attr(tab, "missings") <- missn
+          }
+
+          main <- gettextf("%s ~ %s", resp, pred)
+          do.call( Desc, args=append( list(x=tab, xname="", grpname="", plotit=FALSE, main=NA), dotargs.factor.factor) )
+          if(plotit) PlotDesc.table(tab, main=main)
+        } else {
+          cat(gettextf("Don't know how to describe class: %s ~ %s!\n", class(x), class(grp)), "\n")
+        }
+      } else {
+        cat(gettextf("Don't know how to describe class: %s ~ %s!\n", class(x), class(grp)), "\n")
+      }
+
+    }
+  }
+  invisible()
+
+}
 
 
 

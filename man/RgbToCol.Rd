@@ -1,6 +1,7 @@
 \name{RgbToCol}
 \alias{RgbToCol}
 \alias{RgbToLong}
+\alias{LongToRgb}
 
 
 %- Also NEED an '\alias' for EACH other topic documented here.
@@ -14,17 +15,21 @@ RgbToLong converts an RGB-color to a long integer in numeric format.
 }
 \usage{
 RgbToCol(col, method = "rgb", metric = "euclidean")
-RgbToLong(col)}
+
+RgbToLong(col)
+LongToRgb(col)
+}
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
     \item{col}{the color in rgb code, say a matrix with the red, green and blue code in the rows.  }
-    \item{method}{character string specifying the color space to be used. Can be "rgb" (default) or "hsv".}    
+    \item{method}{character string specifying the color space to be used. Can be \code{"rgb"} (default) or \code{"hsv"}.}
     \item{metric}{character string specifying the metric to be used for calculating distances between the colors.
-        Available options are "euclidean" (default) and "manhattan". Euclidean distances are root sum-of-squares of 
+        Available options are \code{"euclidean"} (default) and \code{"manhattan"}. Euclidean distances are root sum-of-squares of
         differences, and manhattan distances are the sum of absolute differences.}
 
 }
+\details{It may not be clear from the start which method, rgb or hsv, yield the more natural results. Trying and comparing is a recommended strategy. Moreover the shortest numerical distance will not always be the best choice, when comparing the colours visually.}
 \value{the name of the nearest found R color.
 }
 \author{Andri Signorell <andri@signorell.net>

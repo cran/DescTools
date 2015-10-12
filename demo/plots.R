@@ -25,22 +25,22 @@ PlotMultiDens( split(d.pizza$delivery_min, d.pizza$driver), na.rm=TRUE
 
 
 # areaplot with stapled areas
-tab <- table( d.pizza$date, d.pizza$driver )  
-PlotArea(x=as.Date(rownames(tab)), y=tab, xaxt="n", xlab="Date", ylab="Pizzas delivered" )  
+tab <- table( d.pizza$date, d.pizza$driver )
+PlotArea(x=as.Date(rownames(tab)), y=tab, xaxt="n", xlab="Date", ylab="Pizzas delivered" )
 # add x-axis and some text labels
 xrng <- pretty(range(as.Date(rownames(tab))))
 axis(side=1, at=xrng, labels=xrng)
-text( x=min(d.pizza$date + .5, na.rm=TRUE), y=cumsum(tab[2,])-2.5, 
+text( x=min(d.pizza$date + .5, na.rm=TRUE), y=cumsum(tab[2,])-2.5,
       label=levels(d.pizza$driver), adj=c(0,0.5), col=TextContrastColor( gray.colors(7)))
 
 
-# dotchart with confidence intervals  
+# dotchart with confidence intervals
 x <- do.call("rbind", tapply( d.pizza$temperature, d.pizza$driver, MeanCI, na.rm=TRUE))
 rownames(x) <- levels(d.pizza$driver)
-PlotDotCI(x)
+PlotDot(x)
 
 
-# Plot pyramid 
+# Plot pyramid
 xy.pop <- c(3.2,3.5,3.6,3.6,3.5,3.5,3.9,3.7,3.9,3.5,3.2,2.8,2.2,1.8,1.5,1.3,0.7,0.4)
 xx.pop <- c(3.2,3.4,3.5,3.5,3.5,3.7,4,3.8,3.9,3.6,3.2,2.5,2,1.7,1.5,1.3,1,0.8)
 agelabels <- c("0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44",
@@ -67,9 +67,9 @@ PlotPolar(posmat, type="l", main="Spiderweb plot", col=2:4, lwd=1:3)
 PolarGrid( nr=NA, ntheta=ncol(posmat), alabels=paste("X", 1:ncol(posmat)
                                                      , sep=""), col="grey", lty="solid" )
 
-# radarplot   
+# radarplot
 data(mtcars)
-d.car <- scale(mtcars[1:6,1:7], center=FALSE)   
+d.car <- scale(mtcars[1:6,1:7], center=FALSE)
 # let's have a palette with thransparent colors (alpha = 32)
 cols <- paste(colorRampPalette(c("red","yellow","green","blue"), space = "rgb")(6), "32", sep="")
 PlotPolar(d.car, type="l", fill=cols, main="Cars in radar")

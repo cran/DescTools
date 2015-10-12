@@ -11,7 +11,8 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-PlotRCol(ord = c("hsv", "default"), label = c("text", "hex", "dec"))
+PlotRCol(ord = c("hsv", "default"), label = c("text", "hex", "dec"),
+         mdim = c(38, 12))
 PlotPar()
 PlotMar()
 }
@@ -20,9 +21,10 @@ PlotMar()
   \item{ord}{the order of the colors, can be either defined by hsv-value or by the R internal color-number
 %%     ~~Describe \code{ord} here~~
 }
-  \item{label}{label for the colors, can be the colorname (text), the hex-code (#rrggbb) or the decimal RGB-number
+  \item{label}{label for the colors, can be the colorname (text), the hex-code (#RRGGBB) or the decimal RGB-number
 %%     ~~Describe \code{label} here~~
 }
+  \item{mdim}{the dimension of the color matrix. Default is 38 rows and 12 columns.}
 }
 \details{\code{PlotMar()} should plot the margins, but waits for its implementation...
 %%  ~~ If necessary, more details than the description above ~~

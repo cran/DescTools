@@ -105,8 +105,7 @@ PlotFdist(d.pizza$weekday, na.rm=TRUE)
 # special arguments for hist, density and ecdf
 PlotFdist(x=faithful$eruptions, 
           args.hist=list(breaks=20), args.dens=list(bw=.1),
-          args.ecdf=list(verticals=FALSE, do.points=TRUE, 
-            cex=1.2, pch=16, lwd=1), args.rug=TRUE)
+          args.ecdf=list(cex=1.2, pch=16, lwd=1), args.rug=TRUE)
 
 # no density curve, no ecdf but add rug instead, make boxplot a bit higher
 PlotFdist(x=d.pizza$delivery_min, na.rm=TRUE, args.dens=NA, args.ecdf=NA, 

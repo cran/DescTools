@@ -28,6 +28,8 @@ LCM(..., na.rm = FALSE)
 
   \code{n * m = GCD(n, m) * LCM(n, m)}
 }
+\references{Eddelbuettel, D. (2013). Seamless R and C++ Integration with Rcpp. New York, NY: Springer.}
+
 \author{Dirk Eddelbuettel <edd@debian.org> (RCPP part), Andri Signorell <andri@signorell.net>, originally based on code in package \pkg{numbers} by Hans W Borchers <hwborchers@googlemail.com> }
 
 

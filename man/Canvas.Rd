@@ -8,8 +8,8 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Canvas(xlim = NULL, ylim = xlim, xpd=par("xpd"), mar=c(5.1,5.1,5.1,5.1), 
-       asp = 1, bg = par("bg"), ...)
+Canvas(xlim = NULL, ylim = xlim, xpd=par("xpd"), mar=c(5.1,5.1,5.1,5.1),
+       asp = 1, bg = par("bg"), usrbg = "white", ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,10 +22,13 @@ Canvas(xlim = NULL, ylim = xlim, xpd=par("xpd"), mar=c(5.1,5.1,5.1,5.1),
   \item{mar}{set margins. Defaults to c(5.1,5.1,5.1,5.1).
 %%     ~~Describe \code{xlim} here~~
 }
-  \item{asp}{numeric, giving the aspect ratio y/x. (See \code{\link{plot.window}} for details. Default is 1. 
+  \item{asp}{numeric, giving the aspect ratio y/x. (See \code{\link{plot.window}} for details. Default is 1.
 %%     ~~Describe \code{xlim} here~~
 }
   \item{bg}{the background color of the plot, defaults to par("bg"), which usually will be "white".
+%%     ~~Describe \code{xlim} here~~
+}
+  \item{usrbg}{the color of the user space of the plot, defaults to "white".
 %%     ~~Describe \code{xlim} here~~
 }
   \item{\dots}{additional arguments are passed to the \code{plot()} command.

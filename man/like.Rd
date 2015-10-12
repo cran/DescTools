@@ -1,5 +1,6 @@
 \name{\%like\%}
 \alias{\%like\%}
+\alias{\%like any\%}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Like operator
 %%  ~~function to do ... ~~
@@ -9,6 +10,8 @@
 }
 \usage{
 x \%like\% pattern
+
+x \%like any\% pattern
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

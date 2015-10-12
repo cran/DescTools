@@ -45,11 +45,9 @@ PlotDesc(x, ..., wrd = NULL)
          maxrows = 12, lablen = 25, type = c("bar","dot"),
          col = NULL, border = NULL, xlim=NULL, ecdf=FALSE, ..., wrd = NULL)
 
-\method{PlotDesc}{table}(x, col1 = getOption("col1", hblue),
-         col2 = getOption("col2", hred),
+\method{PlotDesc}{table}(x, col1 = NULL, col2 = NULL,
          horiz = TRUE,  main="", ..., wrd = NULL)
-\method{PlotDesc}{matrix}(x, col1 = getOption("col1", hblue),
-         col2 = getOption("col2", hred),
+\method{PlotDesc}{matrix}(x, col1 = NULL, col2 = NULL,
          horiz = TRUE,  main="", ..., wrd = NULL)
 
 \method{PlotDesc}{ordered}(x, ..., wrd = NULL)
@@ -71,7 +69,8 @@ PlotDescFactNum(x, y, ptab,
                 col1 = getOption("col1", hblue), col2 = getOption("col2", hred),
                 main=NULL, notch=FALSE, add_ni = TRUE, ... , wrd=NULL)
 
-PlotDescNumNum(form1, form2, data, main = NULL, xlab = NULL, ylab = NULL, ..., wrd = NULL)
+PlotDescNumNum(form1, form2, data, col = SetAlpha(1, 0.3), main = NULL,
+               xlab = NULL, ylab = NULL, smooth = NULL, ..., wrd = NULL)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -103,6 +102,7 @@ PlotDescNumNum(form1, form2, data, main = NULL, xlab = NULL, ylab = NULL, ..., w
   Default is the last created pointer stored in \code{getOption("lastWord")}.}
   \item{y}{the response variable}
   \item{ptab}{the proportions table for the deciles of x used in PlotDesc.flags.}
+  \item{smooth}{character, either "loess" or "smooth.spline" defining the type of smoother to be used in num ~ num plots. Default is loess for n < 500 and smooth.spline else.}
   \item{\dots}{further arguments
 }
 }

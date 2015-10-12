@@ -4,7 +4,7 @@
 \title{Get PDF Manual Of a Package From CRAN
 %%  ~~function to do ... ~~
 }
-\description{PDF versions of the manual are usually not included as vignettes in R packages. Still this format is convenient for reading. \cr This function creates the appropriate link the pdf file on CRAN and opens the pdf manual in a browser window.
+\description{PDF versions of the manual are usually not included as vignettes in R packages. Still this format is convenient for reading. \cr This function creates the appropriate link to the pdf file on CRAN and opens the pdf manual in a browser window.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -24,6 +24,4 @@ PDFManual(package)
 PDFManual(DescTools)
 }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
+

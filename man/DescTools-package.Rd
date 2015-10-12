@@ -184,6 +184,7 @@ A grouped list of the functions:
 \link{PlotQQ}    \tab  QQ-plot for an optional distribution\cr
 \link{PlotWeb}    \tab  Create a web plot \cr
 \link{PlotTernary}    \tab  Create a triangle or ternary plot \cr
+\link{PlotMiss}    \tab  Plot missing values \cr
 \cr\cr
 \bold{Distributions:}\tab\cr
 \link{pBenf}   \tab      Benford distribution, including \link{qBenf}, \link{dBenf}, \link{rBenf}\cr
@@ -193,7 +194,7 @@ A grouped list of the functions:
 \bold{Statistics:}\tab\cr
 \link{Freq}  \tab    Frequency table   \cr
 \link{PercTable}  \tab    Two dimensional percentage table   \cr
-\link{MarginTable}       \tab      Return the (extended) margin tables of a table \cr
+\link{Margins}       \tab      Return the (extended) margin tables of a table \cr
 \link{ExpFreq}       \tab      Calculate the expected frequencies of a nxm-table \cr
 \link{Mode}  \tab     Mode, the most frequent value   \cr
 \link{Gmean}, \link{Gsd}  \tab  Geometric mean and geometric standard deviation     \cr
@@ -267,7 +268,7 @@ A grouped list of the functions:
 \link{RunsTest}    \tab  Runs test for randomness\cr
 \link{DurbinWatsonTest}    \tab  Durbin-Watson test for autocorrelation\cr
 \link{BartelsRankTest}    \tab  Bartels rank test for randomness\cr
-\link{JarqueBeraTest}    \tab  Jarque-Bera Test\cr
+\link{JarqueBeraTest}    \tab  Jarque-Bera Test for normality\cr
 \link{AndersonDarlingTest}    \tab  Anderson-Darling test for normality\cr
 \link{CramerVonMisesTest}    \tab  Cramer-von Mises test for normality\cr
 \link{LillieTest}    \tab  Lilliefors (Kolmogorov-Smirnov) test for normality\cr

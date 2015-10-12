@@ -1,4 +1,35 @@
-DescTools 0.99.13 (2015-10-14)
+DescTools 0.99.14 (2015-10-11)
+-----------------------------
+
+NEW FUNCTIONS ADDED:
+   * new function %like any% has been defined according to the usual SQL logic
+   * PlotMiss creates a graphical representation of the position of missings.
+   * SmoothSpline implements a formula interface for smooth.spline.
+
+
+UPDATED FUNCTIONS:
+   * ErrBars will accept a kx3-matrix as from argument and use the first as mid,
+     the second as from and the third as to argument.
+   * PlotHorizBar will automatically adapt the left margin to the width of the labels.
+   * Desc.table will now report ChiSquare test results with cont. correction
+     only for 2x2 tables (and without contcorr for rxc tables) by default.
+   * Desc.table gains a conf.level argument, allowing to pass that to OddsRatio, Assocs etc.
+   * DescNumNum will only display the given function y ~ x anymore (leaving out x ~ y).
+     The smoother can now be set to "loess"" or to "spline".
+   * PlotDesc.table will interpret col1, col2 as a vector of colors for the two mosaics,
+     instead of two colors spanning a color ramp.
+   * MarginTable has been renamed to Margins, to delimit it from margin.table.
+   * IsLeapYear accepts integers instead only dates as argument.
+   * Stamp looses the arguments wdpath and time, wheras txt can be defined
+     more flexible either as expression or as free text.
+
+
+BUGFIXES:
+   * Desc.numeric would not have reported the correct number of zeros, in case zero was
+     the smallest value in x.
+
+
+DescTools 0.99.13 (2015-08-24)
 -----------------------------
 
 BUGFIXES:
@@ -6,7 +37,7 @@ BUGFIXES:
 
 
 DescTools 0.99.12 (2015-08-21)
------------------------------
+------------------------------
 
 NEW FUNCTIONS ADDED:
    * TextToTable tries to turn a table like text into a table.
@@ -25,7 +56,7 @@ NEW FUNCTIONS ADDED:
    * New imports from Rcpp.
    * Eps returns Greenhouse-Geisser And Huynh-Feldt Epsilons.
    * PlotMosaic creates a mosaicplot with reasonable labels (so far for a two-way table only).
-   * PDFManual gets a pdf manual ob a package from CRAN.
+   * PDFManual gets a pdf manual of a package directly from CRAN.
 
 
 UPDATED FUNCTIONS:

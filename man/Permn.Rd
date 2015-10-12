@@ -1,13 +1,13 @@
 \name{Permn}
 \alias{Permn}
-\alias{CombSet} 
+\alias{CombSet}
 \alias{CombN}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Number and Samples for Permutations or Combinations of a Set 
+\title{Number and Samples for Permutations or Combinations of a Set
 %%  ~~function to do ... ~~
 }
-\description{ Return the set of permutations for a given set of values. 
-The values can be numeric values, characters or factors.
+\description{ Return the set of permutations for a given set of values.
+The values can be numeric values, characters or factors. \code{CombN} computes the number of combinations with and without replacement and order, whereas \code{CombSet} returns the value sets.
 
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
@@ -23,10 +23,10 @@ CombSet(x, m, repl = FALSE, ord = FALSE, as.list = FALSE)
   \item{x}{a vector of numeric values or characters. Characters need not be unique.
 %%     ~~Describe \code{x} here~~
 }
-  \item{m}{number of elements to choose. For \code{CombSet} can \code{m} be a numeric vector too.} 
+  \item{m}{number of elements to choose. For \code{CombSet} can \code{m} be a numeric vector too.}
   \item{repl}{logical. Should repetition of the same element be allowed? Defaults to FALSE}
   \item{ord}{logical. Does the order matter? Default is FALSE.}
-  
+
   \item{sort}{logical, defining if the result set should be sorted. Default is FALSE.
 %%     ~~Describe \code{x} here~~
 }
@@ -37,14 +37,14 @@ automatically be filtered for unique sets, if the same element is given twice or
 \value{a matrix with all possible permutations or combinations of the values in x for \code{Permn} and \code{CombSet}\cr
 if m contains more than one element the result will be a list of matrices or a flat list if \code{as.list} is set to \code{TRUE}
 \cr
-an integer value for \code{CombN} 
+an integer value for \code{CombN}
 }
-\author{Friederich Leisch <Friedrich.Leisch@boku.ac.at>\cr Andri Signorell <andri@signorell.net> (CombSet, CompN)
+\author{Friederich Leisch <Friedrich.Leisch@boku.ac.at>\cr Andri Signorell <andri@signorell.net> (CombSet, CombN)
 %%  ~~who you are~~
 }
 
 \seealso{\code{\link{combn}}, \code{\link{choose}}, \code{\link{factorial}}, \code{\link{CombPairs}}\cr
-\code{vignette("Combinatorics")} 
+\code{vignette("Combinatorics")}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

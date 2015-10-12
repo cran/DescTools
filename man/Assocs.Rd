@@ -54,7 +54,7 @@ tob <- as.table(matrix(c(
   69, 28, 68, 51,  6,
   69, 38, 55, 37,  0,
   90, 47, 94, 94, 16
-), nrow=3, byrow=TRUE, 
+), nrow=3, byrow=TRUE,
    dimnames=list(eye=c("blue","green","brown"),
                  hair=c("fair","red","medium","dark","black")) ))
 Desc(tob)
@@ -64,7 +64,7 @@ Assocs(tob)
 # pp. 1349
 
 pain <- as.table(matrix(c(
-   26,  6, 
+   26,  6,
    26,  7,
    23,  9,
    18, 14,

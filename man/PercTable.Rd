@@ -4,7 +4,7 @@
 \alias{PercTable.table}
 \alias{PercTable.formula}
 \alias{PercTable.matrix}
-\alias{MarginTable}
+\alias{Margins}
 \alias{print.PercTable}
 
 
@@ -20,12 +20,12 @@ All the frequencies are nested into one single table.
 
 \method{PercTable}{table}(tab, row.vars = NULL, col.vars = 2, justify = "right",
           freq = TRUE, rfrq = "100", expected = FALSE, residuals = FALSE,
-          stdres = FALSE, margins = NULL, vsep = NULL, \dots)
+          stdres = FALSE, margins = NULL, \dots)
 
 \method{PercTable}{formula}(formula, data, subset, na.action, \dots)
-\method{print}{PercTable}(x, ...)
+\method{print}{PercTable}(x, vsep = NULL, ...)
 
-MarginTable(tab, ...)
+Margins(tab, ...)
 
 }
 
@@ -74,7 +74,7 @@ MarginTable(tab, ...)
   \item{vsep}{logical, defining if an empty row should be introduced between the table rows. Default is FALSE, if only a table with one single description (either frequencies or percents) should be returned and TRUE in any other case.
 %%     ~~Describe \code{digits} here~~
 }
-  \item{\dots}{the dots are passed from \code{PercTable.default()} to \code{PercTable.table()} and from \code{MarginTable} to the function \code{\link{Freq}}.
+  \item{\dots}{the dots are passed from \code{PercTable.default()} to \code{PercTable.table()} and from \code{Margins} to the function \code{\link{Freq}}.
 %%     ~~Describe \code{\dots} here~~
 }
 }
@@ -85,7 +85,7 @@ the dimensions (included percentages are named \code{"idx"}) or numbers (1:3, wh
 Use \code{Sort()} if you want to have your table sorted by rows.\cr\cr
 The number format can be set via the options \code{"fmt.abs"} for the absolute values and \code{"fmt.per"} for the percentages. These options must be of class \code{"fmt"} which is basically a list containing any format information used in \code{\link{Format}}.
 
-MarginTable returns a list containing all the margin tables of a n-dimensional table along all dimensions. It does not much more than \code{\link{margin.table}} besides add percentages and do the job for all the dimensions.
+Margins returns a list containing all the one dimensional margin tables of a n-dimensional table along the given dimensions. It uses \code{\link{margin.table}} for all the dimensions and adds the appropriate percentages.
 
 %%  ~~ If necessary, more details than the description above ~~
 }
@@ -147,6 +147,10 @@ PercTable(driver ~ area, data=d.pizza, subset=wine_delivered==0)
 # sort the table by rows, order first column (Zurich), then third, then row.names (0)
 PercTable(tab=Sort(tab, ord=c(1,3,0)))
 
+# reverse the row variables, so that absolute frequencies and percents
+# are not nested together
+PercTable(tab, row.vars=c(3, 1))
+
 # the vector interface
 PercTable(x=d.pizza$driver, y=d.pizza$area)
 PercTable(x=d.pizza$driver, y=d.pizza$area, margins=c(1,2), rfrq="000", useNA="ifany")
@@ -155,7 +159,7 @@ PercTable(x=d.pizza$driver, y=d.pizza$area, margins=c(1,2), rfrq="000", useNA="i
 PercTable(x=d.pizza$driver)
 
 # the margin tables
-MarginTable(Titanic)
+Margins(Titanic)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

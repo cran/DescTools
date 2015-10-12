@@ -54,6 +54,6 @@ PlotHorizBar(from, to, grp = 1, col = "lightgrey", border = "black",
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-PlotHorizBar( 1:5, 3:8)
+PlotHorizBar(from=1:5, to=3:7, grp=1:5, col=PalHelsana()[1:5])
 }
 \keyword{ hplot}

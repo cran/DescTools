@@ -4,7 +4,7 @@
 \title{Gini Coefficient
 %%  ~~function to do ... ~~
 }
-\description{Compute the Gini coefficient.
+\description{Compute the Gini coefficient, the most commonly used measure of inequality.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -47,6 +47,7 @@ Gini(x, n = rep(1, length(x)), unbiased = TRUE,
 }
 }
 \details{
+The range of the Gini coefficient goes from 0 (no concentration) to \eqn{\sqrt(\frac{n-1}{n})} (maximal concentration). The bias corrected Gini coefficient goes from 0 to 1.\cr
 The small sample variance properties of the Gini coefficient are not known, and large sample approximations to the variance of the coefficient are poor (Mills and Zandvakili, 1997; Glasser, 1962; Dixon et al., 1987),
 therefore confidence intervals are calculated via bootstrap re-sampling methods (Efron and Tibshirani, 1997). \cr
 Two types of bootstrap confidence intervals are commonly used, these are
