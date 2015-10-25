@@ -1,14 +1,14 @@
 \name{Keywords}
 \alias{Keywords}
-\title{List valid Keywords for R man pages}
+\title{List Keywords For R Manual Pages}
 \description{
-  List valid keywords for R man pages
+  List the keywords for specific R man pages or return a list of valid R keywords.
 }
 \usage{
 Keywords(topic)
 }
 \arguments{
-  \item{topic}{object or man page topic}
+  \item{topic}{optional, object or man page topic}
 }
 \details{
   If \code{topic} is provided, return a list of the Keywords associated

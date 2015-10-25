@@ -9,7 +9,8 @@
 }
 \usage{
 PlotMosaic(x, main = deparse(substitute(x)), horiz = TRUE, cols = NULL,
-           off = 0.02, mar = NULL, xlab = NULL, ylab = NULL)
+           off = 0.02, mar = NULL, xlab = NULL, ylab = NULL,
+           cex = par("cex"), las = 2, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -34,6 +35,17 @@ PlotMosaic(x, main = deparse(substitute(x)), horiz = TRUE, cols = NULL,
   \item{xlab, ylab}{x- and y-axis labels used for the plot; by default, the first and second element of names(dimnames(X)) (i.e., the name of the first and second variable in X).
 %%     ~~Describe \code{xlab} here~~
 }
+ \item{cex}{numeric character expansion factor; multiplied by \code{par("cex")} yields the final character size. \code{NULL} and \code{NA} are equivalent to 1.0.
+%%     ~~Describe \code{cex} here~~
+}
+  \item{las}{the style of axis labels. 0 - parallel to the axis, 1 - horizontal, 2 - perpendicular, 3 - vertical.
+%%     ~~Describe \code{las} here~~
+}
+
+ \item{\dots}{additional arguments are passed to the text function.
+%%     ~~Describe \code{\dots} here~~
+}
+
 }
 \details{The reason for this function to exist are the unsatisfying labels in base mosaicplot.
 %%  ~~ If necessary, more details than the description above ~~

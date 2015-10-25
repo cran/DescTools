@@ -5,9 +5,8 @@
 \description{Find a color on a defined color range depending on the value of x. This is helpful for colorcoding numeric values.
 }
 \usage{
-FindColor(x, cols = rev(heat.colors(100)), 
-          min.x = min(pretty(x)), max.x = max(pretty(x)), 
-          all.inside = FALSE)
+FindColor(x, cols = rev(heat.colors(100)),
+          min.x = NULL, max.x = NULL, all.inside = FALSE)
 
 }
 \arguments{
@@ -15,21 +14,21 @@ FindColor(x, cols = rev(heat.colors(100)),
 }
   \item{cols}{a vector of colors.
 }
-  \item{min.x}{the x-value to be used for the left edge of the first color.
+  \item{min.x}{the x-value to be used for the left edge of the first color. If left to the default \code{NULL} \code{min(pretty(x))} will be used.
 }
-  \item{max.x}{the x-value to be used for the right edge of the last color.
+  \item{max.x}{the x-value to be used for the right edge of the last color. If left to the default \code{NULL} \code{max(pretty(x))} will be used.
 }
-  \item{all.inside}{logical; if true, the returned indices are coerced into \code{1, ..., N-1}, i.e., \code{0} 
+  \item{all.inside}{logical; if true, the returned indices are coerced into \code{1, ..., N-1}, i.e., \code{0}
   is mapped to \code{1} and \code{N} to \code{N-1}.
 }
 }
-\details{For the selection of colors the option \code{rightmost.closed} in the used function 
+\details{For the selection of colors the option \code{rightmost.closed} in the used function
 \code{\link{findInterval}} is set to TRUE.
-This will ensure that all values on the right edge of the range are assigned a color. 
+This will ensure that all values on the right edge of the range are assigned a color.
 How values outside the boundaries of min.x and max.x should be handled can be controlled by \code{all.inside}. Set this value to TRUE, if those values
 should get the colors at the edges or set it to FALSE, if they should remain white (which is the default).
 
-Note that \code{\link{findInterval}} closes the intervals on the left side, e.g. [0, 1). This option can't be changed. Consequently will x-values lying on the edge of two colors get the color of the bigger one. 
+Note that \code{\link{findInterval}} closes the intervals on the left side, e.g. [0, 1). This option can't be changed. Consequently will x-values lying on the edge of two colors get the color of the bigger one.
 }
 
 
@@ -46,14 +45,14 @@ Canvas(7, main="Use of function FindColor()")
 # get some data
 x <- c(23, 56, 96)
 # get a color range from blue via white to red
-cols <- colorRampPalette(c("blue","white","red"))(100)  
+cols <- colorRampPalette(c("blue","white","red"))(100)
 ColorLegend(x="bottomleft", cols=cols, labels=seq(0, 100, 10), cex=0.8)
 
 # and now the color coding of x:
 (xcols <- FindColor(x, cols, min.x=0, max.x=100))
 
 # this should be the same as
-cols[x+1] 
+cols[x+1]
 
 # how does it look like?
 y0 <- c(-5, -2, 1)

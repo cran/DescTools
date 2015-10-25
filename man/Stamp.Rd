@@ -15,8 +15,8 @@ Stamp(txt = NULL, las = 1, cex = 0.6)
   \item{cex}{numeric \bold{c}haracter \bold{ex}pansion factor; multiplied by \code{par("cex")} yields the final character size. Defaults to 0.6.}
 }
 \details{
-The text can be freely defined as option. If user and date should be included by default, the following option will help:
-\code{options(stamp="expression(gettextf('\%s/\%s', Sys.getenv('USERNAME'), Format(Today(), fmt='yyyy-mm-dd')))")}
+The text can be freely defined as option. If user and date should be included by default, the following option using an expression will help:
+\code{options(stamp=expression(gettextf('\%s/\%s', Sys.getenv('USERNAME'), Format(Today(), fmt='yyyy-mm-dd'))))}
 
   For \R results may not be satisfactory if \code{par(mfrow=)} is in effect.
 }

@@ -402,7 +402,10 @@ CombN <- function(x, m, repl=FALSE, ord=FALSE){
     }
   } else {
     if(ord){
-      res <- choose(n, m) * factorial(m)
+      # res <- choose(n, m) * factorial(m)
+      # res <- gamma(n+1) / gamma(m+1)
+      # avoid numeric overflow
+      res <- exp(lgamma(n+1)-lgamma(m+1))
     } else {
       res <- choose(n, m)
     }
@@ -1946,7 +1949,9 @@ IsLeapYear <- function(x){
 }
 
 
-Month <- function (x, fmt = c("m", "mm", "mmm"), lang = c("local", "engl"), stringsAsFactors = TRUE) {
+Month <- function (x, fmt = c("m", "mm", "mmm"), lang = NULL, stringsAsFactors = TRUE) {
+
+  if(is.null(lang)) lang <- Coalesce(getOption("lang"), "local")
 
   res <- as.POSIXlt(x)$mon + 1
 
@@ -2035,7 +2040,9 @@ Day <- function(x){ as.POSIXlt(x)$mday }
 # Accessor for Day, as defined by library(lubridate)
 "Day<-" <- function(x, value) { x <- x + (value - Day(x)) }
 
-Weekday <- function (x, fmt = c("d", "dd", "ddd"), lang = c("local", "engl"), stringsAsFactors = TRUE) {
+Weekday <- function (x, fmt = c("d", "dd", "ddd"), lang = NULL, stringsAsFactors = TRUE) {
+
+  if(is.null(lang)) lang <- Coalesce(getOption("lang"), "local")
 
   # x <- as.Date(x)
   res <- as.POSIXlt(x)$wday
@@ -2493,18 +2500,21 @@ axTicks.POSIXct <- function (side, x, at, format, labels = TRUE, ...) {
 
 `%like%` <- function(x, pattern) {
 
-    if (!substr(pattern, 1, 1) == "%") {
-      pattern <- paste("^", pattern, sep="")
-    } else {
-      pattern <- substr(pattern, 2, nchar(pattern) )
-    }
-    if (!substr(pattern, nchar(pattern), nchar(pattern)) == "%") {
-      pattern <- paste(pattern, "$", sep="")
-    } else {
-      pattern <- substr(pattern, 1, nchar(pattern)-1 )
-    }
+    # if (!substr(pattern, 1, 1) == "%") {
+    #   pattern <- paste("^", pattern, sep="")
+    # } else {
+    #   pattern <- substr(pattern, 2, nchar(pattern) )
+    # }
+    # if (!substr(pattern, nchar(pattern), nchar(pattern)) == "%") {
+    #   pattern <- paste(pattern, "$", sep="")
+    # } else {
+    #   pattern <- substr(pattern, 1, nchar(pattern)-1 )
+    # }
+    #
+    # grepl(pattern = pattern, x = x)
 
-    grepl(pattern = pattern, x = x)
+  `%like any%`(x, pattern)
+
 }
 
 
@@ -2687,73 +2697,6 @@ PartitionBy <- function(x, by, FUN, ...){
 }
 
 
-
-# those are useless for R-NonDummies:
-#
-# WhichFlags <- function(d.frm) {
-#   # liefert die Namen aller Flags (logische Var, int mit 2 levels) eines data.frames
-#   switch( class(d.frm)[1]
-#       , "data.frame" = {
-#            ints <- names(d.frm)[ grep( pattern="integer", x=lapply( d.frm, class ) ) ]
-#            c(
-#               ints[ unlist( lapply(d.frm[,ints], function(x) length(unique(na.omit(x))) == 2 )) ]
-#             , names(d.frm)[ grep( pattern="logical", x=lapply( d.frm, class ) ) ]
-#            )
-#       }
-# 	  , "integer" = { if( length(unique(na.omit(d.frm))) == 2 ) names(d.frm) else NULL }
-# 	  , "logical" = { deparse(substitute(d.frm)) }
-# 	  , NULL
-#   )
-# }
-#
-#
-#
-# WhichFactors <- function(d.frm) {
-#   # liefert die Namen aller Faktoren eines data.frames
-#   names(d.frm)[ grep( pattern="factor", x=lapply( d.frm, class ) ) ]
-# }
-#
-# WhichNumerics <- function(d.frm, type=c("all","numeric","integer"), excl.flags=FALSE ) {
-#   # liefert die Namen aller kardinalskalierten Variablen eines data.frames
-#   ints <- names(d.frm)[ grep(
-#               pattern=switch( match.arg(type), "all"="integer|numeric", "numeric"="numeric", "integer"="integer" )
-#             , x=lapply( d.frm, class )
-#             ) ]
-#   if( !excl.flags ){
-#     ints} else { ints[ !ints %in% WhichFlags(d.frm) ] }
-#
-# }
-#
-# WhichCharacters <- function (d.frm) {
-#   # returns the names of all character vectors of a data.frame
-#   names(d.frm)[grep(pattern = "character", x = lapply(d.frm, class))]
-# }
-#
-
-
-
-# IsWhole <-function(x, tol = .Machine$double.eps^0.5, na.rm=FALSE) {
-#   # Define check if integer as (source: help-file from is.integer, example section)
-#
-#   # example:
-#   # x <- c(1,3,2.003)
-#   # all(IsWhole(x))
-#
-#   # an alternative in cwhmisc :
-#   #   whole.number <- function (x) all((x%%1) == 0)
-#
-#   # other idea: floor(n) != ceiling(n)
-#
-#   if (na.rm)
-#     x <- na.omit(x)
-#   if(is.numeric(x))
-#     abs(x - round(x)) < tol
-#   else
-#     FALSE
-#
-# }
-
-
 IsWhole <-function(x, tol = .Machine$double.eps^0.5, na.rm=FALSE) {
 
   # this is a new version form sfsmisc
@@ -2809,13 +2752,6 @@ IsOdd <- function(x) x %% 2 == 1
 
 
 IsDichotomous <- function(x) length(unique(na.omit(x))) <= 2
-
-# IsDichotomous <- function(x){
-#   if(inherits(x, "logical")) return(TRUE)
-#   if(inherits(x, "factor")) return(nlevels(x)==2)
-#   if(inherits(x, "integer") || inherits(x, "numeric")) return(length(unique(na.omit(x))) == 2 )
-#   return(FALSE)
-# }
 
 
 StrIsNumeric <- function(x){
@@ -3030,7 +2966,7 @@ PDFManual <- function(package){
 
 
 Abind <- function(..., along=N, rev.along=NULL, new.names=NULL,
-                  force.array=TRUE, make.names=use.anon.names, use.anon.names=FALSE,
+                  force.array=TRUE, make.names=FALSE,
                   use.first.dimnames=FALSE, hier.names=FALSE, use.dnns=FALSE) {
 
   if (is.character(hier.names))
@@ -3767,9 +3703,12 @@ Format.default <- function(x, digits = NULL, sci = getOption("scipen")
     } else {
       idx <- (((abs(x) > .Machine$double.eps) & (abs(x) <= 10^-sci)) | (abs(x) >= 10^sci))
       res <- as.character(rep(NA, length(x)))
+
       # use which here instead of res[idx], because of NAs
-      res[which(idx)] <- formatC(x[which(idx)], digits = digits, width = width, format = "e",
-                                 big.mark=big.mark)
+#   formatC is barking, classes are of no interess here, so suppress warning...
+#   what's that exactly??
+       res[which(idx)] <- suppressWarnings(formatC(x[which(idx)], digits = digits, width = width, format = "e",
+                                 big.mark=big.mark))
 
 #       Warning messages:
 #         1: In formatC(x[which(!idx)], digits = digits, width = width, format = "f",  :
@@ -5843,7 +5782,9 @@ median.factor <- function(x, na.rm = FALSE) {
   # Answered by Hong Ooi on 2011-10-28T00:37:08-04:00
   # http://www.rqna.net/qna/nuiukm-idiomatic-method-of-finding-the-median-of-an-ordinal-in-r.html
 
-  if(is.ordered(x)) return(NA)
+  # return NA, if x is not ordered
+  # clearme: why not median.ordered?
+  if(!is.ordered(x)) return(NA)
 
   if(na.rm) x <- na.omit(x)
   if(any(is.na(x))) return(NA)
@@ -12207,6 +12148,100 @@ CochranArmitageTest <- function(x, alternative = c("two.sided","increasing","dec
 
 
 
+BarnardTest <- function (x, y = NULL, dp = 0.001, pooled = TRUE, alternative = "two.sided") {
+
+  if (is.matrix(x)) {
+    r <- nrow(x)
+    if ((r < 2) || (ncol(x) != r))
+      stop("'x' must be square with at least two rows and columns")
+    if (any(x < 0) || anyNA(x))
+      stop("all entries of 'x' must be nonnegative and finite")
+    DNAME <- deparse(substitute(x))
+  } else {
+    if (is.null(y))
+      stop("if 'x' is not a matrix, 'y' must be given")
+    if (length(x) != length(y))
+      stop("'x' and 'y' must have the same length")
+    DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
+    OK <- complete.cases(x, y)
+    x <- as.factor(x[OK])
+    y <- as.factor(y[OK])
+    r <- nlevels(x)
+    if ((r < 2) || (nlevels(y) != r))
+      stop("'x' and 'y' must have the same number of levels (minimum 2)")
+    x <- table(x, y)
+  }
+
+  nr <- nrow(x)
+  nc <- ncol(x)
+  if ((nr == 2) && (nc == 2)) {
+    alternative <- char.expand(alternative, c("two.sided", "less", "greater"))
+    if (length(alternative) > 1L || is.na(alternative))
+      stop("alternative must be \"two.sided\", \"less\" or \"greater\"")
+  }
+
+  method <- c("Wald", "Score")[1 + pooled]
+  METHOD <- gettextf("Barnards Unconditional 2x2-test", method)
+
+  vec.size <- 1.0 + 1.0 / dp
+  mat.size <- 4.0 * prod(rowSums(x) + 1) # (n1 + n3 + 1) * (n2 + n4 + 1)
+
+  meth <- paste(method, "S", sep="")
+
+  ret1 <- .C( meth,
+              as.integer(x[1]), as.integer(x[2]), as.integer(x[3]), as.integer(x[4]),
+              as.numeric(dp),
+              mat.size = as.integer(0),
+              statistic.table = as.double(vector("double", mat.size)),
+              statistic = as.double(0.0))
+
+  xr <- seq(1, ret1$mat.size, 4) + 2
+
+  ret1$statistic.table[xr + 1][
+    (ret1$statistic <= 0 & ret1$statistic.table[xr] <= ret1$statistic) |
+      (ret1$statistic >= 0 & ret1$statistic.table[xr] >= ret1$statistic)] <- 1
+
+  ret1$statistic.table[xr + 1][
+    (ret1$statistic <= 0 & ret1$statistic.table[xr] >= -ret1$statistic) |
+      (ret1$statistic >= 0 & ret1$statistic.table[xr] <= -ret1$statistic)] <- 2
+
+  ret2 <- .C("Barnard",
+             as.integer(x[1]), as.integer(x[2]), as.integer(x[3]), as.integer(x[4]),
+             as.numeric(dp),
+             as.integer(ret1$mat.size),
+             nuisance.vector.x = as.double(vector("double",vec.size)),
+             nuisance.vector.y0 = as.double(vector("double",vec.size)),
+             nuisance.vector.y1 = as.double(vector("double",vec.size)),
+             statistic.table = as.double(ret1$statistic.table))
+
+  np0 <- which.max(ret2$nuisance.vector.y0)
+  np1 <- which.max(ret2$nuisance.vector.y1)
+
+  nuisance.matrix <- matrix(cbind(ret2$nuisance.vector.x, ret2$nuisance.vector.y0, ret2$nuisance.vector.y1), ncol=3)
+  statistic.table <- matrix(ret1$statistic.table, ncol=4, byrow=TRUE, dimnames=list(c(), c("n1", "n2", "statistic", "include.in.p.value")))
+
+
+  STATISTIC <- ret1$statistic
+  if(alternative == "two.sided"){
+    PVAL <- ret2$nuisance.vector.y1[np1]
+    ESTIMATE <- c(`Nuisance parameter` = ret2$nuisance.vector.x[np1])
+  } else {
+    PVAL <- ret2$nuisance.vector.y0[np0]
+    ESTIMATE <- c(`Nuisance parameter` = ret2$nuisance.vector.x[np0])
+  }
+
+  names(STATISTIC) <- gettextf("%s statistic", method)
+  RVAL <- list(statistic = STATISTIC, alternative = alternative, estimate = ESTIMATE,
+               p.value = PVAL, method = METHOD, data.name = DNAME,
+               statistic.table = statistic.table, nuisance.matrix = nuisance.matrix)
+
+  class(RVAL) <- "htest"
+  return(RVAL)
+}
+
+
+
+
 EtaSq <- function (x, type = 2, anova = FALSE) {
   UseMethod("EtaSq")
 }
@@ -13883,6 +13918,14 @@ SysInfo <- function() {
 
 }
 
+FindRProfile <- function(){
+  candidates <- c( Sys.getenv("R_PROFILE"),
+                   file.path(Sys.getenv("R_HOME"), "etc", "Rprofile.site"),
+                   Sys.getenv("R_PROFILE_USER"),
+                   file.path(getwd(), ".Rprofile") )
+
+  Filter(file.exists, candidates)
+}
 
 
 DescToolsOptions <- function(default=FALSE){
@@ -13908,7 +13951,9 @@ DescToolsOptions <- function(default=FALSE){
                 options("fmt.abs"=NULL)
                 options("fmt.per"=NULL)
                 options("fmt.num"=NULL)
-  }
+                options("lang"=NULL)
+                options("stamp"=NULL)
+    }
 
   cat(gettextf("\nCurrently defined DescTools options:
   footnote1     = %s
@@ -13921,7 +13966,9 @@ DescToolsOptions <- function(default=FALSE){
   fixedfontsize = %s
   fmt.abs       = %s
   fmt.per       = %s
-  fmt.num       = %s \n\n"
+  fmt.num       = %s
+  lang          = %s
+  stamp         = %s \n\n"
   , getOption("footnote1", "' (default)")
   , getOption("footnote2", '" (default)')
   , getOption("plotit", "FALSE (default)")
@@ -13933,6 +13980,9 @@ DescToolsOptions <- function(default=FALSE){
   , fmtToTxt("fmt.abs")
   , fmtToTxt("fmt.per")
   , fmtToTxt("fmt.num")
+  , getOption("lang", "NULL (default)")
+  , getOption("stamp", "NULL (default)")
+
   ))
 
 }
@@ -16478,11 +16528,14 @@ MixColor <- function (col1, col2, amount1=0.5) {
 
 
 
-FindColor <- function(x, cols=rev(heat.colors(100)), min.x=min(pretty(x)), max.x=max(pretty(x)),
+FindColor <- function(x, cols=rev(heat.colors(100)), min.x=NULL, max.x=NULL,
                       all.inside = FALSE){
 
+  if(is.null(min.x)) min.x <- min(pretty(x))
+  if(is.null(max.x)) max.x <- max(pretty(x))
+
 	# Korrektur von min und max, wenn nicht standardmaessig
-	colrange <- range( pretty(c(min.x,max.x)) )
+	colrange <- range(c(min.x, max.x))
 
 	# Berechnung des entsprechenden Farb-Index
   col.idx <- findInterval(x, seq(colrange[1], colrange[2], length = length(cols) + 1)
@@ -19414,7 +19467,7 @@ PlotDesc.matrix <- function(x, col1 = NULL, col2 = NULL,
 
 
 PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = NULL,
-                        off = 0.02, mar = NULL, xlab = NULL, ylab = NULL) {
+                        off = 0.02, mar = NULL, xlab = NULL, ylab = NULL, cex=par("cex"), las=2, ...) {
 
   if (is.null(xlab))
     xlab <- Coalesce(names(dimnames(x)[2]), "x")
@@ -19424,13 +19477,13 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
     # ymar <- 5.1
     # xmar <- 6.1
     inches_to_lines <- (par("mar") / par("mai") )[1]  # 5
-    lab.width <- max(strwidth(rownames(x), units="inches")) * inches_to_lines
-    xmar <- lab.width + 1
     lab.width <- max(strwidth(colnames(x), units="inches")) * inches_to_lines
+    xmar <- lab.width + 1
+    lab.width <- max(strwidth(rownames(x), units="inches")) * inches_to_lines
     ymar <- lab.width + 1
 
     mar <- c(ifelse(is.na(xlab), 2.1, 5.1), ifelse(is.na(ylab), ymar, ymar+2),
-             ifelse(is.na(main), xmar, xmar+2), 1.6)
+             ifelse(is.na(main), xmar, xmar+3), 1.6)
     # par(mai = c(par("mai")[1], max(par("mai")[2], strwidth(levels(grp), "inch")) +
     #               0.5, par("mai")[3], par("mai")[4]))
 
@@ -19466,8 +19519,11 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
     txt_y <- apply(cbind(y_from, y_to), 1, mean)
     txt_x <- apply(cbind(x_from[nrow(x_from),], x_to[nrow(x_from),]), 1, mean)
 
-    text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, las = 1, adj = 1)
-    text(labels = colnames(x), x = txt_x, y = 1.04, srt = 90, adj = 0)
+    srt.x <- if (las > 1) 90  else 0
+    srt.y <- if (las == 0 || las == 3) 90 else 0
+
+    text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, adj = ifelse(srt.y==90, 0.5, 1), cex=cex, srt=srt.y)
+    text(labels = colnames(x), x = txt_x, y = 1.04, adj = ifelse(srt.x==90, 0, 0.5), cex=cex, srt=srt.x)
 
   } else {
 
@@ -19478,9 +19534,9 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
     ptab <- ptab * (1 - (nrow(ptab) - 1) * off)
     pxt <- (prop.table(margin.table(x, 2)) * (1 - (ncol(x) - 1) * off))
 
-    x_from <- c(0, cumsum(pxt) + (1:(ncol(x))) * off)[-ncol(x) -
-                                                          1]
+    x_from <- c(0, cumsum(pxt) + (1:(ncol(x))) * off)[-ncol(x) - 1]
     x_to <- cumsum(pxt) + (0:(ncol(x) - 1)) * off
+
     y_from <- (apply(rbind(0, ptab), 2, cumsum) + (0:nrow(ptab)) *
                  off)[-(nrow(ptab) + 1), ]
     y_to <- (apply(ptab, 2, cumsum) + (0:(nrow(ptab) - 1) *
@@ -19493,14 +19549,25 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
     txt_y <- apply(cbind(y_from[, 1], y_to[, 1]), 1, mean)
     txt_x <- apply(cbind(x_from, x_to), 1, mean)
 
-    text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, las = 1, adj = 1)
-    text(labels = colnames(x), x = txt_x, y = 1.04, srt = 90, adj = 0)
+    srt.x <- if (las > 1) 90  else 0
+    srt.y <- if (las == 0 || las == 3) 90 else 0
+
+    text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, adj = ifelse(srt.y==90, 0.5, 1), cex=cex, srt=srt.y)
+    text(labels = colnames(x), x = txt_x, y = 1.04, adj = ifelse(srt.x==90, 0, 0.5), cex=cex, srt=srt.x)
 
   }
 
-  if (!is.na(main)) title(main = main)
+  if (!is.na(main)) {
+    usr <- par("usr")
+    plt <- par("plt")
+    ym <- usr[4] + diff(usr[3:4])/diff(plt[3:4])*(plt[3]) + 1.2 * strheight('m', cex=1.2, font=2)
+    text(x=0.5, y=ym, labels = main, cex=1.2, font=2)
+  }
   if (!is.na(xlab)) title(xlab = xlab, line = 1)
   if (!is.na(ylab)) title(ylab = ylab)
+
+  if(!is.null(getOption("stamp")))
+    Stamp()
 
   invisible(list(x = txt_x, y = txt_y))
 
@@ -21357,7 +21424,6 @@ PpPlot <- function( type="png", crop=c(0,0,0,0),
   invisible( pic )
 
 }
-
 
 
 

@@ -1,3 +1,20 @@
+
+DescTools 0.99.15 (2015-12-11)
+-----------------------------
+
+NEW FUNCTIONS ADDED:
+   * BarnardTest calculating Barnard's unconditional test for superiority
+     applied to 2x2 contingency tables.
+
+UPDATED FUNCTIONS:
+   * FindColor will not use pretty for min.x and max.n anymore.
+   * PlotMosaic gains new arguments cex and las and better defaults.
+
+BUGFIXES:
+   * Corrected (hopefully) the last valgrind issue.
+
+
+
 DescTools 0.99.14 (2015-10-11)
 -----------------------------
 

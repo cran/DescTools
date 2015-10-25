@@ -22,17 +22,17 @@
 \title{Basic Date Functions
 %%  ~~function to do ... ~~
 }
-\description{Some more date functions for making daily life a bit easier. The first ones extract a specific part of a given date, others check some conditions. 
+\description{Some more date functions for making daily life a bit easier. The first ones extract a specific part of a given date, others check some conditions.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 Year(x)
 Quarter(x)
-Month(x, fmt = c("m", "mm", "mmm"), lang = c("local", "engl"), 
+Month(x, fmt = c("m", "mm", "mmm"), lang = NULL,
       stringsAsFactors = TRUE)
 Week(x, method = c("iso", "us"))
 Day(x)
-Weekday(x, fmt = c("d", "dd", "ddd"), lang = c("local", "engl"), 
+Weekday(x, fmt = c("d", "dd", "ddd"), lang = NULL,
         stringsAsFactors = TRUE)
 YearDay(x)
 YearMonth(x)
@@ -65,7 +65,7 @@ LastDayOfMonth(x)
   \item{value}{new value
 %%     ~~Describe \code{value} here~~
 }
-  \item{lang}{the language for the months and daynames. This can be either the current locale (default) or english.
+  \item{lang}{optional, language for the months and daynames, either \code{"local"} for current locale or \code{"engl"} for english.If left to \code{NULL}, an option named \code{"lang"} will be searched for and if not found \code{"local"} will be taken as default.
 %%     ~~Describe \code{value} here~~
 }
   \item{stringsAsFactors}{logical. Defines if the result should be coerced to a factor, using the local definitions as levels.
@@ -82,7 +82,7 @@ LastDayOfMonth(x)
 
 \details{These functions are mainly convenience wrappers for the painful \code{format()} and its strange codes...\cr
 Based on the requested time component, the output is as follows:\cr\cr
-\kbd{Year} returns the year of the input date in yyyy format.\cr 
+\kbd{Year} returns the year of the input date in yyyy format.\cr
 \kbd{Quarter} returns the quarter of the year (1 to 4) for the input date. \cr
 \kbd{Month} returns the month of the year (1 to 12) for the input date. \cr
 \kbd{Week} returns the week of the year for the input date (0 to 53), as defined in ISO8601. \cr
@@ -101,6 +101,9 @@ The day can not only be extracted, but as well be defined. See examples.
 \kbd{DiffDays360} calculates the difference between 2 dates using the 360-days convention.\cr
 \kbd{LastDayOfMonth} returns the last day of the month of the given date(s).
 %%  ~~ If necessary, more details than the description above ~~
+
+The language in Weekday and Moth can be set with an option as well. The functions will check for an existing option named "lang" and take this value if it exists. So simply set option(lang="engl") if the results should always be reported in english.
+
 }
 \value{a vector of the same dimension as x, consisting of either numeric values or characters depending on the function used.
 }
@@ -113,7 +116,7 @@ Andri Signorell <andri@signorell.net>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-x <- Today()    # the same as Sys.Date() but maybe easier to remember..  
+x <- Today()    # the same as Sys.Date() but maybe easier to remember..
 
 Year(x)
 Quarter(x)

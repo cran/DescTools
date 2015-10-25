@@ -9,8 +9,8 @@ Combine multi-dimensional arrays.  This is a
 }
 \usage{
 Abind(..., along = N, rev.along = NULL, new.names = NULL, force.array = TRUE,
-      make.names = use.anon.names, use.anon.names = FALSE,
-      use.first.dimnames = FALSE, hier.names = FALSE, use.dnns = FALSE)
+      make.names = FALSE, use.first.dimnames = FALSE, hier.names = FALSE,
+      use.dnns = FALSE)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
@@ -74,11 +74,6 @@ arguments are expressions.
     <p>The default is \code{FALSE}.
 }
 
-
-\item{use.anon.names}{ (optional)
-  \code{use.anon.names}
-is a deprecated synonym for \code{make.names}.
-}
   \item{use.first.dimnames}{ (optional)
     When dimension names are present on more than one
 argument, should dimension names for the result be take from
@@ -130,7 +125,7 @@ for \code{rbind} and \code{cbind}: use dimnames
 from later arguments.)  If some names are supplied for the
 along dimension (either as argument names or dimnames in
 arguments), names are constructed for anonymous arguments
-unless \code{use.anon.names=FALSE}.
+unless \code{maken.ames=FALSE}.
 }
 \value{
 

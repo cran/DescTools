@@ -1,19 +1,23 @@
 \name{SysInfo}
 \alias{SysInfo}
+\alias{FindRProfile}
 \alias{DescToolsOptions}
 \title{System Information And DescTools Options}
 \description{SysInfo is a convenience function to compile some information about the
 computing system and environment used.}
 \usage{SysInfo()
-DescToolsOptions(default = FALSE)}
-
+FindRProfile()
+DescToolsOptions(default = FALSE)
+}
 \arguments{
   \item{default}{logical, if set to TRUE the DescTools options will be reset to their default values.
 }
 }
 
-\details{The function SysInfo is mainly used to save the system environment information
+\details{The function \code{SysInfo} is mainly used to save the system environment information
 in ncdf files containing the results of some calculations. \cr\cr
+\code{FindRProfile} returns path candidates where the profile could be found.
+\cr\cr
 \bold{Options}\cr
 There are a few options for the graphical output that can be set. DescToolsOptions displays the currently defined options.\cr
 \bold{1) Footnotes}\cr
@@ -27,6 +31,10 @@ Two format definitions are currently used in the Desc routines. For integer valu
 \code{options(fmt.per=structure(list(digits=3, leading="drop"), class="fmt"))} would display percentages as .892\cr
 and \code{options(fmt.per=structure(list(digits=1, fmt="\%"), class="fmt"))} as 89.2\%\cr
 \code{options(fmt.abs=structure(list(digits=0, big.mark="'"), class="fmt"))} will display integers as 45'123\cr
+\bold{5) Language}\cr
+The language for names of weekdays and months can be set via \code{option(lang="local")} to either \code{"local"} or \code{"engl"}.\cr
+\bold{6) Stamp}\cr
+The \code{option(lang="stamp")} can be set if plots should be stamped by default in the right bottom corner with some author or date information.\cr
 }
 \value{character string with all version and system information of the current R system}
 

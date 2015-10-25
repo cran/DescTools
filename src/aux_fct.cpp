@@ -27,7 +27,7 @@ int compute_GCD(int a, int b){
 // [[Rcpp::export]]
 int compute_LCM(int a, int b){
   return
-  boost::math::lcm(a, b);
+    boost::math::lcm(a, b);
 }
 
 
@@ -45,10 +45,10 @@ List n_pow_sum(NumericVector x, double meanx) {
   double sum3 = d2*d;
   double sum4 = d2*d2;
 
-  int n = x.size();   // the vector size
+  int n = x.size();    // the vector size
   int zn = 0;
-  if(x[0]==0) {zn=1;};   // the number of zeros
-  int un = 1;         // the number of unique values
+  if(x[0]==0) {zn=1;}; // the number of zeros
+  int un = 1;          // the number of unique values
 
   for (int ii=1; ii < x.size(); ii++) {
 
@@ -83,17 +83,20 @@ List n_pow_sum(NumericVector x, double meanx) {
   int i = 1;
   int j = 0;
 
-  while((j < ldim) && (i < n)) {
-
+  do {
     if(x[i] == x[i-1] ){
       small_freq[j] += 1 ;
     } else {
+// we have reached the max number of interesting values, so we break
+      if(j==ldim-1) break;
+
       j += 1 ;
       small_val[j] = x[i] ;
       small_freq[j] = 1 ;
     }
     i += 1 ;
-  }
+
+  } while(i < n);
 
 
   // the 5 largest values and their frequencies
@@ -107,17 +110,21 @@ List n_pow_sum(NumericVector x, double meanx) {
   i = n-1;
   j = 0;
 
-  while((j < ldim) && (i >= 1)) {
+  do {
 
     if(x[i] == x[i-1] ){
       large_freq[j] += 1 ;
     } else {
+      // we have reached the max number of interesting values, so we break
+      if(j==ldim-1) break;
+
       j += 1 ;
       large_val[j] = x[i-1] ;
       large_freq[j] = 1 ;
     }
     i -= 1 ;
-  }
+
+  } while(i >= 1);
 
 
   return Rcpp::List::create(Rcpp::Named("sum2", sum2),
