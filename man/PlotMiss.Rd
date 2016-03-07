@@ -8,7 +8,8 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-PlotMiss(x, col = hred, bg = SetAlpha(hecru, 0.3), clust = FALSE, main = NULL)
+PlotMiss(x, col = hred, bg = SetAlpha(hecru, 0.3), clust = FALSE,
+         main = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,6 +26,9 @@ PlotMiss(x, col = hred, bg = SetAlpha(hecru, 0.3), clust = FALSE, main = NULL)
 %%     ~~Describe \code{clust} here~~
 }
   \item{main}{the main title.
+%%     ~~Describe \code{main} here~~
+}
+  \item{\dots}{the dots are passed to \code{\link{plot}}.
 %%     ~~Describe \code{main} here~~
 }
 }

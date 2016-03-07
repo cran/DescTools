@@ -22,7 +22,7 @@ ChooseColorDlg()
 
 }
 
-\seealso{\code{\link{PlotRCol}}
+\seealso{\code{\link{ColPicker}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \keyword{ utilities }

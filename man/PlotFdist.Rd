@@ -5,34 +5,34 @@
 %%  ~~function to do ... ~~
 }
 \description{
-This function is designed to give a univariate graphic representation of a numeric vector's frequency distribution. 
-It combines a histogram, a density curve, a boxplot and a plot of the empirical cumulative distribution function (ecdf) in one single plot, resulting in a dense and informative picture of the facts. 
-Still the function remains flexible as all possible arguments can be passed to the single components (hist, boxplot etc.) by list (see examples). 
+This function is designed to give an univariate graphic representation of a numeric vector's frequency distribution.
+It combines a histogram, a density curve, a boxplot and the empirical cumulative distribution function (ecdf) in one single plot. A rug as well as a model distribution curve (e.g. a normal curve) can optionally be superposed. This results in a dense and informative picture of the facts.
+Still the function remains flexible as all possible arguments can be passed to the single components (\code{hist}, \code{boxplot} etc.) as a list (see examples).
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
-          do.hist = !(all(IsWhole(x, na.rm = TRUE)) & length(unique(na.omit(x))) < 13),
-          args.hist = NULL, args.rug = NA, args.dens = NULL, args.curve = NA, 
-          args.boxplot = NULL, args.ecdf = NULL, heights = NULL, pdist = NULL,
+          do.hist = NULL, args.hist = NULL, args.rug = NA, args.dens = NULL,
+          args.curve = NA, args.boxplot = NULL, args.ecdf = NULL,
+          heights = NULL, pdist = NULL,
           na.rm = FALSE, cex.axis = NULL, cex.main = NULL, mar = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{the numerical variable, whose distribution is to be plotted. 
+  \item{x}{the numerical variable, whose distribution is to be plotted.
 %%     ~~Describe \code{x} here~~
 }
   \item{main}{main title of the plot.
 %%     ~~Describe \code{main} here~~
 }
- \item{xlab}{label of the x-axis, defaults to "". (The name of the variable is typically  placed in the main title and would be redundant.)
+ \item{xlab}{label of the x-axis, defaults to \code{""}. (The name of the variable is typically  placed in the main title and would be redundant here.)
 %%     ~~Describe \code{xlab} here~~
 }
   \item{xlim}{range of the x-axis, defaults to a pretty \code{range(x, na.rm = TRUE)}.
 %%     ~~Describe \code{xlim} here~~
 }
-   \item{do.hist}{defines, whether a histogram or a plot with \code{type = "h"} should be used. 
-  Default is \code{TRUE} (meaning a histogram will be plotted), unless x is an integer with less than 13 unique values!
+   \item{do.hist}{defines, whether a histogram or a plot with \code{type = "h"} should be used.
+  Set this to \code{NULL} (default) will use a histogram, unless \code{x} is an integer with up to 12 unique values!
 %%     ~~Describe \code{do.hist} here~~
 }
   \item{args.hist}{list of additional arguments to be passed to the histogram \code{hist()}, ignored if \code{do.hist = FALSE}.
@@ -40,7 +40,7 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
 %%     ~~Describe \code{args.hist} here~~
 }
   \item{args.rug}{list of additional arguments to be passed to the function \code{rug()}.
-      Use \code{args.rug = NA} if no rug should be added. This is the default. Use \code{args.rug = NULL} to add rug with reasonable default values. 
+      Use \code{args.rug = NA} if no rug should be added. This is the default. Use \code{args.rug = NULL} to add rug with reasonable default values.
   %%     ~~Describe \code{args.rug} here~~
 }
   \item{args.dens}{list of additional arguments to be passed to \code{density}.
@@ -48,11 +48,12 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
 %%     ~~Describe \code{args.dens} here~~
 }
   \item{args.curve}{list of additional arguments to be passed to \code{\link{curve}}.
-  This argument allows to add a fitted distribution curve to the histogram. By default no curve will be added (args.curve = NA). If the argument is set to NULL, a normal curve with mean(x) and sd(x) will be drawn. See examples for more details.
+  This argument allows to add a fitted distribution curve to the histogram. By default no curve will be added (\code{args.curve = NA}). If the argument is set to \code{NULL}, a normal curve with \code{mean(x)} and \code{sd(x)} will be drawn. See examples for more details.
 %%     ~~Describe \code{args.dens} here~~
 }
   \item{args.boxplot}{list of additional arguments to be passed to the boxplot \code{boxplot()}.
   The defaults are pretty much the same as in \code{\link{boxplot}}.
+  The two additional arguments \code{pch.mean} (default \code{23}) and \code{col.meanci} (default \code{"grey80"}) control, if the mean is displayed within the boxplot. Setting those  arguments to \code{NA} will prevent them from being displayed.
 %%     ~~Describe \code{args.hist} here~~
 }
   \item{args.ecdf}{list of additional arguments to be passed to \code{ecdf()}.
@@ -60,15 +61,15 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
   The defaults are taken from \code{\link{plot.ecdf}}.
 %%     ~~Describe \code{args.ecdf} here~~
 }
-  \item{heights}{heights of the plotparts, defaults to \code{c(2,0.5,1.4)} for the histogram, the boxplot 
+  \item{heights}{heights of the plotparts, defaults to \code{c(2,0.5,1.4)} for the histogram, the boxplot
   and the empirical cumulative distribution function, resp. to \code{c(2,1.5)} for a histogram and a boxplot only.
 %%     ~~Describe \code{heights} here~~
 }
-  \item{pdist}{distances of the plotparts, defaults to \code{c(0, 0)}, say there will be no distance between the histogram, the boxplot and the ecdf-plot. This can be changed for instance in case that the xaxis is to 
+  \item{pdist}{distances of the plotparts, defaults to \code{c(0, 0)}, say there will be no distance between the histogram, the boxplot and the ecdf-plot. This can be useful for instance in case that the x-axis has to
   be added to the histogram.
 %%     ~~Describe \code{heights} here~~
 }
-  \item{na.rm}{logical, should NAs be omitted? Histogram and boxplot could do without this option,
+  \item{na.rm}{logical, should \code{NA}s be omitted? Histogram and boxplot could do without this option,
   but the density-function refuses to plot with missings. Defaults to \code{FALSE}.
 %%     ~~Describe \code{na.rm} here~~
 }
@@ -78,8 +79,8 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
 \item{mar}{A numerical vector of the form \code{c(bottom, left, top, right)} which gives the number of lines of outer margin to be specified on the four sides of the plot. The default is \code{c(0, 0, 3, 0)}.}
 }
 
-\details{If x is growing large (n > 1e5), the performance will suffer. Especially the density curve and the ecdf, but as well the boxplot (due to the chosen alpha channel) will take their time to calculate and plot.\cr
-In such cases consider taking a sample, i.e. \code{  PlotFdist(x[sample(length(x), size=5000)])}, the big picture of the distribution won't usually change much. 
+\details{Performance has been significantly improved, but if \code{x} is growing large (n > 1e7) the function will take its time to complete. Especially the density curve and the ecdf, but as well as the boxplot (due to the chosen alpha channel) will take their time to calculate and plot.\cr
+In such cases consider taking a sample, i.e. \code{  PlotFdist(x[sample(length(x), size=5000)])}, the big picture of the distribution won't usually change much.
 .}
 
 \author{Andri Signorell <andri@signorell.net>
@@ -91,38 +92,39 @@ In such cases consider taking a sample, i.e. \code{  PlotFdist(x[sample(length(x
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-# create a new window and do the plot 
 PlotFdist(x=d.pizza$delivery_min, na.rm=TRUE)
 
-# define additional arguments for hist and dens
-PlotFdist(d.pizza$delivery_min, args.hist=list(breaks=50), 
-  args.dens=list(col="olivedrab4"), na.rm=TRUE )
+# define additional arguments for hist, dens and boxplot
+PlotFdist(d.pizza$delivery_min, args.hist=list(breaks=50),
+  args.dens=list(col="olivedrab4"), na.rm=TRUE,
+  args.boxplot=list(col="olivedrab2", pch.mean=NA, col.meanci=NA))
 
 
-# do a "h"-plot instead of a histogram for integers 
-PlotFdist(d.pizza$weekday, na.rm=TRUE)
+# do a "h"-plot instead of a histogram for integers
+x <- sample(runif(10), 100, replace = TRUE)
+PlotFdist(x, do.hist=FALSE)
 
 # special arguments for hist, density and ecdf
-PlotFdist(x=faithful$eruptions, 
+PlotFdist(x=faithful$eruptions,
           args.hist=list(breaks=20), args.dens=list(bw=.1),
           args.ecdf=list(cex=1.2, pch=16, lwd=1), args.rug=TRUE)
 
 # no density curve, no ecdf but add rug instead, make boxplot a bit higher
-PlotFdist(x=d.pizza$delivery_min, na.rm=TRUE, args.dens=NA, args.ecdf=NA, 
+PlotFdist(x=d.pizza$delivery_min, na.rm=TRUE, args.dens=NA, args.ecdf=NA,
   args.hist=list(xaxt="s"),  # display x-axis on the histogram
   args.rug=TRUE, heights=c(3, 2.5), pdist=2.5, main="Delivery time")
 
 # alpha channel on rug is cool, but takes its time for being drawn...
 PlotFdist(x=d.pizza$temperature, args.rug=list(col=SetAlpha("black", 0.1)), na.rm=TRUE)
 
-# plot a normal density curve
-x <- rnorm(1000) 
+# plot a normal density curve, but no boxplot nor ecdf
+x <- rnorm(1000)
 PlotFdist(x, args.curve = NULL, args.boxplot=NA, args.ecdf=NA)
 
 # compare with a t-distribution
-PlotFdist(x, args.curve = list(expr="dt(x, df=2)", col="darkgreen"), 
+PlotFdist(x, args.curve = list(expr="dt(x, df=2)", col="darkgreen"),
           args.boxplot=NA, args.ecdf=NA)
-legend(x="topright", legend=c("kernel density", "t-distribution (df=2)"), 
+legend(x="topright", legend=c("kernel density", "t-distribution (df=2)"),
        fill=c(getOption("col1", hred), "darkgreen"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

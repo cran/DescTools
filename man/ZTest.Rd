@@ -13,7 +13,7 @@
 
 ZTest(x, ...)
 
-\method{ZTest}{default}(x, y = NULL, alternative = c("two.sided", "less", "greater"), 
+\method{ZTest}{default}(x, y = NULL, alternative = c("two.sided", "less", "greater"),
       paired = FALSE, mu = 0, sd_pop, conf.level = 0.95, \dots )
 
 \method{ZTest}{formula}(formula, data, subset, na.action, \dots)
@@ -24,32 +24,37 @@ ZTest(x, ...)
   \item{x}{numeric vector of data values. Non-finite (e.g. infinite or missing) values will be omitted.}
   \item{y}{an optional numeric vector of data values: as with x non-finite values will be omitted.}
   \item{mu}{a number specifying the hypothesized mean of the population. }
-  \item{sd_pop}{ known standard deviation of the population. }
-  \item{alternative}{is a character string, one of \code{"greater"},
-  \code{"less"}, or \code{"two.sided"}, or the initial letter of each,
-  indicating the specification of the alternative hypothesis. For
+  \item{sd_pop}{a number specifying the known standard deviation of the population. }
+
+  \item{alternative}{a character string specifying the alternative
+    hypothesis, must be one of \code{"two.sided"} (default),
+    \code{"greater"} or \code{"less"}.  You can specify just the initial
+    letter. \cr For
   one-sample tests, \code{alternative} refers to the true
-  median of the parent population in relation to the hypothesized
+  mean of the parent population in relation to the hypothesized
   value of the mean.}
+
   \item{paired}{a logical indicating whether you want a paired z-test.}
   \item{conf.level}{ confidence level for the interval computation. }
-    \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}  
-  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}. 
-    By default the variables are taken from \code{environment(formula)}.}  
-  \item{subset}{an optional vector specifying a subset of observations to be used.}  
-  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}  
+    \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and \code{rhs}
+    a factor with two levels giving the corresponding groups.}
+
+  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}.
+    By default the variables are taken from \code{environment(formula)}.}
+  \item{subset}{an optional vector specifying a subset of observations to be used.}
+  \item{na.action}{a function which indicates what should happen when the data contain \code{NA}s. Defaults to \code{getOption("na.action")}.}
   \item{\dots}{further arguments to be passed to or from methods.}
 
 }
 \details{
-  Most introductory statistical texts introduce inference by using the z-test 
+  Most introductory statistical texts introduce inference by using the z-test
   and z-based confidence intervals based on knowing the population
   standard deviation. However statistical packages often do not include
   functions to do z-tests since the t-test is usually more appropriate
   for real world situations. This function is meant to be used during
   that short period of learning when the student is learning about
   inference using z-procedures, but has not learned the t-based
-  procedures yet.  Once the student has learned about the 
+  procedures yet.  Once the student has learned about the
   t-distribution the \code{t.test} function should be used instead of this
   one (but the syntax is very similar, so this function should be an
   appropriate introductory step to learning \code{t.test}).
@@ -89,7 +94,7 @@ with(sleep, ZTest(extra[group == 1], extra[group == 2], sd_pop=2))
 ZTest(extra ~ group, data = sleep, sd_pop=2)
 
 
-# Stahel (2002), pp. 186, 196  
+# Stahel (2002), pp. 186, 196
 
 d.tyres <- data.frame(A=c(44.5,55,52.5,50.2,45.3,46.1,52.1,50.5,50.6,49.2),
                       B=c(44.9,54.8,55.6,55.2,55.6,47.7,53,49.1,52.3,50.7))

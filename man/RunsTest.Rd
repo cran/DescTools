@@ -9,38 +9,38 @@ Performs a one sample runs test or a two sample Wald-Wolfowitz-Test on vectors o
 \usage{
 RunsTest(x, ...)
 
-\method{RunsTest}{default}(x, y = NULL, alternative = c("two.sided", "less", "greater"), 
+\method{RunsTest}{default}(x, y = NULL, alternative = c("two.sided", "less", "greater"),
          exact = NULL, na.rm = FALSE, ...)
 
 \method{RunsTest}{formula}(formula, data, subset, na.action, \dots)
-         
+
 }
 \arguments{
   \item{x}{a dichotomous vector of data values or a (non-empty) numeric vector of data values.}
   \item{y}{an optional (non-empty) numeric vector of data values.}
-  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}  
-  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}. 
-    By default the variables are taken from \code{environment(formula)}.}  
-  \item{subset}{an optional vector specifying a subset of observations to be used.}  
-  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}  
-  
-  \item{alternative}{a character string specifying the alternative hypothesis, must be one of \code{"two.sided"} (default), \code{"less"} or \code{"greater"}.} 
+  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}
+  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}.
+    By default the variables are taken from \code{environment(formula)}.}
+  \item{subset}{an optional vector specifying a subset of observations to be used.}
+  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}
+
+  \item{alternative}{a character string specifying the alternative hypothesis, must be one of \code{"two.sided"} (default), \code{"less"} or \code{"greater"}.}
   \item{exact}{a logical indicating whether an exact p-value should be computed. By default exact values will be calculated for small vectors with a total length <= 30.}
-  \item{na.rm}{defines if NAs should be omitted. Default is FALSE. }
+  \item{na.rm}{defines if \code{NA}s should be omitted. Default is \code{FALSE}. }
   \item{\dots}{further arguments to be passed to or from methods.}
 
 }
 
 
 \details{
-The runs test for randomness is used to test the hypothesis 
+The runs test for randomness is used to test the hypothesis
 that a series of numbers is random. The 2-sample test is known as the Wald-Wolfowitz test. \cr
 
-For a categorical variable, the number of runs correspond to the number of times the category changes, that is, 
+For a categorical variable, the number of runs correspond to the number of times the category changes, that is,
 where \eqn{x_{i}} belongs to one category and  \eqn{x_{i+1}}  belongs to the other. The number of runs, is the number of sign changes plus one.\cr
 
-For a numeric variable x containing more than two values, a run is a set of sequential values that are either all above or below a 
-specified cutpoint, typically the median. 
+For a numeric variable x containing more than two values, a run is a set of sequential values that are either all above or below a
+specified cutpoint, typically the median.
 }
 
 \value{
@@ -83,8 +83,8 @@ abline(h=0)
 set.seed(123)
 x <- sample(0:1, size=100, replace=TRUE)
 RunsTest(x)
-# As you would expect of values from a random number generator, the test fails to reject 
-# the null hypothesis that the data are random. 
+# As you would expect of values from a random number generator, the test fails to reject
+# the null hypothesis that the data are random.
 
 
 # SPSS example

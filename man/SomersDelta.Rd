@@ -24,7 +24,7 @@ SomersDelta(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
   \code{"row"} calculates Somers' D (R | C) ("column dependent").
 %%     ~~Describe \code{x} here~~
 }
-\item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated. 
+\item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated.
 %%     ~~Describe \code{conf.level} here~~
 }
   \item{\dots}{further arguments are passed to the function \code{\link{table}}, allowing i.e. to set useNA. This refers only to the vector interface.
@@ -34,9 +34,9 @@ SomersDelta(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
 \details{
 Somers' D(C | R) and Somers' D(R | C) are asymmetric modifications of \eqn{\tau_b}. C | R indicates that
 the row variable x is regarded as the independent variable and the column variable y is regarded
-as dependent. Similarly, R | C indicates that the column variable y is regarded as the independent 
+as dependent. Similarly, R | C indicates that the column variable y is regarded as the independent
 variable and the row variable x is regarded as dependent. \cr
-Somers' D differs from tau-b in that it uses a correction only for pairs that are tied on the independent variable. Somers' D is appropriate only when both variables lie on an ordinal scale.\cr 
+Somers' D differs from tau-b in that it uses a correction only for pairs that are tied on the independent variable. Somers' D is appropriate only when both variables lie on an ordinal scale.\cr
 Somers' D is computed as\cr
 \deqn{ D(C | R) = \frac{P-Q}{n^2 - \sum(n_i.^2)}}
 %% D(C | R) = (P-Q)/(n^2 - sum(rowSums(tab)^2))
@@ -44,7 +44,7 @@ where P equals twice the number of concordances and Q twice the number of discor
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-a single numeric value if no confidence intervals are requested\cr 
+a single numeric value if no confidence intervals are requested\cr
 and otherwise a numeric vector with 3 elements for the estimate, the lower and the upper confidence interval
 %%  ~Describe the value returned
 %%  If it is a LIST, use
@@ -53,7 +53,7 @@ and otherwise a numeric vector with 3 elements for the estimate, the lower and t
 %% ...
 }
 \references{
-Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, 
+Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons,
 pp. 57--59.
 
 Goodman, L. A., & Kruskal, W. H. (1954) Measures of
@@ -67,27 +67,24 @@ association for cross classifications III: Approximate
 sampling theory. \emph{Journal of the American Statistical
 Association}, 58, 310--364.
 
-\url{http://support.sas.com/onlinedoc/913/getDoc/en/statug.hlp/freq_sect18.htm}\cr
-\url{http://support.sas.com/onlinedoc/913/getDoc/en/statug.hlp/freq_sect20.htm}
-%% ~put references to the literature/web site here ~
 }
 
 \author{Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~
 }
 
-\seealso{There's an implementation of Somers's D in Frank Harrell's \pkg{Hmisc} \code{\link[Hmisc]{somers2}}, 
+\seealso{There's an implementation of Somers's D in Frank Harrell's \pkg{Hmisc} \code{\link[Hmisc]{somers2}},
 which is quite fast for large sample sizes. However it is restricted to computing Somers' Dxy rank correlation between a variable x and a binary (0-1) variable y.\cr
-\code{\link{ConDisPairs}} yields concordant and discordant pairs \cr
-other association measures: \cr
-\code{\link{GoodmanKruskalTauA}} (tau-a), \code{\link{cor}} (method="kendall") for tau-b, \code{\link{StuartTauC}} (tau-c), 
-\code{\link{GoodmanKruskalGamma}}\cr 
-\code{\link{Lambda}}, \code{\link{UncertCoef}}, \code{\link{MutInf}} 
+\code{\link{ConDisPairs}} yields concordant and discordant pairs \cr\cr
+Other association measures: \cr
+\code{\link{KendallTauA}} (tau-a), \code{\link{KendallTauB}} (tau-b), \code{\link{cor}} (method="kendall") for tau-b, \code{\link{StuartTauC}} (tau-c),
+\code{\link{GoodmanKruskalGamma}}\cr
+\code{\link{Lambda}}, \code{\link{GoodmanKruskalTau}}, \code{\link{UncertCoef}}, \code{\link{MutInf}}
 
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-# example in: 
+# example in:
 # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
 # pp. S. 1821
 

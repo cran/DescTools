@@ -28,11 +28,11 @@
 \usage{
 Year(x)
 Quarter(x)
-Month(x, fmt = c("m", "mm", "mmm"), lang = NULL,
+Month(x, fmt = c("m", "mm", "mmm"), lang = getOption("lang", "local"),
       stringsAsFactors = TRUE)
 Week(x, method = c("iso", "us"))
 Day(x)
-Weekday(x, fmt = c("d", "dd", "ddd"), lang = NULL,
+Weekday(x, fmt = c("d", "dd", "ddd"), lang = getOption("lang", "local"),
         stringsAsFactors = TRUE)
 YearDay(x)
 YearMonth(x)
@@ -65,7 +65,7 @@ LastDayOfMonth(x)
   \item{value}{new value
 %%     ~~Describe \code{value} here~~
 }
-  \item{lang}{optional, language for the months and daynames, either \code{"local"} for current locale or \code{"engl"} for english.If left to \code{NULL}, an option named \code{"lang"} will be searched for and if not found \code{"local"} will be taken as default.
+  \item{lang}{optional value setting the language for the months and daynames. Can be either \code{"local"} for current locale or \code{"engl"} for english. If left to \code{NULL}, the option \code{"lang"} will be searched for and if not found \code{"local"} will be taken as default.
 %%     ~~Describe \code{value} here~~
 }
   \item{stringsAsFactors}{logical. Defines if the result should be coerced to a factor, using the local definitions as levels.

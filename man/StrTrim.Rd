@@ -8,8 +8,8 @@ Remove Leading/Trailing Whitespace From A String
 \description{
 The function removes all spaces, tabs and newlines from the beginning and end of the supplied string.
 If these whitespace characters occur in the middle of the string, they are preserved.\cr
-Trim with method "left" deletes only leading whitespaces, "right" only trailing.
-Designed for users who were socialized by SQL...
+Trimming with method \code{"left"} deletes only leading whitespaces, \code{"right"} only trailing.
+Designed for users who were socialized by SQL.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -25,8 +25,7 @@ StrTrim(x, pattern = " \\t\\n", method = "both")
   the pattern of the whitespaces to be deleted, defaults to space, tab and newline: \kbd{" \\t\\n"}.
 %%     ~~Describe \code{x} here~~
 }
-  \item{method}{one out of "both", "left", "right". Determines on which side the string should be trimmed.
-  Default is "both".}
+  \item{method}{one out of \code{"both"} (default), \code{"left"}, \code{"right"}. Determines on which side the string should be trimmed.}
 }
 \details{
 The functions are defined depending on method as\cr

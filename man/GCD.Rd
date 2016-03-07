@@ -38,10 +38,10 @@ LCM(..., na.rm = FALSE)
 }
 \examples{
 GCD(12, 10)
-GCD(46368, 75025)  # Fibonacci numbers are relatively prime to each other
+GCD(144, 233)    # Fibonacci numbers are relatively prime to each other
 
 LCM(12, 10)
-LCM(c(46368, 75025))  # = 46368 * 75025
+LCM(144, 233)    # = 144 * 233
 
 # all elements will be flattened by unlist
 GCD(2, 3, c(5, 7) * 11)

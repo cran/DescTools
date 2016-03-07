@@ -5,7 +5,6 @@
 \alias{plot.Lc}
 \alias{plot.Lclist}
 \alias{lines.Lc}
-\alias{Desc.Lc}
 \title{Lorenz Curve}
 \description{
 Lc computes the (empirical) ordinary and generalized Lorenz curve of a vector x. Desc calculates some key figures for a Lorenz curve and produces a quick description.}
@@ -17,15 +16,12 @@ Lc(x, ...)
 
 \method{Lc}{formula}(formula, data, subset, na.action, ...)
 
-\method{plot}{Lc}(x, general = FALSE, lwd = 2, type = "l", xlab = "p", ylab = "L(p)", 
+\method{plot}{Lc}(x, general = FALSE, lwd = 2, type = "l", xlab = "p", ylab = "L(p)",
      main = "Lorenz curve", las = 1, ...)
 
-\method{plot}{Lclist}(x, col = 1, lwd = 2, lty = 1, main = "Lorenz curve", 
-     xlab = "p", ylab = "L(p)", ...) 
+\method{plot}{Lclist}(x, col = 1, lwd = 2, lty = 1, main = "Lorenz curve",
+     xlab = "p", ylab = "L(p)", ...)
 
-\method{Desc}{Lc}(x, main = NULL, p = c(0.8, 0.9, 0.95, 0.99), 
-     plotit = getOption("plotit", FALSE), ...)
-       
 }
 \arguments{
  \item{x}{a vector containing non-negative elements.}
@@ -42,14 +38,11 @@ Lc(x, ...)
   \item{p}{a numeric vector with percent points, at which the Lorenz curve will be calculated.
 %%     ~~Describe \code{p} here~~
 }
-  \item{plotit}{boolean. Should a plot be created? Default is \code{FALSE}.
-%%     ~~Describe \code{plotit} here~~
-}
-  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}  
-  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}. 
-    By default the variables are taken from \code{environment(formula)}.}  
-  \item{subset}{an optional vector specifying a subset of observations to be used.}  
-  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}  
+  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}
+  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}.
+    By default the variables are taken from \code{environment(formula)}.}
+  \item{subset}{an optional vector specifying a subset of observations to be used.}
+  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}
 
  \item{\dots}{further argument to be passed to methods.}
 
@@ -62,7 +55,7 @@ Lc(x, ...)
   If \code{n} is changed to anything but the default \code{x} is
   interpreted as a vector of class means and \code{n} as a vector of
   class frequencies: in this case \code{Lc} will compute the minimal
-  Lorenz curve (= no inequality within each group). 
+  Lorenz curve (= no inequality within each group).
 }
 \value{
   A list of class \code{"Lc"} with the following components:
@@ -71,7 +64,7 @@ Lc(x, ...)
 \item{L.general}{vector with values of the generalized Lorenz curve}
 }
 \note{ These functions were previously published as \code{Lc()} in the  \pkg{ineq} package and have been
-integrated here without logical changes. 
+integrated here without logical changes.
 }
 
 \references{
@@ -86,7 +79,7 @@ Cowell, F. A. (1995) \emph{Measuring Inequality} Harvester Wheatshef: Prentice H
 \author{Achim Zeileis <Achim.Zeileis@R-project.org>, minor changes Andri Signorell <andri@signorell.net>}
 
 
-\seealso{The original location \code{\link[ineq]{Lc}()}, \cr 
+\seealso{The original location \code{\link[ineq]{Lc}()}, \cr
 inequality measures \code{\link[ineq]{Gini}()}, \code{\link[ineq]{Atkinson}()}
 }
 
@@ -125,9 +118,9 @@ n  <- c(25,13,10,5,5,2)	        # frequencies
 
 plot(Lc(fl, n),                 # Lorenz-Curve
      panel.first=grid(10, 10),
-     main="Lorenzcurve Farmers", 
-     xlab="Percent farmers (cumulative)", 
-     ylab="Percent of area (\%)" 
+     main="Lorenzcurve Farmers",
+     xlab="Percent farmers (cumulative)",
+     ylab="Percent of area (\%)"
 )
 
 Gini(fl, n)
@@ -152,12 +145,12 @@ text(x=0.65, y=0.2, label=expression(L(0.55) == 0.275))
 fl <- c(2.5,7.5,15,35,75,150)     # midpoints
 n  <- c(25,13,10,5,5,2)           # frequencies
 
-# the formula interface for Lc 
+# the formula interface for Lc
 lst <- Lc(count ~ cut(price, breaks=5), data=d.pizza)
 
 plot(lst, col=1:length(lst), panel.first=grid(), lwd=2)
 legend(x="topleft", legend=names(lst), fill=1:length(lst))
- 
+
 # Describe with Desc-function
 lx <- Lc(fl, n)
 Desc(lx)

@@ -1,5 +1,5 @@
-\name{PlotRCol}
-\alias{PlotRCol}
+\name{ColPicker}
+\alias{ColPicker}
 \alias{PlotPar}
 \alias{PlotMar}
 %- Also NEED an '\alias' for EACH other topic documented here.
@@ -7,17 +7,18 @@
 %%  ~~function to do ... ~~
 }
 \description{The function \code{PlotPar()} plots the typically used parameters and their values. \cr
-\code{PlotRCol()} plots the R-colors in a dense manner.
+\code{ColPicker()} plots the R-colors in a dense manner.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-PlotRCol(ord = c("hsv", "default"), label = c("text", "hex", "dec"),
-         mdim = c(38, 12))
+ColPicker(locator=TRUE, ord = c("hsv", "default"), label = c("text", "hex", "dec"),
+          mdim = c(38, 12))
 PlotPar()
 PlotMar()
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
+\item{locator}{logical, defines if the colors should be selected by mouseclick. Default is TRUE.}
   \item{ord}{the order of the colors, can be either defined by hsv-value or by the R internal color-number
 %%     ~~Describe \code{ord} here~~
 }
@@ -42,8 +43,8 @@ Andri Signorell <andri@signorell.net>
 \examples{
 PlotPar()
 
-PlotRCol(ord="hsv")
-PlotRCol(label="hex")
+ColPicker(locator=FALSE, ord="hsv")
+ColPicker(locator=FALSE, label="hex")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

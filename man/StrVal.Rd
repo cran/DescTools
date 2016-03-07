@@ -18,6 +18,8 @@ StrVal(x, paste = FALSE, as.numeric = FALSE)
 \item{paste}{should separatetly extracted numbers be pasted together? This can be useful to reverse a prior format action. Default is FALSE.}
 \item{as.numeric}{logical value, determining if the extracted values should be converted to a number or be returned as characters. Default is FALSE.}
 }
+\details{If there are multiple numbers in the same string to paste and cast to numeric, pasting will be done first and after pasting the conversion will be performed. So if for example the numbers in \code{x = "34 way 066"} should be extracted \code{StrVal(x, paste = TRUE, as.numeric = TRUE)} will lead to \code{34066}. }
+
 \value{depending on the results the function will return either a character vector, in the case every element of x contained only one number, or a list of character vectors containing the found numbers.
 }
 \author{Andri Signorell <andri@signorell.net>
@@ -30,10 +32,10 @@ StrVal(x, paste = FALSE, as.numeric = FALSE)
 StrVal(x=c("week 1", "week 3", "week 4", "week 5"))
 
 # several numbers per element, extract each part, do not paste and return characters
-StrVal(x=c("This is 1. place: 45.2", "none", "12.1 but -2.7 follow, 10.2e23 "), 
+StrVal(x=c("This is 1. place: 45.2", "none", "12.1 but -2.7 follow, 10.2e23 "),
        paste = FALSE, as.numeric = FALSE)
 
-# a typical use case for this function is to reverse a previously 
+# a typical use case for this function is to reverse a previously
 #   applied number format
 
 x <- c(100000, 4564654632, -456463)

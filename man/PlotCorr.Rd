@@ -8,11 +8,11 @@
 The cells of the matrix can be shaded or colored to show the correlation value.
 }
 \usage{
-PlotCorr(x, cols = colorRampPalette(c(getOption("col1", hred), "white", 
-                                      getOption("col2", hblue)), space = "rgb")(20), 
-         breaks = seq(-1, 1, length = length(cols) + 1), 
+PlotCorr(x, cols = colorRampPalette(c(getOption("col1", hred), "white",
+                                      getOption("col2", hblue)), space = "rgb")(20),
+         breaks = seq(-1, 1, length = length(cols) + 1),
          border = "grey", lwd = 1,
-         args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"), 
+         args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"),
          cex.axis = 0.8, las = 2, mar = c(3, 8, 8, 8), ...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -33,7 +33,7 @@ PlotCorr(x, cols = colorRampPalette(c(getOption("col1", hred), "white",
 %%     ~~Describe \code{lwd} here~~
 }
 \item{args.colorlegend}{list of arguments for the \code{\link{ColorLegend}}. Use NA if no color legend should be painted.
-%%    
+%%
 }
   \item{xaxt}{parameter to define, whether to draw an x-axis, defaults to \code{"n"}.
 %%     ~~Describe \code{xaxt} here~~
@@ -65,33 +65,33 @@ PlotCorr(x, cols = colorRampPalette(c(getOption("col1", hred), "white",
 %%  ~~who you are~~
 }
 
-\seealso{\code{\link{image}}, \code{\link{ColorLegend}}, \code{\link[corrgram]{corrgram}()} 
+\seealso{\code{\link{image}}, \code{\link{ColorLegend}}, \code{\link[corrgram]{corrgram}()}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-m <- cor(d.pizza[,sapply(d.pizza, IsNumeric)], use="pairwise.complete.obs")
+m <- cor(d.pizza[,sapply(d.pizza, IsNumeric, na.rm=TRUE)], use="pairwise.complete.obs")
 
 PlotCorr(m, cols=colorRampPalette(c("red", "black", "green"), space = "rgb")(20))
-PlotCorr(m, cols=colorRampPalette(c("red", "black", "green"), space = "rgb")(20), 
+PlotCorr(m, cols=colorRampPalette(c("red", "black", "green"), space = "rgb")(20),
          args.colorlegend=NA)
 
 m <- PairApply(d.diamonds[, sapply(d.diamonds, is.factor)], CramerV, symmetric=TRUE)
 PlotCorr(m, cols = colorRampPalette(c("white", "steelblue"), space = "rgb")(20),
          breaks=seq(0, 1, length=21), border="black",
-         args.colorlegend = list(labels=sprintf("\%.1f", seq(1, 0, length = 11)), frame=TRUE)
+         args.colorlegend = list(labels=sprintf("\%.1f", seq(0, 1, length = 11)), frame=TRUE)
 )
 title(main="Cramer's V", line=2)
-text(x=rep(1:ncol(m),ncol(m)), y=rep(1:ncol(m),each=ncol(m)), 
+text(x=rep(1:ncol(m),ncol(m)), y=rep(1:ncol(m),each=ncol(m)),
      label=sprintf("\%0.2f", m[,ncol(m):1]), cex=0.8, xpd=TRUE)
 
 # Spearman correlation on ordinal factors
-csp <- cor(data.frame(lapply(d.diamonds[,c("carat", "clarity", "cut", "polish", 
+csp <- cor(data.frame(lapply(d.diamonds[,c("carat", "clarity", "cut", "polish",
                       "symmetry", "price")], as.numeric)), method="spearman")
 PlotCorr(csp)
 
 # some more colors
 PlotCorr(cor(mtcars), col=PalDescTools("RedWhiteBlue1", 100), border="grey",
-         args.colorlegend=list(labels=Format(seq(1,-1,-.25), digits=2), frame="grey"))
+         args.colorlegend=list(labels=Format(seq(-1,1,.25), digits=2), frame="grey"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

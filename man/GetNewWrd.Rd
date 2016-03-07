@@ -7,16 +7,16 @@
 Create a new Word Instance
 %%  ~~function to do ... ~~
 }
-\description{Start a new instance of Word and return its handle. 
-This handle allows controlling word afterwards. \cr 
+\description{Start a new instance of Word and return its handle.
+This handle allows controlling word afterwards. \cr
 WrdKill ends a running Word task.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-GetNewWrd(visible = TRUE, template = "Normal", header = FALSE, 
+GetNewWrd(visible = TRUE, template = "Normal", header = FALSE,
           main = "Descriptive report")
-          
-WrdKill()   
+
+WrdKill()
 
 createCOMReference(ref, className)
 
@@ -56,7 +56,7 @@ kill word task \tab \code{WrdKill} kills a running word task (which might not be
 normal text \tab Use \code{\link{WrdText}} which offers many arguments as fontname, size, color, alignment etc. \cr
  \tab  \code{WrdText("Lorem ipsum dolor sit amet, consetetur", fontname="Arial",}\cr
  \tab    \code{fontsize=10, col=wdConst$wdColorRed)} \cr
-simple text \tab \code{sel$TypeText("sed diam nonumy eirmod tempor invidunt ut labore")} \cr 
+simple text \tab \code{sel$TypeText("sed diam nonumy eirmod tempor invidunt ut labore")} \cr
 heading 1 \tab  \code{WrdCaption("My Word-Story", stylename = wdConst$wdStyleHeading1)} \cr
 heading 2 \tab  \code{WrdCaption("My Word-Story", stylename = wdConst$wdStyleHeading2)} \cr
 insert R output \tab \code{WrdText(capture.output(str(d.diamonds)))} \cr
@@ -68,7 +68,7 @@ add bookmark \tab \code{wrd[["ActiveDocument"]][["Bookmarks"]]$Add("myBookmark")
 goto bookmark \tab \code{sel$GoTo(wdConst$wdGoToBookmark, 0, 0, "myBookmark")} \cr
 show document map \tab \code{ wrd[["ActiveWindow"]][["DocumentMap"]] <- TRUE} \cr
 insert table \tab  \code{\link{WrdTable}}() \cr
-create table \tab  \code{\link{WrdInsTab}}() which allows to define the table's geometry \cr
+create table \tab  \code{\link{WrdTable}}() which allows to define the table's geometry \cr
 insert caption \tab \code{sel$InsertCaption(Label="Abbildung", TitleAutoText="InsertCaption",}\cr
 \tab \code{Title="My Title")} \cr
 tables of figures \tab \code{wrd$ActiveDocument()$TablesOfFigures()$Add(Range=sel$range(),}\cr
@@ -83,7 +83,7 @@ createCOMReference is just a wrapper for RDCOMClient::createCOMReference, as the
 Note that the list of contents has to be refreshed by hand after inserting text (if inserted by \code{header = TRUE}).
 %%  ~~ If necessary, more details than the description above ~~
 }
-\value{a handle (pointer) to the created Word instance. 
+\value{a handle (pointer) to the created Word instance.
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}

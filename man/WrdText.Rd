@@ -8,10 +8,10 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-WrdText(txt, fixedfont = TRUE, fontname = NULL, fontsize = NULL, 
+WrdText(txt, fixedfont = TRUE, fontname = NULL, fontsize = NULL,
         bold = FALSE, italic = FALSE, col = NULL,
         alignment = c("left","right","center"), spaceBefore=0, spaceAfter=0,
-        lineSpacingRule = wdConst$wdLineSpaceSingle, 
+        lineSpacingRule = wdConst$wdLineSpaceSingle,
         appendCR = TRUE, wrd = getOption("lastWord"))
 }
 %- maybe also 'usage' for other objects documented here.
@@ -22,11 +22,11 @@ WrdText(txt, fixedfont = TRUE, fontname = NULL, fontsize = NULL,
   \item{fixedfont}{should a fixedfont be used. Default is \code{TRUE}.
 %%     ~~Describe \code{txt} here~~
 }
-  \item{fontname}{the font of the text. If left to \code{NULL} the \code{fixedfont} will be used, and 
-  if the option does not exist it will be set to \code{Consolas}. 
+  \item{fontname}{the font of the text. If left to \code{NULL} the \code{fixedfont} will be used, and
+  if the option does not exist it will be set to \code{Consolas}.
 %%     ~~Describe \code{fontname} here~~
 }
-  \item{fontsize}{the fontsize of the text. If left to \code{NULL} the \code{fixedfontsize} will be used, and if the option does not exist it will be set to \code{7}. 
+  \item{fontsize}{the fontsize of the text. If left to \code{NULL} the \code{fixedfontsize} will be used, and if the option does not exist it will be set to \code{7}.
 %%     ~~Describe \code{fontsize} here~~
 }
   \item{bold}{should the text be bold?
@@ -53,7 +53,7 @@ WrdText(txt, fixedfont = TRUE, fontname = NULL, fontsize = NULL,
   \item{appendCR}{should a carriage return be appended to the text. Default is TRUE.
 %%     ~~Describe \code{appendCR} here~~
 }
-  \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()} 
+  \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()}
   or an existing one, created by \code{GetCurrWrd()}.
   Default is the last created pointer stored in \code{getOption("lastWord")}.}
 }
@@ -71,7 +71,7 @@ Returns a list of the attributes of the font in the current cursor position.
 }
 
 \seealso{
-\code{\link{WrdSetFont}}, \code{\link{WrdPlot}}, \code{\link{GetNewWrd}}, \code{\link{GetCurrWrd}}
+\code{\link{WrdFont}}, \code{\link{WrdPlot}}, \code{\link{GetNewWrd}}, \code{\link{GetCurrWrd}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
@@ -84,23 +84,23 @@ wrd <- GetNewWrd()
 
 WrdCaption("My Word-Story", stylename=wdConst$wdStyleHeading1)
 
-WrdText("This will be the structure of d.diamonds:\n\n", appendCR=FALSE, 
+WrdText("This will be the structure of d.diamonds:\n\n", appendCR=FALSE,
         fontname="Arial", fontsize=10)
 WrdText(capture.output(str(d.diamonds)))
 
 wrd[["Selection"]]$InsertBreak(wdConst$wdPageBreak)
-WrdText("Lets insert a table (and this ist written Times)!", fontname="Times", 
+WrdText("Lets insert a table (and this ist written Times)!", fontname="Times",
         fontsize=12, appendCR=FALSE, bold=T)
 
 # insert table
-wrd[["ActiveDocument"]][["Tables"]]$Add( wrd[["Selection"]][["Range"]], 
+wrd[["ActiveDocument"]][["Tables"]]$Add( wrd[["Selection"]][["Range"]],
                                          NumRows=2, NumColumns=2 )
 WrdText("First Cell", fontname="Arial", fontsize=10)
 wrd[["Selection"]]$MoveRight( Unit=wdConst$wdCell, Count=1 )
 WrdText("Second Cell")
 wrd[["Selection"]]$MoveRight( Unit=wdConst$wdCell, Count=1 )
 
-wrd[["Selection"]]$MoveRight( Unit=wdConst$wdCharacter, Count=2, 
+wrd[["Selection"]]$MoveRight( Unit=wdConst$wdCharacter, Count=2,
                               Extend=wdConst$wdExtend )
 wrd[["Selection"]][["Cells"]]$Merge()
 WrdText("This cell was merged....", fontname="Arial", fontsize=10)
@@ -134,10 +134,10 @@ WrdText("Text in landscape", fontname="Impact", fontsize=20)
 wrd[["Selection"]][["PageSetup"]][["Bottommargin"]] <- 4 * 72
 wrd[["Selection"]][["PageSetup"]][["Leftmargin"]] <- 4 * 72
 # wrd[["Selection"]][["PageSetup"]][["Topmargin"]] <- 4 * 72
-# wrd[["Selection"]][["PageSetup"]][["Rightmargin"]] <- 4 * 72  
+# wrd[["Selection"]][["PageSetup"]][["Rightmargin"]] <- 4 * 72
 
 # return to the bookmark
-wrd[["Selection"]]$GoTo( wdConst$wdGoToBookmark, 0, 0, "myBookmark") 
+wrd[["Selection"]]$GoTo( wdConst$wdGoToBookmark, 0, 0, "myBookmark")
 
 # and insert text
 WrdText("Back again")

@@ -1,6 +1,82 @@
 
-DescTools 0.99.15 (2015-12-11)
------------------------------
+DescTools 0.99.16 (2016-03-05)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+   * Lookup wraps the function "match" offering a slim interface.
+   * New options "lang", "stamp" and "PalDefault" available. "lang" defines the
+     default language for daynames when used by Format, stamp optionally places
+     a timestamp on plots.
+   * Kendall's tau-a now implemented.
+   * BreuschGodfreyTest for autocorrelation integrated.
+   * VarTest implements a one sample chisquare test for variance.
+   * New plot function for binary tree in PlotBinTree.
+   * PalDefault will return the default palette, which can be set as option.
+   * WrdParagraphFormat can be used to define a paragraph format in Word.
+   * WrdFont and WrdFont<- replace old WrdSetFont and WrdGetFont
+   * ToWrd wraps some old Wrdxyz functions and can be used to beam objects
+     from R to Word. This will replace WrdText and WrdTable functions in future.
+
+UPDATED FUNCTIONS:
+   * Desc.table for higher dimensional tables gets its ChiSquare test back again.
+   * Several corrections and adaptations to the help files.
+   * GoodmanKruskalTauA has been renamed to the more specific GoodmanKruskalTau.
+   * StrAlign gets a new interface for left, right and center alignment. See help.
+   * AddMonths has been splitted in two: AddMonths (for dates) and AddMonthsYM for integers.
+     The ceiling option has been removed, as it was useless. All the rest of the
+     arguments are now being recycled.
+   * RoundM has been renamed to RoundTo.
+   * PlotRCol has been renamed to ColPicker and gets a new argument "locator".
+   * Desc has been conceptually rewritten to follow clearer S3 class design and
+     to be more consistent in the arguments (while improving performance).
+     A print and a plot method are now available. PlotDesc(x) has
+     therefore been replaced by plot(Desc(x)).
+     (I fear this has the potential to break your code, I apologise for that ...)
+   * The class interfaces .default, .formula etc. are by default not exported anymore.
+     This applies to the function PageTest, LeveneTest, JonckheereTerpstraTest,
+     CochranTest, HotellingsT2Test, DunnTest, DunnetTest, MosesTest, NemenyiTest,
+     PostHocTest, YuenTTest, ZTest, SignTest, RunsTest, ScheffeTest,
+     MeanDiffCI, Format, Label, Rev, Sort, PercTable, Lc, EtaSq, PlotArea,
+     PlotMultiDens, PlotBubble, PlotViolin, Lc, LOCF, Untable, WrdTable.
+     Use methods and/or DescTools:::MyTest.default to address, if in rare cases needed.
+   * Old PlotDesc.factor's argument ecdf gets another default value.
+   * StrRight and StrLeft will accept negative n number of characters for cutting
+     characters either right or left.
+   * ToWide can now merge several parts of a data.frame by a key.
+   * PlotLines gain new arguments pch, pch.col, etc. for superposing points.
+   * DunnTest gets an "alternative" argument, the default p-value changes from "one-sided"
+     to "two-sided".
+   * MeanCI, MedianCI and VarCI get a new argument "sides" for one sided confidence interavals.
+   * PlotFdist displays the mean and its confidence intervall by default in the boxplot.
+   * BarnardTest and BartelsRankTest have other alternative options.
+
+BUGFIXES:
+   * Documentation of GoodmanKruskalTau cited the wrong formula.
+   * Corrected gcc-UBSAN issue with big integers in GCD.
+   * PlotDot mistakenly reversed the order of labels, when defined as vector and did not
+     handle groups correctly.
+   * Hmean reported an error, when supplied with a NA vector, instead of simply
+     returning NA and shut up.
+   * Desc.numeric would not always have sorted the whole vector, which in some cases
+     resulted in incorrect unique and extreme values.
+   * StrAlign would not alwas have trimmed white space on the right side.
+
+KNOWN PROBLEMS / TODOS:
+   * Leading zeros and big.mark can not be used together in Format.
+   * DoCounts should get an O(n log(n)) implementation, containig std. errors.
+   * We have not reached our goal yet - documentation is still not finalized, some functions
+     not tested thoroughly enough, others have rather a proof of concept status -
+     but we are well on our way to achieving it. Systematic check over all
+     function interfaces, ensuring consistency with R-standards and DescTools
+     conventions will be performed next.
+
+DEFUNCT:
+   * WrdTable will now do the job of old WrdAddTable.
+   * WrdGetFont and WrdSetFont have been replaced by WrdFont and `WrdFont<-`
+
+
+DescTools 0.99.15 (2015-10-25)
+------------------------------
 
 NEW FUNCTIONS ADDED:
    * BarnardTest calculating Barnard's unconditional test for superiority
@@ -16,7 +92,7 @@ BUGFIXES:
 
 
 DescTools 0.99.14 (2015-10-11)
------------------------------
+------------------------------
 
 NEW FUNCTIONS ADDED:
    * new function %like any% has been defined according to the usual SQL logic
@@ -47,7 +123,7 @@ BUGFIXES:
 
 
 DescTools 0.99.13 (2015-08-24)
------------------------------
+------------------------------
 
 BUGFIXES:
    * Fix for a serious memory-access error (thanks to B. Ripley).
@@ -330,7 +406,7 @@ UPDATED FUNCTIONS:
    * The function "AddLm" has been redesigned to "lines.lm".
    * The function "AddLoess" has been redesigned to "lines.loess".
    * AddConnLines has been renamed to "ConnLines" and gains a new argument xalign, which allows
-	 to add lines to a barplot which are aligned to the middle of the bars.
+	   to add lines to a barplot which are aligned to the middle of the bars.
    * The argument "quant" in CutQ has been renamed to "probs", according to the naming in quantile.
    * PlotFdist has a new option "curve" to be used to add e.g. a normal density curve to the histogram.
    * AndersonDarlingTest calculation logic was replaced with the newer Marsaglia approach.
@@ -403,7 +479,7 @@ BUGFIXES:
    * AddConnLines confused the space argument between horiz=FALSE and horiz=TRUE.
    * shapiro.test would have stopped the Desc procedure, if a variable had only identical values.
      This has been corrected so, that the error message will be printed, while the function Desc will
-	 proceed to describe remaining variables.
+	   proceed to describe remaining variables.
    * PoissonCI was not yet fully implemented.
 
 

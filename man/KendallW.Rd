@@ -5,10 +5,10 @@
 Computes Kendall's coefficient of concordance as an index of interrater reliability of ordinal data. The coefficient could be corrected for ties within raters.
 }
 \usage{
-KendallW(ratings, correct = FALSE, test = FALSE, na.rm = FALSE)
+KendallW(x, correct = FALSE, test = FALSE, na.rm = FALSE)
 }
 \arguments{
-  \item{ratings}{\eqn{n \times m}{k x m} matrix or dataframe, k subjects (in rows) m raters (in columns).}
+  \item{x}{\eqn{n \times m}{k x m} matrix or dataframe, k subjects (in rows) m raters (in columns).}
   \item{correct}{a logical indicating whether the coefficient should be corrected for ties within raters.}
   \item{test}{a logical indicating whether the test statistic and p-value should be reported.}
   \item{na.rm}{
@@ -19,19 +19,19 @@ KendallW(ratings, correct = FALSE, test = FALSE, na.rm = FALSE)
 }
 \details{
 Kendall's W should be corrected for ties, if raters did not use a true ranking order for the subjects.\cr
-The test for the significance of Kendall's W is only valid for large samples. 
+The test for the significance of Kendall's W is only valid for large samples.
 }
 \value{
 Either a single value if test is set to \code{FALSE} or else \cr
 
-a list with class \dQuote{htest} containing the following components: 
+a list with class \dQuote{htest} containing the following components:
   \item{statistic}{the value of the chi-square statistic.}
   \item{p.value }{the p-value for the test.}
   \item{method}{the character string \dQuote{Kendall's coefficient of concordance W}.}
-  \item{data.name}{a character string giving the name(s) of the data.} 
+  \item{data.name}{a character string giving the name(s) of the data.}
   \item{estimate}{the coefficient of concordance.}
   \item{parameter}{the degrees of freedom df, the number of subjects examined and the number of raters.}
-  
+
 }
 \note{
 This function was previously published as \code{kendall()} in the  \pkg{irr} package and has been

@@ -101,7 +101,7 @@
 # this error arises when no plot windows exists, but is the same for boxplot, so we leave it here
 # PlotViolin(temperature ~ driver, d.pizza, col="steelblue", panel.first=grid())
 # Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...) :
-#  plot.new has not been called yet
+# plot.new has not been called yet
 
 
 
@@ -235,7 +235,7 @@
 # load(file="C:/Users/Andri/Documents/R/Projects/DescTools/load/wdConst.rda")
 # load(file="C:/Users/Andri/Documents/R/sources/DescTools/periodic.rda")
 
-utils::globalVariables(c("d.units","d.periodic","d.prefix","day.name","day.abb","wdConst","hblue","hred","hgreen"))
+utils::globalVariables(c("d.units","d.periodic","d.prefix","day.name","day.abb","wdConst","hblue","hred","hgreen", "tarot","cards","roulette"))
 
 # source( "C:/Users/Andri/Documents/R/sources/DescTools/wdConst.r" )
 
@@ -246,11 +246,87 @@ utils::globalVariables(c("d.units","d.periodic","d.prefix","day.name","day.abb",
 # we have month.name and month.abb in base R, but nothing similar for day names
 # in english (use format(ISOdate(2000, 1:12, 1), "%B") for months in current locale)
 
-day.name <- c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
-day.abb <- c("Mon","Tue","Wed","Thu","Fri","Sat","Sun")
+# day.name <- c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+# day.abb <- c("Mon","Tue","Wed","Thu","Fri","Sat","Sun")
 
 # internal: golden section constant
 gold_sec_c <- (1+sqrt(5)) / 2
+
+
+# tarot <- structure(list(rank = c("1", "2", "3", "4", "5", "6", "7", "8",
+#     "9", "10", "page", "knight", "queen", "king", "1", "2", "3",
+#     "4", "5", "6", "7", "8", "9", "10", "page", "knight", "queen",
+#     "king", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "page",
+#     "knight", "queen", "king", "1", "2", "3", "4", "5", "6", "7",
+#     "8", "9", "10", "page", "knight", "queen", "king", "0", "1",
+#     "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13",
+#     "14", "15", "16", "17", "18", "19", "20", "21"), suit = c("wands",
+#     "wands", "wands", "wands", "wands", "wands", "wands", "wands",
+#     "wands", "wands", "wands", "wands", "wands", "wands", "coins",
+#     "coins", "coins", "coins", "coins", "coins", "coins", "coins",
+#     "coins", "coins", "coins", "coins", "coins", "coins", "cups",
+#     "cups", "cups", "cups", "cups", "cups", "cups", "cups", "cups",
+#     "cups", "cups", "cups", "cups", "cups", "swords", "swords", "swords",
+#     "swords", "swords", "swords", "swords", "swords", "swords", "swords",
+#     "swords", "swords", "swords", "swords", "trumps", "trumps", "trumps",
+#     "trumps", "trumps", "trumps", "trumps", "trumps", "trumps", "trumps",
+#     "trumps", "trumps", "trumps", "trumps", "trumps", "trumps", "trumps",
+#     "trumps", "trumps", "trumps", "trumps", "trumps"), desc = c(NA,
+#     NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
+#     NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
+#     NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
+#     NA, NA, NA, NA, NA, NA, NA, "The Fool", "The Magician", "The High Priestess",
+#     "The Empress", "The Emperor", "The Hierophant", "The Lovers",
+#     "The Chariot", "Strength", "The Hermit", "Wheel of Fortune",
+#     "Justice", "The Hanged Man", "Death", "Temperance", "The Devil",
+#     "The Tower", "The Star", "The Moon", "The Sun", "Judgment", "The World"
+#     )), .Names = c("rank", "suit", "desc"), out.attrs = structure(list(
+#     dim = structure(c(14L, 4L), .Names = c("rank", "suit")),
+#     dimnames = structure(list(rank = c("rank=1", "rank=2", "rank=3",
+#                                        "rank=4", "rank=5", "rank=6", "rank=7", "rank=8", "rank=9",
+#                                        "rank=10", "rank=page", "rank=knight", "rank=queen", "rank=king"
+#     ), suit = c("suit=wands", "suit=coins", "suit=cups", "suit=swords"
+#     )), .Names = c("rank", "suit"))), .Names = c("dim", "dimnames"
+#     )), row.names = c(NA, 78L), class = "data.frame")
+#
+#
+# cards <- structure(list(rank = structure(c(1L, 2L, 3L, 4L, 5L, 6L, 7L,
+#     8L, 9L, 10L, 11L, 12L, 13L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L,
+#     10L, 11L, 12L, 13L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L,
+#     11L, 12L, 13L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L,
+#     12L, 13L), .Label = c("2", "3", "4", "5", "6", "7", "8", "9",
+#     "10", "J", "Q", "K", "A"), class = "factor"), suit = structure(c(1L,
+#     1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L,
+#     2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 3L, 3L, 3L, 3L, 3L, 3L, 3L,
+#     3L, 3L, 3L, 3L, 3L, 3L, 4L, 4L, 4L, 4L, 4L, 4L, 4L, 4L, 4L, 4L,
+#     4L, 4L, 4L), .Label = c("club", "diamond", "heart", "spade"), class = "factor")), .Names = c("rank",
+#     "suit"), out.attrs = structure(list(dim = structure(c(13L, 4L
+#     ), .Names = c("rank", "suit")), dimnames = structure(list(rank = c("rank=2",
+#     "rank=3", "rank=4", "rank=5", "rank=6", "rank=7", "rank=8", "rank=9",
+#     "rank=10", "rank=J", "rank=Q", "rank=K", "rank=A"), suit = c("suit=club",
+#     "suit=diamond", "suit=heart", "suit=spade")), .Names = c("rank",
+#     "suit"))), .Names = c("dim", "dimnames")), class = "data.frame", row.names = c(NA, -52L))
+#
+#
+# roulette <- structure(list(num = structure(c(1L, 20L, 24L, 30L, 5L, 22L,
+#   35L, 23L, 11L, 16L, 37L, 26L, 7L, 14L, 2L, 28L, 9L, 18L, 33L,
+#   3L, 17L, 36L, 25L, 4L, 31L, 6L, 21L, 34L, 29L, 10L, 19L, 13L,
+#   15L, 32L, 12L, 8L, 27L), .Label = c("0", "1", "10", "11", "12",
+#   "13", "14", "15", "16", "17", "18", "19", "2", "20", "21", "22",
+#   "23", "24", "25", "26", "27", "28", "29", "3", "30", "31", "32",
+#   "33", "34", "35", "36", "4", "5", "6", "7", "8", "9"), class = "factor"),
+#   col = structure(c(2L,
+#   1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L,
+#   3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L,
+#   1L, 3L, 1L, 3L, 1L, 3L), .Label = c("black", "white", "red"
+#   ), class = "factor")), .Names = c("num", "col"
+#   ), row.names = c(NA, -37L), class = "data.frame")
+#
+
+# save(tarot, file="tarot.rda")
+# save(cards, file="cards.rda")
+# save(roulette, file="roulette.rda")
+
 
 
 Primes <- function (n) {
@@ -389,6 +465,13 @@ LCM <- function(..., na.rm = FALSE) {
   }
   return(l)
 }
+
+
+
+DigitSum <- function(x)
+  # calculates the digit sum of a number: DigitSum(124) = 7
+  sapply(x, function(z)
+    sum(floor(z / 10^(0:(nchar(z) - 1))) %% 10))
 
 
 
@@ -573,6 +656,7 @@ Winsorize <- function(x, minval = NULL, maxval = NULL,
   # pmax(pmin(x, maxval), minval)
 
   # the pmax(pmin()-version is slower than the following
+
   if(is.null(minval) || is.null(maxval)){
     xq <- quantile(x=x, probs=probs, na.rm=na.rm)
     if(is.null(minval)) minval <- xq[1]
@@ -755,6 +839,8 @@ Small <- function (x, k = 5, unique = FALSE, na.rm = FALSE) {
 }
 
 
+
+
 Large <- function (x, k = 5, unique = FALSE, na.rm = FALSE) {
 
   if (na.rm)
@@ -762,8 +848,9 @@ Large <- function (x, k = 5, unique = FALSE, na.rm = FALSE) {
 
   if (unique==TRUE) {
     ux <- unique(x)
-    un <- length(ux)
-    minval <- sort(ux, partial=max((un-k+1), 1):un)[max((un-k+1),1)]
+#    un <- length(ux)
+    un <- sum(!is.na(ux))
+    minval <- sort(ux, partial=max((un-k+1), 1):un, na.last = TRUE)[max((un-k+1),1)]
 
     # we are using the rationale of rle here, as it turned out to be the fastest approach
     x <- sort(x[x>=minval])
@@ -778,8 +865,9 @@ Large <- function (x, k = 5, unique = FALSE, na.rm = FALSE) {
     # res <- unclass(rle(sort(x[x>=minval])))
   }
   else {
-    n <- length(x)
-    res <- sort(x, partial=max((n-k+1),1):n)[max((n-k+1),1):n]
+    # n <- length(x)
+    n <- sum(!is.na(x))
+    res <- sort(x, partial=max((n-k+1),1):n, na.last = TRUE)[max((n-k+1),1):n]
     #   lst <- as.vector(unlist(lapply(lst, "[", "val")))
     #   http://stackoverflow.com/questions/15659783/why-does-unlist-kill-dates-in-r
   }
@@ -811,10 +899,6 @@ HighLow <- function (x, nlow = 5, nhigh = nlow, na.rm = FALSE) {
     }
     frqtxt <- paste(" (", frq, ")", sep = "")
     frqtxt[frq < 2] <- ""
-
-#     txt <- StrTrim(paste(vals, frqtxt, sep = ""))
-#     lowtxt <- paste(head(txt, nlow), collapse = ", ")
-#     hightxt <- paste(tail(txt, nhigh), collapse = ", ")
 
     txt <- StrTrim(paste(vals, frqtxt, sep = ""))
     lowtxt <- paste(head(txt, min(length(frqs$lengths), nlow)), collapse = ", ")
@@ -870,7 +954,7 @@ DenseRank <- function(x, na.last = TRUE) {
 ## base: string functions ====
 
 
-# Missing string functions for newbies..
+# Missing string functions for newbies, but not only..
 
 StrTrim <- function(x, pattern=" \t\n", method="both") {
 
@@ -885,12 +969,22 @@ StrTrim <- function(x, pattern=" \t\n", method="both") {
 
 StrRight <- function(x, n) {
   n <- rep(n, length.out=length(x))
-  sapply(seq_along(x), function(i) substr(x[i], (nchar(x[i]) - n[i]+1), nchar(x[i])))
+  sapply(seq_along(x), function(i) {
+    if(n[i] >= 0)
+      substr(x[i], (nchar(x[i]) - n[i]+1), nchar(x[i]))
+    else
+      substr(x[i], - n[i]+1, nchar(x[i]))
+  }  )
 }
 
 StrLeft <- function(x, n) {
   n <- rep(n, length.out=length(x))
-  sapply(seq_along(x), function(i) substr(x[i], 0, n[i]))
+  sapply(seq_along(x), function(i) {
+    if(n[i] >= 0)
+      substr(x[i], 0, n[i])
+    else
+      substr(x[i], 0, nchar(x[i]) + n[i])
+  } )
 }
 
 
@@ -907,7 +1001,7 @@ StrTrunc <- function(x, maxlen = 20) {
   #
   #   return(formatC(chopx, width = maxlen, flag = ifelse(justify == "left", "-", " ")) )
 
-  # ... but this is all a bit clumsy, let's have it shorter:  ;-)
+  # ... but this is all a bit clumsy, let's have it shorter - and faster!  ;-)
 
   paste(substr(x, 0, maxlen), ifelse(nchar(x) > maxlen, "...", ""), sep="")
 }
@@ -1050,7 +1144,7 @@ StrPad <- function(x, width = NULL, pad = " ", adj = "left") {
 
   # adj <- sapply(adj, match.arg, choices=c("left", "right", "center"))
 
-  if(is.null(width)) width <- max(nchar(x))
+  if(is.null(width)) width <- max(nchar(x), na.rm=TRUE)
 
   lgp <- DescTools::Recycle(x=x, width=width, pad=pad, adj=adj)
   sapply( 1:attr(lgp, "maxdim"), function(i) .pad(lgp$x[i], lgp$width[i], lgp$pad[i], lgp$adj[i]) )
@@ -1059,28 +1153,60 @@ StrPad <- function(x, width = NULL, pad = " ", adj = "left") {
 
 
 
-StrAlign <- function(x, sep = " ", ...){
+StrAlign <- function(x, sep = "\\r"){
+
+  # replace \l by \\^, \r by \\$ and \c means centered
+  # check for NA only and combined
+  # return x if sep is not found in x
+
+  id.na <- is.na(x)
+
+  # what should be done, if x does not contain sep??
+  # we could return unchanged, but this is often not adaquate
+  # we align right to the separator
+  if(length(grep("\\", sep, fixed=TRUE)) == 0) {
+    idx <- !grepl(x=x, pattern=sep, fixed = TRUE)
+    x[idx] <- paste(x[idx], sep, sep="")
+  }
+
+  # center alignment
+  # keep this here, as we may NOT pad x for centered text!!
+  # example?? don't see why anymore... check!
+  if (sep == "\\c")
+    return(StrPad(x, width = max(nchar(x), na.rm=TRUE), pad = " ", adj = "center"))
 
   # Pad to same maximal length, for right alignment this is mandatory
-  # for left alignment not, but for any point
-  x <- StrPad(x, max(nchar(x)))
+  # for left alignment not, but again for any character
+  x <- StrPad(x, max(nchar(x), na.rm=TRUE))
 
   # left alignment
-  if(sep == "\\^")
+  if(sep == "\\l")
     return( sub("(^ +)(.+)", "\\2\\1", x) )
 
   # right alignment
-  if(sep == "\\$")
+  if(sep == "\\r")
     return( sub("(.+?)( +$)", "\\2\\1", x) )
 
+  # alignment by a special character
   bef <- substr(x, 1, StrPos(x, sep, fix=TRUE))  # use fix = TRUE as otherwise the decimal would be to have entered as \\.
   aft <- substr(x, StrPos(x, sep, fix=TRUE) + 1, nchar(x))
-  res <- paste(replace(StrPad(bef, max(nchar(bef)),
+  # chop white space on the right
+  aft <- substr(aft, 1, max(nchar(StrTrim(aft, method="right"))))
+  res <- paste(replace(StrPad(bef, max(nchar(bef), na.rm=TRUE),
                               " ", adj = "right"), is.na(bef), ""),
-               replace(StrPad(aft, max(nchar(aft)), " ", adj = "left"), is.na(aft),
+               replace(StrPad(aft, max(nchar(aft), na.rm=TRUE), " ", adj = "left"), is.na(aft),
                        ""), sep = "")
-  res[is.na(x)] <- NA
-  res
+
+  # restore orignal NAs
+  res[id.na] <- NA
+
+  # overwrite the separator
+  if(length(grep("\\", sep, fixed=TRUE)) == 0)
+    res[idx] <- gsub(sep, " ", res[idx], fixed = TRUE)
+
+  # return unchanged values not containing sep
+  return(res)
+
 }
 
 
@@ -1125,7 +1251,9 @@ StrVal <- function(x, paste = FALSE, as.numeric = FALSE){
       vals <- as.numeric(vals)
   } else {
     if(as.numeric==TRUE)
-      vals <- lapply(vals, as.numeric)
+      vals <- sapply(vals, as.numeric)
+    else
+      vals <- sapply(vals, as.character)
   }
 
   return(vals)
@@ -1223,6 +1351,8 @@ DecToHex <- function(x) as.hexmode(as.numeric(x))
 OctToDec <- function(x) strtoi(x, 8L)
 # example: strtoi(c("12", "24"), 8L)
 DecToOct <- function(x) as.numeric(as.character(as.octmode(as.numeric(x))))
+# Alternative: as.numeric(sprintf(242, fmt="%o"))
+
 
 BinToDec <- function(x) {
   # Alternative:  bin2dec <- function(x) { sum(2^.subset((length(x)-1):0, x)) }
@@ -1297,37 +1427,42 @@ DoCall <- function (what, args, quote = FALSE, envir = parent.frame())  {
 
   if (quote)
     args <- lapply(args, enquote)
-  if (is.null(names(args)) || is.data.frame(args)) {
+
+  if (is.null(names(args)) ||
+      is.data.frame(args)){
     argn <- args
     args <- list()
-  }
-  else {
+  }else{
+    # Add all the named arguments
     argn <- lapply(names(args)[names(args) != ""], as.name)
     names(argn) <- names(args)[names(args) != ""]
+    # Add the unnamed arguments
     argn <- c(argn, args[names(args) == ""])
     args <- args[names(args) != ""]
   }
-  if (class(what) == "character") {
-    if (is.character(what)) {
+
+  if (class(what) == "character"){
+    if(is.character(what)){
       fn <- strsplit(what, "[:]{2,3}")[[1]]
-      what <- if (length(fn) == 1) {
-        get(fn[[1]], envir = envir, mode = "function")
-      }
-      else {
-        get(fn[[2]], envir = asNamespace(fn[[1]]), mode = "function")
+      what <- if(length(fn)==1) {
+        get(fn[[1]], envir=envir, mode="function")
+      } else {
+        get(fn[[2]], envir=asNamespace(fn[[1]]), mode="function")
       }
     }
     call <- as.call(c(list(what), argn))
-  }
-  else if (class(what) == "function") {
+  }else if (class(what) == "function"){
     f_name <- deparse(substitute(what))
     call <- as.call(c(list(as.name(f_name)), argn))
     args[[f_name]] <- what
-  }
-  else if (class(what) == "name") {
+  }else if (class(what) == "name"){
     call <- as.call(c(list(what, argn)))
   }
-  eval(call, envir = args, enclos = envir)
+
+  eval(call,
+       envir = args,
+       enclos = envir)
+
 }
 
 ###
@@ -1365,6 +1500,7 @@ Recode <- function(x, newlevels, elselevel=NA, use.empty=FALSE){
     elselevels <- setdiff(levels(x), unlist(newlevels))
     names(elselevels) <- elselevels
     newlevels <- c(newlevels, elselevels)
+
   } else {
     if(!is.na(elselevel)){
       newlevels[[length(newlevels)+1]] <- setdiff(levels(x), unlist(newlevels))
@@ -1529,6 +1665,9 @@ OrderMixed <- function(x) {
 }
 
 
+Lookup <- function(x, ref, val){
+  val[match(x, ref)]
+}
 
 
 
@@ -1651,8 +1790,8 @@ LogLin <- function(x, a) {
 Logit <- function(x, min=0, max=1) {
 
   # variant in boot:::logit - CHECKME if better ********
-    p <- (x-min)/(max-min)
-    log(p/(1-p))
+  p <- (x-min)/(max-min)
+  log(p/(1-p))
 }
 
 
@@ -1949,9 +2088,7 @@ IsLeapYear <- function(x){
 }
 
 
-Month <- function (x, fmt = c("m", "mm", "mmm"), lang = NULL, stringsAsFactors = TRUE) {
-
-  if(is.null(lang)) lang <- Coalesce(getOption("lang"), "local")
+Month <- function (x, fmt = c("m", "mm", "mmm"), lang = getOption("lang", "local"), stringsAsFactors = TRUE) {
 
   res <- as.POSIXlt(x)$mon + 1
 
@@ -2018,7 +2155,6 @@ Week <- function(x, method = c("iso", "us")){
 #       wn <- ifelse(wn == 0, Week(as.Date(paste(x.y-1, "12-31", sep="-"))), wn)
 
       z <- x + (3 - (as.POSIXlt(x)$wday + 6) %% 7)
-      # jan1 <- as.Date(gettextf("%s-01-01", Year(z)))
       jan1 <- as.Date(paste(Year(z), "-01-01", sep=""))
 
       wn <- 1 + as.integer(z - jan1) %/% 7
@@ -2040,9 +2176,7 @@ Day <- function(x){ as.POSIXlt(x)$mday }
 # Accessor for Day, as defined by library(lubridate)
 "Day<-" <- function(x, value) { x <- x + (value - Day(x)) }
 
-Weekday <- function (x, fmt = c("d", "dd", "ddd"), lang = NULL, stringsAsFactors = TRUE) {
-
-  if(is.null(lang)) lang <- Coalesce(getOption("lang"), "local")
+Weekday <- function (x, fmt = c("d", "dd", "ddd"), lang = getOption("lang", "local"), stringsAsFactors = TRUE) {
 
   # x <- as.Date(x)
   res <- as.POSIXlt(x)$wday
@@ -2088,7 +2222,7 @@ Quarter <- function (x) {
 
 YearDay <- function(x) {
   # return(as.integer(format(as.Date(x), "%j")))
-  as.POSIXlt(x)$yday
+  return(as.POSIXlt(x)$yday)
 }
 
 
@@ -2162,49 +2296,72 @@ LastDayOfMonth <- function(x){
 }
 
 
-AddMonths <- function (x, n, ceiling = TRUE) {
 
-  if (IsDate(x)) {
+AddMonths <- function (x, n, ...) {
+
+  .addMonths <- function (x, n) {
+
     # ref: http://stackoverflow.com/questions/14169620/add-a-month-to-a-date
     # Author: Antonio
 
     # no ceiling
     res <- sapply(x, seq, by = paste(n, "months"), length = 2)[2,]
-    # sapply kills the Date class, so recreate here
-    class(res) <- class(x)
+    # sapply kills the Date class, so recreate down the road
 
-    #ceiling
+    # ceiling
     DescTools::Day(x) <- 1
     res_c <- sapply(x, seq, by = paste(n + 1, "months"), length = 2)[2,] - 1
-    class(res_c) <- class(x)
 
-    #use ceiling in case of overlapping
+    # use ceiling in case of overlapping
     res <- pmin(res, res_c)
+
+    return(res)
+
   }
-  else if (all(DescTools::IsWhole(x))) {
-    res <- sapply(x, function(i){
-      if (i %[]% c(100001, 999912)) {
-        # Author: Roland Rapold
-        # YYYYMM
-        y <- i%/%100
-        m <- i - y * 100
-        res <- (y - 10 + ((m + n + 120 - 1)%/%12)) * 100 +
-          ((m + n + 120 - 1)%%12) + 1
-      }
-      else if (i %[]% c(10000101, 99991231)) {
-        # YYYYMMDD
-        res <- DescTools::AddMonths(x = as.Date(as.character(i), "%Y%m%d"), n = n, ceiling = ceiling)
-        res <- DescTools::Year(res)*10000 + DescTools::Month(res)*100 + Day(res)
-      }
-      return(res)
-    })
-  }
-  else {
-    res <- NA
-  }
+
+  x <- as.Date(x, ...)
+
+  res <- mapply(.addMonths, x, n)
+  # mapply (as sapply above) kills the Date class, so recreate here
+  # and return res in the same class as x
+  class(res) <- "Date"
+
   return(res)
 
 }
+
+
+
+AddMonthsYM <- function (x, n) {
+
+  .addMonths <- function (x, n) {
+
+    if (x %[]% c(100001, 999912)) {
+
+      # Author: Roland Rapold
+      # YYYYMM
+      y <- x %/% 100
+      m <- x - y * 100
+      res <- (y - 10 + ((m + n + 120 - 1) %/% 12)) * 100 +
+        ((m + n + 120 - 1) %% 12) + 1
+
+    } else if (x %[]% c(10000101, 99991231)) {
+
+      # YYYYMMDD
+      res <- DescTools::AddMonths(x = as.Date(as.character(x), "%Y%m%d"), n = n)
+      res <- DescTools::Year(res)*10000 + DescTools::Month(res)*100 + Day(res)
+    }
+
+    return(res)
+
+  }
+
+  res <- mapply(.addMonths, x, n)
+
+  return(res)
+
+}
+
 
 
 Zodiac <- function(x, lang = c("engl","deu"), stringsAsFactors = TRUE) {
@@ -2326,6 +2483,7 @@ axTicks.POSIXct <- function (side, x, at, format, labels = TRUE, ...) {
 ###
 
 ## base: information functions ====
+
 
 # Between operators
 
@@ -2499,22 +2657,7 @@ axTicks.POSIXct <- function (side, x, at, format, labels = TRUE, ...) {
 
 
 `%like%` <- function(x, pattern) {
-
-    # if (!substr(pattern, 1, 1) == "%") {
-    #   pattern <- paste("^", pattern, sep="")
-    # } else {
-    #   pattern <- substr(pattern, 2, nchar(pattern) )
-    # }
-    # if (!substr(pattern, nchar(pattern), nchar(pattern)) == "%") {
-    #   pattern <- paste(pattern, "$", sep="")
-    # } else {
-    #   pattern <- substr(pattern, 1, nchar(pattern)-1 )
-    # }
-    #
-    # grepl(pattern = pattern, x = x)
-
-  `%like any%`(x, pattern)
-
+  return(`%like any%`(x, pattern))
 }
 
 
@@ -2755,7 +2898,9 @@ IsDichotomous <- function(x) length(unique(na.omit(x))) <= 2
 
 
 StrIsNumeric <- function(x){
-  #example: x <- c("123", "-3.141", "foobar123")
+  # example:
+  # x <- c("123", "-3.141", "foobar123")
+  # StrIsNUmeric(x)
   suppressWarnings(!is.na(as.numeric(x)))
 }
 
@@ -2782,16 +2927,12 @@ IsPrime <- function(x) {
 VecRot <- function(x, n = 1)  {
   # just one shift:    (1:x %% x) + 1
   n <- n %% length(x)
-#  rep(x, times=2)[(n+1):(n+length(x))]
   rep(x, times=2)[(length(x) - n+1):(2*length(x)-n)]
 }
 
 
-# Mround <- function(x, multiple) {
-#   round(x/multiple, 0) * multiple
-# }
 
-RoundM <- function(x, multiple = 1, FUN = round) {
+RoundTo <- function(x, multiple = 1, FUN = round) {
 
   # check for functions: round, ceiling, floor, but how????
   # FUN <- match.arg(FUN, c(round, ceiling, floor))
@@ -3282,7 +3423,10 @@ Abind <- function(..., along=N, rev.along=NULL, new.names=NULL,
 # }
 
 ToLong <- function (x, varnames = NULL) {
+
   if(!is.list(x)) {
+    if(is.matrix(x) || is.table(x))
+      x <- as.data.frame(x)
     lst <- as.list(x)
   } else {
     lst <- x
@@ -3295,21 +3439,50 @@ ToLong <- function (x, varnames = NULL) {
     varnames <- c("grp", "x")
 
   colnames(res) <- varnames
-  rownames(res) <- do.call(paste, c(expand.grid(grpnames, rownames(x)), sep="."))
+  rownames(res) <- do.call(paste, c(expand.grid(rownames(x), grpnames), sep="."))
 
   return(res)
 }
 
 
 
+ToWide <- function(x, g, by=NULL, varnames=NULL){
 
-ToWide <- function(x, g, varnames=NULL){
+  if(is.null(varnames))
+    varnames <- levels(g)
+
+  if(is.null(by)){
+    by <- "row.names"
+
+  }  else {
+    x <- data.frame(x, idx=by)
+    by <- "idx"
+    varnames <- c("by", varnames)
+  }
+
   g <- factor(g)
-  res <- do.call("cbind", split(x, g))
-  if(is.null(varnames)) varnames <- levels(g)
+  s <- split(x, g)
+
+  res <- Reduce(function(x, y) {
+    z <- merge(x, y, by=by, all.x=TRUE, all.y=TRUE)
+    # kill the rownames
+    if(by=="row.names") z <- z[, -grep("Row.names", names(z))]
+    return(z)
+  }, s)
+
   colnames(res) <- varnames
   return(res)
+
 }
+
+
+# ToWide <- function(x, g, varnames=NULL){
+#   g <- factor(g)
+#   res <- do.call("cbind", split(x, g))
+#   if(is.null(varnames)) varnames <- levels(g)
+#   colnames(res) <- varnames
+#   return(res)
+# }
 
 
 
@@ -3495,10 +3668,18 @@ Prec <- function (x) {
 #   res
 # }
 
+
+# References:
+# http://stackoverflow.com/questions/3443687/formatting-decimal-places-in-r
+# http://my.ilstu.edu/~jhkahn/apastats.html
+# https://en.wikipedia.org/wiki/Significant_figures
+# http://www.originlab.com/doc/Origin-Help/Options-Dialog-NumFormat-Tab
+
 Format <- function(x, digits = NULL, sci = getOption("scipen")
                                      , big.mark="", leading = NULL
                                      , zero.form = NULL, na.form = NULL
-                                     , fmt = NULL, align = "left", width = NULL, ...){
+                                     , fmt = NULL, align = NULL, width = NULL
+                                     , lang = getOption("lang", "local"), ...){
   UseMethod("Format")
 }
 
@@ -3506,10 +3687,10 @@ Format <- function(x, digits = NULL, sci = getOption("scipen")
 Format.matrix <- function(x, digits = NULL, sci = getOption("scipen")
                            , big.mark="", leading = NULL
                            , zero.form = NULL, na.form = NULL
-                           , fmt = NULL, align = "left", width = NULL, ...){
+                           , fmt = NULL, align = NULL, width = NULL, lang = getOption("lang", "local"), ...){
   x[,] <- Format.default(x=x, digits=digits, sci=sci, big.mark=big.mark,
                          leading=leading, zero.form=zero.form, na.form=na.form,
-                         fmt=fmt, align=align, width=width, ...)
+                         fmt=fmt, align=align, width=width, lang=lang, ...)
   return(x)
 }
 
@@ -3517,10 +3698,10 @@ Format.matrix <- function(x, digits = NULL, sci = getOption("scipen")
 Format.table <- function(x, digits = NULL, sci = getOption("scipen")
                           , big.mark="", leading = NULL
                           , zero.form = NULL, na.form = NULL
-                          , fmt = NULL, align = "left", width = NULL, ...){
+                          , fmt = NULL, align = NULL, width = NULL, lang = getOption("lang", "local"), ...){
   x[] <- Format.default(x=x, digits=digits, sci=sci, big.mark=big.mark,
                          leading=leading, zero.form=zero.form, na.form=na.form,
-                         fmt=fmt, align=align, width=width, ...)
+                         fmt=fmt, align=align, width=width, lang=lang, ...)
   return(x)
 }
 
@@ -3528,7 +3709,148 @@ Format.table <- function(x, digits = NULL, sci = getOption("scipen")
 Format.default <- function(x, digits = NULL, sci = getOption("scipen")
                    , big.mark="", leading = NULL
                    , zero.form = NULL, na.form = NULL
-                   , fmt = NULL, align = NULL, width = NULL, ...){
+                   , fmt = NULL, align = NULL, width = NULL, lang = getOption("lang", "local"), ...){
+
+
+
+
+  .format.date <- function(x, fmt) {
+
+    # fine format codes
+    # http://www.autohotkey.com/docs/commands/FormatTime.htm
+
+    pat <- ""
+    fpat <- ""
+
+    i <- 1
+    # we used here:
+    #       if(length(grep("\\bd{4}\\b", fmt)) > 0)
+    # which found dddd only as separated string from others (\b ... blank)
+    # this is not suitable for formats like yyyymmdd
+    # hence this was changed to d{4}
+
+    #      if(length(grep("\\bd{4}\\b", fmt)) > 0) {
+    if(length(grep("d{4}", fmt)) > 0) {
+      fmt <- gsub(pattern = "dddd", replacement = paste("\\\\", i, sep=""), x = fmt)
+      pat <- paste(pat, "(.+)-", sep="")
+      fpat <- paste(fpat, "%A-", sep="")
+      i <- i+1
+    }
+    #      if(length(grep("\\bd{3}\\b", fmt)) > 0) {
+    if(length(grep("d{3}", fmt)) > 0) {
+      fmt <- gsub(pattern = "ddd", replacement = paste("\\\\", i, sep=""), x = fmt)
+      pat <- paste(pat, "(.+)-", sep="")
+      fpat <- paste(fpat, "%a-", sep="")
+      i <- i+1
+    }
+    if(length(grep("d{2}", fmt)) > 0) {
+      fmt <- gsub(pattern = "dd", replacement = paste("\\\\", i, sep=""), x = fmt)
+      pat <- paste(pat, "(.+)-", sep="")
+      fpat <- paste(fpat, "%d-", sep="")
+      i <- i+1
+    }
+    if(length(grep("d{1}", fmt)) > 0) {
+      fmt <- gsub(pattern = "d", replacement = paste("\\\\", i, sep=""), x = fmt)
+      pat <- paste(pat, "0?(.+)-", sep="")
+      fpat <- paste(fpat, "%d-", sep="")
+      i <- i+1
+    }
+    if(length(grep("m{4}", fmt)) > 0) {
+      fmt <- gsub(pattern = "mmmm", replacement = paste("\\\\", i, sep=""), x = fmt)
+      pat <- paste(pat, "(.+)-", sep="")
+      fpat <- paste(fpat, "%B-", sep="")
+      i <- i+1
+    }
+    if(length(grep("m{3}", fmt)) > 0) {
+      fmt <- gsub(pattern = "mmm", replacement = paste("\\\\", i, sep=""), x = fmt)
+      pat <- paste(pat, "(.+)-", sep="")
+      fpat <- paste(fpat, "%b-", sep="")
+      i <- i+1
+    }
+    if(length(grep("m{2}", fmt)) > 0) {
+      fmt <- gsub(pattern = "mm", replacement = paste("\\\\", i, sep=""), x = fmt)
+      pat <- paste(pat, "(.+)-", sep="")
+      fpat <- paste(fpat, "%m-", sep="")
+      i <- i+1
+    }
+    if(length(grep("m{1}", fmt)) > 0) {
+      fmt <- gsub(pattern = "m", replacement = paste("\\\\", i, sep=""), x = fmt)
+      pat <- paste(pat, "0?(.+)-", sep="")
+      fpat <- paste(fpat, "%m-", sep="")
+      i <- i+1
+    }
+    if(length(grep("y{4}", fmt)) > 0) {
+      fmt <- gsub(pattern = "yyyy", replacement = paste("\\\\", i, sep=""), x = fmt)
+      pat <- paste(pat, "(.+)-", sep="")
+      fpat <- paste(fpat, "%Y-", sep="")
+      i <- i+1
+    }
+    if(length(grep("y{2}", fmt)) > 0) {
+      fmt <- gsub(pattern = "yy", replacement = paste("\\\\", i, sep=""), x = fmt)
+      pat <- paste(pat, "(.+)-", sep="")
+      fpat <- paste(fpat, "%y-", sep="")
+      i <- i+1
+    }
+    if(length(grep("y{1}", fmt)) > 0) {
+      fmt <- gsub(pattern = "y", replacement = paste("\\\\", i, sep=""), x = fmt)
+      pat <- paste(pat, "0?(.+)-", sep="")
+      fpat <- paste(fpat, "%y-", sep="")
+      i <- i+1
+    }
+
+    sub(pat, fmt, format(x, fpat))
+
+  }
+
+  .format.pval <- function(x){
+    # format p-values  *********************************************************
+    # this is based on original code from format.pval
+
+    r <- character(length(is0 <- x < eps))
+    if (any(!is0)) {
+      rr <- x <- x[!is0]
+      expo <- floor(log10(ifelse(x > 0, x, 1e-50)))
+      fixp <- (expo >= -3)
+      if (any(fixp))
+        rr[fixp] <- format(x[fixp], digits = 4)
+      if (any(!fixp))
+        rr[!fixp] <- format(x[!fixp], digits=3, scientific=TRUE)
+      r[!is0] <- rr
+    }
+    if (any(is0)) {
+      r[is0] <- gettextf("< %s", format(eps, digits = 2))
+    }
+
+    return(r)
+
+  }
+
+  .format.stars <- function(x){
+    # format significance stars  ***************************************************
+    # example: Format(c(0.3, 0.08, 0.042, 0.001), fmt="*")
+
+    breaks <- c(0,0.001,0.01,0.05,0.1,1)
+    labels <- c("***","** ","*  ",".  ","   ")
+    res <- as.character(sapply(x, cut, breaks=breaks, labels=labels, include.lowest=TRUE))
+
+    return(res)
+
+  }
+
+  .leading.zero <- function(x, n){
+    # just add a given number of leading zeros
+    # split at the .
+    z <- strsplit(as.character(x), split=".", fixed = TRUE)
+    # left side
+    zl <- lapply(z, "[", 1)
+    zl <- sapply(zl, function(x) sprintf(paste0("%0", n + (x<0)*1, "i"), as.numeric(x)))
+    # right side
+    zr <- sapply(z, "[", 2)
+    zr <- ifelse(is.na(zr), "", paste(".", zr, sep=""))
+
+    paste(zl, zr, sep="")
+
+  }
 
 
 #   We accept here a fmt class to be used as user templates
@@ -3547,183 +3869,76 @@ Format.default <- function(x, digits = NULL, sci = getOption("scipen")
   # getOption("OutDec")
 
 
+  if(lang=="engl"){
+    loc <- Sys.getlocale("LC_TIME")
+    Sys.setlocale("LC_TIME", "C")
+    on.exit(Sys.setlocale("LC_TIME", loc))
+  }
+
   if(is.null(fmt)) fmt <- ""
   if(class(fmt) == "fmt") return(do.call(Format, c(fmt, x=list(x))))
 
-  if(all(class(x) == "Date")){
-# format dates  ********************************************************************
 
-    # fine format codes
-    # http://www.autohotkey.com/docs/commands/FormatTime.htm
+  if(is.null(na.form)) na.form <- "NA"
 
-    formatd <- function(x, fmt) {
+  if ((has.na <- any(ina <- is.na(x))))
+    x <- x[!ina]
 
-      pat <- ""
-      fpat <- ""
+  eps <- .Machine$double.eps
+  sci <- rep(sci, length.out=2)
 
-      i <- 1
-# we used here:
-#       if(length(grep("\\bd{4}\\b", fmt)) > 0)
-# which found dddd only as separated string from others (\b ... blank)
-# this is not suitable for formats like yyyymmdd
-# hence this was changed to d{4}
 
-#      if(length(grep("\\bd{4}\\b", fmt)) > 0) {
-      if(length(grep("d{4}", fmt)) > 0) {
-        fmt <- gsub(pattern = "dddd", replacement = paste("\\\\", i, sep=""), x = fmt)
-        pat <- paste(pat, "(.+)-", sep="")
-        fpat <- paste(fpat, "%A-", sep="")
-        i <- i+1
-      }
-#      if(length(grep("\\bd{3}\\b", fmt)) > 0) {
-      if(length(grep("d{3}", fmt)) > 0) {
-        fmt <- gsub(pattern = "ddd", replacement = paste("\\\\", i, sep=""), x = fmt)
-        pat <- paste(pat, "(.+)-", sep="")
-        fpat <- paste(fpat, "%a-", sep="")
-        i <- i+1
-      }
-      if(length(grep("d{2}", fmt)) > 0) {
-        fmt <- gsub(pattern = "dd", replacement = paste("\\\\", i, sep=""), x = fmt)
-        pat <- paste(pat, "(.+)-", sep="")
-        fpat <- paste(fpat, "%d-", sep="")
-        i <- i+1
-      }
-      if(length(grep("d{1}", fmt)) > 0) {
-        fmt <- gsub(pattern = "d", replacement = paste("\\\\", i, sep=""), x = fmt)
-        pat <- paste(pat, "0?(.+)-", sep="")
-        fpat <- paste(fpat, "%d-", sep="")
-        i <- i+1
-      }
-      if(length(grep("m{4}", fmt)) > 0) {
-        fmt <- gsub(pattern = "mmmm", replacement = paste("\\\\", i, sep=""), x = fmt)
-        pat <- paste(pat, "(.+)-", sep="")
-        fpat <- paste(fpat, "%B-", sep="")
-        i <- i+1
-      }
-      if(length(grep("m{3}", fmt)) > 0) {
-        fmt <- gsub(pattern = "mmm", replacement = paste("\\\\", i, sep=""), x = fmt)
-        pat <- paste(pat, "(.+)-", sep="")
-        fpat <- paste(fpat, "%b-", sep="")
-        i <- i+1
-      }
-      if(length(grep("m{2}", fmt)) > 0) {
-        fmt <- gsub(pattern = "mm", replacement = paste("\\\\", i, sep=""), x = fmt)
-        pat <- paste(pat, "(.+)-", sep="")
-        fpat <- paste(fpat, "%m-", sep="")
-        i <- i+1
-      }
-      if(length(grep("m{1}", fmt)) > 0) {
-        fmt <- gsub(pattern = "m", replacement = paste("\\\\", i, sep=""), x = fmt)
-        pat <- paste(pat, "0?(.+)-", sep="")
-        fpat <- paste(fpat, "%m-", sep="")
-        i <- i+1
-      }
-      if(length(grep("y{4}", fmt)) > 0) {
-        fmt <- gsub(pattern = "yyyy", replacement = paste("\\\\", i, sep=""), x = fmt)
-        pat <- paste(pat, "(.+)-", sep="")
-        fpat <- paste(fpat, "%Y-", sep="")
-        i <- i+1
-      }
-      if(length(grep("y{2}", fmt)) > 0) {
-        fmt <- gsub(pattern = "yy", replacement = paste("\\\\", i, sep=""), x = fmt)
-        pat <- paste(pat, "(.+)-", sep="")
-        fpat <- paste(fpat, "%y-", sep="")
-        i <- i+1
-      }
-      if(length(grep("y{1}", fmt)) > 0) {
-        fmt <- gsub(pattern = "y", replacement = paste("\\\\", i, sep=""), x = fmt)
-        pat <- paste(pat, "0?(.+)-", sep="")
-        fpat <- paste(fpat, "%y-", sep="")
-        i <- i+1
-      }
+  if(all(class(x) == "Date")) {
+    r <- .format.date(x, fmt=fmt)
 
-      sub(pat, fmt, format(x, fpat))
-
-    }
-
-    res <- formatd(x, fmt=fmt)
+  } else if(all(class(x) %in% c("character","factor","ordered"))) {
+    r <- format(x)
 
   } else if(fmt=="*"){
-# format significance stars  ***************************************************
-
-    breaks <- c(0,0.001,0.01,0.05,0.1,1)
-    labels <- c("***","** ","*  ",".  ","   ")
-    if(identical(x, NA)) return(NA)
-    # example: Format(c(0.3, 0.08, 0.042, 0.001), fmt="*")
-    res <- as.character(sapply(x, cut, breaks=breaks, labels=labels, include.lowest=TRUE))
+    r <- .format.stars(x)
 
   } else if(fmt=="p"){
 
-# format p-values  ********************************************************************
-     if(is.null(na.form)) na.form <- "NA"
-#    this is based on original code from format.pval
-
-      eps <- .Machine$double.eps
-
-      if ((has.na <- any(ina <- is.na(x))))
-        x <- x[!ina]
-      r <- character(length(is0 <- x < eps))
-      if (any(!is0)) {
-        rr <- x <- x[!is0]
-        expo <- floor(log10(ifelse(x > 0, x, 1e-50)))
-        fixp <- (expo >= -3)
-        if (any(fixp))
-          rr[fixp] <- format(x[fixp], digits = 4)
-        if (any(!fixp))
-          rr[!fixp] <- format(x[!fixp], digits=3, scientific=TRUE)
-        r[!is0] <- rr
-      }
-      if (any(is0)) {
-        r[is0] <- gettextf("< %s", format(eps, digits = 2))
-      }
-      if (has.na) {
-        rok <- r
-        r <- character(length(ina))
-        r[!ina] <- rok
-        r[ina] <- na.form
-      }
-
-      res <- r
+    r <- .format.pval(x)
 
   } else if(fmt=="e"){
-    res <- formatC(x, digits = digits, width = width, format = "e",
-                   big.mark=big.mark)
+    r <- formatC(x, digits = digits, width = width, format = "e",
+                 big.mark=big.mark, zero.print = zero.form)
 
-  } else {
+  } else if(fmt=="%"){
+      r <- paste(suppressWarnings(formatC(x * 100, digits = digits, width = width, format = "f",
+                                          big.mark=big.mark, drop0trailing = FALSE)),
+                 "%", sep="")
 
-# format else (meaning nor date, nor p-vals, nor sign *, nor exp) ****************************************************************
-    perc <- (fmt == "%")
-    if(perc)
-      # format percentages  ********************************************************************
-      x <- round(x * 100, ifelse(is.null(digits), 0, digits))
+  } else {  # format else   ********************************************
 
-    if(is.na(sci)){
-      res <- formatC(x, digits = digits, width = width, format = "f",
+    if(all(is.na(sci))) {
+      # use is.na(sci) to inhibit scientific notation
+      r <- formatC(x, digits = digits, width = width, format = "f",
                      big.mark=big.mark)
     } else {
-      idx <- (((abs(x) > .Machine$double.eps) & (abs(x) <= 10^-sci)) | (abs(x) >= 10^sci))
-      res <- as.character(rep(NA, length(x)))
+      idx <- (((abs(x) > .Machine$double.eps) & (abs(x) <= 10^-sci[2])) | (abs(x) >= 10^sci[1]))
+      r <- as.character(rep(NA, length(x)))
 
       # use which here instead of res[idx], because of NAs
-#   formatC is barking, classes are of no interess here, so suppress warning...
-#   what's that exactly??
-       res[which(idx)] <- suppressWarnings(formatC(x[which(idx)], digits = digits, width = width, format = "e",
-                                 big.mark=big.mark))
+      #   formatC is barking, classes are of no interess here, so suppress warning...
+      #   what's that exactly??
+      r[which(idx)] <- suppressWarnings(formatC(x[which(idx)], digits = digits, width = width, format = "e",
+                                 big.mark=big.mark, drop0trailing = FALSE))
 
-#       Warning messages:
-#         1: In formatC(x[which(!idx)], digits = digits, width = width, format = "f",  :
-#                         class of 'x' was discarded
+#     Warning messages:
+#     1: In formatC(x[which(!idx)], digits = digits, width = width, format = "f",  :
+#                       class of 'x' was discarded
 #     formatC is barking, classes are of no interess here, so suppress warning...
-      res[which(!idx)] <- suppressWarnings(formatC(x[which(!idx)], digits = digits, width = width, format = "f",
-                                  big.mark=big.mark))
+      r[which(!idx)] <- suppressWarnings(formatC(x[which(!idx)], digits = digits, width = width, format = "f",
+                                  big.mark=big.mark, drop0trailing = FALSE))
     }
-    if(perc) res <- paste(res, "%", sep="")
 
     if(!is.null(leading)){
       # handle leading zeros ------------------------------
       if(leading %in% c("","drop")) {
         # drop leading zeros
-        res <- gsub("(?<![0-9])0+\\.", "\\.", res, perl = TRUE)
+        r <- gsub("(?<![0-9])0+\\.", "\\.", r, perl = TRUE)
 
         # alternative:
         # res <- gsub("(-?)[^[:digit:]]0+\\.", "\\.", res)
@@ -3736,58 +3951,32 @@ Format.default <- function(x, digits = NULL, sci = getOption("scipen")
 #         old:
 #         n <- nchar(leading) - unlist(lapply(lapply(strsplit(res, "\\."), "[", 1), nchar))
 
-        lz <- function(x, n){
-          # just add a given number of leading zeros
-          # split at the .
-          z <- strsplit(as.character(x), split=".", fixed = TRUE)
-          # left side
-          zl <- lapply(z, "[", 1)
-          zl <- sapply(zl, function(x) sprintf(paste0("%0", n + (x<0)*1, "i"), as.numeric(x)))
-          # right side
-          zr <- sapply(z, "[", 2)
-          zr <- ifelse(is.na(zr), "", paste(".", zr, sep=""))
-
-          paste(zl, zr, sep="")
-
-        }
         # old: did not handle - correctly
         # res <- StrPad(res, pad = "0", width=nchar(res) + pmax(n, 0), adj="right")
-        res <- lz(res, nchar(leading))
+        r <- .leading.zero(r, nchar(leading))
       }
     }
-    if(!is.null(zero.form))
-      res[abs(x) < .Machine$double.eps] <- zero.form
-#         StrPad(zero.form, width = Coalesce(width, 1),
-#                adj = Coalesce(ifelse(align == "dec", "right", align), "left"))
-    if(!is.null(na.form)) res[is.na(x)] <- na.form
-#         StrPad(na.form, width = Coalesce(width, 1),
-#                adj = Coalesce(ifelse(align == "dec", "right", align), "left"))
-
-    if(!is.null(align)){
-      # touch alignment only when required
-      switch(match.arg(align, c("left", "right", "center", "dec"))
-# old:       , left  = { res <- gsub("^ +","", res) }   # delete all space on the left
-             , left  = { res <- sub("(^ +)(.+)", "\\2\\1", res) } # delete all space on the left and append to the right
-# old:       , right = { res <- StrPad(res, width = max(nchar(res)), pad = " ", adj="right")}
-# see:   http://stackoverflow.com/questions/31221065/r-regexp-swapping-text-parts
-             , right = { res <- sub("(.+?)( +$)", "\\2\\1", res) }
-             , center= { res <- StrPad(StrTrim(res), width = max(nchar(res)), pad = " ", adj="center" )}
-             , dec   = {
-                         spx <- strsplit(res, "\\.")
-                         bef <- lapply(spx, "[", 1)
-                         aft <- lapply(spx, "[", 2)
-
-                         res <- paste(
-                           replace(StrPad(bef, max(nchar(bef)), " ", adj = "right"), is.na(bef), "")
-                           , replace(StrPad(aft, max(nchar(aft)), " ", adj = "left"), is.na(aft), "")
-                           , sep=".")
-                         res[is.na(x)] <- NA
-             }
-      )}
 
   }
 
-  return(res)
+  if(!is.null(zero.form))
+    r[abs(x) < eps] <- zero.form
+
+
+  if (has.na) {
+    rok <- r
+    r <- character(length(ina))
+    r[!ina] <- rok
+    r[ina] <- na.form
+  }
+
+
+  if(!is.null(align)){
+    r <- StrAlign(r, sep = align)
+  }
+
+
+  return(r)
 
 }
 
@@ -3801,6 +3990,8 @@ Format.default <- function(x, digits = NULL, sci = getOption("scipen")
 
 .fmt_per <- function(digits=NULL){
 
+  # we could use getOption("digits") as default here, but this is normally not a good choice
+  # as numeric digits and percentage digits usually differ
   res <- getOption("fmt.per", structure(list(digits=1,
                                       fmt="%"), class="fmt"))
   # overwrite digits if given
@@ -3856,2375 +4047,9 @@ Recycle <- function(...){
 
 
 
-PartCor <- function(m, x, y)  {
-
-  cl <- match.call()
-
-  if(dim(m)[1] != dim(m)[2]) {
-    n.obs <- dim(m)[1]
-    m <- cor(m, use="pairwise")
-  }
-  if(!is.matrix(m)) m <- as.matrix(m)
-
-  # first reorder the matrix to select the right variables
-  nm <- dim(m)[1]
-  t.mat <- matrix(0, ncol=nm, nrow=nm)
-  xy <- c(x,y)
-  numx <- length(x)
-  numy <- length(y)
-  nxy <- numx+numy
-
-  for (i in 1:nxy) {
-    t.mat[i, xy[i]] <- 1
-  }
-
-  reorder <- t.mat %*% m %*% t(t.mat)
-  reorder[abs(reorder) > 1] <- NA    # this allows us to use the matrix operations to reorder and pick
-
-  X <- reorder[1:numx, 1:numx]
-  Y <- reorder[1:numx, (numx+1):nxy]
-
-  phi <- reorder[(numx+1):nxy,(numx+1):nxy]
-  phi.inv <- solve(phi)
-
-  X.resid <- X - Y %*% phi.inv %*% t(Y)
-  sd <- diag(sqrt(1/diag(X.resid)))
-  X.resid <- sd %*% X.resid %*% sd
-
-  colnames(X.resid) <- rownames(X.resid) <- colnames(m)[x]
-
-  return(X.resid)
-
-}
-
 
 ###
 
-
-## stats: functions (RobRange, Hmean, Gmean, Aad, HuberM etc.) ====
-
-
-FisherZ <- function(rho)  {0.5*log((1+rho)/(1-rho)) }   #converts r to z
-
-FisherZInv <- function(z) {(exp(2*z)-1)/(1+exp(2*z)) }   #converts back again
-
-
-CorCI <- function(rho, n, conf.level = 0.95, alternative = c("two.sided","less","greater")) {
-
-
-    if (n < 3L)
-      stop("not enough finite observations")
-
-    if (!missing(conf.level) && (length(conf.level) != 1 || !is.finite(conf.level)
-                                 || conf.level < 0 || conf.level > 1))
-      stop("'conf.level' must be a single number between 0 and 1")
-
-    alternative <- match.arg(alternative)
-
-    z <- FisherZ(rho)
-    sigma <- 1/sqrt(n - 3)
-
-    ci <- switch(alternative,
-                 less = c(-Inf, z + sigma * qnorm(conf.level)),
-                 greater = c(z - sigma * qnorm(conf.level), Inf),
-                 two.sided = z + c(-1, 1) * sigma * qnorm((1 + conf.level)/2))
-    ci <- FisherZInv(ci)
-
-    return(c(cor = rho, lwr.ci = ci[1], upr.ci = ci[2]))
-}
-
-
-
-
-CorPolychor <- function (x, y, ML=FALSE, control=list(), std.err=FALSE, maxcor=.9999){
-
-    # last modified 21 Oct 08 by J. Fox
-
-    binBvn <- function(rho, row.cuts, col.cuts, bins=4){
-      # last modified 29 Mar 07 by J. Fox
-
-      row.cuts <- if (missing(row.cuts)) c(-Inf, 1:(bins - 1)/bins, Inf) else  c(-Inf, row.cuts, Inf)
-      col.cuts <- if (missing(col.cuts)) c(-Inf, 1:(bins - 1)/bins, Inf) else  c(-Inf, col.cuts, Inf)
-      r <- length(row.cuts) - 1
-      c <- length(col.cuts) - 1
-      P <- matrix(0, r, c)
-      R <- matrix(c(1, rho, rho, 1), 2, 2)
-      for (i in 1:r){
-        for (j in 1:c){
-          P[i,j] <- pmvnorm(lower=c(row.cuts[i], col.cuts[j]),
-                            upper=c(row.cuts[i+1], col.cuts[j+1]),
-                            corr=R)
-        }
-      }
-      P
-    }
-
-
-    f <- function(pars) {
-      if (length(pars) == 1){
-        rho <- pars
-        if (abs(rho) > maxcor) rho <- sign(rho)*maxcor
-        row.cuts <- rc
-        col.cuts <- cc
-      }
-      else {
-        rho <- pars[1]
-        if (abs(rho) > maxcor) rho <- sign(rho)*maxcor
-        row.cuts <- pars[2:r]
-        col.cuts <- pars[(r+1):(r+c-1)]
-      }
-      P <- binBvn(rho, row.cuts, col.cuts)
-      - sum(tab * log(P))
-    }
-
-    tab <- if (missing(y)) x else table(x, y)
-    zerorows <- apply(tab, 1, function(x) all(x == 0))
-    zerocols <- apply(tab, 2, function(x) all(x == 0))
-    zr <- sum(zerorows)
-    if (0 < zr) warning(paste(zr, " row", suffix <- if(zr == 1) "" else "s",
-                              " with zero marginal", suffix," removed", sep=""))
-    zc <- sum(zerocols)
-    if (0 < zc) warning(paste(zc, " column", suffix <- if(zc == 1) "" else "s",
-                              " with zero marginal", suffix, " removed", sep=""))
-    tab <- tab[!zerorows, ,drop=FALSE]
-    tab <- tab[, !zerocols, drop=FALSE]
-    r <- nrow(tab)
-    c <- ncol(tab)
-    if (r < 2) {
-      warning("the table has fewer than 2 rows")
-      return(NA)
-    }
-    if (c < 2) {
-      warning("the table has fewer than 2 columns")
-      return(NA)
-    }
-    n <- sum(tab)
-    rc <- qnorm(cumsum(rowSums(tab))/n)[-r]
-    cc <- qnorm(cumsum(colSums(tab))/n)[-c]
-    if (ML) {
-      result <- optim(c(optimise(f, interval=c(-1, 1))$minimum, rc, cc), f,
-                      control=control, hessian=std.err)
-      if (result$par[1] > 1){
-        result$par[1] <- 1
-        warning("inadmissible correlation set to 1")
-      }
-      else if (result$par[1] < -1){
-        result$par[1] <- -1
-        warning("inadmissible correlation set to -1")
-      }
-      if (std.err) {
-        chisq <- 2*(result$value + sum(tab * log((tab + 1e-6)/n)))
-        df <- length(tab) - r - c
-        result <- list(type="polychoric",
-                       rho=result$par[1],
-                       row.cuts=result$par[2:r],
-                       col.cuts=result$par[(r+1):(r+c-1)],
-                       var=solve(result$hessian),
-                       n=n,
-                       chisq=chisq,
-                       df=df,
-                       ML=TRUE)
-        class(result) <- "polycor"
-        return(result)
-      }
-      else return(as.vector(result$par[1]))
-    }
-    else if (std.err){
-      result <- optim(0, f, control=control, hessian=TRUE, method="BFGS")
-      if (result$par > 1){
-        result$par <- 1
-        warning("inadmissible correlation set to 1")
-      }
-      else if (result$par < -1){
-        result$par <- -1
-        warning("inadmissible correlation set to -1")
-      }
-      chisq <- 2*(result$value + sum(tab *log((tab + 1e-6)/n)))
-      df <- length(tab) - r - c
-      result <- list(type="polychoric",
-                     rho=result$par,
-                     var=1/result$hessian,
-                     n=n,
-                     chisq=chisq,
-                     df=df,
-                     ML=FALSE)
-      class(result) <- "CorPolychor"
-      return(result)
-    }
-    else optimise(f, interval=c(-1, 1))$minimum
-  }
-
-
-
-
-print.CorPolychor <- function(x, digits = max(3, getOption("digits") - 3), ...){
-
-    # last modified 24 June 04 by J. Fox
-
-        if (x$type == "polychoric"){
-      se <- sqrt(diag(x$var))
-      se.rho <- se[1]
-      est <- if (x$ML) "ML est." else "2-step est."
-      cat("\nPolychoric Correlation, ", est, " = ", signif(x$rho, digits),
-          " (", signif(se.rho, digits), ")", sep="")
-      if (x$df > 0)
-        cat("\nTest of bivariate normality: Chisquare = ",
-            signif(x$chisq, digits), ", df = ", x$df, ", p = ",
-            signif(pchisq(x$chisq, x$df, lower.tail=FALSE), digits), "\n", sep="")
-      else cat("\n")
-      r <- length(x$row.cuts)
-      c <- length(x$col.cuts)
-      if (r == 0) return(invisible(x))
-      row.cuts.se <- se[2:(r+1)]
-      col.cuts.se <- se[(r+2):(r+c+1)]
-      rowThresh <- signif(cbind(x$row.cuts, row.cuts.se), digits)
-      if (r > 1) cat("\n  Row Thresholds\n")
-      else cat("\n  Row Threshold\n")
-      colnames(rowThresh) <- c("Threshold", "Std.Err.")
-      rownames(rowThresh) <- if (r > 1) 1:r else " "
-      print(rowThresh)
-      colThresh <- signif(cbind(x$col.cuts, col.cuts.se), digits)
-      if (c > 1) cat("\n\n  Column Thresholds\n")
-      else cat("\n\n  Column Threshold\n")
-      colnames(colThresh) <- c("Threshold", "Std.Err.")
-      rownames(colThresh) <- if (c > 1) 1:c else " "
-      print(colThresh)
-    }
-    else if (x$type == "polyserial"){
-      se <- sqrt(diag(x$var))
-      se.rho <- se[1]
-      est <- if (x$ML) "ML est." else "2-step est."
-      cat("\nPolyserial Correlation, ", est, " = ", signif(x$rho, digits),
-          " (", signif(se.rho, digits), ")", sep="")
-      cat("\nTest of bivariate normality: Chisquare = ", signif(x$chisq, digits),
-          ", df = ", x$df, ", p = ", signif(pchisq(x$chisq, x$df, lower.tail=FALSE), digits),
-          "\n\n", sep="")
-      if (length(se) == 1) return(invisible(x))
-      cuts.se <- se[-1]
-      thresh <- signif(rbind(x$cuts, cuts.se), digits)
-      colnames(thresh) <- 1:length(x$cuts)
-      rownames(thresh) <- c("Threshold", "Std.Err.")
-      print(thresh)
-    }
-    else print(unclass(x))
-    invisible(x)
-  }
-
-
-
-
-FindCorr <- function(x, cutoff = .90, verbose = FALSE) {
-
-  # Author: Max Kuhn
-  # source library(caret)
-
-  varnum <- dim(x)[1]
-
-  if(!isTRUE(all.equal(x, t(x)))) stop("correlation matrix is not symmetric")
-  if(varnum ==1) stop("only one variable given")
-
-  x <- abs(x)
-
-  # re-ordered columns based on max absolute correlation
-  originalOrder <- 1:varnum
-
-  averageCorr <- function(x) mean(x, na.rm = TRUE)
-  tmp <- x
-  diag(tmp) <- NA
-
-  maxAbsCorOrder <- order(apply(tmp, 2, averageCorr), decreasing = TRUE)
-  x <- x[maxAbsCorOrder, maxAbsCorOrder]
-  newOrder <- originalOrder[maxAbsCorOrder]
-
-  deletecol <- 0
-
-  for(i in 1:(varnum-1))
-  {
-    for(j in (i+1):varnum)
-    {
-      if(!any(i == deletecol)  & !any(j == deletecol))
-      {
-        if(verbose)
-          cat("Considering row\t", newOrder[i],
-              "column\t", newOrder[j],
-              "value\t", round(x[i,j], 3), "\n")
-        if(abs(x[i,j]) > cutoff)
-        {
-          if(mean(x[i, -i]) > mean(x[-j, j]))
-          {
-            deletecol <- unique(c(deletecol, i))
-            if(verbose) cat("  Flagging column\t", newOrder[i], "\n")
-          } else {
-            deletecol <- unique(c(deletecol, j))
-            if(verbose) cat("  Flagging column\t", newOrder[j], "\n")
-          }
-        }
-      }
-    }
-  }
-  deletecol <- deletecol[deletecol != 0]
-  newOrder[deletecol]
-}
-
-
-
-
-RobRange <- function(x, trim = 0.2, fac = 3, na.rm = FALSE) {
-
-  # author: Werner Stahel
-  # from:   regr.r
-
-  if(na.rm) x <- na.omit(x)
-
-  ldat <- x[is.finite(x)]
-  if (is.character(ldat)|length(ldat) == 0) stop("invalid data")
-  trim <- c(trim, 0.2)[1]
-  if (!is.finite(trim)) trim <- 0.2
-  lmn <- mean(ldat, trim=trim)
-  lds <- sort(abs(ldat - lmn))
-  ln <- ceiling((1 - trim) * length(ldat))
-  if (ln < 3) {
-    warning("Not enough valid data. returning ordinary range")
-    lsd <- Inf
-  } else {
-    lsd <- fac * sum(lds[1:ln] / (ln-1))
-    if (lsd == 0) {
-      warning("Robust range has width 0. returning ordinary range")
-      lsd <- Inf }
-  }
-  c(max(lmn - lsd, min(ldat)), min(lmn + lsd, max(ldat)))
-
-}
-
-
-# Alternative:
-# From roc bioconductor
-# Vince Carey (stvjc@channing.harvard.edu)
-
-# trapezint <- function (x, y, a, b){
-#
-#   if (length(x) != length(y))
-#     stop("length x must equal length y")
-#   y <- y[x >= a & x <= b]
-#   x <- x[x >= a & x <= b]
-#   if (length(unique(x)) < 2)
-#     return(NA)
-#   ya <- approx(x, y, a, ties = max, rule = 2)$y
-#   yb <- approx(x, y, b, ties = max, rule = 2)$y
-#   x <- c(a, x, b)
-#   y <- c(ya, y, yb)
-#   h <- diff(x)
-#   lx <- length(x)
-#   0.5 * sum(h * (y[-1] + y[-lx]))
-# }
-
-
-AUC <- function(x, y, method=c("trapezoid", "step", "spline"), na.rm = FALSE) {
-
-  # calculates Area unter the curve
-  # example:
-  #   AUC( x=c(1,2,3,5), y=c(0,1,1,2))
-  #   AUC( x=c(2,3,4,5), y=c(0,1,1,2))
-
-  if(na.rm) {
-    idx <- na.omit(cbind(x,y))
-    x <- x[idx]
-    y <- y[idx]
-  }
-
-  if (length(x) != length(y))
-    stop("length x must equal length y")
-
-  idx <- order(x)
-  x <- x[idx]
-  y <- y[idx]
-
-  switch( match.arg( arg=method, choices=c("trapezoid","step","spline") )
-    , "trapezoid" = { a <- sum((apply( cbind(y[-length(y)], y[-1]), 1, mean))*(x[-1] - x[-length(x)])) }
-    , "step" = { a <- sum( y[-length(y)] * (x[-1] - x[-length(x)])) }
-    , "spline" = { a <- integrate(splinefun(x, y, method="natural"), lower=min(x), upper=max(x))$value }
-  )
-  return(a)
-}
-
-
-
-# mode value, the most frequent element
-Mode <- function(x, na.rm=FALSE) {
-  if(!is.atomic(x) | is.matrix(x)) stop("Mode supports only atomic vectors. Use sapply(*, Mode) instead.")
-  if(na.rm) x <- na.omit(x)
-  tab <- table(x)
-  res <- names( which(tab==max(tab)) )    # handle ties...
-  if( !inherits(x,"factor")) class(res) <- class(x)
-  return(as.vector(res))
-}
-
-
-
-Gmean <- function (x, na.rm = FALSE) {
-    if (na.rm) x <- na.omit(x)
-    if(any(x < 0)) return(NA)
-    return( exp(mean(log(x))) )
-}
-
-
-Gsd <- function (x, na.rm = FALSE) {
-    if (na.rm) x <- na.omit(x)
-    return( exp(sd(log(x))) )
-}
-
-Hmean <- function(x, na.rm = FALSE) {
-  if(any(x < 0)) return(NA)
-  else
-  return( 1 / mean(1/x, na.rm = na.rm) )
-}
-
-
-# Average absolute deviation from the median
-MeanAD <- function(x, FUN = mean, na.rm = FALSE) {
-
-  if (na.rm) x <- na.omit(x)
-
-  if(is.function(FUN)) {
-    #  if FUN is a function, then save it under new name and
-    # overwrite function name in FUN, which has to be character
-    fct <- FUN
-    FUN <- "fct"
-    FUN <- gettextf("%s(x)", FUN)
-  }
-  # Calculates the mean absolute deviation from the sample mean.
-  return(eval(parse(text = gettextf("mean(abs(x - %s))", FUN))))
-}
-
-
-
-
-TukeyBiweight <- function(x, const=9, na.rm = FALSE, conf.level = NA, ci.type = "bca", R=1000, ...) {
-
-  if(na.rm) x <- na.omit(x)
-  if(anyNA(x)) return(NA)
-
-  if(is.na(conf.level)){
-    #  .Call("tbrm", as.double(x[!is.na(x)]), const)
-    res <- .Call("tbrm", as.double(x), const)
-
-  } else {
-
-
-    # adjusted bootstrap percentile (BCa) interval
-    boot.tbw <- boot(x, function(x, d) .Call("tbrm", as.double(x[d]), const), R=R, ...)
-    ci <- boot.ci(boot.tbw, conf=conf.level, type=ci.type)
-    res <- c(tbw=boot.tbw$t0, lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])
-  }
-
-  return(res)
-
-}
-
-
-
-## Originally from  /u/ftp/NDK/Source-NDK-9/R/rg2-fkt.R :
-.tauHuber <- function(x, mu, k=1.345, s = mad(x), resid = (x - mu)/s) {
-  ## Purpose: Korrekturfaktor Tau fuer die Varianz von Huber-M-Schaetzern
-  ## -------------------------------------------------------------------------
-  ## Arguments: x = Daten mu = Lokations-Punkt k = Parameter der Huber Psi-Funktion
-  ## -------------------------------------------------------------------------
-  ## Author: Rene Locher Update: R. Frisullo 23.4.02;  M.Maechler (as.log(); s, resid)
-  inr <- abs(resid) <= k
-  psi  <- ifelse(inr, resid, sign(resid)*k)                # psi (x)
-  psiP <- as.logical(inr)# = ifelse(abs(resid) <= k, 1, 0) # psi'(x)
-  length(x) * sum(psi^2) / sum(psiP)^2
-}
-
-.wgt.himedian <- function(x, weights = rep(1,n)) {
-
-  # Purpose: weighted hiMedian of x
-  # Author: Martin Maechler, Date: 14 Mar 2002
-  n <- length(x <- as.double(x))
-  stopifnot(storage.mode(weights) %in% c("integer", "double"))
-  if(n != length(weights))
-    stop("'weights' must have same length as 'x'")
-  # if(is.integer(weights)) message("using integer weights")
-  .C(if(is.integer(weights)) "wgt_himed_i" else "wgt_himed",
-     x, n, weights,
-     res = double(1))$res
-}
-
-
-##  A modified "safe" (and more general) Huber estimator:
-.huberM <-
-  function(x, k = 1.345, weights = NULL,
-           tol = 1e-06,
-           mu = if(is.null(weights)) median(x) else .wgt.himedian(x, weights),
-           s = if(is.null(weights)) mad(x, center=mu)
-           else .wgt.himedian(abs(x - mu), weights),
-           se = FALSE,
-           warn0scale = getOption("verbose"))
-  {
-             ## Author: Martin Maechler, Date: 6 Jan 2003, ff
-
-             ## implicit 'na.rm = TRUE':
-             if(any(i <- is.na(x))) {
-               x <- x[!i]
-               if(!is.null(weights)) weights <- weights[!i]
-             }
-             n <- length(x)
-             sum.w <-
-               if(!is.null(weights)) {
-                 stopifnot(is.numeric(weights), weights >= 0, length(weights) == n)
-                 sum(weights)
-               } else n
-             it <- 0L
-             NA. <- NA_real_
-             if(sum.w == 0) # e.g 'x' was all NA
-               return(list(mu = NA., s = NA., it = it, se = NA.)) # instead of error
-
-             if(se && !is.null(weights))
-               stop("Std.error computation not yet available for the case of 'weights'")
-             if (s <= 0) {
-               if(s < 0) stop("negative scale 's'")
-               if(warn0scale && n > 1)
-                 warning("scale 's' is zero -- returning initial 'mu'")
-             }
-             else {
-               wsum <- if(is.null(weights)) sum else function(u) sum(u * weights)
-               repeat {
-                 it <- it + 1L
-                 y <- pmin(pmax(mu - k * s, x), mu + k * s)
-                 mu1 <- wsum(y) / sum.w
-                 if (abs(mu - mu1) < tol * s)
-                   break
-                 mu <- mu1
-               }
-             }
-             list(mu = mu, s = s, it = it,
-                  SE = if(se) s * sqrt(.tauHuber(x, mu=mu, s=s, k=k) / n) else NA.)
-}
-
-
-HuberM <- function(x, k = 1.345, mu = median(x), s = mad(x, center=mu),
-    na.rm = FALSE, conf.level = NA, ci.type = c("wald", "boot"), ...){
-
-  # new interface to HuberM, making it less complex
-  # refer to robustbase::huberM if more control is required
-
-  if(na.rm) x <- na.omit(x)
-  if(anyNA(x)) return(NA)
-
-
-  if(is.na(conf.level)){
-    res <- .huberM(x=x, k=k, mu=mu, s=s, warn0scale=TRUE)$mu
-
-    return(res)
-
-  } else {
-
-    switch(match.arg(ci.type)
-           ,"wald"={
-             res <- .huberM(x=x, k=k, mu=mu, s=s, se=TRUE, warn0scale=TRUE)
-# Solution: (12.6.06) - Robuste Regression (Rg-2d) - Musterloeungen zu Serie 1
-# r.loc$mu + c(-1,1)*qt(0.975,8)*sqrt(t.tau/length(d.ertrag))*r.loc$s
-#
-# Ruckstuhl's Loesung:
-# (Sleep.HM$mu + c(-1,1)*qt(0.975, length(Sleep)-1) *
-#              sqrt(f.tau(Sleep, Sleep.HM$mu)) * Sleep.HM$s/sqrt(length(Sleep)))
-
-#             ci <- qnorm(1-(1-conf.level)/2) * res$SE
-             ci <- qt(1-(1-conf.level)/2, length(x)-1) *
-                             sqrt(.tauHuber(x, res$mu, k=k)) * res$s/sqrt(length(x))
-             res <- c(hm=res$mu, lwr.ci=res$mu - ci, upr.ci=res$mu + ci)
-           }
-           ,"boot" ={
-             R <- InDots(..., arg="R", default=1000)
-             bci.type <- InDots(..., arg="type", default="perc")
-
-             boot.hm <- boot(x, function(x, d){
-               hm <- .huberM(x=x[d], k=k, mu=mu, s=s, se=TRUE)
-               return(c(hm$mu, hm$s^2))
-               }, R=R)
-             ci <- boot.ci(boot.hm, conf=conf.level, ...)
-
-             if(ci.type =="norm") {
-               lwr.ci <- ci[[4]][2]
-               upr.ci <- ci[[4]][3]
-             } else {
-               lwr.ci <- ci[[4]][4]
-               upr.ci <- ci[[4]][5]
-             }
-
-             res <- c(hm=boot.hm$t0[1], lwr.ci=lwr.ci, upr.ci=upr.ci)
-
-           }
-           )
-    return(res)
-
-  }
-
-}
-
-
-
-
-# old version, replace 13.5.2015
-#
-# #  A modified "safe" (and more general) Huber estimator:
-# HuberM <- function(x, k = 1.5, weights = NULL, tol = 1e-06,
-# 	     mu = if(is.null(weights)) median(x) else wgt.himedian(x, weights),
-# 	     s = if(is.null(weights)) mad(x, center=mu) else wgt.himedian(abs(x - mu), weights),
-# 	     se = FALSE, warn0scale = getOption("verbose"), na.rm = FALSE, stats = FALSE) {
-#
-#     # Author: Martin Maechler, Date: 6 Jan 2003, ff
-#
-#     # Originally from  /u/ftp/NDK/Source-NDK-9/R/rg2-fkt.R :
-#     tauHuber <- function(x, mu, k=1.5, s = mad(x), resid = (x - mu)/s) {
-#       # Purpose: Korrekturfaktor Tau fuer die Varianz von Huber-M-Schaetzern
-#       # ******************************************************************************
-#       # Arguments: x = Daten mu = Lokations-Punkt k = Parameter der Huber Psi-Funktion
-#       # ******************************************************************************
-#       # Author: Rene Locher Update: R. Frisullo 23.4.02;  M.Maechler (as.log(); s, resid)
-#       inr <- abs(resid) <= k
-#       psi  <- ifelse(inr, resid, sign(resid)*k)                 #### psi (x)
-#       psiP <- as.logical(inr) # = ifelse(abs(resid) <= k, 1, 0) #### psi'(x)
-#       length(x) * sum(psi^2) / sum(psiP)^2
-#     }
-#
-#     wgt.himedian <- function(x, weights = rep(1,n)) {
-#
-#         # Purpose: weighted hiMedian of x
-#         # Author: Martin Maechler, Date: 14 Mar 2002
-#         n <- length(x <- as.double(x))
-#         stopifnot(storage.mode(weights) %in% c("integer", "double"))
-#         if(n != length(weights))
-#       stop("'weights' must have same length as 'x'")
-#         # if(is.integer(weights)) message("using integer weights")
-#         .C(if(is.integer(weights)) "wgt_himed_i" else "wgt_himed",
-#            x, n, weights,
-#            res = double(1))$res
-#     }
-#
-#
-#     # Andri: introduce na.rm
-#     # old: implicit 'na.rm = TRUE'
-#     if(na.rm) {
-#         i <- is.na(x)
-#         x <- x[!i]
-#         if(!is.null(weights)) weights <- weights[!i]
-#     } else {
-#       if(anyNA(x)) return(NA)
-#     }
-#
-#
-#     n <- length(x)
-#     sum.w <-
-#         if(!is.null(weights)) {
-#             stopifnot(is.numeric(weights), weights >= 0, length(weights) == n)
-#             sum(weights)
-#         } else n
-#     it <- 0L
-#     NA. <- NA_real_
-#     if(sum.w == 0) # e.g 'x' was all NA
-# 	return(list(mu = NA., s = NA., it = it, se = NA.)) # instead of error
-#
-#     if(se && !is.null(weights))
-# 	stop("Std.error computation not yet available for the case of 'weights'")
-#
-#     if (s <= 0) {
-#         if(s < 0) stop("negative scale 's'")
-#         if(warn0scale && n > 1)
-#             warning("scale 's' is zero -- returning initial 'mu'")
-#     }
-#     else {
-#         wsum <- if(is.null(weights)) sum else function(u) sum(u * weights)
-#
-# 	repeat {
-# 	    it <- it + 1L
-#             y <- pmin(pmax(mu - k * s, x), mu + k * s)
-# 	    mu1 <- wsum(y) / sum.w
-# 	    if (abs(mu - mu1) < tol * s)
-# 		break
-# 	    mu <- mu1
-# 	}
-#     }
-#
-#   if(stats)
-#     res <- list(mu = mu, s = s, it = it,
-#              SE = if(se) s * sqrt(tauHuber(x, mu=mu, s=s, k=k) / n) else NA.)
-#   else
-#     res <- mu
-#
-#   return(res)
-#
-# }
-
-
-
-HodgesLehmann <- function(x, y = NULL, conf.level = NA, na.rm = FALSE) {
-
-#   Werner Stahel's version:
-#
-#   f.HodgesLehmann <- function(data)
-#   {
-#     ## Purpose:   Hodges-Lehmann estimate and confidence interval
-#     ## -------------------------------------------------------------------------
-#     ## Arguments:
-#     ## Remark: function changed so that CI covers >= 95%, before it was too
-#     ##         small (9/22/04)
-#     ## -------------------------------------------------------------------------
-#     ## Author: Werner Stahel, Date: 12 Aug 2002, 14:13
-#     ## Update: Beat Jaggi, Date: 22 Sept 2004
-#     .cexact <-
-#       # c(NA,NA,NA,NA,NA,21,26,33,40,47,56,65,74,84,95,107,119,131,144,158)
-#       c(NA,NA,NA,NA,NA,22,27,34,41,48,57,66,75,85,96,108,120,132,145,159)
-#     .d <- na.omit(data)
-#     .n <- length(.d)
-#     .wa <- sort(c(outer(.d,.d,"+")/2)[outer(1:.n,1:.n,"<=")])
-#     .c <- if (.n<=length(.cexact)) .n*(.n+1)/2+1-.cexact[.n] else
-#       floor(.n*(.n+1)/4-1.96*sqrt(.n*(.n+1)*(2*.n+1)/24))
-#     .r <- c(median(.wa), .wa[c(.c,.n*(.n+1)/2+1-.c)])
-#     names(.r) <- c("estimate","lower","upper")
-#     .r
-#   }
-
-
-  # inspired by package ICSNP, function hl.loc
-
-  if(na.rm) {
-    if(is.null(y))
-      x <- na.omit(x)
-    else {
-      ok <- complete.cases(x, y)
-      x <- x[ok]
-      y <- y[ok]
-    }
-  }
-
-  if(anyNA(x) || (!is.null(y) && anyNA(y)))
-    if(is.na(conf.level))
-      return(NA)
-    else
-      return(c(est=NA,  lwr.ci=NA, upr.ci=NA))
-
-
-  res <- wilcox.test(x,  y, conf.int = TRUE, conf.level = Coalesce(conf.level, 0.8))
-
-  if(is.na(conf.level)){
-    result <-  res$estimate
-    names(result) <- NULL
-  } else {
-    result <- c(est=res$estimate,  lwr.ci=res$conf.int[1], upr.ci=res$conf.int[2])
-    names(result)[1] <- "est"
-  }
-
-  return(result)
-
-}
-
-
-
-Skew <- function (x, na.rm = FALSE, method = 3, conf.level = NA, ci.type = "bca", R=1000, ...) {
-
-  # C part for the expensive (x - mean(x))^2 etc. is a kind of 14 times faster
-  #   > x <- rchisq(100000000, df=2)
-  #   > system.time(Skew(x))
-  #   user  system elapsed
-  #   6.32    0.30    6.62
-  #   > system.time(Skew2(x))
-  #   user  system elapsed
-  #   0.47    0.00    0.47
-
-
-  i.skew <- function(x, method = 3) {
-
-    n <- length(x)
-
-    # method 1: older textbooks
-    r.skew <- .Call("rskew", as.numeric(x), as.numeric(mean(x)), PACKAGE="DescTools")
-    se <- sqrt((6*(n-2))/((n+1)*(n+3)))
-
-    if (method == 2) {
-      # method 2: SAS/SPSS
-      r.skew <- r.skew * n^0.5 * (n - 1)^0.5/(n - 2)
-      se <- se * sqrt(n*(n-1))/(n-2)
-    }
-    else if (method == 3) {
-      # method 3: MINITAB/BDMP
-      r.skew <- r.skew * ((n - 1)/n)^(3/2)
-      se <- se * ((n - 1)/n)^(3/2)
-    }
-    return(c(r.skew, se^2))
-  }
-
-  if (na.rm) x <- na.omit(x)
-
-  if(is.na(conf.level)){
-    res <- i.skew(x, method=method)[1]
-
-  } else {
-
-    if(ci.type == "classic") {
-      res <- i.skew(x, method=method)
-      res <- c(skewness=res[1], lwr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]), upr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]))
-
-    } else {
-      # Problematic standard errors and confidence intervals for skewness and kurtosis.
-      # Wright DB, Herrington JA. (2011) recommend only bootstrap intervals
-      # adjusted bootstrap percentile (BCa) interval
-      boot.skew <- boot(x, function(x, d) i.skew(x[d], method=method), R=R, ...)
-      ci <- boot.ci(boot.skew, conf=conf.level, type=ci.type)
-      if(ci.type =="norm") {
-        lwr.ci <- ci[[4]][2]
-        upr.ci <- ci[[4]][3]
-      } else {
-        lwr.ci <- ci[[4]][4]
-        upr.ci <- ci[[4]][5]
-      }
-    }
-
-    res <- c(skew=boot.skew$t0[1], lwr.ci=lwr.ci, upr.ci=upr.ci)
-    # res <- ci
-  }
-
-  return(res)
-
-}
-
-
-
-Kurt <- function (x, na.rm = FALSE, method = 3, conf.level = NA, ci.type = "bca", R=1000, ...) {
-
-  i.kurt <- function(x, na.rm = FALSE, method = 3) {
-    if (na.rm) x <- na.omit(x)
-
-    n <- length(x)
-    # method 1: older textbooks
-    r.kurt <- .Call("rkurt", as.numeric(x), as.numeric(mean(x)), PACKAGE="DescTools")
-    se <- sqrt((24*n*(n-2)*(n-3))/((n+1)^2*(n+3)*(n+5)))
-
-    if (method == 2) {
-      # method 2: SAS/SPSS
-      r.kurt <- ((r.kurt + 3) * (n + 1)/(n - 1) - 3) * (n - 1)^2/(n - 2)/(n - 3)
-      se <- se * (((n-1)*(n+1))/((n-2)*(n-3)))
-    }
-    else if (method == 3) {
-      # method 3: MINITAB/BDMP
-      r.kurt <- (r.kurt + 3) * (1 - 1/n)^2 - 3
-      se <- se * ((n-1)/n)^2
-    }
-    return(c(r.kurt, se^2))
-  }
-
-  if(is.na(conf.level)){
-    res <- i.kurt(x, na.rm=na.rm, method=method)[1]
-
-  } else {
-    if(ci.type == "classic") {
-      res <- i.kurt(x, method=method)
-      res <- c(kurtosis=res[1], lwr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]), upr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]))
-
-    } else {
-
-      # Problematic standard errors and confidence intervals for skewness and kurtosis.
-      # Wright DB, Herrington JA. (2011) recommend only bootstrap intervals
-      # adjusted bootstrap percentile (BCa) interval
-      boot.kurt <- boot(x, function(x, d) i.kurt(x[d], na.rm=na.rm, method=method), R=R, ...)
-      ci <- boot.ci(boot.kurt, conf=conf.level, type=ci.type)
-
-      if(ci.type =="norm") {
-        lwr.ci <- ci[[4]][2]
-        upr.ci <- ci[[4]][3]
-      } else {
-        lwr.ci <- ci[[4]][4]
-        upr.ci <- ci[[4]][5]
-      }
-
-      res <- c(kurt=boot.kurt$t0[1], lwr.ci=lwr.ci, upr.ci=upr.ci)
-    }
-  }
-
-  return(res)
-
-}
-
-
-Outlier <- function(x, method=c("boxplot"), na.rm=FALSE){
-
-  if(na.rm) x <- na.omit(x)
-
-  switch(match.arg(arg = method, choices = c("boxplot")),
-  #         boxplot =  { x[x %)(% (quantile(x, c(0.25,0.75), na.rm=na.rm) + c(-1,1) * 1.5*IQR(x,na.rm=na.rm))] }
-     boxplot =  { res <- boxplot(x, plot = FALSE)$out }
-
-  )
-  return(res)
-
-}
-
-
-LOF <- function(data,k) {
-
-    # source: library(dprep)
-
-    # A function that finds the local outlier factor (Breunig,2000) of
-    # the matrix "data" with k neighbors
-    # Adapted by Caroline Rodriguez and Edgar Acuna, may 2004
-
-  knneigh.vect <-
-    function(x,data,k)
-    {
-      #Function that returns the distance from a vector "x" to
-      #its k-nearest-neighbors in the matrix "data"
-
-      temp=as.matrix(data)
-      numrow=dim(data)[1]
-      dimnames(temp)=NULL
-
-      #subtract rowvector x from each row of data
-      difference<- scale(temp, x, FALSE)
-
-      #square and add all differences and then take the square root
-      dtemp <- drop(difference^2 %*% rep(1, ncol(data)))
-      dtemp=sqrt(dtemp)
-
-      #order the distances
-      order.dist <- order(dtemp)
-      nndist=dtemp[order.dist]
-
-      #find distance to k-nearest neighbor
-      #uses k+1 since first distance in vector is a 0
-      knndist=nndist[k+1]
-
-      #find neighborhood
-      #eliminate first row of zeros from neighborhood
-      neighborhood=drop(nndist[nndist<=knndist])
-      neighborhood=neighborhood[-1]
-      numneigh=length(neighborhood)
-
-      #find indexes of each neighbor in the neighborhood
-      index.neigh=order.dist[1:numneigh+1]
-
-      # this will become the index of the distance to first neighbor
-      num1=length(index.neigh)+3
-
-      # this will become the index of the distance to last neighbor
-      num2=length(index.neigh)+numneigh+2
-
-      #form a vector
-      neigh.dist=c(num1,num2,index.neigh,neighborhood)
-
-      return(neigh.dist)
-    }
-
-
-
-    dist.to.knn <-
-      function(dataset,neighbors)
-      {
-
-        #function returns an object in which each column contains
-        #the indices of the first k neighbors followed by the
-        #distances to each of these neighbors
-
-        numrow=dim(dataset)[1]
-
-        #applies a function to find distance to k nearest neighbors
-        #within "dataset" for each row of the matrix "dataset"
-
-        knndist=rep(0,0)
-
-
-        for (i in 1:numrow)
-        {
-          #find obervations that make up the k-distance neighborhood for dataset[i,]
-          neighdist=knneigh.vect(dataset[i,],dataset,neighbors)
-
-          #adjust the length of neighdist or knndist as needed to form matrix of neighbors
-          #and their distances
-          if (i==2)
-          {
-            if (length(knndist)<length(neighdist))
-            {
-              z=length(neighdist)-length(knndist)
-              zeros=rep(0,z)
-              knndist=c(knndist,zeros)
-            }
-            else if (length(knndist)>length(neighdist))
-            {
-              z=length(knndist)-length(neighdist)
-              zeros=rep(0,z)
-              neighdist=c(neighdist,zeros)
-            }
-          }
-          else
-          {
-            if (i!=1)
-            {
-              if (dim(knndist)[1]<length(neighdist))
-              {
-                z=(length(neighdist)-dim(knndist)[1])
-                zeros=rep(0,z*dim(knndist)[2])
-                zeros=matrix(zeros,z,dim(knndist)[2])
-                knndist=rbind(knndist,zeros)
-              }
-              else if (dim(knndist)[1]>length(neighdist))
-              {
-                z=(dim(knndist)[1]-length(neighdist))
-                zeros=rep(0,z)
-                neighdist=c(neighdist,zeros)
-              }
-            }
-          }
-          knndist=cbind(knndist,neighdist)
-        }
-
-        return(knndist)
-      }
-
-
-  reachability <-
-    function(distdata,k)
-    {
-      #function that calculates the local reachability density
-      #of Breuing(2000) for each observation in a matrix, using
-      #a matrix (distdata) of k nearest neighbors computed by the function dist.to.knn2
-
-      p=dim(distdata)[2]
-      lrd=rep(0,p)
-
-      for (i in 1:p)
-      {
-        j=seq(3,3+(distdata[2,i]-distdata[1,i]))
-        # compare the k-distance from each observation to its kth neighbor
-        # to the actual distance between each observation and its neighbors
-        numneigh=distdata[2,i]-distdata[1,i]+1
-        temp=rbind(diag(distdata[distdata[2,distdata[j,i]],distdata[j,i]]),distdata[j+numneigh,i])
-
-        #calculate reachability
-        reach=1/(sum(apply(temp,2,max))/numneigh)
-        lrd[i]=reach
-      }
-      lrd
-    }
-
-
-    data=as.matrix(data)
-
-    #find k nearest neighbors and their distance from each observation
-    #in data
-    distdata=dist.to.knn(data,k)
-    p=dim(distdata)[2]
-
-    #calculate the local reachability density for each observation in data
-    lrddata=reachability(distdata,k)
-
-    lof=rep(0,p)
-
-    #computer the local outlier factor of each observation in data
-    for ( i in 1:p)
-    {
-      nneigh=distdata[2,i]-distdata[1,i]+1
-      j=seq(0,(nneigh-1))
-      local.factor=sum(lrddata[distdata[3+j,i]]/lrddata[i])/nneigh
-      lof[i]=local.factor
-    }
-
-    #return lof, a vector with the local outlier factor of each observation
-    lof
-}
-
-
-
-
-# Confidence Intervals for Binomial Proportions
-BinomCI <- function(x, n, conf.level = 0.95, method = c("wilson", "wald", "agresti-coull", "jeffreys", "modified wilson",
-    "modified jeffreys", "clopper-pearson", "arcsine", "logit", "witting", "pratt"), rand = 123) {
-
-  if(missing(method)) method <- "wilson"
-
-  iBinomCI <- function(x, n, conf.level = 0.95, method = c("wilson", "wald", "agresti-coull", "jeffreys", "modified wilson",
-      "modified jeffreys", "clopper-pearson", "arcsine", "logit", "witting", "pratt"), rand = 123) {
-
-    if(length(x) != 1) stop("'x' has to be of length 1 (number of successes)")
-    if(length(n) != 1) stop("'n' has to be of length 1 (number of trials)")
-    if(length(conf.level) != 1)  stop("'conf.level' has to be of length 1 (confidence level)")
-    if(conf.level < 0.5 | conf.level > 1)  stop("'conf.level' has to be in [0.5, 1]")
-
-    alpha <- 1 - conf.level
-    kappa <- qnorm(1-alpha/2)
-    p.hat <- x/n
-    q.hat <- 1 - p.hat
-
-    switch( match.arg(arg=method, choices=c("wilson", "wald", "agresti-coull", "jeffreys", "modified wilson",
-                                            "modified jeffreys", "clopper-pearson", "arcsine", "logit", "witting","pratt"))
-            , "wald" = {
-              est <- p.hat
-              term2 <- kappa*sqrt(p.hat*q.hat)/sqrt(n)
-              CI.lower <- max(0, p.hat - term2)
-              CI.upper <- min(1, p.hat + term2)
-            }
-            , "wilson" = {
-              est <- p.hat
-              term1 <- (x + kappa^2/2)/(n + kappa^2)
-              term2 <- kappa*sqrt(n)/(n + kappa^2)*sqrt(p.hat*q.hat + kappa^2/(4*n))
-              CI.lower <-  max(0, term1 - term2)
-              CI.upper <- min(1, term1 + term2)
-            }
-            , "agresti-coull" = {
-              x.tilde <- x + kappa^2/2
-              n.tilde <- n + kappa^2
-              p.tilde <- x.tilde/n.tilde
-              q.tilde <- 1 - p.tilde
-              est <- p.tilde
-              term2 <- kappa*sqrt(p.tilde*q.tilde)/sqrt(n.tilde)
-              CI.lower <- max(0, p.tilde - term2)
-              CI.upper <- min(1, p.tilde + term2)
-            }
-            , "jeffreys" = {
-              est <- p.hat
-              if(x == 0)
-                CI.lower <- 0
-              else
-                CI.lower <- qbeta(alpha/2, x+0.5, n-x+0.5)
-              if(x == n)
-                CI.upper <- 1
-              else
-                CI.upper <- qbeta(1-alpha/2, x+0.5, n-x+0.5)
-            }
-            , "modified wilson" = {
-              est <- p.hat
-              term1 <- (x + kappa^2/2)/(n + kappa^2)
-              term2 <- kappa*sqrt(n)/(n + kappa^2)*sqrt(p.hat*q.hat + kappa^2/(4*n))
-              if((n <= 50 & x %in% c(1, 2)) | (n >= 51 & n <= 100 & x %in% c(1:3)))
-                CI.lower <- 0.5*qchisq(alpha, 2*x)/n
-              else
-                CI.lower <-  max(0, term1 - term2)
-
-              if((n <= 50 & x %in% c(n-1, n-2)) | (n >= 51 & n <= 100 & x %in% c(n-(1:3))))
-                CI.upper <- 1 - 0.5*qchisq(alpha, 2*(n-x))/n
-              else
-                CI.upper <- min(1, term1 + term2)
-            }
-            , "modified jeffreys" = {
-              est <- p.hat
-              if(x == n)
-                CI.lower <- (alpha/2)^(1/n)
-              else {
-                if(x <= 1)
-                  CI.lower <- 0
-                else
-                  CI.lower <- qbeta(alpha/2, x+0.5, n-x+0.5)
-              }
-              if(x == 0)
-                CI.upper <- 1 - (alpha/2)^(1/n)
-              else{
-                if(x >= n-1)
-                  CI.upper <- 1
-                else
-                  CI.upper <- qbeta(1-alpha/2, x+0.5, n-x+0.5)
-              }
-            }
-            , "clopper-pearson" = {
-              est <- p.hat
-              CI.lower <- qbeta(alpha/2, x, n-x+1)
-              CI.upper <- qbeta(1-alpha/2, x+1, n-x)
-            }
-            , "arcsine" = {
-              p.tilde <- (x + 0.375)/(n + 0.75)
-              est <- p.tilde
-              CI.lower <- sin(asin(sqrt(p.tilde)) - 0.5*kappa/sqrt(n))^2
-              CI.upper <- sin(asin(sqrt(p.tilde)) + 0.5*kappa/sqrt(n))^2
-            }
-            , "logit" = {
-              est <- p.hat
-              lambda.hat <- log(x/(n-x))
-              V.hat <- n/(x*(n-x))
-              lambda.lower <- lambda.hat - kappa*sqrt(V.hat)
-              lambda.upper <- lambda.hat + kappa*sqrt(V.hat)
-              CI.lower <- exp(lambda.lower)/(1 + exp(lambda.lower))
-              CI.upper <- exp(lambda.upper)/(1 + exp(lambda.upper))
-            }
-            , "witting" = {
-              set.seed(rand)
-              x.tilde <- x + runif(1, min = 0, max = 1)
-              pbinom.abscont <- function(q, size, prob){
-                v <- trunc(q)
-                term1 <- pbinom(v-1, size = size, prob = prob)
-                term2 <- (q - v)*dbinom(v, size = size, prob = prob)
-                return(term1 + term2)
-              }
-              qbinom.abscont <- function(p, size, x){
-                fun <- function(prob, size, x, p){
-                  pbinom.abscont(x, size, prob) - p
-                }
-                uniroot(fun, interval = c(0, 1), size = size, x = x, p = p)$root
-              }
-              est <- p.hat
-              CI.lower <- qbinom.abscont(1-alpha, size = n, x = x.tilde)
-              CI.upper <- qbinom.abscont(alpha, size = n, x = x.tilde)
-            }
-
-          , "pratt" = {
-
-                  est <- p.hat
-
-                  if(x==0) {
-                    CI.lower <- 0
-                    CI.upper <- 1-alpha^(1/n)
-                  } else if(x==1) {
-                    CI.lower <- 1-(1-alpha/2)^(1/n)
-                    CI.upper <- 1-(alpha/2)^(1/n)
-                  } else if(x==(n-1)) {
-                    CI.lower <- (alpha/2)^(1/n)
-                    CI.upper <- (1-alpha/2)^(1/n)
-                  } else if(x==n) {
-                    CI.lower <- alpha^(1/n)
-                    CI.upper <- 1
-                  } else {
-                    z <- qnorm(1 - alpha/2)
-
-                    A <- ((x+1) / (n-x))^2
-                    B <- 81*(x+1)*(n-x)-9*n-8
-                    C <- (0-3)*z*sqrt(9*(x+1)*(n-x)*(9*n+5-z^2)+n+1)
-                    D <- 81*(x+1)^2-9*(x+1)*(2+z^2)+1
-                    E <- 1+A*((B+C)/D)^3
-                    CI.upper <- 1/E
-
-                    A <- (x / (n-x-1))^2
-                    B <- 81*x*(n-x-1)-9*n-8
-                    C <- 3*z*sqrt(9*x*(n-x-1)*(9*n+5-z^2)+n+1)
-                    D <- 81*x^2-9*x*(2+z^2)+1
-                    E <- 1+A*((B+C)/D)^3
-                    CI.lower <- 1/E
-                }
-                }
-          )
-
-    ci <- c( est=est, lwr.ci=CI.lower, upr.ci=CI.upper )
-    return(ci)
-
-  }
-
-  # handle vectors
-  # which parameter has the highest dimension
-  lst <- list(x=x, n=n, conf.level=conf.level, method=method, rand=rand)
-  maxdim <- max(unlist(lapply(lst, length)))
-  # recycle all params to maxdim
-  lgp <- lapply( lst, rep, length.out=maxdim )
-
-  res <- sapply(1:maxdim, function(i) iBinomCI(x=lgp$x[i], n=lgp$n[i], conf.level=lgp$conf.level[i], method=lgp$method[i], rand=lgp$rand[i]))
-  rownames(res)[1] <- c("est")
-
-  # colnames(res) <- names(x)
-  # colnames(res) <- unlist(lapply(lgp, paste, collapse=" "))
-
-  return(t(res))
-
-}
-
-
-
-BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95,
-                        method=c("wald", "waldcor", "ac","exact","newcombe","newcombecor","fm","ha")) {
-  #   .Wald #1
-  #   .Wald (Corrected) #2
-  #   .Exact
-  #   .Exact (FM Score)
-  #   .Newcombe Score #10
-  #   .Newcombe Score (Corrected) #11
-  #   .Farrington-Manning
-  #   .Hauck-Anderson
-  # http://www.jiangtanghu.com/blog/2012/09/23/statistical-notes-5-confidence-intervals-for-difference-between-independent-binomial-proportions-using-sas/
-  #  Interval estimation for the difference between independent proportions: comparison of eleven methods.
-
-  method <- match.arg(arg = method,
-                      choices = c("wald", "waldcor", "ac","exact","newcombe","newcombecor","fm","ha"))
-
-  alpha <- 1 - conf.level
-  kappa <- qnorm(1 - alpha/2)
-
-  p1.hat <- x1/n1
-  p2.hat <- x2/n2
-  est <- p2.hat - p1.hat
-
-  switch(method,
-         "wald" = {  vd <- p1.hat*(1-p1.hat)/n1 + p2.hat*(1-p2.hat)/n2
-                     term2 <- sign(est) * kappa * sqrt(vd)
-
-                     CI.lower <- max(-1, est - term2)
-                     CI.upper <- min(1, est + term2)
-         },
-
-         "waldcor" = {
-           vd <- p1.hat*(1-p1.hat)/n1 + p2.hat*(1-p2.hat)/n2
-
-           term2 <- sign(est) * kappa * sqrt(vd)
-           term2 <- term2 + 0.5 * (1/n1+1/n2)
-
-           CI.lower <- max(-1, est - term2)
-           CI.upper <- min(1, est + term2)
-         },
-         "ac" = {   # Agresti-Caffo
-
-           n1 <- n1+2
-           n2 <- n2+2
-           x1  <- x1+1
-           x2  <- x2+1
-
-           p1.hat <- x1/n1
-           p2.hat <- x2/n2
-           est1 <-  p2.hat - p1.hat
-
-           vd <- p1.hat*(1-p1.hat)/n1 + p2.hat*(1-p2.hat)/n2
-
-           term2 <- sign(est1) * kappa * sqrt(vd)
-
-           CI.lower <- max(-1, est1 - term2)
-           CI.upper <- min(1, est1 + term2)
-         } ,
-         "newcombe" = {   # Newcombe
-
-           w1 <- BinomCI(x=x1, n=n1, conf.level=conf.level, method="wilson")
-           w2 <- BinomCI(x=x2, n=n2, conf.level=conf.level, method="wilson")
-           l1 <- w1[2]
-           u1 <- w1[3]
-           l2 <- w2[2]
-           u2 <- w2[3]
-
-           CI.lower <- max(-1, est + kappa * sqrt(l1*(1-l1)/n1 + u2*(1-u2)/n2))
-           CI.upper <- min( 1, est - kappa * sqrt(u1*(1-u1)/n1 + l2*(1-l2)/n2))
-         }
-  )
-
-  ci <- c(est = est, lwr.ci = min(CI.lower, CI.upper), upr.ci = max(CI.lower, CI.upper))
-  return(ci)
-
-}
-
-
-
-BinomRatioCI <- function(x1, n1, x2, n2, conf.level = 0.95, method = "katz.log", bonf = FALSE, tol = .Machine$double.eps^0.25, R = 1000, r = length(x1)) {
-
-  # source: asbio::ci.prat by Ken Aho <kenaho1 at gmail.com>
-
-  conf <- conf.level
-
-  x <- x1; m <- n1; y <- x2; n <- n2
-
-  indices <- c("adj.log","bailey","boot","katz.log","koopman","noether","sinh-1")
-  method <- match.arg(method, indices)
-
-
-  if(any(c(length(m),length(y),length(n))!= length(x))) stop("x1, n1, x2, and n2 vectors must have equal length")
-
-  alpha <- 1 - conf
-  oconf <- conf
-  conf <- ifelse(bonf == FALSE, conf, 1 - alpha/r)
-  z.star <- qnorm(1 - (1 - conf)/2)
-  x2 <- qchisq(conf, 1)
-
-  ci.prat1 <- function(x, m, y, n, conf = 0.95, method = "katz.log", bonf = FALSE){
-    if((x > m)|(y > n)) stop("Use correct parameterization for x1, x2, n1, and n2")
-
-    #-------------------------- Adj-log ------------------------------#
-
-    if(method == "adj.log"){
-      if((x == m & y == n)){
-        rat <- (x/m)/(y/n); x <- m - 0.5; y <- n - 0.5; nrat <- ((x+0.5)/(m+0.5))/((y+0.5)/(n+0.5)); varhat <- (1/(x+0.5)) - (1/(m+0.5)) + (1/(y+0.5)) - (1/(n+0.5))
-        CIL <- nrat * exp(-1 * z.star * sqrt(varhat))
-        CIU <- nrat * exp(z.star * sqrt(varhat))
-      } else if(x == 0 & y == 0){CIL = 0; CIU = Inf; rat = 0; varhat <- (1/(x+0.5)) - (1/(m+0.5)) + (1/(y+0.5)) - (1/(n+0.5))
-      }else{
-        rat <- (x/m)/(y/n); nrat <- ((x+0.5)/(m+0.5))/((y+0.5)/(n+0.5)); varhat <- (1/(x+0.5)) - (1/(m+0.5)) + (1/(y+0.5)) - (1/(n+0.5))
-        CIL <- nrat * exp(-1 * z.star * sqrt(varhat))
-        CIU <- nrat * exp(z.star * sqrt(varhat))}
-      CI <- c(rat, CIL, CIU)
-    }
-
-    #-------------------------------Bailey-----------------------------#
-
-    if(method == "bailey"){
-      rat <- (x/m)/(y/n)
-      varhat <- ifelse((x == m) & (y == n),(1/(m-0.5)) - (1/(m)) + (1/(n-0.5)) - (1/(n)),(1/(x)) - (1/(m)) + (1/(y)) - (1/(n)))
-
-      p.hat1 <- x/m; p.hat2 <- y/n;
-      q.hat1 <- 1 - p.hat1; q.hat2 <- 1 - p.hat2
-
-      if(x == 0 | y == 0){
-        xn <- ifelse(x == 0, 0.5, x)
-        yn <- ifelse(y == 0, 0.5, y)
-        nrat <- (xn/m)/(yn/n)
-        p.hat1 <- xn/m; p.hat2 <- yn/n;
-        q.hat1 <- 1 - p.hat1; q.hat2 <- 1 - p.hat2
-        if(xn == m | yn == n){
-          xn <- ifelse(xn == m, m - 0.5, xn)
-          yn <- ifelse(yn == n, n - 0.5, yn)
-          nrat <- (xn/m)/(yn/n)
-          p.hat1 <- xn/m; p.hat2 <- yn/n;
-          q.hat1 <- 1 - p.hat1; q.hat2 <- 1 - p.hat2
-        }
-      }
-
-      if(x == 0 | y == 0){
-        if(x == 0 & y == 0){
-          rat <- Inf
-          CIL <- 0
-          CIU <- Inf
-        }
-        if(x == 0 & y != 0){
-          CIL <- 0
-          CIU <- nrat * ((1+ z.star * sqrt((q.hat1/xn) + (q.hat2/yn) - (z.star^2 * q.hat1 * q.hat2)/(9 * xn * yn))/3)/((1 - (z.star^2 * q.hat2)/(9 * yn))))^3
-        }
-        if(y == 0 & x != 0){
-          CIU = Inf
-          CIL <- nrat * ((1- z.star * sqrt((q.hat1/xn) + (q.hat2/yn) - (z.star^2 * q.hat1 * q.hat2)/(9 * xn * yn))/3)/((1 - (z.star^2 * q.hat2)/(9 * yn))))^3
-        }
-      }else if(x == m | y == n){
-        xn <- ifelse(x == m, m - 0.5, x)
-        yn <- ifelse(y == n, n - 0.5, y)
-        nrat <- (xn/m)/(yn/n)
-        p.hat1 <- xn/m; p.hat2 <- yn/n;
-        q.hat1 <- 1 - p.hat1; q.hat2 <- 1 - p.hat2
-        CIL <- nrat * ((1- z.star * sqrt((q.hat1/xn) + (q.hat2/yn) - (z.star^2 * q.hat1 * q.hat2)/(9 * xn * yn))/3)/((1 - (z.star^2 * q.hat2)/(9 * yn))))^3
-        CIU <- nrat * ((1+ z.star * sqrt((q.hat1/xn) + (q.hat2/yn) - (z.star^2 * q.hat1 * q.hat2)/(9 * xn * yn))/3)/((1 - (z.star^2 * q.hat2)/(9 * yn))))^3
-      }else{
-        CIL <- rat * ((1- z.star * sqrt((q.hat1/x) + (q.hat2/y) - (z.star^2 * q.hat1 * q.hat2)/(9 * x * y))/3)/((1 - (z.star^2 * q.hat2)/(9 * y))))^3
-        CIU <- rat * ((1+ z.star * sqrt((q.hat1/x) + (q.hat2/y) - (z.star^2 * q.hat1 * q.hat2)/(9 * x * y))/3)/((1 - (z.star^2 * q.hat2)/(9 * y))))^3
-      }
-      CI <- c(rat, CIL, CIU)
-    }
-
-    #-------------------------- Boot ------------------------------#
-
-    if(method == "boot"){
-      rat <- (x/m)/(y/n)
-      if((x == 0 & y == 0)|(x == 0 & y != 0)|(x != 0 & y == 0)){
-        if(x == 0 & y == 0) {CIL <- 0;  CIU <- Inf; rat = 0; varhat = NA}
-        if(x == 0 & y != 0) {CIL <- 0;  rat <- (x/m)/(y/n); x <- 0.5; nrat <- (x/m)/(y/n)
-                             varhat <- (1/x) - (1/m) + (1/y) - (1/n)
-                             CIU <- nrat * exp(z.star * sqrt(varhat))}
-        if(x != 0 & y == 0) {CIU <- Inf;  rat <- (x/m)/(y/n); y <- 0.5; nrat <- (x/m)/(y/n)
-                             varhat <- (1/x) - (1/m) + (1/y) - (1/n)
-                             CIL <- nrat * exp(-1 * z.star * sqrt(varhat))}
-      } else{
-        num.data <- c(rep(1, x), rep(0, m - x))
-        den.data <- c(rep(1, y), rep(0, n - y))
-        nd <- matrix(ncol = R, nrow = m)
-        dd <- matrix(ncol = R, nrow = n)
-        brat <- 1:R
-        for(i in 1:R){
-          nd[,i] <- sample(num.data, m, replace = TRUE)
-          dd[,i] <- sample(den.data, n, replace = TRUE)
-          brat[i] <- (sum(nd[,i])/m)/(sum(dd[,i])/n)
-        }
-        alpha <- 1 - conf
-        CIU <- quantile(brat, 1 - alpha/2, na.rm = TRUE)
-        CIL <- quantile(brat, alpha/2, na.rm = TRUE)
-        varhat <- var(brat)
-      }
-      CI <- c(rat, CIL, CIU)
-    }
-
-    #-------------------------- Katz-log ------------------------------#
-
-    if(method == "katz.log"){
-      if((x == 0 & y == 0)|(x == 0 & y != 0)|(x != 0 & y == 0)|(x == m & y == n)){
-        if(x == 0 & y == 0) {CIL <- 0;  CIU <- Inf; rat = 0; varhat = NA}
-        if(x == 0 & y != 0) {CIL <- 0;  rat <- (x/m)/(y/n); x <- 0.5; nrat <- (x/m)/(y/n)
-                             varhat <- (1/x) - (1/m) + (1/y) - (1/n)
-                             CIU <- nrat * exp(z.star * sqrt(varhat))}
-        if(x != 0 & y == 0) {CIU <- Inf;  rat <- (x/m)/(y/n); y <- 0.5; nrat <- (x/m)/(y/n)
-                             varhat <- (1/x) - (1/m) + (1/y) - (1/n)
-                             CIL <- nrat * exp(-1 * z.star * sqrt(varhat))}
-        if(x == m & y == n) {
-          rat <- (x/m)/(y/n); x <- m - 0.5; y <- n - 0.5; nrat <- (x/m)/(y/n); varhat <- (1/x) - (1/m) + (1/y) - (1/n); CIL <- nrat * exp(-1 * z.star * sqrt(varhat))
-          x <- m - 0.5; y <- n - 0.5; nrat <- (x/m)/(y/n); varhat <- (1/x) - (1/m) + (1/y) - (1/n); CIU <- nrat * exp(z.star * sqrt(varhat))
-        }
-      } else
-      {rat <- (x/m)/(y/n); varhat <- (1/x) - (1/m) + (1/y) - (1/n)
-       CIL <- rat * exp(-1 * z.star * sqrt(varhat))
-       CIU <- rat * exp(z.star * sqrt(varhat))}
-      CI <- c(rat, CIL, CIU)
-    }
-
-    #-------------------------- Koopman ------------------------------#
-
-    if(method == "koopman"){
-
-      if(x == 0 & y == 0) {CIL <- 0;  CIU <- Inf; rat = 0; varhat = NA
-      } else {
-
-        a1 = n * (n * (n + m) * x + m * (n + x) * (z.star^2))
-        a2 = -n * (n * m * (y + x) + 2 * (n + m) * y *
-                     x + m * (n + y + 2 * x) * (z.star^2))
-        a3 = 2 * n * m * y * (y + x) + (n + m) * (y^2) *
-          x + n * m * (y + x) * (z.star^2)
-        a4 = -m * (y^2) * (y + x)
-        b1 = a2/a1; b2 = a3/a1; b3 = a4/a1
-        c1 = b2 - (b1^2)/3;  c2 = b3 - b1 * b2/3 + 2 * (b1^3)/27
-        ceta = suppressWarnings(acos(sqrt(27) * c2/(2 * c1 * sqrt(-c1))))
-        t1 <- suppressWarnings(-2 * sqrt(-c1/3) * cos(pi/3 - ceta/3))
-        t2 <- suppressWarnings(-2 * sqrt(-c1/3) * cos(pi/3 + ceta/3))
-        t3 <- suppressWarnings(2 * sqrt(-c1/3) * cos(ceta/3))
-        p01 = t1 - b1/3; p02 = t2 - b1/3; p03 = t3 - b1/3
-        p0sum = p01 + p02 + p03; p0up = min(p01, p02, p03); p0low = p0sum - p0up - max(p01, p02, p03)
-
-
-        U <- function(a){
-          p.hatf <- function(a){
-            (a * (m + y) + x + n - ((a * (m + y) + x + n)^2 - 4 * a * (m + n) * (x + y))^0.5)/(2 * (m + n))
-          }
-          p.hat <- p.hatf(a)
-          (((x - m * p.hat)^2)/(m * p.hat * (1 - p.hat)))*(1 + (m * (a - p.hat))/(n * (1 - p.hat))) - x2
-        }
-
-        rat <- (x/m)/(y/n); nrat <- (x/m)/(y/n); varhat <- (1/x) - (1/m) + (1/y) - (1/n)
-        if((x == 0) & (y != 0)) {nrat <- ((x + 0.5)/m)/(y/n); varhat <- (1/(x + 0.5)) - (1/m) + (1/y) - (1/n)}
-        if((y == 0) & (x != 0)) {nrat <- (x/m)/((y + 0.5)/n); varhat <- (1/x) - (1/m) + (1/(y + 0.5)) - (1/n)}
-        if((y == n) & (x == m)) {nrat <- 1; varhat <- (1/(m - 0.5)) - (1/m) + 1/(n - 0.5) - (1/n)}
-
-        La <- nrat * exp(-1 * z.star * sqrt(varhat)) * 1/4
-        Lb <- nrat
-        Ha <- nrat
-        Hb <- nrat * exp(z.star * sqrt(varhat)) * 4
-
-        #----------------------------------------------------------------------------#
-
-        if((x != 0) & (y == 0)) {
-          if(x == m){
-            CIL = (1 - (m - x) * (1 - p0low)/(y + m - (n + m) * p0low))/p0low
-            CIU <- Inf
-          }
-          else{
-            CIL <- uniroot(U, c(La, Lb), tol=tol)$root
-            CIU <- Inf
-          }
-        }
-
-        #------------------------------------------------------------#
-
-        if((x == 0) & (y != n)) {
-          CIU <- uniroot(U, c(Ha, Hb), tol=tol)$root
-          CIL <- 0
-        }
-
-        #------------------------------------------------------------#
-
-        if(((x == m)|(y == n)) & (y != 0)){
-
-
-          if((x == m)&(y == n)){
-            U.0 <- function(a){if(a <= 1) {m * (1 - a)/a - x2}
-                               else{(n * (a - 1)) - x2}
-            }
-            CIL <- uniroot(U.0, c(La, rat), tol = tol)$root
-            CIU <- uniroot(U.0, c(rat, Hb), tol = tol)$root
-          }
-
-          #------------------------------------------------------------#
-
-          if((x == m) & (y != n)){
-
-            phat1 = x/m; phat2 = y/n
-            phihat = phat2/phat1
-            phiu = 1.1 * phihat
-            r = 0
-            while (r >= -z.star) {
-              a = (m + n) * phiu
-              b = -((x + n) * phiu + y + m)
-              c = x + y
-              p1hat = (-b - sqrt(b^2 - 4 * a * c))/(2 * a)
-              p2hat = p1hat * phiu
-              q2hat = 1 - p2hat
-              var = (m * n * p2hat)/(n * (phiu - p2hat) +
-                                       m * q2hat)
-              r = ((y - n * p2hat)/q2hat)/sqrt(var)
-              phiu1 = phiu
-              phiu = 1.0001 * phiu1
-            }
-            CIU = (1 - (m - x) * (1 - p0up)/(y + m - (n + m) * p0up))/p0up
-            CIL = 1/phiu1
-          }
-
-          #------------------------------------------------------------#
-
-          if((y == n) & (x != m)){
-            p.hat2 = y/n; p.hat1 = x/m; phihat = p.hat1/p.hat2
-            phil = 0.95 * phihat; r = 0
-            if(x != 0){
-              while(r <= z.star) {
-                a = (n + m) * phil
-                b = -((y + m) * phil + x + n)
-                c = y + x
-                p1hat = (-b - sqrt(b^2 - 4 * a * c))/(2 * a)
-                p2hat = p1hat * phil
-                q2hat = 1 - p2hat
-                var = (n * m * p2hat)/(m * (phil - p2hat) +
-                                         n * q2hat)
-                r = ((x - m * p2hat)/q2hat)/sqrt(var)
-                CIL = phil
-                phil = CIL/1.0001
-              }
-            }
-
-            phiu = 1.1 * phihat
-
-            if(x == 0){CIL = 0; phiu <- ifelse(n < 100, 0.01, 0.001)}
-
-            r = 0
-            while(r >= -z.star) {
-              a = (n + m) * phiu
-              b = -((y + m) * phiu + x  + n)
-              c = y + x
-              p1hat = (-b - sqrt(b^2 - 4 * a * c))/(2 * a)
-              p2hat = p1hat * phiu
-              q2hat = 1 - p2hat
-              var = (n * m * p2hat)/(m * (phiu - p2hat) +
-                                       n * q2hat)
-              r = ((x  - m * p2hat)/q2hat)/sqrt(var)
-              phiu1 = phiu
-              phiu = 1.0001 * phiu1
-            }
-            CIU <- phiu1
-          }
-        } else if((y != n) & (x != m) & (x != 0) & (y != 0)){
-          CIL <- uniroot(U, c(La, Lb), tol=tol)$root
-          CIU <- uniroot(U, c(Ha, Hb), tol=tol)$root
-        }
-      }
-      CI <- c(rat, CIL, CIU)
-    }
-
-    #-------------------------- Noether ------------------------------#
-
-    if(method == "noether"){
-      if((x == 0 & y == 0)|(x == 0 & y != 0)|(x != 0 & y == 0)|(x == m & y == n)){
-        if(x == 0 & y == 0) {CIL <- 0;  CIU <- Inf; rat = 0; se.hat <- NA; varhat = NA}
-        if(x == 0 & y != 0) {rat <- (x/m)/(y/n); CIL <- 0;  x <- 0.5
-                             nrat <- (x/m)/(y/n); se.hat <- nrat * sqrt((1/x) - (1/m) + (1/y) - (1/n))
-                             CIU <- nrat + z.star * se.hat}
-        if(x != 0 & y == 0) {rat <- Inf; CIU <- Inf;  y <- 0.5
-                             nrat <- (x/m)/(y/n); se.hat <- nrat * sqrt((1/x) - (1/m) + (1/y) - (1/n))
-                             CIL <- nrat - z.star * se.hat}
-        if(x == m & y == n) {
-          rat <- (x/m)/(y/n); x <- m - 0.5; y <- n - 0.5; nrat <- (x/m)/(y/n); se.hat <- nrat * sqrt((1/x) - (1/m) + (1/y) - (1/n))
-          CIU <- nrat + z.star * se.hat
-          CIL <- nrat - z.star * se.hat
-        }
-      } else
-      {
-        rat <- (x/m)/(y/n)
-        se.hat <- rat * sqrt((1/x) - (1/m) + (1/y) - (1/n))
-        CIL <- rat - z.star * se.hat
-        CIU <- rat + z.star * se.hat
-      }
-      varhat <- ifelse(is.na(se.hat), NA, se.hat^2)
-      CI <- c(rat, max(0,CIL), CIU)
-    }
-
-    #------------------------- sinh-1 -----------------------------#
-
-    if(method == "sinh-1"){
-
-      if((x == 0 & y == 0)|(x == 0 & y != 0)|(x != 0 & y == 0)|(x == m & y == n)){
-        if(x == 0 & y == 0) {CIL <- 0;  CIU <- Inf; rat = 0; varhat = NA}
-        if(x == 0 & y != 0) {rat <- (x/m)/(y/n); CIL <- 0;  x <- z.star
-                             nrat <- (x/m)/(y/n); varhat <- 2 * asinh((z.star/2)*sqrt(1/x + 1/y - 1/m - 1/n))
-                             CIU <- exp(log(nrat) + varhat)}
-        if(x != 0 & y == 0) {rat = Inf; CIU <- Inf;  y <- z.star
-                             nrat <- (x/m)/(y/n); varhat <- 2 * asinh((z.star/2)*sqrt(1/x + 1/y - 1/m - 1/n))
-                             CIL <- exp(log(nrat) - varhat)}
-        if(x == m & y == n) {
-          rat <- (x/m)/(y/n); x <- m - 0.5; y <- n - 0.5; nrat <- (x/m)/(y/n); varhat <- 2 * asinh((z.star/2)*sqrt(1/x + 1/y - 1/m - 1/n))
-          CIL <- exp(log(nrat) - varhat)
-          CIU <- exp(log(nrat) + varhat)
-        }
-      } else
-      {rat <- (x/m)/(y/n); varhat <- 2 * asinh((z.star/2)*sqrt(1/x + 1/y - 1/m - 1/n))
-       CIL <- exp(log(rat) - varhat)
-       CIU <- exp(log(rat) + varhat)
-      }
-      CI <- c(rat, CIL, CIU)
-    }
-
-    #------------------------Results ------------------------------#
-
-    res <- list(CI = CI, varhat = varhat)
-    res
-  }
-
-  CI <- matrix(ncol = 3, nrow = length(x1))
-  vh <- rep(NA, length(x1))
-
-  for(i in 1 : length(x1)){
-    temp <- ci.prat1(x = x[i], m = m[i], y = y[i], n = n[i], conf = conf, method = method, bonf = bonf)
-    CI[i,] <- temp$CI
-    vh[i] <- temp$varhat
-  }
-
-  CI <- data.frame(CI)
-  if(length(x1) == 1) row.names(CI) <- ""
-  head <- paste(paste(as.character(oconf * 100),"%",sep=""), c("Confidence interval for ratio of binomial proportions"))
-  if(method == "adj.log")head <- paste(head,"(method=adj-log)")
-  if(method == "bailey")head <- paste(head,"(method=Bailey)")
-  if(method == "boot")head <- paste(head,"(method=percentile bootstrap)")
-  if(method == "katz.log")head <- paste(head,"(method=Katz-log)")
-  if(method == "koopman")head <- paste(head,"(method=Koopman)")
-  if(method == "noether")head <- paste(head,"(method=Noether)")
-  if(method == "sinh")head <- paste(head,"(method=sinh^-1)")
-
-  if(bonf == TRUE)head <- paste(head, "\n Bonferroni simultaneous intervals, r = ", bquote(.(r)),
-                                "\n Marginal confidence = ", bquote(.(conf)), "\n", sep = "")
-
-  ends <- c("Estimate", paste(as.character(c((1-oconf)/2, 1-((1-oconf)/2))*100), "%", sep=""))
-  # res <- list(varhat = vh, ci = CI, ends = ends, head = head)
-  # class(res) <- "ci"
-  res <- data.matrix(CI)
-  dimnames(res) <- list(NULL, c("est","lwr.ci","upr.ci"))
-
-  res
-}
-
-
-
-MultinomCI <- function(x, conf.level = 0.95, method = c("sisonglaz", "cplus1", "goodman")) {
-
-  # Code mainly by:
-  # Pablo J. Villacorta Iglesias <pjvi@decsai.ugr.es>\n
-  # Department of Computer Science and Artificial Intelligence, University of Granada (Spain)
-
-  .moments <- function(c, lambda){
-
-    a <- lambda + c
-    b <- lambda - c
-    if(b < 0) b <- 0
-    if(b > 0) den <- ppois(a, lambda) - ppois(b-1, lambda)
-    if(b == 0) den <- ppois(a,lambda)
-
-    mu <- mat.or.vec(4,1)
-    mom <- mat.or.vec(5,1)
-    for(r in 1:4){
-      poisA <- 0
-      poisB <- 0
-
-      if((a-r) >=0){ poisA <- ppois(a,lambda)-ppois(a-r,lambda) }
-      if((a-r) < 0){ poisA <- ppois(a,lambda) }
-      if((b-r-1) >=0){ poisB <- ppois(b-1,lambda)-ppois(b-r-1,lambda) }
-      if((b-r-1) < 0 && (b-1)>=0){ poisB <- ppois(b-1,lambda) }
-      if((b-r-1) < 0 && (b-1) < 0){ poisB <- 0 }
-
-      mu[r] <- (lambda^r)*(1-(poisA-poisB)/den)
-    }
-    mom[1] <- mu[1]
-    mom[2] <- mu[2] + mu[1] - mu[1]^2
-    mom[3] <- mu[3] + mu[2]*(3-3*mu[1]) + (mu[1]-3*mu[1]^2+2*mu[1]^3)
-    mom[4] <- mu[4] + mu[3]*(6-4*mu[1]) + mu[2]*(7-12*mu[1]+6*mu[1]^2)+mu[1]-4*mu[1]^2+6*mu[1]^3-3*mu[1]^4
-    mom[5] <- den
-
-    return(mom)
-
-  }
-
-  .truncpoi <- function(c, x, n, k){
-
-    m <- matrix(0, k, 5)
-
-    for(i in 1:k){
-      lambda <- x[i]
-      mom <- .moments(c, lambda)
-      for(j in 1:5){ m[i,j] <- mom[j] }
-    }
-    for(i in 1:k){ m[i, 4] <- m[i, 4] - 3 * m[i, 2]^2 }
-
-    s <- colSums(m)
-    s1 <- s[1]
-    s2 <- s[2]
-    s3 <- s[3]
-    s4 <- s[4]
-
-    probn <- 1/(ppois(n,n)-ppois(n-1,n))
-    z <- (n-s1)/sqrt(s2)
-    g1 <- s3/(s2^(3/2))
-    g2 <- s4/(s2^2)
-    poly <- 1 + g1*(z^3-3*z)/6 + g2*(z^4-6*z^2+3)/24
-    + g1^2*(z^6-15*z^4 + 45*z^2-15)/72
-    f <- poly*exp(-z^2/2)/(sqrt(2)*gamma(0.5))
-
-    probx <- 1
-    for(i in 1:k){ probx <- probx * m[i,5]  }
-
-    return(probn * probx * f / sqrt(s2))
-  }
-
-
-  n <- sum(x, na.rm=TRUE)
-  k <- length(x)
-  p <- x/n
-
-  if (missing(method)) method <- "sisonglaz"
-
-  method <- match.arg(arg = method, choices = c("sisonglaz", "cplus1", "goodman"))
-  if(method == "goodman") {
-
-    q.chi <- qchisq(conf.level, k - 1)
-    lci <- (q.chi + 2*x - sqrt(q.chi*(q.chi + 4*x*(n-x)/n))) / (2*(n+q.chi))
-    uci <- (q.chi + 2*x + sqrt(q.chi*(q.chi + 4*x*(n-x)/n))) / (2*(n+q.chi))
-
-    res <- cbind(est=p, lwr.ci=lci, upr.ci=uci)
-
-  } else {  # sisonglaz, cplus1
-
-    const <- 0
-    pold <- 0
-
-    for(cc in 1:n){
-      poi <- .truncpoi(cc, x, n, k)
-      if(poi > conf.level && pold < conf.level) {
-        const <- cc
-        break
-      }
-      pold <- poi
-    }
-
-    delta <- (conf.level - pold)/(poi - pold)
-    const <- const - 1
-
-    if(method == "sisonglaz") {
-      res <- cbind(est = p, lwr.ci = pmax(0, p - const/n), upr.ci = pmin(1, p + const/n + 2*delta/n))
-
-    } else if(method == "cplus1") {
-      res <- cbind(est = p, lwr.ci = pmax(0, p - const/n - 1/n), upr.ci = pmin(1,p + const/n + 1/n))
-    }
-  }
-
-  return(res)
-}
-
-
-
-# Confidence Intervals for Poisson mean
-
-PoissonCI <- function(x, n = 1, conf.level = 0.95,
-                      method = c("exact","score", "wald")) {
-
-  iPoissonCI <- function(x, n = 1, conf.level = 0.95,
-                      method = c("exact","score", "wald")) {
-
-    # ref:  http://www.ijmo.org/papers/189-S083.pdf but wacklig!!!
-    # http://www.math.montana.edu/~rjboik/classes/502/ci.pdf
-    # http://www.ine.pt/revstat/pdf/rs120203.pdf
-    # http://www.pvamu.edu/include/Math/AAM/AAM%20Vol%206,%20Issue%201%20(June%202011)/06_%20Kibria_AAM_R308_BK_090110_Vol_6_Issue_1.pdf
-
-    # see also:   pois.conf.int {epitools}
-
-    if(missing(method)) method <- "score"
-
-    if(length(conf.level) != 1)  stop("'conf.level' has to be of length 1 (confidence level)")
-    if(conf.level < 0.5 | conf.level > 1)  stop("'conf.level' has to be in [0.5, 1]")
-
-    alpha <- 1 - conf.level
-    z <- qnorm(1-alpha/2)
-
-    lambda <- x/n
-
-    switch( match.arg(arg=method, choices=c("exact","score", "wald"))
-            , "exact" = {
-              ci <- poisson.test(x, n, conf.level = conf.level)$conf.int
-              lwr.ci <- ci[1]
-              upr.ci <- ci[2]
-            }
-            , "score" = {
-              term1 <- (x + z^2/2)/n
-              term2 <- z * n^-0.5 * sqrt(x/n + z^2/(4*n))
-              lwr.ci <- term1 - term2
-              upr.ci <- term1 + term2
-            }
-            , "wald" = {
-              term2 <- z*sqrt(lambda/n)
-              lwr.ci <- lambda - term2
-              upr.ci <- lambda + term2
-            }
-  # agresti-coull is the same as score
-  #             , "agresti-coull" = {
-  #               lwr.ci <- lambda + z^2/(2*n) - z*sqrt(lambda/n + z^2/(4*n^2))
-  #               upr.ci <- lambda + z^2/(2*n) + z*sqrt(lambda/n + z^2/(4*n^2))
-  #
-  #             }
-  # garwood is the same as exact, check that!!
-  #             , "garwood" = {
-  #               lwr.ci <- qchisq((1 - conf.level)/2, 2*x)/(2*n)
-  #               upr.ci <- qchisq(1 - (1 - conf.level)/2, 2*(x + 1))/(2*n)
-  #             }
-    )
-
-    ci <- c( est=lambda, lwr.ci=lwr.ci, upr.ci=upr.ci )
-    return(ci)
-  }
-
-  # handle vectors
-  # which parameter has the highest dimension
-  lst <- list(x=x, n=n, conf.level=conf.level, method=method)
-  maxdim <- max(unlist(lapply(lst, length)))
-  # recycle all params to maxdim
-  lgp <- lapply( lst, rep, length.out=maxdim )
-
-  res <- sapply(1:maxdim, function(i) iPoissonCI(x=lgp$x[i], n=lgp$n[i], conf.level=lgp$conf.level[i], method=lgp$method[i]))
-  rownames(res)[1] <- c("est")
-  colnames(res) <- names(x)
-
-  return(t(res))
-
-}
-
-
-
-# ordered interface for the median
-median.factor <- function(x, na.rm = FALSE) {
-
-  # Answered by Hong Ooi on 2011-10-28T00:37:08-04:00
-  # http://www.rqna.net/qna/nuiukm-idiomatic-method-of-finding-the-median-of-an-ordinal-in-r.html
-
-  # return NA, if x is not ordered
-  # clearme: why not median.ordered?
-  if(!is.ordered(x)) return(NA)
-
-  if(na.rm) x <- na.omit(x)
-  if(any(is.na(x))) return(NA)
-
-  levs <- levels(x)
-  m <- median(as.integer(x), na.rm = na.rm)
-  if(floor(m) != m)
-  {
-    warning("Median is between two values; using the first one")
-    m <- floor(m)
-  }
-  ordered(m, labels = levs, levels = seq_along(levs))
-}
-
-
-# Konfidenzintervall fuer den Median
-
-MedianCI <- function(x, conf.level=0.95, na.rm=FALSE, method=c("exact","boot"), R=999) {
-  if(na.rm) x <- na.omit(x)
-
-  # alte Version, ziemlich grosse Unterschiede zu wilcox.test:
-  # Bosch: Formelsammlung Statistik (bei Markus Naepflin), S. 95
-  # x <- sort(x)
-  # return( c(
-  # x[ qbinom(alpha/2,length(x),0.5) ], ### lower limit
-  # x[ qbinom(1-alpha/2,length(x),0.5) ] ### upper limit
-  # ) )
-
-  switch( match.arg(arg=method, choices=c("exact","boot"))
-          , "exact" = { # this is the SAS-way to do it
-            # https://stat.ethz.ch/pipermail/r-help/2003-September/039636.html
-            r <- SignTest(x)$conf.int
-          }
-          , "boot" = {
-              boot.med <- boot(x, function(x, d) median(x[d], na.rm=na.rm), R=R)
-              r <- boot.ci(boot.med, conf=conf.level, type="basic")[[4]][4:5]
-          } )
-
-  med <- median(x, na.rm=na.rm)
-  if(is.na(med)) {   # do not report a CI if the median is not defined...
-    r <- rep(NA, 3)
-  } else {
-    r <- c(median=med, r)
-  }
-  names(r) <- c("median","lwr.ci","upr.ci")
-  return( r )
-
-}
-
-
-
-# standard error of mean
-MeanSE <- function(x, sd = NULL, na.rm = FALSE) {
-  if(na.rm) x <- na.omit(x)
-  if(is.null(sd)) s <- sd(x)
-  s/sqrt(length(x))
-}
-
-
-
-MeanCI <- function (x, sd = NULL, trim = 0, method = c("classic", "boot"),
-                    conf.level = 0.95, na.rm = FALSE, ...) {
-
-  if (na.rm) x <- na.omit(x)
-
-  winvar <- function(x, trim) {
-    n <- length(x)
-    # calculate the winsorized variance of x
-    trn <- floor(trim * n) + 1
-
-# new 17.2.2015:
-    minval <- sort(x, partial = trn)[trn]
-    maxval <- sort(x, partial = max((n - trn + 1), 1))[max((n - trn + 1), 1)]
-    winvar <- var(Winsorize(x, minval = minval, maxval = maxval))
-
-# This was an overkill, we need only the n-thest value here:
-# winvar <- var(Winsorize(x, minval=max(Small(x, trn)), maxval=min(Large(x, trn))))
-#
-    # degrees of freedom
-    DF <- n - 2*(trn-1) - 1
-    return(c(var=winvar, DF=DF))
-  }
-
-  method <- match.arg(method, c("classic", "boot"))
-  if(method == "classic"){
-    if(trim != 0) {
-      # see: http://dornsife.usc.edu/assets/sites/239/docs/Rallfun-v27.txt
-      #      http://www.psychology.mcmaster.ca/bennett/boot09/rt2.pdf
-
-      wvar <- winvar(x, trim)
-      # the standard error
-      se <- sqrt(wvar["var"]) / ((1 - 2*trim) * sqrt(length(x)))
-
-      res <- mean(x, trim = trim) + c(0, -1, 1) * qt(1-(1-conf.level)/2, wvar["DF"]) * se
-      names(res) <- c("mean", "lwr.ci", "upr.ci")
-
-    } else {
-      if(is.null(sd)) {
-        a <- qt(p = (1 - conf.level)/2, df = length(x) - 1) * sd(x)/sqrt(length(x))
-      } else {
-        a <- qnorm(p = (1 - conf.level)/2) * sd/sqrt(length(x))
-      }
-      res <- c(mean = mean(x), lwr.ci = mean(x) + a, upr.ci = mean(x) - a)
-    }
-
-  } else {
-
-    # see: http://www.psychology.mcmaster.ca/bennett/boot09/percentileT.pdf
-    # this might contain an erroneuous calculation of boot variance...
-
-    btype <- InDots(..., arg="type", default="basic")
-
-    # we need separate functions for trimmed means and normal means
-    if(trim != 0) {
-      boot.fun <- boot(x,
-                       function(x, i){
-                         # this is according to the example in boot.ci
-                         m <- mean(x[i], na.rm = FALSE, trim = trim)
-                         n <- length(i)
-                         v <- winvar(x, trim)/((1-2*trim)*sqrt(length(x)))^2
-                         c(m, v)
-                       },
-                       R=InDots(..., arg="R", default=999),
-                       parallel=InDots(..., arg="parallel", default="no"))
-
-    } else {
-      boot.fun <- boot(x,
-                       function(x, i){
-                         # this is according to the example in boot.ci
-                         m <- mean(x[i], na.rm = FALSE)
-                         n <- length(i)
-                         v <- (n-1) * var(x[i]) / n^2
-                         # v <- (sd(x[i]) / sqrt(n))^2  # following Bennet
-                         c(m, v)
-                         # IMPORTANT: boot.ci requires the estimated VARIANCE of the statistic
-                         # pop sd estimated from bootstrapped sample
-                       },
-                       R=InDots(..., arg="R", default=999),
-                       parallel=InDots(..., arg="parallel", default="no"))
-    }
-    ci <- boot.ci(boot.fun, conf=conf.level, type=btype)
-
-    if(btype == "norm"){
-      res <- c(mean=boot.fun$t0[1], lwr.ci=ci[[4]][2], upr.ci=ci[[4]][3])
-    } else {
-      res <- c(mean=boot.fun$t0[1], lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])
-    }
-  }
-
-  return(res)
-}
-
-
-MeanDiffCI <- function(x, ...){
-  UseMethod("MeanDiffCI")
-}
-
-
-
-MeanDiffCI.formula <- function (formula, data, subset, na.action, ...) {
-
-  # this is from t.test.formula
-
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-                                                                  "term.labels")) != 1L))
-    stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- as.name("model.frame")
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  DNAME <- paste(names(mf), collapse = " by ")
-  names(mf) <- NULL
-  response <- attr(attr(mf, "terms"), "response")
-  g <- factor(mf[[-response]])
-  if (nlevels(g) != 2L)
-    stop("grouping factor must have exactly 2 levels")
-  DATA <- setNames(split(mf[[response]], g), c("x", "y"))
-
-  y <- DoCall("MeanDiffCI", c(DATA, list(...)))
-
-  #   y$data.name <- DNAME
-  #   if (length(y$estimate) == 2L)
-  #     names(y$estimate) <- paste("mean in group", levels(g))
-  y
-}
-
-
-
-MeanDiffCI.default <- function (x, y, method = c("classic", "norm","basic","stud","perc","bca"),
-                    conf.level = 0.95, na.rm = FALSE, R=999, ...) {
-
-  if (na.rm) {
-    x <- na.omit(x)
-    y <- na.omit(y)
-  }
-  method <- match.arg(method, c("classic", "norm","basic","stud","perc","bca"))
-  if(method == "classic"){
-      a <- t.test(x, y, conf.level = conf.level)
-      res <- c(meandiff = mean(x) - mean(y), lwr.ci = a$conf.int[1], upr.ci = a$conf.int[2])
-
-  } else {
-
-    diff.means <- function(d, f)
-    {    n <- nrow(d)
-         gp1 <- 1:table(as.numeric(d[,2]))[1]
-         m1 <- sum(d[gp1,1] * f[gp1])/sum(f[gp1])
-         m2 <- sum(d[-gp1,1] * f[-gp1])/sum(f[-gp1])
-         m1 - m2
-    }
-
-    m <- cbind(c(x,y), c(rep(1,length(x)), rep(2,length(y))))
-
-    boot.fun <- boot(m, diff.means, R=R, stype="f", strata = m[,2])
-    ci <- boot.ci(boot.fun, conf=conf.level, type=method)
-    if(method == "norm"){
-      res <- c(meandiff=boot.fun$t0, lwr.ci=ci[[4]][2], upr.ci=ci[[4]][3])
-    } else {
-      res <- c(meandiff=boot.fun$t0, lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])
-    }
-  }
-
-  return(res)
-}
-
-
-# CohenEffectSize <- function(x){
-
-# (C) Antti Arppe 2007-2011
-# E-mail: antti.arppe@helsinki.fi
-
-# Cohen's Effect Size (1988)
-# e0 <- matrix(,ctable.rows,ctable.cols)
-# for(i in 1:ctable.rows)
-# for(j in 1:ctable.cols)
-# e0[i,j] <- sum.row[i]*sum.col[j]/N
-# p0 <- e0/N
-# p1 <- ctable/N
-# effect.size <- sqrt(sum(((p1-p0)^2)/p0))
-# noncentrality <- N*(effect.size^2)
-# d.f=(ctable.rows-1)*(ctable.cols-1)
-# beta <- pchisq(qchisq(alpha,df=d.f,lower.tail=FALSE),df=d.f,ncp=noncentrality)
-# power <- 1-beta
-
-# return(effect.size)
-# }
-
-
-CohenD <- function(x, y=NULL, pooled = TRUE, correct = FALSE, conf.level = NA, na.rm = FALSE) {
-
-  if (na.rm) {
-    x <- na.omit(x)
-    if(!is.null(y)) y <- na.omit(y)
-  }
-
-  if(is.null(y)){   # one sample Cohen d
-    d <- mean(x) / sd(x)
-    n <- length(x)
-    if(!is.na(conf.level)){
-      # reference: Smithson Confidence Intervals pp. 36:
-      ci <- .nctCI(d / sqrt(n), df = n-1, conf = conf.level)
-      res <- c(d=d, lwr.ci=ci[1]/sqrt(n), upr.ci=ci[3]/sqrt(n))
-    } else {
-      res <- d
-    }
-  } else {
-
-    meanx <- mean(x)
-    meany <- mean(y)
-#     ssqx <- sum((x - meanx)^2)
-#     ssqy <- sum((y - meany)^2)
-    nx <- length(x)
-    ny <- length(y)
-
-    DF <- nx + ny - 2
-    d <- (meanx - meany)
-
-    if(pooled){
-      d <- d / sqrt(((nx - 1) * var(x) + (ny - 1) * var(y)) / DF)
-    }else{
-      d <- d / sd(c(x, y))
-    }
-
-    #  if(unbiased) d <- d * gamma(DF/2)/(sqrt(DF/2) * gamma((DF - 1)/2))
-
-    if(correct){  # "Hedges's g"
-      # Hedges, L. V. & Olkin, I. (1985). Statistical methods for meta-analysis. Orlando, FL: Academic Press.
-      d <- d * (1 - 3 / ( 4 * (nx + ny) - 9))
-    }
-
-    if(!is.na(conf.level)) {
-      # old:
-      # The Handbook of Research Synthesis and Meta-Analysis (Cooper, Hedges, & Valentine, 2009)
-      ## p 238
-      # ci <- d + c(-1, 1) * sqrt(((nx+ny) / (nx*ny) + .5 * d^2 / DF) * ((nx + ny)/DF)) * qt((1 - conf.level) / 2, DF)
-
-      # supposed to be better, Smithson's version:
-      ci <- .nctCI(d / sqrt(nx*ny/(nx+ny)), df = DF, conf = conf.level)
-      res <- c(d=d, lwr.ci=ci[1]/sqrt(nx*ny/(nx+ny)), upr.ci=ci[3]/sqrt(nx*ny/(nx+ny)))
-
-      res <- c(d=d, lwr.ci=ci[1], upr.ci=ci[2])
-    } else {
-      res <- d
-    }
-  }
-
-  ## Cohen, J. (1992). A power primer. Psychological Bulletin, 112, 155-159. Crow, E. L. (1991).
-  attr(res, "magnitude") <- c("negligible","small","medium","large")[findInterval(abs(d), c(0.2, 0.5, 0.8)) + 1]
-
-  return(res)
-
-}
-
-
-
-.nctCI <- function(tval.1, df, conf) {
-
-  # Function for finding the upper and lower confidence limits for the noncentrality from noncentral t distributions.
-  # Especially helpful when forming confidence intervals around the standardized effect size, Cohen's d.
-
-  ###################################################################################################################
-  # The following code was adapted from code written by Michael Smithson:
-  # Australian National University, sometime around the early part of October, 2001
-  # Adapted by Joe Rausch & Ken Kelley: University of Notre Dame, in January 2002.
-  # Available at: JRausch@nd.edu & KKelley@nd.edu
-  ###################################################################################################################
-
-
-  # tval.1 is the observed t value, df is the degrees of freedom (group size need not be equal), and conf is simply 1 - alpha
-
-  #         Result <- matrix(NA,1,4)
-  tval <- abs(tval.1)
-
-
-  ############################This part Finds the Lower bound for the confidence interval###########################
-  ulim <- 1 - (1-conf)/2
-
-  # This first part finds a lower value from which to start.
-  lc <- c(-tval,tval/2,tval)
-  while(pt(tval, df, lc[1])<ulim)    {
-    lc <- c(lc[1]-tval,lc[1],lc[3])
-  }
-
-  # This next part finds the lower limit for the ncp.
-  diff <- 1
-  while(diff > .00000001)    {
-    if(pt(tval, df, lc[2]) <ulim)
-      lc <- c(lc[1],(lc[1]+lc[2])/2,lc[2])
-    else lc <- c(lc[2],(lc[2]+lc[3])/2,lc[3])
-    diff <- abs(pt(tval,df,lc[2]) - ulim)
-    ucdf <- pt(tval,df,lc[2])
-  }
-  res.1 <- ifelse(tval.1 >= 0,lc[2],-lc[2])
-
-  ############################This part Finds the Upper bound for the confidence interval###########################
-  llim <- (1-conf)/2
-
-  # This first part finds an upper value from which to start.
-  uc <- c(tval,1.5*tval,2*tval)
-  while(pt(tval,df,uc[3])>llim)   {
-    uc <- c(uc[1],uc[3],uc[3]+tval)
-  }
-
-  # This next part finds the upper limit for the ncp.
-  diff <- 1
-  while(diff > .00000001)         {
-    if(pt(tval,df,uc[2])<llim)
-      uc <- c(uc[1],(uc[1]+uc[2])/2,uc[2])
-    else uc <- c(uc[2],(uc[2]+uc[3])/2,uc[3])
-    diff <- abs(pt(tval,df,uc[2]) - llim)
-    lcdf <- pt(tval,df,uc[2])
-  }
-  res <- ifelse(tval.1 >= 0,uc[2],-uc[2])
-
-
-  #################################This part Compiles the results into a matrix#####################################
-
-  return(c(lwr.ci=min(res, res.1), lprob=ucdf, upr.ci=max(res, res.1), uprob=lcdf))
-
-  #        Result[1,1] <- min(res,res.1)
-  #         Result[1,2] <- ucdf
-  #         Result[1,3] <- max(res,res.1)
-  #         Result[1,4] <- lcdf
-  # dimnames(Result) <- list("Values", c("Lower.Limit", "Prob.Low.Limit", "Upper.Limit", "Prob.Up.Limit"))
-  #         Result
-}
-
-
-CoefVar <- function(x, unbiased = FALSE, conf.level = NA, na.rm = FALSE) {
-
-  if(na.rm) x <- na.omit(x)
-
-  res <- sd(x) / mean(x)
-  n <- length(x)
-  if(unbiased) {
-    res <- res * ((1 - (1/(4*(n-1))) + (1/n) * res^2)+(1/(2*(n-1)^2)))
-  }
-
-
-  if(!is.na(conf.level)){
-    ci <- .nctCI(sqrt(n)/res, df = n-1, conf = conf.level)
-    res <- c(est=res, low.ci= unname(sqrt(n)/ci["upr.ci"]), upr.ci= unname(sqrt(n)/ci["lwr.ci"]))
-  }
-
-  return(res)
-
-}
-
-# aus agricolae: Variations Koeffizient aus aov objekt
-#
-# CoefVar.aov <- function(x){
-#   return(sqrt(sum(x$residual^2) / x$df.residual) / mean(x$fitted.values))
-# }
-
-
-VarCI <- function (x, method = c("classic", "norm","basic","stud","perc","bca"),
-                    conf.level = 0.95, na.rm = FALSE, R=999) {
-
-  if (na.rm) x <- na.omit(x)
-  method <- match.arg(method, c("classic", "norm","basic","stud","perc","bca"))
-
-  if(method == "classic"){
-    df <- length(x) - 1
-    v <- var(x)
-    res <- c (var = v, lwr.ci = df * v/qchisq((1 - conf.level)/2, df, lower.tail = FALSE)
-              , upr.ci = df * v/qchisq((1 - conf.level)/2, df) )
-
-  } else {
-    boot.fun <- boot(x, function(x, d) var(x[d], na.rm=na.rm), R=R)
-    ci <- boot.ci(boot.fun, conf=conf.level, type=method)
-    if(method == "norm"){
-      res <- c(mean=boot.fun$t0, lwr.ci=ci[[4]][2], upr.ci=ci[[4]][3])
-    } else {
-      res <- c(mean=boot.fun$t0, lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])
-    }
-  }
-
-  return(res)
-}
 
 ## stats: strata sampling ----------------
 
@@ -6560,1676 +4385,294 @@ SampleTwins <- function (x, stratanames = NULL, twins,
 
 
 
-## stats: Lorenz, Gini & ineq ====
 
-Lc <- function(x, ...)
-  UseMethod("Lc")
+Conf <-  function(x, ref = NULL, pos = NULL, na.rm = TRUE, ...) {
 
+  .Conf.table <- function(x, pos = NULL, ...) {
 
-Lc.formula <- function(formula, data, subset, na.action, ...) {
+    CollapseConfTab <- function(x, pos = NULL, ...) {
 
-  # this is taken basically from wilcox.test.formula
+      if(nrow(x) > 2) {
+        names(attr(x, "dimnames")) <- c("pred", "obs")
+        x <- CollapseTable(x, obs=c("neg", pos)[(rownames(x)==pos)+1],
+                           pred=c("neg", pos)[(rownames(x)==pos)+1])
+      }
 
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-                                                                  "term.labels")) != 1L))
-    stop("'formula' missing or incorrect")
-
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- as.name("model.frame")
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-#   mf$na.action <- substitute(na.action)
-#   DNAME <- paste(names(mf), collapse = " by ")
-#
-#   DATA <- list(table(mf))
-#   do.call("Lc", c(DATA, list(...)))
-    drop <- TRUE
-#   mf <- model.frame(x, data)
-    x <- split(x = mf[,1], f = mf[,2], drop=drop, ...)
-
-    res <- lapply(x, FUN = "Lc", ...)
-    class(res) <- "Lclist"
-
-  return(res)
-
-}
-
-
-Lc.default <- function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
-
-  g <- Gini(x, n, na.rm=na.rm)
-
-  if(na.rm) x <- na.omit(x)
-  if (any(is.na(x)) || any(x < 0)) return(NA_real_)
-
-  k <- length(x)
-  o <- order(x)
-  x <- x[o]
-  n <- n[o]
-  x <- n*x
-  p <- cumsum(n)/sum(n)
-  L <- cumsum(x)/sum(x)
-  p <- c(0,p)
-  L <- c(0,L)
-  L2 <- L * mean(x)
-  Lc <- list(p, L, L2, g)
-  names(Lc) <- c("p", "L", "L.general", "Gini")
-  class(Lc) <- "Lc"
-
-  # no plot anymore, we have plot(lc) and Desc(lc, plotit=TRUE)
-  # if(plot) plot(Lc)
-  Lc
-}
-
-plot.Lc <- function(x, general=FALSE, lwd=2, type="l", xlab="p", ylab="L(p)",
-                    main="Lorenz curve", las=1, ...)  {
-  if(!general)
-    L <- x$L
-  else
-    L <- x$L.general
-  plot(x$p, L, type=type, main=main, lwd=lwd, xlab=xlab, ylab=ylab, xaxs="i",
-       yaxs="i", las=las, ...)
-  abline(0,max(L))
-}
-
-lines.Lc <- function(x, general=FALSE, lwd=2, ...) {
-
-  if(!general)
-    L <- x$L
-  else
-    L <- x$L.general
-  lines(x$p, L, lwd=lwd, ...)
-}
-
-
-plot.Lclist <- function(x, col=1, lwd=2, lty=1, main = "Lorenz curve",
-                        xlab="p", ylab="L(p)", ...){
-
-  # Recycle arguments
-  lgp <- Recycle(x=seq_along(x), col=col, lwd=lwd, lty=lty)
-
-  plot(x[[1]], col=lgp$col[1], lwd=lgp$lwd[1], lty=lgp$lty[1], main=main, xlab=xlab, ylab=ylab, ...)
-  for(i in 2:length(x)){
-    lines(x[[i]], col=lgp$col[i], lwd=lgp$lwd[i], lty=lgp$lty[i])
-  }
-}
-
-
-
-# Original Zeileis:
-# Gini <- function(x)
-# {
-#   n <- length(x)
-#   x <- sort(x)
-#   G <- sum(x * 1:n)
-#   G <- 2*G/(n*sum(x))
-#   G - 1 - (1/n)
-# }
-
-# other:
-# http://rss.acs.unt.edu/Rdoc/library/reldist/html/gini.html
-# http://finzi.psych.upenn.edu/R/library/dplR/html/gini.coef.html
-
-
-Gini <- function(x, n = rep(1, length(x)), unbiased = TRUE, conf.level = NA, R = 1000, type = "bca", na.rm = FALSE) {
-
-  x <- rep(x, n)    # same handling as Lc
-  if(na.rm) x <- na.omit(x)
-  if (any(is.na(x)) || any(x < 0)) return(NA_real_)
-
-  i.gini <- function (x, unbiased = TRUE){
-    n <- length(x)
-    x <- sort(x)
-
-    res <- 2 * sum(x * 1:n) / (n*sum(x)) - 1 - (1/n)
-    if(unbiased) res <- n / (n - 1) * res
-
-# limit Gini to 0 here, if negative values appear, which is the case with
-# Gini( c(10,10,10))
-    return( pmax(0, res))
-
-# other guy out there:
-#     N <- if (unbiased) n * (n - 1) else n * n
-#     dsum <- drop(crossprod(2 * 1:n - n - 1, x))
-#     dsum / (mean(x) * N)
-# is this slower, than above implementation??
-  }
-
-  if(is.na(conf.level)){
-    res <- i.gini(x, unbiased = unbiased)
-
-  } else {
-    # adjusted bootstrap percentile (BCa) interval
-    boot.gini <- boot(x, function(x, d) i.gini(x[d], unbiased = unbiased), R=R)
-    ci <- boot.ci(boot.gini, conf=conf.level, type=type)
-    res <- c(gini=boot.gini$t0, lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])
-  }
-
-  return(res)
-
-}
-
-
-
-GiniSimpson <- function(x, na.rm = FALSE) {
-
-
-  # referenz:   Sachs, Angewandte Statistik, S. 57
-
-  # example:
-  # x <- as.table(c(69,17,7,62))
-  # rownames(x) <- c("A","B","AB","0")
-  # GiniSimpson(x)
-
-  if(na.rm) x <- na.omit(x)
-
-  x <- as.table(x)
-  ptab <- prop.table(x)
-  return(sum(ptab*(1-ptab)))
-}
-
-
-
-Atkinson <- function(x, n = rep(1, length(x)), parameter = 0.5, na.rm = FALSE) {
-
-  x <- rep(x, n)    # same handling as Lc and Gini
-  if(na.rm) x <- na.omit(x)
-  if (any(is.na(x)) || any(x < 0)) return(NA_real_)
-
-  if(is.null(parameter)) parameter <- 0.5
-  if(parameter==1)
-    A <- 1 - (exp(mean(log(x)))/mean(x))
-  else
-  {
-    x <- (x/mean(x))^(1-parameter)
-    A <- 1 - mean(x)^(1/(1-parameter))
-  }
-  A
-}
-
-Herfindahl <- function(x, n = rep(1, length(x)), parameter=1, na.rm = FALSE) {
-
-  x <- rep(x, n)    # same handling as Lc and Gini
-  if(na.rm) x <- na.omit(x)
-  if (any(is.na(x)) || any(x < 0)) return(NA_real_)
-
-  if(is.null(parameter))
-    m <- 1
-  else
-    m <- parameter
-  Herf <- x/sum(x)
-  Herf <- Herf^(m+1)
-  Herf <- sum(Herf)^(1/m)
-  Herf
-}
-
-Rosenbluth <- function(x, n = rep(1, length(x)), na.rm = FALSE) {
-
-  x <- rep(x, n)    # same handling as Lc and Gini
-  if(na.rm) x <- na.omit(x)
-  if (any(is.na(x)) || any(x < 0)) return(NA_real_)
-
-  n <- length(x)
-  x <- sort(x)
-  HT <- (n:1)*x
-  HT <- 2*sum(HT/sum(x))
-  HT <- 1/(HT-1)
-  HT
-}
-
-###
-
-## stats: assocs etc. ====
-
-
-CutQ <- function(x, breaks=quantile(x, seq(0, 1, by=0.25), na.rm=TRUE), labels=NULL, na.rm = FALSE, ...){
-
-  # old version:
-  #  cut(x, breaks=probsile(x, breaks=probs, na.rm = na.rm), include.lowest=TRUE, labels=labels)
-
-  # $Id: probscut.R 1431 2010-04-28 17:23:08Z ggrothendieck2 $
-  # from gtools
-
-  if(na.rm) x <- na.omit(x)
-
-  if(is.null(labels)) labels <- gettextf("Q%s", 1:(length(breaks)-1))
-
-  # probs <- quantile(x, probs)
-  dups <- duplicated(breaks)
-  if(any(dups)) {
-
-    flag <- x %in% unique(breaks[dups])
-    retval <- ifelse(flag, paste("[", as.character(x), "]", sep=''), NA)
-    uniqs <- unique(breaks)
-
-    # move cut points over a bit...
-    reposition <- function(cut) {
-      flag <- x>=cut
-      if(sum(flag)==0)
-        return(cut)
-      else
-        return(min(x[flag]))
+      # order confusion table so
+      # that the positive class is the first and the others keep their position
+      ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
+      # the columnnames must be the same as the rownames
+      x <- as.table(x[ord, ord])
+      return(x)
     }
 
-    newprobs <- sapply(uniqs, reposition)
-    retval[!flag] <- as.character(cut(x[!flag], breaks=newprobs, include.lowest=TRUE,...))
+    p <- (d <- dim(x))[1L]
+    if(!is.numeric(x) || length(d) != 2L || p != d[2L]) # allow nxn!  || p != 2L)
+      stop("'x' is not a nxn numeric matrix")
 
-    levs <- unique(retval[order(x)]) # ensure factor levels are
-    # properly ordered
-    retval <- factor(retval, levels=levs)
+    # observed in columns, predictions in rows
+    if(!identical(rownames(x), colnames(x)))
+      stop("rownames(x) and colnames(x) must be identical")
 
-    ## determine open/closed interval ends
-    mkpairs <- function(x) # make table of lower, upper
-      sapply(x,
-             function(y) if(length(y)==2) y[c(2,2)] else y[2:3]
-      )
-    pairs <- mkpairs(strsplit(levs, '[^0-9+\\.\\-]+'))
-    rownames(pairs) <- c("lower.bound","upper.bound")
-    colnames(pairs) <- levs
+    if(is.null(pos)) pos <- rownames(x)[1]
+    if(nrow(x)!=2) {
+      # ignore pos for nxn tables, pos makes only sense for sensitivity
+      # and that is not defined for n-dim tables
+      pos <- NULL
 
-    closed.lower <- rep(F,ncol(pairs)) # default lower is open
-    closed.upper <- rep(T,ncol(pairs)) # default upper is closed
-    closed.lower[1] <- TRUE             # lowest interval is always closed
+    } else {
+      # order 2x2-confusion table so that the positive class
+      # is the first and the others keep their position
+      ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
+      # the columnnames must be the same as the rownames
+      x <- as.table(x[ord, ord])
+    }
 
-    for(i in 2:ncol(pairs))            # open lower interval if above singlet
-      if(pairs[1,i]==pairs[1,i-1] && pairs[1,i]==pairs[2,i-1])
-        closed.lower[i] <- FALSE
-
-    for(i in 1:(ncol(pairs)-1))        # open upper interval if below singlet
-      if(pairs[2,i]==pairs[1,i+1] && pairs[2,i]==pairs[2,i+1])
-        closed.upper[i] <- FALSE
-
-    levs <- ifelse(pairs[1,]==pairs[2,],
-                   pairs[1,],
-                   paste(ifelse(closed.lower,"[","("),
-                         pairs[1,],
-                         ",",
-                         pairs[2,],
-                         ifelse(closed.upper,"]",")"),
-                         sep='')
+    # overall statistics first
+    res <- list(
+      table   = x,
+      pos     = pos,
+      diag    = sum(diag(x)),
+      n       = sum(x)
     )
-    levels(retval) <- levs
+    res <- c(res,
+             acc     = BinomCI(x=res$diag, n=res$n),
+             sapply(binom.test(x=res$diag, n=res$n,
+                               p=max(apply(x, 2, sum) / res$n),
+                               alternative = "greater")[c("null.value", "p.value")], unname),
+             kappa   = CohenKappa(x),
+             mcnemar = mcnemar.test(x)$p.value
+    )
+    names(res) <- c("table","pos","diag","n","acc","acc.lci","acc.uci",
+                    "nri","acc.pval","kappa","mcnemar.pval")
+
+    # byclass
+    lst <- list()
+    for(i in 1:nrow(x)){
+
+      z <- CollapseConfTab(x=x, pos=rownames(x)[i])
+      A <- z[1, 1]; B <- z[1, 2]; C <- z[2, 1]; D <- z[2, 2]
+
+      lst[[i]] <- rbind(
+        sens    = A / (A + C),                 # sensitivity
+        spec    = D / (B + D),                 # specificity
+        ppv     = A / (A + B),                 # positive predicted value
+        npv     = D / (C + D),                 # negative predicted value
+        prev    = (A + C) / (A + B + C + D),   # prevalence
+        detrate = A / (A + B + C + D),         # detection rate
+        detprev = (A + C) / (A + B + C + D),   # detection prevalence
+        bacc    = mean(c(A / (A + C), D / (B + D)) ),  # balanced accuracy
+        fval    = Hmean(c(A / (A + B), A / (A + C))) # guetemass wollschlaeger s. 150
+      )
+    }
+
+    res <- c(res, byclass=list(do.call(cbind, lst)))
+    colnames(res[["byclass"]]) <- rownames(x)
+
+    if(nrow(x)==2) res[["byclass"]] <- res[["byclass"]][, res[["pos"]], drop=FALSE]
+
+    class(res) <- "Conf"
+
+    return(res)
+
+  }
+
+
+  if(!is.null(ref)){
+
+    if(na.rm) {
+      idx <- complete.cases(data.frame(x, ref))
+      x <- x[idx]
+      ref <- ref[idx]
+    }
+
+    Conf(table(pred=x, obs=ref), pos = pos, ...)
 
   } else
-    retval <- cut( x, breaks, include.lowest=TRUE,  labels=labels, ... )
-
-  return(retval)
-
-}
-
-
-
-# Phi-Koeff
-Phi  <- function (x, y = NULL, ...) {
-  if(!is.null(y)) x <- table(x, y, ...)
-  # when computing phi, note that Yates' correction to chi-square must not be used.
-  as.numeric( sqrt( suppressWarnings(chisq.test(x, correct=FALSE)$statistic) / sum(x) ) )
-}
-
-
-
-# Kontingenz-Koeffizient
-ContCoef <- function(x, y = NULL, correct = FALSE, ...) {
-  if(!is.null(y)) x <- table(x, y, ...)
-  chisq <- suppressWarnings(chisq.test(x, correct = FALSE)$statistic)
-  cc <- as.numeric( sqrt( chisq / ( chisq + sum(x)) ))
-  if(correct) {  # Sakoda's adjusted Pearson's C
-    k <- min(nrow(x),ncol(x))
-    cc <- cc/sqrt((k-1)/k)
-  }
-  return(cc)
-}
-
-
-CramerV <- function(x, y = NULL, conf.level = NA, ...){
-
-  if(!is.null(y)) x <- table(x, y, ...)
-
-  # CIs and power for the noncentral chi-sq noncentrality parameter (ncp):
-  # The function lochi computes the lower CI limit and hichi computes the upper limit.
-  # Both functions take 3 arguments: observed chi-sq, df, and confidence level.
-
-  # author:   Michael Smithson
-  # http://psychology3.anu.edu.au/people/smithson/details/CIstuff/Splusnonc.pdf
-
-  lochi <- function(chival, df, conf) {
-    ulim <- 1 - (1-conf)/2
-    #  This first part finds a lower value from which to start.
-    lc <- c(.001,chival/2,chival)
-    while(pchisq(chival,df,lc[1])<ulim) {
-      if(pchisq(chival,df)<ulim)
-        return(c(0,pchisq(chival,df)))
-      lc <- c(lc[1]/4,lc[1],lc[3])
-    }
-    #	This next part finds the lower limit for the ncp.
-    diff <- 1
-    while(diff > .00001) {
-      if(pchisq(chival, df, lc[2]) < ulim)
-        lc <- c(lc[1],(lc[1]+lc[2])/2,lc[2])
-      else lc <- c(lc[2],(lc[2]+lc[3])/2,lc[3])
-      diff <- abs(pchisq(chival,df,lc[2]) - ulim)
-      ucdf <- pchisq(chival,df,lc[2])
-    }
-    c(lc[2], ucdf)
-  }
-
-  hichi <- function(chival,df,conf) {
-    #	This first part finds upper and lower startinig values.
-    uc <- c(chival, 2*chival, 3*chival)
-    llim <- (1-conf)/2
-    while(pchisq(chival, df, uc[1]) < llim) {
-      uc <- c(uc[1]/4,uc[1],uc[3])
-    }
-    while(pchisq(chival,df,uc[3])>llim) {
-      uc <- c(uc[1],uc[3],uc[3]+chival)
-    }
-    #	This next part finds the upper limit for the ncp.
-    diff <- 1
-    while(diff > .00001) {
-      if(pchisq(chival,df,uc[2]) < llim)
-        uc <- c(uc[1],(uc[1]+uc[2])/2,uc[2])
-      else uc <- c(uc[2],(uc[2]+uc[3])/2,uc[3])
-      diff <- abs(pchisq(chival,df,uc[2]) - llim)
-      lcdf <- pchisq(chival,df,uc[2])
-    }
-    c(uc[2], lcdf)
-  }
-
-  # Remark Andri 18.12.2014:
-  # lochi and hichi could be replaced with:
-  #   optimize(function(x) abs(pchisq(chival, DF, x)  - (1-(1-conf.level)/2)), c(0, chival))
-  #   optimize(function(x) abs(pchisq(chival, DF, x)  - (1-conf.level)/2), c(0, 3*chival))
-  #
-  # ... which would run ~ 25% faster and be more exact
-
-  # what can go wrong while calculating chisq.stat?
-  # we don't need test results here, so we suppress those warnings
-  chisq.hat <- suppressWarnings(chisq.test(x, correct = FALSE)$statistic)
-  df <- prod(dim(x)-1)
-  v <- as.numeric(sqrt(chisq.hat/(sum(x) * (min(dim(x)) - 1))))
-
-  if (is.na(conf.level)) {
-    res <- v
-
-  } else {
-    ci <- c(lochi(chisq.hat, df, conf.level)[1], hichi(chisq.hat, df, conf.level)[1])
-# corrected by michael smithson, 17.5.2014:
-#    ci <- unname(sqrt( (ci + df) / (sum(x) * (min(dim(x)) - 1)) ))
-    ci <- unname(sqrt( (ci) / (sum(x) * (min(dim(x)) - 1)) ))
-    res <- c("Cramer V"=v, lwr.ci=max(0, ci[1]), upr.ci=min(1, ci[2]))
-
-  }
-
-  return(res)
-}
-
-
-
-
-YuleQ <- function(x, y = NULL, ...){
-
-  if(!is.null(y)) x <- table(x, y, ...)
-
-  # allow only 2x2 tables
-  stopifnot(prod(dim(x)) == 4 || length(x) == 4)
-
-   a <- x[1,1]
-   b <- x[1,2]
-   c <- x[2,1]
-   d <- x[2,2]
-  return((a*d- b*c)/(a*d + b*c))  #Yule Q
-
-}
-
-
-YuleY <- function(x, y = NULL, ...){
-
-  if(!is.null(y)) x <- table(x, y, ...)
-
-  # allow only 2x2 tables
-  stopifnot(prod(dim(x)) == 4 || length(x) == 4)
-
-   a <- x[1,1]
-   b <- x[1,2]
-   c <- x[2,1]
-   d <- x[2,2]
-  return((sqrt(a*d) - sqrt(b*c))/(sqrt(a*d)+sqrt(b*c))) # YuleY
-
-}
-
-
-TschuprowT <- function(x, y = NULL, ...){
-
-  if(!is.null(y)) x <- table(x, y, ...)
-
-  # Tschuprow, A. A. (1939) Principles of the Mathematical Theory of Correlation; translated by M. Kantorowitsch. W. Hodge & Co.
-  # http://en.wikipedia.org/wiki/Tschuprow's_T
-  # Hartung S. 451
-
-  # what can go wrong while calculating chisq.stat?
-  # we don't need test results here, so we suppress those warnings
-  as.numeric( sqrt(suppressWarnings(chisq.test(x, correct = FALSE)$statistic)/
-                  (sum(x) * sqrt(prod(dim(x)-1)) )))
-
-}
-
-
-
-
-# based on Kappa from library(vcd)
-# author: David Meyer
-# see also: kappa in library(psych)
-
-CohenKappa <- function (x, y = NULL, weights = c("Unweighted", "Equal-Spacing", "Fleiss-Cohen"), conf.level = NA, ...) {
-
-  if (is.character(weights)) weights <- match.arg(weights)
-
-  if(!is.null(y)) {
-    # we can not ensure a reliable weighted kappa for 2 factors with different levels
-    # so refuse trying it... (unweighted is no problem)
-
-    if( !identical(weights, "Unweighted")) stop("Vector interface for weighted Kappa is not supported. Provide confusion matrix.")
-
-    # x and y must have the same levels in order to build a symmetric confusion matrix
-    x <- factor(x)
-    y <- factor(y)
-    lvl <- unique(c(levels(x), levels(y)))
-    x <- factor(x, levels=lvl)
-    y <- factor(y, levels=lvl)
-    x <- table(x, y, ...)
-
-  } else {
-    d <- dim(x)
-    if (d[1L] != d[2L]) stop("x must be square matrix if provided as confusion matrix")
-  }
-
-  d <- diag(x)
-  n <- sum(x)
-  nc <- ncol(x)
-  colFreqs <- colSums(x)/n
-  rowFreqs <- rowSums(x)/n
-
-  kappa <- function(po, pc) (po - pc)/(1 - pc)
-  std <- function(po, pc, W = 1) sqrt(sum(W * W * po * (1 - po))/crossprod(1 - pc)/n)
-
-  po <- sum(d)/n
-  pc <- crossprod(colFreqs, rowFreqs)
-
-  k <- kappa(po, pc)
-  s <- std(po, pc)
-
-  W <- if (is.matrix(weights))
-    weights
-  else if (weights == "Equal-Spacing")
-    1 - abs(outer(1:nc, 1:nc, "-"))/(nc - 1)
-  else # weightx == "Fleiss-Cohen"
-    1 - (abs(outer(1:nc, 1:nc, "-"))/(nc - 1))^2
-
-  pow <- sum(W * x)/n
-  pcw <- sum(W * colFreqs %o% rowFreqs)
-
-  kw <- kappa(pow, pcw)
-  sw <- std(x/n, 1 - pcw, W)
-
-#   structure(list(Unweighted = c(value = k, ASE = s), Weighted = c(value = kw,
-#       ASE = sw), Weights = W), class = "Kappa")
-
-  if (is.na(conf.level)) {
-    if(identical(weights, "Unweighted"))
-      res <- as.vector(k)
-    else
-      res <- as.vector(kw)
-  } else {
-    if(identical(weights, "Unweighted")) {
-      ci <- k + c(1,-1) * qnorm((1-conf.level)/2) * s
-      res <- c("kappa"=k, lwr.ci=ci[1], upr.ci=ci[2])
-    } else {
-      ci <- kw + c(1,-1) * qnorm((1-conf.level)/2) * sw
-      res <- c("kappa"=kw, lwr.ci=ci[1], upr.ci=ci[2])
-    }
-  }
-  return(res)
-
-}
-
-# KappaTest <- function(x, weights = c("Equal-Spacing", "Fleiss-Cohen"), conf.level = NA) {
-  # to do, idea is to implement a Kappa test for H0: kappa = 0 as in
-  # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf, pp. 1687
-#   print( "still to do...." )
-
-# }
-
-
-KappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) {
-
-	ratings <- as.matrix(na.omit(x))
-
-	ns <- nrow(ratings)
-	nr <- ncol(ratings)
-
-	# Build table
-	lev <- levels(as.factor(ratings))
-
-	for (i in 1:ns) {
-		frow <- factor(ratings[i,],levels=lev)
-
-		if (i==1)
-			ttab <- as.numeric(table(frow))
-		else
-			ttab <- rbind(ttab, as.numeric(table(frow)))
-	}
-
-	ttab <- matrix(ttab, nrow=ns)
-	agreeP <- sum((apply(ttab^2, 1, sum)-nr)/(nr*(nr-1))/ns)
-
-	switch( match.arg(method, choices= c("Fleiss", "Conger", "Light"))
-    , "Fleiss" = {
-      chanceP <- sum(apply(ttab,2,sum)^2)/(ns*nr)^2
-      value <- (agreeP - chanceP)/(1 - chanceP)
-
-      pj <- apply(ttab,2,sum)/(ns*nr)
-      qj <- 1-pj
-
-      varkappa <- (2/(sum(pj*qj)^2*(ns*nr*(nr-1))))*(sum(pj*qj)^2-sum(pj*qj*(qj-pj)))
-      SEkappa <- sqrt(varkappa)
-
-      ci <- value + c(1,-1) * qnorm((1-conf.level)/2) * SEkappa
-    }
-    , "Conger" = {
-      for (i in 1:nr) {
-        rcol <- factor(ratings[,i],levels=lev)
-
-        if (i==1)
-          rtab <- as.numeric(table(rcol))
-        else
-          rtab <- rbind(rtab, as.numeric(table(rcol)))
-      }
-
-      rtab <- rtab/ns
-
-      chanceP <- sum(apply(ttab,2,sum)^2)/(ns*nr)^2 - sum(apply(rtab,2,var)*(nr-1)/nr)/(nr-1)
-      value <- (agreeP - chanceP)/(1 - chanceP)
-
-      # we have not SE for exact Kappa value
-      ci <- c(NA, NA)
-
-    }
-	  , "Light" = {
-	    m <- DescTools::PairApply(ratings, DescTools::CohenKappa, symmetric=TRUE)
-	    value <- mean(m[upper.tri(m)])
-
-	    levlen <- length(lev)
-	    for (nri in 1:(nr - 1)) for (nrj in (nri + 1):nr) {
-	      for (i in 1:levlen) for (j in 1:levlen) {
-	        if (i != j) {
-	          r1i <- sum(ratings[, nri] == lev[i])
-	          r2j <- sum(ratings[, nrj] == lev[j])
-	          if (!exists("dis"))
-	            dis <- r1i * r2j
-	          else dis <- c(dis, r1i * r2j)
-	        }
-	      }
-	      if (!exists("disrater"))
-	        disrater <- sum(dis)
-	      else disrater <- c(disrater, sum(dis))
-	      rm(dis)
-	    }
-	    B <- length(disrater) * prod(disrater)
-	    chanceP <- 1 - B/ns^(choose(nr, 2) * 2)
-	    varkappa <- chanceP/(ns * (1 - chanceP))
-	    SEkappa <- sqrt(varkappa)
-
-	    ci <- value + c(1,-1) * qnorm((1-conf.level)/2) * SEkappa
-
-	  }
-	)
-
-
-	if (is.na(conf.level)) {
-    res <- value
-	} else {
-    res <- c("kappa"=value, lwr.ci=ci[1], upr.ci=ci[2])
-	}
-	return(res)
-
-}
-
-
-
-Agree <- function(x, tolerance = 0, na.rm = FALSE) {
-
-  x <- as.matrix(x)
-  if(na.rm) x <- na.omit(x)
-
-  if(anyNA(x)) return(NA)
-
-  ns <- nrow(x)
-  nr <- ncol(x)
-
-  if (is.numeric(x)) {
-    rangetab <- apply(x, 1, max) - apply(x, 1, min)
-    coeff <-  sum(rangetab <= tolerance)/ns
-
-  } else {
-    rangetab <- as.numeric(sapply(apply(x, 1, table), length))
-    coeff <- (sum(rangetab == 1)/ns)
-    tolerance <- 0
-  }
-
-  rval <- coeff
-  attr(rval, c("subjects")) <- ns
-  attr(rval, c("raters")) <- nr
-
-  return(rval)
-
-}
-
-
-# ICC(ratings)
-# ICC_(ratings, type="ICC3", conf.level=0.95)
-# ICC_(ratings, type="all", conf.level=0.95)
-
-ICC <- function(ratings, type=c("all", "ICC1","ICC2","ICC3","ICC1k","ICC2k","ICC3k"), conf.level = NA, na.rm = FALSE) {
-
-  ratings <- as.matrix(ratings)
-  if(na.rm) ratings <- na.omit(ratings)
-
-  ns <- nrow(ratings)
-  nr <- ncol(ratings)
-
-  x.s <- stack(data.frame(ratings))
-  x.df <- data.frame(x.s, subs = rep(paste("S", 1:ns, sep = ""), nr))
-
-  s.aov <- summary(aov(values ~ subs + ind, data=x.df))
-  stats <- matrix(unlist(s.aov), ncol=3, byrow=TRUE)
-  MSB <- stats[3,1]
-  MSW <- (stats[2,2] + stats[2,3])/(stats[1,2] + stats[1,3])
-  MSJ <- stats[3,2]
-  MSE <- stats[3,3]
-
-  ICC1 <- (MSB- MSW)/(MSB+ (nr-1)*MSW)
-  ICC2 <- (MSB- MSE)/(MSB + (nr-1)*MSE + nr*(MSJ-MSE)/ns)
-  ICC3 <- (MSB - MSE)/(MSB+ (nr-1)*MSE)
-  ICC12 <- (MSB-MSW)/(MSB)
-  ICC22 <- (MSB- MSE)/(MSB +(MSJ-MSE)/ns)
-  ICC32 <- (MSB-MSE)/MSB
-
-  #find the various F values from Shrout and Fleiss
-  F11 <- MSB/MSW
-  df11n <- ns-1
-  df11d <- ns*(nr-1)
-  p11 <- 1 - pf(F11, df11n, df11d)
-  F21 <- MSB/MSE
-  df21n <- ns-1
-  df21d <- (ns-1)*(nr-1)
-  p21 <- 1-pf(F21, df21n, df21d)
-  F31 <- F21
-
-
-  # results <- t(results)
-
-  results <- data.frame(matrix(NA, ncol=8, nrow=6))
-  colnames(results ) <- c("type", "est","F-val","df1","df2","p-val","lwr.ci","upr.ci")
-  rownames(results) <- c("Single_raters_absolute","Single_random_raters","Single_fixed_raters", "Average_raters_absolute","Average_random_raters","Average_fixed_raters")
-
-  results[,1] = c("ICC1","ICC2","ICC3","ICC1k","ICC2k","ICC3k")
-  results[,2] = c(ICC1, ICC2, ICC3, ICC12, ICC22, ICC32)
-  results[1,3] <- results[4,3] <- F11
-  results[2,3] <- F21
-  results[3,3] <- results[6,3] <- results[5,3] <- F31 <- F21
-  results[5,3] <- F21
-  results[1,4] <- results[4,4] <- df11n
-  results[1,5] <- results[4,5] <- df11d
-  results[1,6] <- results[4,6] <- p11
-  results[2,4] <- results[3,4] <- results[5,4] <- results[6,4] <- df21n
-  results[2,5] <- results[3,5] <- results[5,5] <- results[6,5] <- df21d
-  results[2,6] <- results[5,6] <- results[3,6] <- results[6,6] <- p21
-
-  #now find confidence limits
-  #first, the easy ones
-  alpha <- 1 - conf.level
-  F1L <- F11 / qf(1-alpha/2, df11n, df11d)
-  F1U <- F11 * qf(1-alpha/2, df11d, df11n)
-  L1 <- (F1L-1) / (F1L + (nr - 1))
-  U1 <- (F1U -1) / (F1U + nr - 1)
-  F3L <- F31 / qf(1-alpha/2, df21n, df21d)
-  F3U <- F31 * qf(1-alpha/2, df21d, df21n)
-  results[1,7] <- L1
-  results[1,8] <- U1
-  results[3,7] <- (F3L-1)/(F3L+nr-1)
-  results[3,8] <- (F3U-1)/(F3U+nr-1)
-  results[4,7] <- 1- 1/F1L
-  results[4,8] <- 1- 1/F1U
-  results[6,7] <- 1- 1/F3L
-  results[6,8] <- 1 - 1/F3U
-
-  #the hard one is case 2
-  Fj <- MSJ/MSE
-  vn <- (nr-1)*(ns-1)* ( (nr*ICC2*Fj+ns*(1+(nr-1)*ICC2) - nr*ICC2))^2
-  vd <- (ns-1)*nr^2 * ICC2^2 * Fj^2 + (ns *(1 + (nr-1)*ICC2) - nr*ICC2)^2
-  v <- vn/vd
-  F3U <- qf(1-alpha/2,ns-1,v)
-  F3L <- qf(1-alpha/2,v,ns-1)
-
-  L3 <- ns *(MSB- F3U*MSE)/(F3U*(nr * MSJ + (nr*ns-nr-ns) * MSE)+ ns*MSB)
-  results[2, 7] <- L3
-  U3 <- ns *(F3L * MSB - MSE)/(nr * MSJ + (nr * ns - nr - ns)*MSE + ns * F3L * MSB)
-  results[2, 8] <- U3
-  L3k <- L3 * nr/(1+ L3*(nr-1))
-  U3k <- U3 * nr/(1+ U3*(nr-1))
-  results[5, 7] <- L3k
-  results[5, 8] <- U3k
-
-
-  #clean up the output
-  results[,2:8] <- results[,2:8]
-
-  type <- match.arg(type, c("all", "ICC1","ICC2","ICC3","ICC1k","ICC2k","ICC3k"))
-
-  switch(type
-         , all={res <- list(results=results, summary=s.aov, stats=stats, MSW=MSW, ns=ns, nr=nr)
-                class(res) <- "ICC"
+    switch(class(x)
+           , "table"= .Conf.table(x, pos=pos, ...)
+           , "matrix"= Conf(as.table(x), pos=pos, ...)
+           , "rpart" = Conf(x=attr(x,"ylevels")[x$frame$yval[x$where]], ref=attr(x,"ylevels")[x$y], pos=pos, ...)
+           , "randomForest" = Conf(x=x$predicted, ref=x$y, pos=pos, ... )
+           , "svm" = Conf(x=predict(x), ref=model.frame(x)[,1], pos=pos, ... )
+           , "multinom" = {
+                if(is.null(x$model)) stop("x does not contain model. Run multinom with argument model=TRUE!")
+                # attention: this will not handle correctly responses defined as dummy codes
+                # adapt for that!!  ************************************************************
+                # resp <- x$response[,1]
+                Conf(x=predict(x, type="class"), ref=model.extract(x$model, "response"), pos=pos, ... )
            }
-         , ICC1={idx <- 1}
-         , ICC2={idx <- 2}
-         , ICC3={idx <- 3}
-         , ICC1k={idx <- 4}
-         , ICC2k={idx <- 5}
-         , ICC3k={idx <- 6}
-  )
-
-  if(type!="all"){
-    if(is.na(conf.level)){
-      res <- results[idx, c(2)][,]
-    } else {
-      res <- unlist(results[idx, c(2, 7:8)])
-      names(res) <- c(type,"lwr.ci","upr.ci")
-    }
-  }
-
-  return(res)
-
-}
-
-
-print.ICC <- function(x, digits = 3, ...){
-  cat("\nIntraclass correlation coefficients \n")
-  print(x$results, digits=digits)
-  cat("\n Number of subjects =", x$ns, "    Number of raters =", x$nr, "\n")
+           , "glm" = {
+             cutoff <- 0.5
+             resp <- factor(model.extract(x$model, "response"))
+             pred <- levels(resp)[(predict(x, type="response") > cutoff) + 1]
+             Conf(x = pred, ref = resp, pos=pos, ...)
+           }
+           , "regr" = {
+             class(x) <- class(x)[class(x) != "regr"]
+             Conf(x, pos=pos, ...)
+           }
+           , "lda" = Conf(predict(x)$class, model.response(model.frame(x)))
+           , "qda" = Conf(predict(x)$class, model.response(model.frame(x)))
+    )
 }
 
 
 
-
-CronbachAlpha <- function(x, conf.level = NA, cond = FALSE, na.rm = FALSE){
-
-  i.CronbachAlpha <- function(x, conf.level = NA){
-    nc <- ncol(x)
-    colVars <- apply(x, 2, var)
-    total   <- var(apply(x, 1, sum))
-    res <- (total - sum(colVars)) / total * (nc/(nc-1))
-
-    if (!is.na(conf.level)) {
-      N <- length(x)
-      ci <- 1 - (1-res) * qf( c(1-(1-conf.level)/2, (1-conf.level)/2), N-1, (nc-1)*(N-1))
-      res <- c("Cronbach Alpha"=res, lwr.ci=ci[1], upr.ci=ci[2])
-    }
-    return(res)
-  }
-
-
-  x <- as.matrix(x)
-  if(na.rm) x <- na.omit(x)
-
-  res <- i.CronbachAlpha(x = x, conf.level = conf.level)
-
-  if(cond) {
-    condCronbachAlpha <- list()
-    n <- ncol(x)
-    if(n > 2) {     # can't calculate conditional with only 2 items
-      for(i in 1:n){
-        condCronbachAlpha[[i]] <- i.CronbachAlpha(x[,-i], conf.level = conf.level)
-      }
-      condCronbachAlpha <- data.frame(Item = 1:n, do.call("rbind", condCronbachAlpha))
-      colnames(condCronbachAlpha)[2] <- "Cronbach Alpha"
-    }
-    res <- list(unconditional=res, condCronbachAlpha = condCronbachAlpha)
-  }
-
-  return(res)
-}
-
-
-KendallW <- function(ratings, correct=FALSE, test=FALSE, na.rm = FALSE) {
-
-  # see also old Jim Lemon function kendall.w
-  # other solution: library(irr);  kendall(ratings, correct = TRUE)
-  # http://www.real-statistics.com/reliability/kendalls-w/
-
-  dname <- deparse(substitute(ratings))
-
-  ratings <- as.matrix(ratings)
-  if(na.rm) ratings <- na.omit(ratings)
-
-  ns <- nrow(ratings)
-  nr <- ncol(ratings)
-
-  #Without correction for ties
-  if (!correct) {
-    #Test for ties
-    TIES = FALSE
-    testties <- apply(ratings, 2, unique)
-    if (!is.matrix(testties)) TIES=TRUE
-    else { if (length(testties) < length(ratings)) TIES=TRUE }
-
-    ratings.rank <- apply(ratings,2,rank)
-
-    coeff.name <- "W"
-    coeff <- (12*var(apply(ratings.rank,1,sum))*(ns-1))/(nr^2*(ns^3-ns))
-  }
-  else { #With correction for ties
-    ratings <- as.matrix(na.omit(ratings))
-
-    ns <- nrow(ratings)
-    nr <- ncol(ratings)
-
-    ratings.rank <- apply(ratings,2,rank)
-
-    Tj <- 0
-    for (i in 1:nr) {
-      rater <- table(ratings.rank[,i])
-      ties  <- rater[rater>1]
-      l 	  <- as.numeric(ties)
-      Tj	  <- Tj + sum(l^3-l)
-    }
-
-    coeff.name <- "Wt"
-    coeff <- (12*var(apply(ratings.rank,1,sum))*(ns-1))/(nr^2*(ns^3-ns)-nr*Tj)
-  }
-
-  if(test){
-    #test statistics
-    Xvalue  <- nr*(ns-1)*coeff
-    df1     <- ns-1
-    names(df1) <- "df"
-    p.value <- pchisq(Xvalue, df1, lower.tail = FALSE)
-    method <- paste("Kendall's coefficient of concordance", coeff.name)
-    alternative <- paste(coeff.name, "is greater 0")
-    names(ns) <- "subjects"
-    names(nr) <- "raters"
-    names(Xvalue) <- "Kendall chi-squared"
-    names(coeff) <- coeff.name
-    rval <- list(#subjects = ns, raters = nr,
-                 estimate = coeff, parameter=c(df1, ns, nr),
-                 statistic = Xvalue, p.value = p.value,
-                 alternative = alternative, method = method, data.name = dname)
-
-    class(rval) <- "htest"
-  } else {
-    rval <- coeff
-  }
-
-  if (!correct && TIES) warning("Coefficient may be incorrect due to ties")
-  return(rval)
-}
-
-
-
-CCC <- function(x, y, ci = "z-transform", conf.level = 0.95, na.rm = FALSE){
-
-  dat <- data.frame(x, y)
-
-  if(na.rm) dat <- na.omit(dat)
-#   id <- complete.cases(dat)
-#   nmissing <- sum(!complete.cases(dat))
-#   dat <- dat[id,]
-
-
-  N. <- 1 - ((1 - conf.level) / 2)
-  zv <- qnorm(N., mean = 0, sd = 1)
-  lower <- "lwr.ci"
-  upper <- "upr.ci"
-
-  k <- length(dat$y)
-  yb <- mean(dat$y)
-  sy2 <- var(dat$y) * (k - 1) / k
-  sd1 <- sd(dat$y)
-
-  xb <- mean(dat$x)
-  sx2 <- var(dat$x) * (k - 1) / k
-  sd2 <- sd(dat$x)
-
-  r <- cor(dat$x, dat$y)
-  sl <- r * sd1 / sd2
-
-  sxy <- r * sqrt(sx2 * sy2)
-  p <- 2 * sxy / (sx2 + sy2 + (yb - xb)^2)
-
-  delta <- (dat$x - dat$y)
-  rmean <- apply(dat, MARGIN = 1, FUN = mean)
-  blalt <- data.frame(mean = rmean, delta)
-
-  # Scale shift:
-  v <- sd1 / sd2
-  # Location shift relative to the scale:
-  u <- (yb - xb) / ((sx2 * sy2)^0.25)
-  # Variable C.b is a bias correction factor that measures how far the best-fit line deviates from a line at 45 degrees (a measure of accuracy). No deviation from the 45 degree line occurs when C.b = 1. See Lin (1989 page 258).
-  # C.b <- (((v + 1) / (v + u^2)) / 2)^-1
-
-  # The following taken from the Stata code for function "concord" (changed 290408):
-  C.b <- p / r
-
-  # Variance, test, and CI for asymptotic normal approximation (per Lin (March 2000) Biometrics 56:325-5):
-  sep = sqrt(((1 - ((r)^2)) * (p)^2 * (1 - ((p)^2)) / (r)^2 + (2 * (p)^3 * (1 - p) * (u)^2 / r) - 0.5 * (p)^4 * (u)^4 / (r)^2 ) / (k - 2))
-  ll = p - zv * sep
-  ul = p + zv * sep
-
-  # Statistic, variance, test, and CI for inverse hyperbolic tangent transform to improve asymptotic normality:
-  t <- log((1 + p) / (1 - p)) / 2
-  set = sep / (1 - ((p)^2))
-  llt = t - zv * set
-  ult = t + zv * set
-  llt = (exp(2 * llt) - 1) / (exp(2 * llt) + 1)
-  ult = (exp(2 * ult) - 1) / (exp(2 * ult) + 1)
-
-  if(ci == "asymptotic"){
-    rho.c <- as.data.frame(cbind(p, ll, ul))
-    names(rho.c) <- c("est", lower, upper)
-    rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, C.b = C.b, blalt = blalt ) # , nmissing = nmissing)
-  }
-
-  else if(ci == "z-transform"){
-    rho.c <- as.data.frame(cbind(p, llt, ult))
-    names(rho.c) <- c("est", lower, upper)
-    rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, C.b = C.b, blalt = blalt) #, nmissing = nmissing)
-  }
-  return(rval)
-}
-
-
-
-
-KrippAlpha <- function (x, method = c("nominal", "ordinal", "interval", "ratio")) {
-
-  method  <-  match.arg(method)
-
-  coincidence.matrix <- function(x) {
-    levx <- (levels(as.factor(x)))
-    nval <- length(levx)
-    cm <- matrix(rep(0, nval * nval), nrow = nval)
-    dimx <- dim(x)
-    vn <- function(datavec) sum(!is.na(datavec))
-    if(any(is.na(x))) mc <- apply(x, 2, vn) - 1
-    else mc <- rep(1, dimx[2])
-    for(col in 1:dimx[2]) {
-      for(i1 in 1:(dimx[1] - 1)) {
-        for(i2 in (i1 + 1):dimx[1]) {
-          if(!is.na(x[i1, col]) && !is.na(x[i2, col])) {
-            index1 <- which(levx == x[i1, col])
-            index2 <- which(levx == x[i2, col])
-            cm[index1, index2] <- cm[index1,index2] + (1 + (index1 == index2))/mc[col]
-            if(index1 != index2) cm[index2,index1] <- cm[index1,index2]
-          }
-        }
-      }
-    }
-    nmv  <-  sum(apply(cm, 2, sum))
-    return(structure(list(method="Krippendorff's alpha",
-                          subjects=dimx[2], raters=dimx[1],irr.name="alpha",
-                          value=NA,stat.name="nil",statistic=NULL,
-                          cm=cm,data.values=levx,nmatchval=nmv,data.level=NA),
-                     class = "irrlist"))
-  }
-
-  ka <- coincidence.matrix(x)
-  ka$data.level <- method
-  dimcm <- dim(ka$cm)
-  utcm <- as.vector(ka$cm[upper.tri(ka$cm)])
-  diagcm <- diag(ka$cm)
-  occ <- sum(diagcm)
-  nc <- apply(ka$cm,1,sum)
-  ncnc <- sum(nc * (nc - 1))
-  dv <- as.numeric(ka$data.values)
-  diff2 <- rep(0,length(utcm))
-  ncnk <- rep(0,length(utcm))
-  ck <- 1
-
-  if (dimcm[2]<2)
-    ka$value <- 1.0
-  else {
-    for(k in 2:dimcm[2]) {
-      for(c in 1:(k-1)) {
-        ncnk[ck] <- nc[c] * nc[k]
-        if(match(method[1],"nominal",0)) diff2[ck] <- 1
-        if(match(method[1],"ordinal",0)) {
-          diff2[ck] <- nc[c]/2
-          if(k > (c+1))
-            for(g in (c+1):(k-1)) diff2[ck] <- diff2[ck] + nc[g]
-          diff2[ck] <- diff2[ck]+nc[k]/2
-          diff2[ck] <- diff2[ck]^2
-        }
-        if(match(method[1],"interval",0)) diff2[ck] <- (dv[c]-dv[k])^2
-        if(match(method[1],"ratio",0)) diff2[ck] <- (dv[c]-dv[k])^2/(dv[c]+dv[k])^2
-        ck <- ck+1
-      }
-    }
-    ka$value <- 1-(ka$nmatchval-1)*sum(utcm*diff2)/sum(ncnk*diff2)
-  }
-  return(ka)
-}
-
-
-
-Entropy <- function(x, y = NULL, base = 2, ...) {
-
-  # x is either a table or a vector if y is defined
-
-  if(!is.null(y)) { x <- table(x, y, ...) }
-  x <- as.matrix(x)
-
-  ptab <- x / sum(x)
-  H <- - sum( ifelse(ptab > 0, ptab * log(ptab, base=base), 0) )
-  return(H)
-
-}
-
-
-MutInf <- function(x, y = NULL, base = 2, ...){
-  # ### Ref.:  http://en.wikipedia.org/wiki/Cluster_labeling
-
-  if(!is.null(y)) { x <- table(x, y, ...) }
-  x <- as.matrix(x)
-
-  return(
-    Entropy(apply(x, 1, sum), base=base) +
-      Entropy(apply(x, 2, sum), base=base) - Entropy(x, base=base)
-  )
-
-}
-
-
-
-# Rao's Diversity from ade4 divc
-# author:
-
-DivCoef <- function(df, dis = NULL, scale = FALSE){
-    # checking of user's data and initialization.
-    if (!inherits(df, "data.frame")) stop("Non convenient df")
-    if (any(df < 0)) stop("Negative value in df")
-    if (!is.null(dis)) {
-        if (!inherits(dis, "dist")) stop("Object of class 'dist' expected for distance")
-        if (!IsEuclid(dis)) warning("Euclidean property is expected for distance")
-        dis <- as.matrix(dis)
-        if (nrow(df)!= nrow(dis)) stop("Non convenient df")
-        dis <- as.dist(dis)
-    }
-    if (is.null(dis)) dis <- as.dist((matrix(1, nrow(df), nrow(df))
-        - diag(rep(1, nrow(df)))) * sqrt(2))
-    div <- as.data.frame(rep(0, ncol(df)))
-    names(div) <- "diversity"
-    rownames(div) <- names(df)
-    for (i in 1:ncol(df)) {
-        if(sum(df[, i]) < 1e-16) div[i, ] <- 0
-        else div[i, ] <- (t(df[, i]) %*% (as.matrix(dis)^2) %*% df[, i]) / 2 / (sum(df[, i])^2)
-    }
-    if(scale == TRUE){
-        divmax <- DivCoefMax(dis)$value
-        div <- div / divmax
-    }
-    return(div)
-}
-
-IsEuclid <- function (distmat, plot = FALSE, print = FALSE, tol = 1e-07) {
-
-  "bicenter.wt" <- function (X, row.wt = rep(1, nrow(X)), col.wt = rep(1, ncol(X))) {
-      X <- as.matrix(X)
-      n <- nrow(X)
-      p <- ncol(X)
-      if (length(row.wt) != n)
-          stop("length of row.wt must equal the number of rows in x")
-      if (any(row.wt < 0) || (sr <- sum(row.wt)) == 0)
-          stop("weights must be non-negative and not all zero")
-      row.wt <- row.wt/sr
-      if (length(col.wt) != p)
-          stop("length of col.wt must equal the number of columns in x")
-      if (any(col.wt < 0) || (st <- sum(col.wt)) == 0)
-          stop("weights must be non-negative and not all zero")
-      col.wt <- col.wt/st
-      row.mean <- apply(row.wt * X, 2, sum)
-      col.mean <- apply(col.wt * t(X), 2, sum)
-      col.mean <- col.mean - sum(row.mean * col.wt)
-      X <- sweep(X, 2, row.mean)
-      X <- t(sweep(t(X), 2, col.mean))
-      return(X)
-  }
-
-  if (!inherits(distmat, "dist"))
-    stop("Object of class 'dist' expected")
-  if(any(distmat<tol))
-    warning("Zero distance(s)")
-  distmat <- as.matrix(distmat)
-  n <- ncol(distmat)
-  delta <- -0.5 * bicenter.wt(distmat * distmat)
-  lambda <- eigen(delta, symmetric = TRUE, only.values = TRUE)$values
-  w0 <- lambda[n]/lambda[1]
-  if (plot)
-    barplot(lambda)
-  if (print)
-    print(lambda)
-  return((w0 > -tol))
-}
-
-
-DivCoefMax <- function(dis, epsilon = 1e-008, comment = FALSE) {
-
-# inititalisation
-    if(!inherits(dis, "dist")) stop("Distance matrix expected")
-    if(epsilon <= 0) stop("epsilon must be positive")
-    if(!IsEuclid(dis)) stop("Euclidean property is expected for dis")
-    D2 <- as.matrix(dis)^2 / 2
-    n <- dim(D2)[1]
-    result <- data.frame(matrix(0, n, 4))
-    names(result) <- c("sim", "pro", "met", "num")
-    relax <- 0    # determination de la valeur initiale x0
-    x0 <- apply(D2, 1, sum) / sum(D2)
-    result$sim <- x0    # ponderation simple
-    objective0 <- t(x0) %*% D2 %*% x0
-    if (comment == TRUE)
-        print("evolution of the objective function:")
-    xk <- x0    # grande boucle de test des conditions de Kuhn-Tucker
-    repeat {
-        # boucle de test de nullite du gradient projete
-        repeat {
-            maxi.temp <- t(xk) %*% D2 %*% xk
-            if(comment == TRUE) print(as.character(maxi.temp))
-            #calcul du gradient
-            deltaf <- (-2 * D2 %*% xk)
-            # determination des contraintes saturees
-            sature <- (abs(xk) < epsilon)
-            if(relax != 0) {
-                sature[relax] <- FALSE
-                relax <- 0
-            }
-            # construction du gradient projete
-            yk <- ( - deltaf)
-            yk[sature] <- 0
-            yk[!(sature)] <- yk[!(sature)] - mean(yk[!(
-                sature)])
-            # test de la nullite du gradient projete
-            if (max(abs(yk)) < epsilon) {
-                break
-            }
-            # determination du pas le plus grand compatible avec les contraintes
-            alpha.max <- as.vector(min( - xk[yk < 0] / yk[yk <
-                0]))
-            alpha.opt <- as.vector( - (t(xk) %*% D2 %*% yk) / (
-                t(yk) %*% D2 %*% yk))
-            if ((alpha.opt > alpha.max) | (alpha.opt < 0)) {
-                alpha <- alpha.max
-            }
-            else {
-                alpha <- alpha.opt
-            }
-            if (abs(maxi.temp - t(xk + alpha * yk) %*% D2 %*% (
-                xk + alpha * yk)) < epsilon) {
-                break
-            }
-            xk <- xk + alpha * yk
-        }
-        # verification des conditions de KT
-        if (prod(!sature) == 1) {
-            if (comment == TRUE)
-                print("KT")
-            break
-        }
-        vectD2 <- D2 %*% xk
-        u <- 2 * (mean(vectD2[!sature]) - vectD2[sature])
-        if (min(u) >= 0) {
-            if (comment == TRUE)
-                print("KT")
-            break
-        }
-        else {
-            if (comment == TRUE)
-                print("relaxation")
-            satu <- (1:n)[sature]
-            relax <- satu[u == min(u)]
-            relax <-relax[1]
-        }
-    }
-    if (comment == TRUE)
-        print(list(objective.init = objective0, objective.final
-             = maxi.temp))
-    result$num <- as.vector(xk, mode = "numeric")
-    result$num[result$num < epsilon] <- 0
-    # ponderation numerique
-    xk <- x0 / sqrt(sum(x0 * x0))
-    repeat {
-        yk <- D2 %*% xk
-        yk <- yk / sqrt(sum(yk * yk))
-        if (max(xk - yk) > epsilon) {
-            xk <- yk
-        }
-        else break
-    }
-    x0 <- as.vector(yk, mode = "numeric")
-    result$pro <- x0 / sum(x0)    # ponderation propre
-    result$met <- x0 * x0    # ponderation propre
-    restot <- list()
-    restot$value <- DivCoef(cbind.data.frame(result$num), dis)[,1]
-    restot$vectors <- result
-    return(restot)
-}
-
-
-
-
-
-# http://sph.bu.edu/otlt/MPH-Modules/BS/BS704_Confidence_Intervals/BS704_Confidence_Intervals8.html
-# sas:    http://support.sas.com/documentation/cdl/en/statug/63347/HTML/default/viewer.htm#statug_surveyfreq_a0000000227.htm
-
-# discussion:   http://tolstoy.newcastle.edu.au/R/e2/help/06/11/4982.html
 #
-# RelRisk0 <- function(x, conf.level = NA) {
 #
-#   rr <- (x[1,1]/sum(x[,1])) / (x[1,2]/sum(x[,2]))
-#   if (is.na(conf.level)) {
-#     res <- rr
-#   } else {
-#     sigma <- x[1,2]/(x[1,1]*sum(x[1,])) + x[2,2]/(x[2,1]*sum(x[2,]))
-#     qn <- qnorm(1-(1-conf.level)/2)
-#     ci <- exp(log(rr) + c(-1,1)*qn*sqrt(sigma))
-#     res <- c("rel. risk"=rr, lwr.ci=ci[1], upr.ci=ci[2])
+#
+#
+# Conf <- function(x, ...) UseMethod("Conf")
+#
+#
+# Conf.table <- function(x, pos = NULL, ...) {
+#
+#   CollapseConfTab <- function(x, pos = NULL, ...) {
+#
+#     if(nrow(x) > 2) {
+#       names(attr(x, "dimnames")) <- c("pred", "obs")
+#       x <- CollapseTable(x, obs=c("neg", pos)[(rownames(x)==pos)+1],
+#                          pred=c("neg", pos)[(rownames(x)==pos)+1])
+#     }
+#
+#     # order confusion table so
+#     # that the positive class is the first and the others keep their position
+#     ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
+#     # the columnnames must be the same as the rownames
+#     x <- as.table(x[ord, ord])
+#     return(x)
 #   }
+#
+#   p <- (d <- dim(x))[1L]
+#   if(!is.numeric(x) || length(d) != 2L || p != d[2L]) # allow nxn!  || p != 2L)
+#     stop("'x' is not a nxn numeric matrix")
+#
+#   # observed in columns, predictions in rows
+#   if(!identical(rownames(x), colnames(x)))
+#     stop("rownames(x) and colnames(x) must be identical")
+#
+#   if(is.null(pos)) pos <- rownames(x)[1]
+#   if(nrow(x)!=2) {
+#     # ignore pos for nxn tables, pos makes only sense for sensitivity
+#     # and that is not defined for n-dim tables
+#     pos <- NULL
+#
+#   } else {
+#     # order 2x2-confusion table so
+#     # that the positive class is the first and the others keep their position
+#     ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
+#     # the columnnames must be the same as the rownames
+#     x <- as.table(x[ord, ord])
+#   }
+#
+#   # overall statistics first
+#   res <- list(
+#     table   = x,
+#     pos     = pos,
+#     diag    = sum(diag(x)),
+#     n       = sum(x)
+#   )
+#   res <- c(res,
+#            acc     = BinomCI(x=res$diag, n=res$n),
+#            sapply(binom.test(x=res$diag, n=res$n,
+#                              p=max(apply(x, 2, sum) / res$n),
+#                              alternative = "greater")[c("null.value", "p.value")], unname),
+#            kappa   = CohenKappa(x),
+#            mcnemar = mcnemar.test(x)$p.value
+#   )
+#   names(res) <- c("table","pos","diag","n","acc","acc.lci","acc.uci",
+#                   "nri","acc.pval","kappa","mcnemar.pval")
+#
+#   # byclass
+#   lst <- list()
+#   for(i in 1:nrow(x)){
+#
+#     z <- CollapseConfTab(x=x, pos=rownames(x)[i])
+#     A <- z[1, 1]; B <- z[1, 2]; C <- z[2, 1]; D <- z[2, 2]
+#
+#     lst[[i]] <- rbind(
+#       sens    = A / (A + C),                 # sensitivity
+#       spec    = D / (B + D),                 # specificity
+#       ppv     = A / (A + B),                 # positive predicted value
+#       npv     = D / (C + D),                 # negative predicted value
+#       prev    = (A + C) / (A + B + C + D),   # prevalence
+#       detrate = A / (A + B + C + D),         # detection rate
+#       detprev = (A + C) / (A + B + C + D),   # detection prevalence
+#       bacc    = mean(c(A / (A + C), D / (B + D)) ),  # balanced accuracy
+#       fval    = Hmean(c(A / (A + B), A / (A + C))) # guetemass wollschlaeger s. 150
+#     )
+#   }
+#
+#   res <- c(res, byclass=list(do.call(cbind, lst)))
+#   colnames(res[["byclass"]]) <- rownames(x)
+#
+#   if(nrow(x)==2) res[["byclass"]] <- res[["byclass"]][, res[["pos"]], drop=FALSE]
+#
+#   class(res) <- "Conf"
+#
 #   return(res)
+#
 # }
+#
+#
+# Conf.default <-  function(x, ref, pos = NULL, na.rm = TRUE, ...) {
+#
+#   if(na.rm) {
+#     idx <- complete.cases(data.frame(x, ref))
+#     x <- x[idx]
+#     ref <- ref[idx]
+#   }
+#   Conf.table(table(pred=x, obs=ref), pos = pos, ...)
+# }
+#
+# Conf.matrix <- function(x, pos = NULL, ...) {
+#   Conf.table(as.table(x), pos=pos, ...)
+# }
+#
+#
+# # the confusion interface for rpart
+# Conf.rpart <- function(x, ...){
+#   # y <- attr(x, "ylevels")
+#   Conf(x=attr(x, "ylevels")[x$frame$yval[x$where]], reference=attr(x, "ylevels")[x$y], ...)
+# }
+#
+# Conf.multinom <- function(x, ...){
+#   if(is.null(x$model)) stop("x does not contain model. Run multinom with argument model=TRUE!")
+#   resp <- model.extract(x$model, "response")
+#
+#   # attention: this will not handle correctly responses defined as dummy codes
+#   # adapt for that!!  ************************************************************
+#   # resp <- x$response[,1]
+#
+#   pred <- predict(x, type="class")
+#   Conf(x=pred, resp, ... )
+# }
+#
+#
+# Conf.glm <- function(x, cutoff = 0.5, ...){
+#   resp <- model.extract(x$model, "response")
+#   pred <- levels(resp)[(predict(x)>cutoff)+1]
+#   Conf(x=pred, reference=resp, ... )
+# }
+#
+#
+# Conf.randomForest <- function(x, ...){
+#   Conf(x=x$predicted, reference=x$y, ... )
+# }
+#
+#
+# Conf.svm <- function(x, ...){
+#   Conf(x=predict(x), reference=model.frame(x)[,1], ... )
+# }
+#
+#
+# Conf.regr <- function(x, ...){
+#   NextMethod()
+#   # Conf(x=Predict(x, type="class"), reference=x$response[,], ... )
+# }
+#
 
-
-RelRisk <- function(x, y = NULL, conf.level = NA, method = c("score", "wald", "use.or"), delta = 0.5, ...) {
-
-  if(!is.null(y)) x <- table(x, y, ...)
-
-  p <- (d <- dim(x))[1L]
-  if(!is.numeric(x) || length(d) != 2L || p != d[2L] || p !=2L)
-    stop("'x' is not a 2x2 numeric matrix")
-
-  x1 <- x[1,1]
-  x2 <- x[2,1]
-  n1 <- x[1,1] + x[1,2]
-  n2 <- x[2,1] + x[2,2]
-
-  rr <- (x[1,1]/sum(x[1,])) / (x[2,1]/sum(x[2,]))
-
-  if( !is.na(conf.level)) {
-    switch( match.arg( arg = method, choices = c("score", "wald", "use.or") )
-      , "score" = {
-        # source:
-        # Agresti-Code:        http://www.stat.ufl.edu/~aa/cda/R/two-sample/R2/
-
-        # R Code for large-sample score confidence interval for a relative risk
-        # in a 2x2 table (Koopman 1984, Miettinen and Nurminen 1985, Nurminen 1986).
-
-      z =  abs(qnorm((1-conf.level)/2))
-        if ((x2==0) &&(x1==0)){
-          ul = Inf
-          ll = 0
-        }
-        else{
-          a1 =  n2*(n2*(n2+n1)*x1+n1*(n2+x1)*(z^2))
-          a2 = -n2*(n2*n1*(x2+x1)+2*(n2+n1)*x2*x1+n1*(n2+x2+2*x1)*(z^2))
-          a3 = 2*n2*n1*x2*(x2+x1)+(n2+n1)*(x2^2)*x1+n2*n1*(x2+x1)*(z^2)
-          a4 = -n1*(x2^2)*(x2+x1)
-          b1 = a2/a1
-          b2 = a3/a1
-          b3 = a4/a1
-          c1 = b2-(b1^2)/3
-          c2 = b3-b1*b2/3+2*(b1^3)/27
-          ceta = acos(sqrt(27)*c2/(2*c1*sqrt(-c1)))
-          t1 = -2*sqrt(-c1/3)*cos(pi/3-ceta/3)
-          t2 = -2*sqrt(-c1/3)*cos(pi/3+ceta/3)
-          t3 = 2*sqrt(-c1/3)*cos(ceta/3)
-          p01 = t1-b1/3
-          p02 = t2-b1/3
-          p03 = t3-b1/3
-          p0sum = p01+p02+p03
-          p0up = min(p01,p02,p03)
-          p0low = p0sum-p0up-max(p01,p02,p03)
-
-          if( (x2==0) && (x1!=0) ){
-            ll = (1-(n1-x1)*(1-p0low)/(x2+n1-(n2+n1)*p0low))/p0low
-            ul = Inf
-          }
-          else if( (x2!=n2) && (x1==0)){
-            ul = (1-(n1-x1)*(1-p0up)/(x2+n1-(n2+n1)*p0up))/p0up
-            ll = 0
-          }
-          else if( (x2==n2) && (x1==n1)){
-            ul = (n2+z^2)/n2
-            ll =  n1/(n1+z^2)
-          }
-          else if( (x1==n1) || (x2==n2) ){
-            if((x2==n2) && (x1==0)) { ll = 0 }
-            if((x2==n2) && (x1!=0)) {
-              phat1  = x2/n2
-              phat2  =  x1/n1
-              phihat = phat2/phat1
-              phil = 0.95*phihat
-              chi2 = 0
-              while (chi2 <= z){
-                a = (n2+n1)*phil
-                b = -((x2+n1)*phil+x1+n2)
-                c = x2+x1
-                p1hat = (-b-sqrt(b^2-4*a*c))/(2*a)
-                p2hat = p1hat*phil
-                q2hat = 1-p2hat
-                var = (n2*n1*p2hat)/(n1*(phil-p2hat)+n2*q2hat)
-                chi2 = ((x1-n1*p2hat)/q2hat)/sqrt(var)
-                ll = phil
-                phil = ll/1.0001}}
-            i = x2
-            j = x1
-            ni = n2
-            nj = n1
-            if( x1==n1 ){
-              i = x1
-              j = x2
-              ni = n1
-              nj = n2
-            }
-            phat1  = i/ni
-            phat2  =  j/nj
-            phihat = phat2/phat1
-            phiu = 1.1*phihat
-            if((x2==n2) && (x1==0)) {
-              if(n2<100) {phiu = .01}
-              else {phiu=0.001}
-            }
-            chi1 = 0
-            while (chi1 >= -z){
-              a = (ni+nj)*phiu
-              b = -((i+nj)*phiu+j+ni)
-              c = i+j
-              p1hat = (-b-sqrt(b^2-4*a*c))/(2*a)
-              p2hat = p1hat*phiu
-              q2hat = 1-p2hat
-              var = (ni*nj*p2hat)/(nj*(phiu-p2hat)+ni*q2hat)
-              chi1  = ((j-nj*p2hat)/q2hat)/sqrt(var)
-              phiu1 = phiu
-              phiu = 1.0001*phiu1
-            }
-
-            if(x1==n1) {
-              ul = (1-(n1-x1)*(1-p0up)/(x2+n1-(n2+n1)*p0up))/p0up
-              ll = 1/phiu1
-            }
-            else{ ul = phiu1}
-          }
-
-          else{
-            ul = (1-(n1-x1)*(1-p0up)/(x2+n1-(n2+n1)*p0up))/p0up
-            ll = (1-(n1-x1)*(1-p0low)/(x2+n1-(n2+n1)*p0low))/p0low
-          }
-        }
-    }
-    , "wald" = {
-      # based on code by Michael Dewey, 2006
-
-      x1.d <- x1 + delta
-      x2.d <- x2 + delta
-      lrr <- log(rr)
-      se.lrr <- sqrt(1/x1.d - 1/n1 + 1/x2.d - 1/n2)
-      mult <- abs(qnorm((1-conf.level)/2))
-      ll <- exp(lrr - mult * se.lrr)
-      ul <- exp(lrr + mult * se.lrr)
-    }
-    , "use.or" = {
-      or <- OddsRatio(x, conf.level=conf.level)
-      p2 <- x2/n2
-      rr.ci <- or/((1-p2) + p2 * or)
-      ll <- unname(rr.ci[2])
-      ul <- unname(rr.ci[3])
-    }
-    )
-  }
-
-  if (is.na(conf.level)) {
-    res <- rr
-  } else {
-    res <- c("rel. risk"=rr, lwr.ci=ll, upr.ci=ul)
-  }
-  return(res)
-
-}
-
-
-
-OddsRatio <- function(x, y = NULL, conf.level = NA, method=c("wald", "mle", "midp")
-                      , interval = c(0, 1000), ...) {
-
-  if(!is.null(y)) x <- table(x, y, ...)
-
-  p <- (d <- dim(x))[1L]
-  if(!is.numeric(x) || length(d) != 2L || p != d[2L] || p != 2L)
-    stop("'x' is not a 2x2 numeric matrix")
-
-  switch( match.arg( arg = method, choices = c("wald", "mle", "midp") )
-          , "wald" = {
-              if (any(x == 0)) x <- x + 0.5
-              lx <- log(x)
-              or <- exp(lx[1, 1] + lx[2, 2] - lx[1, 2] - lx[2, 1])
-
-              if(is.na(conf.level)){
-                res <- or
-              } else {
-                # Agresti Categorical Data Analysis, 3.1.1
-                sigma2lor <- sum(1/x)
-                ci <- or * exp(c(1,-1) * qnorm((1-conf.level)/2) * sqrt(sigma2lor))
-                res <- c("odds ratio"=or, lwr.ci=ci[1], upr.ci=ci[2])
-              }
-          }
-          , "mle" = {
-              if(is.na(conf.level)){
-                res <- unname(fisher.test(x, conf.int=FALSE)$estimate)
-              } else {
-                res <- fisher.test(x, conf.level=conf.level)
-                res <- c(res$estimate, lwr.ci=res$conf.int[1], upr.ci=res$conf.int[2])
-              }
-          }
-          , "midp" = {
-
-              # based on code from Tomas J. Aragon Developer <aragon at berkeley.edu>
-
-              a1 <- x[1,1]; a0 <- x[1,2]; b1 <- x[2,1]; b0 <- x[2,2]; or <- 1
-
-              # median-unbiased estimate function
-              mue <- function(a1, a0, b1, b0, or){
-                mm <- matrix(c(a1,a0,b1,b0), 2, 2, byrow=TRUE)
-                fisher.test(mm, or=or, alternative="l")$p-fisher.test(x=x, or=or, alternative="g")$p
-              }
-              ##mid-p function
-              midp <- function(a1, a0, b1, b0, or = 1){
-                mm <- matrix(c(a1,a0,b1,b0),2,2, byrow=TRUE)
-                lteqtoa1 <- fisher.test(mm,or=or,alternative="l")$p.val
-                gteqtoa1 <- fisher.test(mm,or=or,alternative="g")$p.val
-                0.5*(lteqtoa1-gteqtoa1+1)
-              }
-
-              # root finding
-              EST <- uniroot(
-                   function(or){ mue(a1, a0, b1, b0, or)},
-                   interval = interval)$root
-
-              if(is.na(conf.level)){
-                res <- EST
-              } else {
-
-                alpha <- 1 - conf.level
-                LCL <- uniroot(function(or){
-                  1-midp(a1, a0, b1, b0, or)-alpha/2
-                },  interval = interval)$root
-                UCL <- 1/uniroot(function(or){
-                  midp(a1, a0, b1, b0, or=1/or)-alpha/2
-                },  interval = interval)$root
-
-                res <- c("odds ratio" = EST, lwr.ci=LCL, upr.ci= UCL)
-              }
-          }
-  )
-  return(res)
-}
-
-
-
-
-Conf <- function(x, ...) UseMethod("Conf")
-
-
-Conf.table <- function(x, pos = NULL, ...) {
-
-  CollapseConfTab <- function(x, pos = NULL, ...) {
-
-    if(nrow(x) > 2) {
-      names(attr(x, "dimnames")) <- c("pred", "obs")
-      x <- CollapseTable(x, obs=c("neg", pos)[(rownames(x)==pos)+1],
-                         pred=c("neg", pos)[(rownames(x)==pos)+1])
-    }
-
-    # order confusion table so
-    # that the positive class is the first and the others keep their position
-    ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
-    # the columnnames must be the same as the rownames
-    x <- as.table(x[ord, ord])
-    return(x)
-  }
-
-  p <- (d <- dim(x))[1L]
-  if(!is.numeric(x) || length(d) != 2L || p != d[2L]) # allow nxn!  || p != 2L)
-    stop("'x' is not a nxn numeric matrix")
-
-  # observed in columns, predictions in rows
-  if(!identical(rownames(x), colnames(x)))
-    stop("rownames(x) and colnames(x) must be identical")
-
-  if(is.null(pos)) pos <- rownames(x)[1]
-  if(nrow(x)!=2) {
-    # ignore pos for nxn tables, pos makes only sense for sensitivity
-    # and that is not defined for n-dim tables
-    pos <- NULL
-
-  } else {
-    # order 2x2-confusion table so
-    # that the positive class is the first and the others keep their position
-    ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
-    # the columnnames must be the same as the rownames
-    x <- as.table(x[ord, ord])
-  }
-
-  # overall statistics first
-  res <- list(
-    table   = x,
-    pos     = pos,
-    diag    = sum(diag(x)),
-    n       = sum(x)
-  )
-  res <- c(res,
-           acc     = BinomCI(x=res$diag, n=res$n),
-           sapply(binom.test(x=res$diag, n=res$n,
-                             p=max(apply(x, 2, sum) / res$n),
-                             alternative = "greater")[c("null.value", "p.value")], unname),
-           kappa   = CohenKappa(x),
-           mcnemar = mcnemar.test(x)$p.value
-  )
-  names(res) <- c("table","pos","diag","n","acc","acc.lci","acc.uci",
-                  "nri","acc.pval","kappa","mcnemar.pval")
-
-  # byclass
-  lst <- list()
-  for(i in 1:nrow(x)){
-
-    z <- CollapseConfTab(x=x, pos=rownames(x)[i])
-    A <- z[1, 1]; B <- z[1, 2]; C <- z[2, 1]; D <- z[2, 2]
-
-    lst[[i]] <- rbind(
-      sens    = A / (A + C),                 # sensitivity
-      spec    = D / (B + D),                 # specificity
-      ppv     = A / (A + B),                 # positive predicted value
-      npv     = D / (C + D),                 # negative predicted value
-      prev    = (A + C) / (A + B + C + D),   # prevalence
-      detrate = A / (A + B + C + D),         # detection rate
-      detprev = (A + C) / (A + B + C + D),   # detection prevalence
-      bacc    = mean(c(A / (A + C), D / (B + D)) ),  # balanced accuracy
-      fval    = Hmean(c(A / (A + B), A / (A + C))) # guetemass wollschlaeger s. 150
-    )
-  }
-
-  res <- c(res, byclass=list(do.call(cbind, lst)))
-  colnames(res[["byclass"]]) <- rownames(x)
-
-  if(nrow(x)==2) res[["byclass"]] <- res[["byclass"]][, res[["pos"]], drop=FALSE]
-
-  class(res) <- "Conf"
-
-  return(res)
-
-}
-
-
-Conf.default <-  function(x, ref, pos = NULL, na.rm = TRUE, ...) {
-  if(na.rm) {
-    idx <- complete.cases(data.frame(x, ref))
-    x <- x[idx]
-    ref <- ref[idx]
-  }
-  Conf.table(table(pred=x, obs=ref), pos = pos, ...)
-}
-
-Conf.matrix <- function(x, pos = NULL, ...) {
-  Conf.table(as.table(x), pos=pos, ...)
-}
-
-
-# the confusion interface for rpart
-Conf.rpart <- function(x, ...){
-  # y <- attr(x, "ylevels")
-  Conf(x=attr(x,"ylevels")[x$frame$yval[x$where]], reference=attr(x,"ylevels")[x$y], ...)
-}
-
-Conf.multinom <- function(x, ...){
-  if(is.null(x$model)) stop("x does not contain model. Run multinom with argument model=TRUE!")
-  resp <- model.extract(x$model, "response")
-
-  # attention: this will not handle correctly responses defined as dummy codes
-  # adapt for that!!  ************************************************************
-  # resp <- x$response[,1]
-
-  pred <- predict(x, type="class")
-  Conf(x=pred, resp, ... )
-}
-
-
-Conf.glm <- function(x, cutoff = 0.5, ...){
-  resp <- model.extract(x$model, "response")
-  pred <- levels(resp)[(predict(x)>cutoff)+1]
-  Conf(x=pred, reference=resp, ... )
-}
-
-
-Conf.randomForest <- function(x, ...){
-  Conf(x=x$predicted, reference=x$y, ... )
-}
-
-
-Conf.svm <- function(x, ...){
-  Conf(x=predict(x), reference=model.frame(x)[,1], ... )
-}
-
-
-Conf.regr <- function(x, ...){
-  NextMethod()
-  # Conf(x=Predict(x, type="class"), reference=x$response[,], ... )
-}
 
 
 plot.Conf <- function(x, main="Confusion Matrix", ...){
@@ -8290,1082 +4733,6 @@ Spec <- function(x, ...) Conf(x, ...)[["byclass"]]["spec",]
 
 
 
-
-# Cohen, Jacob. 1988. Statistical power analysis for the behavioral
-# sciences, (2nd edition). Lawrence Erlbaum Associates, Hillsdale, New
-# Jersey, United States.
-
-# Garson, G. David. 2007. Statnotes: Topics in Multivariate
-# Analysis. URL:
-# http://www2.chass.ncsu.edu/garson/pa765/statnote.htm. Visited Spring
-# 2006 -- Summer 2007.
-
-# Goodman, Leo A. and William H. Kruskal. 1954. Measures of Association
-# for Cross-Classifications. Journal of the American Statistical
-# Association, Vol. 49, No. 268 (December 1954), pp. 732-764.
-
-# Liebetrau, Albert M. 1983. Measures of Association. Sage University
-# Paper series on Quantitative Applications in the Social Sciences,
-# 07-032. Sage Publications, Beverly Hills and London, United
-# States/England.
-
-# Margolin, Barry H. and Richard J. Light. 1974. An Analysis of Variance
-# for Categorical Data II: Small Sample Comparisons with Chi Square and
-# Other Competitors. Journal of the American Statistical Association,
-# Vol. 69, No. 347 (September 1974), pp. 755-764.
-
-# Reynolds, H. T. 1977. Analysis of Nominal Data. Sage University Paper
-# series on Quantitative Applications in the Social Sciences, 08-007,
-# Sage Publications, Beverly Hills/London, California/UK.
-
-# SAS Institute. 2007. Measures of Association
-# http://support.sas.com/onlinedoc/913/getDoc/en/statug.hlp/freq_sect20.htm
-# Visited January 2007.
-
-# Theil, Henri. 1970. On the Estimation of Relationships Involving
-# Qualitative Variables.  The American Journal of Sociology, Vol. 76,
-# No. 1 (July 1970), pp. 103-154.
-
-# N.B. One should use the values for the significance of the
-# Goodman-Kruskal lambda and Theil's UC with reservation, as these
-# have been modeled to mimic the the behavior of the same statistics
-# in SPSS.
-
-
-
-GoodmanKruskalTauA <- function(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...){
-
-  if(!is.null(y)) x <- table(x, y, ...)
-
-  n <- sum(x)
-  n.err.unconditional <- n^2
-  sum.row <- rowSums(x)
-  sum.col <- colSums(x)
-
-  switch( match.arg( arg = direction, choices = c("row", "column") )
-          , "column" = {             # Tau Column|Row
-
-            for(i in 1:nrow(x))
-              n.err.unconditional <- n.err.unconditional-n*sum(x[i,]^2/sum.row[i])
-            n.err.conditional <- n^2-sum(sum.col^2)
-            tau.CR <- 1-(n.err.unconditional/n.err.conditional)
-            v <- n.err.unconditional/(n^2)
-            d <- n.err.conditional/(n^2)
-            f <- d*(v+1)-2*v
-            var.tau.CR <- 0
-            for(i in 1:nrow(x))
-              for(j in 1:ncol(x))
-                var.tau.CR <- var.tau.CR + x[i,j]*(-2*v*(sum.col[j]/n)+d*((2*x[i,j]/sum.row[i])-sum((x[i,]/sum.row[i])^2))-f)^2/(n^2*d^4)
-            ASE.tau.CR <- sqrt(var.tau.CR)
-            est <- tau.CR
-            sigma2 <- ASE.tau.CR^2
-          }
-          , "row" = {             # Tau Row|Column
-
-            for(j in 1:ncol(x))
-              n.err.unconditional <- n.err.unconditional-n*sum(x[,j]^2/sum.col[j])
-            n.err.conditional <- n^2-sum(sum.row^2)
-            tau.RC <- 1-(n.err.unconditional/n.err.conditional)
-            v <- n.err.unconditional/(n^2)
-            d <- n.err.conditional/(n^2)
-            f <- d*(v+1)-2*v
-            var.tau.RC <- 0
-            for(i in 1:nrow(x))
-              for(j in 1:ncol(x))
-                var.tau.RC <- var.tau.RC + x[i,j]*(-2*v*(sum.row[i]/n)+d*((2*x[i,j]/sum.col[j])-sum((x[,j]/sum.col[j])^2))-f)^2/(n^2*d^4)
-            ASE.tau.RC <- sqrt(var.tau.RC)
-            est <- tau.RC
-            sigma2 <- ASE.tau.RC^2
-          }
-  )
-
-  if(is.na(conf.level)){
-    res <- est
-  } else {
-    pr2 <- 1 - (1 - conf.level)/2
-    ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + est
-    res <- c(tauA=est, lwr.ci=ci[1], upr.ci=ci[2])
-  }
-
-  return(res)
-}
-
-
-# good description
-# http://salises.mona.uwi.edu/sa63c/Crosstabs%20Measures%20for%20Nominal%20Data.htm
-
-Lambda <- function(x, y = NULL, direction = c("symmetric", "row", "column"), conf.level = NA, ...){
-
-  if(!is.null(y)) x <- table(x, y, ...)
-
-  # Guttman'a lambda (1941), resp. Goodman Kruskal's Lambda (1954)
-
-  n <- sum(x)
-  csum <- colSums(x)
-  rsum <- rowSums(x)
-  rmax <- apply(x, 1, max)
-  cmax <- apply(x, 2, max)
-  max.rsum <- max(rsum)
-  max.csum <- max(csum)
-
-  nr <- nrow(x)
-  nc <- ncol(x)
-
-  switch( match.arg( arg = direction, choices = c("symmetric", "row", "column") )
-          , "symmetric" = { res <- 0.5*(sum(rmax, cmax) - (max.csum +  max.rsum)) / (n - 0.5*(max.csum +  max.rsum)) }
-          , "column" = { res <- (sum(rmax) - max.csum) / (n - max.csum) }
-          , "row" = { res <- (sum(cmax) - max.rsum) / (n - max.rsum) }
-  )
-
-  if(is.na(conf.level)){
-    res <- res
-  } else {
-
-    L.col <- matrix(,nc)
-    L.row <- matrix(,nr)
-
-    switch( match.arg( arg = direction, choices = c("symmetric", "row", "column") )
-            , "symmetric" = {
-
-#     How to see:
-#     http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
-#     pp. 1744
-#     Author:   Nina
-
-              l <- which.max(csum)
-              k <- which.max(rsum)
-              li <- apply(x,1,which.max)
-              ki <- apply(x,2,which.max)
-
-              w <- 2*n-max.csum-max.rsum
-              v <- 2*n -sum(rmax,cmax)
-              xx <- sum(rmax[li==l], cmax[ki==k], rmax[k], cmax[l])
-              y <- 8*n-w-v-2*xx
-
-              t <- rep(NA, length(li))
-              for (i in 1:length(li)){
-                t[i] <- (ki[li[i]]==i & li[ki[li[i]]]==li[i])
-              }
-
-              sigma2 <- 1/w^4*(w*v*y-2 *w^2*(n - sum(rmax[t]))-2*v^2*(n-x[k,l]))
-
-            }
-            , "column" = {
-              L.col.max <- min(which(csum == max.csum))
-              for(i in 1:nr) {
-                if(length(which(x[i, intersect(which(x[i,] == max.csum), which(x[i,] == max.rsum))] == n))>0)
-                  L.col[i] <- min(which(x[i, intersect(which(x[i,] == max.csum), which(x[i,] == max.rsum))] == n))
-                else
-                  if(x[i, L.col.max] == max.csum)
-                    L.col[i] <- L.col.max
-                  else
-                    L.col[i] <- min(which(x[i,] == rmax[i]))
-              }
-              sigma2 <- (n-sum(rmax))*(sum(rmax) + max.csum -
-                                         2*(sum(rmax[which(L.col == L.col.max)])))/(n-max.csum)^3
-            }
-            , "row" = {
-              L.row.max <- min(which(rsum == max.rsum))
-              for(i in 1:nc) {
-                if(length(which(x[intersect(which(x[,i] == max.rsum), which(x[,i] == max.csum)),i] == n))>0)
-                  L.row[i] <- min(which(x[i,intersect(which(x[i,] == max.csum), which(x[i,] == max.rsum))] == n))
-                else
-                  if(x[L.row.max,i] == max.rsum)
-                    L.row[i] <- L.row.max
-                else
-                  L.row[i] <- min(which(x[,i] == cmax[i]))
-              }
-              sigma2 <- (n-sum(cmax))*(sum(cmax) + max.rsum -
-                                         2*(sum(cmax[which(L.row == L.row.max)])))/(n-max.rsum)^3
-            }
-    )
-
-    pr2 <- 1 - (1 - conf.level)/2
-    ci <- pmin(1, pmax(0, qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + res))
-    res <- c(lambda = res,  lwr.ci=ci[1], ups.ci=ci[2])
-  }
-
-  return(res)
-}
-
-
-
-UncertCoef <- function(x, y = NULL, direction = c("symmetric", "row", "column"),
-                             conf.level = NA, p.zero.correction = 1/sum(x)^2, ... ) {
-  # Theil's UC (1970)
-  # slightly nudge zero values so that their logarithm can be calculated (cf. Theil 1970: x->0 => xlogx->0)
-  if(!is.null(y)) x <- table(x, y, ...)
-
-  x[x == 0] <- p.zero.correction
-
-  n <- sum(x)
-  rsum <- apply(x, 1, sum)
-  csum <- apply(x, 2, sum)
-
-  hx <- -sum((apply(x, 1, sum) * log(apply(x, 1, sum)/n))/n)
-  hy <- -sum((apply(x, 2, sum) * log(apply(x, 2, sum)/n))/n)
-  hxy <- -sum(apply(x, c(1, 2), sum) * log(apply(x, c(1, 2), sum)/n)/n)
-
-  switch( match.arg( arg = direction, choices = c("symmetric", "row", "column") )
-          , "symmetric" = { res <- 2 * (hx + hy - hxy)/(hx + hy) }
-          , "row" = { res <- (hx + hy - hxy)/hx }
-          , "column" = { res <- (hx + hy - hxy)/hy }
-  )
-
-  if(!is.na(conf.level)){
-    var.uc.RC <- var.uc.CR <- 0
-    for(i in 1:nrow(x))
-      for(j in 1:ncol(x))
-      { var.uc.RC <- var.uc.RC + x[i,j]*(hx*log(x[i,j]/csum[j])+((hy-hxy)*log(rsum[i]/n)))^2/(n^2*hx^4);
-        var.uc.CR <- var.uc.CR + x[i,j]*(hy*log(x[i,j]/rsum[i])+((hx-hxy)*log(csum[j]/n)))^2/(n^2*hy^4);
-      }
-    switch( match.arg( arg = direction, choices = c("symmetric", "row", "column") )
-            , "symmetric" = {
-              sigma2 <- 4*sum(x * (hxy * log(rsum %o% csum/n^2) - (hx+hy)*log(x/n))^2 ) /
-                (n^2*(hx+hy)^4)
-            }
-            , "row" = { sigma2 <- var.uc.RC }
-            , "column" = { sigma2 <- var.uc.CR }
-    )
-
-    pr2 <- 1 - (1 - conf.level)/2
-    ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + res
-
-    res <- c(uc = res,  lwr.ci=max(ci[1], -1), ups.ci=min(ci[2], 1))
-  }
-  return(res)
-}
-
-
-TheilU <- function(a, p, type = c(2, 1), na.rm = FALSE){
-
-  if(na.rm) {
-    idx <- complete.cases(a, p)
-    a <- a[idx]
-    p <- p[idx]
-  }
-  n <- length(a)
-  if(length(p)!=n) {
-    warning("a must have same length as p")
-    res <- NA
-  } else {
-    switch( match.arg(as.character(type), c("2", "1"))
-            , "1" = { res <- sqrt(sum((a-p)^2/n))/(sqrt(sum(a^2)/n) + sqrt(sum(p^2)/n)) }
-            , "2" = { res <- sqrt(sum((a-p)^2))/(sqrt(sum(a^2))) }
-            )
-  }
-  return(res)
-
-}
-
-
-#S function SomersDelta
-#
-#    Calculates concordance probability and Somers'  Dxy  rank  correlation
-#    between  a  variable  X  (for  which  ties are counted) and a binary
-#    variable Y (having values 0 and 1, for which ties are not  counted).
-#    Uses short cut method based on average ranks in two groups.
-#
-#    Usage:
-#
-#         SomersDelta(x, y, weights)
-#
-#    Returns vector whose elements are C Index, Dxy, n and missing, where
-#    C Index is the concordance probability and Dxy=2(C Index-.5).
-#
-#    F. Harrell 28 Nov 90     6 Apr 98: added weights
-#
-# SomersDelta2 <- function(x, y, weights=NULL, normwt=FALSE, na.rm=TRUE) {
-#
-#   wtd.mean <- function(x, weights=NULL, normwt='ignored', na.rm=TRUE)
-#   {
-#     if(!length(weights)) return(mean(x, na.rm=na.rm))
-#     if(na.rm) {
-#       s <- !is.na(x + weights)
-#       x <- x[s]
-#       weights <- weights[s]
-#     }
-#
-#     sum(weights*x)/sum(weights)
-#   }
-#
-#   wtd.table <- function(x, weights=NULL, type=c('list','table'),
-#                         normwt=FALSE, na.rm=TRUE)
-#   {
-#     type <- match.arg(type)
-#     if(!length(weights))
-#       weights <- rep(1, length(x))
-#
-#     isdate <- IsDate(x)  ### 31aug02 + next 2
-#     ax <- attributes(x)
-#     ax$names <- NULL
-#     x <- if(is.character(x)) as.category(x)
-#          else unclass(x)
-#
-#     lev <- levels(x)
-#     if(na.rm) {
-#       s <- !is.na(x + weights)
-#       x <- x[s,drop=FALSE]    ### drop is for factor class
-#       weights <- weights[s]
-#     }
-#
-#     n <- length(x)
-#     if(normwt)
-#       weights <- weights*length(x)/sum(weights)
-#
-#     i <- order(x)  ### R does not preserve levels here
-#     x <- x[i]; weights <- weights[i]
-#
-#     if(any(diff(x)==0)) {  ### slightly faster than any(duplicated(xo))
-#       weights <- tapply(weights, x, sum)
-#       if(length(lev)) {    ### 3apr03
-#         levused <- lev[sort(unique(x))]  ### 7sep02
-#         ### Next 3 lines 21apr03
-#         if((length(weights) > length(levused)) &&
-#            any(is.na(weights)))
-#           weights <- weights[!is.na(weights)]
-#
-#         if(length(weights) != length(levused))
-#           stop('program logic error')
-#
-#         names(weights) <- levused   ### 10Apr01  length 16May01
-#       }
-#
-#       if(!length(names(weights)))
-#         stop('program logic error')  ### 16May01
-#
-#       if(type=='table')
-#         return(weights)
-#
-#       x <- all.is.numeric(names(weights),'vector')
-#       if(isdate)
-#         attributes(x) <- c(attributes(x),ax)   ### 31aug02
-#
-#       names(weights) <- NULL
-#       return(list(x=x, sum.of.weights=weights))
-#     }
-#
-#     xx <- x  ### 31aug02
-#     if(isdate)
-#       attributes(xx) <- c(attributes(xx),ax)
-#
-#     if(type=='list')
-#       list(x=if(length(lev))lev[x]
-#              else xx,
-#            sum.of.weights=weights)
-#     else {
-#       names(weights) <- if(length(lev)) lev[x]
-#                         else xx
-#       weights
-#     }
-#   }
-#
-#
-#   wtd.rank <- function(x, weights=NULL, normwt=FALSE, na.rm=TRUE)
-#   {
-#     if(!length(weights))
-#       return(rank(x),na.last=if(na.rm)NA else TRUE)
-#
-#     tab <- wtd.table(x, weights, normwt=normwt, na.rm=na.rm)
-#
-#     freqs <- tab$sum.of.weights
-#     ### rank of x = ### <= x - .5 (# = x, minus 1)
-#     r <- cumsum(freqs) - .5*(freqs-1)
-#     ### Now r gives ranks for all unique x values.  Do table look-up
-#     ### to spread these ranks around for all x values.  r is in order of x
-#     approx(tab$x, r, xout=x)$y
-#   }
-#
-#
-#   if(length(y)!=length(x))stop("y must have same length as x")
-#   y <- as.integer(y)
-#   wtpres <- length(weights)
-#   if(wtpres && (wtpres != length(x)))
-#     stop('weights must have same length as x')
-#
-#   if(na.rm) {
-#       miss <- if(wtpres) is.na(x + y + weights)
-#       else is.na(x + y)
-#
-#       nmiss <- sum(miss)
-#       if(nmiss>0) {
-#           miss <- !miss
-#           x <- x[miss]
-#           y <- y[miss]
-#           if(wtpres) weights <- weights[miss]
-#         }
-#     }
-#   else nmiss <- 0
-#
-#   u <- sort(unique(y))
-#   if(any(! y %in% 0:1)) stop('y must be binary')
-#
-#   if(wtpres) {
-#       if(normwt)
-#         weights <- length(x)*weights/sum(weights)
-#       n <- sum(weights)
-#     }
-#   else n <- length(x)
-#
-#   if(n<2) stop("must have >=2 non-missing observations")
-#
-#   n1 <- if(wtpres)sum(weights[y==1]) else sum(y==1)
-#
-#   if(n1==0 || n1==n)
-#     return(c(C=NA,Dxy=NA,n=n,Missing=nmiss))
-#
-#   mean.rank <- if(wtpres)
-#       wtd.mean(wtd.rank(x, weights, na.rm=FALSE), weights*y)
-#     else
-#       mean(rank(x)[y==1])
-#
-#   c.index <- (mean.rank - (n1+1)/2)/(n-n1)
-#   dxy <- 2*(c.index-.5)
-#   r <- c(c.index, dxy, n, nmiss)
-#   names(r) <- c("C", "Dxy", "n", "Missing")
-#   r
-# }
-#
-
-
-SomersDelta <- function(x,  y = NULL, direction=c("row","column"), conf.level = NA, ...) {
-
-  if(!is.null(y)) tab <- table(x, y, ...)
-  else tab <- as.table(x)
-
-  # tab is a matrix of counts
-  x <- ConDisPairs(tab)
-
-# use .DoCount
-#   if(is.na(conf.level)) {
-#     d.tab <- as.data.frame.table(tab)
-#     x <- .DoCount(d.tab[,1], d.tab[,2], d.tab[,3])
-#   } else {
-#     x <- ConDisPairs(tab)
-#   }
-
-  m <- min(dim(tab))
-  n <- sum(tab)
-  switch( match.arg( arg = direction, choices = c("row","column") )
-    , "row" = { ni. <- apply(tab, 2, sum) }
-    , "column" = { ni. <- apply(tab, 1, sum) }
-  )
-  wt <- n^2 - sum(ni.^2)
-  # Asymptotic standard error: sqrt(sigma2)
-  sigma2 <- 4/wt^4 * (sum(tab * (wt*(x$pi.c - x$pi.d) - 2*(x$C-x$D)*(n-ni.))^2))
-  # debug: print(sqrt(sigma2))
-
-  somers <- (x$C - x$D) / (n * (n-1) /2 - sum(ni. * (ni. - 1) /2 ))
-
-  pr2 <- 1 - (1 - conf.level)/2
-  ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + somers
-
-  if(is.na(conf.level)){
-    result <- somers
-  } else {
-    result <- c(somers = somers,  lwr.ci=max(ci[1], -1), ups.ci=min(ci[2], 1))
-  }
-
-  return(result)
-
-}
-
-
-# Computes rank correlation measures between a variable X and a possibly
-# censored variable Y, with event/censoring indicator EVENT
-# Rank correlation is extension of Somers' Dxy = 2(Concordance Prob-.5)
-# See Harrell et al JAMA 1984(?)
-# Set outx=T to exclude ties in X from computations (-> Goodman-Kruskal
-#  gamma-type rank correlation)
-# based on rcorr.cens in Hmisc, https://stat.ethz.ch/pipermail/r-help/2003-March/030837.html
-# author Frank Harrell
-
-
-# GoodmanGammaF <- function(x, y) {
-
-  # ### Fortran implementation of Concordant/Discordant, but still O(n^2)
-
-  # x <- as.numeric(x)
-  # y <- as.numeric(y)
-
-  # event <-  rep(TRUE, length(x))
-  # if(length(y)!=length(x))
-    # stop("y must have same length as x")
-
-  # outx <- TRUE
-  # n <- length(x)
-  # ne <- sum(event)
-
-  # z <- .Fortran("cidxcn", x, y, event, length(x), nrel=double(1), nconc=double(1),
-                # nuncert=double(1),
-                # c.index=double(1), gamma=double(1), sd=double(1), as.logical(outx)
-  # )
-
-  # r <- c(z$c.index, z$gamma, z$sd, n, ne, z$nrel, z$nconc, z$nuncert)
-  # names(r) <- c("C Index","Dxy","S.D.","n","uncensored",
-                # "Relevant Pairs",
-                # "Concordant","Uncertain")
-  # unname(r[2])
-
-# }
-
-
-# GoodmanGamma(as.numeric(d.frm$Var1), as.numeric(d.frm$Var2))
-# cor(as.numeric(d.frm$Var1), as.numeric(d.frm$Var2))
-
-GoodmanKruskalGamma <- function(x, y = NULL, conf.level = NA, ...) {
-
-  if(!is.null(y)) tab <- table(x, y, ...)
-  else tab <- as.table(x)
-
-  # tab is a matrix of counts
-  # Based on code of Michael Friendly and Laura Thompson
-  # Confidence interval calculation and output from Greg Rodd
-
-  x <- ConDisPairs(tab)
-
-  psi <- 2 * (x$D * x$pi.c - x$C * x$pi.d)/(x$C + x$D)^2
-  # Asymptotic standard error: sqrt(sigma2)
-  sigma2 <- sum(tab * psi^2) - sum(tab * psi)^2
-
-  gamma <- (x$C - x$D)/(x$C + x$D)
-
-  if(is.na(conf.level)){
-    result <- gamma
-  } else {
-    pr2 <- 1 - (1 - conf.level)/2
-    ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + gamma
-    result <- c(gamma = gamma,  lwr.ci=max(ci[1], -1), ups.ci=min(ci[2], 1))
-  }
-
-  return(result)
-
-}
-
-
-# KendallTauB.table <- function(tab, conf.level = NA) {
-
-  # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
-  # pp 1738
-
-  # tab is a matrix of counts
-
-  # x <- ConDisPairs(tab)
-
-  # n <- sum(tab)
-  # ni. <- apply(tab, 1, sum)
-  # n.j <- apply(tab, 2, sum)
-  # wr <- n^2 - sum(ni.^2)
-  # wc <- n^2 - sum(n.j^2)
-  # w <- sqrt(wr * wc)
-  # vij <- ni. * wc + n.j * wr
-  # dij <- x$pi.c - x$pi.d    ### Aij - Dij
-
-  # Asymptotic standard error: sqrt(sigma2)
-  # sigma2 <- 1/w^4 * (sum(tab * (2*w*dij + taub*vij)^2) - n^3 * taub^2 * (wr + wc)^2)
-
-  # this is the H0 = 0 variance:
-  # sigma2 <- 4/(wr * wc) * (sum(tab * (x$pi.c - x$pi.d)^2) - 4*(x$C - x$D)^2/n )
-
-
-  # taub <- 2*(x$C - x$D)/sqrt(wr * wc)
-
-  # if(is.na(conf.level)){
-    # result <- taub
-  # } else {
-    # pr2 <- 1 - (1 - conf.level)/2
-    # ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + taub
-    # result <- c(taub = taub,  lwr.ci=max(ci[1], -1), ups.ci=min(ci[2], 1))
-  # }
-
-  # return(result)
-
-# }
-
-
-# KendallTauB <- function(x, y = NULL, conf.level = NA, test=FALSE, alternative = c("two.sided", "less", "greater"), ...){
-  KendallTauB <- function(x, y = NULL, conf.level = NA, ...){
-
-  # Ref: http://www.fs.fed.us/psw/publications/lewis/LewisHMP.pdf
-  # pp 2-9
-  #
-  if (!is.null(y)) {
-    dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-  } else {
-    dname <- deparse(substitute(x))
-  }
-
-  if(!is.null(y)) tab <- table(x, y, ...)
-  else tab <- as.table(x)
-
-  x <- ConDisPairs(tab)
-
-  n <- sum(tab)
-  n0 <- n*(n-1)/2
-  ti <- apply(tab, 1, sum)
-  uj <- apply(tab, 2, sum)
-  n1 <- sum(ti * (ti-1) / 2)
-  n2 <- sum(uj * (uj-1) / 2)
-
-  taub <- (x$C - x$D) / sqrt((n0-n1)*(n0-n2))
-
-  pi <- tab / sum(tab)
-
-  pdiff <- (x$pi.c - x$pi.d) / sum(tab)
-  Pdiff <- 2 * (x$C - x$D) / sum(tab)^2
-
-  rowsum <- apply(pi, 1, sum)
-  colsum <- apply(pi, 2, sum)
-
-  rowmat <- matrix(rep(rowsum, dim(tab)[2]), ncol = dim(tab)[2])
-  colmat <- matrix(rep(colsum, dim(tab)[1]), nrow = dim(tab)[1], byrow = T)
-
-  delta1 <- sqrt(1 - sum(rowsum^2))
-  delta2 <- sqrt(1 - sum(colsum^2))
-
-  # Compute asymptotic standard errors taub
-  tauphi <- (2 * pdiff + Pdiff * colmat) * delta2 * delta1 + (Pdiff * rowmat * delta2)/delta1
-  sigma2 <- ((sum(pi * tauphi^2) - sum(pi * tauphi)^2)/(delta1 * delta2)^4) / n
-
-  if (is.na(conf.level)) {
-    result <- taub
-  }
-  else {
-    pr2 <- 1 - (1 - conf.level)/2
-    ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + taub
-    result <- c(tau_b = taub, lwr.ci = max(ci[1], -1), ups.ci = min(ci[2], 1))
-  }
-
-#   if(test){
-#
-#     alternative <- match.arg(alternative)
-#
-#     zstat <- taub / sqrt(sigma2)
-#
-#     if (alternative == "less") {
-#       pval <- pnorm(zstat)
-#       cint <- c(-Inf, zstat + qnorm(conf.level))
-#     }
-#     else if (alternative == "greater") {
-#       pval <- pnorm(zstat, lower.tail = FALSE)
-#       cint <- c(zstat - qnorm(conf.level), Inf)
-#     }
-#     else {
-#       pval <- 2 * pnorm(-abs(zstat))
-#       alpha <- 1 - conf.level
-#       cint <- qnorm(1 - alpha/2)
-#       cint <- zstat + c(-cint, cint)
-#     }
-#
-#     RVAL <- list()
-#     RVAL$p.value <- pval
-#     RVAL$method <- "Kendall's rank correlation tau"
-#     RVAL$data.name <- dname
-#     RVAL$statistic <- x$C - x$D
-#     names(RVAL$statistic) <- "T"
-#     RVAL$estimate <- taub
-#     names(RVAL$estimate) <- "tau-b"
-#     RVAL$conf.int <- c(max(ci[1], -1), min(ci[2], 1))
-#   #  attr(RVAL$conf.int, "conf.level") = round(attr(ci,"conf.level"), 3)
-#     class(RVAL) <- "htest"
-#     return(RVAL)
-#
-# #     rval <- list(statistic = zstat, p.value = pval,
-# #                  parameter = sd_pop,
-# #                  conf.int = cint, estimate = estimate, null.value = mu,
-# #                  alternative = alternative, method = method, data.name = dname)
-#
-#   } else {
-    return(result)
-#   }
-
-}
-
-# KendallTauB(x, y, conf.level = 0.95, test=TRUE)
-#
-# cor.test(x,y, method="kendall")
-
-# tab <- as.table(rbind(c(26,26,23,18,9),c(6,7,9,14,23)))
-# KendallTauB(tab, conf.level = 0.95)
-# Assocs(tab)
-
-StuartTauC <- function(x, y = NULL, conf.level = NA, ...) {
-
-  if(!is.null(y)) tab <- table(x, y, ...)
-  else tab <- as.table(x)
-
-  # Reference:
-  # http://v8doc.sas.com/sashtml/stat/chap28/sect18.htm
-  x <- ConDisPairs(tab)
-
-  m <- min(dim(tab))
-  n <- sum(tab)
-  # Asymptotic standard error: sqrt(sigma2)
-  sigma2 <- 4 * m^2 / ((m-1)^2 * n^4) * (sum(tab * (x$pi.c - x$pi.d)^2) - 4 * (x$C -x$D)^2/n)
-  # debug: print(sqrt(sigma2))
-
-  # Tau-c = (C - D)*[2m/(n2(m-1))]
-  tauc <- (x$C - x$D) * 2 * min(dim(tab)) / (sum(tab)^2*(min(dim(tab))-1))
-
-  if(is.na(conf.level)){
-    result <- tauc
-  } else {
-    pr2 <- 1 - (1 - conf.level)/2
-    CI <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + tauc
-    result <- c(tauc = tauc,  lwr.ci=max(CI[1], -1), ups.ci=min(CI[2], 1))
-  }
-
-  return(result)
-
-}
-
-
-
-
-SpearmanRho <- function(x, y = NULL, use = c("everything", "all.obs", "complete.obs",
-            "na.or.complete","pairwise.complete.obs"), conf.level = NA ) {
-
-  if(is.null(y)) {
-    x <- Untable(x)
-    y <- x[,2]
-    x <- x[,1]
-  }
-  # Reference:
-  #   https://stat.ethz.ch/pipermail/r-help/2006-October/114319.html
-  # fisher z transformation for calc SpearmanRho ci :
-  # Conover WJ, Practical Nonparametric Statistics (3rd edition). Wiley 1999.
-
-  # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
-  # pp 1738
-
-
-  # n <- sum(tab)
-  # ni. <- apply(tab, 1, sum)
-  # n.j <- apply(tab, 2, sum)
-  # F <- n^3 - sum(ni.^3)
-  # G <- n^3 - sum(n.j^3)
-  # w <- 1/12*sqrt(F * G)
-
-  # ### Asymptotic standard error: sqrt(sigma2)
-  # sigma2 <- 1
-  # ### debug: print(sqrt(sigma2))
-
-  # ### Tau-c = (C - D)*[2m/(n2(m-1))]
-  # est <- 1
-
-  # if(is.na(conf.level)){
-    # result <- tauc
-  # } else {
-    # pr2 <- 1 - (1 - conf.level)/2
-    # CI <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + est
-    # result <- c(SpearmanRho = est,  lwr.ci=max(CI[1], -1), ups.ci=min(CI[2], 1))
-  # }
-
-  # return(result)
-
-
-  # Ref:
-  # http://www-01.ibm.com/support/docview.wss?uid=swg21478368
-
-  use <- match.arg(use, choices=c("everything", "all.obs", "complete.obs",
-            "na.or.complete","pairwise.complete.obs"))
-
-  rho <- cor(as.numeric(x), as.numeric(y), method="spearman", use = use)
-
-  e_fx <- exp( 2 * ((.5 * log((1+rho) / (1-rho))) - c(1, -1) *
-      (abs(qnorm((1 - conf.level)/2))) * (1 / sqrt(sum(complete.cases(x,y)) - 3)) ))
-  ci <- (e_fx - 1) / (e_fx + 1)
-
-  if (is.na(conf.level)) {
-    result <- rho
-  } else {
-    pr2 <- 1 - (1 - conf.level) / 2
-    result <- c(rho = rho, lwr.ci = max(ci[1], -1), ups.ci = min(ci[2], 1))
-  }
-  return(result)
-
-}
-
-
-
-# Definitions:
-# http://v8doc.sas.com/sashtml/stat/chap28/sect18.htm
-
-ConDisPairs <-function(x){
-
-  # tab is a matrix of counts
-  # Based on code of Michael Friendly and Laura Thompson
-
-  # slooooow because of 2 nested for clauses O(n^2)
-  # this is NOT faster when implemented with a mapply(...)
-
-  # Lookin for alternatives in C
-  # http://en.verysource.com/code/1169955_1/kendl2.cpp.html
-  # cor(..., "kendall") is for dimensions better
-
-  n <- nrow(x)
-  m <- ncol(x)
-  pi.c <- pi.d <- matrix(0, nrow = n, ncol = m)
-
-  row.x <- row(x)
-  col.x <- col(x)
-
-  for(i in 1:n){
-    for(j in 1:m){
-      pi.c[i, j] <- sum(x[row.x<i & col.x<j]) + sum(x[row.x>i & col.x>j])
-      pi.d[i, j] <- sum(x[row.x<i & col.x>j]) + sum(x[row.x>i & col.x<j])
-    }
-  }
-  C <- sum(pi.c * x)/2
-  D <- sum(pi.d * x)/2
-
-  return(list(pi.c = pi.c, pi.d = pi.d, C = C, D = D))
-
-}
-
-
-BinTree <- function(n) {
-  ranks <- rep(0L, n)
-  yet.to.do <- 1:n
-  depth <- floor(logb(n, 2))
-  start <- as.integer(2^depth)
-  lastrow.length <- 1 + n - start
-  indx <- seq(1L, by = 2L, length = lastrow.length)
-  ranks[yet.to.do[indx]] <- start + 0:(length(indx) - 1L)
-  yet.to.do <- yet.to.do[-indx]
-  while (start > 1) {
-    start <- as.integer(start/2)
-    indx <- seq(1L, by = 2L, length = start)
-    ranks[yet.to.do[indx]] <- start + 0:(start - 1L)
-    yet.to.do <- yet.to.do[-indx]
-  }
-  ranks
-}
-
-
-.DoCount <- function(y, x, wts) {
-
-  # O(n log n):
-  # http://www.listserv.uga.edu/cgi-bin/wa?A2=ind0506d&L=sas-l&P=30503
-
-
-
-  if(missing(wts)) wts <- rep(1, length(x))
-
-  ord <- order(y)
-  ux <- sort(unique(x))
-  n2 <- length(ux)
-  index <- BinTree(n2)[match(x[ord], ux)] - 1L
-  y <- cbind(y,1)
-  res <- .Call("conc", y[ord,], as.double(wts[ord]),
-        as.integer(index), as.integer(n2))
-
-  return(list(pi.c = NA, pi.d = NA, C = res[2], D = res[1]))
-
-}
-
-# .DoCount(x, y) will do ConDisPairs but yet without se
-
-
-# ConDisPairs(tab1)
-# ConDisPairs2(tab1)
-# some code of Marc Schwartz
-# https://stat.ethz.ch/pipermail/r-help/2006-September/112806.html
-# but this is not significantly better than friendly's version
-
-# ConDisPairs2 <-function(x){
-#
-#   ### tab is a matrix of counts
-#
-#   mat.lr <- function(r, c) {
-#     lr <- c( x[(r.x < r) & (c.x < c)], x[(r.x > r) & (c.x > c)] )
-#     sum(lr)
-#   }
-#
-#   mat.ll <- function(r, c)  {
-#     ll <- c(x[(r.x < r) & (c.x > c)], x[(r.x > r) & (c.x < c)])
-#     sum(ll)
-#   }
-#
-#   ### get row and column index for each
-#   ### matrix element
-#   r.x <- row(x)
-#   c.x <- col(x)
-#
-#   ### return the sum of each matrix[r, c] * sums
-#   ### using mapply to sequence thru each matrix[r, c]
-#   pi.c <- matrix(mapply(mat.lr, r = r.x, c = c.x), dim(x))
-#   pi.d <- matrix(mapply(mat.ll, r = r.x, c = c.x), dim(x))
-#
-#   C <- sum(pi.c * x)/2
-#   D <- sum(pi.d * x)/2
-#
-#   return(list(pi.c = pi.c, pi.d = pi.d, C = C, D = D))
-#
-# }
-
-# all association measures combined
-
-Assocs <- function(x, conf.level = 0.95){
-
-  # this is from boot::corr combined with ci logic from cor.test
-  r <- corr(d=CombPairs(1:nrow(x), 1:ncol(x)), as.vector(x))
-  r.ci <- CorCI(rho = r, n = sum(x), conf.level = conf.level)
-
-  res <- rbind(
-    "Phi Coeff." = c(Phi(x), NA, NA)
-    , "Contingency Coeff." = c(ContCoef(x),NA, NA)
-    , "Cramer V" = CramerV(x, conf.level=conf.level)
-    , "Goodman Kruskal Gamma" = GoodmanKruskalGamma(x, conf.level=conf.level)
-    , "Kendall Tau-b" = KendallTauB(x, conf.level=conf.level)
-    , "Stuart Tau-c" = StuartTauC(x, conf.level=conf.level)
-    , "Somers D C|R" = SomersDelta(x, direction="column", conf.level=conf.level)
-    , "Somers D R|C" = SomersDelta(x, direction="r", conf.level=conf.level)
-#    , "Pearson Correlation" =c(cor.p$estimate, lwr.ci=cor.p$conf.int[1], upr.ci=cor.p$conf.int[2])
-    , "Pearson Correlation" =c(r.ci[1], lwr.ci=r.ci[2], upr.ci=r.ci[3])
-    , "Spearman Correlation" = SpearmanRho(x, conf.level=conf.level)
-    , "Lambda C|R" = Lambda(x, direction="column", conf.level=conf.level)
-    , "Lambda R|C" = Lambda(x, direction="row", conf.level=conf.level)
-    , "Lambda sym" = Lambda(x, direction="sym", conf.level=conf.level)
-    , "Uncertainty Coeff. C|R" = UncertCoef(x, direction="column", conf.level=conf.level)
-    , "Uncertainty Coeff. R|C" = UncertCoef(x, direction="row", conf.level=conf.level)
-    , "Uncertainty Coeff. sym" = UncertCoef(x, direction="sym", conf.level=conf.level)
-    , "Mutual Information" = c(MutInf(x),NA,NA)
-  )
-
-  dimnames(res)[[2]][1] <- "estimate"
-  class(res) <- c("Assocs", class(res))
-  return(res)
-
-}
-
-
-print.Assocs <- function(x, digits=4, ...){
-  out <- apply(round(x, digits), 2, Format, digits=digits)
-  out[c(1,2,17), 2:3] <- "      -"
-  dimnames(out) <- dimnames(x)
-
-  print(data.frame(out), quote=FALSE)
-}
-
-
-
-
-## This is an exact copy from Hmisc
-## Changes since sent to statlib: improved printing N matrix in print.hoeffd
-
-HoeffD <- function(x, y) {
-
-  phoeffd <- function(d, n)  {
-
-    d <- as.matrix(d); n <- as.matrix(n)
-    b <- d + 1/36/n
-    z <- .5*(pi^4)*n*b
-    zz <- as.vector(z)
-    zz[is.na(zz)] <- 1e30   # so approx won't bark
-
-    tabvals <- c(5297,4918,4565,4236,3930,
-                 3648,3387,3146,2924,2719,2530,2355,
-                 2194,2045,1908,1781,1663,1554,1453,
-                 1359,1273,1192,1117,1047,0982,0921,
-                 0864,0812,0762,0716,0673,0633,0595,
-                 0560,0527,0496,0467,0440,0414,0390,
-                 0368,0347,0327,0308,0291,0274,0259,
-                 0244,0230,0217,0205,0194,0183,0173,
-                 0163,0154,0145,0137,0130,0123,0116,
-                 0110,0104,0098,0093,0087,0083,0078,
-                 0074,0070,0066,0063,0059,0056,0053,
-                 0050,0047,0045,0042,0025,0014,0008,
-                 0005,0003,0002,0001)/10000
-
-    P <- ifelse(z<1.1 | z>8.5, pmax(1e-8,pmin(1,exp(.3885037-1.164879*z))),
-                matrix(approx(c(seq(1.1, 5,by=.05),
-                                seq(5.5,8.5,by=.5)),
-                              tabvals, zz)$y,
-                       ncol=ncol(d)))
-
-    dimnames(P) <- dimnames(d)
-    P
-  }
-
-  if(!missing(y))
-    x <- cbind(x, y)
-
-  x[is.na(x)] <- 1e30
-  storage.mode(x) <-
-#   if(.R.)
-      "double"
-#  else
-#    "single"
-
-  p <- as.integer(ncol(x))
-  if(p<1)
-    stop("must have >1 column")
-
-  n <- as.integer(nrow(x))
-  if(n<5)
-    stop("must have >4 observations")
-
-  h <-
-#     if(.R.)
-      .Fortran("hoeffd", x, n, p, hmatrix=double(p*p), aad=double(p*p),
-               maxad=double(p*p), npair=integer(p*p),
-               double(n), double(n),  double(n), double(n), double(n),
-               PACKAGE="DescTools")
-#   else
-#     .Fortran("hoeffd", x, n, p, hmatrix=single(p*p), npair=integer(p*p),
-#              single(n), single(n),  single(n), single(n), single(n),
-#              single(n), integer(n))
-
-  nam <- dimnames(x)[[2]]
-  npair <- matrix(h$npair, ncol=p)
-  aad <- maxad <- NULL
- # if(.R.) {
-    aad <- matrix(h$aad, ncol=p)
-    maxad <- matrix(h$maxad, ncol=p)
-    dimnames(aad) <- dimnames(maxad) <- list(nam, nam)
-#  }
-  h <- matrix(h$hmatrix, ncol=p)
-  h[h>1e29] <- NA
-  dimnames(h) <- list(nam, nam)
-  dimnames(npair) <- list(nam, nam)
-  P <- phoeffd(h, npair)
-  diag(P) <- NA
-  structure(list(D=30*h, n=npair, P=P, aad=aad, maxad=maxad), class="HoeffD")
-}
-
-
-print.HoeffD <- function(x, ...)
-{
-  cat("D\n")
-  print(round(x$D,2))
-  if(length(aad <- x$aad)) {
-    cat('\navg|F(x,y)-G(x)H(y)|\n')
-    print(round(aad,4))
-  }
-  if(length(mad <- x$maxad)) {
-    cat('\nmax|F(x,y)-G(x)H(y)|\n')
-    print(round(mad,4))
-  }
-  n <- x$n
-  if(all(n==n[1,1]))
-    cat("\nn=",n[1,1],"\n")
-  else {
-    cat("\nn\n")
-    print(x$n)
-  }
-
-  cat("\nP\n")
-  P <- x$P
-  P <- ifelse(P<.0001,0,P)
-  p <- format(round(P,4))
-  p[is.na(P)] <- ""
-  print(p, quote=FALSE)
-  invisible()
-}
-
-
-###
 
 ## stats: distributions  ---------------------------------
 
@@ -9513,4242 +4880,6 @@ RndWord <- function(size, length, x = LETTERS, replace = TRUE, prob = NULL){
 
 
 
-## stats: tests ====
-
-
-#### ******************************
-#### ******TODO*TODO***************
-#### ******xxxxxxxxx***************
-#### ******************************
-
-# original:
-
-# https://github.com/nicebread/WRS
-# Rand Wilcox,
-# http://www.psychology.mcmaster.ca/bennett/boot09/rt2.pdf
-
-#
-#  Compute a 1-alpha confidence interval for the difference between
-#  the trimmed means corresponding to two independent groups.
-#  The bootstrap percentile t method is used.
-#
-#  The default amount of trimming is tr=.2
-#  side=T indicates two-sided method using absolute value of the
-#  test statistics within the bootstrap; otherwise the equal-tailed method
-#  is used.
-#
-#  This function uses trimse.
-#
-
-# side<-as.logical(side)
-# p.value<-NA
-# yuenbt<-vector(mode="numeric",length=2)
-# if(SEED)set.seed(2) # set seed of random number generator so that
-# #             results can be duplicated.
-# x<-x[!is.na(x)]  # Remove missing values in x
-# y<-y[!is.na(y)]  # Remove missing values in y
-# xcen<-x-mean(x,tr)
-# ycen<-y-mean(y,tr)
-# if(!side){
-#   if(pr)print("NOTE: p-value computed only when side=T")
-# }
-# test<-(mean(x,tr)-mean(y,tr))/sqrt(trimse(x,tr=tr)^2+trimse(y,tr=tr)^2)
-# datax<-matrix(sample(xcen,size=length(x)*nboot,replace=TRUE),nrow=nboot)
-# datay<-matrix(sample(ycen,size=length(y)*nboot,replace=TRUE),nrow=nboot)
-# top<-apply(datax,1,mean,tr)-apply(datay,1,mean,tr)
-# botx<-apply(datax,1,trimse,tr)
-# boty<-apply(datay,1,trimse,tr)
-# tval<-top/sqrt(botx^2+boty^2)
-# if(plotit){
-#   if(op == 1)
-#     akerd(tval)
-#   if(op == 2)
-#     rdplot(tval)
-# }
-# if(side)tval<-abs(tval)
-# tval<-sort(tval)
-# icrit<-floor((1-alpha)*nboot+.5)
-# ibot<-floor(alpha*nboot/2+.5)
-# itop<-floor((1-alpha/2)*nboot+.5)
-# se<-sqrt((trimse(x,tr))^2+(trimse(y,tr))^2)
-# yuenbt[1]<-mean(x,tr)-mean(y,tr)-tval[itop]*se
-# yuenbt[2]<-mean(x,tr)-mean(y,tr)-tval[ibot]*se
-# if(side){
-#   yuenbt[1]<-mean(x,tr)-mean(y,tr)-tval[icrit]*se
-#   yuenbt[2]<-mean(x,tr)-mean(y,tr)+tval[icrit]*se
-#   p.value<-(sum(abs(test)<=abs(tval)))/nboot
-# }
-# list(ci=yuenbt,test.stat=test,p.value=p.value,est.1=mean(x,tr),est.2=mean(y,tr),est.dif=mean(x,tr)-mean(y,tr),
-#      n1=length(x),n2=length(y))
-
-
-
-# getAnywhere(t.test.default)
-#
-# function (x, y = NULL, alternative = c("two.sided", "less", "greater"),
-#           mu = 0, paired = FALSE, var.equal = FALSE, conf.level = 0.95,
-#           trim = 0, nboot = 599, na.rm = FALSE
-#           ...)
-
-.YuenTTestB <- function(x, y, trim = 0, conf.level = 0.95, nboot=599
-                       , alternative = c("two.sided", "less", "greater"), mu = 0, na.rm = FALSE){
-
-
-  TrimSE <- function(x, trim = 0, na.rm = FALSE) {
-
-    #  Estimate the standard error of the gamma trimmed mean
-    #  The default amount of trimming is trim = 0.2
-
-    if(na.rm) x <- na.omit(x)
-
-    winvar <- var(Winsorize(x, probs = c(trim, 1-trim)))
-
-    trimse <- sqrt(winvar) / ((1 - 2 * trim) * sqrt(length(x)))
-    trimse
-  }
-
-
-  alternative <- match.arg(alternative)
-  method <- "Yuen Two Sample bootstrap t-test"
-  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-
-  if(na.rm) x <- na.omit(x)
-  if(na.rm) y <- na.omit(y)
-
-  meanx <- mean(x, trim = trim)
-  meany <- mean(y, trim = trim)
-
-  tstat <- (meanx - meany ) / sqrt(TrimSE(x, trim = trim)^2 + TrimSE(y, trim = trim)^2)
-
-  sampx <- matrix(sample(x - meanx, size=length(x) * nboot, replace=TRUE), nrow=nboot)
-  sampy <- matrix(sample(y - meany, size=length(y) * nboot, replace=TRUE), nrow=nboot)
-
-  top <- apply(sampx, 1, mean, trim) - apply(sampy, 1, mean, trim)
-  botx <- apply(sampx, 1, TrimSE, trim)
-  boty <- apply(sampy, 1, TrimSE, trim)
-  tval <- top / sqrt(botx^2 + boty^2)
-
-
-  alpha <- 1 - conf.level
-  se <- sqrt((TrimSE(x, trim = trim))^2 + (TrimSE(y, trim = trim))^2)
-
-  if(alternative == "two.sided") {
-    tval <- abs(tval)
-    icrit <- floor((1 - alpha) * nboot + .5)
-    cint <- meanx - meany + c(-1, 1) * tval[icrit] * se
-    pval <- (sum(abs(tstat) <= abs(tval))) / nboot
-
-  } else {
-    tval <- sort(tval)
-    ibot <- floor(alpha/2 * nboot + .5)
-    itop <- floor((1 - alpha/2) * nboot + .5)
-    cint <- meanx - meany - tval[c(itop, ibot)] * se
-
-  }
-
-  names(tstat) <- "t"
-  names(mu) <- "difference in means"
-  estimate <- c(meanx, meany)
-  names(estimate) <- c("mean of x", "mean of y")
-
-  attr(cint, "conf.level") <- conf.level
-  rval <- list(statistic = tstat, p.value = pval,
-               conf.int = cint, estimate = estimate, null.value = mu,
-               alternative = alternative, method = method, data.name = dname)
-  class(rval) <- "htest"
-  return(rval)
-
-}
-
-
-
-YuenTTest <- function (x, ...)
-  UseMethod("YuenTTest")
-
-
-YuenTTest.formula <- function (formula, data, subset, na.action, ...)  {
-
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-                                                                  "term.labels")) != 1L))
-    stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- quote(stats::model.frame)
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  DNAME <- paste(names(mf), collapse = " by ")
-  names(mf) <- NULL
-  response <- attr(attr(mf, "terms"), "response")
-  g <- factor(mf[[-response]])
-  if (nlevels(g) != 2L)
-    stop("grouping factor must have exactly 2 levels")
-  DATA <- setNames(split(mf[[response]], g), c("x", "y"))
-  y <- DoCall("YuenTTest", c(DATA, list(...)))
-  y$data.name <- DNAME
-  if (length(y$estimate) == 2L)
-    names(y$estimate) <- paste("trimmed mean in group", levels(g))
-  y
-}
-
-
-YuenTTest.default <- function (x, y = NULL, alternative = c("two.sided", "less", "greater"),
-          mu = 0, paired = FALSE, conf.level = 0.95, trim = 0.2, ...) {
-
-  alternative <- match.arg(alternative)
-  if (!missing(mu) && (length(mu) != 1 || is.na(mu)))
-    stop("'mu' must be a single number")
-  if (!missing(conf.level) && (length(conf.level) != 1 || !is.finite(conf.level) ||
-                                 conf.level < 0 || conf.level > 1))
-    stop("'conf.level' must be a single number between 0 and 1")
-  if (!is.null(y)) {
-    dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-    if (paired)
-      xok <- yok <- complete.cases(x, y)
-    else {
-      yok <- !is.na(y)
-      xok <- !is.na(x)
-    }
-    y <- y[yok]
-  }
-  else {
-    dname <- deparse(substitute(x))
-    if (paired)
-      stop("'y' is missing for paired test")
-    xok <- !is.na(x)
-    yok <- NULL
-  }
-  x <- x[xok]
-
-  nx <- length(x)
-  mx <- mean(x, trim = trim)
-  vx <- var(Winsorize(x, probs = c(trim, 1-trim)))
-
-  if (is.null(y) | paired) {
-    if (nx < 2)
-      stop("not enough 'x' observations")
-
-    df <- nx - 2 * floor(trim * nx) - 1
-
-    if(paired){
-      my <- mean(y, trim = trim)
-      vy <- var(Winsorize(y, probs = c(trim, 1-trim)))
-      covxy <- var(Winsorize(x, probs = c(trim, 1-trim)), Winsorize(y, probs = c(trim, 1-trim)))
-      stderr <- sqrt( (nx-1) * (vx + vy - 2 * covxy) / ((df + 1) * df) )
-    } else {
-      stderr <- sqrt(vx) / ((1 - 2 * trim) * sqrt(nx))
-    }
-
-    if (stderr < 10 * .Machine$double.eps * abs(mx))
-      stop("data are essentially constant")
-
-    if(paired){
-      method <- "Yuen Paired t-test"
-      tstat <- (mx - my - mu) / stderr
-      estimate <- setNames(mx - my, "difference of trimmed means")
-
-    } else {
-      method <- "Yuen One Sample t-test"
-      tstat <- (mx - mu)/stderr
-      estimate <- setNames(mx, "trimmed mean of x")
-    }
-
-  }
-  else {
-    ny <- length(y)
-    if (nx < 2)
-      stop("not enough 'x' observations")
-    if (ny < 2)
-      stop("not enough 'y' observations")
-    my <- mean(y, trim = trim)
-    vy <- var(Winsorize(y, probs = c(trim, 1-trim)))
-    method <- "Yuen Two Sample t-test"
-    estimate <- c(mx, my)
-    names(estimate) <- c("trimmed mean of x", "trimmed mean of y")
-
-    dfx <- length(x) - 2 * floor(trim * length(x)) - 1
-    dfy <- length(y) - 2 * floor(trim * length(y)) - 1
-
-    stderrx <- (length(x) - 1) * vx / ((dfx + 1) * dfx)
-    stderry <- (length(y) - 1) * vy / ((dfy + 1) * dfy)
-
-    df <- (stderrx + stderry)^2 / (stderrx^2 / dfx + stderry^2 / dfy)
-
-    stderr <- sqrt(stderrx + stderry)
-
-    if (stderr < 10 * .Machine$double.eps * max(abs(mx), abs(my)))
-      stop("data are essentially constant")
-    tstat <- (mx - my - mu) / stderr
-  }
-  if (alternative == "less") {
-    pval <- pt(tstat, df)
-    cint <- c(-Inf, tstat + qt(conf.level, df))
-  }
-  else if (alternative == "greater") {
-    pval <- pt(tstat, df, lower.tail = FALSE)
-    cint <- c(tstat - qt(conf.level, df), Inf)
-  }
-  else {
-    pval <- 2 * pt(-abs(tstat), df)
-    alpha <- 1 - conf.level
-    cint <- qt(1 - alpha/2, df)
-    cint <- tstat + c(-cint, cint)
-  }
-  cint <- mu + cint * stderr
-  names(tstat) <- "t"
-  names(df) <- "df"
-  names(trim) <- "trim"
-  names(mu) <- if (paired || !is.null(y))
-    "difference in trimmed means"
-  else "trimmed mean"
-  attr(cint, "conf.level") <- conf.level
-  rval <- list(statistic = tstat, parameter = c(df, trim), p.value = pval,
-               conf.int = cint, estimate = estimate, null.value = mu,
-               alternative = alternative, method = method, data.name = dname)
-  class(rval) <- "htest"
-  return(rval)
-}
-
-
-
-
-
-
-SignTest <- function (x, ...)  UseMethod("SignTest")
-
-SignTest.formula <- function (formula, data, subset, na.action, ...) {
-
-  # this is designed just like wilcox.test.formula
-
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-      "term.labels")) != 1L))
-      stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-      m$data <- as.data.frame(data)
-  m[[1L]] <- as.name("model.frame")
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  DNAME <- paste(names(mf), collapse = " by ")
-  names(mf) <- NULL
-  response <- attr(attr(mf, "terms"), "response")
-  g <- factor(mf[[-response]])
-  if (nlevels(g) != 2L)
-      stop("grouping factor must have exactly 2 levels")
-  DATA <- split(mf[[response]], g)
-  names(DATA) <- c("x", "y")
-  y <- DoCall("SignTest", c(DATA, list(...)))
-  y$data.name <- DNAME
-  y
-
-}
-
-# test:
-#  cbind( c(NA,sort(x)), 0:n, dbinom(0:n, size=n, prob=0.5),  pbinom(0:n, size=n, prob=0.5))
-
-SignTest.default <- function(x, y = NULL, alternative = c("two.sided", "less", "greater"),
-    mu = 0, conf.level = 0.95, ...) {
-
-  MedianCI_Binom <- function( x, conf.level = 0.95,
-      alternative = c("two.sided", "less", "greater"), na.rm = FALSE ){
-    # http://www.stat.umn.edu/geyer/old03/5102/notes/rank.pdf
-    # http://de.scribd.com/doc/75941305/Confidence-Interval-for-Median-Based-on-Sign-Test
-    if(na.rm) x <- na.omit(x)
-    n <- length(x)
-    switch( match.arg(alternative)
-      , "two.sided" = {
-          k <- qbinom(p = (1 - conf.level) / 2, size=n, prob=0.5, lower.tail=TRUE)
-          ci <- sort(x)[c(k, n - k + 1)]
-          attr(ci, "conf.level") <- 1 - 2 * pbinom(k-1, size=n, prob=0.5)
-        }
-      , "greater" = {
-          k <- qbinom(p = (1 - conf.level), size=n, prob=0.5, lower.tail=TRUE)
-          ci <- c(sort(x)[k], Inf)
-          attr(ci, "conf.level") <- 1 - pbinom(k-1, size=n, prob=0.5)
-        }
-      , "less" = {
-          k <- qbinom(p = conf.level, size=n, prob=0.5, lower.tail=TRUE)
-          ci <- c(-Inf, sort(x)[k])
-          attr(ci, "conf.level") <- pbinom(k, size=n, prob=0.5)
-        }
-    )
-    return(ci)
-  }
-
-  alternative <- match.arg(alternative)
-
-  if (!missing(mu) && ((length(mu) > 1L) || !is.finite(mu)))
-      stop("'mu' must be a single number")
-
-  if (!((length(conf.level) == 1L) && is.finite(conf.level) &&
-      (conf.level > 0) && (conf.level < 1)))
-      stop("'conf.level' must be a single number between 0 and 1")
-
-  if (!is.numeric(x))
-      stop("'x' must be numeric")
-
-  if (!is.null(y)) {
-      if (!is.numeric(y))
-          stop("'y' must be numeric")
-      if (length(x) != length(y))
-          stop("'x' and 'y' must have the same length")
-
-      DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-      OK <- complete.cases(x, y)
-      x <- x[OK]
-      y <- y[OK]
-      METHOD <- "Dependent-samples Sign-Test"
-      x <- (x - y)
-
-  } else {
-      DNAME <- deparse(substitute(x))
-      x <- x[is.finite(x)]
-      METHOD <- "One-sample Sign-Test"
-  }
-
-  d <- (x - mu)
-
-  # Naive version:
-  n.valid <- sum(d > 0) + sum(d < 0)
-  if(n.valid > 0) {
-    RVAL <- binom.test(x=sum(d > 0), n=n.valid, p=0.5, alternative = alternative, conf.level = conf.level )
-  } else {
-    RVAL <- binom.test(x=1, n=1)
-  }
-
-  RVAL$method <- METHOD
-  RVAL$data.name <- DNAME
-  names(mu) <- if (!is.null(y)) "median difference" else "median"
-
-  names(RVAL$statistic) <- "S"
-  RVAL$estimate <- median(d + mu, na.rm=TRUE)
-  names(RVAL$parameter) <- "number of differences"
-  mci <- MedianCI_Binom(d + mu, conf.level=conf.level, alternative=alternative, na.rm=TRUE)
-  RVAL$conf.int <- mci
-  attr(RVAL$conf.int, "conf.level") = round(attr(mci,"conf.level"), 3)
-
-  names(RVAL$estimate) <- "median of the differences"
-  RVAL$null.value <- mu
-  class(RVAL) <- "htest"
-  return(RVAL)
-
-}
-
-
-
-ZTest <- function (x, ...)
-  UseMethod("ZTest")
-
-
-ZTest.formula <- function (formula, data, subset, na.action, ...)  {
-
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-                                                                  "term.labels")) != 1L))
-    stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- quote(stats::model.frame)
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  DNAME <- paste(names(mf), collapse = " by ")
-  names(mf) <- NULL
-  response <- attr(attr(mf, "terms"), "response")
-  g <- factor(mf[[-response]])
-  if (nlevels(g) != 2L)
-    stop("grouping factor must have exactly 2 levels")
-  DATA <- setNames(split(mf[[response]], g), c("x", "y"))
-  y <- DoCall("ZTest", c(DATA, list(...)))
-  y$data.name <- DNAME
-  if (length(y$estimate) == 2L)
-    names(y$estimate) <- paste("mean in group", levels(g))
-  y
-}
-
-
-ZTest.default <- function (x, y = NULL, alternative = c("two.sided", "less", "greater"),
-                           paired = FALSE, mu = 0, sd_pop, conf.level = 0.95,  ...)  {
-
-  alternative <- match.arg(alternative)
-  if (!missing(mu) && (length(mu) != 1 || is.na(mu)))
-    stop("'mu' must be a single number")
-  if (!missing(conf.level) && (length(conf.level) != 1 || !is.finite(conf.level) ||
-                                 conf.level < 0 || conf.level > 1))
-    stop("'conf.level' must be a single number between 0 and 1")
-  if (!is.null(y)) {
-    dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-
-    if (paired)
-      xok <- yok <- complete.cases(x, y)
-    else {
-      yok <- !is.na(y)
-      xok <- !is.na(x)
-    }
-
-    y <- y[yok]
-  }
-  else {
-    dname <- deparse(substitute(x))
-    if (paired)
-      stop("'y' is missing for paired test")
-    xok <- !is.na(x)
-    yok <- NULL
-  }
-  x <- x[xok]
-
-  if (paired) {
-    x <- x - y
-    y <- NULL
-  }
-
-  nx <- length(x)
-  mx <- mean(x)
-  # vx <- sd_pop^2
-
-  if (is.null(y)) {
-    if (nx < 2)
-      stop("not enough 'x' observations")
-    stderr <- sqrt(sd_pop^2/nx)
-    if (stderr < 10 * .Machine$double.eps * abs(mx))
-      stop("data are essentially constant")
-    zstat <- (mx - mu)/stderr
-
-    method <- method <- if (paired)
-      "Paired z-test" else "One Sample z-test"
-    estimate <- setNames(mx, if (paired)
-      "mean of the differences"
-      else "mean of x")
-  }
-  else {
-    ny <- length(y)
-    if (nx < 1)
-      stop("not enough 'x' observations")
-    if (ny < 1)
-      stop("not enough 'y' observations")
-    if (nx + ny < 3)
-      stop("not enough observations")
-    my <- mean(y)
-
-    method <- paste("Two Sample z-test")
-    estimate <- c(mx, my)
-    names(estimate) <- c("mean of x", "mean of y")
-
-    stderr <- sqrt(sd_pop^2 * (1/nx + 1/ny))
-
-    if (stderr < 10 * .Machine$double.eps * max(abs(mx),
-                                                abs(my)))
-      stop("data are essentially constant")
-    zstat <- (mx - my - mu)/stderr
-  }
-  if (alternative == "less") {
-    pval <- pnorm(zstat)
-    cint <- c(-Inf, zstat + qnorm(conf.level))
-  }
-  else if (alternative == "greater") {
-    pval <- pnorm(zstat, lower.tail = FALSE)
-    cint <- c(zstat - qnorm(conf.level), Inf)
-  }
-  else {
-    pval <- 2 * pnorm(-abs(zstat))
-    alpha <- 1 - conf.level
-    cint <- qnorm(1 - alpha/2)
-    cint <- zstat + c(-cint, cint)
-  }
-  cint <- mu + cint * stderr
-  names(zstat) <- "z"
-  names(mu) <- if (paired || !is.null(y))
-    "difference in means"
-  else "mean"
-  names(sd_pop) <- "Std. Dev. Population"
-  attr(cint, "conf.level") <- conf.level
-  rval <- list(statistic = zstat, p.value = pval,
-               parameter = sd_pop,
-               conf.int = cint, estimate = estimate, null.value = mu,
-               alternative = alternative, method = method, data.name = dname)
-  class(rval) <- "htest"
-  return(rval)
-}
-
-
-
-# moved from Rcmdr 13 July 2004
-
-# levene.test.default function slightly modified and generalized from Brian Ripley via R-help
-# the original generic version was contributed by Derek Ogle
-# last modified 28 January 2010 by J. Fox
-
-LeveneTest <- function (y, ...) {
-	UseMethod("LeveneTest")
-}
-
-LeveneTest.default <- function (y, group, center=median, ...) { # original levene.test
-	if (!is.numeric(y))
-		stop(deparse(substitute(y)), " is not a numeric variable")
-	if (!is.factor(group)) {
-		warning(deparse(substitute(group)), " coerced to factor.")
-		group <- as.factor(group)
-	}
-	valid <- complete.cases(y, group)
-	meds <- tapply(y[valid], group[valid], center, ...)
-	resp <- abs(y - meds[group])
-	table <- anova(lm(resp ~ group))[, c(1, 4, 5)]
-	rownames(table)[2] <- " "
-	dots <- deparse(substitute(...))
-	attr(table, "heading") <- paste("Levene's Test for Homogeneity of Variance (center = ",
-			deparse(substitute(center)), if(!(dots == "NULL")) paste(":", dots),  ")", sep="")
-	table
-}
-
-LeveneTest.formula <- function(y, data, ...) {
-	form <- y
-	mf <- if (missing(data)) model.frame(form) else model.frame(form, data)
-	if (any(sapply(2:dim(mf)[2], function(j) is.numeric(mf[[j]]))))
-		stop("Levene's test is not appropriate with quantitative explanatory variables.")
-	y <- mf[,1]
-	if(dim(mf)[2]==2) group <- mf[,2]
-	else {
-		if (length(grep("\\+ | \\| | \\^ | \\:",form))>0) stop("Model must be completely crossed formula only.")
-		group <- interaction(mf[,2:dim(mf)[2]])
-	}
-	LeveneTest.default(y = y, group=group, ...)
-}
-
-LeveneTest.lm <- function(y, ...) {
-	LeveneTest.formula(formula(y), data=model.frame(y), ...)
-}
-
-
-
-
-RunsTest <- function (x, ...)  UseMethod("RunsTest")
-
-RunsTest.formula <- function (formula, data, subset, na.action, ...) {
-
-  # this is a taken analogue to wilcox.test.formula
-
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-                                                                  "term.labels")) != 1L))
-    stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- as.name("model.frame")
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  DNAME <- paste(names(mf), collapse = " by ")
-  names(mf) <- NULL
-  response <- attr(attr(mf, "terms"), "response")
-  g <- factor(mf[[-response]])
-  if (nlevels(g) != 2L)
-    stop("grouping factor must have exactly 2 levels")
-  DATA <- split(mf[[response]], g)
-  names(DATA) <- c("x", "y")
-  y <- DoCall("RunsTest", c(DATA, list(...)))
-  y$data.name <- DNAME
-  y
-
-}
-
-
-RunsTest.default <- function(x, y=NULL, alternative=c("two.sided", "less", "greater"), exact=NULL, na.rm = FALSE, ...) {
-
-  # exact values:
-  # http://www.reiter1.com/Glossar/Wald_Wolfowitz.htm
-
-  # example:   x <- sample(c(0,1), size=20, r=TRUE)
-
-  pruns <- function(r, n1, n2, alternative=c("two.sided", "less", "greater")) {
-
-    # source: randomizeBE
-    # author: D. Labes <detlewlabes at gmx.de>
-
-    # function for calculating the denominator of the runs distribution
-    .druns_nom <- function(r, n1, n2){
-      pp <- vector(mode="numeric",length=length(r))
-      for (i in seq_along(r)){
-        if (2*r[i]%/%2==r[i]){
-          # even 2*k
-          k <- r[i]/2
-          pp[i] <- 2*choose(n1-1, k-1)*choose(n2-1, k-1)
-        } else {
-          # odd 2*k+1
-          k <- (r[i]-1)/2
-          pp[i] <- choose(n1-1,k-1) * choose(n2-1,k) +
-            choose(n1-1,k)   * choose(n2-1,k-1)
-        }
-      }
-      pp
-    }
-
-    alternative <- match.arg(alternative)
-
-    n <- n1+n2
-
-    if(r<=1) stop("Number of runs must be > 1")
-    if(r>n) stop("Number of runs must be < (n1+n2")
-    if(n1<1 | n2<1) return(0) #??? is not random!
-
-    E <- 1 + 2*n1*n2/n
-
-    denom <- choose(n,n1)
-    # how long should we make the r vector?
-    # in very unsymmetric cases only a few elements of
-    # pp = density have values > 0 if rmax=n1+n2
-    # number of runs possible: 2*m if n=m, 2*m+1 if m<n
-    rmax <- ifelse(n1==n2, 2*n1, 2*min(n1,n2)+1)
-    rv <- 2:rmax
-    pp <- .druns_nom(rv, n1, n2)
-
-    # pL is p(R<=r) -> left/lower tail
-    pL <- sum(pp[rv<=r])/denom
-    #pU is p(R>=r) -> right/upper tail
-    pU <- 1 - sum(pp[rv<=(r-1)])/denom
-
-    # Equn. 4.7 of the SPSS documentation
-    p2 <- sum(pp[abs(rv-E)>=abs(r-E)])/denom
-
-    # Next is the rule from:
-    # Gibbons "Nonparametric Methods for Quantitative Analysis"
-    # 0.5 is to avoid p>1 if both pL and pU are >0.5
-    p2min <- 2*min(c(pL, pU, 0.5))
-
-    # we are using the SPSS approach wich takes into account the
-    # unsymmetric form of the distribution if n1 << n2
-
-    return(
-      switch( alternative
-              , "less" = pL
-              , "greater" = pU
-              , "two.sided" = p2
-      )
-    )
-
-  }
-
-
-  if(!is.null(y)) {
-    dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-    # perform Wald-Wolfowitz-Test with 2 variables
-    xy <- Sort(cbind(c(x,y), c(rep(0, length(x)), rep(1, length(y)))))[,2]
-    res <- RunsTest(x=xy, alternative=alternative, exact=exact, na.rm=na.rm)
-    res$data.name <- dname
-    res$method <- "Wald-Wolfowitz Runs Test "
-    return(res)
-  }
-
-  alternative <- match.arg(alternative)
-  dname <- deparse(substitute(x))
-
-  # Strip NAs
-  if (na.rm) x <- na.omit(x)
-
-  # let's have a 0,1 vector if x is a numeric vector with more than 2 values
-  if(is.numeric(x) & (length(unique(x))>2)) {
-    est <- median(x, na.rm=TRUE)
-    names(est) <- "median(x)"
-    x <- ((x > est)*1)
-
-  } else {
-    est <- NULL
-  }
-
-  x <- factor(x)
-  if( nlevels(x) %nin% c(1,2) ) stop("Can only process dichotomous variables")
-  x <- as.numeric(x) - 1
-
-  # x <- sample(c(0,1), 100000000, replace=TRUE)
-  # ### user  system elapsed
-  #   9.39    6.76   16.30    system.time(rle(x))
-  #   4.49    3.45    8.00    system.time(sum(diff(x) != 0) + 1)
-  # so don't use rle...
-
-  runs <- sum(diff(x) != 0) + 1
-  m <- sum(x==0)
-  n <- sum(x==1)
-
-  if(is.null(exact)) { exact <- ((m +n) <= 30) }
-
-  E <- 1 + 2*n*m / (n + m)
-  s2 <- (2*n*m * (2*n*m - n - m)) / ((n + m)^2 * (n + m - 1))
-
-  # this is the SPSS-Definition
-  # http://publib.boulder.ibm.com/infocenter/spssstat/v20r0m0/index.jsp?topic=%2Fcom.ibm.spss.statistics.help%2Fidh_idd_npar_onesample_settings_tests_runs.htm
-  if( n+m >= 50) {
-    statistic <- (runs - E) / sqrt(s2)
-  } else {
-    switch( as.character(cut(runs - E, breaks=c(-Inf, -0.5, 0.5, Inf), labels=c("a", "b", "c")))
-      , "a" = statistic <- (runs - E + 0.5) / sqrt(s2)
-      , "b" = statistic <- 0
-      , "c" = statistic <- (runs - E - 0.5) / sqrt(s2)
-    )
-  }
-
-  switch( alternative
-    , "less" = {
-        p.value <- ifelse(exact, pruns(runs, m, n, alternative="less"), pnorm(statistic) )
-        alternative <- "true number of runs is less than expected"
-      }
-    , "greater" = {
-        p.value = ifelse(exact, pruns(runs, m, n, alternative="greater"), 1 - pnorm(statistic) )
-        alternative <- "true number of runs is greater than expected"
-      }
-    , "two.sided" = {
-        p.value = ifelse(exact, pruns(runs, m, n, alternative="two.sided"),
-                         2 * min(pnorm(statistic), 1 - pnorm(statistic)) )
-        alternative <- "true number of runs is not equal the expected number"
-      }
-  )
-
-  method = "Runs Test for Randomness"
-  names(statistic) <- "z"  # Standardized Runs Statistic
-
-  # do not report statistic when exact p-value is calculated
-  if(exact) statistic <- NULL
-
-  structure(list(
-    statistic = statistic,
-    p.value = p.value,
-    method = method,
-    alternative = alternative,
-    data.name = dname,
-    estimate = est,
-    parameter = c(runs=runs, m=m, n=n)),
-  class = "htest")
-
-}
-
-
-
-DurbinWatsonTest <- function(formula, order.by = NULL, alternative = c("greater", "two.sided", "less"),
-                             iterations = 15, exact = NULL, tol = 1e-10, data = list()) {
-
-  dname <- paste(deparse(substitute(formula)))
-  alternative <- match.arg(alternative)
-
-  if(!inherits(formula, "formula")) {
-    if(!is.null(w <- weights(formula))) {
-      if(!isTRUE(all.equal(as.vector(w), rep(1L, length(w)))))
-        stop("weighted regressions are not supported")
-    }
-    X <- if(is.matrix(formula$x))
-      formula$x
-    else model.matrix(terms(formula), model.frame(formula))
-    y <- if(is.vector(formula$y))
-      formula$y
-    else model.response(model.frame(formula))
-  } else {
-    mf <- model.frame(formula, data = data)
-    y <- model.response(mf)
-    X <- model.matrix(formula, data = data)
-  }
-
-  if(!is.null(order.by))
-  {
-    if(inherits(order.by, "formula")) {
-      z <- model.matrix(order.by, data = data)
-      z <- as.vector(z[,ncol(z)])
-    } else {
-      z <- order.by
-    }
-    X <- as.matrix(X[order(z),])
-    y <- y[order(z)]
-  }
-
-  n <- nrow(X)
-  if(is.null(exact)) exact <- (n < 100)
-  k <- ncol(X)
-
-  res <- lm.fit(X,y)$residuals
-  dw <- sum(diff(res)^2)/sum(res^2)
-  Q1 <- chol2inv(qr.R(qr(X)))
-  if(n < 3) {
-    warning("not enough observations for computing a p value, set to 1")
-    pval <- 1
-  } else {
-    if(exact)
-    {
-      A <- diag(c(1,rep(2, n-2), 1))
-      A[abs(row(A)-col(A))==1] <- -1
-      MA <- diag(rep(1,n)) - X %*% Q1 %*% t(X)
-      MA <- MA %*% A
-      ev <- eigen(MA)$values[1:(n-k)]
-      if(any(Im(ev)>tol)) warning("imaginary parts of eigenvalues discarded")
-      ev <- Re(ev)
-      ev <- ev[ev>tol]
-
-      pdw <- function(dw) .Fortran("pan", as.double(c(dw,ev)), as.integer(length(ev)),
-                                   as.double(0), as.integer(iterations), x=double(1),
-                                   PACKAGE = "DescTools")$x
-      pval <- switch(alternative,
-                     "two.sided" = (2*min(pdw(dw), 1-pdw(dw))),
-                     "less" = (1 - pdw(dw)),
-                     "greater" = pdw(dw))
-
-      if(is.na(pval) || ((pval > 1) | (pval < 0)))
-      {
-        warning("exact p value cannot be computed (not in [0,1]), approximate p value will be used")
-        exact <- FALSE
-      }
-    }
-    if(!exact)
-    {
-      if(n < max(5, k)) {
-        warning("not enough observations for computing an approximate p value, set to 1")
-        pval <- 1
-      } else {
-        AX <- matrix(as.vector(filter(X, c(-1, 2, -1))), ncol = k)
-        AX[1,] <- X[1,] - X[2,]
-        AX[n,] <- X[n,] - X[(n-1),]
-        XAXQ <- t(X) %*% AX %*% Q1
-        P <- 2*(n-1) - sum(diag(XAXQ))
-        Q <- 2*(3*n - 4) - 2* sum(diag(crossprod(AX) %*% Q1)) + sum(diag(XAXQ %*% XAXQ))
-        dmean <- P/(n-k)
-        dvar <- 2/((n-k)*(n-k+2)) * (Q - P*dmean)
-        pval <- switch(alternative,
-                       "two.sided" = (2*pnorm(abs(dw-dmean), sd=sqrt(dvar), lower.tail = FALSE)),
-                       "less" = pnorm(dw, mean = dmean, sd = sqrt(dvar), lower.tail = FALSE),
-                       "greater" = pnorm(dw, mean = dmean, sd = sqrt(dvar)))
-      }
-    }
-  }
-
-  alternative <- switch(alternative,
-                        "two.sided" = "true autocorrelation is not 0",
-                        "less" = "true autocorrelation is less than 0",
-                        "greater" = "true autocorrelation is greater than 0")
-
-  names(dw) <- "DW"
-  RVAL <- list(statistic = dw, method = "Durbin-Watson test",
-               alternative = alternative, p.value= pval, data.name=dname)
-  class(RVAL) <- "htest"
-  return(RVAL)
-}
-
-
-
-##
-##  Bartels' Rank Test
-##
-BartelsRankTest <- function(x, alternative="two.sided", pvalue="normal"){
-  # Performs Bartels Ratio Test for Randomness.
-  #
-  # Args:
-  #   x: a numeric vector containing the data.
-  #   alternative hypothesis, must be one of "two.sided" (default), "left.sided" or "right.sided"
-  #   pv.method: asymptotic aproximation method used to compute the p-value.
-  #
-  # Returns:
-  #   statistic: the value of the RVN statistic test and the theoretical mean value and variance of the RVN statistic test.
-  #   n: the sample size, after the remotion of consecutive duplicate values.
-  #   p.value: the asymptotic p-value.
-  #   method: a character string indicating the test performed.
-  #   data.name: a character string giving the name of the data.
-  #   alternative: a character string describing the alternative.
-  #
-  dname <- deparse(substitute(x))
-  # Remove NAs
-  x <- na.omit(x)
-  stopifnot(is.numeric(x))
-  n <- length(x)
-  if (alternative == "t"){alternative <- "two.sided"}
-  if (alternative == "l"){alternative <- "left.sided"}
-  if (alternative == "r"){alternative <- "right.sided"}
-  if (alternative != "two.sided" & alternative != "left.sided" & alternative != "right.sided")
-  {stop("must give a valid alternative")}
-  if (n < 10){stop("sample size must be greater than 9")}
-  # unique
-  rk <- rank(x)
-  d <- diff(rk)
-  #d.rank <- n*(n^2-1)/12
-  d.rank <- sum(rk^2)-n*(mean(rk)^2)
-  RVN <- sum(d^2)/d.rank
-  mu <- 2
-  vr <- (4*(n-2)*(5*n^2-2*n-9))/(5*n*(n+1)*(n-1)^2)
-  #
-  # Computes the p-value
-  if (pvalue == "auto"){pvalue<-ifelse(n<=100,"beta","normal")}
-  if (pvalue == "beta"){
-    btp <- (5*n*(n+1)*(n-1)^2)/(2*(n-2)*(5*n^2-2*n-9))-1/2
-    pv0 <- pbeta(RVN/4,shape1=btp,shape2=btp)
-  }
-  if (pvalue=="normal"){
-    pv0 <- pnorm((RVN - mu) / sqrt(vr))
-  }
-
-  if (alternative=="two.sided"){
-    pv <- 2*min(pv0,1-pv0)
-    alternative<-"nonrandomness"
-  }
-  if (alternative=="left.sided"){
-    pv <- pv0
-    alternative<-"trend"
-  }
-  if (alternative=="right.sided"){
-    pv <- 1-pv0
-    alternative<-"systematic oscillation"
-  }
-
-  test <- (RVN - mu) / sqrt(vr)
-  rval <- list(statistic = c(statistic=test), nm=sum(d^2), rvn=RVN, mu=mu, var=vr, p.value = pv,
-               method = "Bartels Ratio Test", data.name = dname, parameter=c(n=n), n=n, alternative=alternative)
-  class(rval) <- "htest"
-  return(rval)
-
-}
-
-
-
-MosesTest <- function (x, ...)  UseMethod("MosesTest")
-
-# Extremreaktionen nach Moses: Nullhypothese: Die Spannweite der Werte ist
-# in beiden Gruppen gleich gross. Die Werte beider Gruppen werden in eine gemeinsame
-# Reihenfolge gebracht. Anschliessend werden ihnen Rangwerte zugewiesen.
-# Eine der Gruppen (die Gruppe des Wertes, der in dem Dialogfeld
-#                   Gruppen definieren als erstes angegeben ist) wird als Kontrollgruppe verwendet.
-# Fuer diese Gruppe wird die Spannweite der Raenge als Differenz zwischen
-# dem groessten und kleinsten Rangwert berechnet. Anhand dieser Spannweite errechnet
-# sich die einseitige Signifikanz. Zusaetzlich wird der Test ein zweites
-# Mal durchgefuehrt, wobei die Ausreisser der Gesamtstichprobe ausgeschlossen
-# werden (insgesamt 5% der Faelle). Dabei werden sowohl die hoechsten als auch
-# die niedrigsten Raenge entfernt. Das Testergebnis teilt die Anzahl der Faelle beider
-# Gruppen, die Spannweiten und die entsprechenden einseitigen Signifikanzen
-# fuer beide Tests (mit und ohne Ausreisser) mit. Fuer ein Beispiel siehe oben
-# Abschnitt Moses-Test, S. 760.
-
-
-MosesTest.formula <- function (formula, data, subset, na.action, ...) {
-
-  # this is a taken analogue to wilcox.test.formula
-
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-      "term.labels")) != 1L))
-      stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-      m$data <- as.data.frame(data)
-  m[[1L]] <- as.name("model.frame")
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  DNAME <- paste(names(mf), collapse = " by ")
-  names(mf) <- NULL
-  response <- attr(attr(mf, "terms"), "response")
-  g <- factor(mf[[-response]])
-  if (nlevels(g) != 2L)
-      stop("grouping factor must have exactly 2 levels")
-  DATA <- split(mf[[response]], g)
-  names(DATA) <- c("x", "y")
-  y <- DoCall("MosesTest", c(DATA, list(...)))
-  y$data.name <- DNAME
-  y
-
-}
-
-
-
-MosesTest.default <- function(x, y, extreme = NULL, ...){
-
-  # example
-  # x <- c(0.80, 0.83, 1.89, 1.04, 1.45, 1.38, 1.91, 1.64, 0.73, 1.46)
-  # y <- c(1.15, 0.88, 0.90, 0.74, 1.21)
-  # MosesTest(y, x)
-
-  if(is.null(extreme)) extreme <- pmax(floor(0.05 * length(x)), 1)
-  h <- extreme
-  if(2*h > length(x)-2) h <- floor((length(x)-2)/2)
-
-  # no alternative for the moses.test
-  DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-
-  nk <- length(x)
-  ne <- length(y)
-  # decreasing ranks following SPSS-calculation
-  R1 <- rank(-c(x, y))[1:nk]
-  R1 <- sort(R1)[(h+1):(length(R1)-h)]
-
-  S <- ceiling(max(R1) - min(R1) + 1)
-
-  tmp <- 0
-  for( i in 0 : (S - nk + 2*h)) {
-    tmp <- tmp + choose(i + nk - 2*h - 2, i) * choose(ne + 2*h + 1 - i, ne - i)
-  }
-
-  PVAL <- (tmp / choose(nk + ne, nk))
-
-  structure(list(statistic = c(S = S),
-                 p.value = PVAL,
-                 method = "Moses Test of Extreme Reactions",
-                 alternative = "extreme values are more likely in x than in y",
-                 data.name = DNAME),
-            class = "htest")
-
-}
-
-
-
-SiegelTukeyTest <- function (x, ...)  UseMethod("SiegelTukeyTest")
-
-SiegelTukeyTest.formula <- function (formula, data, subset, na.action, ...)
-{
-  # this is a taken analogue to wilcox.test.formula
-
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-      "term.labels")) != 1L))
-      stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-      m$data <- as.data.frame(data)
-  m[[1L]] <- as.name("model.frame")
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  DNAME <- paste(names(mf), collapse = " by ")
-  names(mf) <- NULL
-  response <- attr(attr(mf, "terms"), "response")
-  g <- factor(mf[[-response]])
-  if (nlevels(g) != 2L)
-      stop("grouping factor must have exactly 2 levels")
-  DATA <- split(mf[[response]], g)
-  names(DATA) <- c("x", "y")
-  y <- DoCall("SiegelTukeyTest", c(DATA, list(...)))
-  y$data.name <- DNAME
-  y
-
-}
-
-
-
-SiegelTukeyRank <- function(x, g, drop.median = TRUE) {
-
-    # they do not drop the median in:
-    # http://en.wikipedia.org/wiki/Siegel%E2%80%93Tukey_test
-    # A <- c(33,62,84,85,88,93,97); B <- c(4,16,48,51,66,98)
-    # this is wrong there, as the author did not leave the median out
-
-    ord.x <- order(x, g)
-    sort.x <- x[ord.x]
-    sort.id <- g[ord.x]
-
-    n <- length(x)
-    if(drop.median){
-      if(n %% 2 > 0) {
-        # gonna have to drop the (first) median value
-        # as we sorted by the groupsize, this will be the one out of the bigger group (if existing)
-        fm <- which( sort.x == median(sort.x))[1]
-        sort.x <- sort.x[-fm]
-        sort.id <- sort.id[-fm]
-        n <- n-1
-      }
-    }
-
-    base1 <- c(1, 4)
-    iterator1 <- matrix(seq(from = 1, to = n, by = 4)) - 1
-    rank1 <- apply(iterator1, 1, function(x) x + base1)
-
-    iterator2 <- matrix(seq(from = 2, to = n, by = 4))
-    base2 <- c(0, 1)
-    rank2 <- apply(iterator2, 1, function(x) x + base2)
-
-    if (length(rank1) == length(rank2)) {
-        rank <- c(rank1[1:floor(n/2)], rev(rank2[1:ceiling(n/2)]))
-    } else {
-        rank <- c(rank1[1:ceiling(n/2)], rev(rank2[1:floor(n/2)]))
-    }
-
-    unique.ranks <- tapply(rank, sort.x, mean)
-    unique.x <- as.numeric(as.character(names(unique.ranks)))
-
-    ST.matrix <- merge(
-       data.frame(sort.x, sort.id),          # this are the original values in x-order
-       data.frame(unique.x, unique.ranks),   # this is the rank.matrix
-       by.x = "sort.x", by.y = "unique.x")
-
-    return(ST.matrix)
-}
-
-
-SiegelTukeyTest.default <- function(x, y, adjust.median = FALSE,
-    alternative = c("two.sided","less","greater"), mu = 0,
-    exact = NULL, correct = TRUE, conf.int = FALSE, conf.level = 0.95, ...) {
-    ###### published on:
-    #   http://www.r-statistics.com/2010/02/siegel-tukey-a-non-parametric-test-for-equality-in-variability-r-code/
-    #   Main author of the function:  Daniel Malter
-
-    # Doku: http://www.crcnetbase.com/doi/abs/10.1201/9781420036268.ch14
-
-
-  if (!missing(mu) && ((length(mu) > 1L) || !is.finite(mu)))
-      stop("'mu' must be a single number")
-
-  if (conf.int) {
-      if (!((length(conf.level) == 1L) && is.finite(conf.level) &&
-          (conf.level > 0) && (conf.level < 1)))
-          stop("'conf.level' must be a single number between 0 and 1")
-  }
-
-  if (!is.numeric(x))
-      stop("'x' must be numeric")
-
-  if (!is.null(y)) {
-      if (!is.numeric(y))
-          stop("'y' must be numeric")
-      DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-      x <- x[is.finite(x)]
-      y <- y[is.finite(y)]
-  }
-  else {
-      DNAME <- deparse(substitute(x))
-      x <- x[is.finite(x)]
-  }
-
-  # adjusting median
-  if (adjust.median) {
-      x <- x - median(x)
-      y <- y - median(y)
-  }
-
-  # the larger group comes first
-  if( length(x) > length(y) ){
-    xx <- c(x, y)
-    id <- c(rep(0, length(x)), rep(1, length(y)))
-  } else {
-    xx <- c(y,x)
-    id <- c(rep(0, length(y)), rep(1, length(x)))
-  }
-
-  strank <- SiegelTukeyRank(xx, g = id)
-  ranks0 <- strank$unique.ranks[strank$sort.id == 0]
-  ranks1 <- strank$unique.ranks[strank$sort.id == 1]
-
-  RVAL <- wilcox.test(ranks0, ranks1, alternative = alternative,
-      mu = mu, paired = FALSE, exact = exact, correct = correct,
-      conf.int = conf.int, conf.level = conf.level)
-
-  RVAL$statistic <- sum(ranks1)
-  names(RVAL$statistic)  <- "ST"
-  RVAL$data.name <- DNAME
-  RVAL <- c(RVAL, list(stranks = strank, MeanRanks = c(mean(ranks0), mean(ranks1))))
-  RVAL$method <- "Siegel-Tukey-test for equal variability"
-  RVAL$null.value <- 1
-  names(RVAL$null.value) <- "ratio of scales"
-  class(RVAL) <- "htest"
-  return(RVAL)
-
-  if(suppressWarnings(wilcox.test(x,y)$p.value) < 0.05) warning("SiegelTukeyTest: wilcox.test(x, y) is significant! Consider setting adjust.median = TRUE." )
-
-}
-
-
-
-
-JonckheereTerpstraTest <- function (x, ...)  UseMethod("JonckheereTerpstraTest")
-
-JonckheereTerpstraTest.formula <- function (formula, data, subset, na.action, ...) {
-
-    if (missing(formula) || (length(formula) != 3L))
-        stop("'formula' missing or incorrect")
-    m <- match.call(expand.dots = FALSE)
-    if (is.matrix(eval(m$data, parent.frame())))
-        m$data <- as.data.frame(data)
-    m[[1L]] <- as.name("model.frame")
-    mf <- eval(m, parent.frame())
-    DNAME <- paste(names(mf), collapse = " by ")
-    names(mf) <- NULL
-    y <- DoCall("JonckheereTerpstraTest", as.list(mf))
-    y$data.name <- DNAME
-    y
-}
-
-JonckheereTerpstraTest.default <- function (x, g, alternative = c("two.sided", "increasing", "decreasing"), nperm=NULL, ...) {
-
-    if (is.list(x)) {
-        if (length(x) < 2L)
-            stop("'x' must be a list with at least 2 elements")
-        DNAME <- deparse(substitute(x))
-        x <- lapply(x, function(u) u <- u[complete.cases(u)])
-        k <- length(x)
-        l <- sapply(x, "length")
-        if (any(l == 0))
-            stop("all groups must contain data")
-        g <- factor(rep(1:k, l))
-        x <- unlist(x)
-    }
-    else {
-        if (length(x) != length(g))
-            stop("'x' and 'g' must have the same length")
-        DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(g)))
-        OK <- complete.cases(x, g)
-        x <- x[OK]
-        g <- g[OK]
-        if (!all(is.finite(g)))
-            stop("all group levels must be finite")
-        g <- factor(g)
-        k <- nlevels(g)
-        if (k < 2)
-            stop("all observations are in the same group")
-    }
-    n <- length(x)
-    if (n < 2)
-        stop("not enough observations")
-
-    # start calculating
-
-  jtpdf <- function(gsize) {
-    ng <- length(gsize)
-    cgsize <- rev(cumsum(rev(gsize)))
-    mxsum <- sum(gsize[-ng]*cgsize[-1]) + 1
-    zz <- .Fortran("jtpdf",
-                   as.integer(mxsum),
-                   pdf=double(mxsum),
-                   as.integer(ng),
-                   as.integer(cgsize),
-                   double(mxsum),
-                   double(mxsum))
-    zz$pdf
-  }
-
-  jtperm.p <- function(x, ng, gsize, cgsize, alternative, nperm) {
-    # this function computes the pdf using the convolution by Mark van de Wiel
-
-    n <- length(x)
-    pjtrsum <- rep(0, nperm)
-    for (np in 1:nperm){
-      jtrsum <- 0
-      for(i in 1:(ng-1)) {
-        na <- gsize[i]
-        nb <- n-cgsize[i+1]
-  # this jtrsum will be small if data are increasing and large if decreasing
-        jtrsum <- jtrsum + sum(rank(x[(cgsize[i]+1):n])[1:na]) - na*(na+1)/2
-      }
-      pjtrsum[np] <- jtrsum
-      # permute the data; this way the first value is the original statistic
-      x <- sample(x)
-    }
-    # one-sided p-values
-    # number of permuted values at least as small as original
-    iPVAL <- sum(pjtrsum <= pjtrsum[1])/nperm
-    # number of permuted values at least as large as original
-    dPVAL <- sum(pjtrsum >= pjtrsum[1])/nperm
-    # return p-value for the alternative of interest
-    PVAL <- switch(alternative,
-                   "two.sided" = 2*min(iPVAL, dPVAL, 1),
-                   "increasing" = iPVAL,
-                   "decreasing" = dPVAL)
-    PVAL
-  }
-
-  if(!is.numeric(x)) stop("data values should be numeric")
-  if(!is.numeric(g) & !is.ordered(g)) stop("group should be numeric or ordered factor")
-  alternative <- match.arg(alternative)
-  METHOD <- "Jonckheere-Terpstra test"
-  PERM <- !missing(nperm)
-  n <- length(x)
-  if(length(g) != n) stop("lengths of data values and group don't match")
-  TIES <- length(unique(x)) != n
-  gsize <- table(g)
-  ng <- length(gsize)
-  cgsize <- c(0,cumsum(gsize))
-  x <- x[order(g)]
-  jtrsum <- jtmean <- jtvar <- 0
-  for(i in 1:(ng-1)) {
-    na <- gsize[i]
-    nb <- n-cgsize[i+1]
-    jtrsum <- jtrsum + sum(rank(x[(cgsize[i]+1):n])[1:na]) - na*(na+1)/2
-    jtmean <- jtmean + na*nb/2
-    jtvar <- jtvar + na*nb*(na+nb+1)/12
-  }
-# this jtrsum will be small if data are increasing and large if decreasing
-# to reverse this use 2*jtmean - jtrsum
-  jtrsum <- 2*jtmean - jtrsum
-  STATISTIC <- jtrsum
-  names(STATISTIC) <- "JT"
-  if (PERM) {
-    PVAL <- jtperm.p(x, ng, gsize, cgsize, alternative, nperm)
-  } else {
-    if (n > 100 | TIES) {
-      warning("Sample size > 100 or data with ties \n p-value based on normal approximation. Specify nperm for permutation p-value")
-      zstat <- (STATISTIC-jtmean)/sqrt(jtvar)
-      PVAL <- pnorm(zstat)
-      PVAL <- switch(alternative,
-                     "two.sided" = 2*min(PVAL, 1-PVAL, 1),
-                     "increasing" = 1-PVAL,
-                     "decreasing" = PVAL)
-    } else {
-      dPVAL <- sum(jtpdf(gsize)[1:(jtrsum+1)])
-      iPVAL <- 1-sum(jtpdf(gsize)[1:(jtrsum)])
-      PVAL <- switch(alternative,
-                     "two.sided" = 2*min(iPVAL, dPVAL, 1),
-                     "increasing" = iPVAL,
-                     "decreasing" = dPVAL)
-    }
-  }
-
-  RVAL <- list(statistic = STATISTIC,
-               p.value = as.numeric(PVAL),
-               alternative = alternative,
-               method = METHOD,
-               data.name = DNAME)
-  class(RVAL) <- "htest"
-  RVAL
-
-}
-
-
-
-# ***********************************
-# Tests aus library(nortest)
-
-ShapiroFranciaTest <- function (x) {
-    DNAME <- deparse(substitute(x))
-    x <- sort(x[complete.cases(x)])
-    n <- length(x)
-    if ((n < 5 || n > 5000))
-        stop("sample size must be between 5 and 5000")
-    y <- qnorm(ppoints(n, a = 3/8))
-    W <- cor(x, y)^2
-    u <- log(n)
-    v <- log(u)
-    mu <- -1.2725 + 1.0521 * (v - u)
-    sig <- 1.0308 - 0.26758 * (v + 2/u)
-    z <- (log(1 - W) - mu)/sig
-    pval <- pnorm(z, lower.tail = FALSE)
-    RVAL <- list(statistic = c(W = W), p.value = pval, method = "Shapiro-Francia normality test",
-        data.name = DNAME)
-    class(RVAL) <- "htest"
-    return(RVAL)
-}
-
-
-PearsonTest <- function (x, n.classes = ceiling(2 * (n^(2/5))), adjust = TRUE) {
-
-    DNAME <- deparse(substitute(x))
-    x <- x[complete.cases(x)]
-    n <- length(x)
-    if (adjust) {
-        dfd <- 2
-    }
-    else {
-        dfd <- 0
-    }
-    num <- floor(1 + n.classes * pnorm(x, mean(x), sd(x)))
-    count <- tabulate(num, n.classes)
-    prob <- rep(1/n.classes, n.classes)
-    xpec <- n * prob
-    h <- ((count - xpec)^2)/xpec
-    P <- sum(h)
-    pvalue <- pchisq(P, n.classes - dfd - 1, lower.tail = FALSE)
-    RVAL <- list(statistic = c(P = P), p.value = pvalue, method = "Pearson chi-square normality test",
-        data.name = DNAME, n.classes = n.classes, df = n.classes -
-            1 - dfd)
-    class(RVAL) <- "htest"
-    return(RVAL)
-}
-
-
-LillieTest <- function (x) {
-
-    DNAME <- deparse(substitute(x))
-    x <- sort(x[complete.cases(x)])
-    n <- length(x)
-    if (n < 5)
-        stop("sample size must be greater than 4")
-    p <- pnorm((x - mean(x))/sd(x))
-    Dplus <- max(seq(1:n)/n - p)
-    Dminus <- max(p - (seq(1:n) - 1)/n)
-    K <- max(Dplus, Dminus)
-    if (n <= 100) {
-        Kd <- K
-        nd <- n
-    }
-    else {
-        Kd <- K * ((n/100)^0.49)
-        nd <- 100
-    }
-    pvalue <- exp(-7.01256 * Kd^2 * (nd + 2.78019) + 2.99587 *
-        Kd * sqrt(nd + 2.78019) - 0.122119 + 0.974598/sqrt(nd) +
-        1.67997/nd)
-    if (pvalue > 0.1) {
-        KK <- (sqrt(n) - 0.01 + 0.85/sqrt(n)) * K
-        if (KK <= 0.302) {
-            pvalue <- 1
-        }
-        else if (KK <= 0.5) {
-            pvalue <- 2.76773 - 19.828315 * KK + 80.709644 *
-                KK^2 - 138.55152 * KK^3 + 81.218052 * KK^4
-        }
-        else if (KK <= 0.9) {
-            pvalue <- -4.901232 + 40.662806 * KK - 97.490286 *
-                KK^2 + 94.029866 * KK^3 - 32.355711 * KK^4
-        }
-        else if (KK <= 1.31) {
-            pvalue <- 6.198765 - 19.558097 * KK + 23.186922 *
-                KK^2 - 12.234627 * KK^3 + 2.423045 * KK^4
-        }
-        else {
-            pvalue <- 0
-        }
-    }
-    RVAL <- list(statistic = c(D = K), p.value = pvalue, method = "Lilliefors (Kolmogorov-Smirnov) normality test",
-        data.name = DNAME)
-    class(RVAL) <- "htest"
-    return(RVAL)
-}
-
-
-CramerVonMisesTest <- function (x) {
-    DNAME <- deparse(substitute(x))
-    x <- sort(x[complete.cases(x)])
-    n <- length(x)
-    if (n < 8)
-        stop("sample size must be greater than 7")
-    p <- pnorm((x - mean(x))/sd(x))
-    W <- (1/(12 * n) +
-        sum(
-            (p - (2 * seq(1:n) - 1)/(2 * n))^2
-        ))
-    WW <- (1 + 0.5/n) * W
-    if (WW < 0.0275) {
-        pval <- 1 - exp(-13.953 + 775.5 * WW - 12542.61 * WW^2)
-    }
-    else if (WW < 0.051) {
-        pval <- 1 - exp(-5.903 + 179.546 * WW - 1515.29 * WW^2)
-    }
-    else if (WW < 0.092) {
-        pval <- exp(0.886 - 31.62 * WW + 10.897 * WW^2)
-    }
-    else if (WW < 1.1) {
-        pval <- exp(1.111 - 34.242 * WW + 12.832 * WW^2)
-    }
-    else {
-        warning("p-value is smaller than 7.37e-10, cannot be computed more accurately")
-        pval <- 7.37e-10
-    }
-    RVAL <- list(statistic = c(W = W), p.value = pval, method = "Cramer-von Mises normality test",
-        data.name = DNAME)
-    class(RVAL) <- "htest"
-    return(RVAL)
-}
-
-
-#
-# AndersonDarlingTest <- function (x) {
-#
-#     DNAME <- deparse(substitute(x))
-#     x <- sort(x[complete.cases(x)])
-#     n <- length(x)
-#     if (n < 8)
-#         stop("sample size must be greater than 7")
-#     p <- pnorm((x - mean(x))/sd(x))
-#     h <- (2 * seq(1:n) - 1) * (log(p) + log(1 - rev(p)))
-#     A <- -n - mean(h)
-#     AA <- (1 + 0.75/n + 2.25/n^2) * A
-#
-#     if (AA < 0.2) {
-#         pval <- 1 - exp(-13.436 + 101.14 * AA - 223.73 * AA^2)
-#     }
-#     else if (AA < 0.34) {
-#         pval <- 1 - exp(-8.318 + 42.796 * AA - 59.938 * AA^2)
-#     }
-#     else if (AA < 0.6) {
-#         pval <- exp(0.9177 - 4.279 * AA - 1.38 * AA^2)
-#     }
-#     else if (AA < 160) {
-#         pval <- exp(1.2937 - 5.709 * AA + 0.0186 * AA^2)
-#     }
-#     else {
-#       pval <-0
-#     }
-#       RVAL <- list(statistic = c(A = A), p.value = pval, method = "Anderson-Darling normality test",
-#         data.name = DNAME)
-#     class(RVAL) <- "htest"
-#     return(RVAL)
-# }
-
-
-##
-## andarl.R
-##
-##  Anderson-Darling test and null distribution
-##
-## $Revision: 1.6 $ $Date: 2014/06/24 02:12:20 $
-##
-
-AndersonDarlingTest <- function(x, null="punif", ..., nullname) {
-
-  .recogniseCdf <- function(s="punif") {
-    if(!is.character(s) || length(s) != 1) return(NULL)
-    if(nchar(s) <= 1 || substr(s,1,1) != "p") return(NULL)
-    root <- substr(s, 2, nchar(s))
-    a <- switch(root,
-                beta     = "beta",
-                binom    = "binomial",
-                birthday = "birthday coincidence",
-                cauchy   = "Cauchy",
-                chisq    = "chi-squared",
-                exp      = "exponential",
-                f        = "F",
-                gamma    = "Gamma",
-                geom     = "geometric",
-                hyper    = "hypergeometric",
-                lnorm    = "log-normal",
-                logis    = "logistic",
-                nbinom   = "negative binomial",
-                norm     = "Normal",
-                pois     = "Poisson",
-                t        = "Student's t",
-                tukey    = "Tukey (Studentized range)",
-                unif     = "uniform",
-                weibull  = "Weibull",
-                NULL)
-    if(!is.null(a))
-      return(paste(a, "distribution"))
-    b <- switch(root,
-                AD     = "Anderson-Darling",
-                CvM    = "Cramer-von Mises",
-                wilcox = "Wilcoxon Rank Sum",
-                NULL)
-    if(!is.null(b))
-      return(paste("null distribution of", b, "Test Statistic"))
-    return(NULL)
-  }
-
-
-  xname <- deparse(substitute(x))
-  nulltext <- deparse(substitute(null))
-  if(is.character(null)) nulltext <- null
-  if(missing(nullname) || is.null(nullname)) {
-    reco <- .recogniseCdf(nulltext)
-    nullname <- if(!is.null(reco)) reco else
-      paste("distribution", sQuote(nulltext))
-  }
-  stopifnot(is.numeric(x))
-  x <- as.vector(x)
-  n <- length(x)
-  F0 <- if(is.function(null)) null else
-    if(is.character(null)) get(null, mode="function") else
-      stop("Argument 'null' should be a function, or the name of a function")
-  U <- F0(x, ...)
-  if(any(U < 0 | U > 1))
-    stop("null distribution function returned values outside [0,1]")
-  U <- sort(U)
-  k <- seq_len(n)
-  ## call Marsaglia C code
-  z <- .C("ADtestR",
-          x = as.double(U),
-          n = as.integer(n),
-          adstat = as.double(numeric(1)),
-          pvalue = as.double(numeric(1))
-  )
-  STATISTIC <- z$adstat
-  names(STATISTIC) <- "An"
-  PVAL <- z$pvalue
-  METHOD <- c("Anderson-Darling test of goodness-of-fit",
-              paste("Null hypothesis:", nullname))
-  extras <- list(...)
-  parnames <- intersect(names(extras), names(formals(F0)))
-  if(length(parnames) > 0) {
-    pars <- extras[parnames]
-    pard <- character(0)
-    for(i in seq_along(parnames))
-      pard[i] <- paste(parnames[i], "=", paste(pars[[i]], collapse=" "))
-    pard <- paste("with",
-                  ngettext(length(pard), "parameter", "parameters"),
-                  "  ",
-                  paste(pard, collapse=", "))
-    METHOD <- c(METHOD, pard)
-  }
-  out <- list(statistic = STATISTIC,
-              p.value = PVAL,
-              method = METHOD,
-              data.name = xname)
-  class(out) <- "htest"
-  return(out)
-}
-
-.pAD <- function(q, n=Inf, lower.tail=TRUE, fast=TRUE) {
-  q <- as.numeric(q)
-  p <- rep(NA_real_, length(q))
-  if(any(ones <- is.infinite(q) & (q == Inf)))
-    p[ones] <- 1
-  if(any(zeroes <- (is.finite(q) & q <= 0) | (is.infinite(q) & (q == -Inf))))
-    p[zeroes] <- 0
-  ok <- is.finite(q) & (q > 0)
-  nok <- sum(ok)
-  if(nok > 0) {
-    if(is.finite(n)) {
-      z <- .C("ADprobN",
-              a       = as.double(q[ok]),
-              na      = as.integer(nok),
-              nsample = as.integer(n),
-              prob    = as.double(numeric(nok))
-      )
-      p[ok] <- z$prob
-    } else if(fast) {
-      ## fast version adinf()
-      z <- .C("ADprobApproxInf",
-              a    = as.double(q[ok]),
-              na   = as.integer(nok),
-              prob = as.double(numeric(nok))
-      )
-      p[ok] <- z$prob
-    } else {
-      ## slow, accurate version ADinf()
-      z <- .C("ADprobExactInf",
-              a    = as.double(q[ok]),
-              na   = as.integer(nok),
-              prob = as.double(numeric(nok))
-      )
-      p[ok] <- z$prob
-    }
-
-  }
-  if(!lower.tail)
-    p <- 1 - p
-  return(p)
-}
-
-
-# .qAD <- local({
-#
-#   f <- function(x, N, P, Fast) {
-#     .pAD(x, N, fast=Fast) - P
-#   }
-#
-#   .qAD <- function(p, n=Inf, lower.tail=TRUE, fast=TRUE) {
-#     ## quantiles of null distribution of Anderson-Darling test statistic
-#     stopifnot(all(p >= 0))
-#     stopifnot(all(p <= 1))
-#     if(!lower.tail) p <- 1-p
-#     ans <- rep(NA_real_, length(p))
-#     for(i in which(p >= 0 & p < 1))
-#       ans[i] <- uniroot(f, c(0, 1), N=n, P=p[i], Fast=fast, extendInt="up")$root
-#     return(ans)
-#   }
-#
-#   .qAD
-# })
-#
-#
-#
-
-
-
-
-# ***********************************
-# Tests aus library(tseries)
-#
-# JarqueBeraTest <- function(x, robust=TRUE, na.rm=FALSE) {
-#
-#   # Author: Adrian Trapletti
-#
-#   if(NCOL(x) > 1)
-#       stop("x is not a vector or univariate time series")
-#
-#   if(na.rm) x <- na.omit(x)
-#
-#   DNAME <- deparse(substitute(x))
-#   n <- length(x)
-#   m1 <- sum(x)/n
-#   m2 <- sum((x-m1)^2)/n
-#   m3 <- sum((x-m1)^3)/n
-#   m4 <- sum((x-m1)^4)/n
-#   b1 <- (m3/m2^(3/2))^2
-#   b2 <- (m4/m2^2)
-#   STATISTIC <- n * b1 / 6 + n * (b2 - 3)^2 / 24
-#   names(STATISTIC) <- "X-squared"
-#   PARAMETER <- 2
-#   names(PARAMETER) <- "df"
-#   PVAL <- 1 - pchisq(STATISTIC,df = 2)
-#   METHOD <- "Jarque Bera Test"
-#   structure(list(statistic = STATISTIC,
-#                  parameter = PARAMETER,
-#                  p.value = PVAL,
-#                  method = METHOD,
-#                  data.name = DNAME),
-#             class = "htest")
-# }
-#
-#
-
-
-
-JarqueBeraTest <- function (x, robust=TRUE, method=c("chisq", "mc"), N=0, na.rm=FALSE) {
-
-  method <- match.arg(method)
-
-  if (NCOL(x) > 1){ stop("x is not a vector or univariate time series") }
-  if(na.rm) x <- na.omit(x)
-
-  if ((method == "mc") & (N==0)) {
-    stop("number of Monte Carlo simulations N should be provided for the empirical critical values")
-  }
-
-  DNAME <- deparse(substitute(x))
-
-  ## Calculate the first 4 central moments
-  n <- length(x)
-  m1 <- sum(x)/n
-  m2 <- sum((x - m1)^2)/n
-  m3 <- sum((x - m1)^3)/n
-  m4 <- sum((x - m1)^4)/n
-
-  ## User can choose the Standard Jarque Bera Test or Robust Jarque Bera Test
-  ## Robust Jarque Bera Test is default
-  if(!robust) {
-    b1 <- (m3/m2^(3/2))^2;
-    b2 <- (m4/m2^2);
-    statistic <- n * b1/6 + n * (b2 - 3)^2/24
-
-  } else {
-    J <- sqrt(pi/2) * mean(abs(x-median(x)))
-    J2 <- J^2
-    b1 <- (m3/(J2)^(3/2))^2
-    b2 <- (m4/(J2)^2)
-    vk<-64/n
-    vs<-6/n
-    ek<-3
-    statistic <- b1/vs + (b2 - ek)^2/vk
-
-  }
-
-  if(method == "mc"){
-    if(!robust) {
-      ## computes empirical critical values for the JB statistic
-
-      jb<-double(N)
-
-      for (k in 1:N) {
-        e <- rnorm(length(x), mean=0, sd = sqrt(1))
-        m1 <- sum(e)/n
-        m2 <- sum((e - m1)^2)/n
-        m3 <- sum((e - m1)^3)/n
-        m4 <- sum((e - m1)^4)/n
-        b1 <- (m3/m2^(3/2))^2
-        b2 <- (m4/m2^2)
-        vk <- 24/n
-        vs <- 6/n
-        ek <- 3
-        jb[k] <- b1/vs + (b2 - ek)^2/vk
-      }
-
-      y <- sort(jb)
-
-      if (statistic >= max(y)) {
-        p.value <- 0
-
-      } else if (statistic<=min(y)) {
-        p.value <- 1
-
-      } else {
-        bn <- which(y==min(y[I(y>=statistic)]))
-        an <- which(y==max(y[I(y<statistic)]))
-        a <- max(y[I(y<statistic)])
-        b <- min(y[I(y>=statistic)])
-        pa <- (an - 1) / (N - 1)
-        pb <- (bn - 1) / (N - 1)
-        alpha <- (statistic-a)/(b-a)
-        p.value <- 1-alpha*pb-(1-alpha)*pa
-      }
-
-    } else {
-      ## computes empirical critical values for the RJB statistic
-      rjb <- double(N)
-
-      for (k in 1:N) {
-        e <- rnorm(length(x), mean=0, sd = sqrt(1))
-        J <- sqrt(pi/2)*mean(abs(e-median(e)))
-        J2 <- J^2
-        m1 <- sum(e)/n
-        m2 <- sum((e - m1)^2)/n
-        m3 <- sum((e - m1)^3)/n
-        m4 <- sum((e - m1)^4)/n
-        b1 <- (m3/(J2)^(3/2))^2
-        b2 <- (m4/(J2)^2)
-        vk <- 64/n
-        vs <- 6/n
-        ek <- 3
-        rjb[k] <- b1/vs + (b2 - ek)^2/vk
-      }
-
-      y <- sort(rjb)
-
-      if (statistic >= max(y)) {
-        p.value <- 0
-
-      } else if (statistic <= min(y)) {
-        p.value <- 1
-
-      } else {
-        bn <- which(y==min(y[I(y>=statistic)]))
-        an <- which(y==max(y[I(y<statistic)]))
-        a <- max(y[I(y<statistic)])
-        b <- min(y[I(y>=statistic)])
-        pa <- (an - 1) / (N - 1)
-        pb <- (bn - 1) / (N - 1)
-        alpha <- (statistic-a)/(b-a)
-        p.value <- 1-alpha*pb-(1-alpha)*pa
-      }
-    }
-
-  } else {
-    p.value <- 1 - pchisq(statistic, df = 2)
-  }
-
-  METHOD <- ifelse(!robust, "Jarque Bera Test", "Robust Jarque Bera Test")
-  STATISTIC=statistic
-  names(STATISTIC) <- "X-squared"
-  PARAMETER <- 2
-  names(PARAMETER) <- "df"
-
-  structure(list(statistic = STATISTIC, parameter = PARAMETER,
-            p.value = p.value, method = METHOD, data.name = DNAME),
-            class = "htest")
-
-}
-
-
-
-
-# PageTest <- function(x) {
-#
-#   DNAME <- deparse(substitute(x))
-#   x <- x[complete.cases(x),]
-#
-#   rnksum <- apply(apply(x, 1, rank),1, sum)
-#   L <- sum(seq_along(rnksum) * rnksum)
-#   nc <- ncol(x)
-#   nr <- nrow(x)
-#   mu <- nr * nc * (nc+1)^2 / 4
-#   sig <- nr * nc^2 * (nc+1)^2*(nc-1) / 144
-#   z <- (L - mu)/sqrt(sig)
-#
-#   pval <- pnorm(z, lower.tail = FALSE)
-#   RVAL <- list(statistic = c(L = L), p.value = pval, method = "Page test for ordered alternatives",
-#       data.name = DNAME)
-#   class(RVAL) <- "htest"
-#   return(RVAL)
-#
-# }
-
-
-
-# PageTest<-function(x) {
-
-# ### Alternative: package coin
-# ### independence_test(scores ~ product | sitting, data = egg_data,
-# ### scores = list(product = 1:10),
-# ### ytrafo = yt)
-
-# ### http://imaging.mrc-cbu.cam.ac.uk/statswiki/FAQ/pagesL
-
-
-  # if(missing(x))
-    # stop("Usage: PageTest(x)\n\twhere x is a matrix of ranks")
-
-  # dname <- deparse(substitute(x))
-
-  # dimx <- dim(x)
-
-  # ### This one only requires two dimensions
-  # page.crit3 <- array(
-    # c(28,41,54,66,79,91,104,116,128,141,153,165,178,190,202,215,227,239,251,
-    # NA,42,55,68,81,93,106,119,131,144,156,169,181,194,206,218,231,243,256,
-    # NA,NA,56,70,83,96,109,121,134,147,160,172,185,197,210,223,235,248,260),
-    # c(19,3)
-  # )
-
-  # ### the rest require three
-  # page.crit4plus <- array(
-    # c(58,84,111,137,163,189,214,240,266,292,317,
-    # 103,150,197,244,291,338,384,431,477,523,570,
-    # 166,244,321,397,474,550,625,701,777,852,928,
-    # 252,370,487,603,719,835,950,1065,1180,1295,1410,
-    # 362,532,701,869,1037,1204,1371,1537,1703,1868,2035,
-    # 500,736,971,1204,1436,1668,1900,2131,2361,2592,2822,
-    # 670,987,1301,1614,1927,2238,2549,2859,3169,3478,3788,
-    # 60,87,114,141,167,193,220,246,272,298,324,
-    # 106,155,204,251,299,346,393,441,487,534,581,
-    # 173,252,331,409,486,563,640,717,793,869,946,
-    # 261,382,501,620,737,855,972,1088,1205,1321,1437,
-    # 376,549,722,893,1063,1232,1401,1569,1736,1905,2072,
-    # 520,761,999,1236,1472,1706,1940,2174,2407,2639,2872,
-    # 696,1019,1339,1656,1972,2288,2602,2915,3228,3541,3852,
-    # NA,89,117,145,172,198,225,252,278,305,331,
-    # 109,160,210,259,307,355,403,451,499,546,593,
-    # 178,260,341,420,499,577,655,733,811,888,965,
-    # 269,394,516,637,757,876,994,1113,1230,1348,1465,
-    # 388,567,743,917,1090,1262,1433,1603,1773,1943,2112,
-    # 544,790,1032,1273,1512,1750,1987,2223,2459,2694,2929,
-    # 726,1056,1382,1704,2025,2344,2662,2980,3296,3612,3927),
-    # c(11,7,3)
-    # )
-
-  # mean.ranks <- apply(x, 2, mean)
-  # Lval <- NA
-  # p.table <- NA
-  # L <- sum(apply(x, 2, sum) * 1:dimx[2])
-
-  # if((dimx[1] > 1 && dimx[1] < 13) && (dimx[2] > 3 && dimx[2] < 11))
-    # Lval <- page.crit4plus[dimx[1]-1,dimx[2]-3,]
-
-  # if((dimx[1] > 1 && dimx[1] < 21) && dimx[2] == 3)
-    # Lval <- page.crit3[dimx[1]-1,]
-
-  # p.table <-
-    # ifelse(L > Lval[1],ifelse(L > Lval[2],ifelse(L > Lval[3],"<=.001","<=.01"),"<=.05"),"NS")
-  # #### print(Lval)
-
-  # ### if there was no tabled value, calculate the normal approximation
-  # if(length(Lval)<2) {
-    # munum <- dimx[1]*dimx[2]*(dimx[2]+1)*(dimx[2]+1)
-    # muL <- munum/4
-    # cat("muL =",muL,"\n")
-    # sigmaL <- (dimx[1]*dimx[2]*dimx[2]*(dimx[2]*dimx[2]-1)*(dimx[2]*dimx[2]-1))/
-      # (144*(dimx[2]-1))
-    # cat("sigmaL =",sigmaL,"\n")
-    # zL <- ((12*L-3*munum)/(dimx[2]*(dimx[2]-1)))*sqrt((dimx[2]-1)/dimx[1])
-    # pZ <- pnorm(zL,lower.tail=FALSE)
-  # } else {
-    # zL <- NA
-    # pZ <- NA
-  # }
-
-  # #### ptt <- list(ranks=x, mean.ranks=mean.ranks, L=L, p.table=p.table, Z=zL, pZ=pZ)
-  # #### class(ptt) <- "PageTest"
-  # #### return(ptt)
-
-  # if(is.na(p.table)) pval <- pZ else pval <- p.table
-
-  # RVAL <- list(statistic = c(L = L), p.value = pval, method = "Page test for ordered alternatives",
-      # data.name = dname)
-  # class(RVAL) <- "htest"
-  # return(RVAL)
-
-# }
-
-# print.PageTest<-function(x,...) {
-
-  # cat("\nPage test for ordered alternatives\n")
-  # cat("L =",x$L)
-
-  # if(is.na(x$p.table)) {
-  # plabel<-paste("Z =",x$Z,", p =",x$pZ,sep="",collapse="")
-  # cat(plabel,x$p.chisq,"\n\n")
-  # }
-  # else cat("  p(table) ",x$p.table,"\n\n")
-# }
-
-
-PageTest <- function (y, ...) UseMethod("PageTest")
-
-
-PageTest.default <- function (y, groups, blocks, ...) {
-
-  p.page <- function(k, n, L){
-
-    qvec <- .PageDF[k][[1]]
-    f1 <- qvec
-
-    for (i in 1:(n-1)) {
-      erg <- convolve(f1, qvec, conj = TRUE, type = "open")
-      f1 <- erg
-    }
-    p <- cumsum(erg)[n * k * (k+1) * (2*k+1)/6 + 1 - L]
-    return(p)
-
-  }
-
-
-  DNAME <- deparse(substitute(y))
-  if (is.matrix(y)) {
-    groups <- factor(c(col(y)))
-    blocks <- factor(c(row(y)))
-  }
-  else {
-    if (any(is.na(groups)) || any(is.na(blocks)))
-      stop("NA's are not allowed in 'groups' or 'blocks'")
-    if (any(diff(c(length(y), length(groups), length(blocks))) !=
-              0L))
-      stop("'y', 'groups' and 'blocks' must have the same length")
-    DNAME <- paste(DNAME, ", ", deparse(substitute(groups)),
-                   " and ", deparse(substitute(blocks)), sep = "")
-    if (any(table(groups, blocks) != 1))
-      stop("not an unreplicated complete block design")
-    groups <- factor(groups)
-    blocks <- factor(blocks)
-    o <- order(groups, blocks)
-    y <- y[o]
-    groups <- groups[o]
-    blocks <- blocks[o]
-  }
-  k <- nlevels(groups)
-  y <- matrix(unlist(split(y, blocks)), ncol = k, byrow = TRUE)
-  y <- y[complete.cases(y), ]
-  n <- nrow(y)
-
-
-  rnksum <- apply(apply(y, 1, rank), 1, sum)
-  L <- sum(seq_along(rnksum) * rnksum)
-  nc <- ncol(y)
-  nr <- nrow(y)
-
-  if(nc < 16){
-    pval <- p.page(k=nc, n=nr, L=L)
-  } else {
-    mu <- nr * nc * (nc + 1)^2/4
-    # sig <- nr * nc^2 * (nc + 1)^2 * (nc - 1)/144
-    sigma <- nr * nc^2 * (nc+1) * (nc^2-1) / 144
-    z <- (L - mu)/sqrt(sigma)
-    pval <- pnorm(z, lower.tail = FALSE)
-
-  }
-
-  structure(list(statistic = c(L = L), p.value = pval, method = "Page test for ordered alternatives",
-                 data.name = DNAME),
-          class = "htest")
-}
-
-
-PageTest.formula <- function (formula, data, subset, na.action, ...) {
-
-  if (missing(formula))
-    stop("formula missing")
-  if ((length(formula) != 3L) || (length(formula[[3L]]) !=
-                                    3L) || (formula[[3L]][[1L]] != as.name("|")) || (length(formula[[3L]][[2L]]) !=
-                                                                                       1L) || (length(formula[[3L]][[3L]]) != 1L))
-    stop("incorrect specification for 'formula'")
-  formula[[3L]][[1L]] <- as.name("+")
-  m <- match.call(expand.dots = FALSE)
-  m$formula <- formula
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- as.name("model.frame")
-  mf <- eval(m, parent.frame())
-  DNAME <- paste(names(mf), collapse = " and ")
-  names(mf) <- NULL
-  y <- DoCall("PageTest", as.list(mf))
-  y$data.name <- DNAME
-  y
-
-}
-
-
-
-CochranQTest <- function(y, ...){
-
-  # Cochran's Q Test is analogue to the friedman.test with 0,1 coded response
-
-  res <- friedman.test(y, ...)
-  attr(res$statistic, "names") <- "Q"
-  res$method <- "Cochran's Q test"
-  return(res)
-}
-
-CochranQTest.default <- function(y, groups, blocks, ...){
-  res <- friedman.test(y, groups, blocks, ...)
-  attr(res$statistic, "names") <- "Q"
-  res$method <- "Cochran's Q test"
-  return(res)
-}
-
-CochranQTest.formula <- function(formula, data, subset, na.action, ...){
-  res <- friedman.test(formula, data, subset, na.action, ...)
-  attr(res$statistic, "names") <- "Q"
-  res$method <- "Cochran's Q test"
-  return(res)
-}
-
-
-MHChisqTest <- function(x, srow=1:nrow(x), scol=1:ncol(x)){
-
-  # calculates Mantel-Haenszel Chisquare test
-
-  # check for rxc 2-dim matrix
-  p <- (d <- dim(x))[1L]
-  if(!is.numeric(x) || length(d) != 2L)
-    stop("'x' is not a rxc numeric matrix")
-
-  DNAME <- deparse(substitute(x))
-
-  STATISTIC <- (sum(x) - 1) * corr(d=CombPairs(srow, scol), as.vector(x))^2
-  PARAMETER <- 1
-  names(STATISTIC) <- "X-squared"
-  names(PARAMETER) <- "df"
-  PVAL <- pchisq(STATISTIC, PARAMETER, lower.tail = FALSE)
-  METHOD <- "Mantel-Haenszel Chi-Square"
-
-  structure(list(statistic = STATISTIC, parameter = PARAMETER,
-                 p.value = PVAL, method = METHOD, data.name = DNAME), class = "htest")
-}
-
-
-
-GTest <- function(x, y = NULL, correct=c("none", "williams", "yates"), p = rep(1/length(x), length(x))) {
-
-
-  # Log-likelihood tests of independence & goodness of fit
-  # Does Williams' and Yates' correction
-  # does Monte Carlo simulation of p-values, via gtestsim.c
-  #
-  # G & q calculation from Sokal & Rohlf (1995) Biometry 3rd ed.
-  # TOI Yates' correction taken from Mike Camann's 2x2 G-test fn.
-  # GOF Yates' correction as described in Zar (2000)
-  # more stuff taken from ctest's chisq.test()
-  #
-  # ToDo:
-  # 1) Beautify
-  # 2) Add warnings for violations
-  # 3) Make appropriate corrections happen by default
-  #
-  # V3.3 Pete Hurd Sept 29 2001. phurd@ualberta.ca
-
-
-  DNAME <- deparse(substitute(x))
-  if (is.data.frame(x)) x <- as.matrix(x)
-  if (is.matrix(x)) {
-    if (min(dim(x)) == 1)
-      x <- as.vector(x)
-  }
-  if (!is.matrix(x) && !is.null(y)) {
-    if (length(x) != length(y))
-      stop("x and y must have the same length")
-    DNAME <- paste(DNAME, "and", deparse(substitute(y)))
-    OK <- complete.cases(x, y)
-    x <- as.factor(x[OK])
-    y <- as.factor(y[OK])
-    if ((nlevels(x) < 2) || (nlevels(y) < 2))
-      stop("x and y must have at least 2 levels")
-    x <- table(x, y)
-  }
-  if (any(x < 0) || any(is.na(x)))
-    stop("all entries of x must be nonnegative and finite")
-  if ((n <- sum(x)) == 0)
-    stop("at least one entry of x must be positive")
-
-  correct <- match.arg(correct)
-
-  #If x is matrix, do test of independence
-  if (is.matrix(x)) {
-    #Test of Independence
-    nrows<-nrow(x)
-    ncols<-ncol(x)
-    if (correct=="yates"){ # Do Yates' correction?
-      if(dim(x)[1]!=2 || dim(x)[2]!=2) # check for 2x2 matrix
-        stop("Yates' correction requires a 2 x 2 matrix")
-      if((x[1,1]*x[2,2])-(x[1,2]*x[2,1]) > 0)
-      {
-#         x[1,1] <- x[1,1] - 0.5
-#         x[2,2] <- x[2,2] - 0.5
-#         x[1,2] <- x[1,2] + 0.5
-#         x[2,1] <- x[2,1] + 0.5
-#   this can be done quicker: 14.5.2015 AS
-        x <- x + 0.5
-        diag(x) <- diag(x) - 1
-
-      } else {
-
-        x <- x - 0.5
-        diag(x) <- diag(x) + 1
-
-#         x[1,1] <- x[1,1] + 0.5
-#         x[2,2] <- x[2,2] + 0.5
-#         x[1,2] <- x[1,2] - 0.5
-#         x[2,1] <- x[2,1] - 0.5
-      }
-    }
-
-    sr <- apply(x,1,sum)
-    sc <- apply(x,2,sum)
-    E <- outer(sr,sc, "*")/n
-    # are we doing a monte-carlo?
-    # no monte carlo GOF?
-#     if (simulate.p.value){
-#       METHOD <- paste("Log likelihood ratio (G-test) test of independence\n\t with simulated p-value based on", B, "replicates")
-#       tmp <- .C("gtestsim", as.integer(nrows), as.integer(ncols),
-#                 as.integer(sr), as.integer(sc), as.integer(n), as.integer(B),
-#                 as.double(E), integer(nrows * ncols), double(n+1),
-#                 integer(ncols), results=double(B), PACKAGE= "ctest")
-#       g <- 0
-#       for (i in 1:nrows){
-#         for (j in 1:ncols){
-#           if (x[i,j] != 0) g <- g + x[i,j] * log(x[i,j]/E[i,j])
-#         }
-#       }
-#       STATISTIC <- G <- 2 * g
-#       PARAMETER <- NA
-#       PVAL <- sum(tmp$results >= STATISTIC)/B
-#     }
-#     else {
-      # no monte-carlo
-      # calculate G
-      g <- 0
-      for (i in 1:nrows){
-        for (j in 1:ncols){
-          if (x[i,j] != 0) g <- g + x[i,j] * log(x[i,j]/E[i,j])
-        }
-# }
-      q <- 1
-      if (correct=="williams"){ # Do Williams' correction
-        row.tot <- col.tot <- 0
-        for (i in 1:nrows){ row.tot <- row.tot + 1/(sum(x[i,])) }
-        for (j in 1:ncols){ col.tot <- col.tot + 1/(sum(x[,j])) }
-        q <- 1+ ((n*row.tot-1)*(n*col.tot-1))/(6*n*(ncols-1)*(nrows-1))
-      }
-      STATISTIC <- G <- 2 * g / q
-      PARAMETER <- (nrow(x)-1)*(ncol(x)-1)
-      PVAL <- 1-pchisq(STATISTIC,df=PARAMETER)
-      if(correct=="none")
-        METHOD <- "Log likelihood ratio (G-test) test of independence without correction"
-      if(correct=="williams")
-        METHOD <- "Log likelihood ratio (G-test) test of independence with Williams' correction"
-      if(correct=="yates")
-        METHOD <- "Log likelihood ratio (G-test) test of independence with Yates' correction"
-    }
-  }
-  else {
-    # x is not a matrix, so we do Goodness of Fit
-    METHOD <- "Log likelihood ratio (G-test) goodness of fit test"
-    if (length(x) == 1)
-      stop("x must at least have 2 elements")
-    if (length(x) != length(p))
-      stop("x and p must have the same number of elements")
-    E <- n * p
-
-    if (correct=="yates"){ # Do Yates' correction
-      if(length(x)!=2)
-        stop("Yates' correction requires 2 data values")
-      if ( (x[1]-E[1]) > 0.25) {
-        x[1] <- x[1]-0.5
-        x[2] <- x[2]+0.5
-      }
-      else if ( (E[1]-x[1]) > 0.25){
-        x[1] <- x[1]+0.5
-        x[2] <- x[2]-0.5
-      }
-    }
-    names(E) <- names(x)
-    g <- 0
-    for (i in 1:length(x)){
-      if (x[i] != 0) g <- g + x[i] * log(x[i]/E[i])
-    }
-    q <- 1
-    if (correct=="williams"){ # Do Williams' correction
-      q <- 1+(length(x)+1)/(6*n)
-    }
-    STATISTIC <- G <- 2*g/q
-    PARAMETER <- length(x) - 1
-    PVAL <- pchisq(STATISTIC, PARAMETER, lower.tail = FALSE)
-  }
-  names(STATISTIC) <- "G"
-  names(PARAMETER) <- "X-squared df"
-  names(PVAL) <- "p.value"
-  structure(list(statistic=STATISTIC,parameter=PARAMETER,p.value=PVAL,
-                 method=METHOD,data.name=DNAME, observed=x, expected=E),
-            class="htest")
-}
-
-
-
-
-
-
-StuartMaxwellTest <- function (x, y = NULL) {
-
-  # stuart.maxwell.mh computes the marginal homogeneity test for
-  # a CxC matrix of assignments of objects to C categories or an
-  # nx2 or 2xn matrix of category scores for n data objects by two
-  # raters. The statistic is distributed as Chi-square with C-1
-  # degrees of freedom.
-
-  # The core code is form Jim Lemon, package concord
-  # the intro is taken from mcnemar.test (core)
-
-  if (is.matrix(x)) {
-    r <- nrow(x)
-    if ((r < 2) || (ncol(x) != r))
-      stop("'x' must be square with at least two rows and columns")
-    if (any(x < 0) || anyNA(x))
-      stop("all entries of 'x' must be nonnegative and finite")
-    DNAME <- deparse(substitute(x))
-  }
-  else {
-    if (is.null(y))
-      stop("if 'x' is not a matrix, 'y' must be given")
-    if (length(x) != length(y))
-      stop("'x' and 'y' must have the same length")
-    DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-    OK <- complete.cases(x, y)
-    x <- as.factor(x[OK])
-    y <- as.factor(y[OK])
-    r <- nlevels(x)
-    if ((r < 2) || (nlevels(y) != r))
-      stop("'x' and 'y' must have the same number of levels (minimum 2)")
-    x <- table(x, y)
-  }
-
-  # get the marginals
-  rowsums <- rowSums(x)
-  colsums <- colSums(x)
-  equalsums <- rowsums == colsums
-
-  if(any(equalsums)) {
-    # dump any categories with perfect agreement
-    x <- x[!equalsums, !equalsums]
-    # bail out if too many categories have disappeared
-    if(dim(x)[1] < 2) stop("Too many equal marginals, cannot compute")
-    # get new marginals
-    rowsums <- rowSums(x)
-    colsums <- colSums(x)
-  }
-
-  # use K-1 marginals
-  Kminus1 <- length(rowsums) - 1
-  smd <- (rowsums-colsums)[1:Kminus1]
-  smS <- matrix(0, nrow=Kminus1, ncol=Kminus1)
-  for(i in 1:Kminus1) {
-    for(j in 1:Kminus1) {
-      if(i == j) smS[i,j] <- rowsums[i] + colsums[j] - 2 * x[i,j]
-      else smS[i,j] <- -(x[i,j] + x[j,i])
-    }
-  }
-
-  STATISTIC <- t(smd) %*% solve(smS) %*% smd
-
-  PARAMETER <- r - 1
-  METHOD <- "Stuart-Maxwell test"
-
-  PVAL <- pchisq(STATISTIC, PARAMETER, lower.tail = FALSE)
-  names(STATISTIC) <- "chi-squared"
-  names(PARAMETER) <- "df"
-  RVAL <- list(statistic = STATISTIC, parameter = PARAMETER,
-               p.value = PVAL, method = METHOD, data.name = DNAME)
-  class(RVAL) <- "htest"
-  return(RVAL)
-
-}
-
-
-
-
-BreslowDayTest <- function(x, OR = NA, correct = FALSE) {
-
-  # Function to perform the Breslow and Day (1980) test including
-  # the corrected test by Tarone
-  # Uses the equations in Lachin (2000) p. 124-125.
-  #
-  # Programmed by Michael Hoehle <http://www-m4.ma.tum.de/pers/hoehle>
-  # Note that the results of the Tarone corrected test do
-  # not correspond to the numbers in the Lachin book...
-  #
-  # Params:
-  #  x - a 2x2xK contingency table
-  #  correct - if TRUE Tarones correction is returned
-  #
-  # Returns:
-  #  a vector with three values
-  #   statistic - Breslow and Day test statistic
-  #   pval - p value evtl. based on the Tarone test statistic
-  #               using a \chi^2(K-1) distribution
-  #
-
-
-  if(is.na(OR)) {
-    #Find the common OR based on Mantel-Haenszel
-    or.hat.mh <- mantelhaen.test(x)$estimate
-  } else {
-    or.hat.mh <- OR
-  }
-
-  #Number of strata
-  K <- dim(x)[3]
-  #Value of the Statistic
-  X2.HBD <- 0
-  #Value of aj, tildeaj and Var.aj
-  a <- tildea <- Var.a <- numeric(K)
-
-  for (j in 1:K) {
-    #Find marginals of table j
-    mj <- apply(x[,,j], MARGIN=1, sum)
-    nj <- apply(x[,,j], MARGIN=2, sum)
-
-    #Solve for tilde(a)_j
-    coef <- c(-mj[1]*nj[1] * or.hat.mh, nj[2]-mj[1]+or.hat.mh*(nj[1]+mj[1]),
-              1-or.hat.mh)
-    sols <- Re(polyroot(coef))
-    #Take the root, which fulfills 0 < tilde(a)_j <= min(n1_j, m1_j)
-    tildeaj <- sols[(0 < sols) &  (sols <= min(nj[1],mj[1]))]
-    #Observed value
-    aj <- x[1,1,j]
-
-    #Determine other expected cell entries
-    tildebj <- mj[1] - tildeaj
-    tildecj <- nj[1] - tildeaj
-    tildedj <- mj[2] - tildecj
-
-    #Compute \hat{\Var}(a_j | \widehat{\OR}_MH)
-    Var.aj <- (1/tildeaj + 1/tildebj + 1/tildecj + 1/tildedj)^(-1)
-
-    #Compute contribution
-    X2.HBD <- X2.HBD + as.numeric((aj - tildeaj)^2 / Var.aj)
-
-    #Assign found value for later computations
-    a[j] <- aj ;  tildea[j] <- tildeaj ; Var.a[j] <- Var.aj
-  }
-
-  # Compute Tarone corrected test
-  X2.HBDT <-as.numeric( X2.HBD -  (sum(a) - sum(tildea))^2/sum(Var.aj) )
-
-  DNAME <- deparse(substitute(x))
-
-  STATISTIC <- if(correct) X2.HBDT else X2.HBD
-  PARAMETER <- K - 1
-  # Compute p-value based on the Tarone corrected test
-  PVAL <- 1 - pchisq(STATISTIC, PARAMETER)
-  METHOD <- if(correct) "Breslow-Day Test on Homogeneity of Odds Ratios (with Tarone correction)" else
-    "Breslow-Day test on Homogeneity of Odds Ratios"
-  names(STATISTIC) <- "X-squared"
-  names(PARAMETER) <- "df"
-  structure(list(statistic = STATISTIC, parameter = PARAMETER,
-                 p.value = PVAL, method = METHOD, data.name = DNAME
-  ), class = "htest")
-
-}
-
-
-# the VCD package (available via CRAN) has a function called woolf_test()
-
-WoolfTest <- function(x) {
-
-  DNAME <- deparse(substitute(x))
-  if (any(x == 0))
-    x <- x + 1 / 2
-  k <- dim(x)[3]
-  or <- apply(x, 3, function(x) (x[1,1] * x[2,2]) / (x[1,2] * x[2,1]))
-  w <-  apply(x, 3, function(x) 1 / sum(1 / x))
-  o <- log(or)
-  e <- weighted.mean(log(or), w)
-  STATISTIC <- sum(w * (o - e)^2)
-  PARAMETER <- k - 1
-  PVAL <- 1 - pchisq(STATISTIC, PARAMETER)
-  METHOD <- "Woolf Test on Homogeneity of Odds Ratios (no 3-Way assoc.)"
-  names(STATISTIC) <- "X-squared"
-  names(PARAMETER) <- "df"
-  structure(list(statistic = STATISTIC, parameter = PARAMETER,
-                 p.value = PVAL, method = METHOD, data.name = DNAME, observed = o,
-                 expected = e), class = "htest")
-
-}
-
-
-LehmacherTest <- function(x, y = NULL) {
-
-  if (is.matrix(x)) {
-    r <- nrow(x)
-    if ((r < 2) || (ncol(x) != r))
-      stop("'x' must be square with at least two rows and columns")
-    if (any(x < 0) || anyNA(x))
-      stop("all entries of 'x' must be nonnegative and finite")
-    DNAME <- deparse(substitute(x))
-  }
-  else {
-    if (is.null(y))
-      stop("if 'x' is not a matrix, 'y' must be given")
-    if (length(x) != length(y))
-      stop("'x' and 'y' must have the same length")
-    DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-    OK <- complete.cases(x, y)
-    x <- as.factor(x[OK])
-    y <- as.factor(y[OK])
-    r <- nlevels(x)
-    if ((r < 2) || (nlevels(y) != r))
-      stop("'x' and 'y' must have the same number of levels (minimum 2)")
-    x <- table(x, y)
-  }
-
-  rsum <- rowSums(x)
-  csum <- colSums(x)
-
-  STATISTIC <- (rsum-csum)^2 / (rsum + csum - 2*diag(x))
-  PARAMETER <- 1
-  PVAL <- 1 - pchisq(STATISTIC, PARAMETER)
-  METHOD <- "Lehmacher-Test on Marginal Homogeneity"
-  names(STATISTIC) <- "X-squared"
-  names(PARAMETER) <- "df"
-  structure(list(statistic = STATISTIC, parameter = PARAMETER,
-                 p.value = PVAL, p.value.corr = p.adjust(PVAL, "hochberg"),
-                 method = METHOD, data.name = DNAME),
-            class = "mtest")
-
-}
-
-
-print.mtest <- function (x, digits = 4L, ...) {
-
-  cat("\n")
-  cat(strwrap(x$method, prefix = "\t"), sep = "\n")
-  cat("\n")
-  cat("data:  ", x$data.name, "\n", sep = "")
-
-  out <- character()
-  out <- cbind(format(round(x$statistic, 4)), format.pval(x$p.value, digits = digits),
-               format.pval(x$p.value.corr, digits = digits),
-               symnum(x$p.value.corr, corr = FALSE, na = FALSE,
-                      cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
-                      symbols = c("***", "**", "*", ".", " ")))
-  colnames(out) <- c("X-squared", "pval", "pval adj", " ")
-  rownames(out) <- if(is.null(rownames(x))) 1:length(x$statistic) else rownames(x)
-  print.default(out, digits = 3, quote = FALSE, right = TRUE)
-
-  cat("\n")
-  cat("---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n")
-  invisible(x)
-}
-
-
-
-
-CochranArmitageTest <- function(x, alternative = c("two.sided","increasing","decreasing")) {
-
-  # based on:
-  # http://tolstoy.newcastle.edu.au/R/help/05/07/9442.html
-  DNAME <- deparse(substitute(x))
-
-  if (!(any(dim(x)==2)))
-    stop("Cochran-Armitage test for trend must be used with rx2-table", call.=FALSE)
-
-  if (dim(x)[2]!=2) x <- t(x)
-
-  nidot <- apply(x, 1, sum)
-  n <- sum(nidot)
-
-  # Ri <- scores(x, 1, "table")
-  Ri <- 1:dim(x)[1]
-  Rbar <- sum(nidot*Ri)/n
-
-  s2 <- sum(nidot*(Ri-Rbar)^2)
-  pdot1 <- sum(x[,1])/n
-  z <- sum(x[,1]*(Ri-Rbar))/sqrt(pdot1*(1-pdot1)*s2)
-  STATISTIC <- z
-
-  alternative <- match.arg(alternative)
-
-  PVAL <- switch(alternative,
-            two.sided = 2*pnorm(abs(z), lower.tail=FALSE),
-            increasing = pnorm(z),
-            decreasing = pnorm(z, lower.tail=FALSE) )
-
-  PARAMETER <- dim(x)[1]
-  names(STATISTIC) <- "Z"
-  names(PARAMETER) <- "dim"
-
-  METHOD <- "Cochran-Armitage test for trend"
-  structure(list(statistic = STATISTIC, parameter = PARAMETER, alternative = alternative,
-                 p.value = PVAL, method = METHOD, data.name = DNAME
-                 ), class = "htest")
-
-}
-
-
-
-BarnardTest <- function (x, y = NULL, dp = 0.001, pooled = TRUE, alternative = "two.sided") {
-
-  if (is.matrix(x)) {
-    r <- nrow(x)
-    if ((r < 2) || (ncol(x) != r))
-      stop("'x' must be square with at least two rows and columns")
-    if (any(x < 0) || anyNA(x))
-      stop("all entries of 'x' must be nonnegative and finite")
-    DNAME <- deparse(substitute(x))
-  } else {
-    if (is.null(y))
-      stop("if 'x' is not a matrix, 'y' must be given")
-    if (length(x) != length(y))
-      stop("'x' and 'y' must have the same length")
-    DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-    OK <- complete.cases(x, y)
-    x <- as.factor(x[OK])
-    y <- as.factor(y[OK])
-    r <- nlevels(x)
-    if ((r < 2) || (nlevels(y) != r))
-      stop("'x' and 'y' must have the same number of levels (minimum 2)")
-    x <- table(x, y)
-  }
-
-  nr <- nrow(x)
-  nc <- ncol(x)
-  if ((nr == 2) && (nc == 2)) {
-    alternative <- char.expand(alternative, c("two.sided", "less", "greater"))
-    if (length(alternative) > 1L || is.na(alternative))
-      stop("alternative must be \"two.sided\", \"less\" or \"greater\"")
-  }
-
-  method <- c("Wald", "Score")[1 + pooled]
-  METHOD <- gettextf("Barnards Unconditional 2x2-test", method)
-
-  vec.size <- 1.0 + 1.0 / dp
-  mat.size <- 4.0 * prod(rowSums(x) + 1) # (n1 + n3 + 1) * (n2 + n4 + 1)
-
-  meth <- paste(method, "S", sep="")
-
-  ret1 <- .C( meth,
-              as.integer(x[1]), as.integer(x[2]), as.integer(x[3]), as.integer(x[4]),
-              as.numeric(dp),
-              mat.size = as.integer(0),
-              statistic.table = as.double(vector("double", mat.size)),
-              statistic = as.double(0.0))
-
-  xr <- seq(1, ret1$mat.size, 4) + 2
-
-  ret1$statistic.table[xr + 1][
-    (ret1$statistic <= 0 & ret1$statistic.table[xr] <= ret1$statistic) |
-      (ret1$statistic >= 0 & ret1$statistic.table[xr] >= ret1$statistic)] <- 1
-
-  ret1$statistic.table[xr + 1][
-    (ret1$statistic <= 0 & ret1$statistic.table[xr] >= -ret1$statistic) |
-      (ret1$statistic >= 0 & ret1$statistic.table[xr] <= -ret1$statistic)] <- 2
-
-  ret2 <- .C("Barnard",
-             as.integer(x[1]), as.integer(x[2]), as.integer(x[3]), as.integer(x[4]),
-             as.numeric(dp),
-             as.integer(ret1$mat.size),
-             nuisance.vector.x = as.double(vector("double",vec.size)),
-             nuisance.vector.y0 = as.double(vector("double",vec.size)),
-             nuisance.vector.y1 = as.double(vector("double",vec.size)),
-             statistic.table = as.double(ret1$statistic.table))
-
-  np0 <- which.max(ret2$nuisance.vector.y0)
-  np1 <- which.max(ret2$nuisance.vector.y1)
-
-  nuisance.matrix <- matrix(cbind(ret2$nuisance.vector.x, ret2$nuisance.vector.y0, ret2$nuisance.vector.y1), ncol=3)
-  statistic.table <- matrix(ret1$statistic.table, ncol=4, byrow=TRUE, dimnames=list(c(), c("n1", "n2", "statistic", "include.in.p.value")))
-
-
-  STATISTIC <- ret1$statistic
-  if(alternative == "two.sided"){
-    PVAL <- ret2$nuisance.vector.y1[np1]
-    ESTIMATE <- c(`Nuisance parameter` = ret2$nuisance.vector.x[np1])
-  } else {
-    PVAL <- ret2$nuisance.vector.y0[np0]
-    ESTIMATE <- c(`Nuisance parameter` = ret2$nuisance.vector.x[np0])
-  }
-
-  names(STATISTIC) <- gettextf("%s statistic", method)
-  RVAL <- list(statistic = STATISTIC, alternative = alternative, estimate = ESTIMATE,
-               p.value = PVAL, method = METHOD, data.name = DNAME,
-               statistic.table = statistic.table, nuisance.matrix = nuisance.matrix)
-
-  class(RVAL) <- "htest"
-  return(RVAL)
-}
-
-
-
-
-EtaSq <- function (x, type = 2, anova = FALSE) {
-  UseMethod("EtaSq")
-}
-
-EtaSq.lm <- function (x, type = 2, anova = FALSE) {
-
-  # file:    etaSquared.R
-  # author:  Dan Navarro
-  # contact: daniel.navarro@adelaide.edu.au
-  # changed: 13 November 2013
-  # modified by Daniel Wollschlaeger 17.9.2014
-
-  # etaSquared() calculates eta-squared and partial eta-squared for linear models
-  # (usually ANOVAs). It takes an lm object as input and computes the effect size
-  # for all terms in the model. By default uses Type II sums of squares to calculate
-  # the effect size, but Types I and III are also possible. By default the output
-  # only displays the effect size, but if requested it will also print out the full
-  # ANOVA table.
-
-  if (!is(anova, "logical") | length(anova) != 1) {
-    stop("\"anova\" must be a single logical value")
-  }
-  if (!is(type, "numeric") | length(type) != 1) {
-    stop("type must be equal to 1, 2 or 3")
-  }
-  if (type == 1) {
-    ss <- anova(x)[, "Sum Sq", drop = FALSE]
-    ss.res <- ss[dim(ss)[1], ]
-    ss.tot <- sum(ss)
-    ss <- ss[-dim(ss)[1], , drop = FALSE]
-    ss <- as.matrix(ss)
-  }
-  else {
-    if (type == 2) {
-      ss.tot <- sum((x$model[, 1] - mean(x$model[, 1]))^2)
-      ss.res <- sum((x$residuals)^2)
-      terms <- attr(x$terms, "factors")[-1, , drop = FALSE]
-      l <- attr(x$terms, "term.labels")
-      ss <- matrix(NA, length(l), 1)
-      rownames(ss) <- l
-      for (i in seq_along(ss)) {
-        vars.this.term <- which(terms[, i] != 0)
-        dependent.terms <- which(apply(terms[vars.this.term, , drop = FALSE], 2, prod) > 0)
-        m0 <- lm(x$terms[-dependent.terms], x$model)
-        if (length(dependent.terms) > 1) {
-          m1 <- lm(x$terms[-setdiff(dependent.terms, i)], x$model)
-          ss[i] <- anova(m0, m1)$`Sum of Sq`[2]
-        }
-        else {
-          ss[i] <- anova(m0, x)$`Sum of Sq`[2]
-        }
-      }
-    }
-    else {
-      if (type == 3) {
-        ## check if model was fitted with sum-to-zero contrasts
-        ## necessary for valid SS type 3 (e.g., contr.sum, contr.helmert)
-        IVs <- names(attr(model.matrix(x), "contrasts"))
-        ## only relevant for more than one factor
-        ## (and for unbalanced cell sizes and interactions, not tested here)
-        if(length(IVs) > 1) {
-          isSumToZero <- function(IV) {
-            ## check if factor has directly associated contrasts
-            if(!is.null(attr(x$model[, IV], "contrasts"))) {
-              cm <- contrasts(x$model[, IV])
-              all(colSums(cm) == 0)
-            } else {
-              ## check attributes from model matrix
-              attr(model.matrix(x), "contrasts")[[IV]] %in% c("contr.sum", "contr.helmert")
-            }
-          }
-
-          valid <- vapply(IVs, isSumToZero, logical(1))
-
-          if(!all(valid)) {
-            warning(c(ifelse(sum(!valid) > 1, "Factors ", "Factor "),
-                      paste(IVs[!valid], collapse=", "),
-                      ifelse(sum(!valid) > 1, " are", " is"),
-                      " not associated with sum-to-zero contrasts",
-                      " necessary for valid SS type III",
-                      " when cell sizes are unbalanced",
-                      " and interactions are present.",
-                      " Consider re-fitting the model after setting",
-                      " options(contrasts=c(\"contr.sum\", \"contr.poly\"))"))
-          }
-        }
-
-        mod <- drop1(x, scope = x$terms)
-        ss <- mod[-1, "Sum of Sq", drop = FALSE]
-        ss.res <- mod[1, "RSS"]
-        ss.tot <- sum((x$model[, 1] - mean(x$model[, 1]))^2)
-        ss <- as.matrix(ss)
-      }
-      else {
-        stop("type must be equal to 1, 2 or 3")
-      }
-    }
-  }
-  if (anova == FALSE) {
-    eta2 <- ss/ss.tot
-    eta2p <- ss/(ss + ss.res)
-    E <- cbind(eta2, eta2p)
-    rownames(E) <- rownames(ss)
-    colnames(E) <- c("eta.sq", "eta.sq.part")
-  }
-  else {
-    ss <- rbind(ss, ss.res)
-    eta2 <- ss/ss.tot
-    eta2p <- ss/(ss + ss.res)
-    k <- length(ss)
-    eta2p[k] <- NA
-    df <- anova(x)[, "Df"]
-    ms <- ss/df
-    Fval <- ms/ms[k]
-    p <- 1 - pf(Fval, df, rep.int(df[k], k))
-    E <- cbind(eta2, eta2p, ss, df, ms, Fval, p)
-    E[k, 6:7] <- NA
-    colnames(E) <- c("eta.sq", "eta.sq.part", "SS", "df", "MS", "F", "p")
-    rownames(E) <- rownames(ss)
-    rownames(E)[k] <- "Residuals"
-  }
-  return(E)
-}
-
-
-EtaSq.aovlist <-  function (x, type = 2, anova = FALSE) {
-
-    # author:  Daniel Wollschlaeger
-    # contact: contact@dwoll.de
-    # changed: 13 October 2014
-
-    # EtaSq.aovlist() calculates partial eta-squared and generalized eta-squared
-    # for aovlists
-
-    if (!is(anova, "logical") | length(anova) != 1) {
-      stop("\"anova\" must be a single logical value")
-    }
-    if (!is(type, "numeric") | length(type) != 1) {
-      stop("type must be equal to 1, 2 or 3")
-    }
-
-    ## alternative: check design has balanced cell sizes
-    if (type != 1) {
-      stop("type must be equal to 1")
-    }
-
-    details <- aovlDetails(x)
-    ss      <- details$Sum.Sq             # effect SS
-    ss.res  <- sum(aovlErrorTerms(x)$SS)  # total error SS
-    ss.tot  <- sum(ss) + sum(ss.res)
-
-    # eta squared
-    eta2 <- ss / ss.tot
-
-    # partial eta squared
-    # cf. Bakeman, R. (2005) Behavior Research Methods. 37(3), 379-384. Tables 1, 2
-    eta2p <- ss / (ss + details$SSE)
-
-    # generalized eta squared
-    # if all factors are manipulated
-    # cf. Bakeman, R. (2005) Behavior Research Methods. 37(3), 379-384. Tables 1, 2
-    geta2 <- ss / (ss + sum(ss.res))
-
-    if (anova == FALSE) {
-      E <- cbind(eta2, eta2p, geta2)
-      rownames(E) <- details$tt
-      colnames(E) <- c("eta.sq", "eta.sq.part", "eta.sq.gen")
-    } else {
-      E <- data.frame(eta2=eta2,
-                      eta2p=eta2p,
-                      geta2=geta2,
-                      ss=ss,
-                      df=details$Df,
-                      ms=details$Mean.Sq,
-                      sse=details$SSE,
-                      dfe=details$dfE,
-                      Fval=details$F.value,
-                      p=details$Pr..F.)
-      colnames(E) <- c("eta.sq", "eta.sq.part", "eta.sq.gen", "SS", "df", "MS", "SSE", "dfE", "F", "p")
-      rownames(E) <- details$tt
-    }
-    return(E)
-  }
-
-# author:  Daniel Wollschlaeger
-aovlDetails <- function(aovObj) {
-  aovSum  <- summary(aovObj)
-  etNames <- names(aovSum)  # error terms
-
-  getOneRes <- function(tt, tab) {  # tab=anova table, tt = tested term
-    ttIdx <- which(DescTools::StrTrim(rownames(tab)) == tt)
-    list(df=tab[ttIdx,       "Df"],
-         SS=tab[ttIdx,       "Sum Sq"],
-         MS=tab[ttIdx,       "Mean Sq"],
-         dfE=tab["Residuals", "Df"],
-         SSE=tab["Residuals", "Sum Sq"],
-         MSE=tab["Residuals", "Mean Sq"],
-         F=tab[ttIdx, "F value"],
-         p=tab[ttIdx, "Pr(>F)"])
-  }
-
-  getTermRes <- function(et) { # et = error term
-    tab <- aovSum[[et]][[1]]
-    at  <- DescTools::StrTrim(rownames(tab)) # all terms
-    tt  <- at[-which(at == "Residuals")]     # tested terms only
-
-    if(length(tt) > 0)
-    {
-      # error terms
-      etRes <- list(df=tab["Residuals", "Df"],
-                    SS=tab["Residuals", "Sum Sq"],
-                    MS=tab["Residuals", "Mean Sq"])
-      ttRes <- lapply(tt, getOneRes, tab=tab)
-      ttRes <- setNames(ttRes, tt)
-      ttIdx <- which(DescTools::StrTrim(rownames(tab)) %in% tt)
-      return(data.frame(tt=tt, et=et,
-                        tab[ttIdx, , drop=FALSE],
-                        dfE=etRes$df, SSE=etRes$SS, MSE=etRes$MS,
-                        stringsAsFactors=FALSE))
-    } else {
-      emptyDf <- data.frame(matrix(ncol=10, nrow=0))
-      return(setNames(emptyDf, c("tt", "et", "Df", "Sum.Sq", "Mean.Sq", "F.value",
-                                 "Pr..F.", "dfE", "SSE", "MSE")))
-    }
-  }
-
-  detailsL  <- setNames(lapply(etNames, getTermRes), etNames)
-  detailsDf <- do.call("rbind", detailsL)
-  rownames(detailsDf) <- NULL
-  return(detailsDf)
-}
-
-aovlErrorTerms <- function(aovObj) {
-  aovSum  <- summary(aovObj)
-  etNames <- names(aovSum)
-  getSS <- function(x) {
-    aovSum[[x]][[1]]["Residuals", "Sum Sq"]
-  }
-
-  getMS <- function(x) {
-    aovSum[[x]][[1]]["Residuals", "Mean Sq"]
-  }
-
-  getDF <- function(x) {
-    aovSum[[x]][[1]]["Residuals", "Df"]
-  }
-
-  SS <- vapply(etNames, getSS, numeric(1))
-  MS <- vapply(etNames, getMS, numeric(1))
-  DF <- vapply(etNames, getDF, numeric(1))
-  return(list(SS=SS, MS=MS, DF=DF))
-}
-
-# # RB-p
-# N      <- 10
-# P      <- 4
-# id     <- factor(rep(1:N, times=P))
-# IV     <- factor(rep(1:P,  each=N))
-# DV_t1  <- round(rnorm(N, -0.3, 1), 2)
-# DV_t2  <- round(rnorm(N, -0.2, 1), 2)
-# DV_t3  <- round(rnorm(N,  0.1, 1), 2)
-# DV_t4  <- round(rnorm(N,  0.4, 1), 2)
-# DV     <- c(DV_t1, DV_t2, DV_t3, DV_t4)
-# dfRBpL <- data.frame(id, IV, DV)
-# rbp <- aov(DV ~ IV + Error(id/IV), data=dfRBpL)
-# EtaSq(rbp)
-#
-# ez::ezANOVA(data=dfRBpL, wid=id, dv=DV, within=.(IV))
-
-# # RBF-pq
-# N        <- 10
-# P        <- 2
-# Q        <- 3
-# id       <- factor(rep(1:N,              times=P*Q))
-# IV1      <- factor(rep(rep(1:P, each=N), times=Q))
-# IV2      <- factor(rep(rep(1:Q,           each=N*P)))
-# DV_t11   <- round(rnorm(N, -0.8, 1), 2)
-# DV_t12   <- round(rnorm(N, -0.7, 1), 2)
-# DV_t13   <- round(rnorm(N,  0.0, 1), 2)
-# DV_t21   <- round(rnorm(N,  0.2, 1), 2)
-# DV_t22   <- round(rnorm(N,  0.3, 1), 2)
-# DV_t23   <- round(rnorm(N,  1.0, 1), 2)
-# DV       <- c(DV_t11, DV_t21, DV_t12, DV_t22, DV_t13, DV_t23)
-# dfRBFpqL <- data.frame(id, IV1, IV2, DV)
-# rbfpq <- aov(DV ~ IV1*IV2 + Error(id/(IV1*IV2)), data=dfRBFpqL)
-# EtaSq(rbfpq)
-#
-# ez::ezANOVA(data=dfRBFpqL, wid=id, dv=DV, within=.(IV1, IV2))
-#
-# # SPF-p.q
-# Nj       <- 10
-# P        <- 3
-# Q        <- 3
-# id       <- factor(rep(1:(P*Nj),     times=Q))
-# IVbtw    <- factor(rep(LETTERS[1:P], times=Q*Nj))
-# IVwth    <- factor(rep(1:Q,           each=P*Nj))
-# DV_t1    <- round(rnorm(P*Nj, -0.5, 1), 2)
-# DV_t2    <- round(rnorm(P*Nj,  0,   1), 2)
-# DV_t3    <- round(rnorm(P*Nj,  0.5, 1), 2)
-# DV       <- c(DV_t1, DV_t2, DV_t3)
-# dfSPFpqL <- data.frame(id, IVbtw, IVwth, DV)
-# spfp.q <- aov(DV ~ IVbtw*IVwth + Error(id/IVwth), data=dfSPFpqL)
-# EtaSq(spfp.q)
-#
-# ez::ezANOVA(data=dfSPFpqL, wid=id, dv=DV, within=.(IVwth), between=.(IVbtw))
-#
-# ##### SPF-p.qr
-# Nj     <- 10
-# P      <- 2
-# Q      <- 3
-# R      <- 2
-# id     <- factor(rep(1:(P*Nj),            times=Q*R))
-# IVbtw  <- factor(rep(LETTERS[1:P],        times=Q*R*Nj))
-# IVwth1 <- factor(rep(1:Q,                  each=P*R*Nj))
-# IVwth2 <- factor(rep(rep(1:R, each=P*Nj), times=Q))
-# DV_t11 <- round(rnorm(P*Nj,  8, 2), 2)
-# DV_t21 <- round(rnorm(P*Nj, 13, 2), 2)
-# DV_t31 <- round(rnorm(P*Nj, 13, 2), 2)
-# DV_t12 <- round(rnorm(P*Nj, 10, 2), 2)
-# DV_t22 <- round(rnorm(P*Nj, 15, 2), 2)
-# DV_t32 <- round(rnorm(P*Nj, 15, 2), 2)
-# DV     <- c(DV_t11, DV_t12, DV_t21, DV_t22, DV_t31, DV_t32)
-# dfSPFp.qrL <- data.frame(id, IVbtw, IVwth1, IVwth2, DV)
-#
-# spfp.qr <- aov(DV ~ IVbtw*IVwth1*IVwth2 + Error(id/(IVwth1*IVwth2)), data=dfSPFp.qrL)
-# EtaSq(spfp.qr)
-#
-# ez::ezANOVA(data=dfSPFp.qrL, wid=id, dv=DV, within=.(IVwth1,IVwth2), between=.(IVbtw))
-#
-# ##### SPF-pq.r
-# Njk    <- 20
-# P      <- 2
-# Q      <- 2
-# R      <- 3
-# id     <- factor(rep(1:(P*Q*Njk),          times=R))
-# IVbtw1 <- factor(rep(1:P,                  times=Q*R*Njk))
-# IVbtw2 <- factor(rep(rep(1:Q, each=P*Njk), times=R))
-# IVwth  <- factor(rep(1:R,                   each=P*Q*Njk))
-# DV_t1  <- round(rnorm(P*Q*Njk, -3, 2), 2)
-# DV_t2  <- round(rnorm(P*Q*Njk,  1, 2), 2)
-# DV_t3  <- round(rnorm(P*Q*Njk,  2, 2), 2)
-# DV     <- c(DV_t1, DV_t2, DV_t3)
-# dfSPFpq.rL <- data.frame(id, IVbtw1, IVbtw2, IVwth, DV)
-#
-# spfpq.r <- aov(DV ~ IVbtw1*IVbtw2*IVwth + Error(id/IVwth), data=dfSPFpq.rL)
-# EtaSq(spfpq.r)
-#
-# ez::ezANOVA(data=dfSPFpq.rL, wid=id, dv=DV, within=.(IVwth), between=.(IVbtw1,IVbtw2))
-
-
-# EtaSq <- function (x, type = 2, anova = FALSE) {
-#
-#   # file:    etaSquared.R
-#   # author:  Dan Navarro
-#   # contact: daniel.navarro@adelaide.edu.au
-#   # changed: 13 November 2013
-#   # modified by Daniel Wollschlaeger 17.9.2014
-#
-#
-#   # etaSquared() calculates eta-squared and partial eta-squared for linear models
-#   # (usually ANOVAs). It takes an lm object as input and computes the effect size
-#   # for all terms in the model. By default uses Type II sums of squares to calculate
-#   # the effect size, but Types I and III are also possible. By default the output
-#   # only displays the effect size, but if requested it will also print out the full
-#   # ANOVA table.
-#
-#
-#   if (!is(anova, "logical") | length(anova) != 1) {
-#     stop("\"anova\" must be a single logical value")
-#   }
-#   if (!is(x, "lm")) {
-#     stop("\"x\" must be a linear model object")
-#   }
-#   if (!is(type, "numeric") | length(type) != 1) {
-#     stop("type must be equal to 1, 2 or 3")
-#   }
-#   if (type == 1) {
-#     ss <- anova(x)[, "Sum Sq", drop = FALSE]
-#     ss.res <- ss[dim(ss)[1], ]
-#     ss.tot <- sum(ss)
-#     ss <- ss[-dim(ss)[1], , drop = FALSE]
-#     ss <- as.matrix(ss)
-#   }
-#   else {
-#     if (type == 2) {
-#       ss.tot <- sum((x$model[, 1] - mean(x$model[, 1]))^2)
-#       ss.res <- sum((x$residuals)^2)
-#       terms <- attr(x$terms, "factors")[-1, , drop = FALSE]
-#       l <- attr(x$terms, "term.labels")
-#       ss <- matrix(NA, length(l), 1)
-#       rownames(ss) <- l
-#       for (i in seq_along(ss)) {
-#         vars.this.term <- which(terms[, i] != 0)
-#         dependent.terms <- which(apply(terms[vars.this.term, , drop = FALSE], 2, prod) > 0)
-#         m0 <- lm(x$terms[-dependent.terms], x$model)
-#         if (length(dependent.terms) > 1) {
-#           m1 <- lm(x$terms[-setdiff(dependent.terms, i)], x$model)
-#           ss[i] <- anova(m0, m1)$`Sum of Sq`[2]
-#         }
-#         else {
-#           ss[i] <- anova(m0, x)$`Sum of Sq`[2]
-#         }
-#       }
-#     }
-#     else {
-#       if (type == 3) {
-#         ## check if model was fitted with sum-to-zero contrasts
-#         ## necessary for valid SS type 3 (e.g., contr.sum, contr.helmert)
-#         IVs <- names(attr(model.matrix(x), "contrasts"))
-#         ## only relevant for more than one factor
-#         ## (and for unbalanced cell sizes and interactions, not tested here)
-#         if(length(IVs) > 1) {
-#           isSumToZero <- function(IV) {
-#             ## check if factor has directly associated contrasts
-#             if(!is.null(attr(x$model[, IV], "contrasts"))) {
-#               cm <- contrasts(x$model[, IV])
-#               all(colSums(cm) == 0)
-#             } else {
-#               ## check attributes from model matrix
-#               attr(model.matrix(x), "contrasts")[[IV]] %in% c("contr.sum", "contr.helmert")
-#             }
-#           }
-#
-#           valid <- vapply(IVs, isSumToZero, logical(1))
-#
-#           if(!all(valid)) {
-#             warning(c(ifelse(sum(!valid) > 1, "Factors ", "Factor "),
-#                       paste(IVs[!valid], collapse=", "),
-#                       ifelse(sum(!valid) > 1, " are", " is"),
-#                       " not associated with sum-to-zero contrasts",
-#                       " necessary for valid SS type III",
-#                       " when cell sizes are unbalanced",
-#                       " and interactions are present.",
-#                       " Consider re-fitting the model after setting",
-#                       " options(contrasts=c(\"contr.sum\", \"contr.poly\"))"))
-#           }
-#         }
-#
-#         mod <- drop1(x, scope = x$terms)
-#         ss <- mod[-1, "Sum of Sq", drop = FALSE]
-#         ss.res <- mod[1, "RSS"]
-#         ss.tot <- sum((x$model[, 1] - mean(x$model[, 1]))^2)
-#         ss <- as.matrix(ss)
-#       }
-#       else {
-#         stop("type must be equal to 1, 2 or 3")
-#       }
-#     }
-#   }
-#   if (anova == FALSE) {
-#     eta2 <- ss/ss.tot
-#     eta2p <- ss/(ss + ss.res)
-#     E <- cbind(eta2, eta2p)
-#     rownames(E) <- rownames(ss)
-#     colnames(E) <- c("eta.sq", "eta.sq.part")
-#   }
-#   else {
-#     ss <- rbind(ss, ss.res)
-#     eta2 <- ss/ss.tot
-#     eta2p <- ss/(ss + ss.res)
-#     k <- length(ss)
-#     eta2p[k] <- NA
-#     df <- anova(x)[, "Df"]
-#     ms <- ss/df
-#     Fval <- ms/ms[k]
-#     p <- 1 - pf(Fval, df, rep.int(df[k], k))
-#     E <- cbind(eta2, eta2p, ss, df, ms, Fval, p)
-#     E[k, 6:7] <- NA
-#     colnames(E) <- c("eta.sq", "eta.sq.part", "SS", "df", "MS", "F", "p")
-#     rownames(E) <- rownames(ss)
-#     rownames(E)[k] <- "Residuals"
-#   }
-#   return(E)
-# }
-
-
-
-Eps <- function(S, p, g, n) {
-
-  ## Purpose: calculates the Greenhouse-Geisser and Huynh-Feldt epsilons
-  ## -------------------------------------------------------------------
-  ## Arguments: S pxp covariance matrix
-  ##            p dimension of observation vectors
-  ##            g number of groups
-  ##            n number of subjects
-
-  ## Lit:    E.F. Vonesh + V.M. Chinchilli (1997), p.84-86
-  ##         M.J. Crowder and D.J. Hand (1990), p.54-55
-
-  ## Author: H.-R. Roth
-  ## Date:   23.07.2002
-  ## -------------------------------------------------------------------
-
-  # U is a matrix of (p-1) orthonormal contrasts
-  U <- t(cbind(diag(p-1),0) - outer(1:(p-1), 1:p, "<") / ((p-1):1))
-  a <- 1/sqrt(colSums(U^2))
-  U <- U%*%diag(a)
-  V <- t(U) %*% S %*% U
-  e <- (sum(diag(V)))^2/sum(diag(V%*%V))/(p-1)
-
-  GGepsilon <- e
-  HFepsilon <- min(1, (n*(p-1)*e - 2) / ((p-1)* (n-g-(p-1)*e) ))
-  t.output <- c(GGepsilon, HFepsilon)
-  names(t.output)  <- c("G-G-epsilon", "H-F-epsilon")
-  t.output
-
-}
-
-
-
-power.chisq.test <- function (n = NULL, w = NULL, df = NULL, sig.level = 0.05, power = NULL) {
-
-  if (sum(sapply(list(w, n, df, power, sig.level), is.null)) != 1)
-    stop("exactly one of w, n, df, power or sig.level must be NULL")
-  if (!is.null(w) && w < 0)
-    stop("w must be positive")
-  if (!is.null(n) && n < 1)
-    stop("number of observations must be at least 1")
-  if (!is.null(sig.level) && !is.numeric(sig.level) || any(0 > sig.level | sig.level > 1))
-    stop(sQuote("sig.level"), " must be numeric in [0, 1]")
-  if (!is.null(power) && !is.numeric(power) || any(0 > power | power > 1))
-    stop(sQuote("power"), " must be numeric in [0, 1]")
-  p.body <- quote({
-    k <- qchisq(sig.level, df = df, lower = FALSE)
-    pchisq(k, df = df, ncp = n * w^2, lower = FALSE)
-  })
-  if (is.null(power))
-    power <- eval(p.body)
-  else if (is.null(w))
-    w <- uniroot(function(w) eval(p.body) - power, c(1e-10, 1e+05))$root
-  else if (is.null(n))
-    n <- uniroot(function(n) eval(p.body) - power, c(1 + 1e-10, 1e+05))$root
-  else if (is.null(sig.level))
-    sig.level <- uniroot(function(sig.level) eval(p.body) -
-                           power, c(1e-10, 1 - 1e-10))$root
-  else stop("internal error")
-
-  METHOD <- "Chi squared power calculation"
-  NOTE <- "n is the number of observations"
-  structure(list(w = w, n = n, df = df, sig.level = sig.level,
-                 power = power, method = METHOD, note = NOTE), class = "power.htest")
-}
-
-
-
-
-Contrasts <- function (levs) {
-  k = length(levs)
-  M = data.frame(levs = levs)
-  for (i in 1:(k - 1)) {
-    for (j in (i + 1):k) {
-      con = rep(0, k)
-      con[i] = -1
-      con[j] = 1
-      nm = paste(levs[j], levs[i], sep = "-")
-      M[[nm]] = con
-    }
-  }
-  row.names(M) = levs
-
-  return(M[-1])
-
-}
-
-
-ScheffeTest <- function (x, ...)
-  UseMethod("ScheffeTest")
-
-ScheffeTest.default <- function (x, g = NULL, which = NULL, contrasts = NULL, conf.level = 0.95, ...) {
-  ScheffeTest(x=aov(x~g), which=which, contrasts=contrasts, conf.level=conf.level, ...)
-}
-
-
-
-ScheffeTest.aov <- function(x, which=NULL, contrasts = NULL, conf.level=0.95, ...){
-
-  mm <- model.tables(x, "means")
-  if (is.null(mm$n))
-    stop("no factors in the fitted model")
-  tabs <- mm$tables[-1L]
-
-  if(is.null(which)) which <- seq_along(tabs)
-
-  tabs <- tabs[which]
-  nn <- mm$n[names(tabs)]
-  nn_na <- is.na(nn)
-  if (all(nn_na))
-    stop("'which' specified no factors")
-  if (any(nn_na)) {
-    warning("'which' specified some non-factors which will be dropped")
-    tabs <- tabs[!nn_na]
-    nn <- nn[!nn_na]
-  }
-  out <- setNames(vector("list", length(tabs)), names(tabs))
-  MSE <- sum(x$residuals^2)/x$df.residual
-
-  autoContr <- is.null(contrasts)
-  if(!is.null(contrasts)){
-    contrasts <- data.frame(contrasts)
-  }
-
-  # nm <- "tension"
-  for (nm in names(tabs)) {
-    tab <- tabs[[nm]]
-    means <- as.vector(tab)
-
-    nms <- if (length(d <- dim(tab)) > 1L) {
-      dn <- dimnames(tab)
-      apply(do.call("expand.grid", dn), 1L, paste, collapse = ":")
-    } else names(tab)
-
-    n <- nn[[nm]]
-    if (length(n) < length(means))
-      n <- rep.int(n, length(means))
-
-    if(autoContr) contrasts <- Contrasts(nms)
-
-    psi <- apply(contrasts * means, 2, sum)
-    sscoeff <- apply(contrasts * contrasts / n, 2, sum)
-    mspsi <- (psi * psi) / sscoeff
-
-# Korrektur von Daniel Wollschlaeger 9.9.2014:
-#     psi <- contrasts %*% means
-#     sscoeff <- contrasts * contrasts %*% (1/n)
-
-    dferr <- x$df.residual
-    dfgrp <- length(x$residuals) - dferr - 1
-
-    pval <- pf(psi^2/(MSE*sscoeff*dfgrp),
-               df1=dfgrp, df2=dferr, lower.tail=FALSE)
-
-    critvalue <- dfgrp * qf(1-conf.level, dfgrp, dferr, lower.tail=FALSE)
-
-    lwr <- psi - sqrt(critvalue) * sqrt(MSE * sscoeff)
-    upr <- psi + sqrt(critvalue) * sqrt(MSE * sscoeff)
-
-    out[[nm]] <- cbind(diff=psi, lwr, upr, pval)
-    colnames(out[[nm]]) <- c("diff","lwr.ci","upr.ci","pval")
-
-    if(!autoContr) {
-      # define contrasts rownames
-      rownames(out[[nm]]) <-  apply(contrasts, 2, function(x)
-        gettextf("%s-%s", paste(nms[x>0], collapse=","),
-                 paste(nms[x<0], collapse=",")) )
-      if(is.na(conf.level)) out[[nm]] <- out[[nm]][,-c(2:3)]
-    }
-
-    if(autoContr & is.na(conf.level)) {
-      out[[nm]] <- matrix(NA, nrow=length(means), ncol=length(means))
-      out[[nm]][lower.tri(out[[nm]], diag = FALSE)] <- pval
-      dimnames(out[[nm]]) <- list(nms, nms)
-      out[[nm]] <- out[[nm]][-1, -ncol(out[[nm]])]
-    }
-
-  }
-
-  class(out) <- c("PostHocTest")
-  attr(out, "orig.call") <- x$call
-  attr(out, "conf.level") <- conf.level
-  attr(out, "ordered") <- FALSE
-  attr(out, "method") <- "Scheffe Test"
-  attr(out, "method.str") <- gettextf("\n  Posthoc multiple comparisons of means : %s \n", attr(out, "method"))
-
-
-  return(out)
-
-}
-
-
-PostHocTest <- function (x, ...)
-  UseMethod("PostHocTest")
-
-
-
-PostHocTest.aov <- function (x, which = NULL,
-                         method=c("hsd","bonferroni","lsd","scheffe","newmankeuls","duncan"),
-                         conf.level = 0.95, ordered = FALSE, ...) {
-
-  method <- match.arg(method)
-
-  if(method=="scheffe"){
-    out <- ScheffeTest(x=x, which=which, conf.level=conf.level, ...)
-
-  } else {
-
-    mm <- model.tables(x, "means")
-    if (is.null(mm$n))
-      stop("no factors in the fitted model")
-    tabs <- mm$tables[-1L]
-
-    if(is.null(which)) which <- seq_along(tabs)
-    tabs <- tabs[which]
-
-    nn <- mm$n[names(tabs)]
-    nn_na <- is.na(nn)
-    if (all(nn_na))
-      stop("'which' specified no factors")
-    if (any(nn_na)) {
-      warning("'which' specified some non-factors which will be dropped")
-      tabs <- tabs[!nn_na]
-      nn <- nn[!nn_na]
-    }
-    out <- setNames(vector("list", length(tabs)), names(tabs))
-    MSE <- sum(x$residuals^2)/x$df.residual
-    for (nm in names(tabs)) {
-      tab <- tabs[[nm]]
-      means <- as.vector(tab)
-      nms <- if (length(d <- dim(tab)) > 1L) {
-        dn <- dimnames(tab)
-        apply(do.call("expand.grid", dn), 1L, paste, collapse = ":")
-      }
-      else names(tab)
-      n <- nn[[nm]]
-      if (length(n) < length(means))
-        n <- rep.int(n, length(means))
-
-      # this will be ignored for bonferroni, lsd
-      if (method %in% c("hsd", "newmankeuls", "duncan") & as.logical(ordered)) {
-        ord <- order(means)
-        means <- means[ord]
-        n <- n[ord]
-        if (!is.null(nms))
-          nms <- nms[ord]
-      }
-
-      center <- outer(means, means, "-")
-      keep <- lower.tri(center)
-      center <- center[keep]
-
-      switch(method
-             ,"bonferroni" = {
-               width <-  qt(1 - (1 - conf.level)/(length(means) * (length(means) - 1)), x$df.residual) *
-                 sqrt(MSE * outer(1/n, 1/n, "+"))[keep]
-               est <- center/sqrt(MSE * outer(1/n, 1/n, "+")[keep])
-
-               pvals <- pmin(2 * pt(abs(est), df = x$df.residual, lower.tail = FALSE)
-                             * ((length(means)^2 - length(means))/2), 1)
-               method.str <- "Bonferroni"
-
-             }
-             ,"lsd" = {
-               width <-  qt(1 - (1 - conf.level)/2, x$df.residual) *
-                 sqrt(MSE * outer(1/n, 1/n, "+"))[keep]
-               est <- center/sqrt(MSE * outer(1/n, 1/n, "+")[keep])
-               pvals <- 2 * pt(abs(est), df = x$df.residual, lower.tail = FALSE)
-               method.str <- "Fisher LSD"
-             }
-             ,"hsd" = {
-               width <- qtukey(conf.level, length(means), x$df.residual) *
-                 sqrt((MSE/2) * outer(1/n, 1/n, "+"))[keep]
-               est <- center/(sqrt((MSE/2) * outer(1/n, 1/n, "+"))[keep])
-               pvals <- ptukey(abs(est), length(means), x$df.residual,
-                               lower.tail = FALSE)
-               method.str <- "Tukey HSD"
-
-             }
-             ,"newmankeuls" ={
-               nmean <- (abs(outer(rank(means), rank(means), "-")) + 1)[keep]
-
-               width <- qtukey(conf.level, nmean, x$df.residual) *
-                 sqrt((MSE/2) * outer(1/n, 1/n, "+"))[keep]
-
-               est <- center/(sqrt((MSE/2) * outer(1/n, 1/n, "+"))[keep])
-
-               pvals <- ptukey(abs(est), nmean, x$df.residual, lower.tail = FALSE)
-               method.str <- "Newman-Keuls"
-
-             }
-             ,"duncan" = {
-               # same as newmankeuls, but with bonferroni corrected alpha
-               nmean <- (abs(outer(rank(means), rank(means), "-")) + 1)[keep]
-
-               width <- qtukey(conf.level^(nmean-1), nmean, x$df.residual) *
-                 sqrt((MSE/2) * outer(1/n, 1/n, "+"))[keep]
-
-               est <- center/(sqrt((MSE/2) * outer(1/n, 1/n, "+"))[keep])
-               pvals <- 1-(1-ptukey(abs(est), nmean, x$df.residual,
-                                    lower.tail = FALSE))^(1/(nmean - 1))
-
-               method.str <- "Duncan's new multiple range test"
-
-             }
-             ,"dunnett" = {
-               method.str <- "Dunnett"
-             }
-             ,"scottknott" = {
-               method.str <- "Scott Knott"
-             }
-             ,"waller" = {
-               method.str <- "Waller"
-             }
-             ,"gabriel" = {
-               method.str <- "Gabriel"
-             }
-      )
-
-      if(!is.na(conf.level)){
-        dnames <- list(NULL, c("diff", "lwr.ci", "upr.ci", "pval"))
-        if (!is.null(nms))
-          dnames[[1L]] <- outer(nms, nms, paste, sep = "-")[keep]
-        out[[nm]] <- array(c(center, center - width,
-                             center + width, pvals), c(length(width), 4L), dnames)
-      } else {
-        out[[nm]] <- matrix(NA, nrow=length(means), ncol=length(means))
-        out[[nm]][lower.tri(out[[nm]], diag = FALSE)] <- pvals
-        dimnames(out[[nm]]) <- list(nms, nms)
-        out[[nm]] <- out[[nm]][-1, -ncol(out[[nm]])]
-
-      }
-    }
-
-    class(out) <- c("PostHocTest")
-    attr(out, "orig.call") <- x$call
-    attr(out, "conf.level") <- conf.level
-    attr(out, "ordered") <- ordered
-    attr(out, "method") <- method.str
-    attr(out, "method.str") <- gettextf("\n  Posthoc multiple comparisons of means : %s \n", attr(out, "method"))
-
-  }
-
-  return(out)
-
-}
-
-
-PostHocTest.matrix <- function(x, method = c("none","fdr","BH","BY","bonferroni","holm","hochberg","hommel"),
-                               conf.level = 0.95, ...) {
-
-  # http://support.sas.com/resources/papers/proceedings14/1544-2014.pdf
-
-  # no conf.level supported so far
-  conf.level  <- NA
-
-  method <- match.arg(method)
-
-#  out <- setNames(vector("list", length(tabs)), names(tabs))
-
-  pvals <- DescTools::PairApply(t(as.matrix(x)), FUN = function(y1, y2) chisq.test(cbind(y1,y2))$p.value, symmetric=TRUE)
-  pvals[upper.tri(pvals, diag=TRUE)] <- NA
-
-  if(method != "none")
-    pvals[] <- p.adjust(pvals, method=method)
-
-#  pvals[] <- format.pval(pvals, digits = 2, na.form = "-")
-  pvals <- pvals[-1, -ncol(pvals)]
-  out <- list()
-  out[[deparse(substitute(x))]] <- pvals
-
-  class(out) <- c("PostHocTest")
-  attr(out, "orig.call") <- "table"
-  attr(out, "conf.level") <- conf.level
-  attr(out, "ordered") <- FALSE
-  attr(out, "method") <- method
-  attr(out, "method.str") <- gettextf("\n  Posthoc multiple comparisons on chi-square test : %s \n", attr(out, "method"))
-
-  return(out)
-
-}
-
-
-PostHocTest.table <- function(x, method = c("none","fdr","BH","BY","bonferroni","holm","hochberg","hommel"),
-                               conf.level = 0.95, ...) {
-  class(x) <- "matrix"
-  PostHocTest(x, method=method, conf.level=conf.level, ...)
-}
-
-
-
-#
-# print.PostHocTest <- function(x, ...){
-#
-#   cat(gettextf("\n  Posthoc multiple comparisons of means : %s \n", attr(x, "method")))
-#
-#   cat("\nFit: ", deparse(attr(x, "orig.call"), 500L), "\n\n",
-#       sep = "")
-#
-#   for(i in seq_along(x)){
-#     cat("$",names(x)[i], "\n", sep="")
-#     pp <- format.pval(x[[i]], 2, na.form = "-")
-#     attributes(pp) <- attributes(x[[i]])
-#     print(pp, quote = FALSE, ...)
-#     cat("\n")
-#   }
-#   cat("\n")
-# }
-
-
-
-print.PostHocTest <- function (x, digits = getOption("digits"), ...) {
-
-  cat(attr(x, "method.str"))
-  if (!is.na(attr(x, "conf.level")))
-    cat("    ", format(100 * attr(x, "conf.level"), 2), "% family-wise confidence level\n",
-        sep = "")
-  if (attr(x, "ordered"))
-    cat("    factor levels have been ordered\n")
-  if(!is.language(attr(x, "orig.call")) && !is.null(attr(x, "orig.call")))
-    cat("\nFit: ", deparse(attr(x, "orig.call"), 500L), "\n\n", sep = "")
-  else
-    cat("\n")
-  xx <- unclass(x)
-
-  attr(xx, "orig.call") <- attr(xx, "conf.level") <-
-    attr(xx, "ordered") <-  attr(xx, "method.str") <-  attr(xx, "method") <- NULL
-
-  xx["data.name"] <- NULL
-
-  if(!is.na(attr(x, "conf.level"))) {
-    xx <- lapply(xx, as.data.frame)
-    for(nm in names(xx)){
-      xx[[nm]]$" " <- Format(xx[[nm]]$"pval", fmt="*")
-      xx[[nm]]$"pval" <- format.pval(xx[[nm]]$"pval", digits=2, nsmall=4)
-    }
-
-    print.default(xx, digits=digits, ...)
-    cat("---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n")
-  } else {
-    for(nm in names(xx)){
-      xx[[nm]][] <- format.pval(xx[[nm]], 2, na.form = "-")
-    }
-#     attributes(pp) <- attributes(x$p.value)
-    print(xx, digits=digits, quote = FALSE, ...)
-  }
-  cat("\n")
-
-  invisible(x)
-}
-
-
-
-plot.PostHocTest <- function(x, ...){
-  # original:   stats:::plot.TukeyHSD(x, ...)
-
-  # don't need that here..
-  x$data.name <- NULL
-
-  for (i in seq_along(x)) {
-    xi <- x[[i]][, -4L, drop = FALSE]
-    yvals <- nrow(xi):1L
-    dev.hold()
-    on.exit(dev.flush())
-    plot(c(xi[, "lwr.ci"], xi[, "upr.ci"]), rep.int(yvals, 2L),
-         type = "n", axes = FALSE, xlab = "", ylab = "", main = NULL,
-         ...)
-    axis(1, ...)
-    axis(2, at = nrow(xi):1, labels = dimnames(xi)[[1L]],
-         srt = 0, ...)
-    abline(h = yvals, lty = 1, lwd = 0.5, col = "lightgray")
-    abline(v = 0, lty = 2, lwd = 0.5, ...)
-    segments(xi[, "lwr.ci"], yvals, xi[, "upr.ci"], yvals, ...)
-    segments(as.vector(xi), rep.int(yvals - 0.1, 3L), as.vector(xi),
-             rep.int(yvals + 0.1, 3L), ...)
-    title(main = paste0(format(100 * attr(x, "conf.level"),
-                               digits = 2L), "% family-wise confidence level\n"),
-          xlab = paste("Differences in mean levels of", names(x)[i]))
-    box()
-    dev.flush()
-    on.exit()
-  }
-
-}
-
-
-
-DunnTest <- function (x, ...)
-  UseMethod("DunnTest")
-
-
-
-DunnTest.formula <- function (formula, data, subset, na.action, ...) {
-
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-                                                                  "term.labels")) != 1L))
-    stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- quote(stats::model.frame)
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  if (length(mf) > 2L)
-    stop("'formula' should be of the form response ~ group")
-  DNAME <- paste(names(mf), collapse = " by ")
-  names(mf) <- NULL
-  response <- attr(attr(mf, "terms"), "response")
-  y <- DoCall("DunnTest", c(as.list(mf), list(...)))
-  y$data.name <- DNAME
-  y
-}
-
-
-
-
-DunnTest.default <- function (x, g, method = c("holm","hochberg","hommel","bonferroni","BH","BY","fdr","none"),
-                              out.list = TRUE, ...) {
-
-  if (is.list(x)) {
-    if (length(x) < 2L)
-      stop("'x' must be a list with at least 2 elements")
-    DNAME <- deparse(substitute(x))
-    x <- lapply(x, function(u) u <- u[complete.cases(u)])
-    k <- length(x)
-    l <- sapply(x, "length")
-    if (any(l == 0))
-      stop("all groups must contain data")
-    g <- factor(rep(1:k, l))
-    x <- unlist(x)
-  }
-  else {
-    if (length(x) != length(g))
-      stop("'x' and 'g' must have the same length")
-    DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(g)))
-    OK <- complete.cases(x, g)
-    x <- x[OK]
-    g <- g[OK]
-    if (!all(is.finite(g)))
-      stop("all group levels must be finite")
-    g <- factor(g)
-    k <- nlevels(g)
-    if (k < 2)
-      stop("all observations are in the same group")
-  }
-  N <- length(x)
-  if (N < 2)
-    stop("not enough observations")
-
-  method <- match.arg(method)
-
-  nms <- levels(g)
-
-  n <- tapply(g, g, length)
-  rnk <- rank(x)
-  mrnk <- tapply(rnk, g, mean)
-
-  tau <- table(rnk[AllDuplicated(rnk)])
-  tiesadj <- sum(tau^3 - tau) / (12*(N-1))
-  mrnkdiff <- outer(mrnk, mrnk, "-")
-
-  z <- mrnkdiff / sqrt( ((N*(N+1)/12) - tiesadj) * outer(1/n, 1/n, "+"))
-  pvals <- pnorm(abs(z), lower.tail=FALSE)
-
-  keep <- lower.tri(pvals)
-  pvals <- pvals[keep]
-  m <- sum(keep)
-
-  out <- list()
-
-  pvals <- p.adjust(pvals, method=method)
-  method.str <- method
-
-  if(out.list){
-    dnames <- list(NULL, c("mean rank diff", "pval"))
-    if (!is.null(nms))
-      dnames[[1L]] <- outer(nms, nms, paste, sep = "-")[keep]
-    out[[1]] <- array(c(mrnkdiff[keep], pvals), c(length(mrnkdiff[keep]), 2L), dnames)
-
-  } else {
-    out[[1]] <- matrix(NA, nrow=length(nms), ncol=length(nms))
-    out[[1]][lower.tri(out[[1]], diag = FALSE)] <- pvals
-    dimnames(out[[1]]) <- list(nms, nms)
-    out[[1]] <- out[[1]][-1, -ncol(out[[1]])]
-
-  }
-
-  class(out) <- c("DunnTest")
-  attr(out, "main") <- gettextf("Dunn's test of multiple comparisons using rank sums : %s ", method.str)
-  attr(out, "method") <- method.str
-  attr(out, "out.list") <- out.list
-
-  return(out)
-
-}
-
-
-
-
-print.DunnTest <- function (x, digits = getOption("digits"), ...) {
-
-  cat("\n", attr(x, "main"), "\n\n")
-  xx <- unclass(x)
-
-  if(attr(x, "out.list")==TRUE) {
-    xx <- data.frame(x[1])
-    xx$" " <- Format(xx$"pval", fmt="*")
-    xx$"pval" <- format.pval(xx$"pval", digits=2, nsmall=4)
-
-    print.data.frame(xx, digits=digits, ...)
-    cat("---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n")
-  } else {
-    xx[[1]][] <- format.pval(xx[[1]], 2, na.form = "-")
-    #     attributes(pp) <- attributes(x$p.value)
-    print(xx[[1]], digits=digits, quote = FALSE, ...)
-  }
-  cat("\n")
-
-  invisible(x)
-}
-
-
-
-# Test  NemenyiTest
-#
-# d.frm <- data.frame(x=c(28,30,33,35,38,41, 36,39,40,43,45,50, 44,45,47,49,53,54),
-#                     g=c(rep(LETTERS[1:3], each=6)))
-# NemenyiTest(x~g, d.frm)
-#
-# library(coin)
-# library(multcomp)
-# nem <- oneway_test(x ~ g, data=d.frm,
-#                    ytrafo = function(data) trafo(data, numeric_trafo=rank),
-#                    xtrafo = function(data) trafo(data, factor_trafo = function(x)
-#                      model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))),
-#                    teststat="max")
-# nem
-# pvalue(nem, method="single-step")
-
-
-NemenyiTest <- function (x, ...)
-  UseMethod("NemenyiTest")
-
-
-NemenyiTest.formula <- function (formula, data, subset, na.action, ...) {
-
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-                                                                  "term.labels")) != 1L))
-    stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- quote(stats::model.frame)
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  if (length(mf) > 2L)
-    stop("'formula' should be of the form response ~ group")
-  DNAME <- paste(names(mf), collapse = " by ")
-  names(mf) <- NULL
-  response <- attr(attr(mf, "terms"), "response")
-  y <- DoCall("NemenyiTest", c(as.list(mf), list(...)))
-  y$data.name <- DNAME
-  y
-}
-
-
-
-
-NemenyiTest.default <- function (x, g,
-                                 dist = c("tukey", "chisq"), out.list = TRUE, ...) {
-
-  if (is.list(x)) {
-    if (length(x) < 2L)
-      stop("'x' must be a list with at least 2 elements")
-    DNAME <- deparse(substitute(x))
-    x <- lapply(x, function(u) u <- u[complete.cases(u)])
-    k <- length(x)
-    l <- sapply(x, "length")
-    if (any(l == 0))
-      stop("all groups must contain data")
-    g <- factor(rep(1:k, l))
-    x <- unlist(x)
-  }
-  else {
-    if (length(x) != length(g))
-      stop("'x' and 'g' must have the same length")
-    DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(g)))
-    OK <- complete.cases(x, g)
-    x <- x[OK]
-    g <- g[OK]
-    if (!all(is.finite(g)))
-      stop("all group levels must be finite")
-    g <- factor(g)
-    k <- nlevels(g)
-    if (k < 2)
-      stop("all observations are in the same group")
-  }
-  N <- length(x)
-  if (N < 2)
-    stop("not enough observations")
-
-  dist <- match.arg(dist, c("tukey", "chisq"))
-
-  nms <- levels(g)
-
-  n <- tapply(g, g, length)
-  rnk <- rank(x)
-  mrnk <- tapply(rnk, g, mean)
-
-  tau <- table(rnk[AllDuplicated(rnk)])
-  tiesadj <- min(1, 1 - sum(tau^3 - tau) / (N^3 - N))
-  mrnkdiff <- outer(mrnk, mrnk, "-")
-
-  if(dist == "chisq"){
-    chi <- mrnkdiff^2 / ((N*(N+1)/12) * outer(1/n, 1/n, "+"))
-    pvals <- pchisq(tiesadj * chi, df=k-1, lower.tail=FALSE)
-  } else {
-    z <- abs(mrnkdiff) / sqrt( (N*(N+1)/12) * outer(1/n, 1/n, "+"))
-    pvals <- ptukey(z * sqrt(2), nmeans=k, df=Inf, lower.tail=FALSE)
-  }
-
-
-  keep <- lower.tri(pvals)
-  pvals <- pvals[keep]
-  m <- sum(keep)
-
-  out <- list()
-
-  # no p.adjustment in this test
-  # pvals <- p.adjust(pvals, method=method)
-  method.str <- "none" #method
-
-  if(out.list){
-    dnames <- list(NULL, c("mean rank diff", "pval"))
-    if (!is.null(nms))
-      dnames[[1L]] <- outer(nms, nms, paste, sep = "-")[keep]
-    out[[1]] <- array(c(mrnkdiff[keep], pvals), c(length(mrnkdiff[keep]), 2L), dnames)
-
-  } else {
-    out[[1]] <- matrix(NA, nrow=length(nms), ncol=length(nms))
-    out[[1]][lower.tri(out[[1]], diag = FALSE)] <- pvals
-    dimnames(out[[1]]) <- list(nms, nms)
-    out[[1]] <- out[[1]][-1, -ncol(out[[1]])]
-
-  }
-
-  class(out) <- c("DunnTest")
-  attr(out, "main") <- gettextf("Nemenyi's test of multiple comparisons for independent samples (%s) ", dist)
-  attr(out, "method") <- method.str
-  attr(out, "out.list") <- out.list
-
-  return(out)
-
-}
-
-
-
-
-DunnettTest <- function (x, ...)
-  UseMethod("DunnettTest")
-
-
-
-DunnettTest.formula <- function (formula, data, subset, na.action, ...) {
-
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-                                                                  "term.labels")) != 1L))
-    stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- quote(stats::model.frame)
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  if (length(mf) > 2L)
-    stop("'formula' should be of the form response ~ group")
-  DNAME <- paste(names(mf), collapse = " by ")
-  names(mf) <- NULL
-  response <- attr(attr(mf, "terms"), "response")
-  y <- DoCall("DunnettTest", c(as.list(mf), list(...)))
-  y$data.name <- DNAME
-  y
-}
-
-
-
-DunnettTest.default <- function (x, g, control = NULL
-                                  , conf.level = 0.95, ...) {
-
-  if (is.list(x)) {
-    if (length(x) < 2L)
-      stop("'x' must be a list with at least 2 elements")
-    DNAME <- deparse(substitute(x))
-    x <- lapply(x, function(u) u <- u[complete.cases(u)])
-    k <- length(x)
-    l <- sapply(x, "length")
-    if (any(l == 0))
-      stop("all groups must contain data")
-    g <- factor(rep(1:k, l))
-    x <- unlist(x)
-  } else {
-    if (length(x) != length(g))
-      stop("'x' and 'g' must have the same length")
-    DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(g)))
-    OK <- complete.cases(x, g)
-    x <- x[OK]
-    g <- g[OK]
-    if (!all(is.finite(g)))
-      stop("all group levels must be finite")
-    g <- factor(g)
-    k <- nlevels(g)
-    if (k < 2)
-      stop("all observations are in the same group")
-  }
-  N <- length(x)
-  if (N < 2)
-    stop("not enough observations")
-
-  # just organisational stuff so far, got a fine x and g now
-
-  if (is.null(control)) control <- levels(g)[1]
-
-  ctrls <- control
-  out <- list()
-
-  for(ii in seq_along(ctrls)){
-
-    control <- ctrls[ii]
-
-    ni <- tapply(x, g, length)
-
-    means <- tapply(x, g, mean)
-    meandiffs <- means[names(means) != control] - means[control]
-
-    fittedn <- ni[names(ni) != control]
-    controln <- ni[control]
-
-    s <- sqrt( sum(tapply(x, g, function(x) sum((x - mean(x))^2) )) /
-                 (N - k))
-
-    Dj <- meandiffs / (s * sqrt((1/fittedn) + (1/controln)))
-    Rij <- sqrt(fittedn/(fittedn + controln))
-
-    R <- outer(Rij, Rij, "*")
-    diag(R) <- 1
-
-    set.seed(5)  # for getting consistent results every run
-    qvt <- mvtnorm::qmvt((1 - (1 - conf.level)/2), df = N - k, sigma = R, tail = "lower.tail")$quantile
-
-    lower <- meandiffs - s * sqrt((1/fittedn) + (1/controln)) * qvt
-    upper <- meandiffs + s * sqrt((1/fittedn) + (1/controln)) * qvt
-
-    pval <- c()
-    for (i in 1:(k-1)){
-      pval[i] <- 1 - mvtnorm::pmvt(-abs(Dj[i]), abs(Dj[i]), corr=R, delta=rep(0, k-1), df=N - k)[1]
-    }
-
-    out[[ii]] <- cbind(diff=meandiffs, lower, upper, pval)
-    dimnames(out[[ii]]) <- list(paste(names(meandiffs), control, sep="-"), c("diff", "lwr.ci", "upr.ci","pval"))
-  }
-
-  names(out) <- ctrls
-
-  class(out) <- c("PostHocTest")
-#  attr(out, "orig.call") <- NA
-  attr(out, "conf.level") <- conf.level
-  attr(out, "ordered") <- FALSE
-  attr(out, "method") <- ""
-  attr(out, "method.str") <- gettextf("\n  Dunnett's test for comparing several treatments with a control : %s \n", attr(out, "method"))
-
-  return(out)
-
-}
-
-
-
-
-HotellingsT2Test <- function(x,...) {
-  UseMethod("HotellingsT2Test")
-}
-
-HotellingsT2Test.default <- function(x, y=NULL, mu=NULL, test="f",...) {
-
-
-  `HotellingsT.internal`  <-  function(x, y=NULL, mu, test) {
-    n <- dim(x)[1]
-    p <- dim(x)[2]
-
-    if(is.null(y))     #one sample case
-    {
-      test.statistic <- n*as.numeric(t(colMeans(x)-mu)%*%solve(cov(x))%*%(colMeans(x)-mu))*switch(test,f=(n-p)/(p*(n-1)),chi=1)
-      df.1 <- p
-      df.2 <- switch(test,f=n-p,chi=NA)
-      p.value <- 1-switch(test,f=pf(test.statistic,df.1,df.2),chi=pchisq(test.statistic,df.1))
-      return(list(test.statistic=test.statistic,p.value=p.value,df.1=df.1,df.2=df.2))
-    }
-
-    # else two sample case
-    n1 <- n
-    n2 <- dim(y)[1]
-    xmeans <- colMeans(x)
-    ymeans <- colMeans(y)
-    x.diff <- sweep(x,2,xmeans)
-    y.diff <- sweep(y,2,ymeans)
-    S.pooled <- 1/(n1+n2-2)*(t(x.diff)%*%x.diff+t(y.diff)%*%y.diff)
-    test.statistic <- n1*n2/(n1+n2)*t(xmeans-ymeans-mu)%*%solve(S.pooled)%*%(xmeans-ymeans-mu)*switch(test,f=(n1+n2-p-1)/(p*(n1+n2-2)),chi=1)
-    df.1 <- p
-    df.2 <- switch(test,f=n1+n2-p-1,chi=NA)
-    p.value <- 1-switch(test,f=pf(test.statistic,df.1,df.2),chi=pchisq(test.statistic,df.1))
-    list(test.statistic=test.statistic,p.value=p.value,df.1=df.1,df.2=df.2)
-  }
-
-
-  if (is.null(y)) {
-    DNAME <- deparse(substitute(x))
-  } else {
-    DNAME=paste(deparse(substitute(x)),"and",deparse(substitute(y)))
-  }
-
-  xok <- complete.cases(x)
-  x <- x[xok,]
-  if(!all(sapply(x, is.numeric))) stop("'x' must be numeric")
-  x <- as.matrix(x)
-
-  p <- dim(x)[2]
-
-  if (!is.null(y)) {
-    yok <- complete.cases(y)
-    y <- y[yok,]
-
-    if(!all(sapply(y, is.numeric))) stop("'y' must be numeric")
-    if (p!=dim(y)[2]) stop("'x' and 'y' must have the same number of columns")
-    y <- as.matrix(y)
-  }
-
-  if (is.null(mu)) mu <- rep(0,p)
-  else if (length(mu)!=p) stop("length of 'mu' must equal the number of columns of 'x'")
-
-  test <- match.arg(test,c("f","chi"))
-
-  if (is.null(y) & test=="f") version <- "one.sample.f"
-  if (is.null(y) & test=="chi") version <- "one.sample.chi"
-  if (!is.null(y) & test=="f") version <- "two.sample.f"
-  if (!is.null(y) & test=="chi") version <- "two.sample.chi"
-
-  res1 <- switch(version,
-                 "one.sample.f"={
-                   result <- HotellingsT.internal(x,mu=mu,test=test)
-                   STATISTIC <- result$test.statistic
-                   names(STATISTIC) <- "T.2"
-                   PVAL <- result$p.value
-                   METHOD <- "Hotelling's one sample T2-test"
-                   PARAMETER <- c(result$df.1,result$df.2)
-                   names(PARAMETER) <- c("df1","df2")
-                   RVAL <- list(statistic=STATISTIC,p.value=PVAL,method=METHOD,parameter=PARAMETER)
-
-                   RVAL}
-                 ,
-                 "one.sample.chi"={
-                   result <- HotellingsT.internal(x,mu=mu,test=test)
-                   STATISTIC <- result$test.statistic
-                   names(STATISTIC) <- "T.2"
-                   PVAL <- result$p.value
-                   METHOD <- "Hotelling's one sample T2-test"
-                   PARAMETER <- c(result$df.1)
-                   names(PARAMETER) <- c("df")
-                   RVAL <- list(statistic=STATISTIC,p.value=PVAL,method=METHOD,parameter=PARAMETER)
-
-                   RVAL}
-                 ,
-                 "two.sample.f"={
-                   result <- HotellingsT.internal(x,y,mu,test)
-                   STATISTIC <- result$test.statistic
-                   names(STATISTIC) <- "T.2"
-                   PVAL <- result$p.value
-                   METHOD <- "Hotelling's two sample T2-test"
-                   PARAMETER <- c(result$df.1,result$df.2)
-                   names(PARAMETER) <- c("df1","df2")
-                   RVAL <- list(statistic=STATISTIC,p.value=PVAL,method=METHOD,parameter=PARAMETER)
-
-                   RVAL}
-                 ,
-                 "two.sample.chi"={
-                   result <- HotellingsT.internal(x,y,mu,test)
-                   STATISTIC <- result$test.statistic
-                   names(STATISTIC) <- "T.2"
-                   PVAL <- result$p.value
-                   METHOD <- "Hotelling's two sample T2-test"
-                   PARAMETER <- c(result$df.1)
-                   names(PARAMETER) <- c("df")
-                   RVAL <- list(statistic=STATISTIC,p.value=PVAL,method=METHOD,parameter=PARAMETER)
-
-                   RVAL}
-  )
-  ALTERNATIVE="two.sided"
-  NVAL <- paste("c(",paste(mu,collapse=","),")",sep="")
-  if (is.null(y)) names(NVAL) <- "location" else names(NVAL) <- "location difference"
-  res <- c(res1,list(data.name=DNAME,alternative=ALTERNATIVE,null.value=NVAL))
-  class(res) <- "htest"
-  return(res)
-}
-
-
-HotellingsT2Test.formula <- function (formula, data, subset, na.action, ...) {
-
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-                                                                  "term.labels")) != 1L))
-    stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- quote(stats::model.frame)
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  DNAME <- paste(names(mf), collapse = " by ")
-  names(mf) <- NULL
-  response <- attr(attr(mf, "terms"), "response")
-  g <- factor(mf[[-response]])
-  if (nlevels(g) != 2L)
-    stop("grouping factor must have exactly 2 levels")
-  # DATA <- setNames(split(mf[[response]], g), c("x", "y"))
-  DATA <- setNames(split(as.data.frame(mf[[response]]), g), c("x", "y"))
-
-  y <- DoCall("HotellingsT2Test", c(DATA, list(...)))
-  y$data.name <- DNAME
-  y
-}
-
-
-###
 
 
 ## basic finance functions  ---------------
@@ -15002,7 +6133,7 @@ PlotPar <- function(){
 
 
 
-PlotRCol <- function(ord=c("hsv","default"), label=c("text","hex","dec"), mdim = c(38, 12)) {
+ColPicker <- function(locator=TRUE, ord=c("hsv","default"), label=c("text","hex","dec"), mdim = c(38, 12)) {
 
   usr <- par(no.readonly=TRUE);  on.exit(par(usr))
 
@@ -15066,6 +6197,11 @@ PlotRCol <- function(ord=c("hsv","default"), label=c("text","hex","dec"), mdim =
         )
       }
   )
+
+  z <- locator()
+
+
+
 }
 
 
@@ -15126,7 +6262,6 @@ Mar <- function(bottom=NULL, left=NULL, top=NULL, right=NULL, outer=FALSE){
 
 Xplore <- function (x) {
 
-  # require(manipulate)
 
   .PrepCmd <- function(xvar, yvar, data, dcol, col, dpch, pch, alpha, cex, grid, smooth, desc, show) {
     if(desc){
@@ -15182,43 +6317,45 @@ Xplore <- function (x) {
 
   }
 
-  # define the variables here, as the Rcmd check as CRAN will note miss a visible binding:
-  #    Explore: no visible binding for global variable 'xvar'
+  if (requireNamespace("manipulate", quietly = FALSE)){
 
-  xvar <- character()
-  yvar <- character()
-  dcol <- character()
-  dpch <- character()
-  col <- character()
-  pch <- character()
-  alpha <- character()
-  cex <- character()
-  desc <- logical()
-  show <- logical()
+    # define the variables here, as the Rcmd check as CRAN will note miss a visible binding:
+    #    Explore: no visible binding for global variable 'xvar'
 
-  variables <- c("none", as.list(names(x)))
-  snames <- c(none = NA, as.list(names(x)[!sapply(x, IsNumeric)]))
-  cols <- as.list(colors())
-  smoothers <- as.list(c("none", "loess", "linear", "spline"))
+    xvar <- character()
+    yvar <- character()
+    dcol <- character()
+    dpch <- character()
+    col <- character()
+    pch <- character()
+    alpha <- character()
+    cex <- character()
+    desc <- logical()
+    show <- logical()
 
-  manipulate::manipulate({
-    eval(parse(text = .PrepCmd(xvar, yvar, x, dcol, col, dpch, pch, alpha, cex, grid, smooth, desc, show)))
-  },
-  yvar = manipulate::picker(variables, initial = "none", label = "y-variable     "),
-  xvar = manipulate::picker(variables, initial = "none", label = "x-variable     "),
-  dcol = manipulate::picker(snames, initial = "none", label = "data color          "),
-  col = manipulate::picker(cols, initial = "black", label = "color          "),
-  dpch = manipulate::picker(snames, initial = "none", label = "data point character"),
-  pch = manipulate::picker(as.list(as.character(1:25)), initial = "1", label = "point character"),
-  alpha = manipulate::slider(min=0, max = 1, step = 0.1, ticks = TRUE, initial = 1, label = "transparency"),
-  cex = manipulate::slider(min=0.1, max = 5, step = 0.1, ticks = TRUE, initial = 1, label = "point character extension"),
-  grid = manipulate::checkbox(initial = FALSE, label = "grid"),
-  smooth = manipulate::picker(smoothers, initial = "none", label = "smoother          "),
-  desc = manipulate::button("Describe"),
-  show = manipulate::button("Print command")
-  )
+    variables <- c("none", as.list(names(x)))
+    snames <- c(none = NA, as.list(names(x)[!sapply(x, IsNumeric)]))
+    cols <- as.list(colors())
+    smoothers <- as.list(c("none", "loess", "linear", "spline"))
 
+    manipulate::manipulate({
+      eval(parse(text = .PrepCmd(xvar, yvar, x, dcol, col, dpch, pch, alpha, cex, grid, smooth, desc, show)))
+    },
+    yvar = manipulate::picker(variables, initial = "none", label = "y-variable     "),
+    xvar = manipulate::picker(variables, initial = "none", label = "x-variable     "),
+    dcol = manipulate::picker(snames, initial = "none", label = "data color          "),
+    col = manipulate::picker(cols, initial = "black", label = "color          "),
+    dpch = manipulate::picker(snames, initial = "none", label = "data point character"),
+    pch = manipulate::picker(as.list(as.character(1:25)), initial = "1", label = "point character"),
+    alpha = manipulate::slider(min=0, max = 1, step = 0.1, ticks = TRUE, initial = 1, label = "transparency"),
+    cex = manipulate::slider(min=0.1, max = 5, step = 0.1, ticks = TRUE, initial = 1, label = "point character extension"),
+    grid = manipulate::checkbox(initial = FALSE, label = "grid"),
+    smooth = manipulate::picker(smoothers, initial = "none", label = "smoother          "),
+    desc = manipulate::button("Describe"),
+    show = manipulate::button("Print command")
+    )
 
+  }
 }
 
 
@@ -15698,6 +6835,10 @@ hblue <- PalHelsana()[6]
 hgreen <- PalHelsana()[7]
 
 
+PalDefault <- function(){
+  getOption("DescTools.pal", default = c(PalHelsana()[c(1,6,4,2,7,3,5)], "grey80", "grey40", "white"))
+}
+
 # example:
 # barplot(1:7, col=SetAlpha(PalHelsana[c("ecru","hellgruen","hellblau")], 1) )
 
@@ -15706,7 +6847,7 @@ hgreen <- PalHelsana()[7]
 
 ## geometric primitives ====
 
-Stamp <- function(txt=NULL, las=1, cex=0.6) {
+Stamp <- function(txt=NULL, las=par("las"), cex=0.6) {
 
   # set an option like:
   # options(stamp=expression("gettextf('%s/%s', Sys.getenv('USERNAME'), Format(Today(), fmt='yyyy-mm-dd')))")
@@ -15714,7 +6855,8 @@ Stamp <- function(txt=NULL, las=1, cex=0.6) {
 
   stamp <- function(x) {
 
-    opar <- par(yaxt='s', xaxt='s', xpd=TRUE)
+#    opar <- par(yaxt='s', xaxt='s', xpd=TRUE)
+    opar <- par(yaxt='s', xaxt='s', xpd=NA)
     on.exit(par(opar))
     plt <- par('plt')
     usr <- par('usr')
@@ -16682,7 +7824,7 @@ PlotBubble.formula <- function (formula, data = parent.frame(), ..., subset, yla
 
 PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
                        , xlim = NULL
-                       , do.hist = !(all(IsWhole(x,na.rm=TRUE)) & length(unique(na.omit(x))) < 13)
+                       , do.hist =NULL # !(all(IsWhole(x,na.rm=TRUE)) & length(unique(na.omit(x))) < 13)
                        # do.hist overrides args.hist, add.dens and rug
                        , args.hist = NULL          # list( breaks = "Sturges", ...)
                        , args.rug = NA             # list( ticksize = 0.03, side = 1, ...), pass NA if no rug
@@ -16703,6 +7845,7 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
   # dev question: should dots be passed somewhere??
 
   usr <- par(no.readonly=TRUE);  on.exit(par(usr))
+  opt <- options(stamp=NULL)
 
   add.boxplot <- !identical(args.boxplot, NA)
   add.rug <- !identical(args.rug, NA)
@@ -16764,6 +7907,9 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
   if (is.null(xlim))  args.hist1$xlim <- range(pretty(x.hist$breaks))
   args.histplot <- args.hist1[!names(args.hist1) %in% c("x", "breaks", "include.lowest", "right", "nclass")]
 
+  if(is.null(do.hist))
+    do.hist <- !(isTRUE(all.equal(x, round(x), tol = .Machine$double.eps^0.5)) && length(unique(x)) < 13)
+
   if (do.hist) {
     # calculate max ylim for density curve, provided there should be one...
     # what's the maximal value in density or in histogramm$densities?
@@ -16817,6 +7963,8 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
       }
       DoCall("rug", args.rug1)
     }
+
+
   }
   else {
     plot(prop.table(table(x)), type = "h", xlab = "", ylab = "",
@@ -16833,11 +7981,20 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
     args.boxplot1 <- list(x = x, frame.plot = FALSE, main = NA, boxwex = 1,
                           horizontal = TRUE, ylim = args.hist1$xlim,
                           at = 1, xaxt = ifelse(add.ecdf, "n", "s"),
-                          outcex = 1.3, outcol = rgb(0,0,0,0.5), cex.axis=cex.axis)
+                          outcex = 1.3, outcol = rgb(0,0,0,0.5), cex.axis=cex.axis,
+                          pch.mean=23, col.meanci="grey85")
     if (!is.null(args.boxplot)) {
       args.boxplot1[names(args.boxplot)] <- args.boxplot
     }
+    plot(1, type="n", xlim=args.hist1$xlim, ylim=c(0,1)+.5, xlab="", ylab="", axes=FALSE)
+    grid(ny=NA)
+    ci <- MeanCI(x, na.rm=TRUE)
+    rect(xleft = ci[2], ybottom = 0.62, xright = ci[3], ytop = 1.35,
+         col=args.boxplot1$col.meanci, border=NA)
+    args.boxplot1$add = TRUE
     DoCall("boxplot", args.boxplot1)
+    points(x=ci[1], y=1, cex=2, col="grey65", pch=args.boxplot1$pch.mean, bg="white")
+
   }
 
   # plot ecdf
@@ -16872,7 +8029,15 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
     title(main=main, outer = TRUE)
   }
 
+  options(opt)
+  if(!is.null(getOption("stamp")))
+    if(add.ecdf)
+      Stamp(cex=0.9)
+    else
+      Stamp()
+
   layout(matrix(1))           # reset layout on exit
+
 }
 
 
@@ -16907,6 +8072,9 @@ PlotECDF <- function(x, breaks=NULL, col=getOption("col1", hblue),
   grid(ny = NA)
   points(x = range(x), y = c(0, 1), col = col,  pch = 3, cex = 2)
 
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
 }
 
 
@@ -16933,6 +8101,8 @@ PlotMultiDens.formula <- function (formula, data, subset, na.action, ...) {
     response <- attr(attr(mf, "terms"), "response")
 
     PlotMultiDens(split(mf[[response]], mf[-response]), ...)
+
+
 }
 
 
@@ -17027,6 +8197,9 @@ PlotMultiDens.default <- function( x, xlim = NULL, ylim = NULL
 
   res <- DoCall(rbind, lapply((lapply(l.dens, "[", c("bw","n"))), data.frame))
   res$kernel <- unlist(args.dens1["kernel"])
+
+  if(!is.null(getOption("stamp")))
+    Stamp()
 
   invisible(res)
 
@@ -17211,6 +8384,9 @@ PlotArea.default <- function(x, y=NULL, prop=FALSE, add=FALSE, xlab=NULL, ylab=N
     suppressWarnings(polygon(xx, yy, col=col[i], ...))
   }
 
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
   invisible(y[,-1])
 }
 
@@ -17237,36 +8413,65 @@ PlotArea.formula <- function (formula, data, subset, na.action, ...) {
   } else {
     PlotArea.default(mf[2:1], ...)
   }
+
 }
 
 ###
 
 ## plots: PlotDotCI ====
-
-
 PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("cex"),
                      pch = 21, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"),
-                     lcolor = "gray", xlim = NULL, main = NULL,
-                     xlab = NULL, ylab = NULL, add = FALSE,
-                     args.errbars = NULL, ...) {
+                     lcolor = "gray", xlim = NULL, main = NULL, xlab = NULL, ylab = NULL,
+                     add = FALSE, args.errbars = NULL, ...) {
 
-  # this is mainly R-Core code from dotchart
-  # extended by argument add and returning y-coordinates
-
-  x <- Rev(x, margin=1)
-
-  if(is.null(xlim)) {
-    if(is.null(args.errbars)){
-      xlim <- range(x[is.finite(x)])
-    } else {
-      rng <- c(args.errbars[["from"]], args.errbars[["to"]])
-      xlim <- range(rng[is.finite(rng)])
+  ErrBarArgs <- function(from, to = NULL, pos = NULL, mid = NULL,
+                         horiz = FALSE, col = par("fg"), lty = par("lty"), lwd = par("lwd"),
+                         code = 3, length = 0.05, pch = NA, cex.pch = par("cex"),
+                         col.pch = par("fg"), bg.pch = par("bg"), ...) {
+    if (is.null(to)) {
+      if (dim(from)[2] %nin% c(2, 3))
+        stop("'from' must be a kx2 or a kx3 matrix, when 'to' is not provided.")
+      if (dim(from)[2] == 2) {
+        to <- from[, 2]
+        from <- from[, 1]
+      }
+      else {
+        mid <- from[, 1]
+        to <- from[, 3]
+        from <- from[, 2]
+      }
     }
+    return(list(from = from, to = to, mid = mid, col = col,
+                col.axis = 1, lty = lty, lwd = lwd, angle = 90, code = code,
+                length = length, pch = pch, cex.pch = cex.pch, col.pch = col.pch,
+                bg.pch = bg.pch))
   }
 
+  x <- Rev(x, 1)
+  labels <- rev(labels)
+  groups <- rev(groups)
+  gdata <- Rev(gdata, 1)
+  # gcolor <- Rev(gcolor)
+  lcolor <- Rev(lcolor)
+  color <- Rev(color)
+  pch <- Rev(pch)
+  bg <- Rev(bg)
+
+  cex <- rep(cex, length.out = 3)
+  if (!is.null(args.errbars))
+    errb <- do.call(ErrBarArgs, args.errbars)
+  if (!add && is.null(xlim)) {
+    if (is.null(args.errbars)) {
+      xlim <- range(x[is.finite(x)])
+    }
+    else {
+      rng <- c(errb$from, errb$to)
+      xlim <- range(pretty(rng[is.finite(rng)]))
+    }
+  }
   opar <- par("mai", "mar", "cex", "yaxs")
   on.exit(par(opar))
-  par(cex = cex, yaxs = "i")
+  par(cex = cex[1], yaxs = "i")
   if (!is.numeric(x))
     stop("'x' must be a numeric vector or matrix")
   n <- length(x)
@@ -17290,7 +8495,8 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
       x <- as.numeric(x)
     }
   }
-  if(!add) plot.new()
+  if (!add)
+    plot.new()
   linch <- if (!is.null(labels))
     max(strwidth(labels, "inch"), na.rm = TRUE)
   else 0
@@ -17317,137 +8523,240 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
     o <- sort.list(as.numeric(groups), decreasing = TRUE)
     x <- x[o]
     groups <- groups[o]
-    color <- rep_len(color, length(groups))[o]
-    lcolor <- rep_len(lcolor, length(groups))[o]
+    # color <- rep_len(color, length(groups))[o]
+    # lcolor <- rep_len(lcolor, length(groups))[o]
     offset <- cumsum(c(0, diff(as.numeric(groups)) != 0))
     y <- 1L:n + 2 * offset
     ylim <- range(0, y + 2)
   }
-  if(!add) plot.window(xlim = xlim, ylim = ylim, log = "")
+  if (!add)
+    plot.window(xlim = xlim, ylim = ylim, log = "")
   lheight <- par("csi")
   if (!is.null(labels)) {
     linch <- max(strwidth(labels, "inch"), na.rm = TRUE)
     loffset <- (linch + 0.1)/lheight
     labs <- labels[o]
     mtext(labs, side = 2, line = loffset, at = y, adj = 0,
-          col = color, las = 2, cex = cex, ...)
+          col = color, las = 2, cex = cex[2], ...)
   }
-  if(!add) abline(h = y, lty = "dotted", col = lcolor)
+  if (!add)
+    abline(h = y, lty = "dotted", col = lcolor)
   points(x, y, pch = pch, col = color, bg = bg)
-  if (!is.null(groups) & (!add)) {
+  if (!is.null(groups)) {
     gpos <- rev(cumsum(rev(tapply(groups, groups, length)) +
                          2) - 1)
-    ginch <- max(strwidth(glabels, "inch", font=2), na.rm = TRUE)
+    ginch <- max(strwidth(glabels, "inch"), na.rm = TRUE)
     goffset <- (max(linch + 0.2, ginch, na.rm = TRUE) + 0.1)/lheight
-    mtext(glabels, side = 2, line = goffset, at = gpos, adj = 0, font=2,
-          col = gcolor, las = 2, cex = cex, ...)
+    mtext(glabels, side = 2, line = goffset, at = gpos, adj = 0,
+          col = gcolor, las = 2, cex = cex[3], ...)
     if (!is.null(gdata)) {
       abline(h = gpos, lty = "dotted")
       points(gdata, gpos, pch = gpch, col = gcolor, bg = bg,
              ...)
     }
   }
-  if(!add) axis(1)
-  if(!add) box()
-  if(!add) title(main = main, xlab = xlab, ylab = ylab, ...)
-
-  # add error bars if requested
-  args.errbars1 <- list(horiz=TRUE, pos=rev(y))
-  if(!is.null(args.errbars)) {
-    args.errbars1[names(args.errbars)] <- args.errbars
-    args.errbars1[["from"]] <- args.errbars1[["from"]]
-    args.errbars1[["to"]] <- args.errbars1[["to"]]
-    args.errbars1[["mid"]] <- args.errbars1[["mid"]]
-
-    do.call("ErrBars", args.errbars1)
+  if (!add)
+    axis(1)
+  if (!add)
+    box()
+  if (!add)
+    title(main = main, xlab = xlab, ylab = ylab, ...)
+  if (!is.null(args.errbars)) {
+    arrows(x0 = rev(errb$from)[o], x1 = rev(errb$to)[o],
+           y0 = y, col = rev(errb$col), angle = 90, code = rev(errb$code),
+           lty = rev(errb$lty), lwd = rev(errb$lwd), length = rev(errb$length))
+    if (!is.null(errb$mid))
+      points(rev(errb$mid)[o], y = y, pch = rev(errb$pch), col = rev(errb$col.pch),
+             cex = rev(errb$cex.pch), bg = rev(errb$bg.pch))
   }
-
-
-  # return y-values
-  invisible(y)
-
+  if (!is.null(getOption("stamp")))
+    Stamp()
+  invisible(y[order(o, decreasing = TRUE)])
 }
 
 
-
-
-# PlotDotCI <- function( x, xlim = NULL, pch = 21, pch.cex = 1.0, pch.col = "black", pch.bg = "grey50"
-#   , lcol = "grey40", lwd = 2, args.legend = NULL , code = 3, lend="butt"
-#   , mar = c(7.1,4.1,4.1,2.1), ... ) {
+# PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("cex"),
+#                       pch = 21, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"),
+#                       lcolor = "gray", xlim = NULL, main = NULL, xlab = NULL, ylab = NULL,
+#                       add = FALSE, args.errbars = NULL, ...) {
 #
-#   # example:
-#   # xx <- do.call("rbind",tapply( d.pizza$temperature, d.pizza$driver, MeanCI, na.rm=TRUE ) )
-#   # rownames(xx) <- levels(d.pizza$driver)
-#   # PlotDotCI( xx, pch.cex=1.2 )
+#   # this is mainly R-Core code from dotchart
+#   # extended by argument add and returning y-coordinates
 #
-#   usr <- par("usr");  on.exit( par(usr) )
-#   par(mar=mar, lend=lend)
 #
-#   # we need xlim here, as all segments should be completely displayed
-#   if( missing("xlim") ) xlim <- range(pretty(x))
+#   ErrBarArgs <- function (from, to = NULL, pos = NULL, mid = NULL, horiz = FALSE,
+#                           col = par("fg"), lty = par("lty"), lwd = par("lwd"), code = 3,
+#                           length = 0.05, pch = NA, cex.pch = par("cex"), col.pch = NULL,
+#                           bg.pch = par("bg"), ...) {
 #
-#   x <- x[rev(1:nrow(x)),]    # reverse order by default
+#     col <- Rev(col)
+#     lty <- Rev(lty)
+#     lwd <- Rev(lwd)
+#     length <- Rev(length)
+#     pch <- Rev(pch)
+#     cex.pch <- Rev(cex.pch)
+#     if(is.null(col.pch))
+#       col.pch <- col
+#     else
+#       col.pch <- Rev(col.pch)
+#     bg.pch <- Rev(bg.pch)
 #
-#   dotchart( x[,1], xaxt="n", xlim=xlim, color="black", ...)
-#   abline(v=axTicks(1), col="grey", lty="dotted")
-#   arrows( x0=x[,2], x1=x[,3], y0=1:nrow(x), col=lcol, lwd=lwd, angle=90, code=code, length=0.05 )
-#   points( x=x[,1], y=1:nrow(x), bg=pch.bg, pch=pch, cex=pch.cex, col=pch.col )
+#     if (is.null(to)) {
+#       if (dim(from)[2] %nin% c(2, 3))
+#         stop("'from' must be a kx2 or a kx3 matrix, when 'to' is not provided.")
+#       if (dim(from)[2] == 2) {
+#         to <- from[, 2]
+#         from <- from[, 1]
+#       }
+#       else {
+#         mid <- from[, 1]
+#         to <- from[, 3]
+#         from <- from[, 2]
+#       }
+#     }
 #
-#   # the default values for the legend
-#   args.legend1 <- list( x = mean(par()$usr[1:2]), y = -1.3
-#         , legend = c("estimate", "95%-CI"), xpd = TRUE
-#         , ncol = 2, seg.len = 2, xjust = 0.5
-#         , adj = c(0, 0.5)
-#         , pt.bg = c(pch.bg, NA), lwd = lwd
-#         , pch = c(pch, NA), col = c(pch.bg, lcol)
-#         , bg = "white", cex = 0.8
-#       )
-#   if( length(unique(lwd))>1 ) {
-#     args.legend1[["fill"]] <-  NULL
-#     args.legend1[["col"]] <- col
-#     args.legend1[["lwd"]] <- lwd
+#     return(list(from=from, to=to, mid=mid, col = col, col.axis = 1, lty = lty,
+#                 lwd = lwd, angle = 90, code = code, length = length, pch=pch,
+#                 cex.pch=cex.pch, col.pch=col.pch, bg.pch=bg.pch))
+#
 #   }
-#   if ( !is.null(args.legend) ) { args.legend1[names(args.legend)] <- args.legend }
-#   add.legend <- TRUE
-#   if(!is.null(args.legend)) if(all(is.na(args.legend))) {add.legend <- FALSE}
 #
-#   if(add.legend) do.call("legend", args.legend1)
+#   x <- Rev(x, 1)
+#   labels <- rev(labels)
+#   groups <- rev(groups)
+#   gdata <- Rev(gdata, 1)
+#
+#
+#   cex <- rep(cex, length.out=3)
+#
+#   if (!is.null(args.errbars))
+#     errb <- do.call(ErrBarArgs, args.errbars)
+#
+#   if (!add && is.null(xlim)) {
+#     if (is.null(args.errbars)) {
+#       xlim <- range(x[is.finite(x)])
+#     }
+#     else {
+#       rng <- c(errb$from, errb$to)
+#       xlim <- range(pretty(rng[is.finite(rng)]))
+#     }
+#   }
+#
+#
+#   opar <- par("mai", "mar", "cex", "yaxs")
+#   on.exit(par(opar))
+#   par(cex = cex[1], yaxs = "i")
+#   if (!is.numeric(x))
+#     stop("'x' must be a numeric vector or matrix")
+#   n <- length(x)
+#   if (is.matrix(x)) {
+#     if (is.null(labels))
+#       labels <- rownames(x)
+#     if (is.null(labels))
+#       labels <- as.character(1L:nrow(x))
+#     labels <- rep_len(labels, n)
+#     if (is.null(groups))
+#       groups <- col(x, as.factor = TRUE)
+#     glabels <- levels(groups)
+#
+#   }  else {
+#     if (is.null(labels))
+#       labels <- names(x)
+#     glabels <- if (!is.null(groups))
+#       levels(groups)
+#     if (!is.vector(x)) {
+#       warning("'x' is neither a vector nor a matrix: using as.numeric(x)")
+#       x <- as.numeric(x)
+#     }
+#   }
+#   if(!add) plot.new()
+#   linch <- if (!is.null(labels))
+#     max(strwidth(labels, "inch"), na.rm = TRUE)
+#   else 0
+#   if (is.null(glabels)) {
+#     ginch <- 0
+#     goffset <- 0
+#
+#   }  else {
+#     ginch <- max(strwidth(glabels, "inch"), na.rm = TRUE)
+#     goffset <- 0.4
+#   }
+#   if (!(is.null(labels) && is.null(glabels))) {
+#     nmai <- par("mai")
+#     nmai[2L] <- nmai[4L] + max(linch + goffset, ginch) +
+#       0.1
+#     par(mai = nmai)
+#   }
+#   if (is.null(groups)) {
+#     o <- 1L:n
+#     y <- o
+#     ylim <- c(0, n + 1)
+#
+#   }  else {
+#     o <- sort.list(as.numeric(groups), decreasing = TRUE)
+#     x <- x[o]
+#     groups <- groups[o]
+#     color <- rep_len(color, length(groups))[o]
+#     lcolor <- rep_len(lcolor, length(groups))[o]
+#     offset <- cumsum(c(0, diff(as.numeric(groups)) != 0))
+#     y <- 1L:n + 2 * offset
+#     ylim <- range(0, y + 2)
+#   }
+#   if(!add) plot.window(xlim = xlim, ylim = ylim, log = "")
+#   lheight <- par("csi")
+#   if (!is.null(labels)) {
+#     linch <- max(strwidth(labels, "inch"), na.rm = TRUE)
+#     loffset <- (linch + 0.1)/lheight
+#     labs <- labels[o]
+#     mtext(labs, side = 2, line = loffset, at = y, adj = 0,
+#           col = color, las = 2, cex = cex[2], ...)
+#   }
+#   if(!add) abline(h = y, lty = "dotted", col = lcolor)
+#   points(x, y, pch = pch, col = color, bg = bg)
+#
+#
+#   if (!is.null(groups)) {
+#     gpos <- rev(cumsum(rev(tapply(groups, groups, length)) +
+#                          2) - 1)
+#     ginch <- max(strwidth(glabels, "inch"), na.rm = TRUE)
+#     goffset <- (max(linch + 0.2, ginch, na.rm = TRUE) + 0.1)/lheight
+#     mtext(glabels, side = 2, line = goffset, at = gpos, adj = 0,
+#           col = gcolor, las = 2, cex = cex[3], ...)
+#     if (!is.null(gdata)) {
+#       abline(h = gpos, lty = "dotted")
+#       points(gdata, gpos, pch = gpch, col = gcolor, bg = bg,
+#              ...)
+#     }
+#   }
+#
+#   if(!add) axis(1)
+#   if(!add) box()
+#   if(!add) title(main = main, xlab = xlab, ylab = ylab, ...)
+#
+#   # draw the error bars
+#   if (!is.null(args.errbars)) {
+#     arrows(x0 = rev(errb$from)[o], x1 = rev(errb$to)[o], y0 = y, col = errb$col, angle = 90, code = errb$code,
+#            lty = errb$lty, lwd = errb$lwd,  length = errb$length)
+#
+#     if(!is.null(errb$mid))
+#       points(rev(errb$mid)[o], y=y, pch=errb$pch, col=errb$col.pch, cex=errb$cex.pch, bg=errb$bg.pch)
+#
+#   }
+#
+#   if (!is.null(getOption("stamp")))
+#     Stamp()
+#
+#   # return y-values
+#   invisible(y[order(o, decreasing=TRUE)])
 #
 # }
 #
-#
-#
-# PlotDotCIp <- function(x, n, xlim=c(0,1), ord=c("rel", "abs", "names"), decreasing=FALSE, ... ) {
-#
-#   # example:
-#
-#   # tab <- table( d.pizza$driver, d.pizza$wine_delivered)
-#   # PlotDotCIp( x=tab[,2], n=apply(tab,1,sum), ord="abs", dec=TRUE )
-#
-#   # parameter recycling for x and n:
-#   #   which parameter has the highest dimension
-#   lgp <- list(x=x, n=n)
-#   maxdim <- max(unlist(lapply(lgp, length)))
-#   #   recycle all params to maxdim
-#   lgp <- lapply( lgp, rep, length.out=maxdim )
-#
-#   ci <- t(sapply(seq_along(x), function(i) BinomCI( x=lgp$x[i], n=lgp$n[i]) ))
-#   rownames(ci) <- names(x)
-#   switch( match.arg( arg=ord, choices=c("rel", "abs", "names") )
-#     , "rel" = { idx <- order(ci[,1], decreasing=decreasing) }
-#     , "abs" = { idx <- order(ci[,2], decreasing=decreasing) }
-#     , "names" =  { idx <- order(names(x), decreasing=decreasing) }
-#   )
-#   ci <- ci[idx,]
-#
-#   PlotDotCI( ci, xlim=xlim, ... )
-#
-# }
+
 
 
 PlotLinesA <- function(x, y, col=1:5, lty=1, lwd=1, lend = par("lend"), xlab = NULL,
                        ylab = NULL, xlim = NULL, ylim = NULL, cex = 1, cex.legend = 1,
-                       main=NULL, grid=TRUE, mar=NULL){
+                       main=NULL, grid=TRUE, mar=NULL, pch=NA, pch.col=par("fg"), pch.bg=par("bg"), pch.cex=1){
 
   # example:
   #
@@ -17460,13 +8769,16 @@ PlotLinesA <- function(x, y, col=1:5, lty=1, lwd=1, lend = par("lend"), xlab = N
   last <- Sort(data.frame(t(tail(as.matrix(x), 1))))
   last <- setNames(last[,], nm = rownames(last))
 
-  if(is.null(mar)) Mar(,,, 10)  # this would be nice, but there's no plot so far... max(strwidth(names(last))) * 1.2
+  if(is.null(mar)) Mar(NULL, NULL, NULL, 10)  # this would be nice, but there's no plot so far... max(strwidth(names(last))) * 1.2
   else do.call(Mar, as.list(mar))
 
   matplot(x, y, type="n", las=1, xlim=xlim, ylim=ylim, xaxt="n", main=main, ylab=ylab, cex = cex)
   axis(side = 1, at=c(1:nrow(x)), rownames(x), xlab=xlab)
   if(grid) grid()
   matplot(x, type="l", lty=lty, col=col, lwd=lwd, lend=lend, xaxt="n", add=TRUE)
+
+  if(!is.na(pch))
+    matplot(x, type="p", pch=pch, col=pch.col, bg=pch.bg, cex=pch.cex, xaxt="n", add=TRUE)
 
   oldpar <- par(xpd=TRUE); on.exit(par(oldpar))
   mtext(text = names(last), side=4, line = 1.8, at = SpreadOut(last, mindist = 1.2 * strheight("M")),
@@ -17476,6 +8788,9 @@ PlotLinesA <- function(x, y, col=1:5, lty=1, lwd=1, lend = par("lend"), xlab = N
            y0 = SpreadOut(unlist(last), mindist = 1.2 * strheight("M")),
            lwd=4, lend=1,
            col=col[match(names(last), colnames(x))])
+
+  if(!is.null(getOption("stamp")))
+    Stamp()
 
 }
 
@@ -17642,6 +8957,9 @@ PlotPyramid <- function(lx, rx = NA, ylab = "",
   mtext(text=rxlab, side=1, at=mean(at.right), padj=0.5, line=2.5, cex=cex.lab)
   mtext(text=lxlab, side=1, at=mean(at.left), padj=0.5, line=2.5, cex=cex.lab)
 
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
   return(b)   # return the same result as barplot
 }
 
@@ -17697,7 +9015,7 @@ PlotCorr <- function(x, cols = colorRampPalette(c(getOption("col1", hred), "whit
   if(yaxt!="n") axis(side=2, at=1:ncol(x), labels=colnames(x), cex.axis=cex.axis, las=las, lwd=-1)
 
   if((is.list(args.colorlegend) || is.null(args.colorlegend))){
-    args.colorlegend1 <- list( labels=sprintf("%.1f", seq(1,-1, length=length(cols)/2+1))
+    args.colorlegend1 <- list( labels=sprintf("%.1f", seq(-1,1, length=length(cols)/2+1))
       , x=nrow(x)+0.5 + nrow(x)/20, y=ncol(x)+0.5
       , width=nrow(x)/20, height=ncol(x), cols=cols, cex=0.8 )
     if ( !is.null(args.colorlegend) ) { args.colorlegend1[names(args.colorlegend)] <- args.colorlegend }
@@ -17714,6 +9032,9 @@ PlotCorr <- function(x, cols = colorRampPalette(c(getOption("col1", hred), "whit
     abline(h=seq(-2, nrow(x)+1,1)-0.5, v=seq(1,nrow(x)+1,1)-0.5, col=border,lwd=lwd)
     do.call("clip", as.list(usr))
   }
+
+  if(!is.null(getOption("stamp")))
+    Stamp()
 
 }
 
@@ -17842,6 +9163,9 @@ PlotViolin.default <- function (x, ..., horizontal = FALSE, bw = "SJ", na.rm = F
 
   }
 
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
 }
 
 
@@ -17929,6 +9253,10 @@ PlotPolar <- function(r, theta = NULL, type="p"
       segments(x0=0, y0=0, x1=xy$x, y1=xy$y, lwd = lwd[i], lty = lty[i], col = col[i])
     }
   }
+
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
 }
 
 
@@ -18042,6 +9370,9 @@ PlotTernary <- function(x, y = NULL, z = NULL, args.grid=NULL, lbl = NULL, main 
 
   points((x[,2] - x[,3]) * sq3, x[,1] * 1.5 - 0.5, ...)
 
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
 }
 
 
@@ -18138,6 +9469,9 @@ PlotVenn <- function (x, col = "transparent", plotit = TRUE, labels = NULL) {
     xy <- NA
   }
 
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
   return(list(venntab, xy))
 }
 
@@ -18181,12 +9515,15 @@ PlotHorizBar <- function (from, to, grp = 1, col = "lightgrey", border = "black"
   rect(xleft, ybottom, xright, ytop, density = NULL, angle = 45,
        col = col, border = border, lty = par("lty"), lwd = par("lwd"))
 
-}
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
+  }
 
 
 
 PlotMiss <- function(x, col = hred, bg=SetAlpha(hecru, 0.3), clust=FALSE,
-                     main = NULL){
+                     main = NULL, ...){
 
   x <- as.data.frame(x)
   x <- Rev(x, 2)
@@ -18197,7 +9534,7 @@ PlotMiss <- function(x, col = hred, bg=SetAlpha(hecru, 0.3), clust=FALSE,
   ymar <- lab.width + 3
 
   Canvas(xlim=c(1, nrow(x)+1), ylim=c(0, n), asp=NA, xpd=TRUE, mar = c(5.1, ymar, 5.1, 5.1)
-         , main=main)
+         , main=main, ...)
 
   usr <- par("usr") # set background color lightgrey
   rect(xleft=0, ybottom=usr[3], xright=nrow(x)+1, ytop=usr[4], col=bg, border=NA)
@@ -18228,6 +9565,9 @@ PlotMiss <- function(x, col = hred, bg=SetAlpha(hecru, 0.3), clust=FALSE,
   abline(h=1:ncol(x), col="white")
   text(x = -0.03 * nrow(x), y = (1:n)-0.5, labels = colnames(x), las=1, adj = 1)
   text(x = nrow(x) * 1.04, y = (1:n)-0.5, labels = sapply(x, function(y) sum(is.na(y))), las=1, adj=0)
+
+  if(!is.null(getOption("stamp")))
+    Stamp()
 
   invisible(res)
 }
@@ -18356,6 +9696,9 @@ PlotTreemap <- function(x, grp=NULL, labels=NULL, cex=1.0, text.col="black", col
         y=apply(zg[,c("y0","y1")], 1, mean),
         labels=labels.grp, cex=cex.grp, col=text.col.grp)
 
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
   invisible(res)
 
 }
@@ -18440,7 +9783,10 @@ PlotCirc <- function(tab, acol = rainbow(sum(dim(tab))), aborder = "darkgrey",
     text(out, labels=labels, cex=cex.lab, srt=ifelse(las==3, 90, 0), adj=adj)
   }
 
-  invisible(out)
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
+    invisible(out)
 
 }
 
@@ -18451,8 +9797,9 @@ PlotCirc <- function(tab, acol = rainbow(sum(dim(tab))), aborder = "darkgrey",
 ## plots: PlotWeb ====
 
 
-PlotWeb <- function(m, col=c("red","blue"), lty=par("lty"), args.legend=NULL, pch=21, pt.cex=2,
-                    pt.col="black", pt.bg="darkgrey", ... ){
+PlotWeb <- function(m, col=c(hred, hblue), lty=par("lty"), args.legend=NULL, pch=21, pt.cex=2,
+                    pt.col="black", pt.bg="darkgrey", cex.lab = 1.0,
+                    las = 1, adj = NULL, dist = 0.5, ... ){
 
 # following an idee from library(LIM)
 # example(plotweb)
@@ -18466,32 +9813,60 @@ PlotWeb <- function(m, col=c("red","blue"), lty=par("lty"), args.legend=NULL, pc
   DescTools::Canvas(w, ...)
   angles <- seq(0, 2*pi, length=nrow(m)+1)[-1]
   xy <- DescTools::PolToCart(r=3, theta=angles)
-  cbind(1, (angles %[]% c(pi/2, 3*pi/2))*1)
-  text(x=xy$x, y=round(xy$y,3), labels=colnames(m), pos=(!angles %[]% c(pi/2, 3*pi/2))*2 + 2, offset=1 )
-  #text(x=xy$x, y=round(xy$y,3), labels="x", pos=(!angles %[]% c(pi/2, 3*pi/2))*2+2   )
+  xylab <- DescTools::PolToCart(r=3 + dist, theta=angles)
 
-  d.m <- data.frame( from=rep(colnames(m), nrow(m)), to=rep(colnames(m), each=nrow(m))
-    , d=as.vector(m)
-    , from.x=rep(xy$x, nrow(m)), from.y=rep(xy$y, nrow(m)), to.x=rep(xy$x, each=nrow(m)), to.y=rep(xy$y, each=nrow(m)) )
+  labels <- colnames(m)
+
+    if(las == 2){
+    if(is.null(adj)) adj <- (angles %[]% c(pi/2, 3*pi/2))*1
+    adj <- rep(adj, length_out=length(labels))
+    sapply(seq_along(labels),
+           function(i) text(xylab$x[i], xylab$y[i], labels=labels[i], cex=cex.lab,
+                            srt=DescTools::RadToDeg(atan(xy$y[i]/xy$x[i])), adj=adj[i]))
+  } else {
+    if(is.null(adj)){
+      if(las==1)
+        adj <- (angles %[]% c(pi/2, 3*pi/2))*1
+      if(las==3)
+        adj <- (angles %[]% c(3*pi/4, 7*pi/4))*1
+    }
+    adj <- rep(adj, length_out=length(labels))
+    sapply(seq_along(labels),
+           function(i) text(xylab$x[i], xylab$y[i], labels=labels[i], cex=cex.lab,
+                            srt=ifelse(las==3, 90, 0), adj=adj[i]))
+
+  }
+
+  # d.m <- data.frame( from=rep(colnames(m), nrow(m)), to=rep(colnames(m), each=nrow(m))
+  #   , d=as.vector(m)
+  #   , from.x=rep(xy$x, nrow(m)), from.y=rep(xy$y, nrow(m)), to.x=rep(xy$x, each=nrow(m)), to.y=rep(xy$y, each=nrow(m)) )
   # d.m <- d.m[d.m$d > 0,]
   # lineare transformation of linewidth
-  a <- 1
-  b <- 15
-  d.m$d.sc <- (b-a) * (min(d.m$d)-a) + (b-a) /diff(range(d.m$d)) * d.m$d
+  a <- 0.5
+  b <- 10
+  # d.m$d.sc <- (b-a) * (min(d.m$d)-a) + (b-a) /diff(range(d.m$d)) * d.m$d
 
-  d.m$d.sc <- DescTools::LinScale(abs(d.m$d), newlow=0.5, newhigh=10 )
+  i <- DescTools::CombPairs(1:dim(m)[1])
+  d.m <- data.frame(from=colnames(m)[i[,1]], from=colnames(m)[i[, 2]], d=m[lower.tri(m)],
+                    from.x=xy[[1]][i[,2]], to.x=xy[[1]][i[,1]],
+                    from.y=xy[[2]][i[,2]], to.y=xy[[2]][i[,1]])
+
+  d.m$d.sc <- DescTools::LinScale(abs(d.m$d), newlow=a, newhigh=b )
   col <- rep(col, length.out=2)
   segments( x0=d.m$from.x, y0=d.m$from.y, x1 = d.m$to.x, y1 = d.m$to.y,
          col = col[((sign(d.m$d)+1)/2)+1], lty = lty, lwd = d.m$d.sc, lend= 1)
   points( xy, cex=pt.cex, pch=pch, col=pt.col, bg=pt.bg )
 
-  args.legend1 <- list( x="bottomright", inset=-0.05, legend=round(c(-min(abs(d.m$d)), max(abs(d.m$d))), 3)
+  args.legend1 <- list( x="bottomright", inset=-0.05, legend=round(c(-min(abs(d.m$d), na.rm=TRUE), max(abs(d.m$d), na.rm=TRUE)), 3)
                         , lwd = c(a,b), col=col, bg="white", cex=0.8)
   if ( !is.null(args.legend) ) { args.legend1[names(args.legend)] <- args.legend }
   add.legend <- TRUE
   if(!is.null(args.legend)) if(all(is.na(args.legend))) {add.legend <- FALSE}
 
   if(add.legend) do.call("legend", args.legend1)
+
+  if(!is.null(getOption("stamp")))
+    Stamp()
 
   invisible(xy)
 
@@ -18532,6 +9907,9 @@ PlotCandlestick <-  function(x, y, xlim = NULL, ylim = NULL, col = c("springgree
     col = col[(y[,1] > y[,4]) * 1 + 1], border = border)
 
   axis(side = 1, at = x, labels = x)
+
+  if(!is.null(getOption("stamp")))
+    Stamp()
 
 }
 
@@ -18762,26 +10140,37 @@ PlotACF <- function(series, lag.max = 10*log10(length(series)), ...)  {
   ## Revision: Christian Keller, 5 May 98
   ## Revision: Markus Huerzeler, 11. Maerz 04
 
+  # the stamp option should only be active for the third plot, so deactivate it here
+  opt <- options(stamp=NULL)
+
   if (!is.null(dim(series)))
     stop("f.acf is only implemented for univariate time series")
+
   par(mfrow=c(1,1))
   old.par <- par(mar=c(3,3,1,1), mgp=c(1.5,0.5,0))
   on.exit(par(old.par))
+
   split.screen(figs=matrix(c(0,1,0.33,1, 0,0.5,0,0.33, 0.5,1,0,0.33),
                            ncol=4, byrow=T), erase=TRUE)
-  ##screen(1)
+
+  ## screen(1)
   plot.ts(series, cex=0.7, ylab=deparse(substitute(series)), ...)
   screen(2)
   PlotGACF(series, lag.max=lag.max, cex=0.7)
+
   screen(3)
+  # Stamp only the last plot
+  options(opt)
   PlotGACF(series, lag.max=lag.max, type="part", cex=0.7)
   close.screen(all.screens=TRUE)
+
   invisible(par(old.par))
+
 }
 
 
-PlotGACF <- function(series, lag.max=10*log10(length(series)), type="cor", ylab=NULL, ...)
-{
+PlotGACF <- function(series, lag.max=10*log10(length(series)), type="cor", ylab=NULL, ...) {
+
   ## Author: Markus Huerzeler, Date:  6 Jun 94
   ## Revision: Christian Keller, 27 Nov 98
   ## Revision: Markus Huerzeler, 11 Mar 02
@@ -18825,6 +10214,10 @@ PlotGACF <- function(series, lag.max=10*log10(length(series)), type="cor", ylab=
   axis(1, at=pos, ...)
   abline(0,0)
   abline(h=c(erg.konf, - erg.konf), lty=2, col="blue")
+
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
   invisible()
 }
 
@@ -18896,6 +10289,10 @@ PlotMonth <- function(x, type = "l", labels, xlab = "", ylab = deparse(substitut
     axis(2)
     axis(1, at = hx + p/2, labels = labels)
   }
+
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
   invisible()
 }
 
@@ -19010,6 +10407,9 @@ PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, add=FALSE, args.qq
 
   }
 
+  if(!is.null(getOption("stamp")))
+    Stamp()
+
 }
 
 
@@ -19018,22 +10418,22 @@ PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, add=FALSE, args.qq
 
 
 # Format-Funktion, brauchen wir ueberall
-.fmt <- function(x, digits=3, sdigits=7, big.mark="'") {
-  x <- as.numeric(x)
-  if(is.finite(x)){
-    fdigits <- ifelse( IsWhole(x), 0
-      , ifelse(x > 1e3, digits - (round(log(abs(x),10),0)-3), digits )
-    )
-    switch( findInterval( abs(x), c(0,.Machine$double.eps^0.5, 1e-4, 1e6) )
-                    , "1" = { formatC(x, digits=fdigits, format="f", big.mark=big.mark ) }
-                    , "2" = { formatC(x, digits=digits, format="e", big.mark=big.mark ) }
-                    , "3" = { formatC(x, digits=fdigits, format="f", big.mark=big.mark ) }
-                    , "4" = { formatC(x, digits=digits, format="e", big.mark=big.mark ) }
-    )
-  } else {
-    formatC(x)
-  }
-}
+# .fmt <- function(x, digits=3, sdigits=7, big.mark="'") {
+#   x <- as.numeric(x)
+#   if(is.finite(x)){
+#     fdigits <- ifelse( IsWhole(x), 0
+#       , ifelse(x > 1e3, digits - (round(log(abs(x),10),0)-3), digits )
+#     )
+#     switch( findInterval( abs(x), c(0,.Machine$double.eps^0.5, 1e-4, 1e6) )
+#                     , "1" = { formatC(x, digits=fdigits, format="f", big.mark=big.mark ) }
+#                     , "2" = { formatC(x, digits=digits, format="e", big.mark=big.mark ) }
+#                     , "3" = { formatC(x, digits=fdigits, format="f", big.mark=big.mark ) }
+#                     , "4" = { formatC(x, digits=digits, format="e", big.mark=big.mark ) }
+#     )
+#   } else {
+#     formatC(x)
+#   }
+# }
 
 
 .txtline <- function(txt, width, space="", ind="") {
@@ -19045,36 +10445,42 @@ PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, add=FALSE, args.qq
 
 
 
-TOne <- function(x, grp = NA){
+TOne <- function(x, grp = NA, add.length=TRUE,
+                 colnames=NULL, vnames=NULL,
+                 align="\\l", FUN = NULL){
 
 
   afmt <- .fmt_abs()
   pfmt <- .fmt_per()
   nfmt <- .fmt_num()
+  #    fmt <- structure(list(digits=2, bigmark="'"), class="fmt")
+
+  if(is.null(vnames))
+    vnames <- colnames(x)
 
   # creates the table one in a study
-
-  num_fun <- function(x){
-    # wie soll die einzelne Zelle fuer numerische Daten aussehen
-#    fmt <- structure(list(digits=2, bigmark="'"), class="fmt")
-    gettextf("%s (%s)",
-             Format(mean(x, na.rm=TRUE), fmt=nfmt),
-             Format(sd(x, na.rm=TRUE), fmt=nfmt))
+  if(is.null(FUN)){
+    num_fun <- function(x){
+      # wie soll die einzelne Zelle fuer numerische Daten aussehen
+      gettextf("%s (%s)",
+               Format(mean(x, na.rm=TRUE), fmt=nfmt),
+               Format(sd(x, na.rm=TRUE), fmt=nfmt))
+    }
+  } else {
+    num_fun <- FUN
   }
 
   num_row <- function(x, g, total=TRUE, test="kruskal.test", vname = deparse(substitute(x))){
     # wie soll die zeile aussehen fuer numerische Daten
     p <- eval(parse(text=gettextf("%s(x ~ g)", test)))
-    cbind(var=vname, total = num_fun(x), rbind(tapply(x, g, num_fun)), Format(p$p.value, fmt="*"))
+    cbind(var=vname, total = num_fun(x), rbind(tapply(x, g, num_fun)), paste(Format(p$p.value, fmt="*"), getOption("footnote1", "'")))
   }
 
 
   cat_mat <- function(x, g, vname=deparse(substitute(x))){
-#     fmt.a <- structure(list(digits=0, bigmark="'"), class="fmt")
-#     fmt.p <- structure(list(digits=1, fmt="%"), class="fmt")
 
     tab <- table(x, g)
-    ptab <- prop.table(tab, 1)
+    ptab <- prop.table(tab, margin = 2)
     tab <- addmargins(tab, 2)
     ptab <- cbind(ptab, Sum=prop.table(table(x)))
 
@@ -19092,16 +10498,23 @@ TOne <- function(x, grp = NA){
                 rbind("", m))
     # add test
     p <- chisq.test(tab)$p.value
-    m <- cbind(m, c(Format(p, fmt="*"), rep("", nlevels(x))))
+    m <- cbind(m, c(paste(Format(p, fmt="*"), getOption("footnote3", '"')), rep("", nlevels(x))))
     m
   }
 
   dich_mat <- function(x, g, vname=deparse(substitute(x))){
-#     fmt.a <- structure(list(digits=0, bigmark="'"), class="fmt")
-#     fmt.p <- structure(list(digits=1, fmt="%"), class="fmt")
 
     tab <- Rev(table(x, g), margin=1)
-    ptab <- prop.table(tab, 1)
+
+    if(identical(dim(tab), c(2L,2L))){
+      p <- fisher.test(tab)$p.value
+      foot <- getOption("footnote2", '""')
+    } else {
+      p <- chisq.test(tab)$p.value
+      foot <- getOption("footnote3", '"')
+    }
+
+    ptab <- prop.table(tab, 2)
     tab <- addmargins(tab, 2)
     ptab <- cbind(ptab, Sum = prop.table(tab[,"Sum"]))
 
@@ -19113,12 +10526,7 @@ TOne <- function(x, grp = NA){
     # totals to the left
     m <- m[, c(ncol(m), 1:(ncol(m)-1))]
 
-    if(identical(dim(tab), c(2,2))){
-      p <- fisher.test(tab)$p.value
-    } else {
-      p <- chisq.test(tab)$p.value
-    }
-    m <- rbind(c(vname, m[1,], Format(p, fmt="*")))
+    m <- rbind(c(vname, m[1,], paste(Format(p, fmt="*"), foot)))
     m
   }
 
@@ -19133,22 +10541,52 @@ TOne <- function(x, grp = NA){
   lst <- list()
   for(i in 1:ncol(x)){
     if(ctype[i] == "num"){
-      lst[[i]] <- num_row(x[,i], grp, vname=colnames(x)[i])
+      lst[[i]] <- num_row(x[,i], grp, vname=vnames[i])
 
     } else if(ctype[i] == "cat") {
-      lst[[i]] <- cat_mat(x[,i], grp, vname=colnames(x)[i])
+      lst[[i]] <- cat_mat(x[,i], grp, vname=vnames[i])
 
     } else if(ctype[i] == "dich") {
-      lst[[i]] <- dich_mat(x[,i], grp, vname=colnames(x)[i])
+      lst[[i]] <- dich_mat(x[,i], grp, vname=gettextf("%s (= %s)", vnames[i], levels(factor(x[,i]))[2]))
 
     } else {
       lst[[i]] <- rbind(c(colnames(x)[i], rep(NA, nlevels(grp) + 2)))
     }
 
   }
-  return(do.call(rbind, lst))
+
+  res <- do.call(rbind, lst)
+
+  if(add.length)
+    res <- rbind(c("n", c(Format(sum(!is.na(grp)), fmt=afmt),
+                          paste(Format(table(grp), fmt=afmt), " (",
+                          Format(prop.table(table(grp)), fmt=pfmt), ")", sep=""), ""))
+               , res)
+
+  if(!is.null(colnames))
+    colnames(res) <- colnames
+
+  # align the table
+  if(align != "\\l")
+    res[,-c(1, ncol(res))] <- StrAlign(res[,-c(1, ncol(res))], sep = align)
+
+  attr(res, "legend") <- gettextf("%s) Kruskal-Wallis test, %s) Fisher exact test, %s) Chi-Square test",
+                                  getOption("footnote1","'"), getOption("footnote2",'"'), getOption("footnote3",'""'))
+
+  class(res) <- "TOne"
+  return(res)
 }
 
+
+
+print.TOne <- function(x, ...){
+
+  write.table(format(rbind(colnames(x), x), justify="left"),
+              row.names=FALSE, col.names=FALSE, quote=FALSE)
+
+  cat("---\n")
+  cat(attr(x, "legend"), "\n\n")
+}
 
 
 
@@ -19160,309 +10598,6 @@ Flags <- function(x){
 
 
 
-###
-
-## PlotDesc functions for univariate description  ====
-
-PlotDesc <- function(x, ..., wrd=NULL){
-  if(length(na.omit(x))==0) {
-
-    plot(1, type="n", axes=FALSE, xlab="", ylab="", xlim=c(0,1),ylim=c(0,1), frame.plot=TRUE)
-    text(x=0.5, y=0.5, labels="Nothing to plot...")
-
-    if(!is.null(wrd)) WrdPlot(width=7.5, height=4.7, dfact=2.4, crop=c(0,0,0.7,0), wrd=wrd, append.cr=TRUE)
-
-  } else {
-    if( is.vector(x) && length(unique(na.omit(x))) == 2) {
-      PlotDesc.logical(x=x, ..., wrd=wrd)
-    } else {
-      UseMethod("PlotDesc")
-    }
-  }
-
-}
-
-
-PlotDesc.default<- function(x, ...) {
-  warning( gettextf("Unhandled class %s of %s.\n", class(x), deparse(substitute(x)) ) )
-}
-
-
-PlotDesc.ordered <- function(x, ..., wrd=NULL) {
-  mf <- match.call(expand.dots = FALSE)
-  mf$...["ord"] <- InDots(..., arg="ord", default = "level")
-  # error if main is not treated here... why??
-  mf$...["main"] <- InDots(..., arg="main", default = deparse(substitute(x)))
-  args <- append(list(x=x, wrd=wrd), mf$...)
-  do.call(PlotDesc.factor, args)
-
-}
-
-
-
-PlotDesc.data.frame <- function(x, ..., wrd=NULL){
-  for( cx in colnames(x) ){
-    PlotDesc( x[,cx], main=cx, ..., wrd=wrd)
-  }
-  invisible()
-
-}
-
-
-PlotDesc.numeric <- function(x, main = deparse(substitute(x)), ..., wrd=NULL) {
-  # just pass everything to PlotFdist, but omit NAs as density in PlotFDist would not handle it..
-  PlotFdist(x=na.omit(x), main=main, ...)
-  if(!is.null(wrd)) WrdPlot(width=8, height=5.5, dfact=2.3, crop=c(0,0,1,0), wrd=wrd, append.cr=FALSE)
-  invisible()
-
-}
-
-
-PlotDesc.integer <- function(x, main = deparse(substitute(x))
-  , ord=c("val_asc","val_desc","frq_asc","frq_desc")
-  , maxrows=12, ... , wrd=NULL) {
-
-  switch(as.character(cut(length(unique(na.omit(x))), breaks=c(0,2,15,Inf), labels=1:3))
-    , "1" = { PlotDesc.logical(x, main=main, ..., wrd=wrd) }
-    , "2" = { PlotDesc.factor(x, main=main, maxrows=maxrows, ..., type="dot", ord="none", wrd=wrd)  }
-    , "3" = { PlotDesc.numeric(x, main=main, ..., wrd=wrd) }
-  )
-  invisible()
-
-}
-
-
-
-
-
-PlotDesc.factor <- function (x, main = deparse(substitute(x)),
-                             ord = c("desc", "level", "name", "asc", "none"), maxrows = 12, lablen = 25,
-                             type=c("bar","dot"), col=NULL, border=NULL, xlim=NULL, ecdf=FALSE, ..., wrd=NULL)  {
-
-
-  if (nlevels(factor(x)) <= 2) {
-    PlotDesc.logical(x, main = main, ..., wrd=wrd)
-  }
-  else {
-
-    oldpar <- par(no.readonly=TRUE);  on.exit( par(oldpar) )
-
-    # was cex in the dots-args? parse dots.arguments
-    cex <- unlist(match.call(expand.dots=FALSE)$...["cex"])
-    if(is.null(cex)) cex <- par("cex")
-
-    tab <- table(x)
-    switch(match.arg(arg = ord, choices = c("desc", "level", "name", "asc", "none")),
-           name = { tab <- tab[order(rownames(tab))]},
-           asc =  { tab <- sort(tab) },
-           desc = { tab <- -sort(-tab) })
-
-    ptab <- prop.table(tab)
-    trunc_fg <- (nrow(tab) > maxrows)
-    if (!is.na(maxrows)) {
-      tab <- tab[1:min(nrow(tab), maxrows)]
-      ptab <- ptab[1:min(nrow(tab), maxrows)]
-    }
-
-    if(max(nchar(rownames(tab))) > lablen ) rownames(tab) <- StrTrunc(rownames(tab), lablen)
-    wtxt <- max(strwidth(rownames(tab), "inch"))
-    wplot <- (par("pin")[1] - wtxt) / 2
-    layout(matrix(c(1,2), nrow=1), widths=c(wtxt + wplot, wplot) * 2.54 )
-    par(mai=c(1.5, max(strwidth(rev(rownames(tab)), "inch"))+.5, 0.2, .3)+.02)
-    if(!is.na(main)) par(oma=c(0,0,3,0))
-
-
-    switch(match.arg(arg = type, choices = c("bar", "dot")),
-           dot = {
-
-             if(is.null(xlim)) xlim <- range(pretty(tab)) + c(-1,1) * diff(range(pretty(tab))) * 0.04
-
-             if(is.null(col)) col <- getOption("col1", hblue)
-             if(is.null(border)) border <- "black"
-             b <- barplot( rev(tab), horiz=TRUE, border=NA, col="white", las=1,
-                           xlim=xlim,
-                           xpd=FALSE, xlab="frequency", cex.names=cex, cex.axis=cex, cex.lab=cex, tck=-0.04)
-             abline(h=b, v=0, col="grey", lty="dotted")
-             points( x=as.vector(rev(tab)), y=b, yaxt = "n", col=border, pch=21, bg=col, cex=1.3)
-             box()
-
-             par(mai=c(1.5, 0.1, 0.2, .3)+.02)
-             b <- barplot( rev(ptab), horiz=TRUE, border=NA, col="white", las=1, names="", xlim=c(-0.04,1.04), xlab="percent", cex.names=cex, cex.axis=cex, cex.lab=cex, tck=-0.04)
-             abline(h=b, v=0, col="grey", lty="dotted")
-             points( x=as.vector(rev(ptab)), y=b, col=border, pch=21, bg=col, cex=1.3)
-             box()
-
-           }, bar = { # type = "bar"
-
-             if(is.null(xlim)) xlim <- range(pretty(c(0.96*min(tab), 1.04*max(tab))))
-
-             if(is.null(col)) {
-               col <- c(rep("grey80", length.out=2*nrow(tab)), rep(SetAlpha("grey80",0.4), length.out=nrow(tab)))
-             } else {
-               if(length(col)==1){
-                 col <- c(rep(col, length.out=2*nrow(tab)), rep(SetAlpha(col,0.3), length.out=nrow(tab)))
-               } else {
-                 col <- rep(col, length.out=3*nrow(tab))
-               }
-             }
-             if(is.null(border)) border <- NA
-             barplot( rev(tab), horiz=TRUE, col=col[1:nrow(tab)], border=border, las=1, xlim=xlim, xpd=FALSE, xlab="frequency", cex.names=cex, cex.axis=cex, cex.lab=cex, tck=-0.04)
-             grid(ny=NA)
-
-             par(mai=c(1.5, 0.15, 0.2, .3) + .02)
-             if(ecdf) {
-               barplot( rev(cumsum(ptab)), horiz=TRUE, col=col[(2*nrow(tab)+1):(3*nrow(tab))], border=border, las=1, names="", xlim=c(0,1), xlab="percent", cex.names=cex, cex.axis=cex, cex.lab=cex, tck=-0.04)
-               barplot( rev(ptab), horiz=TRUE, col=col[(nrow(tab)+1):(2*nrow(tab))], border=border, names="", xlab=NA, ylab=NA, add=TRUE, axes=FALSE)
-             } else {
-               barplot( rev(ptab), horiz=TRUE, col=col[(nrow(tab)+1):(2*nrow(tab))], border=border, las=1, names="", xlim=c(0,1), xlab="percent", cex.names=cex, cex.axis=cex, cex.lab=cex, tck=-0.04)
-             }
-             grid(ny=NA)
-
-           })
-
-    if(!is.na(main)) title(main=main, outer=TRUE)
-
-    if (trunc_fg)
-      text(x = par()$usr[2], y = 0.4, labels = " ...[list output truncated]  ",
-           cex = 0.6, adj = c(1, 0.5))
-
-    if(!is.null(wrd)) WrdPlot(width=8, height=pmin(2+3/6*nrow(ptab), 10), dfact=2.7, crop=c(0,0,1,0), wrd=wrd, append.cr=FALSE)
-
-  }
-  invisible()
-
-}
-
-
-
-
-PlotDesc.logical <- function(x, main = deparse(substitute(x)), xlab="",
-                             col1=getOption("col1", hblue), col2=getOption("col2", hred), ..., wrd=NULL) {
-
-  tab <- table(factor(x))
-  if(nrow(tab)>2) stop( "!PlotDesc.logical! can only display 2 levels" )
-  ptab <- prop.table(tab)
-
-  oldpar <- par(no.readonly=TRUE);  on.exit( par(oldpar) )
-  # usr <- par("usr"); on.exit(par(usr))
-
-  par(mar=c(4.1,2.1,0,2.1))
-  if(!is.na(main)) par(oma=c(0,0,3,0))
-
-  plot( x=ptab[1], y=1, cex=0.8, xlim=c(0,1), yaxt="n", ylab="", type="n", bty="n", xlab=xlab, main=NA)
-  segments( x0=0, x1=1, y0=1, y1=1, col="grey")
-  segments( x0=c(0,1), x1=c(0,1), y0=0.8, y1=1.2, col="grey")
-  # insert grid
-  segments( x0=seq(0,1,0.1), x1=seq(0,1,0.1), y0=0.8, y1=1.2, col="grey", lty="dotted")
-  rect(xleft=0, ybottom=0.95, xright=ptab[1], ytop=1.05, col=col1 )     # greenyellow
-  rect(xleft=ptab[1], ybottom=0.95, xright=1, ytop=1.05, col=col2 )     # green4
-  ci.99 <- BinomCI(tab[1], sum(tab), conf.level=0.99)[2:3]
-  ci.95 <- BinomCI(tab[1], sum(tab), conf.level=0.95)[2:3]
-  ci.90 <- BinomCI(tab[1], sum(tab), conf.level=0.90)[2:3]
-  rect(xleft=ci.99[1], ybottom=0.9, xright=ci.99[2], ytop=1.1, col="grey80" ) # olivedrab1
-  rect(xleft=ci.95[1], ybottom=0.9, xright=ci.95[2], ytop=1.1, col="grey60" ) # olivedrab3
-  rect(xleft=ci.90[1], ybottom=0.9, xright=ci.90[2], ytop=1.1, col="grey40" ) # olivedrab4
-  segments( x0=ptab[1], x1=ptab[1], y0=0.7, y1=1.3)
-
-  legend( x=0, y=0.75, legend=c("ci.99     ","ci.95     ","ci.90     "), box.col="white"
-    , fill=c("grey80","grey60","grey40"), bg="white", cex=1, ncol=3, text.width=c(0.2,0.2,0.2) )
-  text( names(ptab), x=c(ptab[1], ptab[1] + 1)/2, y=1.2 )
-  if(!is.na(main)) title(main=main, outer=TRUE)
-
-  if(!is.null(wrd)) WrdPlot(width=6, height=4, dfact=2.6, crop=c(0.2,0.2,2,0), wrd=wrd, append.cr=FALSE)
-  invisible()
-
-}
-
-
-
-
-
-PlotDesc.Date <- function(x, main = deparse(substitute(x)), breaks = NULL, ..., wrd = NULL) {
-
-  # example:
-  # PlotDesc.Date( x, newwin=TRUE )
-
-  # plots exp-obs dotcharts of weekdays and months
-  oldpar <- par(no.readonly=TRUE);  on.exit( par(oldpar) )
-
-  # par(mar=c(10.1,3.1,4.1,1.1), oma=c(0,9,0,0), mfrow=c(1,1))
-  par(oma=c(0,9,0,0))
-
-  tab <- c(table( factor( format( x, "%A"), levels=format(ISOdate(2000, 1, 3:9), "%A"), ordered=TRUE) ))
-  r.chi <- chisq.test(rev(tab))
-
-  dotchart( as.numeric(r.chi$exp[]), xlim=range(pretty(range(c(r.chi$exp[],r.chi$obs[]))))
-    , color="black", bg="white", pch=21, cex=0.8, xpd=TRUE  )
-  mtext(side=2, at=1:7, line=2, names(r.chi$exp), las=1)
-  points( x=r.chi$obs[], y=1:7, col="black", bg="black", pch=21, cex=1.2 )
-  points( x=r.chi$exp[], y=1:7, col="black", bg="white", pch=21, cex=1.2 )
-
-  if(!is.na(main) & is.null(wrd)) title(main=gettextf("%s (a: weekday)", main))
-
-  if(!is.null(wrd)) WrdPlot(width=6.5, height=5, dfact=2.5, wrd=wrd, append.cr=TRUE)
-
-  # Haeufigkeiten normiert mit Anzahl Tagen im Monat
-  # par(mar=c(10.1,3.1,1.1,1.1))
-
-  ydays <- factor( format(seq(from=as.Date("2010-01-01")
-    ,to=as.Date("2010-12-31"), by="day"), "%B"), levels=format(ISOdate(2000, 1:12, 1), "%B") )
-  r.chi <- chisq.test( rev(c(table(factor(format(x, "%B"),levels=levels(ydays)))))
-    , p=prop.table( rev( c(table(ydays)))) )
-  month_xlim <- range(pretty(range(c(r.chi$exp[],r.chi$obs[]))))
-  dotchart( as.numeric(r.chi$exp[]), xlim=month_xlim
-    , color="black", bg="white", pch=21, cex=0.8, xpd=TRUE  )
-  mtext(side=2, at=1:12, line=2, names(r.chi$exp), las=1)
-  points( x=r.chi$obs[], y=1:12, col="black", bg="black", pch=21, cex=1.2 )
-  points( x=r.chi$exp[], y=1:12, col="black", bg="white", pch=21, cex=1.2 )
-
-  legend(x="bottom", inset=-0.5, legend=c("expected","observed"), xpd=TRUE, ncol=2
-    , pch=c(21), col=c("black","black"), bg="white", pt.bg=c("white","black"), cex=1
-    , pt.cex=1, xjust=0.5, adj=c(0,0.5),  text.width=c(4,4) )
-
-  if(!is.na(main) & is.null(wrd)) title(main=gettextf("%s (b: month)", main))
-
-  if(!is.null(wrd)) WrdPlot(width=6.5, height=6.2, dfact=2.5, wrd=wrd, append.cr=TRUE)
-
-  # breaks can be:  c("month","days","weeks","quarter","year")
-
-  # old:
-  #   tab <- table(cut(x, breaks))
-  #
-  #   # par( mar=c(8.1,3.1,3.1,1.1) )
-  #   plot( y=as.vector(tab), x=as.Date(names(tab)), type="h", cex=0.8, xlab="abs. frq.", xaxt="n"
-  #     , ylab="", ... )
-  #   axis.Date(1, cex.axis=0.8, at=seq(as.Date(names(tab)[1]), as.Date(rev(names(tab))[1]), breaks)
-  #     , labels=strftime(seq(as.Date(names(tab)[1]), as.Date(rev(names(tab))[1]), breaks), "%y-%m") )
-
-  if(is.null(breaks)) {
-    # get some appropiate default for the breaks
-    dd <- as.integer(diff(range(x, na.rm=TRUE)))
-    dw <- dd / (360/52) # weeks
-    dm <- dd / (360/12) # months
-    dq <- dd / (360/4) # quarters
-    dy <- dd / 360 # years
-
-    breaks <- ifelse(dy<12, ifelse(dq<12, ifelse(dm<12, ifelse(dw<12,"days","weeks"),"months"), "quarters"), "years")
-  }
-  Mar(,0)
-  hist(x, breaks=breaks, main=NA, xlab="")
-
-  if(!is.na(main) & is.null(wrd)) title(main=gettextf("%s (c: %s)", main, breaks))
-  # return(invisible(c(devlst, dev.cur()))) # return window numbers ..
-
-  if(!is.null(wrd)) WrdPlot(width=6.5, height=4, dfact=2.5, wrd=wrd, append.cr=TRUE)
-  invisible()
-
-}
-
-
-PlotDesc.matrix <- function(x, col1 = NULL, col2 = NULL,
-                           horiz = TRUE, main=NA, ..., wrd=NULL){
-
-  # treat matrix as table
-  PlotDesc.table(x, col1=col1, col2=col2, horiz=horiz, main=main, ..., wrd=wrd)
-}
 
 
 
@@ -19483,11 +10618,12 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
     ymar <- lab.width + 1
 
     mar <- c(ifelse(is.na(xlab), 2.1, 5.1), ifelse(is.na(ylab), ymar, ymar+2),
-             ifelse(is.na(main), xmar, xmar+3), 1.6)
+             ifelse(is.na(main), xmar, xmar+4), 1.6)
     # par(mai = c(par("mai")[1], max(par("mai")[2], strwidth(levels(grp), "inch")) +
     #               0.5, par("mai")[3], par("mai")[4]))
 
   }
+
   Canvas(xlim = c(0, 1), ylim = c(0, 1), asp = NA, mar = mar)
 
   col1 <- getOption("col1", hblue)
@@ -19519,11 +10655,11 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
     txt_y <- apply(cbind(y_from, y_to), 1, mean)
     txt_x <- apply(cbind(x_from[nrow(x_from),], x_to[nrow(x_from),]), 1, mean)
 
-    srt.x <- if (las > 1) 90  else 0
-    srt.y <- if (las == 0 || las == 3) 90 else 0
-
-    text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, adj = ifelse(srt.y==90, 0.5, 1), cex=cex, srt=srt.y)
-    text(labels = colnames(x), x = txt_x, y = 1.04, adj = ifelse(srt.x==90, 0, 0.5), cex=cex, srt=srt.x)
+    # srt.x <- if (las > 1) 90  else 0
+    # srt.y <- if (las == 0 || las == 3) 90 else 0
+    #
+    # text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, adj = ifelse(srt.y==90, 0.5, 1), cex=cex, srt=srt.y)
+    # text(labels = colnames(x), x = txt_x, y = 1.04, adj = ifelse(srt.x==90, 0, 0.5), cex=cex, srt=srt.x)
 
   } else {
 
@@ -19549,13 +10685,20 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
     txt_y <- apply(cbind(y_from[, 1], y_to[, 1]), 1, mean)
     txt_x <- apply(cbind(x_from, x_to), 1, mean)
 
-    srt.x <- if (las > 1) 90  else 0
-    srt.y <- if (las == 0 || las == 3) 90 else 0
-
-    text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, adj = ifelse(srt.y==90, 0.5, 1), cex=cex, srt=srt.y)
-    text(labels = colnames(x), x = txt_x, y = 1.04, adj = ifelse(srt.x==90, 0, 0.5), cex=cex, srt=srt.x)
+    # srt.x <- if (las > 1) 90  else 0
+    # srt.y <- if (las == 0 || las == 3) 90 else 0
+    #
+    # text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, adj = ifelse(srt.y==90, 0.5, 1), cex=cex, srt=srt.y)
+    # text(labels = colnames(x), x = txt_x, y = 1.04, adj = ifelse(srt.x==90, 0, 0.5), cex=cex, srt=srt.x)
 
   }
+
+  srt.x <- if (las > 1) 90  else 0
+  srt.y <- if (las == 0 || las == 3) 90 else 0
+
+  text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, adj = ifelse(srt.y==90, 0.5, 1), cex=cex, srt=srt.y)
+  text(labels = colnames(x), x = txt_x, y = 1.04, adj = ifelse(srt.x==90, 0, 0.5), cex=cex, srt=srt.x)
+
 
   if (!is.na(main)) {
     usr <- par("usr")
@@ -19576,385 +10719,7 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
 
 
 
-PlotDesc.table <- function(x, col1=NULL, col2=NULL,
-                        horiz = TRUE, main=NA, ..., wrd=NULL){
-
-
-  oldpar <- par(no.readonly=TRUE);  on.exit( par(oldpar) )
-
-  if(length(dim(x)) == 1){
-    maxrows <- InDots(..., arg="maxrows", default = 12)
-    PlotDesc.factor(Untable(x)[,], main=main, ord="none", wrd=wrd, maxrows=maxrows, col=col1)
-    width <- 6
-    height <- 4
-
-  } else if(length(dim(x)) > 2){
-    mosaicplot(x, main="", cex=0.8, las=1 # , xlab="", ylab=""
-               , col=col1, ... )
-
-    width <- 8
-    height <- 8  # dimension for 2 mosaicplots
-    par(mfrow=c(1,1))
-    par(mar=c(3.1,4.1,1.1,0.5), oma=c(0,0,ifelse(is.na(main), 0, 2),0))
-
-  } else {
-
-    if(is.null(col1))
-      col1 <- colorRampPalette(c(getOption("col1", hblue), "white", getOption("col2", hred)), space = "rgb")(ncol(x))
-    if(is.null(col2))
-      col2 <- colorRampPalette(c(getOption("col1", hblue), "white", getOption("col2", hred)), space = "rgb")(nrow(x))
-
-    if(horiz){
-      width <- 16
-      height <- 6.5  # dimension for 2 mosaicplots
-      par(mfrow=c(1,2))
-      par(oma=c(1.1, 2.1,ifelse(is.na(main), 0, 2.1),0))
-
-    } else {
-      width <- 7
-      height <- 14  # dimension for 2 mosaicplots
-      par(mfrow=c(2,1), xpd=TRUE)
-      par(oma=c(3.1,1.1,ifelse(is.na(main), 0, 2),0))
-    }
-
-
-    PlotMosaic(x, main=NA, xlab=NA, ylab=NA, horiz=TRUE, cols = col1)
-    PlotMosaic(x, main=NA, xlab=NA, ylab=NA, horiz=FALSE, cols = col2)
-
-    title(xlab=Coalesce(names(dimnames(x))[2], "x"), outer=TRUE, line=-1)
-    title(ylab=Coalesce(names(dimnames(x))[1], "y"), outer=TRUE, line=0)
-
-  }
-
-  # 8.10.2015 same as in PlotDescNumNum
-  # if(!is.null(wrd)) WrdPlot(width=width, height=height, dfact=2.0, crop=c(0,0,0,0), wrd=wrd, append.cr=TRUE)
-
-  if(!is.na(main) && (length(dim(x)) != 1)) title(main, outer=TRUE)
-
-  invisible()
-
-}
-
-
-
-## PlotDesc for bivariate representations  -------------
-
-PlotDescNumFact <- function( formula, data, main=deparse(formula), notch=FALSE,
-  add_ni = TRUE, ... , wrd=NULL){
-
-  # PlotMultiDens() would maybe be nice as well
-  # or perhaps violinplot??
-
-  # create a new graphics window
-  usr <- par("usr");  on.exit( par(usr) )
-  par( mar=c(5,4,2*add_ni,2)+.1, oma=c(0,0,4.1,0))
-
-  layout( matrix(c(1,2), ncol=2, byrow=TRUE), widths=c(2,1), TRUE)
-  boxplot( formula, data, notch=notch, type="n", xaxt="n", yaxt="n", ... )
-  grid(nx=NA, ny=NULL)
-  bx <- boxplot( formula, data, col="white", notch=notch, add=TRUE, cex.axis=0.8, ... )
-
-  if(add_ni){ mtext( paste("n=", bx$n, sep=""), side=3, line=1, at=1:length(bx$n), cex=0.8) }
-
-  plot.design(x=formula, data=data, cex=0.8, xlab="", ylab="", cex.axis=0.8, main="", ... )
-  mtext( "means", side=3, line=1, cex=0.8)
-  title(main=main, outer=TRUE)
-
-  # 8.10.2015 same as in PlotDescNumNum
-  # if(!is.null(wrd)) WrdPlot(width=15, height=7, dfact=2.2, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
-
-  invisible()
-
-}
-
-
-
-PlotDescNumNum <- function(form1, form2, data, col=SetAlpha(1, 0.3),
-                           main = NULL, xlab= NULL, ylab= NULL, smooth = NULL, ... , wrd=NULL) {
-
-  # create a new graphics window
-  usr <- par("usr");  on.exit(par(usr))
-  par(mar=c(5.1, 4.1, 4.1, 2.1))
-
-  if(is.null(main)) main <- form1
-
-  plot(form1, data=data, type="n", main=main, xlab=xlab, ylab=ylab, ...)
-  grid()
-  points(form1, data=data, col=col)
-
-  if(is.null(smooth)) {
-    if(nrow(data) < 500)
-      smooth <- "loess"
-    else
-      smooth <- "spline"
-  }
-
-  if(smooth=="loess"){
-    lines(loess(form1, data=data))
-  } else if(smooth=="spline"){
-    mf <- model.frame(form1, data)
-    y <- mf[,1]
-    x <- mf[,2]
-    lines(smooth.spline(x=x, y=y))
-  }
-
-
-  # und alles nochmals mit vertauschten Achsen
-  # transponiere die formula
-  # plot( form2, data=data, col=rgb(0,0,0,0.3), type="n", main=NA, xlab=ylab, ylab=xlab,... )
-  # grid()
-  # points( form2, data=data, col=rgb(0,0,0,0.3) )
-  # lines(loess(form2, data=data))
-
-  # 8.10.2015: We don't need that here, as plot ist controlled by WrdPlot in DescWrd.formula
-  #
-  # if(!is.null(wrd)) WrdPlot(width=11, height=11/gold_sec_c, dfact=2.5, crop=c(0,0,0.2,0),
-  #                           wrd=wrd, append.cr=TRUE)
-
-  invisible()
-
-}
-
-
-
-
-PlotDesc.flags <- function(x, ..., wrd = NULL){
-
-  oldpar <- par(no.readonly=TRUE);  on.exit( par(oldpar) )
-
-  flags <- do.call(rbind, lapply(x, function(z) {
-    tab <- table(z)
-    BinomCI(tab[1], sum(tab))
-  }))
-  rownames(flags) <- names(x)
-
-  par(mai=c(1, max(strwidth(rev(rownames(flags)), "inch"))+2, 0.2, .3)+.02)
-  PlotDot(flags, lwd = 20, code = 0, cex=0.9,
-          lcolor = PalHelsana()["hellgruen"], pch="|", pch.cex = 2.5,
-          xlim=c(0,1), lend="butt")
-
-  if(!is.null(wrd)) WrdPlot(width=8, height=pmin(3+3/6*nrow(flags), 10),
-                            dfact=2.5, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
-  invisible()
-
-}
-
-
 ###
-
-## Descriptive summaries for bivariate description  ====
-
-
-# Summary fuer kontinuierliche ~ factor Variablen
-
-DescNumFact <- function( x, grp, digits = NULL
-  , xname=deparse(substitute(x)), grpname=deparse(substitute(grp))
-  , width=getOption("width")
-  , use.na = c("no", "ifany", "always"), plotit=getOption("plotit", FALSE)) {
-
-  if( is.null(digits) ) {
-    digits <- c(NA,NA,NA,NA,0,3,0,0)
-  } else if (length(digits) == 1)  {
-    digits <- c(rep(digits, 4),0,3,0,0)
-  }
-  # else take them, as they are defined
-
-	outline <- function(x, width, digits=NA, markext=TRUE) {
-
-		out <- paste(paste( formatC( x, width=width, digits=digits, format="f" ), collapse=" "),"")
-		if(markext==TRUE) {
-		  for( i in which(x==min(x))*(width+1) ) substr(out,i,i) <- getOption("footnote1","'")
-		  for( i in which(x==max(x))*(width+1) ) substr(out,i,i) <- getOption("footnote2",'"')
-		}
-		return(out)
-	}
-
-  # Pairs summary
-  n <- length(x)
-  idcomp <- complete.cases(x, grp)
-  vn <- sum(idcomp)
-  dig <- format.info(signif((n-vn)/n*100,3))[2]-2    # hier 3 signifikante Stellen fuer beide Angaben bestimmen
-
-  d.res <- data.frame(
-      mean= tapply( x, grp, FUN=mean, na.rm=T )
-	  , median= tapply( x, grp, FUN=median, na.rm=T )
-	  , sd= tapply( x, grp, FUN=sd, na.rm=T )
-	  , IQR= tapply( x, grp, FUN=IQR, na.rm=T )
-    , n= tapply( x, grp, FUN=function(x) sum(!is.na(x)) )
-	  , np= tapply( x, grp, FUN=function(x) sum(!is.na(x))) / vn
-	  , NAs= tapply( x, grp, FUN=function(x) sum(is.na(x)))
-	  , "0s"= tapply( x, grp, FUN=function(x) sum(na.omit(x)==0))
-    , row.names=NULL
-	)
-  if(is.null(levels(grp))) cname <- levels(factor(grp)) else cname <- levels(grp)
-  cname[is.na(cname)] <- "NA"
-  rownames(d.res) <- cname
-  rname <- c("mean","median","sd","IQR","n","np","NAs","0s")  # cannot use names as 0s is replaced by X.0s....
-
-  cat("\nSummary: \n",
-      "n pairs: ", .fmt(n),
-      ", valid: ", .fmt(vn), " (", round(vn/n*100, dig), "%)",
-      ", missings: ", .fmt(n-vn), " (", round((n-vn)/n*100, dig), "%)",
-      ", groups: ", length(cname),
-      "\n\n"
-      , sep="" )
-
-	d.fmt <- data.frame(digits=rep(NA,ncol(d.res)), width=NA)
-	for( i in 1:ncol(d.res) ){
-     if(is.na(digits[i])) {
-	     d.fmt$digits[i] <- Ndec(format(d.res[,i])[1])
-	   } else {
-       d.fmt$digits[i] <- digits[i]
-	   }
-     d.fmt$width[i] <- max( nchar(formatC(d.res[,i], format="f", digits=d.fmt$digits[i])) )
-	}
-
-  wmax <- max(c( max(d.fmt$width)   # die maximale Breite der Zahlen
-    , nchar(rownames(d.res))) )     # die maximale Breite der ueberschriften
-  lenrowname <- max(nchar(rname))
-
-	out <- vector(mode="character", length=ncol(d.res)+1)
-	out[1] <- paste( paste(rep(" ",lenrowname),collapse=""),
-	    outline(rownames(d.res), width=wmax+1, digits=NA, markext=FALSE)
-		, sep=" ")
-
-	markext <- c(TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE)
-  cat( "\n" )
-
-	for( i in 1:ncol(d.res) ){
-	  out[i+1] <- paste(paste( format( rname[i], width=lenrowname )
-	    , outline(d.res[,i], width=wmax+1, digits=d.fmt$digits[i], markext=markext[i]), collapse="" )
-		, sep=" " )
-	}
-
-  CatTable(out, wcol=wmax+2, nrepchars=8, width )
-  cat(gettextf("%s min, %s max\n", Coalesce(getOption("footnote1"),"'"), Coalesce(getOption("footnote2"),'"')))
-
-  res <- tryCatch(kruskal.test( x ~ grp, na.action = "na.omit"), error=function(e) {e})
-
-  if (inherits(res, "simpleError")) {
-    cat(gettextf("\nError in kruskal.test(x) : %s\n\n", res$message))
-  } else {
-    cat(gettextf("\nKruskal-Wallis rank sum test:\n  %s",
-                 .CaptOut(res)[5], "\n\n", sep=""))
-  }
-
-  if((sum(is.na(grp)) > 0) & (length(grep("NA",cname))==0))
-    cat(gettextf("\nWarning:\n  Grouping variable contains %s NAs (%s"
-      , sum(is.na(grp)), signif(sum(is.na(grp))/length(grp), digits=3)*100), "%).\n", sep="")
-
-  cat( "\n")
-
-  if(plotit){
-    PlotDescNumFact( formula=formula("x ~ grp"), data=data.frame(x=x, grp=grp),
-                     main=paste(xname, " ~ ", grpname, sep="") )
-    # main would be nice here...
-  }
-  invisible()
-
-}
-
-
-
-
-DescNumNum <- function(x, y, xname=deparse(substitute(x))
-    , yname=deparse(substitute(y)), plotit=getOption("plotit", FALSE), ...) {
-
-  n <- length(x)
-  vn <- sum(complete.cases(x,y))
-  digits <- format.info(signif((n-vn)/n*100,3))[2]-2    # hier 3 signifikante Stellen fuer beide Angaben bestimmen
-  cat( "\nSummary: \n",
-    "n pairs: ", Format(n, digits=0, big.mark="'"),
-    ", valid: ", Format(vn, digits=0, big.mark="'"), " (", Format(vn/n, digits=1, fmt="%"), ")",
-# old:    ", missings: ", Format(n-vn, big.mark="'"), " (", round((n-vn)/n*100, digits), "%)\n\n"
-    ", missings: ", Format(n-vn, digits=0, big.mark="'"), " (", Format((n-vn)/n, digits=1, fmt="%"), ")\n\n"
-	, sep="" )
-
-  cat(sprintf(
-    "\nPearson corr. : %s\nSpearman corr.: %s\nKendall corr. : %s\n"
-    , Format(cor(x, y, use="pairwise.complete.obs"), digits=3)
-    , Format(cor(x, y, method="spearman", use="pairwise.complete.obs"), digits=3)
-    , if(n < 5000){
-        Format(cor(x, y, method="kendall", use="pairwise.complete.obs"), digits=3)
-      } else {
-        "(sample too large)"
-      }
-  ))
-
-  cat("\n")
-
-  if(plotit){
-    d.frm <- data.frame(x=x, y=y)
-#     names(d.frm) <-  c(xname, yname)
-#     PlotDescNumNum( form1=formula(gettextf("%s ~ %s", xname, yname)),
-#                     form2=formula(gettextf("%s ~ %s", yname, xname)), data=d.frm,
-#                     main = gettextf("%s ~ %s", yname, xname) )
-    PlotDescNumNum( form1=formula("y ~ x"),
-                    form2=formula("x ~ y"), data=d.frm,
-                    main = gettextf("%s ~ %s", yname, xname), xlab = xname, ylab = yname, ... )
-  }
-  invisible()
-
-}
-
-
-DescFactNum <- function(x, y, xname=deparse(substitute(x))
-                       , yname=deparse(substitute(y)), plotit=getOption("plotit", FALSE), digits = NULL, ...) {
-
-  # use the other way round first
-  DescNumFact(x = y, grp = x, plotit=FALSE, digits=digits, ... )
-
-  xy <- na.omit(data.frame(x=x, y=y))
-
-  ptab <- prop.table(table(unname(xy$x), CutQ(xy$y, probs = seq(0,1,0.1), na.rm = TRUE)), 2)
-  cat(gettextf("\nProportions of %s in the quantiles of %s:\n", xname , yname))
-  print(round(ptab,3), quote=FALSE)
-  cat("\n")
-
-  if(plotit) PlotDescFactNum(y, x, ptab, main=paste(xname, " ~ ", yname, sep=""))
-  invisible()
-
-}
-
-
-
-PlotDescFactNum <- function( x, y, ptab, col1=getOption("col1", hblue), col2=getOption("col2", hred), main=NULL, notch=FALSE,
-                            add_ni = TRUE, ... , wrd=NULL){
-
-  if(is.null(main)) main <- paste(deparse(substitute(y)), " ~ ", deparse(substitute(x)), sep="")
-
-  usr <- par("usr");  on.exit( par(usr) )
-  par( mar=c(5,4,2*add_ni,2)+.1, oma=c(0,0,4.1,0))
-
-  layout( matrix(c(1,2), ncol=2, byrow=TRUE), widths=c(1,2), TRUE)
-  boxplot(x ~ y, notch=notch, type="n", xaxt="n", yaxt="n", ... )
-  grid(nx=NA, ny=NULL)
-  bx <- boxplot( x ~ y, col="white", notch=notch, add=TRUE, cex.axis=0.8, ... )
-
-  if(add_ni){ mtext( paste("n=", bx$n, sep=""), side=3, line=1, at=1:length(bx$n), cex=0.8) }
-
-  if(nrow(ptab) < 3){
-    plot(ptab[2,], xaxt="n", las=1, ylab="", xlab="Quantiles of x")
-    axis(side=1, at=1:10, labels=gettextf("Q%s", 1:10))
-    grid()
-    if(ncol(ptab) > 6) { lines(loess(p ~ x, data.frame(p=ptab[2,], x=1:ncol(ptab)))) }
-  } else {
-    Mar(,,1,)
-    mosaicplot(t(ptab), las=1, cex=1, col=colorRampPalette(c(col1, "white", col2), space = "rgb")(nrow(ptab)), main=NA)
-  }
-
-  title(main=main, outer=TRUE)
-
-  if(!is.null(wrd)) WrdPlot(width=15, height=7, dfact=2.2, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
-  invisible()
-
-}
-
-
-
-###
-
-## Special: Desc.formula() ====
 
 
 ParseFormula <- function(formula, data=parent.frame(), drop = TRUE) {
@@ -20026,279 +10791,6 @@ ParseFormula <- function(formula, data=parent.frame(), drop = TRUE) {
 
 ###
 
-
-## Word descriptives:  DescWrd. ... ====
-
-DescWrd.default <- function(x, wrd, main = deparse(substitute(x)),
-                            plotit = getOption("plotit", FALSE), ...) {
-
-  .plotReset <- function(){
-    layout(matrix(1))
-    par(
-      xlog = FALSE, ylog = FALSE, adj = 0.5, ann = TRUE,
-      ask = FALSE, bg = "white", bty = "o", cex = 1, cex.axis = 1,
-      cex.lab = 1, cex.main = 1.2, cex.sub = 1, col = "black",
-      col.axis = "black", col.lab = "black", col.main = "black",
-      col.sub = "black", crt = 0, err = 0L, family = "", fg = "black",
-      fig = c(0, 1, 0, 1), fin = c(12.8333333333333, 8), font = 1L,
-      font.axis = 1L, font.lab = 1L, font.main = 2L, font.sub = 1L,
-      #      lab = c(5L, 5L, 7L), las = 0L, lend = "round", lheight = 1,
-      lab = c(5L, 5L, 7L), lend = "round", lheight = 1,
-      ljoin = "round", lmitre = 10, lty = "solid", lwd = 1,
-      mai = c(1.36, 1.09333, 1.093333, 0.56), mar = c(5.1, 4.1,4.1, 2.1),
-      mex = 1, mfcol = c(1L, 1L), mfg = c(1L, 1L, 1L, 1L),
-      mfrow = c(1L, 1L), mgp = c(3, 1, 0), mkh = 0.001, new = FALSE,
-      oma = c(0, 0, 0, 0), omd = c(0, 1, 0, 1), omi = c(0, 0, 0, 0),
-      pch = 1L, pin = c(11.18, 5.54666666666667),
-      plt = c(0.0851948051948052, 0.956363636363636, 0.17, 0.863333333333333),
-      ps = 16L, pty = "m", smo = 1, srt = 0, tck = NA_real_,
-      tcl = -0.5, usr = c(0, 1, 0, 1), xaxp = c(0, 1, 5), xaxs = "r", xaxt = "s", xpd = FALSE,
-      yaxp = c(0, 1, 5), yaxs = "r", yaxt = "s", ylbias = 0.2)
-    #     par(
-    #       xlog = FALSE, ylog = FALSE,
-    #       mai = c(1.36, 1.09333, 1.093333, 0.56), mar = c(5.1, 4.1,4.1, 2.1),
-    #       mex = 1, mfcol = c(1L, 1L), mfg = c(1L, 1L, 1L, 1L),
-    #       mfrow = c(1L, 1L),
-    #       oma = c(0, 0, 0, 0), omd = c(0, 1, 0, 1), omi = c(0, 0, 0, 0),
-    #       usr = c(0, 1, 0, 1), xpd = FALSE
-    #       )
-  }
-
-
-  if(!is.null(main)) WrdCaption(x=main, wrd=wrd)
-
-  # we should overwrite plotit here, as it would be plotted two times...
-  txt <- .CaptOut(Desc(x, plotit = FALSE, ...))[-(1:2)]
-
-  # insert table
-  if(inherits(x, "Date")) {
-    # special Date Table...
-    wrd[["ActiveDocument"]][["Tables"]]$Add( wrd[["Selection"]][["Range"]], NumRows=2, NumColumns=2 )
-    wrd[["Selection"]]$MoveRight(Unit=wdConst$wdCharacter, Count=2, Extend=wdConst$wdExtend)
-    wrd[["Selection"]][["Cells"]]$Merge()
-
-    WrdText( txt=txt[1:6], wrd=wrd )
-    wrd[["Selection"]]$MoveRight( wdConst$wdCell, 1, 0)
-    WrdText( txt=txt[-c(1:6)], wrd=wrd )
-
-  } else {
-    if(max(unlist(lapply(txt, nchar))) < 59){  # decide if two rows or 2 columns ist adequate
-      wrd[["ActiveDocument"]][["Tables"]]$Add( wrd[["Selection"]][["Range"]], NumRows=1, NumColumns=2 )
-      horiz1 <- FALSE
-    } else {
-      wrd[["ActiveDocument"]][["Tables"]]$Add( wrd[["Selection"]][["Range"]], NumRows=2, NumColumns=1 )
-      horiz1 <- TRUE
-    }
-    WrdText( txt=txt, wrd=wrd )
-  }
-  wrd[["Selection"]]$MoveRight( wdConst$wdCell, 1, 0)
-
-  if(plotit){
-    .plotReset()
-
-    # corr 8.11.2014: not sure if we need the dots here, anyway they can produce errors
-    # PlotDesc(x, main="", ..., wrd=wrd)
-    if(any(class(x)=="table") || class(x)=="matrix"){
-      horiz <- InDots(..., arg="horiz", default = horiz1)
-      PlotDesc(x, main="", wrd=wrd, horiz=horiz)  # 2.2.2015: table might need the horiz argument, that's clearly a hack...
-      # ...  rises a warning for disregarding other arguments, as verbose for example
-      #  ******* KEEP AN EYE ON ME *****************
-    } else {
-      PlotDesc(x, main="", wrd=wrd)
-    }
-  }
-
-  wrd[["Selection"]]$EndOf( wdConst$wdTable )
-  # get out of tablerange
-  wrd[["Selection"]]$MoveRight( wdConst$wdCharacter, 2, 0 )
-  wrd[["Selection"]]$TypeParagraph()
-
-  invisible()
-
-}
-
-
-DescWrd.data.frame <- function (x, wrd, main = NULL, plotit = getOption("plotit", FALSE), enum = TRUE, ...) {
-
-  # Start report:     data.frame  Infos einfuegen **************
-  WrdCaption( "Describe data.frame", wrd=wrd )
-  wrd[["Selection"]]$TypeParagraph()
-  WrdText(.CaptOut(Str(x, list.len = Inf)), wrd = wrd)
-  wrd[["Selection"]]$TypeParagraph()
-  wrd[["Selection"]]$TypeParagraph()
-
-  if(is.null(main))
-    main <- paste(if(enum) paste(seq_along(colnames(x)) , "- "), colnames(x),
-                  " (", lapply(lapply(x, class), paste, collapse=", "), ")", sep="")
-  else
-    main <- rep(main, length.out = ncol(x))
-
-  for( cx in colnames(x) ){
-    # cat( "\n", sep, "\n", sep="")
-    # Alternative mit Fensterbreite:
-    # cat( paste(rep("-",getOption("width")-2),collapse=""), "\n")
-    Desc(x[, cx], main = main[match(cx, colnames(x))], wrd = wrd, plotit=plotit, ...)
-  }
-  cat("\n")
-  invisible()
-
-}
-
-
-DescWrd.list <- function (x, wrd, main = NULL, plotit = getOption("plotit", FALSE), enum = TRUE, ...) {
-
-  # Start report:     data.frame  Infos einfuegen **************
-  WrdCaption( "Describe data.frame", wrd=wrd )
-  wrd[["Selection"]]$TypeParagraph()
-  WrdText(.CaptOut(Str(x, list.len = Inf)), wrd = wrd)
-  wrd[["Selection"]]$TypeParagraph()
-  wrd[["Selection"]]$TypeParagraph()
-
-  if(is.null(main))
-    main <- paste(if(enum) paste(seq_along(names(x)) , "- "), names(x),
-                  " (", lapply(lapply(x, class), paste, collapse=", "), ")", sep="")
-  else
-    main <- rep(main, length.out = length(x))
-
-  for( i in seq_along(x) ){
-    # cat( "\n", sep, "\n", sep="")
-    # Alternative mit Fensterbreite:
-    # cat( paste(rep("-",getOption("width")-2),collapse=""), "\n")
-    Desc(x[, i], main = main[i], wrd = wrd, plotit=plotit, ...)
-  }
-  cat("\n")
-  invisible()
-
-}
-
-
-
-###
-
-## DescWrd.formula() ====
-
-DescWrd.formula <- function(formula, data = parent.frame(), subset = TRUE, wrd = NULL, plotit = getOption("plotit", FALSE), ...) {
-
-  if(!IsValidWrd(wrd)) stop("wrd is not a valid handle to a running Word instance.")
-
-  mf <- match.call(expand.dots = FALSE)
-
-  # parse dots.arguments, such as not to send unappropriate arguments to subfunctions
-  dotargs.factor.factor <- mf$...[ names(mf$...)[
-    !is.na(match(names(mf$...), names( formals( Desc.table) )))
-    ] ]
-  dotargs.numeric.factor <- mf$...[ names(mf$...)[
-    !is.na(match(names(mf$...), names( formals( DescNumFact) )))
-    ] ]
-  dotargs.factor.numeric <- mf$...[ names(mf$...)[
-    !is.na(match(names(mf$...), names( formals( DescFactNum) )))
-    ] ]
-  dotargs.numeric.numeric <- mf$...[ names(mf$...)[
-    !is.na(match(names(mf$...), names( formals( DescNumNum) )))
-    ] ]
-
-  subset.expr <- mf$subset
-  mf$subset <- NULL
-  if (!missing(subset)) {
-    s <- eval(subset.expr, data, parent.frame())
-    data <- data[s,]
-  }
-  mm <- ParseFormula(formula=formula, data=data)
-
-  # don't want AsIs (will come in case of I(...)) to proceed, so just coerce to vector an back again
-  # but don't use the following, as interaction names will be set to y.x instead of y:x
-  # mm$lhs$mf.eval <- data.frame(lapply(mm$lhs$mf.eval, as.vector))
-  # mm$rhs$mf.eval <- data.frame(lapply(mm$rhs$mf.eval, as.vector))
-  for(i in which(lapply(mm$lhs$mf.eval, class) == "AsIs")) {
-    mm$lhs$mf.eval[,i] <- as.vector(mm$lhs$mf.eval[,i])
-  }
-  for(i in which(lapply(mm$rhs$mf.eval, class) == "AsIs")) {
-    mm$rhs$mf.eval[,i] <- as.vector(mm$rhs$mf.eval[,i])
-  }
-
-  # start output
-  cat("\nCall:\n")
-  cat(paste(deparse(sys.call()), sep = "\n", collapse = "\n"),"\n\n", sep = "")
-
-  # start analysis
-  for(resp in mm$lhs$vars){         # for all response variables
-    for(pred in mm$rhs$vars){       # evalutate for all conditions
-      x <- mm$lhs$mf.eval[,resp]
-      grp <- mm$rhs$mf.eval[,pred]
-
-#       cat( paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), "\n" )
-#       cat( paste(resp, " ~ ", pred, sep="") )
-#       if( !is.null(attr(x,"label")) ) cat(" :", strwrap(attr(x,"label"), indent=2, exdent=2), sep="\n" )
-#       cat("\n")
-
-    # coerce logicals and characters to factors
-#     if( class(x)[1] %in% c("logical","character")) x <- factor(x)
-#     if( class(grp)[1] %in% c("logical","character")) grp <- factor(grp)
-    if( IsDichotomous(x)) x <- factor(x)
-    if( IsDichotomous(grp)) grp <- factor(grp)
-
-    # main report caption
-    WrdCaption( x=paste(resp, " ~ ", pred, sep=""), wrd=wrd )
-
-    # coerce logicals and characters to factors
-    if( class(x)[1] %in% c("logical","character")) x <- factor(x)
-    if( class(grp)[1] %in% c("logical","character")) grp <- factor(grp)
-
-
-    if(class(x)[1] %in% c("numeric","integer")){
-
-      if(class(grp)[1] %in% c("numeric","integer")){
-        WrdText( .CaptOut(
-          do.call( DescNumNum, args=append( list(x=grp, y=x, xname=pred, yname=resp, plotit=plotit), dotargs.numeric.numeric)) ))
-        if(plotit)
-          WrdPlot(width=11, height=11/gold_sec_c, dfact=2.5, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
-
-      } else if(class(grp)[1] %in% c("factor","ordered")){
-        WrdText( .CaptOut(
-          do.call( DescNumFact, args=append( list(x=x, grp=grp, xname=resp, grpname=pred, plotit=plotit), dotargs.numeric.factor )) ))
-        if(plotit)
-          WrdPlot(width=13, height=6.5, dfact=2.5, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
-
-      } else {
-        cat(gettextf("Don't know how to describe class: %s ~ %s!\n", paste(class(x), collapse=", "),
-                     paste(class(grp), collapse=", ")), "\n")
-      }
-    } else if(class(x)[1] %in% c("factor","ordered")){
-
-      if( class(grp)[1] %in% c("numeric","integer")){
-        WrdText( .CaptOut(
-          do.call( DescFactNum, args=append( list(x=x, y=grp, xname=resp, yname=pred, plotit=plotit), dotargs.factor.numeric )) ))
-        if(plotit)
-          WrdPlot(width=13, height=6.5, dfact=2.5, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
-
-      } else if ( class(grp)[1] %in% c("factor","ordered")){
-        tab <- table(x, grp, dnn=c(resp, pred))
-        WrdText( .CaptOut(
-          do.call( Desc, args=append( list(x=tab,
-                                           xname="", grpname="", plotit=FALSE,
-                                           main=NA), dotargs.factor.factor) )
-        ))
-        WrdText("\n", wrd=wrd)
-        if(plotit)
-          PlotDesc.table(tab, horiz = TRUE, wrd=wrd)
-      } else {
-        cat(gettextf("Don't know how to describe class: %s ~ %s!\n", class(x), class(grp)), "\n")
-      }
-    } else {
-      cat(gettextf("Don't know how to describe class: %s ~ %s!\n", class(x), class(grp)), "\n")
-    }
-
-    }
-  }
-
-  invisible()
-
-}
-
-
-
-
-###
 
 ## Word fundamentals  ====
 
@@ -20374,57 +10866,14 @@ GetNewWrd <- function(visible = TRUE, template = "Normal", header=FALSE
 
 
 
-# .GetNewWrdA <- function(visible = TRUE, template = "Normal", header=FALSE
-#                       , main="Descriptive report") {
-#
-#   # stopifnot(require(RDCOMClient))
-#
-#   # Starts the Word application with wrd as handle
-#   wrd <- RDCOMClient::COMCreate("Word.Application", existing=FALSE)
-#   options(lastWord = wrd)
-#
-#   if( visible == TRUE ) wrd[["Visible"]] <- TRUE
-#
-#   # Create a new document based on template
-#   # VBA code:
-#   # Documents.Add Template:= _
-#   #        "O:\G\GI\_Admin\Administration\09_Templates\newlogo_GI_doc_bericht.dot", _
-#   #        NewTemplate:=False, DocumentType:=0
-#   #
-#   newdoc <- wrd[["Documents"]]$Add(template, FALSE, 0)
-#
-#   # prepare word document, with front page, table of contents, footer ...
-#   if(header) .WrdPrepRep( wrd=wrd, main=main )
-#
-#   return( invisible( wrd ) )
-# }
+WrdKill <- function(){
+  # Word might not always quit and end the task
+  # so killing the task is "ultima ratio"...
+
+  shell('taskkill /F /IM WINWORD.EXE')
+}
 
 
-
-# GetNewWrd <- function(visible = TRUE, template = "Normal", header=FALSE
-#                       , main="Descriptive report") {
-#
-#   stopifnot(require(RDCOMClient))
-#
-#   # Starts the Word application with wrd as handle
-#   wrd <- RDCOMClient::COMCreate("Word.Application", existing=FALSE)
-#   options(lastWord = wrd)
-#
-#   if( visible == TRUE ) wrd[["Visible"]] <- TRUE
-#
-#   # Create a new document based on template
-#   # VBA code:
-#   # Documents.Add Template:= _
-#   #        "O:\G\GI\_Admin\Administration\09_Templates\newlogo_GI_doc_bericht.dot", _
-#   #        NewTemplate:=False, DocumentType:=0
-#   #
-#   newdoc <- wrd[["Documents"]]$Add(template, FALSE, 0)
-#
-#   # prepare word document, with front page, table of contents, footer ...
-#   if(header) .WrdPrepRep( wrd=wrd, main=main )
-#
-#   return( invisible( wrd ) )
-# }
 
 
 .WrdPrepRep <- function(wrd, main="Bericht" ){
@@ -20497,89 +10946,372 @@ GetNewWrd <- function(visible = TRUE, template = "Normal", header=FALSE
 #   wrd[["Selection"]]$InsertBreak(wdConst$wdPageBreak)
 # }
 
-# WrdPlot(wrd=wrd, height=10, width=16)
 
-WrdPlot <- function( type="png", append.cr=TRUE, crop=c(0,0,0,0), main = NULL,
-                     picscale=100, height=NA, width=NA, res=300, dfact=1.6, wrd = getOption("lastWord") ){
-
-  # png is considered a good choice for export to word (Smith)
-  # http://blog.revolutionanalytics.com/2009/01/10-tips-for-making-your-r-graphics-look-their-best.html
-
-  # height, width in cm!
-  # scale will be overidden, if height/width defined
+ToWrd <- function(x, font=NULL, ..., wrd=getOption("lastWord")){
+    UseMethod("ToWrd")
+}
 
 
-  # Example: WrdPlot(picscale=30)
-  #          WrdPlot(width=8)
+ToWrd.default <- function(x, font=NULL, ..., wrd=getOption("lastWord")){
 
-  .CentimetersToPoints <- function(x) x * 28.35
-  .PointsToCentimeters <- function(x) x / 28.35
-  # http://msdn.microsoft.com/en-us/library/bb214076(v=office.12).aspx
+  ToWrd.character(x=.CaptOut(x), font=font, ..., wrd=wrd)
+  invisible()
 
-  # handle missing height or width values
-  if (is.na(width) ){
-    if (is.na(height)) {
-      width <- 14
-      height <- par("pin")[2] / par("pin")[1] * width
-    } else {
-      width <- par("pin")[1] / par("pin")[2] * height
+}
+
+
+ToWrd.TOne <- function(x, font=NULL, main=NULL, align=NULL, autofit=TRUE, ..., wrd=getOption("lastWord")){
+
+  wTab <- ToWrd.table(x, main=NULL, font=font, align=align, autofit=autofit, wrd=wrd, ...)
+
+  if(is.null(font)) font <- list()
+  if(is.null(font$size))
+    font$size <- WrdFont(wrd)$size - 2
+  else
+    font$size <- font$size - 2
+
+
+  ToWrd.character(paste("\n", attr(x, "legend"), "\n\n", sep=""),
+        font=font, wrd=wrd)
+
+
+  if(!is.null(main)){
+    sel <- wrd$Selection()  # "Abbildung"
+    sel$InsertCaption(Label=wdConst$wdCaptionTable, Title=main)
+    sel$TypeParagraph()
+
+  }
+
+  invisible(wTab)
+
+}
+
+
+
+ToWrd.lm <- function(x, font=NULL, ..., wrd=getOption("lastWord")){
+
+  invisible()
+}
+
+
+# ToWrd.character <- function(x, font=NULL, ..., wrd=getOption("lastWord")){
+#
+#   if(!is.null(font)){
+#     currfont <- WrdFont(wrd)
+#     WrdFont(wrd) <- font
+#     on.exit(WrdFont(wrd) <- currfont)
+#   }
+#
+#   wrd[["Selection"]]$TypeText(paste(x, collapse="\n"))
+#
+#   invisible()
+# }
+#
+#
+
+
+ToWrd.character <- function (x, font = NULL, para = NULL, style = NULL, ..., wrd = getOption("lastWord")) {
+
+  wrd[["Selection"]]$InsertAfter(paste(x, collapse = "\n"))
+
+  if (!is.null(style))
+    WrdStyle(wrd) <- style
+
+  if (!is.null(para))
+    WrdParagraphFormat(wrd) <- para
+
+
+  if(!is.null(font)){
+      currfont <- WrdFont(wrd)
+      WrdFont(wrd) <- font
+      on.exit(WrdFont(wrd) <- currfont)
     }
-  } else {
-    if (is.na(height) ){
-        height <- par("pin")[2] / par("pin")[1] * width
-    }
+
+  wrd[["Selection"]]$Collapse(Direction=wdConst$wdCollapseEnd)
+
+  invisible()
+
+}
+
+
+WrdCaption <- function(x, index = 1, wrd = getOption("lastWord")){
+  ToWrd.character(paste(x, "\n", sep=""),
+                  style=eval(parse(text=gettextf("wdConst$wdStyleHeading%s", index))))
+}
+
+
+
+
+ToWrd.Freq <- function(x, font=NULL, main = NULL, ..., wrd = getOption("lastWord")){
+
+  x[,c(3,5)] <- sapply(round(x[,c(3,5)], 3), Format, digits=3)
+
+  res <- ToWrd.table(x=x, main=main, font=font, wrd=wrd)
+
+  invisible(res)
+
+}
+
+
+ToWrd.ftable <- function(x, font=NULL, main = NULL, ..., wrd = getOption("lastWord")) {
+  x <- FixToTab(capture.output(x))
+  NextMethod()
+}
+
+
+ToWrd.table <- function (x, font = NULL, main = NULL, align=NULL, autofit = TRUE,
+                              row.names=FALSE, ..., wrd = getOption("lastWord")) {
+
+  tab <- x
+
+  dim1 <- ncol(tab)
+  dim2 <- nrow(tab)
+  if(row.names) dim1 <- dim1 + 1
+
+  # wdConst ist ein R-Objekt (Liste mit 2755 Objekten!!!)
+
+  write.table(tab, file = "clipboard", sep = "\t", quote = FALSE, row.names=row.names)
+
+  myRange <- wrd[["Selection"]][["Range"]]
+  bm      <- wrd[["ActiveDocument"]][["Bookmarks"]]$Add("PasteHere", myRange)
+  myRange$Paste()
+
+  if(row.names) wrd[["Selection"]]$TypeText("\t")
+
+  myRange[["Start"]] <- bm[["Range"]][["Start"]]
+  myRange$Select()
+  bm$Delete()
+  wrd[["Selection"]]$ConvertToTable(Separator       = wdConst$wdSeparateByTabs,
+                                    NumColumns      = dim1,
+                                    NumRows         = dim2,
+                                    AutoFitBehavior = wdConst$wdAutoFitFixed)
+
+  wrdTable <- wrd[["Selection"]][["Tables"]]$Item(1)
+  # http://www.thedoctools.com/downloads/DocTools_List_Of_Built-in_Style_English_Danish_German_French.pdf
+  wrdTable[["Style"]] <- -115 # "Tabelle Klassisch 1"
+  wrdSel <- wrd[["Selection"]]
+
+
+  # align the columns
+  if(is.null(align))
+    align <- c("l", rep(x = "r", ncol(tab)-1))
+  else
+    align <- rep(align, length.out=ncol(tab))
+
+  align[align=="l"] <- wdConst$wdAlignParagraphLeft
+  align[align=="c"] <- wdConst$wdAlignParagraphCenter
+  align[align=="r"] <- wdConst$wdAlignParagraphRight
+
+  for(i in seq_along(align)){
+    wrdTable$Columns(i)$Select()
+    wrd[["Selection"]][["ParagraphFormat"]][["Alignment"]] <- align[i]
   }
 
-
-  # get a [type] tempfilename:
-  fn <- paste( tempfile(pattern = "file", tmpdir = tempdir()), ".", type, sep="" )
-  # this is a problem for RStudio....
-  # savePlot( fn, type=type )
-  # png(fn, width=width, height=height, units="cm", res=300 )
-  dev.copy(eval(parse(text=type)), fn, width=width*dfact, height=height*dfact, res=res, units="cm")
-  d <- dev.off()
-
-  # add it to our word report
-  res <- wrd[["Selection"]][["InlineShapes"]]$AddPicture( fn, FALSE, TRUE )
-  wrdDoc <- wrd[["ActiveDocument"]]
-  pic <- wrdDoc[["InlineShapes"]]$Item( wrdDoc[["InlineShapes"]][["Count"]] )
-
-  pic[["LockAspectRatio"]] <- -1  # = msoTrue
-  picfrmt <- pic[["PictureFormat"]]
-  picfrmt[["CropBottom"]] <- .CentimetersToPoints(crop[1])
-  picfrmt[["CropLeft"]] <- .CentimetersToPoints(crop[2])
-  picfrmt[["CropTop"]] <- .CentimetersToPoints(crop[3])
-  picfrmt[["CropRight"]] <- .CentimetersToPoints(crop[4])
-
-  if( is.na(height) & is.na(width) ){
-    # or use the ScaleHeight/ScaleWidth attributes:
-    pic[["ScaleHeight"]] <- picscale
-    pic[["ScaleWidth"]] <- picscale
-  } else {
-    # Set new height:
-    if( is.na(width) ) width <- height / .PointsToCentimeters( pic[["Height"]] ) * .PointsToCentimeters( pic[["Width"]] )
-    if( is.na(height) ) height <- width / .PointsToCentimeters( pic[["Width"]] ) * .PointsToCentimeters( pic[["Height"]] )
-    pic[["Height"]] <- .CentimetersToPoints(height)
-    pic[["Width"]] <- .CentimetersToPoints(width)
+  if(!is.null(font)){
+    wrdTable$Select()
+    WrdFont(wrd) <- font
   }
 
-  if( append.cr == TRUE ) { wrd[["Selection"]]$TypeText("\n")
-  } else {
-    wrd[["Selection"]]$MoveRight(wdConst$wdCharacter, 1, 0)
-  }
+  if(autofit)
+    wrdTable$Columns()$AutoFit()
 
-  if( file.exists(fn) ) { file.remove(fn) }
+  # Cursor aus der Tabelle auf die letzte Postition im Dokument setzten
+  # Selection.GoTo What:=wdGoToPercent, Which:=wdGoToLast
+  wrd[["Selection"]]$GoTo(What = wdConst$wdGoToPercent, Which= wdConst$wdGoToLast)
 
   if(!is.null(main)){
     # insert caption
     sel <- wrd$Selection()  # "Abbildung"
-    sel$InsertCaption(Label=wdConst$wdCaptionFigure, Title=main)
+    sel$InsertCaption(Label=wdConst$wdCaptionTable, Title=main)
     sel$TypeParagraph()
+
   }
 
-  invisible(pic)
+  invisible(wrdTable)
 
 }
+
+
+
+
+# Get and set font
+
+WrdFont <- function(wrd = getOption("lastWord") ) {
+  # returns the font object list: list(name, size, bold, italic) on the current position
+
+  wrdSel <- wrd[["Selection"]]
+  wrdFont <- wrdSel[["Font"]]
+
+  currfont <- list(
+    name = wrdFont[["Name"]] ,
+    size = wrdFont[["Size"]] ,
+    bold = wrdFont[["Bold"]] ,
+    italic = wrdFont[["Italic"]],
+    color = setNames(wrdFont[["Color"]], names(which(
+      wdConst==wrdFont[["Color"]] & grepl("wdColor", names(wdConst)))))
+  )
+
+  class(currfont) <- "font"
+  return(currfont)
+}
+
+
+`WrdFont<-` <- function(wrd, value){
+
+  wrdSel <- wrd[["Selection"]]
+  wrdFont <- wrdSel[["Font"]]
+
+  # set the new font
+  if(!is.null(value$name)) wrdFont[["Name"]] <- value$name
+  if(!is.null(value$size)) wrdFont[["Size"]] <- value$size
+  if(!is.null(value$bold)) wrdFont[["Bold"]] <- value$bold
+  if(!is.null(value$italic)) wrdFont[["Italic"]] <- value$italic
+  if(!is.null(value$color)) wrdFont[["Color"]] <- value$color
+
+  return(wrd)
+}
+
+
+# Get and set ParagraphFormat
+
+WrdParagraphFormat <- function(wrd = getOption("lastWord") ) {
+
+  wrdPar <- wrd[["Selection"]][["ParagraphFormat"]]
+
+  currpar <- list(
+    LeftIndent               =wrdPar[["LeftIndent"]] ,
+    RightIndent              =wrdPar[["RightIndent"]] ,
+    SpaceBefore              =wrdPar[["SpaceBefore"]] ,
+    SpaceBeforeAuto          =wrdPar[["SpaceBeforeAuto"]] ,
+    SpaceAfter               =wrdPar[["SpaceAfter"]] ,
+    SpaceAfterAuto           =wrdPar[["SpaceAfterAuto"]] ,
+    LineSpacingRule          =wrdPar[["LineSpacingRule"]],
+    Alignment                =wrdPar[["Alignment"]],
+    WidowControl             =wrdPar[["WidowControl"]],
+    KeepWithNext             =wrdPar[["KeepWithNext"]],
+    KeepTogether             =wrdPar[["KeepTogether"]],
+    PageBreakBefore          =wrdPar[["PageBreakBefore"]],
+    NoLineNumber             =wrdPar[["NoLineNumber"]],
+    Hyphenation              =wrdPar[["Hyphenation"]],
+    FirstLineIndent          =wrdPar[["FirstLineIndent"]],
+    OutlineLevel             =wrdPar[["OutlineLevel"]],
+    CharacterUnitLeftIndent  =wrdPar[["CharacterUnitLeftIndent"]],
+    CharacterUnitRightIndent =wrdPar[["CharacterUnitRightIndent"]],
+    CharacterUnitFirstLineIndent=wrdPar[["CharacterUnitFirstLineIndent"]],
+    LineUnitBefore           =wrdPar[["LineUnitBefore"]],
+    LineUnitAfter            =wrdPar[["LineUnitAfter"]],
+    MirrorIndents            =wrdPar[["MirrorIndents"]]
+    # wrdPar[["TextboxTightWrap"]] <- TextboxTightWrap
+  )
+
+  class(currpar) <- "paragraph"
+  return(currpar)
+}
+
+
+
+`WrdParagraphFormat<-` <- function(wrd, value){
+
+  wrdPar <- wrd[["Selection"]][["ParagraphFormat"]]
+
+  # set the new font
+  if(!is.null(value$LeftIndent)) wrdPar[["LeftIndent"]] <- value$LeftIndent
+  if(!is.null(value$RightIndent)) wrdPar[["RightIndent"]] <- value$RightIndent
+  if(!is.null(value$SpaceBefore)) wrdPar[["SpaceBefore"]] <- value$SpaceBefore
+  if(!is.null(value$SpaceBeforeAuto)) wrdPar[["SpaceBeforeAuto"]] <- value$SpaceBeforeAuto
+  if(!is.null(value$SpaceAfter)) wrdPar[["SpaceAfter"]] <- value$SpaceAfter
+  if(!is.null(value$SpaceAfterAuto)) wrdPar[["SpaceAfterAuto"]] <- value$SpaceAfterAuto
+  if(!is.null(value$LineSpacingRule)) wrdPar[["LineSpacingRule"]] <- value$LineSpacingRule
+  if(!is.null(value$Alignment)) {
+    if(is.character(value$Alignment))
+      switch(match.arg(value$Alignment, choices = c("left","center","right"))
+             , left=value$Alignment <- wdConst$wdAlignParagraphLeft
+             , center=value$Alignment <- wdConst$wdAlignParagraphCenter
+             , right=value$Alignment <- wdConst$wdAlignParagraphRight
+      )
+    wrdPar[["Alignment"]] <- value$Alignment
+    }
+  if(!is.null(value$WidowControl)) wrdPar[["WidowControl"]] <- value$WidowControl
+  if(!is.null(value$KeepWithNext)) wrdPar[["KeepWithNext"]] <- value$KeepWithNext
+  if(!is.null(value$KeepTogether)) wrdPar[["KeepTogether"]] <- value$KeepTogether
+  if(!is.null(value$PageBreakBefore)) wrdPar[["PageBreakBefore"]] <- value$PageBreakBefore
+  if(!is.null(value$NoLineNumber)) wrdPar[["NoLineNumber"]] <- value$NoLineNumber
+  if(!is.null(value$Hyphenation)) wrdPar[["Hyphenation"]] <- value$Hyphenation
+  if(!is.null(value$FirstLineIndent)) wrdPar[["FirstLineIndent"]] <- value$FirstLineIndent
+  if(!is.null(value$OutlineLevel)) wrdPar[["OutlineLevel"]] <- value$OutlineLevel
+  if(!is.null(value$CharacterUnitLeftIndent)) wrdPar[["CharacterUnitLeftIndent"]] <- value$CharacterUnitLeftIndent
+  if(!is.null(value$CharacterUnitRightIndent)) wrdPar[["CharacterUnitRightIndent"]] <- value$CharacterUnitRightIndent
+  if(!is.null(value$CharacterUnitFirstLineIndent)) wrdPar[["CharacterUnitFirstLineIndent"]] <- value$CharacterUnitFirstLineIndent
+  if(!is.null(value$LineUnitBefore)) wrdPar[["LineUnitBefore"]] <- value$LineUnitBefore
+  if(!is.null(value$LineUnitAfter)) wrdPar[["LineUnitAfter"]] <- value$LineUnitAfter
+  if(!is.null(value$MirrorIndents)) wrdPar[["MirrorIndents"]] <- value$MirrorIndents
+
+  return(wrd)
+
+}
+
+
+WrdStyle <- function (wrd = getOption("lastWord")) {
+  wrdSel <- wrd[["Selection"]]
+  wrdStyle <- wrdSel[["Style"]][["NameLocal"]]
+  return(wrdStyle)
+}
+
+
+`WrdStyle<-` <- function (wrd, value) {
+  wrd[["Selection"]][["Style"]] <- value
+  return(wrd)
+}
+
+
+
+
+# WrdSetFont <- function(font = list(name = "Consolas", size = 7,
+#                        bold = FALSE, italic = FALSE), wrd = getOption("lastWord") ) {
+#
+#   wrdSel <- wrd[["Selection"]]
+#   wrdFont <- wrdSel[["Font"]]
+#
+#   # get the currentfont
+#   currfont <- structure(list(
+#     name = wrdFont[["Name"]] ,
+#     size = wrdFont[["Size"]] ,
+#     bold = wrdFont[["Bold"]] ,
+#     italic = wrdFont[["Italic"]]
+#   ), class="font")
+#
+#   # set the new font
+#   with(font, {
+#     wrdFont[["Name"]] <- name
+#     wrdFont[["Size"]] <- size
+#     wrdFont[["Bold"]] <- bold
+#     wrdFont[["Italic"]] <- italic
+#   } )
+#
+#
+#   # return the originally set font
+#   invisible(currfont)
+#
+# }
+#
+#
+# WrdGetFont <- function(wrd = getOption("lastWord") ) {
+#   # returns the font object list: list(name, size, bold, italic) on the current position
+#
+#   wrdSel <- wrd[["Selection"]]
+#   wrdFont <- wrdSel[["Font"]]
+#
+#   currfont <- list(
+#     name = wrdFont[["Name"]] ,
+#     size = wrdFont[["Size"]] ,
+#     bold = wrdFont[["Bold"]] ,
+#     italic = wrdFont[["Italic"]]
+#   )
+#
+#   class(currfont) <- "font"
+#   return(currfont)
+# }
+
 
 
 IsValidWrd <- function(wrd = getOption("lastWord")){
@@ -20591,34 +11323,34 @@ IsValidWrd <- function(wrd = getOption("lastWord")){
 }
 
 
-WrdCaption <- function(x, stylename = wdConst$wdStyleHeading1, wrd = getOption("lastWord") ) {
-
-  wrdSel <- wrd[["Selection"]]
-  wrdFont <- wrdSel[["Font"]]
-
-  if(is.null(wrdSel)) stop("No running word found!")
-
-  currfont <- list(
-    name = wrdFont[["Name"]] ,
-    size = wrdFont[["Size"]] ,
-    bold = wrdFont[["Bold"]] ,
-    italic = wrdFont[["Italic"]]
-  )
-
-  wrdSel[["Style"]] <- stylename
-  wrdSel$TypeText(x)
-  wrdSel$TypeParagraph()
-
-  wrdSel[["Style"]] <- wdConst$wdStyleNormal
-
-  # Restore old font
-  wrdFont[["Name"]] <- currfont[["name"]]
-  wrdFont[["Size"]] <- currfont[["size"]]
-  wrdFont[["Bold"]] <- currfont[["bold"]]
-  wrdFont[["Italic"]] <- currfont[["italic"]]
-  invisible()
-
-}
+# WrdCaption <- function(x, stylename = wdConst$wdStyleHeading1, wrd = getOption("lastWord") ) {
+#
+#   wrdSel <- wrd[["Selection"]]
+#   wrdFont <- wrdSel[["Font"]]
+#
+#   if(is.null(wrdSel)) stop("No running word found!")
+#
+#   currfont <- list(
+#     name = wrdFont[["Name"]] ,
+#     size = wrdFont[["Size"]] ,
+#     bold = wrdFont[["Bold"]] ,
+#     italic = wrdFont[["Italic"]]
+#   )
+#
+#   wrdSel[["Style"]] <- stylename
+#   wrdSel$TypeText(x)
+#   wrdSel$TypeParagraph()
+#
+#   wrdSel[["Style"]] <- wdConst$wdStyleNormal
+#
+#   # Restore old font
+#   wrdFont[["Name"]] <- currfont[["name"]]
+#   wrdFont[["Size"]] <- currfont[["size"]]
+#   wrdFont[["Bold"]] <- currfont[["bold"]]
+#   wrdFont[["Italic"]] <- currfont[["italic"]]
+#   invisible()
+#
+# }
 
 
 WrdText <- function(txt, fixedfont=TRUE, fontname=NULL,
@@ -20717,41 +11449,6 @@ WrdUpdateBookmark <- function (name, text, what = wdConst$wdGoToBookmark, wrd = 
 
 
 
-WrdSetFont <- function(fontname = "Consolas", fontsize = 7, bold = FALSE, italic = FALSE, wrd = getOption("lastWord") ) {
-
-  wrdSel <- wrd[["Selection"]]
-  wrdFont <- wrdSel[["Font"]]
-
-  currfont <- list(
-    name = wrdFont[["Name"]] ,
-    size = wrdFont[["Size"]] ,
-    bold = wrdFont[["Bold"]] ,
-    italic = wrdFont[["Italic"]]
-  )
-
-  wrdFont[["Name"]] <- fontname
-  wrdFont[["Size"]] <- fontsize
-
-  invisible(currfont)
-
-}
-
-
-WrdGetFont <- function(wrd = getOption("lastWord") ) {
-  # returns the font object list: list(name, size, bold, italic) on the current position
-
-  wrdSel <- wrd[["Selection"]]
-  wrdFont <- wrdSel[["Font"]]
-
-  currfont <- list(
-    name = wrdFont[["Name"]] ,
-    size = wrdFont[["Size"]] ,
-    bold = wrdFont[["Bold"]] ,
-    italic = wrdFont[["Italic"]]
-  )
-  return(currfont)
-}
-
 
 
 WrdR <- function(x,  wrd = getOption("lastWord") ){
@@ -20765,12 +11462,94 @@ WrdR <- function(x,  wrd = getOption("lastWord") ){
 }
 
 
+# Example: WrdPlot(picscale=30)
+#          WrdPlot(width=8)
+
+.CentimetersToPoints <- function(x) x * 28.35
+.PointsToCentimeters <- function(x) x / 28.35
+# http://msdn.microsoft.com/en-us/library/bb214076(v=office.12).aspx
 
 
 
-WrdInsTab <- function(nrow = 1, ncol = 1, heights = NULL, widths = NULL, main = NULL, wrd = getOption("lastWord")){
+WrdPlot <- function( type="png", append.cr=TRUE, crop=c(0,0,0,0), main = NULL,
+                     picscale=100, height=NA, width=NA, res=300, dfact=1.6, wrd = getOption("lastWord") ){
 
-  .CentimetersToPoints <- function(x) x * 28.35
+  # png is considered a good choice for export to word (Smith)
+  # http://blog.revolutionanalytics.com/2009/01/10-tips-for-making-your-r-graphics-look-their-best.html
+
+  # height, width in cm!
+  # scale will be overidden, if height/width defined
+
+
+
+  # handle missing height or width values
+  if (is.na(width) ){
+    if (is.na(height)) {
+      width <- 14
+      height <- par("pin")[2] / par("pin")[1] * width
+    } else {
+      width <- par("pin")[1] / par("pin")[2] * height
+    }
+  } else {
+    if (is.na(height) ){
+      height <- par("pin")[2] / par("pin")[1] * width
+    }
+  }
+
+
+  # get a [type] tempfilename:
+  fn <- paste( tempfile(pattern = "file", tmpdir = tempdir()), ".", type, sep="" )
+  # this is a problem for RStudio....
+  # savePlot( fn, type=type )
+  # png(fn, width=width, height=height, units="cm", res=300 )
+  dev.copy(eval(parse(text=type)), fn, width=width*dfact, height=height*dfact, res=res, units="cm")
+  d <- dev.off()
+
+  # add it to our word report
+  res <- wrd[["Selection"]][["InlineShapes"]]$AddPicture( fn, FALSE, TRUE )
+  wrdDoc <- wrd[["ActiveDocument"]]
+  pic <- wrdDoc[["InlineShapes"]]$Item( wrdDoc[["InlineShapes"]][["Count"]] )
+
+  pic[["LockAspectRatio"]] <- -1  # = msoTrue
+  picfrmt <- pic[["PictureFormat"]]
+  picfrmt[["CropBottom"]] <- .CentimetersToPoints(crop[1])
+  picfrmt[["CropLeft"]] <- .CentimetersToPoints(crop[2])
+  picfrmt[["CropTop"]] <- .CentimetersToPoints(crop[3])
+  picfrmt[["CropRight"]] <- .CentimetersToPoints(crop[4])
+
+  if( is.na(height) & is.na(width) ){
+    # or use the ScaleHeight/ScaleWidth attributes:
+    pic[["ScaleHeight"]] <- picscale
+    pic[["ScaleWidth"]] <- picscale
+  } else {
+    # Set new height:
+    if( is.na(width) ) width <- height / .PointsToCentimeters( pic[["Height"]] ) * .PointsToCentimeters( pic[["Width"]] )
+    if( is.na(height) ) height <- width / .PointsToCentimeters( pic[["Width"]] ) * .PointsToCentimeters( pic[["Height"]] )
+    pic[["Height"]] <- .CentimetersToPoints(height)
+    pic[["Width"]] <- .CentimetersToPoints(width)
+  }
+
+  if( append.cr == TRUE ) { wrd[["Selection"]]$TypeText("\n")
+  } else {
+    wrd[["Selection"]]$MoveRight(wdConst$wdCharacter, 1, 0)
+  }
+
+  if( file.exists(fn) ) { file.remove(fn) }
+
+  if(!is.null(main)){
+    # insert caption
+    sel <- wrd$Selection()  # "Abbildung"
+    sel$InsertCaption(Label=wdConst$wdCaptionFigure, Title=main)
+    sel$TypeParagraph()
+  }
+
+  invisible(pic)
+
+}
+
+
+
+WrdTable <- function(nrow = 1, ncol = 1, heights = NULL, widths = NULL, main = NULL, wrd = getOption("lastWord")){
 
   res <- wrd[["ActiveDocument"]][["Tables"]]$Add(wrd[["Selection"]][["Range"]],
                                                  NumRows = nrow, NumColumns = ncol)
@@ -20807,111 +11586,107 @@ WrdInsTab <- function(nrow = 1, ncol = 1, heights = NULL, widths = NULL, main = 
 
 ###
 
-## Word Table - experimental code
-
-WrdTable <- function(tab, main = NULL, wrd = getOption("lastWord"), row.names = FALSE, ...){
-  UseMethod("WrdTable")
-
-}
-
-
-WrdTable.Freq <- function(tab, main = NULL, wrd = getOption("lastWord"), row.names = FALSE, ...){
-
-  tab[,c(3,5)] <- sapply(round(tab[,c(3,5)], 3), Format, digits=3)
-  WrdTable.default(tab=tab, wrd=wrd)
-
-  if(!is.null(main)){
-    # insert caption
-    sel <- wrd$Selection()  # "Abbildung"
-    sel$InsertCaption(Label=wdConst$wdCaptionTable, Title=main)
-    sel$TypeParagraph()
-  }
-
-  invisible()
-
-}
-
-WrdTable.ftable <- function(tab, main = NULL, wrd = getOption("lastWord"), row.names = FALSE, ...) {
-  tab <- FixToTab(capture.output(tab))
-  NextMethod()
-}
-
-
-WrdTable.default <- function (tab,  main = NULL, wrd = getOption("lastWord"), row.names=FALSE
-                              , fmt = NULL, fontsize = NULL, ...) {
-
-
-  dim1 <- ncol(tab)
-  dim2 <- nrow(tab)
-  if(row.names) dim1 <- dim1 + 1
-
-  # wdConst ist ein R-Objekt (Liste mit 2755 Objekten!!!)
-
-  write.table(tab, file = "clipboard", sep = "\t", quote = FALSE, row.names=row.names)
-
-  myRange <- wrd[["Selection"]][["Range"]]
-  bm      <- wrd[["ActiveDocument"]][["Bookmarks"]]$Add("PasteHere", myRange)
-  myRange$Paste()
-
-  if(row.names) wrd[["Selection"]]$TypeText("\t")
-
-  myRange[["Start"]] <- bm[["Range"]][["Start"]]
-  myRange$Select()
-  bm$Delete()
-  wrd[["Selection"]]$ConvertToTable(Separator       = wdConst$wdSeparateByTabs,
-                                    NumColumns      = dim1,
-                                    NumRows         = dim2,
-                                    AutoFitBehavior = wdConst$wdAutoFitFixed)
-
-  wrdTable <- wrd[["Selection"]][["Tables"]]$Item(1)
-  # http://www.thedoctools.com/downloads/DocTools_List_Of_Built-in_Style_English_Danish_German_French.pdf
-  wrdTable[["Style"]] <- -115 # "Tabelle Klassisch 1"
-  wrdSel <- wrd[["Selection"]]
-
-
-  if(!is.null(fmt)){  # fmt <- "rl"
-    # expects a llrr character vector for alignment
-    align <- rep(unlist(strsplit(fmt, "")), length.out=wrdTable[["Columns"]]$count())
-
-    for(i in 1:wrdTable[["Columns"]]$count()){
-      wrdTable[["Columns"]]$Item(i)$Select()
-      wrd[["Selection"]][["ParagraphFormat"]][["Alignment"]] <-
-        if(align[i]=="l") wdConst$wdAlignParagraphLeft
-        else if(align[i]=="c") wdConst$wdAlignParagraphCenter
-        else if(align[i]=="r") wdConst$wdAlignParagraphRight
-      if(!is.null(fontsize))
-         wrd[["Selection"]][["Font"]][["Size"]] <- fontsize
-
-    }
-
-  } else {
-    wrdSel[["ParagraphFormat"]][["Alignment"]] <- wdConst$wdAlignParagraphLeft
-    wrdTable[["Columns"]]$Item(1)$Select()
-    wrd[["Selection"]][["ParagraphFormat"]][["Alignment"]] <- wdConst$wdAlignParagraphLeft
-  }
-
-
-#   if(!is.null(fontsize)){
-#     wrdTable$Select()
-#     wrd[["Selection"]][["Font"]][["Size"]] <- fontsize
+# ## Word Table - experimental code
+#
+# WrdTable <- function(tab, main = NULL, wrd = getOption("lastWord"), row.names = FALSE, ...){
+#   UseMethod("WrdTable")
+#
+# }
+#
+#
+# WrdTable.Freq <- function(tab, main = NULL, wrd = getOption("lastWord"), row.names = FALSE, ...){
+#
+#   tab[,c(3,5)] <- sapply(round(tab[,c(3,5)], 3), Format, digits=3)
+#   res <- WrdTable.default(tab=tab, wrd=wrd)
+#
+#   if(!is.null(main)){
+#     # insert caption
+#     sel <- wrd$Selection()  # "Abbildung"
+#     sel$InsertCaption(Label=wdConst$wdCaptionTable, Title=main)
+#     sel$TypeParagraph()
 #   }
-
-  # Cursor aus der Tabelle auf die letzte Postition im Dokument setzten
-  # Selection.GoTo What:=wdGoToPercent, Which:=wdGoToLast
-  wrd[["Selection"]]$GoTo(What = wdConst$wdGoToPercent, Which= wdConst$wdGoToLast)
-
-  if(!is.null(main)){
-    # insert caption
-    sel <- wrd$Selection()  # "Abbildung"
-    sel$InsertCaption(Label=wdConst$wdCaptionTable, Title=main)
-    sel$TypeParagraph()
-
-  }
-
-  invisible()
-
-}
-
+#
+#   invisible(res)
+#
+# }
+#
+# WrdTable.ftable <- function(tab, main = NULL, wrd = getOption("lastWord"), row.names = FALSE, ...) {
+#   tab <- FixToTab(capture.output(tab))
+#   NextMethod()
+# }
+#
+#
+# WrdTable.default <- function (tab, font = NULL, align=NULL, autofit = TRUE, main = NULL,
+#                               wrd = getOption("lastWord"), row.names=FALSE,
+#                               ...) {
+#
+#   dim1 <- ncol(tab)
+#   dim2 <- nrow(tab)
+#   if(row.names) dim1 <- dim1 + 1
+#
+#   # wdConst ist ein R-Objekt (Liste mit 2755 Objekten!!!)
+#
+#   write.table(tab, file = "clipboard", sep = "\t", quote = FALSE, row.names=row.names)
+#
+#   myRange <- wrd[["Selection"]][["Range"]]
+#   bm      <- wrd[["ActiveDocument"]][["Bookmarks"]]$Add("PasteHere", myRange)
+#   myRange$Paste()
+#
+#   if(row.names) wrd[["Selection"]]$TypeText("\t")
+#
+#   myRange[["Start"]] <- bm[["Range"]][["Start"]]
+#   myRange$Select()
+#   bm$Delete()
+#   wrd[["Selection"]]$ConvertToTable(Separator       = wdConst$wdSeparateByTabs,
+#                                     NumColumns      = dim1,
+#                                     NumRows         = dim2,
+#                                     AutoFitBehavior = wdConst$wdAutoFitFixed)
+#
+#   wrdTable <- wrd[["Selection"]][["Tables"]]$Item(1)
+#   # http://www.thedoctools.com/downloads/DocTools_List_Of_Built-in_Style_English_Danish_German_French.pdf
+#   wrdTable[["Style"]] <- -115 # "Tabelle Klassisch 1"
+#   wrdSel <- wrd[["Selection"]]
+#
+#
+#   # align the columns
+#   if(is.null(align))
+#     align <- c("l", rep(x = "r", ncol(tab)-1))
+#   else
+#     align <- rep(align, length.out=ncol(tab))
+#
+#   align[align=="l"] <- wdConst$wdAlignParagraphLeft
+#   align[align=="c"] <- wdConst$wdAlignParagraphCenter
+#   align[align=="r"] <- wdConst$wdAlignParagraphRight
+#
+#   for(i in seq_along(align)){
+#     wrdTable$Columns(i)$Select()
+#     wrd[["Selection"]][["ParagraphFormat"]][["Alignment"]] <- align[i]
+#   }
+#
+#   if(!is.null(font)){
+#     wrdTable$Select()
+#     WrdFont(wrd) <- font
+#   }
+#
+#   if(autofit)
+#     wrdTable$Columns()$AutoFit()
+#
+#   # Cursor aus der Tabelle auf die letzte Postition im Dokument setzten
+#   # Selection.GoTo What:=wdGoToPercent, Which:=wdGoToLast
+#   wrd[["Selection"]]$GoTo(What = wdConst$wdGoToPercent, Which= wdConst$wdGoToLast)
+#
+#   if(!is.null(main)){
+#     # insert caption
+#     sel <- wrd$Selection()  # "Abbildung"
+#     sel$InsertCaption(Label=wdConst$wdCaptionTable, Title=main)
+#     sel$TypeParagraph()
+#
+#   }
+#
+#   invisible(wrdTable)
+#
+# }
+#
 
 # WrdTable <- function(tab, wrd){
 
@@ -21006,13 +11781,6 @@ WrdTable.default <- function (tab,  main = NULL, wrd = getOption("lastWord"), ro
 # WrdPlot(PlotDescNumFact( temperature ~ driver, data=d.pizza, newwin=T )
 # , wrd=wrd, width=17, crop=c(0,0,60,0))
 
-
-WrdKill <- function(){
-  # Word might not alwasy quit and end the task
-  # so killing the task is "ultima ratio"...
-
-  shell('taskkill /F /IM WINWORD.EXE')
-}
 
 
 ###

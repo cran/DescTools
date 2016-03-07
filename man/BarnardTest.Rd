@@ -6,19 +6,21 @@ Barnard's unconditional test for superiority applied to \eqn{2 \times 2}{2x2} co
 using Score or Wald statistics for the difference between two binomial proportions.
 }
 \usage{
-BarnardTest(x, y = NULL, dp = 0.001, pooled = TRUE, alternative = "two.sided")
+BarnardTest(x, y = NULL, alternative = c("two.sided", "less", "greater"),
+            dp = 0.001, pooled = TRUE)
 }
 \arguments{
 
- \item{x}{either a two-dimensional contingency table in matrix form,
-     or a factor object.}
+ \item{x}{a numeric vector or a two-dimensional contingency table in matrix form. \code{x} and \code{y} can also both be factors. }
  \item{y}{a factor object; ignored if \code{x} is a matrix.}
 
   \item{dp}{ The resolution of the search space for the nuisance parameter }
   \item{pooled}{ Z statistic with pooled (Score) or unpooled (Wald) variance }
-   \item{alternative}{indicates the alternative hypothesis and must be
-     one of \code{"two.sided"}, \code{"greater"} or \code{"less"}.
-     You can specify just the initial letter.  }
+
+  \item{alternative}{a character string specifying the alternative
+    hypothesis, must be one of \code{"two.sided"} (default),
+    \code{"greater"} or \code{"less"}.  You can specify just the initial
+    letter.}
 
 }
 

@@ -16,26 +16,26 @@ Trim(x, trim = 0.1, na.rm = FALSE)
   \item{x}{a numeric vector to be trimmed.
 %%     ~~Describe \code{x} here~~
 }
-  \item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each end of x before the mean is computed. Values of trim outside that range are taken as the nearest endpoint.\cr
-  The argument can also be set to an integer value. If \code{trim} is set to >1 it is interpreted as the number of elements to be cut off at each tail of x.
+  \item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each end of x. Values of trim outside that range (and < 1) are taken as the nearest endpoint.
+   If \code{trim} is set to a value >1 it's interpreted as the number of elements to be cut off at each tail of \code{x}.
 %%     ~~Describe \code{trim} here~~
 }
-  \item{na.rm}{a logical value indicating whether NA values should be stripped before the computation proceeds.
+  \item{na.rm}{a logical value indicating whether \code{NA} values should be stripped before the computation proceeds.
 %%     ~~Describe \code{na.rm} here~~
 }
 }
 
-\details{A symmetrically trimmed vector x with a fraction of trim observations (resp. the given number) deleted from each end will be returned. If trim is set to a value >0.5 or to an integer value > n/2 then the result will be NA. }
+\details{A symmetrically trimmed vector \code{x} with a fraction of trim observations (resp. the given number) deleted from each end will be returned. If \code{trim} is set to a value >0.5 or to an integer value > n/2 then the result will be \code{NA}. }
 
 \value{
-The trimmed vector x. The result vector will be sorted (as \code{\link{sort.int}} is used within the function).
+The trimmed vector \code{x}. The result vector will be sorted (as \code{\link{sort.int}} is used within the function).
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
-\note{This function is basically an excerpt from the base function \code{\link{mean}}, which allows the vector x to be trimmed before calculating the mean. But what if a trimmed sd is needed?}
+\note{This function is basically an excerpt from the base function \code{\link{mean}}, which allows the vector \code{x} to be trimmed before calculating the mean. But what if a trimmed standard deviation is needed?}
 \author{R-Core (function mean), Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~
 }

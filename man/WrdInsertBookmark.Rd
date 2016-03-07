@@ -26,7 +26,7 @@ WrdUpdateBookmark(name, text, what = wdConst$wdGoToBookmark, wrd = getOption("la
   \item{what}{a word constant, defining the type of object to be used to place the cursor.
 %%     ~~Describe \code{what} here~~
 }
-  \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()} 
+  \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()}
   or an existing one, created by \code{GetCurrWrd()}.
   Default is the last created pointer stored in \code{getOption("lastWord")}.}
 }
@@ -41,7 +41,7 @@ WrdUpdateBookmark(name, text, what = wdConst$wdGoToBookmark, wrd = getOption("la
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{WrdSetFont}}, \code{\link{WrdPlot}}, \code{\link{GetNewWrd}}, \code{\link{GetCurrWrd}}
+\code{\link{WrdFont}}, \code{\link{WrdPlot}}, \code{\link{GetNewWrd}}, \code{\link{GetCurrWrd}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

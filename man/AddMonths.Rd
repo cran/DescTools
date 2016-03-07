@@ -2,29 +2,28 @@
 \alias{AddMonths}
 \title{Add a Month to a Date
 }
-\description{Simple adding a number of months to a date can lead to invalid dates, think of e.g. 2012-01-30 + 1 month. This function offers a ceiling option to make sure that the result is always a valid date, e.g.
-\code{as.Date("2013-01-31") + 1 month} will be \code{"2013-02-28"}. If number \code{n} is negative, the months will be subtracted.  
+\description{Clueless adding numbers of months to a date will in some cases lead to invalid dates, think of e.g. 2012-01-30 + 1 month. AddMonths ensures that the result is always a valid date, e.g.
+\code{as.Date("2013-01-31") + 1 month} will be \code{"2013-02-28"}. If number \code{n} is negative, the months will be subtracted.
 }
 \usage{
-AddMonths(x, n, ceiling = TRUE)
+AddMonths(x, n, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{the date to which a number of months has to be added. x can be a date or an integer.
-  If it is an integer it will be interpreted as yyyymm.
+  \item{x}{a Date object (or something which can be coerced by \code{\link{as.Date}}(x, ...) to such an object)
+  to which a number of months has to be added.
 %%     ~~Describe \code{x} here~~
 }
   \item{n}{the number of months to be added. If n is negative the months will be subtracted.
 %%     ~~Describe \code{n} here~~
 }
-  \item{ceiling}{logic. If set to TRUE (default), a ceiling to the last available day of month will be set.
+  \item{\dots}{the dots are passed to \code{\link{as.Date}}, e.g. for supplying \code{origin}.
 %%     ~~Describe \code{ceiling} here~~
 }
 }
-%% \details{
-%%  ~~ If necessary, more details than the description above ~~
-%% }
-\value{a vector with the same dimension and type as x, containing the transformed dates.
+\details{All parameters will be recyled if necessary.
+}
+\value{a vector of class \code{Date} with the same dimension as \code{x}, containing the transformed dates.
 }
 \references{
 Thanks to Antonio: \url{http://stackoverflow.com/questions/14169620/add-a-month-to-a-date}
@@ -32,21 +31,28 @@ Thanks to Antonio: \url{http://stackoverflow.com/questions/14169620/add-a-month-
 \author{Andri Signorell <andri@signorell.net>, based on code by Roland Rapold and Antonio
 }
 
-\seealso{Date functions, like \code{\link{Year}}, \code{\link{Month}}, etc.
+\seealso{\code{\link{AddMonthsYM}}; Date functions: \code{\link{Year}}, \code{\link{Month}}, etc.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-AddMonths(as.Date("2013-01-01"), 10)
-AddMonths(as.Date("2013-01-01"), -5)
+# characters will be coerced to Date
+AddMonths("2013-01-31", 1)
 
-AddMonths(201301, 3)
-AddMonths(201301, -5)
+# negative n
+AddMonths(as.Date("2013-03-31"), -1)
 
-AddMonths(as.Date("2013-01-31"), 1)
-AddMonths(as.Date("2013-01-31"), -2)
+# Arguments will be recycled
+# (with warning if the longer is not a multiple of length of shorter)
+AddMonths(c("2013-01-31", "2013-03-31", "2013-10-31", "2013-12-31"), c(1,-1))
 
-AddMonths(as.Date(c("2014-10-12","2013-01-31","2011-12-05")), 3)
 
+x <- as.POSIXct(c("2015-01-31", "2015-08-31"))
+n <- c(1, 3)
+AddMonths(x, n)
+
+# mind the origin if x supplied as numeric ...
+x <- as.numeric(as.Date(x))
+AddMonths(x, n, origin=as.Date("1970-01-01"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

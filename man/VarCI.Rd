@@ -9,7 +9,8 @@ Calculates the confidence interval for the variance either the classical way or 
 }
 \usage{
 VarCI(x, method = c("classic", "norm", "basic", "stud", "perc", "bca"),
-      conf.level = 0.95, na.rm = FALSE, R = 999)
+      conf.level = 0.95, sides = c("two.sided", "left", "right"),
+      na.rm = FALSE, R = 999)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -24,6 +25,8 @@ VarCI(x, method = c("classic", "norm", "basic", "stud", "perc", "bca"),
   \item{conf.level}{confidence level of the interval.
 %%     ~~Describe \code{conf.level} here~~
 }
+\item{sides}{a character string specifying the side of the confidence interval, must be one of \code{"two.sided"} (default), \code{"left"} or \code{"right"}. You can specify just the initial letter. \code{"left"} would be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
+
   \item{na.rm}{logical. Should missing values be removed? Defaults to FALSE.
 %%     ~~Describe \code{na.rm} here~~
 }

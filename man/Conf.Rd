@@ -1,14 +1,5 @@
 \name{Conf}
 \alias{Conf}
-\alias{Conf.table}
-\alias{Conf.default}
-\alias{Conf.matrix}
-\alias{Conf.rpart}
-\alias{Conf.multinom}
-\alias{Conf.glm}
-\alias{Conf.randomForest}
-\alias{Conf.svm}
-\alias{Conf.regr}
 \alias{plot.Conf}
 \alias{print.Conf}
 \alias{Sens}
@@ -22,56 +13,43 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Conf(x, ...)
+Conf(x, ref = NULL, pos = NULL, na.rm = TRUE, ...)
 
-\method{Conf}{table}(x, pos = NULL, ...) 
-\method{Conf}{matrix}(x, pos = NULL, ...)
-\method{Conf}{default}(x, ref, pos = NULL, na.rm = TRUE, ...) 
-  
-\method{Conf}{rpart}(x, ...)
-\method{Conf}{multinom}(x, ...)
-\method{Conf}{glm}(x, cutoff = 0.5, ...)
-\method{Conf}{randomForest}(x, ...)
-\method{Conf}{svm}(x, ...)
-\method{Conf}{regr}(x, ...)
+\method{plot}{Conf}(x, main = "Confusion Matrix", ...)
 
-\method{plot}{Conf}(x, main="Confusion Matrix", ...)
+\method{print}{Conf}(x, digits = max(3, getOption("digits") - 3), ...)
 
-\method{print}{Conf}(x, digits = max(3, getOption("digits") - 3), ...) 
-
-Sens(x, ...) 
-Spec(x, ...) 
+Sens(x, ...)
+Spec(x, ...)
 
 }
 %- maybe also 'usage' for other objects documented here.
+% \item{cutoff}{the cutoff point for separating the classes. This is only used if x is a glm-model and ignored else. }
 \arguments{
-  \item{x}{a vector, normally a factor, of predicted classes (for the default method) or an object of class \code{\link{table}}.
+\item{x}{a vector, normally a factor, of predicted classes or an object of following classes \code{rpart}, \code{randomForest}, \code{svm}, \code{C50}, \code{glm}, \code{multinom}, \code{reg}r, \code{ld}a, \code{qda} or \code{\link{table}}, resp. \code{matrix}. When a model is given, the predicted classes will be determined. A table or a matrix will be interpreted as a confusion matrix.
   }
-\item{ref}{a vector, normally a factor, of classes to be used as the reference.}
-\item{pos}{a character string that defines the factor level corresponding to the "positive" results. Will be ignored, if for a \eqn{n \times n}{n x n} table n > 2.}
-\item{cutoff}{the cutoff point for separating the classes. This is only used if x is a glm-model and ignored else. }
+\item{ref}{a vector, normally a factor, of classes to be used as the reference. This is Ignored if \code{x} is a \code{table} or \code{matrix}.}
+\item{pos}{a character string that defines the factor level corresponding to the "positive" results. Will be ignored for a \eqn{n \times n}{n x n} table n > 2.}
 
   \item{main}{overall title for the plot. }
 
   \item{digits}{controls the number of digits to print.
 }
 
-  \item{na.rm}{a logical value indicating whether or not missing values should be removed. Defaults to FALSE.
-
-%%     ~~Describe \code{na.rm} here~~
+  \item{na.rm}{a logical value indicating whether or not missing values should be removed. Defaults to \code{FALSE}.
 }
 
 
   \item{\dots}{further arguments to be passed to or from methods.}
-  
+
   }
 \details{
 The functions requires that the factors have exactly the same levels.
 
 For two class problems, the sensitivity, specificity, positive
 predictive value and negative predictive value is calculated using the
-\code{positive} argument. Also, the prevalence of the "event" is computed from the 
-data (unless passed in as an argument), the detection rate (the rate of true events also 
+\code{positive} argument. Also, the prevalence of the "event" is computed from the
+data (unless passed in as an argument), the detection rate (the rate of true events also
 predicted to be events) and the detection prevalence (the prevalence of predicted events).
 
 Suppose a \eqn{2 \times 2}{2 x 2} table with notation
@@ -97,7 +75,7 @@ See the references for discusions of the first five formulas.
 
 For more than two classes, these results are
 calculated comparing each factor level to the remaining levels
-(i.e. a "one versus all" approach). 
+(i.e. a "one versus all" approach).
 
 The overall accuracy and unweighted Kappa statistic are calculated. A p-value from McNemar's test is also computed using \code{\link[stats]{mcnemar.test}} (which can produce \code{NA} values with sparse tables).
 
@@ -105,11 +83,11 @@ The overall accuracy rate is computed along with a 95 percent confidence interva
 
  The sensitivity is defined as the proportion of positive results out of the number of
  samples which were actually positive. When there are no positive results, sensitivity is
- not defined and a value of \code{NA} is returned. Similarly, when there are no negative 
- results, specificity is not defined and a value of \code{NA} is returned. Similar 
+ not defined and a value of \code{NA} is returned. Similarly, when there are no negative
+ results, specificity is not defined and a value of \code{NA} is returned. Similar
  statements are true for predictive values.
 
- 
+
 }
 \value{
 a list with elements
@@ -137,11 +115,11 @@ rewritten based on the ideas of \code{\link[caret]{confusionMatrix}} by Max Kuhn
 }
 \examples{
 # let tab be a confusion table
-txt <- "
+tab <- TextToTable("
    lo hi
 lo 23 13
-hi 10 18 "
-tab <- TextToTable(txt, dimnames=c("pred", "obs"))
+hi 10 18 ", dimnames=c("pred", "obs"))
+
 Conf(tab, pos="hi")
 
 
@@ -154,17 +132,16 @@ Conf(x = pred, ref = obs, pos="hi")
 Sens(tab)   # Sensitivity
 Spec(tab)   # Specificity
 
-txt <- "
+
+tab <- TextToTable("
       terrible poor marginal clear
 terrible       10    4        1     0
 poor            5   10       12     2
 marginal        2    4       12     5
 clear           0    2        6    13
-"
-tab <- TextToTable(txt, dimnames=c("pred", "obs"))
-Conf(tab)
+", dimnames=c("pred", "obs"))
 
+Conf(tab)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
+
 \keyword{multivar}

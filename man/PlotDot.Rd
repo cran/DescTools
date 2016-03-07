@@ -9,7 +9,7 @@
 PlotDot(x, labels = NULL, groups = NULL, gdata = NULL,
         cex = par("cex"), pch = 21, gpch = 21, bg = par("bg"),
         color = par("fg"), gcolor = par("fg"), lcolor = "gray",
-        xlim = NULL, main = NULL, xlab = NULL, ylab = NULL, 
+        xlim = NULL, main = NULL, xlab = NULL, ylab = NULL,
         add = FALSE, args.errbars = NULL, \dots)
 }
 \arguments{
@@ -79,19 +79,19 @@ PlotDot(t(VADeaths), xlim = c(0,100),
 par(op)
 
 # add some error bars
-PlotDot(VADeaths, main="Death Rates in Virginia - 1940", col="red", pch=NA, 
-        args.errbars = list(from=VADeaths-2, to=VADeaths+2, mid=VADeaths, 
+PlotDot(VADeaths, main="Death Rates in Virginia - 1940", col="red", pch=NA,
+        args.errbars = list(from=VADeaths-2, to=VADeaths+2, mid=VADeaths,
         pch=21, cex=1.4))
-        
+
 # add some other values
 PlotDot(VADeaths+3, pch=15, col="blue", add=TRUE, labels=NA)
 
 # same as PlotDotCI
-xci <- do.call(rbind, tapply( d.pizza$delivery_min, d.pizza$driver, 
+xci <- do.call(rbind, tapply( d.pizza$delivery_min, d.pizza$driver,
                MeanCI, conf.level=0.99, na.rm=TRUE))
 
-PlotDot(xci[,1], main="delivery_min ~ driver", 
-        args.errbars = list(from=xci[,2], to=xci[,3], mid=xci[,1], 
+PlotDot(xci[,1], main="delivery_min ~ driver",
+        args.errbars = list(from=xci[,2], to=xci[,3], mid=xci[,1],
         lwd=2, pch=21, col="grey40", bg.pch="grey50", col.pch="black"),
         xlim=c(15,35), panel.before=grid())
 
@@ -100,15 +100,15 @@ x <- with(d.pizza, tapply(temperature, list(area, driver), mean, na.rm=TRUE))
 
 PlotDot(x, gdata = tapply(d.pizza$temperature, d.pizza$driver, mean, na.rm=TRUE),
         gpch = 15)
-        
+
 # special format
 par(lend=1)
 
 PlotDot(VADeaths, main="Death Rates in Virginia - 1940", pch=NA, lcolor = hecru,
-        args.errbars = list(from=VADeaths-2, to=VADeaths+2, mid=VADeaths, 
+        args.errbars = list(from=VADeaths-2, to=VADeaths+2, mid=VADeaths,
                             pch="|", col.pch=hred, cex=1.3, lwd=8, code=0, col=hgreen))
 
-# Error bars for binomial confidence intervals 
+# Error bars for binomial confidence intervals
 tab <- table(d.pizza$driver, d.pizza$wine_delivered)
 xci <- SetRowNames(BinomCI(tab[,1], rowSums(tab)), rownames(tab))
 PlotDot(xci[,1], main="wine delivered ~ driver ", xlim=c(0,1),
@@ -116,11 +116,17 @@ PlotDot(xci[,1], main="wine delivered ~ driver ", xlim=c(0,1),
 
 
 # Error bars for confidence intervals for means
-xci <- do.call(rbind, tapply(d.pizza$delivery_min, d.pizza$driver, 
+xci <- do.call(rbind, tapply(d.pizza$delivery_min, d.pizza$driver,
   MeanCI, conf.level=0.99, na.rm=TRUE))
 
-PlotDot(xci[,1], main="delivery_min ~ driver", 
+PlotDot(xci[,1], main="delivery_min ~ driver",
   args.errbars=list(from=xci[,-1]))
+
+# Setting the colours
+PlotDot(VADeaths, main="This should only show how to set the colours, not be pretty",
+        col=c("red", "blue"), pch=NA, gcolor = "green", lcolor = "orange",
+        args.errbars = list(from=VADeaths-2, to=VADeaths+2, mid=VADeaths,
+                          pch=21, cex=1.4, col="blue", col.pch="green", bg.pch="red"))
 
 }
 

@@ -10,9 +10,10 @@
 \usage{
 DunnTest(x, \dots)
 
-\method{DunnTest}{default}(x, g, 
-         method = c("holm", "hochberg", "hommel", "bonferroni", "BH", 
-                    "BY", "fdr", "none"), 
+\method{DunnTest}{default}(x, g,
+         method = c("holm", "hochberg", "hommel", "bonferroni", "BH",
+                    "BY", "fdr", "none"),
+         alternative = c("two.sided", "less", "greater"),
          out.list = TRUE, \dots)
 
 \method{DunnTest}{formula}(formula, data, subset, na.action, \dots)
@@ -27,6 +28,7 @@ DunnTest(x, \dots)
     corresponding elements of \code{x}.  Ignored if \code{x} is a
     list.}
   \item{method}{the method for adjusting p-values for multiple comparisons. The function is calling \code{\link{p.adjust}} and this parameter is directly passed through.}
+  \item{alternative}{a character string specifying the alternative hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or \code{"less"}. You can specify just the initial letter.}
   \item{out.list}{logical, indicating if the results should be printed in list mode or as a square matrix. Default is list (TRUE).}
   \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs}
     gives the data values and \code{rhs} the corresponding groups.}
@@ -45,15 +47,15 @@ DunnTest(x, \dots)
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
-  \code{DunnTest} does the post hoc pairwise multiple comparisons procedure appropriate to follow the rejection of a Kruskal-Wallis test. The Kruskal-Wallis test, being a non-parametric analog of the one-way ANOVA, is an omnibus test of the null hypothesis that none of k  groups stochastically dominate one another.
+  \code{DunnTest} performs the post hoc pairwise multiple comparisons procedure appropriate to follow the rejection of a Kruskal-Wallis test. The Kruskal-Wallis test, being a non-parametric analog of the one-way ANOVA, is an omnibus test of the null hypothesis that none of k  groups stochastically dominate one another.
 Dunn's test is constructed in part by summing jointly ranked data. The rank sum test, itself a non-parametric analog of the unpaired t-test, is possibly intuitive, but inappropriate as a post hoc pairwise test, because (1) it fails to retain the dependent ranking that produced the Kruskal-Wallis test statistic, and (2) it does not incorporate the pooled variance estimate implied by the null hypothesis of the Kruskal-Wallis test.
-  
+
   If \code{x} is a list, its elements are taken as the samples to be
   compared, and hence have to be numeric data vectors.  In this case,
   \code{g} is ignored, and one can simply use \code{DunnTest(x)}
   to perform the test.  If the samples are not yet contained in a
   list, use \code{DunnTest(list(x, ...))}.
-  
+
   Otherwise, \code{x} must be a numeric data vector, and \code{g} must
   be a vector or factor object of the same length as \code{x} giving
   the group for the corresponding elements of \code{x}.
@@ -82,6 +84,7 @@ x <- c(2.9, 3.0, 2.5, 2.6, 3.2) # normal subjects
 y <- c(3.8, 2.7, 4.0, 2.4)      # with obstructive airway disease
 z <- c(2.8, 3.4, 3.7, 2.2, 2.0) # with asbestosis
 DunnTest(list(x, y, z))
+
 ## Equivalently,
 x <- c(x, y, z)
 g <- factor(rep(1:3, c(5, 4, 5)),
@@ -96,7 +99,6 @@ kruskal.test(x, g)
 DunnTest(x, g)
 
 ## Formula interface.
-require(graphics)
 boxplot(Ozone ~ Month, data = airquality)
 DunnTest(Ozone ~ Month, data = airquality)
 }

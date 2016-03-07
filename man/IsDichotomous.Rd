@@ -1,5 +1,6 @@
 \name{IsDichotomous}
 \alias{IsDichotomous}
+\alias{Flags}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Test If a Variable Contains Only Two Unique Values
 %%  ~~function to do ... ~~
@@ -9,6 +10,8 @@
 }
 \usage{
 IsDichotomous(x)
+
+Flags(x)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -16,6 +19,7 @@ IsDichotomous(x)
 %%     ~~Describe \code{x} here~~
 }
 }
+\details{IsDichotomous tests a single variable. Flags returns the names of all the dichotomous variables in a list or data.frame.}
 \value{TRUE if x contains only two unique values, FALSE else
 %%  ~Describe the value returned
 %%  If it is a LIST, use

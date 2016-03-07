@@ -64,10 +64,10 @@ print.Freq <- function(x, digits=NULL, ...) {
 }
 
 
-# ToDo: perctable
+# ToDo: PercTable
 # param cumul.count show cumulative frequencies?
 # param cumul.pct show cumulative percentage?
-# param total.name a string containing footer label (defaults to "Total")
+# param total.name a string containing footer label (defaults to "Sum")
 # Drop unused levels
 # useNA ?
 # expected values, residuals, standardized residuals
@@ -135,13 +135,13 @@ PercTable.table <- function(tab, row.vars=NULL, col.vars = 2, justify = "right"
 
     if(perc==1) {
       px <- addmargins(prop.table(addmargins(x, 1), 1), 2)
-      if(!1 %in% margins) px <- px[,-ncol(px)]
-      if(!2 %in% margins) px <- px[-nrow(px),]
+      if(1 %nin% margins) px <- px[,-ncol(px)]
+      if(2 %nin% margins) px <- px[-nrow(px),]
       class(px) <- "table"
     } else if(perc==2) {
       px <- addmargins(prop.table(addmargins(x, 2), 2), 1)
-      if(!1 %in% margins) px <- px[,-ncol(px)]
-      if(!2 %in% margins) px <- px[-nrow(px),]
+      if(1 %nin% margins) px <- px[,-ncol(px)]
+      if(2 %nin% margins) px <- px[-nrow(px),]
       class(px) <- "table"
     } else {
       px <- prop.table(x)
@@ -154,9 +154,9 @@ PercTable.table <- function(tab, row.vars=NULL, col.vars = 2, justify = "right"
     # set 100% margins to some zero value
     # but only if main percentages are requested
     if(perc==1 & (1 %in% margins)) px[, ncol(px)] <- zero
-    if(substr(rfrq,1,1)=="1")
+    if(substr(rfrq, 1, 1)=="1")
       if(perc==2 & (1 %in% margins)) px[, ncol(px)] <- zero
-    if(substr(rfrq,1,1)=="1")
+    if(substr(rfrq, 1, 1)=="1")
       if(perc==1 & (2 %in% margins)) px[nrow(px), ] <- zero
     if(perc==2 & (2 %in% margins)) px[nrow(px), ] <- zero
 
@@ -228,7 +228,7 @@ PercTable.table <- function(tab, row.vars=NULL, col.vars = 2, justify = "right"
   justify <- match.arg(justify, c("left","right"))
   if(justify == "right")
     # align the whole stuff to the right
-    ftab[] <- StrAlign(ftab, "\\$")
+    ftab[] <- StrAlign(ftab, "\\r")
 
   names(attr(ftab, "row.vars"))[1] <- names(dimnames(tab))[1]
   if(length(names(attr(ftab, "row.vars"))) == 2)

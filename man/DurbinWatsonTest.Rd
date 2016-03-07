@@ -6,7 +6,7 @@
  Performs the Durbin-Watson test for autocorrelation of disturbances.
 }
 \usage{
-DurbinWatsonTest(formula, order.by = NULL, 
+DurbinWatsonTest(formula, order.by = NULL,
                  alternative = c("greater", "two.sided", "less"),
                  iterations = 15, exact = NULL, tol = 1e-10, data = list())
 }
@@ -36,7 +36,7 @@ of the disturbances is 0. It is possible to test against the alternative that it
 greater than, not equal to, or less than 0, respectively. This can be specified
 by the \code{alternative} argument.
 
-Under the assumption of normally distributed disturbances, the null distribution 
+Under the assumption of normally distributed disturbances, the null distribution
 of the Durbin-Watson statistic is the distribution of a linear
 combination of chi-squared variables. The p-value is computed using the
 Fortran version of Applied Statistics Algorithm AS 153 by Farebrother
@@ -59,7 +59,7 @@ For an overview on R and econometrics see Racine & Hyndman (2002).
   \item{method}{a character string with the method used.}
   \item{data.name}{a character string with the data name.}
 }
-\note{ This function was previously published as \code{dwtest} in the  \pkg{lmtest} package and has been integrated here without logical changes. 
+\note{ This function was previously published as \code{dwtest} in the  \pkg{lmtest} package and has been integrated here without logical changes.
 }
 \author{Torsten Hothorn, Achim Zeileis, Richard W. Farebrother (pan.f), Clint Cummins (pan.f), Giovanni Millo, David Mitchell}
 
@@ -117,5 +117,10 @@ err2 <- filter(err1, 0.9, method="recursive")
 y2 <- 1 + x + err2
 DurbinWatsonTest(y2 ~ x)
 
+## for a simple vector use:
+e_t <- c(-32.33, -26.603, 2.215, -16.967, -1.148, -2.512, -1.967, 11.669,
+         -0.513, 27.032, -4.422, 40.032, 23.577, 33.94, -2.787, -8.606,
+          0.575, 6.848, -18.971, -29.063)
+DurbinWatsonTest(e_t ~ 1)
 }
 \keyword{htest}

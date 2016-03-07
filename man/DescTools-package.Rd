@@ -9,12 +9,12 @@ A collection of basic statistic functions and convenience wrappers for efficient
 Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, NA handling, recycling rules etc. are concerned. Google style guides were used as naming rules (in absence of convincing alternatives). The 'CamelStyle' was consequently applied to functions borrowed from contributed R packages as well.
 \cr
 
-Feedback, feature requests, bugreports and other suggestions are welcome! Please report problems to Stack Overflow with keyword DescTools or directly to the maintainer.\cr
+Feedback, feature requests, bugreports and other suggestions are welcome! Please report problems to Stack Overflow mentioning DescTools or directly to the maintainer.\cr
 (We're approaching version 1.0, so take the opportunity...)
 
 }
 
-\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in, well, end of 2015) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.
+\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in, hmm - I need another 3-6 months, mid of 2016) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.
 }
 
 \details{
@@ -54,7 +54,7 @@ A grouped list of the functions:
 \link{Sort}      \tab            Sort extension for matrices and data.frames \cr
 \link{SortMixed}, \link{OrderMixed}    \tab Mixed sort order \cr
 \link{DenseRank}       \tab      Calculate ranks in consecutive order (no ties)  \cr
-\link{RoundM}       \tab Round to a multiple \cr
+\link{RoundTo}       \tab Round to a multiple \cr
 \link{Large}, \link{Small}  \tab    Returns the kth largest, resp. smallest values\cr
 \link{HighLow} \tab Combines \code{Large} and \code{Small}.\cr
 \link{Rev}      \tab            Reverses the order of rows and columns of a matrix \cr
@@ -76,12 +76,8 @@ A grouped list of the functions:
 \link{CombN}       \tab      Returns the number of subsets out of a list of elements \cr
 \link{CombSet}       \tab      Generates all possible subsets out of a list of elements \cr
 \link{CombPairs}      \tab            Generates all pairs out of one or two sets of elements \cr
-%%\link{WhichFlags}   \tab      Returns the names of dichotomous columns of a data.frame  \cr
-%%\link{WhichFactors}      \tab            Returns the names of factors in a given data.frame  \cr
-%%\link{WhichNumerics}      \tab            Returns the names of numerical columns of a data.frame \cr
 \link{IsWhole}      \tab            Is x a whole number? \cr
 \link{IsDichotomous}       \tab   Check if x contains exactly 2 values \cr
-%%\link{ IsEuclid}       \tab  \cr
 \link{IsOdd}       \tab    Is x even or odd? \cr
 \link{IsPrime}       \tab  Is x a prime number? \cr
 \link{IsZero}       \tab   Is numeric(x) == 0, say x < machine.eps? \cr
@@ -94,7 +90,8 @@ A grouped list of the functions:
 \link{reorder.factor}       \tab      Reorder the levels of a factor \cr
 \link{LOCF}      \tab         Imputation of datapoints following the "last observation \cr
 \tab carried forward" rule \cr
-%% \link{ToLong}, \link{ToWide}     \tab Simple reshaping of a vector \cr
+\link{Lookup}       \tab      Simple lookup if merge seems cumbersome \cr
+\link{ToLong}, \link{ToWide}     \tab Simple reshaping of a vector \cr
 \cr\cr
 \bold{String functions:}\tab\cr
 \link{StrTrim}       \tab      Delete white spaces from a string \cr
@@ -124,7 +121,7 @@ A grouped list of the functions:
 \bold{Colors:}\tab\cr
 \link{SetAlpha}   \tab  Add transperancy (alpha channel) to a color.     \cr
 \link{ChooseColorDlg}  \tab   Display the system's color dialog to choose a color     \cr
-\link{PlotRCol}    \tab  Display R colors in a dialog\cr
+\link{ColPicker}    \tab  Display R colors in a dialog\cr
 \link{ColorLegend}  \tab   Add a color legend to a plot    \cr
 \link{ColToGray}, \link{ColToGrey}  \tab  Convert colors to gcrey/grayscale     \cr
 \link{ColToHex}, \link{HexToCol}  \tab   Convert a color into hex string    \cr
@@ -167,7 +164,6 @@ A grouped list of the functions:
 \link{PlotCandlestick}    \tab  Plot candlestick chart \cr
 \link{PlotCirc}    \tab  Create a circular plot \cr
 \link{PlotCorr}    \tab Plot a correlation matrix  \cr
-\link{PlotDesc}    \tab   Create a descriptive plot of a vector x dependent on its class  \cr
 \link{PlotDot}    \tab  Plot a dotchart with confidence intervals \cr
 \link{PlotFaces}    \tab  Produce a plot of Chernoff faces  \cr
 \link{PlotFdist}    \tab  Frequency distribution plot, combination of histogram, \cr
@@ -220,13 +216,14 @@ A grouped list of the functions:
 \link{YuleQ}, \link{YuleY}  \tab  Yule's Q and Yule's Y      \cr
 \link{TschuprowT}  \tab  Tschuprow's T     \cr
 \link{Phi}, \link{ContCoef}, \link{CramerV}  \tab   Phi, Pearson's Contingency Coefficient and Cramer's V    \cr
-\link{GoodmanKruskalTauA}  \tab  Goodman Kruskal's tau-a     \cr
 \link{GoodmanKruskalGamma}  \tab  Goodman Kruskal's gamma     \cr
+\link{KendallTauA}  \tab  Kendall's tau-a     \cr
 \link{KendallTauB}  \tab  Kendall's tau-b     \cr
 \link{StuartTauC}  \tab  Stuart's tau-c     \cr
 \link{SomersDelta}  \tab  Somers' delta     \cr
 \link{Lambda}  \tab  Goodman Kruskal's lambda     \cr
-\link{UncertCoef}  \tab  Uncertainty coefficient     \cr
+\link{GoodmanKruskalTau}  \tab  Goodman Kruskal's tau    \cr
+\link{UncertCoef}  \tab  Uncertainty coefficient    \cr
 \link{Entropy}, \link{MutInf}  \tab  Shannon's entropy, mutual information     \cr
 \link{DivCoef}, \link{DivCoefMax}    \tab   Rao's diversity coefficient ("quadratic entropy")\cr
 \link{TheilU} \tab  Theil's U1 and U2 coefficient     \cr
@@ -285,6 +282,7 @@ A grouped list of the functions:
 \link{DunnettTest}   \tab  Dunnett's test of multiple comparisons\cr
 \link{HotellingsT2Test}   \tab  Hotelling's T2 test for the one and two sample case.\cr
 \link{YuenTTest}       \tab Yuen's robust t-Test with trimmed means and winsorized variances\cr
+\link{BarnardTest}       \tab Barnard's test for 2x2 tables\cr
 \cr\cr
 \bold{Date functions:}\tab\cr
 \link{day.name}, \link{day.abb} \tab Defined names of the days \cr
@@ -317,23 +315,20 @@ A grouped list of the functions:
 \link{SelectVarDlg}    \tab  Select elements of a set by click \cr
 \link{PasswordDlg}    \tab  Display a dialog containing an edit field, showing only ***. \cr
 \link{PlotPar}   \tab   Display the R plot parameters in a dialog    \cr
-%%\link{Explore}   \tab   A breeze of interactive plotting \cr
+\link{Xplore}   \tab   A breeze of interactive plotting \cr
 \cr\cr
 \bold{Reporting, InOut:}\tab\cr
 \link{CatTable}  \tab  Print a table with the option to have controlled linebreaks \cr
 \link{Format}  \tab  Easy format for numbers and dates      \cr
 \link{Desc}  \tab   Produce a rich description of an object    \cr
-\link{DescWrd}  \tab       Produce the same description as above but send the results to \cr
-\tab a Word document and add an adequate graphic representation \cr
 \link{GetNewWrd}, \link{GetNewXL}, \link{GetNewPP}     \tab   Create a new Word, Excel or PowerPoint Instance  \cr
 \link{GetCurrWrd}, \link{GetCurrXL}, \link{GetCurrPP}    \tab  Get a handle to a running Word, Excel or PowerPoint instance \cr
 \link{IsValidWrd}       \tab  Check if the handle to a Word instance is valid or outdated \cr
 \link{WrdCaption}    \tab Insert a title in Word   \cr
 \link{WrdPlot}    \tab   Insert the active plot to Word \cr
 \link{WrdR}    \tab  Insert an R command and its output in a Word document \cr
-\link{WrdGetFont}, \link{WrdSetFont}    \tab  Get, resp. set the font on the current cursorposition in Word \cr
-\link{WrdInsTab}       \tab      Create a table in Word \cr
-\link{WrdTable}    \tab  Insert a R-table into Word  \cr
+\link{WrdFont}    \tab  Get, resp. set the font on the current cursorposition in Word \cr
+\link{WrdTable}       \tab      Create a table in Word \cr
 \link{WrdText}    \tab  Insert normal text to Word \cr
 \link{WrdInsertBookmark}    \tab Insert a new bookmark in a Word document \cr
 \link{WrdGoto}    \tab Place cursor to a specific bookmark, or another text position. \cr
@@ -359,7 +354,6 @@ A grouped list of the functions:
 \link{DescToolsOptions}    \tab  Get the DescTools specific options\cr
 \cr
 \link{ClipToVect}       \tab      Return \cr
-\link{Flags}       \tab      Return \cr
 
 \link{PlotBagPairs}       \tab      Return \cr
 \link{PlotGACF}       \tab      Return \cr
@@ -385,7 +379,7 @@ Helsana Versicherungen AG, Health Sciences, Zurich\cr
 HWZ University of Applied Sciences in Business Administration Zurich.\cr
 
 Includes R source code and/or documentation previously published by (in alphabetical order): \cr
-Ken Aho, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Clint Cummins, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Dirk Eddelbuettel, Jeff Enos, Claus Ekstrom, Martin Elff, Kamil Erguler, Richard W. Farebrother, John Fox, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Richard Heiberger, Michael Hoehle, Christian W. Hoffmann, Torsten Hothorn, Markus Huerzeler, Wallace W. Hui, Pete Hurd, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Giovanni Millo, Yongyi Min, David Mitchell, Markus Naepflin, Daniel Navarro, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Tony Plate, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Mark Stevenson, Terry Therneau, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis.
+Ken Aho, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Clint Cummins, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Dirk Eddelbuettel, Jeff Enos, Claus Ekstrom, Martin Elff, Kamil Erguler, Richard W. Farebrother, John Fox, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Richard Heiberger, Michael Hoehle, Christian W. Hoffmann, Torsten Hothorn, Markus Huerzeler, Wallace W. Hui, Pete Hurd, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Giovanni Millo, Yongyi Min, David Mitchell, Markus Naepflin, Daniel Navarro, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Tony Plate, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Mark Stevenson, Terry Therneau, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis
 
 Thank you all!
 

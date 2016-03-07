@@ -1,16 +1,17 @@
 \name{PlotLinesA}
 \alias{PlotLinesA}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Plot Lines 
+\title{Plot Lines
 %%  ~~function to do ... ~~
 }
-\description{Plot the columns of one matrix against the columns of another. Adds a legend on the right at the endpoints of lines. 
+\description{Plot the columns of one matrix against the columns of another. Adds a legend on the right at the endpoints of lines.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-PlotLinesA(x, y, col = 1:5, lty = 1, lwd = 1, lend = par("lend"), 
-           xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL, 
-           cex = 1, cex.legend = 1, main = NULL, grid = TRUE, mar = NULL)
+PlotLinesA(x, y, col = 1:5, lty = 1, lwd = 1, lend = par("lend"),
+           xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL,
+           cex = 1, cex.legend = 1, main = NULL, grid = TRUE, mar = NULL,
+           pch = NA, pch.col = par("fg"), pch.bg = par("bg"), pch.cex = 1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -41,6 +42,16 @@ PlotLinesA(x, y, col = 1:5, lty = 1, lwd = 1, lend = par("lend"),
   \item{mar}{the margins of the plot.
 %%     ~~Describe \code{mar} here~~
 }
+  \item{pch}{character string or vector of 1-characters or integers for plotting characters, see \code{\link{points}}. The first character is the plotting-character for the first plot, the second for the second, etc. The default is the digits (1 through 9, 0) then the lowercase and uppercase letters. If no points should be drawn set this argument to \code{NA} (this is the default).
+}
+  \item{pch.col}{vector of colors for the points. Colors are used cyclically. Ignored if \code{pch = NA}.
+}
+  \item{pch.bg}{vector of background (fill) colors for the open plot symbols given by \code{pch = 21:25} as in \code{\link{points}}. The default is set to \code{par("bg")}. Ignored if \code{pch = NA}.
+}
+  \item{pch.cex}{vector of character expansion sizes, used cyclically. This works as a multiple of \code{\link{par}("cex")}. Default is 1.0. Ignored if \code{pch = NA}.
+}
+
+
 }
 \details{This function is rather a template, than a function. It wraps \code{\link{matplot}} to generate a lines plot and adds a rather sophisticated legend on the right side, while calculating appropriate margins. A grid option is included (as \code{panel.first} does not work in matplot).
 
@@ -54,11 +65,20 @@ As in matplot, the first column of x is plotted against the first column of y, t
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-m <- matrix(c(3,4,5,1,5,4,2,6,2), nrow = 3, 
-            dimnames = list(dose = c("A","B","C"), 
+m <- matrix(c(3,4,5,1,5,4,2,6,2), nrow = 3,
+            dimnames = list(dose = c("A","B","C"),
                             age  = c("2010","2011","2012")))
-                            
+
 PlotLinesA(m, col=c(PalHelsana()), main="Dose ~ age_grp", lwd=3, ylim=c(1, 10))
+
+
+# example from MASS
+shoes <- list(
+  A = c(13.2, 8.2, 10.9, 14.3, 10.7, 6.6, 9.5, 10.8, 8.8, 13.3),
+  B = c(14, 8.8, 11.2, 14.2, 11.8, 6.4, 9.8, 11.3, 9.3, 13.6))
+
+PlotLinesA(do.call(rbind, shoes), xlim=c(0.75,2.25), col=1, main="shoes",
+           pch=21, pch.bg="white", pch.col=1, pch.cex=1.5)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

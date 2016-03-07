@@ -5,7 +5,7 @@
 \title{Convert ASCII Codes to Characters and Vice Versa
 }
 \description{AscToChar returns a character for each ASCII code (integer) supplied.\cr
-CharToAsc returns integer codes in \code{0:255} for each (one byte) character in \code{strings}.
+CharToAsc returns integer codes in \code{0:255} for each (one byte) character in all strings in \code{x}.
 }
 \usage{
 AscToChar(i)
@@ -14,7 +14,7 @@ CharToAsc(x)
 \arguments{
 \item{i}{numeric (integer) vector of values in \code{1:255}.
 }
-\item{x}{\code{\link{character}} vector.
+\item{x}{vector of strings.
 }}
 \details{Only codes in \code{1:127} make up the ASCII encoding which should be
   identical for all \R versions, whereas the \emph{\sQuote{upper}} half
@@ -26,15 +26,20 @@ CharToAsc(x)
   \code{\\0} aka \code{nul} characters in a string anymore.
 }
 \value{
- \code{AscToChar} and \code{CharToAsc} return a
-  vector of the same length as their argument.
+ \code{AscToChar} returns a vector of the same length as i.
+ \code{CharToAsc} returns a list of numeric vectors of character length of each string in x.
 }
 \author{unknown guy out there, help text partly taken from M. Maechler's \pkg{sfsmisc}.
 }
 
 \examples{
 (x <- CharToAsc("Silvia"))
-paste(AscToChar(x), collapse="")
+
+# will be pasted together
+AscToChar(x)
+
+# use strsplit if the single characters are needed
+strsplit(AscToChar(x), split=NULL)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

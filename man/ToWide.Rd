@@ -2,7 +2,7 @@
 \alias{ToWide}
 \alias{ToLong}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Reshape a Vector From Long to Wide Shape Or Vice Versa 
+\title{Reshape a Vector From Long to Wide Shape Or Vice Versa
 %%  ~~function to do ... ~~
 }
 \description{Simple reshaping a vector from long to wide or from wide to long shape by means of a single factor.
@@ -10,22 +10,25 @@
 }
 \usage{
 ToLong(x, varnames = NULL)
-ToWide(x, g, varnames = NULL)
+ToWide(x, g, by = NULL, varnames = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{the vector to be reshaped
 %%     ~~Describe \code{x} here~~
 }
-  \item{g}{the grouping vector to be used for the new columns.
+  \item{g}{the grouping vector to be used for the new columns. The resulting \code{data.frame} will return one column per grouplevel.
+%%     ~~Describe \code{g} here~~
+}
+  \item{by}{a vector to be used to merge the pieces of \code{x}. If this is left to \code{NULL} the pieces will be merged by rownames in the order they are supplied.
 %%     ~~Describe \code{g} here~~
 }
   \item{varnames}{the variable names if not the grouping levels should be used.
 %%     ~~Describe \code{varnames} here~~
 }
 }
-\details{\code{ToLong} expects x as a matrix or a data.frame and reshapes it to a factor representation.
-\code{ToWide} expects two vectors, x being the variable and g being the splitfactor.
+\details{\code{ToLong} expects x as a matrix or a data.frame and reshapes it to a (long) factor representation.
+\code{ToWide} expects the vectors x, g, by, wheras x being the variable, g the splitting factor and by a vector for rowwise merging.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{the reshaped object
@@ -51,6 +54,16 @@ AA BB CC DD EE FF GG
 ")
 
 ToLong(d.x)
+
+# ToWide by row numbers (by = NULL)
+ToWide(PlantGrowth$weight, PlantGrowth$group)
+
+# To wide aligned by key
+set.seed(41)
+PlantGrowth$nr <- c(sample(12, 10), sample(12, 10), sample(12, 10))
+head(PlantGrowth)
+
+ToWide(PlantGrowth$weight, PlantGrowth$group, by=PlantGrowth$nr)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

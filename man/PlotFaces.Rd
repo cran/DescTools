@@ -2,10 +2,10 @@
 \alias{PlotFaces}
 \title{    Chernoff Faces    }
 \description{
-     Plot Chernoff faces. The rows of a data matrix represent cases and the columns the variables. 
+     Plot Chernoff faces. The rows of a data matrix represent cases and the columns the variables.
      }
 \usage{
-PlotFaces(xy, which.row, fill = FALSE, nrow, ncol, 
+PlotFaces(xy, which.row, fill = FALSE, nrow, ncol,
           scale = TRUE, byrow = FALSE, main, labels, print.info=FALSE, col=NA)
 }
 \arguments{
@@ -67,6 +67,13 @@ PlotFaces(longley[1:9,])
 
 set.seed(17)
 PlotFaces(matrix(sample(1:1000,128,),16,8),main="random faces")
+
+
+means <-lapply(iris[,-5], tapply, iris$Species, mean)
+m <- t(do.call(rbind, means))
+m <- cbind(m, matrix(rep(1, 11*3), nrow=3))
+
+PlotFaces(m, ncol=3, col=PalTibco())
 }
 
 \keyword{ hplot }

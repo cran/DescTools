@@ -1,16 +1,15 @@
-\name{GoodmanKruskalTauA}
-\alias{GoodmanKruskalTauA}
+\name{GoodmanKruskalTau}
+\alias{GoodmanKruskalTau}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Goodman Kruskal's Tau a
-%%  ~~function to do ... ~~
+\title{Goodman Kruskal's Tau
 }
-\description{Calculate Goodman Kruskal's tau-a statistic, a measure of
+\description{Calculate Goodman Kruskal's tau statistic, a measure of
 association for ordinal factors in a two-way table.\cr
 The function has interfaces for a table (matrix) and for single vectors.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-GoodmanKruskalTauA(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
+GoodmanKruskalTau(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,7 +23,7 @@ GoodmanKruskalTauA(x, y = NULL, direction = c("row", "column"), conf.level = NA,
   \code{"row"} calculates Goodman Kruskal's tau-a (R|C) ("column dependent").
 %%     ~~Describe \code{x} here~~
 }
-\item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated. 
+\item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated.
 %%     ~~Describe \code{conf.level} here~~
 }
   \item{\dots}{further arguments are passed to the function \code{\link{table}}, allowing i.e. to set useNA. This refers only to the vector interface.
@@ -32,19 +31,18 @@ GoodmanKruskalTauA(x, y = NULL, direction = c("row", "column"), conf.level = NA,
 }
 }
 \details{
-Goodman and Kruskal's tau-a is a measure of categorical association which is based entirely on the observed data and possesses a clear interpretation in terms of proportional reduction in error.
-It gives the probabilities of correctly assigning cases to one set of categories improved by the knowledge of another set of categories. The statistic is asymmetric and yields different results predicting row assignments based on columns than from column assignments based on rows.\cr
-Goodman Kruskal's tau-a is computed as \deqn{ \tau_a(C|R) = \frac{P-Q}{\frac{1}{2} \cdot n \cdot (n-1)}} 
-where P equals twice the number of concordances and Q twice the number of discordances. It's range is [0, 1]. Goodman Kruskal tau reduces to \eqn{\phi^2} (see: \code{\link{Phi}}) in the 2x2-table case.\cr
-(Note that Goodman Kruskal tau-a does not take into consideration any ties, which makes it unpractical.)   
-%%  ~~ If necessary, more details than the description above ~~
+Goodman-Kruskal tau measures association for cross tabulations of nominal level variables.
+Goodman-Kruskal tau is based on random category assignment. It measures the percentage improvement in predictability of the dependent variable (column or row variable) given the value of other variables (row or column variables). Goodman-Kruskal tau is the same as Goodman-Kruskal lambda except the calculations of the tau statistic are based on assignment probabilities specified by marginal or conditional proportions.
+Misclassification probabilities are based on random category assignment with probabilities specified by marginal or conditional proportion.
+
+Goodman Kruskal tau reduces to \eqn{\phi^2} (see: \code{\link{Phi}}) in the 2x2-table case.\cr
 }
 \value{
-a single numeric value if no confidence intervals are requested,\cr 
+a single numeric value if no confidence intervals are requested,\cr
 and otherwise a numeric vector with 3 elements for the estimate, the lower and the upper confidence interval
 }
 \references{
-Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, 
+Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons,
 pp. 57-59.
 
 Goodman, L. A., & Kruskal, W. H. (1954) Measures of
@@ -58,9 +56,8 @@ association for cross classifications III: Approximate
 sampling theory. \emph{Journal of the American Statistical
 Association}, 58, 310-364.
 
-\url{http://support.sas.com/onlinedoc/913/getDoc/en/statug.hlp/freq_sect18.htm}\cr
-\url{http://support.sas.com/onlinedoc/913/getDoc/en/statug.hlp/freq_sect20.htm}
-%% ~put references to the literature/web site here ~
+Liebetrau, A. M. (1983) \emph{Measures of Association}, Sage University Papers Series on Quantitative Applications in the Social Sciences, 07-004. Newbury Park, CA: Sage, pp. 24--30
+
 }
 
 \author{Andri Signorell <andri@signorell.net>, based on code from Antti Arppe <antti.arppe@helsinki.fi>
@@ -69,31 +66,31 @@ Association}, 58, 310-364.
 
 \seealso{\code{\link{ConDisPairs}} yields concordant and discordant pairs \cr\cr
 Other association measures: \cr
-\code{\link{GoodmanKruskalTauA}} (Tau a), \code{\link{cor}} (method="kendall") for Tau b, \code{\link{StuartTauC}}, \code{\link{GoodmanKruskalGamma}}\cr
-\code{\link{Lambda}}, \code{\link{UncertCoef}}, \code{\link{MutInf}} 
+\code{\link{KendallTauA}} (Tau a), \code{\link{cor}} (method="kendall") for Tau b, \code{\link{StuartTauC}}, \code{\link{GoodmanKruskalGamma}}\cr
+\code{\link{Lambda}}, \code{\link{UncertCoef}}, \code{\link{MutInf}}
 
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
 
-# example in: 
+# example in:
 # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
 # pp. S. 1821
 
 tab <- as.table(rbind(c(26,26,23,18,9),c(6,7,9,14,23)))
 
-# Goodman Kruskal's tau-a C|R
-GoodmanKruskalTauA(tab, direction="column", conf.level=0.95)
-# Goodman Kruskal's tau-a R|C
-GoodmanKruskalTauA(tab, direction="row", conf.level=0.95)
+# Goodman Kruskal's tau C|R
+GoodmanKruskalTau(tab, direction="column", conf.level=0.95)
+# Goodman Kruskal's tau R|C
+GoodmanKruskalTau(tab, direction="row", conf.level=0.95)
 
 # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
 # pp. 1814 (143)
 tab <- as.table(cbind(c(11,2),c(4,6)))
 
-GoodmanKruskalTauA(tab, direction="row", conf.level=0.95)
-GoodmanKruskalTauA(tab, direction="column", conf.level=0.95)
-# reduces to:
+GoodmanKruskalTau(tab, direction="row", conf.level=0.95)
+GoodmanKruskalTau(tab, direction="column", conf.level=0.95)
+# reduce both to:
 Phi(tab)^2
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

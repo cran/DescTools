@@ -65,10 +65,10 @@ x <- sample(letters[1:10], 20, replace=TRUE)
 ties <- split(x, x)
 
 # count tied groups
-sum(unlist(lapply(ties, function(x) length(x)>1)))
+sum(sapply(ties, length) > 1)
 
 # length of tied groups
-lapply(ties, length)[lapply(ties, length)>1]
+(x <- sapply(ties, length))[x>1]
 
 # by means of table
 tab <- table(x)
