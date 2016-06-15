@@ -23,7 +23,7 @@ export("%()%","%(]%","%)(%","%)[%","%[)%","%[]%","%](%","%][%","%c%","%like%","%
 "NemenyiTest",
 "Now","NPV","OctToDec","OddsRatio","OPR","OrderMixed","Outlier","Overlap",
 "PageTest",
-"PairApply","PalDescTools","PalHelsana","PalRedBlackGreen","PalRedToBlack","PalRedWhiteGreen","PalSteeblueWhite","PalTibco","ParseFormula","ParseSASDatalines","PartCor","PartitionBy","PasswordDlg","pBenf","PearsonTest",
+"PairApply","PalDescTools","PalHelsana","PalRedBlackGreen","PalRedToBlack","PalRedWhiteGreen","PalSteeblueWhite","PalTibco","ParseFormula","ParseSASDatalines","CorPart","PartitionBy","PasswordDlg","pBenf","PearsonTest",
 "PercTable",
 "Permn","Phi","plot.bagplot","plot.Conf","plot.Lc","plot.Lclist","plot.PostHocTest","PlotACF","PlotArea","PlotBag","PlotBagPairs",
 "PlotBubble","PlotCandlestick","PlotCirc","PlotCorr",
@@ -44,7 +44,10 @@ export("%()%","%(]%","%)(%","%)[%","%[)%","%[]%","%](%","%][%","%c%","%like%","%
 "ZTest",
 "BinTree", "SetRowNames","SetColNames","SetLabel","PlotECDF","Abind","TOne","MaxDigits","XLDateToPOSIXct",
 "axTicks.POSIXct", "print.PercTable", "PlotMosaic", "PDFManual", "LongToRgb", "PlotMiss","BreuschGodfreyTest",
-"WrdParagraphFormat", "WrdParagraphFormat<-", "WrdFont", "WrdFont<-","WrdStyle", "WrdStyle<-"
+"WrdParagraphFormat", "WrdParagraphFormat<-", "WrdFont", "WrdFont<-","WrdStyle", "WrdStyle<-", "WrdTableBorders",
+"RomanToInt", "DigitSum",
+"Range","Mean","Mean.default","SD","Var","Cov","Cor","Median","MAD",
+"AddClass", "RemoveClass", "StrRep", "ORToRelRisk"
 )
 
 importFrom("graphics", "abline", "arrows", "axTicks", "axis", "barplot", "box", "boxplot", "clip", "close.screen", "dotchart", "frame", "grid", "hist", "identify", "image", "layout", "legend", "lines", "locator", "matlines", "matplot", "mosaicplot", "mtext", "pairs", "par",
@@ -52,8 +55,10 @@ importFrom("graphics", "abline", "arrows", "axTicks", "axis", "barplot", "box", 
 importFrom("grDevices", "chull", "col2rgb", "colorRampPalette", "colors", "dev.copy", "dev.cur", "dev.flush", "dev.hold", "dev.list", "dev.off", "dev.set", "gray.colors", "heat.colors", "rainbow", "rgb", "rgb2hsv", "xy.coords")
 importFrom("methods", "is")
 importFrom("stats", ".nknots.smspl", "IQR", "acf", "addmargins", "anova", "aov", "approx", "as.dist", "as.formula", "binom.test", "chisq.test", "complete.cases", "contr.helmert", "contr.poly", "contr.sum", "contr.treatment", "contrasts", "convolve", "cor", "cov", "cycle", "dbinom", "density", "drop1", "end", "filter", "fisher.test", "formula", "frequency", "friedman.test", "ftable", "integrate", "is.ts", "kruskal.test", "lm", "lm.fit", "loess", "mad", "mantelhaen.test", "mcnemar.test", "model.extract", "model.frame", "model.matrix", "model.response", "model.tables", "na.omit", "na.pass", "optim", "optimise", "optimize", "p.adjust", "pbeta", "pbinom", "pchisq", "pf", "plot.ts", "pnorm", "poisson.test", "ppoints", "ppois", "prcomp", "predict", "pt", "ptukey", "qbeta", "qbinom", "qchisq", "qf", "qnorm", "qt", "qtukey", "quantile", "rnorm", "runif", "sd", "setNames", "smooth", "splinefun", "start", "symnum", "t.test", "terms", "time", "ts",
-           "uniroot", "var", "weighted.mean", "weights", "wilcox.test", "xtabs", "as.dendrogram", "dist", "hclust", "order.dendrogram", "smooth.spline","var.test")
-importFrom("utils", "capture.output", "combn", "head", "help.search", "ls.str", "lsf.str", "memory.limit", "object.size", "read.table", "select.list", "sessionInfo", "stack", "str", "tail", "write.table")
+           "uniroot", "var", "weighted.mean", "weights", "wilcox.test", "xtabs", "as.dendrogram", "dist", "hclust", "order.dendrogram", "smooth.spline","var.test"
+           )
+importFrom("utils", "capture.output", "combn", "head", "help.search", "ls.str", "lsf.str", "memory.limit", "object.size", "read.table", "select.list", "sessionInfo", "stack", "str", "tail",
+           "write.table")
 
 importFrom("boot", "boot", "boot.ci", "corr")
 importFrom("mvtnorm", "qmvt", "pmvnorm")
@@ -166,6 +171,18 @@ S3method(split, formula)
 S3method(VarTest, default)
 S3method(VarTest, formula)
 
+S3method(Conf, default)
+S3method(Conf, table)
+S3method(Conf, matrix)
+S3method(Conf, rpart)
+S3method(Conf, multinom)
+S3method(Conf, glm)
+S3method(Conf, randomForest)
+S3method(Conf, svm)
+S3method(Conf, regr)
+S3method(Conf, lda)
+S3method(Conf, qda)
+
 S3method(print, Conf)
 S3method(plot, Conf)
 
@@ -200,6 +217,11 @@ S3method(ToWrd, TOne)
 S3method(ToWrd, lm)
 S3method(ToWrd, character)
 S3method(ToWrd, table)
-S3method(ToWrd, Freq)
 S3method(ToWrd, ftable)
+S3method(ToWrd, Freq)
+S3method(ToWrd, PercTable)
+S3method(ToWrd, matrix)
+S3method(ToWrd, data.frame)
+
+S3method(Mean, default)
 

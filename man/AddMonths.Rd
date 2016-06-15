@@ -2,7 +2,7 @@
 \alias{AddMonths}
 \title{Add a Month to a Date
 }
-\description{Clueless adding numbers of months to a date will in some cases lead to invalid dates, think of e.g. 2012-01-30 + 1 month. AddMonths ensures that the result is always a valid date, e.g.
+\description{Clueless adding numbers of months to a date will in some cases lead to invalid dates, think of e.g. 2012-01-30 + 1 month. \cr AddMonths ensures that the result is always a valid date, e.g.
 \code{as.Date("2013-01-31") + 1 month} will be \code{"2013-02-28"}. If number \code{n} is negative, the months will be subtracted.
 }
 \usage{

@@ -4,12 +4,12 @@
 \title{Confidence Interval for a Difference of Binomials
 %%  ~~function to do ... ~~
 }
-\description{Calculate confidence interval for a risk difference. 
+\description{Calculate confidence interval for a risk difference.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-BinomDiffCI(x1, n1, x2, n2, conf.level = 0.95, 
-            method = c("wald", "waldcor", "ac", "exact", "newcombe", 
+BinomDiffCI(x1, n1, x2, n2, conf.level = 0.95,
+            method = c("wald", "waldcor", "ac", "exact", "newcombe",
                        "newcombecor", "fm", "ha"))
 }
 %- maybe also 'usage' for other objects documented here.
@@ -27,7 +27,7 @@ BinomDiffCI(x1, n1, x2, n2, conf.level = 0.95,
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-  A vector with 3 elements for estimate, lower confidence intervall and upper for the upper one.  
+  A vector with 3 elements for estimate, lower confidence intervall and upper for the upper one.
  }
 \references{
 Fagerland M W, Lydersen S and Laake P (2011) Recommended confidence intervals for two independent binomial proportions, \emph{Statistical Methods in Medical Research} 0(0) 1-31
@@ -41,7 +41,7 @@ Fagerland M W, Lydersen S and Laake P (2011) Recommended confidence intervals fo
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{ \code{\link{BinomCI}},  \code{\link{MultinomCI}},  \code{\link{binom.test}},  
+\seealso{ \code{\link{BinomCI}},  \code{\link{MultinomCI}},  \code{\link{binom.test}},
 \code{\link{prop.test}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }

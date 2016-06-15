@@ -9,11 +9,27 @@ compute_LCM <- function(a, b) {
     .Call('DescTools_compute_LCM', PACKAGE = 'DescTools', a, b)
 }
 
-n_pow_sum <- function(x, meanx) {
-    .Call('DescTools_n_pow_sum', PACKAGE = 'DescTools', x, meanx)
+n_pow_sum <- function(x) {
+    .Call('DescTools_n_pow_sum', PACKAGE = 'DescTools', x)
 }
 
 conv_DecToBin <- function(n) {
     .Call('DescTools_conv_DecToBin', PACKAGE = 'DescTools', n)
+}
+
+top_n <- function(x, n = 5L) {
+    .Call('DescTools_top_n', PACKAGE = 'DescTools', x, n)
+}
+
+bottom_n <- function(x, n = 5L) {
+    .Call('DescTools_bottom_n', PACKAGE = 'DescTools', x, n)
+}
+
+top_i <- function(v, n) {
+    .Call('DescTools_top_i', PACKAGE = 'DescTools', v, n)
+}
+
+bottom_i <- function(v, n) {
+    .Call('DescTools_bottom_i', PACKAGE = 'DescTools', v, n)
 }
 

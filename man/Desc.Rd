@@ -115,7 +115,7 @@ Default is \code{NULL} (none).\cr Applies only to tables and is ignored else.
 }
 
 
-\item{verbose}{character defining the verbosity of the reported results. One out of \code{c("medium", "low", "high")}, "medium" being the default. Can be abbreviated.\cr Applies only to tables and is ignored else.
+\item{verbose}{integer out of \code{c(2, 1, 3)} defining the verbosity of the reported results. 2 (default) means medium, 1 less and 3 extensive results. \cr Applies only to tables and is ignored else.
 }
 \item{conf.level}{confidence level of the interval. If set to \code{NA} no confidence interval will be calculated. Default is 0.95.
 }

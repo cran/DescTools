@@ -1,5 +1,15 @@
 \name{Conf}
 \alias{Conf}
+\alias{Conf.table}
+\alias{Conf.default}
+\alias{Conf.matrix}
+\alias{Conf.rpart}
+\alias{Conf.multinom}
+\alias{Conf.glm}
+\alias{Conf.randomForest}
+\alias{Conf.svm}
+\alias{Conf.regr}
+
 \alias{plot.Conf}
 \alias{print.Conf}
 \alias{Sens}
@@ -13,7 +23,18 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Conf(x, ref = NULL, pos = NULL, na.rm = TRUE, ...)
+Conf(x, ...)
+
+\method{Conf}{table}(x, pos = NULL, ...)
+\method{Conf}{matrix}(x, pos = NULL, ...)
+\method{Conf}{default}(x, ref, pos = NULL, na.rm = TRUE, ...)
+
+\method{Conf}{rpart}(x, ...)
+\method{Conf}{multinom}(x, ...)
+\method{Conf}{glm}(x, cutoff = 0.5, ...)
+\method{Conf}{randomForest}(x, ...)
+\method{Conf}{svm}(x, ...)
+\method{Conf}{regr}(x, ...)
 
 \method{plot}{Conf}(x, main = "Confusion Matrix", ...)
 
@@ -28,9 +49,10 @@ Spec(x, ...)
 \arguments{
 \item{x}{a vector, normally a factor, of predicted classes or an object of following classes \code{rpart}, \code{randomForest}, \code{svm}, \code{C50}, \code{glm}, \code{multinom}, \code{reg}r, \code{ld}a, \code{qda} or \code{\link{table}}, resp. \code{matrix}. When a model is given, the predicted classes will be determined. A table or a matrix will be interpreted as a confusion matrix.
   }
-\item{ref}{a vector, normally a factor, of classes to be used as the reference. This is Ignored if \code{x} is a \code{table} or \code{matrix}.}
+\item{ref}{a vector, normally a factor, of classes to be used as the reference. This is ignored if \code{x} is a \code{table} or \code{matrix}.}
 \item{pos}{a character string that defines the factor level corresponding to the "positive" results. Will be ignored for a \eqn{n \times n}{n x n} table n > 2.}
 
+\item{cutoff}{used in logit models. The cutoff for changing classes.}
   \item{main}{overall title for the plot. }
 
   \item{digits}{controls the number of digits to print.

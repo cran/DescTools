@@ -5,7 +5,7 @@
 \title{ Tools for Descriptive Statistics and Exploratory Data Analysis
 }
 \description{
-A collection of basic statistic functions and convenience wrappers for efficiently describing data. The author's intention was to create a toolbox, which facilitates the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results. The package contains furthermore functions to produce documents using MS Word (or PowerPoint) and functions to import data from Excel. \cr
+A collection of miscellaneous basic statistic functions and convenience wrappers for efficiently describing data. The author's intention was to create a toolbox, which facilitates the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results. The package contains furthermore functions to produce documents using MS Word (or PowerPoint) and functions to import data from Excel. \cr
 Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, NA handling, recycling rules etc. are concerned. Google style guides were used as naming rules (in absence of convincing alternatives). The 'CamelStyle' was consequently applied to functions borrowed from contributed R packages as well.
 \cr
 
@@ -28,7 +28,7 @@ A grouped list of the functions:
 \link{\%)(\%}    \tab      Outside operators: \%)(\%, \%](\%, \%)[\%, \%][\% \cr
 \link{\%nin\%}    \tab     "not in" operator \cr
 \link{\%overlaps\%}    \tab     Do two collections have common elements? \cr
-\link{\%like\%}    \tab     Simple operator to search for a specified pattern \cr
+\link{\%like\%}, \link{\%like any\%}    \tab     Simple operator to search for a specified pattern \cr
 \link{Interval}       \tab    Calculate the number of days of the overlapping part \cr
              \tab of two date periods \cr
 \link{AUC}        \tab      Calculate area under the curve \cr
@@ -38,6 +38,7 @@ A grouped list of the functions:
 \link{LCM}      \tab    Calculate the least common multiple\cr
 \link{Permn}      \tab      Determine all possible permutations of a set \cr
 \link{Fibonacci}  \tab      Generates single Fibonacci numbers or a Fibonacci sequence\cr
+\link{DigitSum}  \tab      Digit sum of a number\cr
 \link{Frac}       \tab      Return the fractional part of a numeric value \cr
 \link{Ndec}       \tab      Count decimal places of a number \cr
 \link{BoxCox}, \link{BoxCoxInv}     \tab      Box Cox transformation and its inverse transformation \cr
@@ -48,7 +49,7 @@ A grouped list of the functions:
 \link{LinScale}       \tab      Simple linear scaling of a vector x \cr
 \link{Winsorize}  \tab      Data cleaning by winsorization \cr
 \link{Trim}  \tab      Trim data by omitting outlying observations \cr
-\link{CutQ}       \tab     Cut a numeric variable into quartiles \cr
+\link{CutQ}       \tab     Cut a numeric variable into quartiles or other quantiles \cr
 \link{Recode}      \tab            Recode a factor with altered levels  \cr
 \link{Rename}      \tab            Change name(s) of a named object \cr
 \link{Sort}      \tab            Sort extension for matrices and data.frames \cr
@@ -57,7 +58,7 @@ A grouped list of the functions:
 \link{RoundTo}       \tab Round to a multiple \cr
 \link{Large}, \link{Small}  \tab    Returns the kth largest, resp. smallest values\cr
 \link{HighLow} \tab Combines \code{Large} and \code{Small}.\cr
-\link{Rev}      \tab            Reverses the order of rows and columns of a matrix \cr
+\link{Rev}      \tab            Reverses the order of rows and/or columns of a matrix or a data.frame \cr
 \link{Untable}      \tab            Recreates original list based on a n-dimensional frequency table \cr
 \link{CollapseTable}       \tab      Collapse some rows/columns in a table. \cr
 \link{Dummy}      \tab      Generate dummy codes for a factor \cr
@@ -188,21 +189,21 @@ A grouped list of the functions:
 \link{qRevGumbelExp}       \tab      Expontial reverse Gumbel distribution (quantile only)\cr
 \cr\cr
 \bold{Statistics:}\tab\cr
-\link{Freq}  \tab    Frequency table   \cr
-\link{PercTable}  \tab    Two dimensional percentage table   \cr
-\link{Margins}       \tab      Return the (extended) margin tables of a table \cr
-\link{ExpFreq}       \tab      Calculate the expected frequencies of a nxm-table \cr
+\link{Freq}  \tab    Univariate frequency table   \cr
+\link{PercTable}  \tab    Bivariate percentage table   \cr
+\link{Margins}       \tab      (Extended) margin tables of a table \cr
+\link{ExpFreq}       \tab      Expected frequencies of a n-dimensional table \cr
 \link{Mode}  \tab     Mode, the most frequent value   \cr
 \link{Gmean}, \link{Gsd}  \tab  Geometric mean and geometric standard deviation     \cr
 \link{Hmean}  \tab    Harmonic Mean   \cr
 \link{median.factor}       \tab   Interface for the median of ordered factors \cr
 \link{HuberM}, \link{TukeyBiweight}  \tab    Huber M-estimator of location and Tukey's biweight robust mean   \cr
-\link{HodgesLehmann}       \tab Return the Hodges-Lehmann estimator\cr
-\link{HoeffD}       \tab   Return Hoeffding's D statistic \cr
+\link{HodgesLehmann}       \tab the Hodges-Lehmann estimator\cr
+\link{HoeffD}       \tab   Hoeffding's D statistic \cr
 \link{MeanSE}  \tab   Standard error of mean    \cr
 \link{MeanCI}, \link{MedianCI}  \tab    Confidence interval for the mean and median   \cr
 \link{MeanDiffCI}  \tab    Confidence interval for the difference of two means \cr
-\link{MoveAvg}       \tab  Calculate a moving average \cr
+\link{MoveAvg}       \tab  Moving average \cr
 \link{MeanAD}  \tab    Mean absolute deviation   \cr
 \link{VarCI}  \tab    Confidence interval for the variance   \cr
 \link{CoefVar} \tab Coefficient of variation and its confidence interval \cr
@@ -240,7 +241,7 @@ A grouped list of the functions:
 \link{Herfindahl}, \link{Rosenbluth}  \tab  Herfindahl- and Rosenbluth coefficient      \cr
 \link{GiniSimpson}       \tab      Compute Gini-Simpson Coefficient \cr
 \link{CorCI}  \tab    Confidence interval for Pearson's correlation coefficient \cr
-\link{PartCor}       \tab      Find the correlations for a set x of variables with set y removed \cr
+\link{CorPart}       \tab      Find the correlations for a set x of variables with set y removed \cr
 \link{CorPolychor}  \tab    Polychoric correlation coefficient \cr
 \link{SpearmanRho}       \tab      Spearman rank correlation and its confidence intervals \cr
 \link{ConDisPairs}       \tab  Return concordant and discordant pairs of two vectors \cr
@@ -255,7 +256,7 @@ A grouped list of the functions:
 \bold{Tests:}\tab\cr
 \link{SignTest}    \tab  Signtest\cr
 \link{ZTest}    \tab   Z--test for known population variance \cr
-\link{JonckheereTerpstraTest}    \tab  Jonckheere-Terpstra test\cr
+\link{JonckheereTerpstraTest}    \tab  Jonckheere-Terpstra trend test for medians\cr
 \link{PageTest}    \tab  Page test for ordered alternatives\cr
 \link{CochranQTest}    \tab  Cochran's Q-test\cr
 \link{SiegelTukeyTest}    \tab  Siegel-Tukey test for equality in variability \cr
@@ -286,7 +287,7 @@ A grouped list of the functions:
 \cr\cr
 \bold{Date functions:}\tab\cr
 \link{day.name}, \link{day.abb} \tab Defined names of the days \cr
-\link{AddMonths}  \tab  Add a number of months to a given date     \cr
+\link{AddMonths}, \link{AddMonthsYM}  \tab  Add a number of months to a given date     \cr
 \link{IsDate} \tab  Check whether x is a date object     \cr
 \link{IsWeekend} \tab  Check whether x falls on a weekend     \cr
 \link{IsLeapYear} \tab  Check whether x is a leap year     \cr
@@ -327,8 +328,9 @@ A grouped list of the functions:
 \link{WrdCaption}    \tab Insert a title in Word   \cr
 \link{WrdPlot}    \tab   Insert the active plot to Word \cr
 \link{WrdR}    \tab  Insert an R command and its output in a Word document \cr
-\link{WrdFont}    \tab  Get, resp. set the font on the current cursorposition in Word \cr
+\link{WrdFont}, WrdFont<-     \tab  Get, resp. set the font on the current cursorposition in Word \cr
 \link{WrdTable}       \tab      Create a table in Word \cr
+\link{ToWrd}    \tab  Mord flexible wrapper to send diverse objects to Word \cr
 \link{WrdText}    \tab  Insert normal text to Word \cr
 \link{WrdInsertBookmark}    \tab Insert a new bookmark in a Word document \cr
 \link{WrdGoto}    \tab Place cursor to a specific bookmark, or another text position. \cr
@@ -348,6 +350,8 @@ A grouped list of the functions:
 \link{InDots}       \tab  Check if an argument is contained in ... argument and return it's value \cr
 \link{ParseFormula}      \tab     Parse a formula and return the splitted parts of if \cr
 \link{Recycle}       \tab      Recycle a list of elements to the maximal found dimension \cr
+\link{AddClass}    \tab  Add a class to an object\cr
+\link{RemoveClass}    \tab Remove a class from an object\cr
 \link{Keywords}    \tab  Get the keywords of a man page\cr
 \link{Exec}       \tab      Execute a R-command given as text \cr
 \link{SysInfo}    \tab  Get some more information about system and environment\cr
@@ -379,11 +383,11 @@ Helsana Versicherungen AG, Health Sciences, Zurich\cr
 HWZ University of Applied Sciences in Business Administration Zurich.\cr
 
 Includes R source code and/or documentation previously published by (in alphabetical order): \cr
-Ken Aho, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Clint Cummins, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Dirk Eddelbuettel, Jeff Enos, Claus Ekstrom, Martin Elff, Kamil Erguler, Richard W. Farebrother, John Fox, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Richard Heiberger, Michael Hoehle, Christian W. Hoffmann, Torsten Hothorn, Markus Huerzeler, Wallace W. Hui, Pete Hurd, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Giovanni Millo, Yongyi Min, David Mitchell, Markus Naepflin, Daniel Navarro, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Tony Plate, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Mark Stevenson, Terry Therneau, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis
+Ken Aho, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Clint Cummins, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Dirk Eddelbuettel, Jeff Enos, Claus Ekstrom, Martin Elff, Kamil Erguler, Richard W. Farebrother, John Fox, Romain Francois, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Richard Heiberger, Michael Hoehle, Christian W. Hoffmann, Torsten Hothorn, Markus Huerzeler, Wallace W. Hui, Pete Hurd, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Giovanni Millo, Yongyi Min, David Mitchell, Markus Naepflin, Daniel Navarro, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Tony Plate, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Nathan Russell, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Mark Stevenson, Terry Therneau, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Hadley Wickham, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis
 
 Thank you all!
 
-Special thanks go to Daniel Wollschlaeger for his valuable contributions.
+Special thanks go to Beat Bruengger, Mathias Frueh, Daniel Wollschlaeger for their valuable contributions.
 
 The good things come from all these guys, any problems are likely due to my tweaking.
 

@@ -12,7 +12,7 @@ Use Excel as Viewer for a Data.Frame
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-XLView(x, col.names = TRUE, row.names = TRUE, na = "")
+XLView(x, col.names = TRUE, row.names = FALSE, na = "")
 
 XLKill()
 }

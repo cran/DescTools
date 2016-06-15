@@ -5,7 +5,7 @@
 %%  ~~function to do ... ~~
 }
 \description{
-This function is designed to give an univariate graphic representation of a numeric vector's frequency distribution.
+This function is designed to give a univariate graphic representation of a numeric vector's frequency distribution.
 It combines a histogram, a density curve, a boxplot and the empirical cumulative distribution function (ecdf) in one single plot. A rug as well as a model distribution curve (e.g. a normal curve) can optionally be superposed. This results in a dense and informative picture of the facts.
 Still the function remains flexible as all possible arguments can be passed to the single components (\code{hist}, \code{boxplot} etc.) as a list (see examples).
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
@@ -14,7 +14,7 @@ Still the function remains flexible as all possible arguments can be passed to t
 PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
           do.hist = NULL, args.hist = NULL, args.rug = NA, args.dens = NULL,
           args.curve = NA, args.boxplot = NULL, args.ecdf = NULL,
-          heights = NULL, pdist = NULL,
+          args.curve.ecdf = NA, heights = NULL, pdist = NULL,
           na.rm = FALSE, cex.axis = NULL, cex.main = NULL, mar = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -61,6 +61,10 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
   The defaults are taken from \code{\link{plot.ecdf}}.
 %%     ~~Describe \code{args.ecdf} here~~
 }
+  \item{args.curve.ecdf}{list of additional arguments to be passed to \code{\link{curve}}.
+  This argument allows to add a fitted distribution curve to the cumulative distribution function. By default no curve will be added (\code{args.curve.ecdf = NA}). If the argument is set to \code{NULL}, a normal curve with \code{mean(x)} and \code{sd(x)} will be drawn. See examples for more details.
+%%     ~~Describe \code{args.dens} here~~
+}
   \item{heights}{heights of the plotparts, defaults to \code{c(2,0.5,1.4)} for the histogram, the boxplot
   and the empirical cumulative distribution function, resp. to \code{c(2,1.5)} for a histogram and a boxplot only.
 %%     ~~Describe \code{heights} here~~
@@ -95,6 +99,7 @@ In such cases consider taking a sample, i.e. \code{  PlotFdist(x[sample(length(x
 PlotFdist(x=d.pizza$delivery_min, na.rm=TRUE)
 
 # define additional arguments for hist, dens and boxplot
+# do not display the mean and its CI on the boxplot
 PlotFdist(d.pizza$delivery_min, args.hist=list(breaks=50),
   args.dens=list(col="olivedrab4"), na.rm=TRUE,
   args.boxplot=list(col="olivedrab2", pch.mean=NA, col.meanci=NA))
@@ -126,6 +131,19 @@ PlotFdist(x, args.curve = list(expr="dt(x, df=2)", col="darkgreen"),
           args.boxplot=NA, args.ecdf=NA)
 legend(x="topright", legend=c("kernel density", "t-distribution (df=2)"),
        fill=c(getOption("col1", hred), "darkgreen"))
+
+# add a gamma distribution curve to both, histogram and ecdf
+ozone <- airquality$Ozone; m <- mean(ozone, na.rm = TRUE); v <- var(ozone, na.rm = TRUE)
+PlotFdist(ozone, args.hist = list(breaks=15),
+  args.curve = list(expr="dgamma(x, shape = m^2/v, scale = v/m)", col=hecru),
+  args.curve.ecdf = list(expr="pgamma(x, shape = m^2/v, scale = v/m)", col=hecru),
+  na.rm = TRUE, main = "Airquality - Ozone")
+
+legend(x="topright",
+       legend=c(expression(plain("gamma:  ") * Gamma * " " * bgroup("(", k * " = " *
+           over(bar(x)^2, s^2) * " , " * theta * plain(" = ") * over(s^2, bar(x)), ")") ),
+                "kernel density"),
+       fill=c(hecru, getOption("col1", hred)), text.width = 0.25)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

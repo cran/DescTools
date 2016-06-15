@@ -1,4 +1,46 @@
 
+DescTools 0.99.17 (2016-06-15)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+   * RomanToInt was a sadly missed and long-awaited converting function.
+   * StrRep repeats and concatenates a string n times.
+   * AddClass and RemoveClass allow to quickly add and remove a class.
+   * ORToRelRisk returns the relative risk for a given OR and a marginal frequency.
+   * New option "digfix" for the number of fixed digits is used in result tables.
+
+UPDATED FUNCTIONS:
+   * Conf gets interfaces for lda and qda.
+   * ToWrd gets an interface for ftables.
+   * XLView gets a new default for the argument rownames, which will
+     now be FALSE by default.
+   * PlotFdist gets a new argument args.curve.ecdf allowing to superpose
+     a function to the ecdf-plot.
+   * PlotFdist's default argument for the bw of the density curve changes to
+     bw = "SJ", which turns out to be the better default for n < 1000.
+   * Large and Small have been recoded in C++ (thanks to Nathan Russel) to run
+     faster and get a renamed argument (na.last instead of na.rm).
+     So far they may be the fastest on the market.
+   * PartCor has been renamed to CorPart, as it can be better found with that name.
+   * Format gets a new format code "eng" for engineering format.
+   * StrDist gets an additional method "normalized levensthein".
+   * PlotMultiDens gets an additional parameter fill for coloring the areas.
+   * PlotWeb gets a lwd argument for defining freely the lined widths.
+   * In Recode the argument newlevels is replaced by the dots argument. This
+     is the same rationale as in Rename.
+   * Numerous updates in help files.
+
+BUGFIXES:
+   * Desc for variables with only one value won't raise an error any more.
+   * Conf for rpart will find the reference now.
+   * Bug fixed in BreslowDayTest (credits to Michael Hoehle and Jean-Francois Bouzereau)
+   * WrdCaption would not have assigned the style to paragraph. (thanks to Mathias Frueh)
+   * Desc.integer did not handle maxrows correct (thanks to David L. Carlson)
+   * Overlap did not correctly return the overlaping period, as stated in the helpfile.
+
+
+
+
 DescTools 0.99.16 (2016-03-05)
 ------------------------------
 
@@ -408,16 +450,20 @@ UPDATED FUNCTIONS:
    * AddConnLines has been renamed to "ConnLines" and gains a new argument xalign, which allows
 	   to add lines to a barplot which are aligned to the middle of the bars.
    * The argument "quant" in CutQ has been renamed to "probs", according to the naming in quantile.
-   * PlotFdist has a new option "curve" to be used to add e.g. a normal density curve to the histogram.
+   * PlotFdist has a new option "curve" to be used to add e.g. a normal density
+     curve to the histogram.
    * AndersonDarlingTest calculation logic was replaced with the newer Marsaglia approach.
      (I'm not sure, whether this was wise. Tell me what you think about that!)
    * JarqueBeraTest gains a new argument *robust*, calculation a robust version of the test.
-   * StrPad has been given recycling power for all arguments. The "str" argument has been renamed to "pad".
+   * StrPad has been given recycling power for all arguments. The "str" argument has
+     been renamed to "pad".
    * The argument "type" in MeanCI, MeanDiffCI, MedianCI, VarCI has been renamed to "method"
      such as to be consistent with others CIs.
-   * The argument verb in Desc.table has been renamed to "verbose" and its allowed values to "medium",
-     "low" and "high". Anyhow this change will not break existing code, as abbreviation is allowed.
-   * Desc-functions have been cleared out, resulting in better consistency and faster and more robust behaviour.
+   * The argument verb in Desc.table has been renamed to "verbose" and its allowed
+     values to "medium", "low" and "high". Anyhow this change will not break existing
+     code, as abbreviation is allowed.
+   * Desc-functions have been cleared out, resulting in better consistency and faster
+     and more robust behaviour.
    * LOCF gets a faster implementation.
 
 
@@ -457,9 +503,11 @@ NEW FUNCTIONS ADDED:
 
 
 UPDATED FUNCTIONS:
-   * PlotGACF will not plot ACF(0) any more. Lags instead of phases will be used for ts-objects as x-axis.
+   * PlotGACF will not plot ACF(0) any more. Lags instead of phases will be used for
+     ts-objects as x-axis.
    * Desc.integer looses its maxlevels argument and gains "maxrows" and "freq". See help.
-   * TukeyBiweight gains a na.rm argument and has been changed to use .Call instead of old .C function.
+   * TukeyBiweight gains a na.rm argument and has been changed to use .Call
+     instead of old .C function.
    * MeanDiffCI gains a formula interface.
    * HighLow uses a more efficient algorithm, based on the function Large/Small.
    * PlotWeb gains a couple of new arguments, making it more flexible.
@@ -475,11 +523,12 @@ UPDATED FUNCTIONS:
 BUGFIXES:
    * AddLm(x, y, ...) created the wrong formula x ~ y instead of the correct y ~ x model.
    * Corrected bug in function StrDist: wrong initialisation for Levenshtein distance.
-   * Corrected a bug in BinomCI identified by Steven Kern in the modified Jeffreys interval for binomial proportions.
+   * Corrected a bug in BinomCI identified by Steven Kern in the modified Jeffreys interval
+     for binomial proportions.
    * AddConnLines confused the space argument between horiz=FALSE and horiz=TRUE.
    * shapiro.test would have stopped the Desc procedure, if a variable had only identical values.
-     This has been corrected so, that the error message will be printed, while the function Desc will
-	   proceed to describe remaining variables.
+     This has been corrected so, that the error message will be printed, while the
+     function Desc will proceed to describe remaining variables.
    * PoissonCI was not yet fully implemented.
 
 

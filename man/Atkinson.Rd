@@ -2,7 +2,7 @@
 \alias{Atkinson}
 \title{Calculate the Atkinson Index}
 \description{
- Compute the Atkinson Index. This inequality measure is useful in determining which end of the distribution contributed most to the observed inequality. }
+The Atkinson index is an inequality measure and is useful in determining which end of the distribution contributed most to the observed inequality. }
 \usage{
 Atkinson(x, n = rep(1, length(x)), parameter = 0.5, na.rm = FALSE)
 }
@@ -16,13 +16,13 @@ Atkinson(x, n = rep(1, length(x)), parameter = 0.5, na.rm = FALSE)
 %%     ~~Describe \code{na.rm} here~~
 }
 
-  }  
+  }
 \value{
   the value of the Akinson Index.
 }
 \note{
 This function was previously published as \code{ineq()} in the  \pkg{ineq} package and has been
-integrated here without logical changes, but with some extensions for NA-handling and the use of weights. 
+integrated here without logical changes, but with some extensions for \code{NA}-handling and the use of weights.
 }
 
 \references{
@@ -35,7 +35,7 @@ Applications}. New York: Academic Press.}
 
 \author{Achim Zeileis <Achim.Zeileis@R-project.org>}
 
-\seealso{See \code{\link{Herfindahl}}, \code{\link{Rosenbluth}} for concentration measures and 
+\seealso{See \code{\link{Herfindahl}}, \code{\link{Rosenbluth}} for concentration measures and
 \code{\link[ineq]{ineq}()} in the package \pkg{ineq} for additional inequality measures}
 
 \examples{

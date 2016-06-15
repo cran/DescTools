@@ -5,9 +5,9 @@
 
 %%  ~~function to do ... ~~
 }
-\description{The function \code{\link{duplicated}} returns a logical vector indicating which elements x are duplicates, but will not include the very first appearance of subsequently duplicated elements. AllDuplicated returns an index vector of ALL the values in x which are involved in ties. \cr
+\description{The function \code{\link{duplicated}} returns a logical vector indicating which elements x are duplicates, but will not include the very first appearance of subsequently duplicated elements. \code{AllDuplicated} returns an index vector of ALL the values in \code{x} which are involved in ties. \cr
 So \code{!AllDuplicated} can be used to determine all elements of x, which
- appear exactly once (say with frequency 1).
+ appear exactly once (thus with frequency 1).
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

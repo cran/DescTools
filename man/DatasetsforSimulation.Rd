@@ -4,12 +4,12 @@
 \alias{roulette}
 \docType{data}
 
-\title{Datasets for Simulation
+\title{Datasets for Probabilistic Simulation
 }
 
-\description{For performing elementary probability calculations in introductory courses there are some datasets available.
-The dataset roulette contains the standard sample space for one spin on a roulette wheel.
-cards contain the standard set of 52 playing cards in four colours. tarot does the same with a classic tarot deck.
+\description{For performing elementary probability calculations in introductory statistic courses, there might datasets of playing cards casually be wanted.
+The dataset \code{roulette} contains the standard sample space for one spin on a roulette wheel.
+\code{cards} contains the standard set of 52 playing cards in four colours. \code{tarot} does the same with a classic tarot deck.
 }
 
 \usage{
@@ -18,11 +18,11 @@ tarot
 roulette
 }
 \value{
-\code{cards} is a data.frame with two columns named \code{rank} and \code{suit}
+\code{cards} is a \code{data.frame} with two columns named \code{rank} and \code{suit}
 
-\code{tarot} is a data.frame with three columns named \code{rank}, \code{suit} and \code{desc}
+\code{tarot} is a \code{data.frame} with three columns named \code{rank}, \code{suit} and \code{desc}
 
-\code{roulette} is a data.frame with two columns named \code{num} and \code{col}
+\code{roulette} is a \code{data.frame} with two columns named \code{num} and \code{col}
 }
 
 \examples{

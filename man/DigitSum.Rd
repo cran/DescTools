@@ -1,23 +1,22 @@
-\name{Recycle}
-\alias{Recycle}
+\name{DigitSum}
+\alias{DigitSum}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Recyle a List of Elements
+\title{Calcute Digit Sum
 %%  ~~function to do ... ~~
 }
-\description{This function recycles all supplied elments to the maximal dimension.
+\description{Calcutes digit sum of a number x.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Recycle(...)
+DigitSum(x)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{\dots}{a number of vectors of elements.
-%%     ~~Describe \code{\dots} here~~
+  \item{x}{an integer number
+%%     ~~Describe \code{x} here~~
 }
 }
-\value{a list of the supplied elements\cr
-\code{attr(,"maxdim")} contains the maximal dimension of the recyled list
+\value{the digit sum
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -28,15 +27,14 @@ Recycle(...)
 %%  ~~who you are~~
 }
 
-\seealso{\code{\link{rep}}, \code{\link{replicate}}
+
+\seealso{\code{\link{IsPrime}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-Recycle(x=1:5, y=1, s=letters[1:2])
-
-z <- Recycle(x=letters[1:5], n=2:3, sep=c("-"," "))
-sapply(1:attr(z, "maxdim"), function(i) paste(rep(z$x[i], times=z$n[i]), collapse=z$sep[i]))
+DigitSum(124)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ utilities }
+\keyword{math}
+\keyword{arith}

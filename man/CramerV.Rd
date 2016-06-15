@@ -11,8 +11,8 @@ Cramer's V, Pearson's Contingency Coefficient and Phi Coefficient\cr
 Yule's Q and Y, Tschuprow's T
 }
 \description{
-Calculate Cramer's V, Pearson's contingency coefficient and phi,  
-Yule's Q and Y and Tschuprow's T of \code{x}, if \code{x} is a table. If both, \code{x} and \code{y} are given, then the according table will be built first. 
+Calculate Cramer's V, Pearson's contingency coefficient and phi,
+Yule's Q and Y and Tschuprow's T of \code{x}, if \code{x} is a table. If both, \code{x} and \code{y} are given, then the according table will be built first.
 }
 \usage{
 Phi(x, y = NULL, \dots)
@@ -26,12 +26,12 @@ TschuprowT(x, y = NULL, \dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{can be a numeric vector, a matrix or a table. 
+  \item{x}{can be a numeric vector, a matrix or a table.
 }
   \item{y}{NULL (default) or a vector with compatible dimensions to \code{x}. If y is provided, \code{table(x, y, ...)} is calculated.
 }
   \item{conf.level}{confidence level of the interval. This is only implemented for Cramer's V. If set to \code{NA} (which is the       default) no confidence interval will be calculated. \cr
-  See examples for how to compute bootstrap intervals. 
+  See examples for how to compute bootstrap intervals.
 }
   \item{correct}{logical. This argument only applies for \code{ContCoef} and indicates, whether the Sakoda's adjusted Pearson's C should be returned. Default is \code{FALSE}.
 }
@@ -41,11 +41,11 @@ TschuprowT(x, y = NULL, \dots)
 \details{
 For x either a matrix or two vectors \code{x} and \code{y} are expected. In latter case \code{table(x, y, ...)} is calculated.
 The function handles \code{NAs} the same way the \code{table} function does, so tables are by default calculated with \code{NAs} omitted. \cr\cr
-A provided matrix is interpreted as a contingency table, which seems in the case of frequency data the natural interpretation 
+A provided matrix is interpreted as a contingency table, which seems in the case of frequency data the natural interpretation
 (this is e.g. also what \code{\link{chisq.test}} expects). \cr\cr
-Use the function \code{\link{PairApply}} (pairwise apply) if the measure should be calculated pairwise for all columns. 
-This allows matrices of association measures to be calculated the same way \code{cor} does. \code{NAs} are by default omitted pairwise, 
-which corresponds to the pairwise.complete option of \code{\link{cor}}.
+Use the function \code{\link{PairApply}} (pairwise apply) if the measure should be calculated pairwise for all columns.
+This allows matrices of association measures to be calculated the same way \code{cor} does. \code{NAs} are by default omitted pairwise,
+which corresponds to the \code{pairwise.complete} option of \code{\link{cor}}.
 Use \code{\link{complete.cases}}, if only the complete cases of a \code{data.frame} are to be used. (see examples)
 
 
@@ -53,18 +53,18 @@ The maximum value for Phi is \eqn{\sqrt(min(r, c) - 1)}. The contingency coeffic
 The minimum value for all is 0 under statistical independence.
 }
 \value{
-a single numeric value if no confidence intervals are requested,\cr 
+a single numeric value if no confidence intervals are requested,\cr
 and otherwise a numeric vector with 3 elements for the estimate, the lower and the upper confidence interval
 }
 \references{
   Yule, G. Uday (1912) On the methods of measuring association between two attributes. \emph{Journal of the Royal Statistical Society, LXXV}, 579-652
-  
+
 Tschuprow, A. A. (1939) \emph{Principles of the Mathematical Theory of Correlation}, translated by M. Kantorowitsch. W. Hodge & Co.
-  
+
 Cramer, H. (1946) \emph{Mathematical Methods of Statistics}. Princeton University Press
-  
+
 Agresti, Alan (1996) \emph{Introduction to categorical data analysis}. NY: John Wiley and Sons
-  
+
 Sakoda, J.M. (1977) Measures of Association for Multivariate Contingency Tables,
   \emph{Proceedings of the Social Statistics Section of the American Statistical Association} (Part III), 777-780.
 
@@ -91,11 +91,11 @@ TschuprowT(tab)
 CramerV(d.pizza$driver, d.pizza$wine_delivered)
 
 # data.frame
-PairApply(d.pizza[,c("driver","operator","area")], CramerV, symmetric = TRUE) 
+PairApply(d.pizza[,c("driver","operator","area")], CramerV, symmetric = TRUE)
 
 
 # useNA is passed to table
-PairApply(d.pizza[,c("driver","operator","area")], CramerV, 
+PairApply(d.pizza[,c("driver","operator","area")], CramerV,
           useNA="ifany", symmetric = TRUE)
 
 d.frm <- d.pizza[,c("driver","operator","area")]

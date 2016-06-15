@@ -10,10 +10,75 @@
 #
 
 
+# some aliases
+
+Mean <- mean
+
+Mean.default <- function (x, trim = 0, na.rm = FALSE, ...)
+  mean.default(x, trim, na.rm, ...)
+
+SD <- sd
+Var <- var
+Cov <- cov
+Cor <- cor
+
+Median <- median
+MAD <- mad
+
+
+# Cov <- cov
+# Cor <- cor
+# Quantile <- quantile
+
+# Length(x)
+# Table(x)
+# Log(x)
+# Abs(x)
+#
+# "abs", "sign", "sqrt", "ceiling", "floor", "trunc", "cummax", "cummin", "cumprod", "cumsum",
+# "log", "log10", "log2", "log1p", "acos", "acosh", "asin", "asinh", "atan", "atanh",
+# "exp", "expm1", "cos", "cosh", "cospi", "sin", "sinh", "sinpi", "tan", "tanh",
+# "tanpi", "gamma", "lgamma", "digamma", "trigamma"
+
+
+Range <- function(x, trim=0, na.rm = FALSE)
+  diff(range(Trim(x, trim=trim, na.rm=na.rm), na.rm=na.rm))
+
+
+
+RobRange <- function(x, trim = 0.2, fac = 3, na.rm = FALSE) {
+
+  # author: Werner Stahel
+  # from:   regr.r
+
+  if(na.rm) x <- na.omit(x)
+
+  ldat <- x[is.finite(x)]
+  if (is.character(ldat)|length(ldat) == 0) stop("invalid data")
+  trim <- c(trim, 0.2)[1]
+  if (!is.finite(trim)) trim <- 0.2
+  lmn <- mean(ldat, trim=trim)
+  lds <- sort(abs(ldat - lmn))
+  ln <- ceiling((1 - trim) * length(ldat))
+  if (ln < 3) {
+    warning("Not enough valid data. returning ordinary range")
+    lsd <- Inf
+  } else {
+    lsd <- fac * sum(lds[1:ln] / (ln-1))
+    if (lsd == 0) {
+      warning("Robust range has width 0. returning ordinary range")
+      lsd <- Inf }
+  }
+  c(max(lmn - lsd, min(ldat)), min(lmn + lsd, max(ldat)))
+
+}
+
+
+
 ## stats: functions (RobRange, Hmean, Gmean, Aad, HuberM etc.) ====
 
 
-PartCor <- function(m, x, y)  {
+CorPart <- function(m, x, y)  {
 
   cl <- match.call()
 
@@ -320,32 +385,6 @@ FindCorr <- function(x, cutoff = .90, verbose = FALSE) {
 
 
 
-RobRange <- function(x, trim = 0.2, fac = 3, na.rm = FALSE) {
-
-  # author: Werner Stahel
-  # from:   regr.r
-
-  if(na.rm) x <- na.omit(x)
-
-  ldat <- x[is.finite(x)]
-  if (is.character(ldat)|length(ldat) == 0) stop("invalid data")
-  trim <- c(trim, 0.2)[1]
-  if (!is.finite(trim)) trim <- 0.2
-  lmn <- mean(ldat, trim=trim)
-  lds <- sort(abs(ldat - lmn))
-  ln <- ceiling((1 - trim) * length(ldat))
-  if (ln < 3) {
-    warning("Not enough valid data. returning ordinary range")
-    lsd <- Inf
-  } else {
-    lsd <- fac * sum(lds[1:ln] / (ln-1))
-    if (lsd == 0) {
-      warning("Robust range has width 0. returning ordinary range")
-      lsd <- Inf }
-  }
-  c(max(lmn - lsd, min(ldat)), min(lmn + lsd, max(ldat)))
-
-}
 
 
 # Alternative:
@@ -2975,14 +3014,15 @@ KappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) 
   }
 
   ttab <- matrix(ttab, nrow=ns)
-  agreeP <- sum((apply(ttab^2, 1, sum)-nr)/(nr*(nr-1))/ns)
+  # agreeP <- sum((apply(ttab^2, 1, sum)-nr)/(nr*(nr-1))/ns)
+  agreeP <- sum((rowSums(ttab^2)-nr)/(nr*(nr-1))/ns)
 
   switch( match.arg(method, choices= c("Fleiss", "Conger", "Light"))
           , "Fleiss" = {
-            chanceP <- sum(apply(ttab,2,sum)^2)/(ns*nr)^2
+            chanceP <- sum(colSums(ttab)^2)/(ns*nr)^2
             value <- (agreeP - chanceP)/(1 - chanceP)
 
-            pj <- apply(ttab,2,sum)/(ns*nr)
+            pj <- colSums(ttab)/(ns*nr)
             qj <- 1-pj
 
             varkappa <- (2/(sum(pj*qj)^2*(ns*nr*(nr-1))))*(sum(pj*qj)^2-sum(pj*qj*(qj-pj)))
@@ -3002,7 +3042,7 @@ KappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) 
 
             rtab <- rtab/ns
 
-            chanceP <- sum(apply(ttab,2,sum)^2)/(ns*nr)^2 - sum(apply(rtab,2,var)*(nr-1)/nr)/(nr-1)
+            chanceP <- sum(colSums(ttab)^2)/(ns*nr)^2 - sum(apply(rtab, 2, var)*(nr-1)/nr)/(nr-1)
             value <- (agreeP - chanceP)/(1 - chanceP)
 
             # we have not SE for exact Kappa value
@@ -3224,7 +3264,7 @@ CronbachAlpha <- function(x, conf.level = NA, cond = FALSE, na.rm = FALSE){
   i.CronbachAlpha <- function(x, conf.level = NA){
     nc <- ncol(x)
     colVars <- apply(x, 2, var)
-    total   <- var(apply(x, 1, sum))
+    total   <- var(rowSums(x))
     res <- (total - sum(colVars)) / total * (nc/(nc-1))
 
     if (!is.na(conf.level)) {
@@ -3500,8 +3540,8 @@ MutInf <- function(x, y = NULL, base = 2, ...){
   x <- as.matrix(x)
 
   return(
-    Entropy(apply(x, 1, sum), base=base) +
-      Entropy(apply(x, 2, sum), base=base) - Entropy(x, base=base)
+    Entropy(rowSums(x), base=base) +
+      Entropy(colSums(x), base=base) - Entropy(x, base=base)
   )
 
 }
@@ -3938,6 +3978,23 @@ OddsRatio <- function(x, y = NULL, conf.level = NA, method=c("wald", "mle", "mid
 }
 
 
+## odds ratio (OR) to relative risk (RR)
+ORToRelRisk <- function(or, p0){
+
+  if(any(or <= 0))
+    stop("'or' has to be positive")
+
+  if(p0 <= 0 | p0 >= 1)
+    stop("'p0' has to be in (0,1)")
+
+  if(length(p0) != 1)
+    stop("'p0' has to be of length 1")
+
+  names(or) <- NULL
+
+  or / (1 - p0 + p0*or)
+
+}
 
 
 # Cohen, Jacob. 1988. Statistical power analysis for the behavioral
@@ -4148,8 +4205,8 @@ UncertCoef <- function(x, y = NULL, direction = c("symmetric", "row", "column"),
   x[x == 0] <- p.zero.correction
 
   n <- sum(x)
-  rsum <- apply(x, 1, sum)
-  csum <- apply(x, 2, sum)
+  rsum <- rowSums(x)
+  csum <- colSums(x)
 
   hx <- -sum((apply(x, 1, sum) * log(apply(x, 1, sum)/n))/n)
   hy <- -sum((apply(x, 2, sum) * log(apply(x, 2, sum)/n))/n)
@@ -4396,8 +4453,8 @@ SomersDelta <- function(x,  y = NULL, direction=c("row","column"), conf.level = 
   m <- min(dim(tab))
   n <- sum(tab)
   switch( match.arg( arg = direction, choices = c("row","column") )
-          , "row" = { ni. <- apply(tab, 2, sum) }
-          , "column" = { ni. <- apply(tab, 1, sum) }
+          , "row" = { ni. <- colSums(tab) }
+          , "column" = { ni. <- rowSums(tab) }
   )
   wt <- n^2 - sum(ni.^2)
   # Asymptotic standard error: sqrt(sigma2)
@@ -4586,8 +4643,8 @@ KendallTauB <- function(x, y = NULL, conf.level = NA, ...){
 
   n <- sum(tab)
   n0 <- n*(n-1)/2
-  ti <- apply(tab, 1, sum)
-  uj <- apply(tab, 2, sum)
+  ti <- rowSums(tab)  # apply(tab, 1, sum)
+  uj <- colSums(tab)  # apply(tab, 2, sum)
   n1 <- sum(ti * (ti-1) / 2)
   n2 <- sum(uj * (uj-1) / 2)
 
@@ -4598,8 +4655,8 @@ KendallTauB <- function(x, y = NULL, conf.level = NA, ...){
   pdiff <- (x$pi.c - x$pi.d) / sum(tab)
   Pdiff <- 2 * (x$C - x$D) / sum(tab)^2
 
-  rowsum <- apply(pi, 1, sum)
-  colsum <- apply(pi, 2, sum)
+  rowsum <- rowSums(pi)  # apply(pi, 1, sum)
+  colsum <- colSums(pi)  # apply(pi, 2, sum)
 
   rowmat <- matrix(rep(rowsum, dim(tab)[2]), ncol = dim(tab)[2])
   colmat <- matrix(rep(colsum, dim(tab)[1]), nrow = dim(tab)[1], byrow = TRUE)
@@ -4936,34 +4993,52 @@ PlotBinTree <- function(x, main="Binary tree", horiz=FALSE, cex=1.0, col=1, ...)
 
 # all association measures combined
 
-Assocs <- function(x, conf.level = 0.95){
+Assocs <- function(x, conf.level = 0.95, verbose=NULL){
 
-  # this is from boot::corr combined with ci logic from cor.test
-  r <- corr(d=CombPairs(1:nrow(x), 1:ncol(x)), as.vector(x))
-  r.ci <- CorCI(rho = r, n = sum(x), conf.level = conf.level)
+  if(is.null(verbose)) verbose <- "3"
+  if(verbose != "3") conf.level <- NA
+
 
   res <- rbind(
     "Phi Coeff." = c(Phi(x), NA, NA)
     , "Contingency Coeff." = c(ContCoef(x),NA, NA)
-    , "Cramer V" = CramerV(x, conf.level=conf.level)
-    , "Goodman Kruskal Gamma" = GoodmanKruskalGamma(x, conf.level=conf.level)
-    , "Kendall Tau-b" = KendallTauB(x, conf.level=conf.level)
-    , "Stuart Tau-c" = StuartTauC(x, conf.level=conf.level)
-    , "Somers D C|R" = SomersDelta(x, direction="column", conf.level=conf.level)
-    , "Somers D R|C" = SomersDelta(x, direction="r", conf.level=conf.level)
-    #    , "Pearson Correlation" =c(cor.p$estimate, lwr.ci=cor.p$conf.int[1], upr.ci=cor.p$conf.int[2])
-    , "Pearson Correlation" =c(r.ci[1], lwr.ci=r.ci[2], upr.ci=r.ci[3])
-    , "Spearman Correlation" = SpearmanRho(x, conf.level=conf.level)
-    , "Lambda C|R" = Lambda(x, direction="column", conf.level=conf.level)
-    , "Lambda R|C" = Lambda(x, direction="row", conf.level=conf.level)
-    , "Lambda sym" = Lambda(x, direction="sym", conf.level=conf.level)
-    , "Uncertainty Coeff. C|R" = UncertCoef(x, direction="column", conf.level=conf.level)
-    , "Uncertainty Coeff. R|C" = UncertCoef(x, direction="row", conf.level=conf.level)
-    , "Uncertainty Coeff. sym" = UncertCoef(x, direction="sym", conf.level=conf.level)
-    , "Mutual Information" = c(MutInf(x),NA,NA)
   )
 
-  dimnames(res)[[2]][1] <- "estimate"
+  if(is.na(conf.level)){
+    res <- rbind(res, "Cramer V" = c(CramerV(x), NA, NA))
+  } else {
+    res <- rbind(res, "Cramer V" = CramerV(x, conf.level=conf.level))
+  }
+
+  if(verbose=="3") {
+
+    # this is from boot::corr combined with ci logic from cor.test
+    r <- corr(d=CombPairs(1:nrow(x), 1:ncol(x)), as.vector(x))
+    r.ci <- CorCI(rho = r, n = sum(x), conf.level = conf.level)
+
+    res <- rbind(res
+      , "Goodman Kruskal Gamma" = GoodmanKruskalGamma(x, conf.level=conf.level)
+      , "Kendall Tau-b" = KendallTauB(x, conf.level=conf.level)
+      , "Stuart Tau-c" = StuartTauC(x, conf.level=conf.level)
+      , "Somers D C|R" = SomersDelta(x, direction="column", conf.level=conf.level)
+      , "Somers D R|C" = SomersDelta(x, direction="r", conf.level=conf.level)
+      #    , "Pearson Correlation" =c(cor.p$estimate, lwr.ci=cor.p$conf.int[1], upr.ci=cor.p$conf.int[2])
+      , "Pearson Correlation" =c(r.ci[1], lwr.ci=r.ci[2], upr.ci=r.ci[3])
+      , "Spearman Correlation" = SpearmanRho(x, conf.level=conf.level)
+      , "Lambda C|R" = Lambda(x, direction="column", conf.level=conf.level)
+      , "Lambda R|C" = Lambda(x, direction="row", conf.level=conf.level)
+      , "Lambda sym" = Lambda(x, direction="sym", conf.level=conf.level)
+      , "Uncertainty Coeff. C|R" = UncertCoef(x, direction="column", conf.level=conf.level)
+      , "Uncertainty Coeff. R|C" = UncertCoef(x, direction="row", conf.level=conf.level)
+      , "Uncertainty Coeff. sym" = UncertCoef(x, direction="sym", conf.level=conf.level)
+      , "Mutual Information" = c(MutInf(x),NA,NA)
+    ) }
+
+  if(verbose=="3")
+    dimnames(res)[[2]][1] <- "estimate"
+  else
+    dimnames(res)[[2]] <- c("estimate", "lwr.ci", "upr.ci")
+
   class(res) <- c("Assocs", class(res))
   return(res)
 
@@ -4971,8 +5046,14 @@ Assocs <- function(x, conf.level = 0.95){
 
 
 print.Assocs <- function(x, digits=4, ...){
+
   out <- apply(round(x, digits), 2, Format, digits=digits)
-  out[c(1,2,17), 2:3] <- "      -"
+
+  if(nrow(x) == 3){
+
+  } else {
+    out[c(1,2,17), 2:3] <- "      -"
+  }
   dimnames(out) <- dimnames(x)
 
   print(data.frame(out), quote=FALSE)

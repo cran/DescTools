@@ -30,14 +30,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // n_pow_sum
-List n_pow_sum(NumericVector x, double meanx);
-RcppExport SEXP DescTools_n_pow_sum(SEXP xSEXP, SEXP meanxSEXP) {
+List n_pow_sum(NumericVector x);
+RcppExport SEXP DescTools_n_pow_sum(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type meanx(meanxSEXP);
-    __result = Rcpp::wrap(n_pow_sum(x, meanx));
+    __result = Rcpp::wrap(n_pow_sum(x));
     return __result;
 END_RCPP
 }
@@ -49,6 +48,54 @@ BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< std::vector< int > >::type n(nSEXP);
     __result = Rcpp::wrap(conv_DecToBin(n));
+    return __result;
+END_RCPP
+}
+// top_n
+Rcpp::List top_n(Rcpp::NumericVector x, int n);
+RcppExport SEXP DescTools_top_n(SEXP xSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    __result = Rcpp::wrap(top_n(x, n));
+    return __result;
+END_RCPP
+}
+// bottom_n
+Rcpp::List bottom_n(Rcpp::NumericVector x, int n);
+RcppExport SEXP DescTools_bottom_n(SEXP xSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    __result = Rcpp::wrap(bottom_n(x, n));
+    return __result;
+END_RCPP
+}
+// top_i
+IntegerVector top_i(NumericVector v, unsigned int n);
+RcppExport SEXP DescTools_top_i(SEXP vSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type v(vSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type n(nSEXP);
+    __result = Rcpp::wrap(top_i(v, n));
+    return __result;
+END_RCPP
+}
+// bottom_i
+IntegerVector bottom_i(NumericVector v, unsigned int n);
+RcppExport SEXP DescTools_bottom_i(SEXP vSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type v(vSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type n(nSEXP);
+    __result = Rcpp::wrap(bottom_i(v, n));
     return __result;
 END_RCPP
 }

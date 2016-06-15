@@ -18,7 +18,7 @@ DunnTest(x, \dots)
 
 \method{DunnTest}{formula}(formula, data, subset, na.action, \dots)
 
-\method{print}{DunnTest}(x, digits = getOption("digits"), ...)
+\method{print}{DunnTest}(x, digits = getOption("digfix", 3), ...)
 
 }
 \arguments{
@@ -41,7 +41,7 @@ DunnTest(x, \dots)
   \item{na.action}{a function which indicates what should happen when
     the data contain \code{NA}s.  Defaults to
     \code{getOption("na.action")}.}
-  \item{digits}{controls the number of digits to print.
+  \item{digits}{controls the number of fixed digits to print.
 }
 
   \item{\dots}{further arguments to be passed to or from methods.}

@@ -94,9 +94,10 @@ Desc.default <- function (x, main=NULL, maxrows=NULL, ord=NULL, conf.level=0.95,
 
 
 
-desc <- function (x, main=NULL, xname=deparse(substitute(x)), digits=NULL, maxrows=NULL, ord=NULL, conf.level=0.95, verbose=2, rfrq="111", margins=c(1,2)
-                          , dprobs=NULL, mprobs=NULL
-                          , plotit=NULL, sep=NULL, ...) {
+desc <- function (x, main=NULL, xname=deparse(substitute(x)), digits=NULL, maxrows=NULL, ord=NULL
+                  , conf.level=0.95, verbose=2, rfrq="111", margins=c(1,2)
+                  , dprobs=NULL, mprobs=NULL
+                  , plotit=NULL, sep=NULL, ...) {
 
 
   # univariate Desc
@@ -110,10 +111,14 @@ desc <- function (x, main=NULL, xname=deparse(substitute(x)), digits=NULL, maxro
     ntot <- length(x)
     n <- sum(x)       # without NAs
     NAs <- NA         # number of NAs in a table, how to?? after all they're pairs..
-
+  } else if(identical(class(x), "NULL")){
+    ntot <- 0
+    x <- NULL
+    n <- 0
+    NAs <- 0
   } else {
     ntot <- length(x) # total count
-    x <- na.omit(x)
+    x <- x[!is.na(x)]
     n <- length(x)    # now without NAs
     NAs <- ntot - n   # number of NAs
   }
@@ -154,16 +159,17 @@ desc <- function (x, main=NULL, xname=deparse(substitute(x)), digits=NULL, maxro
     z <- c(z, calcDesc(x=x, n=n, digits=digits, conf.level=conf.level, ord=ord, maxrows=maxrows,
                        verbose=verbose, rfrq=rfrq, margins=margins, ... ))
 
-    if(!is.null(z$unique) && !is.na(z$unique) && z$unique==2){      # escalate to logical description if only two values
+    if(z$class!="numeric" && !is.null(z$unique) && !is.na(z$unique) && z$unique <= 2){
+      # escalate to logical description if only two values
 
       if(is.null(main))
         z$main <- gettextf("%s (%s - dichotomous)", z$xname, paste(class(x), collapse = ", "))
 
-      if(z$class %in% c("numeric", "integer")){
+      if(z$class %in% c("integer")){
         z$afrq <- cbind(z$small$freq)
         rownames(z$afrq) <- z$small$val
       }
-      if(z$class %in% c("factor", "ordered")){
+      if(z$class %in% c("factor", "ordered", "character")){
         z$afrq <- cbind(z$freq$freq)
         rownames(z$afrq) <- z$freq$level
       }
@@ -335,10 +341,13 @@ calcDesc.numeric   <- function(x, n, maxrows = NULL, ...) {
     lo <- floor(index)
     hi <- ceiling(index)
 
-    #   x <- sort(x, partial = unique(c(lo, hi)))
+    x <- sort(x, partial = unique(c(lo, hi)))
     # WHOLE x MUST be sorted in order to get the smallest and largest values,
     # as well as the number of unique values!!!
-    x <- sort(x)
+
+    # old: x <- sort(x)
+    # x <- sort.int(x, method="quick")  # somewhat faster than "shell"
+
     qs <- x[lo]
     i <- which(index > lo)
     h <- (index - lo)[i]
@@ -348,17 +357,17 @@ calcDesc.numeric   <- function(x, n, maxrows = NULL, ...) {
     # ... here we go, all we need so far is in qs
 
     # proceed with the parameteric stuff, we cannot calc mean faster than R, so do it here
-    meanx <- mean.default(x)      # somewhat faster than mean
+    # meanx <- mean.default(x)      # somewhat faster than mean
 
     # we send the SORTED vector WITHOUT NAs to the C++ function to calc the power sum(s)
-    psum <- .Call("DescTools_n_pow_sum", PACKAGE = "DescTools", x, meanx)
+    psum <- .Call("DescTools_n_pow_sum", PACKAGE = "DescTools", x)
 
     # this is method 3 in the usual functions Skew and Kurt
     skewx <- ((1/n * psum$sum3) /  (psum$sum2 / n)^1.5) * ((n - 1)/n)^(3/2)
     kurtx <- ((((1/n * psum$sum4) /  (psum$sum2 / n)^2) - 3)  + 3) * (1 - 1/n)^2 - 3
 
     # get std dev here
-    sdx <- (psum$sum2 / (n-1))^0.5
+    sdx <- sqrt(psum$sum2 / (n-1))
 
     # we display frequencies, when unique values <=12 else we set maxrows = 0
     # which will display extreme values as high-low list
@@ -379,12 +388,12 @@ calcDesc.numeric   <- function(x, n, maxrows = NULL, ...) {
     # put together the results
     res <- list(unique  = psum$unique,
                 "0s"    = psum$zero,
-                mean    = meanx,
+                mean    = psum$mean,
                 meanSE  = sdx/sqrt(n),
                 quant   = qs,
                 range   = unname(diff(qs[c(1,9)])),
                 sd      = sdx,
-                vcoef   = sdx/meanx,
+                vcoef   = sdx/psum$mean,
                 mad     = mad(x, center = qs[5]),
                 IQR     = unname(diff(qs[c(4,6)])),
                 skew    = skewx,
@@ -480,7 +489,7 @@ calcDesc.Date      <- function(x, n, dprobs = NULL, mprobs=NULL, ...) {
 
   res <- list(
       unique       = length(unique(x))
-    , highlow      = HighLow(x, nlow=4, na.rm=FALSE)
+    , highlow      = HighLow(x, nlow=4, na.last=NA)
     , dperctab     = dtab$perctab
     , d.approx.ok  = dtab$approx.ok
     , d.chisq.test = dtab$chisq.test
@@ -554,7 +563,7 @@ calcDesc.table     <- function(x, n, conf.level=0.95, verbose, rfrq, margins, p,
     or                = if(ttype=="t2x2") OddsRatio(x, conf.level = conf.level),
     relrisk1          = if(ttype=="t2x2") RelRisk(x, conf.level = conf.level, method="wald", delta=0),
     relrisk2          = if(ttype=="t2x2") RelRisk(x[,c(2,1)], conf.level = conf.level, method="wald", delta=0),
-    assocs            = if(ttype %in% c("t2x2","trxc")) Assocs(x, conf.level=conf.level) else NULL,
+    assocs            = if(ttype %in% c("t2x2","trxc")) Assocs(x, conf.level=conf.level, verbose=verbose) else NULL,
     tab               = x,
     pfreq             = prop.table(x),
     pfreqr            = if(ttype != "t1dim") prop.table(x, 1) else NULL,
@@ -679,7 +688,7 @@ calcDesc.bivar     <- function(x, g, xname = NULL, gname = NULL, margin=FALSE, b
 
 
 
-print.Desc          <- function(x, digits=NULL, plotit=NULL, nolabel=FALSE, sep=NULL, ...) {
+print.Desc <- function(x, digits=NULL, plotit=NULL, nolabel=FALSE, sep=NULL, ...) {
 
   .print <- function(x, plotit=NULL, ...) {
 
@@ -722,8 +731,12 @@ print.Desc          <- function(x, digits=NULL, plotit=NULL, nolabel=FALSE, sep=
           cat(gettextf("!print.Desc!:  plot.Desc.%s(x, ...)", x$class), "\n")
       }
 
+    } else if(identical(x$class, NULL) || identical(x$class, "NULL")) {
+        cat("class is NULL, so there's nothing else to describe\n\n")
+
     } else if(x$class == "header") {
         print.Desc.header(x, ...)
+
     } else {
       print(unclass(x), ...)
     }
@@ -756,6 +769,7 @@ print.Desc.numeric  <- function(x, digits = NULL, ...) {
   nlow <- 5
   nhigh <- 5
 
+  if(is.null(digits) && !is.null(x$digits)) digits <- x$digits
   defdigits <- is.null(digits)
 
   x[c("length","n","NAs","unique","0s")] <- lapply(x[c("length","n","NAs","unique","0s")],
@@ -818,6 +832,7 @@ print.Desc.numeric  <- function(x, digits = NULL, ...) {
   }
 
 }
+
 
 
 
@@ -1112,7 +1127,7 @@ print.Desc.numfact  <- function(x, digits = NULL, ...){
   cat("\n\n")
 
   digits <- Coalesce(digits, x$digits, NULL)
-  if(is.null(digits)) digits <- getOption("digits")
+  if(is.null(digits)) digits <- getOption("digfix", 3)
   digits <- rep(digits, length.out=5)
 
   z <- rbind(
@@ -1338,18 +1353,26 @@ plot.Desc.factor    <- function (x, main=NULL, maxlablen = 25,
 
 plot.Desc.integer   <- function(x, main=NULL, ...) {
 
-  switch(as.character(cut(x$unique, breaks=c(0,2,15,Inf), labels=1:3))
-         , "1" = { plot.Desc.logical(x, main=main, ...) }
-         , "2" = { plot.Desc.factor(x, main=main, ..., type="dot")  }
-         , "3" = { plot.Desc.numeric(x, main=main, ...) }
-  )
+  # switch(as.character(cut(x$unique, breaks=c(0, 2, 12,Inf), labels=1:3))
+  #        , "1" = { plot.Desc.logical(x, main=main, ...) }
+  #        , "2" = { plot.Desc.factor(x, main=main, ..., type="dot")  }
+  #        , "3" = { plot.Desc.numeric(x, main=main, ...) }
+  # )
+
+  if(x$unique %[]% c(0, 2)){
+    plot.Desc.logical(x, main=main, ...)
+  } else if(x$unique %(]% c(2, 12)| (x$maxrows > 0)){
+    plot.Desc.factor(x, main=main, ..., type="dot")
+  } else {
+    plot.Desc.numeric(x, main=main, ...)
+  }
 
   invisible()
 
 }
 
 plot.Desc.ordered   <- function(x, main=NULL, ...){
-  plot.Desc.factor(x, ...)
+  plot.Desc.factor(x, main=main, ...)
 }
 
 plot.Desc.logical   <- function(x, main=NULL, xlab="", col=NULL, legend=TRUE, xlim=c(0,1), confint=TRUE, ...) {
@@ -1364,8 +1387,8 @@ plot.Desc.logical   <- function(x, main=NULL, xlab="", col=NULL, legend=TRUE, xl
     col <- rep(col, length.out=5)
 
   tab <- x$afrq
-  if(nrow(tab)>2) stop( "!plot.Desc.logical! can only display 2 levels" )
-  ptab <- x$rfrq[,1]
+  ptab <- x$rfrq[, 1]
+  if(nrow(x$rfrq)>2) stop( "!plot.Desc.logical! can only display 2 levels" )
   oldpar <- par(no.readonly=TRUE);  on.exit(par(oldpar))
 
   par(mar=c(4.1,2.1,0,2.1))
@@ -1393,7 +1416,11 @@ plot.Desc.logical   <- function(x, main=NULL, xlab="", col=NULL, legend=TRUE, xl
   if(legend)
     legend( x=0, y=0.75, legend=c("ci.99     ","ci.95     ","ci.90     "), box.col="white"
             , fill=col[3:5], bg="white", cex=1, ncol=3, text.width=c(0.2,0.2,0.2) )
-  text( rownames(tab), x=c(ptab[1], ptab[1] + 1)/2, y=1.2 )
+  if(length(rownames(tab)) == 1)
+    text( rownames(tab), x=ptab[1]/2, y=1.2 )
+  else
+    text( rownames(tab), x=c(ptab[1], ptab[1] + 1)/2, y=1.2 )
+
   if(!is.na(main)) title(main=main, outer=TRUE)
 
   if(!is.null(getOption("stamp")))    Stamp()
@@ -1633,15 +1660,18 @@ plot.Desc.numfact   <- function(x, main=NULL, notch=FALSE, add_ni = TRUE, ... ){
 
 }
 
+
 plot.Desc.numnum    <- function(x, main = NULL, col=SetAlpha(1, 0.3),
-                                xlab= NULL, ylab= NULL, smooth = NULL, ...) {
+                                pch = NULL, cex = par("cex"), bg = par("bg"),
+                                xlab= NULL, ylab= NULL, smooth = NULL, smooth.front = TRUE, ...) {
 
   if(is.null(main))
     main <- x$main
 
   plot(x=x$g, y=x$x, type="n", main=main, xlab=x$gname, ylab=x$xname, ...)
   grid()
-  points(x=x$g, y=x$x, col=col)
+  if(smooth.front)   # smoother should be in front of the points, this is ok, if x is long
+    points(x=x$g, y=x$x, col=col, pch=pch, cex=cex, bg=bg)
 
   if(is.null(smooth)) {
     if(x$nvalid < 500)
@@ -1651,16 +1681,21 @@ plot.Desc.numnum    <- function(x, main = NULL, col=SetAlpha(1, 0.3),
   }
 
   if(smooth=="loess"){
-    lines(loess(x=x$g, y=x$x, na.action = na.omit))
+    # lines(loess(x=x$g, y=x$x, na.action = na.omit))
+    lines(loess(x$x ~ x$g, na.action = na.omit))
 
   } else if(smooth=="spline"){
     with(na.omit(data.frame(y=x$x, x=x$g)),
        lines(smooth.spline(x=x, y=y)))
   }
 
+  if(!smooth.front)
+    points(x=x$g, y=x$x, col=col, pch=pch, cex=cex, bg=bg)
+
   invisible()
 
 }
+
 
 plot.Desc.factnum   <- function(x, main=NULL, col=NULL, notch=FALSE,
                              add_ni = TRUE, smooth = NULL, ...){
@@ -1776,7 +1811,7 @@ printWrd <- function(x, main=NULL, plotit=NULL, ..., wrd=wrd){
 
     } else if(any(z[[1]]$class %in% c("numeric","integer"))){
       plot.Desc(z, main=NA)
-      WrdPlot(width=8, height=5.5, dfact=2.3, crop=c(0,0,0,0), wrd=wrd, append.cr=FALSE)
+      WrdPlot(width=8, height=5.0, dfact=2.3, crop=c(0,0,0,0), wrd=wrd, append.cr=FALSE)
 
     } else if(any(z[[1]]$class %in% "logical")){
       plot.Desc(z, main=NA)

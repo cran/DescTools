@@ -15,8 +15,8 @@ BartelsRankTest(x, alternative = c("two.sided", "trend", "oscillation"),
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a numeric vector containing the observations}
-  \item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default), "\code{trend}" or "\code{oscillation}". Can be abbreviated.}
-  \item{method}{a character string specifying the method used to compute the p-value. Must be one of \code{normal} (default), \code{beta} or \code{auto}. Can be abbreviated.}
+  \item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default), "\code{trend}" or "\code{oscillation}". }
+  \item{method}{a character string specifying the method used to compute the p-value. Must be one of \code{normal} (default), \code{beta} or \code{auto}. }
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~

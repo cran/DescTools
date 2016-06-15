@@ -13,18 +13,18 @@ AndersonDarlingTest(x, null = "punif", ..., nullname)
 }
 \arguments{
   \item{x}{
-    Numeric vector of data values.
+    numeric vector of data values.
   }
   \item{null}{
-    A function, or a character string giving the name of a function,
+    a function, or a character string giving the name of a function,
     to compute the cumulative distribution function for the
     null distribution.
   }
   \item{\dots}{
-    Additional arguments for the cumulative distribution function.
+    additional arguments for the cumulative distribution function.
   }
   \item{nullname}{
-    Optional character string describing the null distribution.\cr
+    optional character string describing the null distribution.\cr
     The default is \code{"uniform distribution"}.
   }
 }
@@ -55,11 +55,11 @@ AndersonDarlingTest(x, null = "punif", ..., nullname)
   Marsaglia, G. and Marsaglia, J. (2004)
   Evaluating the Anderson-Darling Distribution.
   \emph{Journal of Statistical Software} \bold{9} (2), 1--5.
-  February 2004. 
+  February 2004.
   \url{http://www.jstatsoft.org/v09/i02}
 }
 \author{
-  Original C code by George Marsaglia and John Marsaglia. 
+  Original C code by George Marsaglia and John Marsaglia.
   \R interface by Adrian Baddeley.
 }
 \seealso{

@@ -4,7 +4,7 @@
 \title{Convert xtabs To matrix
 %%  ~~function to do ... ~~
 }
-\description{This function converts an xtabs object to a matrix.
+\description{This function converts an \code{xtabs} object to a \code{matrix}.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -19,8 +19,8 @@
 %%     ~~Describe \code{\dots} here~~
 }
 }
-\details{\code{\link{xtabs}} is indeed already a matrix, but won't be converted to a pure matrix by as.matrix.default function, as its classes will remain unchanged. Some functions expecting a pure matrix may fail, when fed with a xtabs object.
-This function will only kill the classes and the call attribute. \cr
+\details{\code{\link{xtabs}} is indeed already a matrix, but won't be converted to a pure matrix by \code{as.matrix.default} function, as its classes definition will remain unchanged. Some functions expecting a pure matrix may fail, when fed with a \code{xtabs} object.
+\code{as.matrix.xtabs} will kill the classes and the call attribute. \cr
 Note that \code{\link{unclass}} would as well discard the classes \code{xtabs} and \code{table}, but retain the \code{"call"} attribute.
 %%  ~~ If necessary, more details than the description above ~~
 }

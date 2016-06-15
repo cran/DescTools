@@ -5,7 +5,7 @@
 \title{Like operator
 %%  ~~function to do ... ~~
 }
-\description{The like operator is a simple wrapper for \code{\link{grepl}}, whose complexity is hard to crack for R-newbies.
+\description{The like operator is a simple wrapper for \code{\link{grep}(..., value=TRUE)}, whose complexity is hard to crack for R-newbies.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -49,11 +49,12 @@ names(d.pizza) \%like\% "d\%"
 # ... containing er?
 names(d.pizza) \%like\% "\%er\%"
 
-# the positions on the vector
-which(names(d.pizza) \%like\% "\%er\%")
+# and combined, search for a name containing "un", ending on "or"
+# or beginning with "F"
+levels(d.pizza$driver) \%like any\% c("\%un\%", "\%or", "F\%")
 
-# what do they look like?
-names(d.pizza)[names(d.pizza) \%like\% "\%er\%"]
+# the positions on the vector
+match(names(d.pizza) \%like\% "\%er\%", names(d.pizza))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

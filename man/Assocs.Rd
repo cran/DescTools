@@ -5,11 +5,11 @@
 \title{Association Measures
 %%  ~~function to do ... ~~
 }
-\description{Collects a bunch of association measures for nominal and ordinal data.
+\description{Collects a number of association measures for nominal and ordinal data.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Assocs(x, conf.level = 0.95)
+Assocs(x, conf.level = 0.95, verbose = NULL)
 
 \method{print}{Assocs}(x, digits = 4, ...)
 }
@@ -22,6 +22,9 @@ Assocs(x, conf.level = 0.95)
 
 %%     ~~Describe \code{conf.level} here~~
 }
+\item{verbose}{integer out of \code{c(2, 1, 3)} defining the verbosity of the reported results. 2 (default) means medium, 1 less and 3 extensive results. \cr Applies only to tables and is ignored else.
+}
+
   \item{digits}{integer which determines the number of digits used in formatting the measures of association.
 %%     ~~Describe \code{digits} here~~
 }

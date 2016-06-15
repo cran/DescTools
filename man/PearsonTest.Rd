@@ -25,7 +25,7 @@ lying somewhere between the two, see also Moore (1986).
 }
 
 \value{
-  A list with class \dQuote{htest} containing the following components:
+A list of class \code{htest}, containing the following components:
   \item{statistic}{the value of the Pearson chi-square statistic.}
   \item{p.value }{the p-value for the test.}
   \item{method}{the character string \dQuote{Pearson chi-square normality test}.}

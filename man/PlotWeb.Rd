@@ -10,7 +10,7 @@ in proportion to the correlation of two variables. It will place the elements ho
 connecting lines between the points.
 }
 \usage{
-PlotWeb(m, col = c(hred, hblue), lty = par("lty"), args.legend=NULL,
+PlotWeb(m, col = c(hred, hblue), lty = par("lty"), lwd = NULL, args.legend=NULL,
         pch = 21, pt.cex = 2, pt.col = "black", pt.bg = "darkgrey",
         cex.lab = 1, las = 1, adj = NULL, dist = 0.5, ...)
 }
@@ -25,6 +25,10 @@ PlotWeb(m, col = c(hred, hblue), lty = par("lty"), args.legend=NULL,
   \item{lty}{the line type for the connecting lines
 %%     ~~Describe \code{lty} here~~
 }
+  \item{lwd}{the line widths for the connecting lines. If left to NULL it will be linearly scaled between the minimum and maximum value of \code{m}.
+%%     ~~Describe \code{lty} here~~
+}
+
   \item{args.legend}{list of additional arguments to be passed to the \code{legend} function.
   Use \code{args.legend = NA} if no legend should be added.
 %%     ~~Describe \code{args.legend} here~~
@@ -81,6 +85,9 @@ m[ctest > 0.05] <- NA
 noquote(Format(m, na.form = ". ", leading="drop", digits=3, align = "right"))
 
 PlotWeb(m, las=2, cex=1.2)
+
+# define line widths
+PlotWeb(m, lwd=abs(m[lower.tri(m)] * 10))
 }
 \keyword{ hplot }
 \keyword{ multivariate }

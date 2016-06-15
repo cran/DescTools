@@ -38,7 +38,7 @@ axTicks.POSIXct(side, x, at, format, labels = TRUE, ...)
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
-\author{Andri Signorell <andri@signorell.net> just copying R-Core code
+\author{Andri Signorell <andri@signorell.net> simply copying R-Core code
 %%  ~~who you are~~
 }
 

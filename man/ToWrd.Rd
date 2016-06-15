@@ -19,14 +19,22 @@
 ToWrd(x, font = NULL, ..., wrd = getOption("lastWord"))
 
 \method{ToWrd}{Freq}(x, font = NULL, main = NULL, ..., wrd = getOption("lastWord"))
-\method{ToWrd}{table}(x, font = NULL, main = NULL, align = NULL, autofit = TRUE,
-      row.names = FALSE, ..., wrd = getOption("lastWord"))
-\method{ToWrd}{ftable}(x, font = NULL, main = NULL, ..., wrd = getOption("lastWord"))
-\method{ToWrd}{TOne}(x, font = NULL, main = NULL, align = NULL, autofit = TRUE, ...,
-      wrd = getOption("lastWord"))
+
+\method{ToWrd}{table}(x, font = NULL, main = NULL, align = NULL,
+      tablestyle = NULL, autofit = TRUE,
+      row.names = FALSE, col.names = TRUE, ..., wrd = getOption("lastWord"))
+
+\method{ToWrd}{ftable}(x, font = NULL, main = NULL, align = NULL,
+      method = "compact", ..., wrd = getOption("lastWord"))
+
+\method{ToWrd}{TOne}(x, font = NULL, para = NULL, main = NULL, align = NULL,
+      autofit = TRUE, ..., wrd = getOption("lastWord"))
+
 \method{ToWrd}{lm}(x, font = NULL, ..., wrd = getOption("lastWord"))
+
 \method{ToWrd}{character}(x, font = NULL, para = NULL, style = NULL, ...,
       wrd = getOption("lastWord"))
+
 \method{ToWrd}{default}(x, font = NULL, ..., wrd = getOption("lastWord"))
 
 }
@@ -47,12 +55,35 @@ ToWrd(x, font = NULL, ..., wrd = getOption("lastWord"))
   \item{align}{character vector giving the alignment of the table columns. \code{"l"} means left, \code{"r"} right and \code{"c"} center alignement. The code will be recyled to the length of thenumber of columns.
 %%     ~~Describe \code{align} here~~
 }
+ \item{method}{string specifying how the \code{"ftable"} object is formatted
+     (and printed if used as in \code{write.ftable()} or the \code{print}
+     method).  Can be abbreviated.  Available methods are (see the examples):
+     \describe{
+       \item{"non.compact"}{the default representation of an
+         \code{"ftable"} object.}
+       \item{"row.compact"}{a row-compact version without empty cells
+         below the column labels.}
+       \item{"col.compact"}{a column-compact version without empty cells
+         to the right of the row labels.}
+       \item{"compact"}{a row- and column-compact version.  This may imply
+         a row and a column label sharing the same cell.  They are then
+         separated by the string \code{lsep}.}
+     }
+   }
+
   \item{autofit}{logical, defining if the columns of table should be fitted to the length of their content.
 %%     ~~Describe \code{autofit} here~~
 }
   \item{row.names}{logical, defining whether the row.names should be included in the output. Default is \code{FALSE}.
 %%     ~~Describe \code{row.names} here~~
 }
+ \item{col.names}{logical, defining whether the col.names should be included in the output. Default is \code{TRUE}.
+%%     ~~Describe \code{row.names} here~~
+}
+ \item{tablestyle}{either the name of a defined Word tablestyle or its index.
+%%     ~~Describe \code{row.names} here~~
+}
+
 \item{style}{character, name of a style to be applied to the inserted text.}
   \item{\dots}{further arguments to be passed to or from methods.
 %%     ~~Describe \code{\dots} here~~
@@ -87,11 +118,35 @@ LineUnitBefore, LineUnitAfter, MirrorIndents.
 }
 \examples{
 \dontrun{
+# run that by copy to console
+#
 t1 <- TOne(x = d.pizza[, c("temperature","delivery_min","driver","wine_ordered")],
            grp=d.pizza$wine_delivered)
 
 wrd <- GetNewWrd()
 ToWrd(t1, font=list(name="Algerian"), wrd=wrd)
+
+
+tab <- table(d.pizza$driver, d.pizza$area)
+
+tab <- table(d.pizza$driver, d.pizza$area)
+ToWrd(tab, font = list(size=15, name="Arial"), row.names = TRUE, col.names = TRUE,
+      main= "my Title", wrd=wrd)
+ToWrd(tab, font = list(size=10, name="Arial narrow"),
+      row.names = TRUE, col.names=FALSE, wrd=wrd)
+ToWrd(tab, font = list(size=15, name="Arial"), align="r",
+      row.names = FALSE, col.names=TRUE, wrd=wrd)
+ToWrd(tab, font = list(size=15, name="Arial"),
+      row.names = FALSE, col.names=FALSE, wrd=wrd)
+
+ToWrd(tab, tablestyle = "Mittlere Schattierung 2 - Akzent 4",
+      row.names=TRUE, col.names=TRUE, wrd=wrd)
+
+ToWrd(Format(tab, big.mark = "'", digits=0), wrd=wrd)
+
+zz <- ToWrd(Format(tab, big.mark = "'", digits=0), wrd=wrd)
+zz$Rows(1)$Select()
+WrdFont(wrd = wrd) <- list(name="Algerian", size=14, bold=TRUE)
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

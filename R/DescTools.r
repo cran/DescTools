@@ -235,7 +235,12 @@
 # load(file="C:/Users/Andri/Documents/R/Projects/DescTools/load/wdConst.rda")
 # load(file="C:/Users/Andri/Documents/R/sources/DescTools/periodic.rda")
 
-utils::globalVariables(c("d.units","d.periodic","d.prefix","day.name","day.abb","wdConst","hblue","hred","hgreen", "tarot","cards","roulette"))
+
+
+utils::globalVariables(c("d.units","d.periodic","d.prefix",
+                         "day.name","day.abb","wdConst",
+                         "hblue","hred","hgreen",
+                         "tarot","cards","roulette"))
 
 # source( "C:/Users/Andri/Documents/R/sources/DescTools/wdConst.r" )
 
@@ -395,7 +400,7 @@ GCD <- function(..., na.rm = FALSE) {
 
   x <- unlist(list(...), recursive=TRUE)
 
-  if(na.rm) x <- na.omit(x)
+  if(na.rm) x <- x[!is.na(x)]
   if(anyNA(x)) return(NA)
 
 
@@ -438,7 +443,7 @@ LCM <- function(..., na.rm = FALSE) {
 
   x <- unlist(list(...), recursive=TRUE)
 
-  if(na.rm) x <- na.omit(x)
+  if(na.rm) x <- x[!is.na(x)]
   if(anyNA(x)) return(NA)
 
 
@@ -694,7 +699,7 @@ Winsorize <- function(x, minval = NULL, maxval = NULL,
 
 Trim <- function(x, trim = 0.1, na.rm = FALSE){
 
-  if (na.rm) x <- na.omit(x)
+  if (na.rm) x <- x[!is.na(x)]
 
   if (!is.numeric(trim) || length(trim) != 1L)
     stop("'trim' must be numeric of length one")
@@ -807,90 +812,207 @@ LinScale <- function (x, low = NULL, high = NULL, newlow = 0, newhigh = 1)  {
 
 
 
-Small <- function (x, k = 5, unique = FALSE, na.rm = FALSE) {
+Large <- function (x, k = 5, unique = FALSE, na.last = NA) {
 
-  if (na.rm)
-    x <- na.omit(x)
+  n <- length(x)
+  x <- x[!is.na(x)]
+  na_n <- n - length(x)
+
+  #  na.last
+  #  for controlling the treatment of NAs. If TRUE, missing values in the data are put last;
+  #  if FALSE, they are put first;
+  #  if NA, they are removed.
 
   if (unique==TRUE) {
-    ux <- unique(x)
-    un <- length(ux)
-    maxval <- sort(ux, partial = min(k, un))[min(k, un)]
 
-    # we are using the rationale of rle here, as it turned out to be the fastest approach
-    x <- sort(x[x<=maxval])
-    n <- length(x)
-    if (n == 0L)
-      res <- list(lengths = integer(), values = x)
+    res <- .Call("DescTools_top_n", PACKAGE = "DescTools", x, k)
 
-    y <- x[-1L] != x[-n]
-    i <- c(which(y | is.na(y)), n)
-    res <- list(lengths = diff(c(0L, i)), values = x[i])
+    if(na_n > 0){
+      if(!is.na(na.last)){
+        if(na.last==FALSE) {
+          res$value <- tail(c(NA, res$value), k)
+          res$frequency <- tail(c(na_n, res$frequency), k)
+        }
+        if(na.last==TRUE){
+          res$value <- tail(c(res$value, NA), k)
+          res$frequency <- tail(c(res$frequency, na_n), k)
+        }
+      }
+    }
 
-    # res <- unclass(rle(sort(x[x<=maxval])))
+    if(is.factor(x))
+      res$value <- levels(x)[res$value]
+    else
+      class(res$value) <- class(x)
+
+  } else {
+
+    # do not allow k be bigger than n
+    k <- min(k, n)
+
+    res <- x[.Call("DescTools_top_i", PACKAGE = "DescTools", x, k)]
+
+    if(!is.na(na.last)){
+      if(na.last==FALSE)
+        res <- tail(c(rep(NA, na_n), res), k)
+      if(na.last==TRUE)
+        res <- tail(c(res, rep(NA, na_n)), k)
+    }
+
   }
-  else {
-    n <- length(x)
-    res <- sort(x, partial = 1:min(k, n))[1:min(k, n)]
-    #   lst <- as.vector(unlist(lapply(lst, "[", "val")))
-    #   http://stackoverflow.com/questions/15659783/why-does-unlist-kill-dates-in-r
-  }
+
   return(res)
+
 }
 
 
 
 
-Large <- function (x, k = 5, unique = FALSE, na.rm = FALSE) {
+# old version, replaced 0.99.17/13.5.2016
+#
+# Large <- function (x, k = 5, unique = FALSE, na.rm = FALSE) {
+#
+#   if (na.rm)
+#     x <- x[!is.na(x)]
+#
+#   if (unique==TRUE) {
+#     ux <- unique(x)
+# #    un <- length(ux)
+#     un <- sum(!is.na(ux))
+#     minval <- sort(ux, partial=max((un-k+1), 1):un, na.last = TRUE)[max((un-k+1),1)]
+#
+#     # we are using the rationale of rle here, as it turned out to be the fastest approach
+#     x <- sort(x[x>=minval])
+#     n <- length(x)
+#     if (n == 0L)
+#       res <- list(lengths = integer(), values = x)
+#
+#     y <- x[-1L] != x[-n]
+#     i <- c(which(y | is.na(y)), n)
+#     res <- list(lengths = diff(c(0L, i)), values = x[i])
+#
+#     # res <- unclass(rle(sort(x[x>=minval])))
+#   }
+#   else {
+#     # n <- length(x)
+#     n <- sum(!is.na(x))
+#     res <- sort(x, partial=max((n-k+1),1):n, na.last = TRUE)[max((n-k+1),1):n]
+#     #   lst <- as.vector(unlist(lapply(lst, "[", "val")))
+#     #   http://stackoverflow.com/questions/15659783/why-does-unlist-kill-dates-in-r
+#
+#     # faster alternative (but check NA-handling first):
+#     # res <-  x[.Call("DescTools_top_index", PACKAGE = "DescTools", x, k)]
+#
+#   }
+#   return(res)
+# }
 
-  if (na.rm)
-    x <- na.omit(x)
+
+
+Small <- function (x, k = 5, unique = FALSE, na.last = NA) {
+
+  n <- length(x)
+  x <- x[!is.na(x)]
+  na_n <- n - length(x)
+
+#  na.last
+#  for controlling the treatment of NAs. If TRUE, missing values in the data are put last;
+#  if FALSE, they are put first;
+#  if NA, they are removed.
 
   if (unique==TRUE) {
-    ux <- unique(x)
-#    un <- length(ux)
-    un <- sum(!is.na(ux))
-    minval <- sort(ux, partial=max((un-k+1), 1):un, na.last = TRUE)[max((un-k+1),1)]
 
-    # we are using the rationale of rle here, as it turned out to be the fastest approach
-    x <- sort(x[x>=minval])
-    n <- length(x)
-    if (n == 0L)
-      res <- list(lengths = integer(), values = x)
+    res <- .Call("DescTools_bottom_n", PACKAGE = "DescTools", x, k)
 
-    y <- x[-1L] != x[-n]
-    i <- c(which(y | is.na(y)), n)
-    res <- list(lengths = diff(c(0L, i)), values = x[i])
+    if(na_n > 0){
+      if(!is.na(na.last)){
+        if(na.last==FALSE) {
+          k <- min(length(res$value) + 1, k)
+          res$value <- c(NA, res$value)[1:k]
+          res$frequency <- c(na_n, res$frequency)[1:k]
+        }
+        if(na.last==TRUE){
+          k <- min(length(res$value) + 1, k)
+          res$value <- c(res$value, NA)[1:k]
+          res$frequency <- c(res$frequency, na_n)[1:k]
+        }
+      }
+    }
+    if(is.factor(x))
+      res$value <- levels(x)[res$value]
+    else
+      class(res$value) <- class(x)
 
-    # res <- unclass(rle(sort(x[x>=minval])))
+  } else {
+
+    # do not allow k be bigger than n
+    k <- min(k, n)
+
+    res <- rev(x[.Call("DescTools_bottom_i", PACKAGE = "DescTools", x, k)])
+
+    if(!is.na(na.last)){
+      if(na.last==FALSE)
+        res <- c(rep(NA, na_n), res)[1:k]
+      if(na.last==TRUE)
+        res <- c(res, rep(NA, na_n))[1:k]
+    }
+
   }
-  else {
-    # n <- length(x)
-    n <- sum(!is.na(x))
-    res <- sort(x, partial=max((n-k+1),1):n, na.last = TRUE)[max((n-k+1),1):n]
-    #   lst <- as.vector(unlist(lapply(lst, "[", "val")))
-    #   http://stackoverflow.com/questions/15659783/why-does-unlist-kill-dates-in-r
-  }
+
   return(res)
+
 }
 
 
+# Small <- function (x, k = 5, unique = FALSE, na.rm = FALSE) {
+#
+#   if (na.rm)
+#     x <- x[!is.na(x)]
+#
+#   if (unique==TRUE) {
+#     ux <- unique(x)
+#     un <- length(ux)
+#     maxval <- sort(ux, partial = min(k, un))[min(k, un)]
+#
+#     # we are using the rationale of rle here, as it turned out to be the fastest approach
+#     x <- sort(x[x<=maxval])
+#     n <- length(x)
+#     if (n == 0L)
+#       res <- list(lengths = integer(), values = x)
+#
+#     y <- x[-1L] != x[-n]
+#     i <- c(which(y | is.na(y)), n)
+#     res <- list(lengths = diff(c(0L, i)), values = x[i])
+#
+#     # res <- unclass(rle(sort(x[x<=maxval])))
+#   }
+#   else {
+#     n <- length(x)
+#     res <- sort(x, partial = 1:min(k, n))[1:min(k, n)]
+#     #   lst <- as.vector(unlist(lapply(lst, "[", "val")))
+#     #   http://stackoverflow.com/questions/15659783/why-does-unlist-kill-dates-in-r
+#   }
+#   return(res)
+# }
 
-HighLow <- function (x, nlow = 5, nhigh = nlow, na.rm = FALSE) {
+
+
+
+HighLow <- function (x, nlow = 5, nhigh = nlow, na.last = NA) {
 
   # updated 1.2.2014 / Andri
   # using table() was unbearable slow and inefficient for big vectors!!
   # sort(partial) is the way to go..
   # http://r.789695.n4.nabble.com/Fast-way-of-finding-top-n-values-of-a-long-vector-td892565.html
 
-  if(na.rm) x <- na.omit(x)
+  # ... seemed the way to go, but outperformed by nathan russell's C++ solution
 
   if ((nlow + nhigh) != 0) {
-    frqs <- Small(x, k=nlow, unique=TRUE, na.rm=na.rm)
-    frql <- Large(x, k=nhigh, unique=TRUE, na.rm=na.rm)
-    frq <- c(frqs$lengths, frql$lengths)
+    frqs <- Small(x, k=nlow, unique=TRUE, na.last=na.last)
+    frql <- Large(x, k=nhigh, unique=TRUE, na.last=na.last)
+    frq <- c(frqs$frequency, frql$frequency)
 
-    vals <- c(frqs$values, frql$values)
+    vals <- c(frqs$value, frql$value)
     if (is.numeric(x)) {
       vals <- prettyNum(vals, big.mark = "'")
     }
@@ -901,8 +1023,8 @@ HighLow <- function (x, nlow = 5, nhigh = nlow, na.rm = FALSE) {
     frqtxt[frq < 2] <- ""
 
     txt <- StrTrim(paste(vals, frqtxt, sep = ""))
-    lowtxt <- paste(head(txt, min(length(frqs$lengths), nlow)), collapse = ", ")
-    hightxt <- paste(tail(txt, min(length(frql$lengths), nhigh)), collapse = ", ")
+    lowtxt <- paste(head(txt, min(length(frqs$frequency), nlow)), collapse = ", ")
+    hightxt <- paste(tail(txt, min(length(frql$frequency), nhigh)), collapse = ", ")
   }
   else {
     lowtxt <- ""
@@ -918,7 +1040,7 @@ Closest <- function(x, a, which = FALSE, na.rm = FALSE){
 
 #   # example: Closest(a=67.5, x=d.pizza$temperature)
 #
-  if(na.rm) x <- na.omit(x)
+  if(na.rm) x <- x[!is.na(x)]
 
   mdist <- min(abs(x-a))
   if(is.na(mdist))
@@ -1046,7 +1168,7 @@ StrDist <- function (x, y, method = "levenshtein", mismatch = 1, gap = 1){
   if (!is.na(pmatch(method, "levenshtein")))
       method <- "levenshtein"
 
-    METHODS <- c("levenshtein", "hamming")
+    METHODS <- c("levenshtein", "normlevenshtein", "hamming")
     method <- pmatch(method, METHODS)
 
     if (is.na(method))
@@ -1067,7 +1189,7 @@ StrDist <- function (x, y, method = "levenshtein", mismatch = 1, gap = 1){
     else
       y1 <- y
 
-    if (method == 1){ ## Levenshtein
+    if (method %in% c(1,2)){ ## Levenshtein
       m <- length(x1)
       n <- length(y1)
       D <- matrix(NA, nrow = m+1, ncol = n+1)
@@ -1094,8 +1216,14 @@ StrDist <- function (x, y, method = "levenshtein", mismatch = 1, gap = 1){
       rownames(M) <- rownames(D) <- c("gap", x1)
       colnames(M) <- colnames(D) <- c("gap", y1)
       d <- D[m+1, n+1]
+
+      if(method == 2){  ## normalized levenshtein
+        d <- 1-d / (max(m, n))
+      }
     }
-    if(method == 2){ ## Hamming
+
+
+    if(method == 3){ ## Hamming
       if(length(x1) != length(y1))
         stop("Hamming distance is only defined for equal length strings")
       d <- sum(x1 != y1)
@@ -1124,6 +1252,25 @@ StrRev <- function(x) {
 }
 
 
+StrRep <- function(x, times, sep=""){
+  # same as strrep which seems to be new in 3.4.0
+  z <- Recycle(x=x, times=times, sep=sep)
+  sapply(1:attr(z, "maxdim"), function(i) paste(rep(z$x[i], times=z$times[i]), collapse=z$sep[i]))
+}
+
+
+
+# useless because we have base::strwrap
+#
+# StrWordWrap <- function(x, n, sep = "\n") {
+#
+#   res <- gsub(gettextf("(.{1,%s})(\\s|$)", n), gettextf("\\1%s", sep), x)
+#   res <- gsub(gettextf("[%s]$", sep), "", res)
+#
+#   return(res)
+#
+# }
+#
 
 StrPad <- function(x, width = NULL, pad = " ", adj = "left") {
 
@@ -1397,6 +1544,30 @@ DecToBin <- function (x) {
 # }
 
 
+RomanToInt <- function (x) {
+
+  # opposite to as.roman
+
+  roman2int.inner <- function (roman) {
+    results <- .C("roman2int", roman = as.character(roman), nchar = as.integer(nchar(roman)),
+                  value = integer(1), PACKAGE = "DescTools")
+    return(results$value)
+  }
+
+  roman <- trimws(toupper(as.character(x)))
+  tryIt <- function(x) {
+    retval <- try(roman2int.inner(x), silent = TRUE)
+    if (is.numeric(retval))
+      retval
+    else NA
+  }
+  retval <- sapply(roman, tryIt)
+  retval
+
+}
+
+
+
 DegToRad <- function(deg) deg * pi /180
 
 RadToDeg <- function(rad) rad * 180 / pi
@@ -1492,9 +1663,11 @@ TextToTable <- function(x, dimnames = NULL, ...){
 }
 
 
-Recode <- function(x, newlevels, elselevel=NA, use.empty=FALSE){
+Recode <- function(x, ..., elselevel=NA, use.empty=FALSE){
 
-  if( sum(duplicated(unlist(newlevels))) > 0) stop ("!Recode! newlevels contain non unique values!")
+  newlevels <- list(...)
+
+  if( sum(duplicated(unlist(newlevels))) > 0) stop ("newlevels contain non unique values!")
 
   if(is.null(elselevel)) { # leave elselevels as they are
     elselevels <- setdiff(levels(x), unlist(newlevels))
@@ -2027,7 +2200,7 @@ SecToHms <- function(x, digits=NULL) {
   s <- floor(x-(m*60 + h*3600))
   b <- x-(s + m*60 + h*3600)
 
-  if(is.null(digits)) digits <- ifelse(all(b < .Machine$double.eps^0.5),0, 2)
+  if(is.null(digits)) digits <- ifelse(all(b < sqrt(.Machine$double.eps)),0, 2)
   if(digits==0) f <- "" else f <- gettextf(paste(".%0", digits, "d", sep=""), round(b*10^digits, 0))
 
   gettextf("%02d:%02d:%02d%s", h, m, s, f)
@@ -2679,6 +2852,11 @@ axTicks.POSIXct <- function (side, x, at, format, labels = TRUE, ...) {
 
   grepl(pattern=paste(pattern, collapse = "|"), x=x)
 
+  # since 0.99.17: better returning the values, than a logical vector:
+  # grep(pattern=paste(pattern, collapse = "|"), x=x, value=TRUE)
+
+  # rolled back 26.4.2016: did not really prove successful
+
 }
 
 
@@ -2734,9 +2912,25 @@ Overlap <- function(x, y){
   x <- x[rep(1:nrow(x), length.out=maxdim), , drop=FALSE]
   y <- y[rep(1:nrow(y), length.out=maxdim), , drop=FALSE]
 
-  d <- (apply(x, 1, diff) + apply(y, 1, diff)) - pmin(x[,2] - y[,1], y[,2]- x[,1])
-  d[x[,1] > y[,2] | y[,1] > x[,2]] <- 0
+  # old: replaced in 0.99.17 as it did not what it was expected to
+  #
+  # d <- (apply(x, 1, diff) + apply(y, 1, diff)) - pmin(x[,2] - y[,1], y[,2]- x[,1])
+  # d[x[,1] > y[,2] | y[,1] > x[,2]] <- 0
+
+  d1 <- x[, 2]
+  idx <- x[, 2] > y[, 2]
+  d1[idx] <- y[idx, 2]
+
+  d2 <- y[, 1]
+  idx <- x[, 1] > y[, 1]
+  d2[idx] <- x[idx, 1]
+
+  d <- d1 - d2
+
+  d[d <=0 ] <- 0
+
   unname(d)
+
 }
 
 
@@ -2840,39 +3034,75 @@ PartitionBy <- function(x, by, FUN, ...){
 }
 
 
-IsWhole <-function(x, tol = .Machine$double.eps^0.5, na.rm=FALSE) {
+# IsWhole <-function(x, tol = .Machine$double.eps^0.5, na.rm=FALSE) {
+#
+#   # this is a new version form sfsmisc
+#   # replaced old solution in DescTools 0.99.12
+#   if (na.rm)
+#     x <- na.omit(x)
+#
+#   is.whole.scalar <- if (is.integer(x)) {
+#   function(x) TRUE
+#   }
+#   else if (is.numeric(x)) {
+#     function(x) isTRUE(all.equal(x, round(x), tol = tol))
+#   }
+#   else if (is.complex(x)) {
+#     function(x) isTRUE(all.equal(Re(x), round(Re(x)), tol = tol)) &&
+#       isTRUE(all.equal(Im(x), round(Im(x)), tol = tol))
+#   }
+# #  else stop("Input must be of type integer, numeric or complex.")
+#   else   function(x) FALSE
+#
+#   if (is.null(dim(x)))
+#     vapply(x, is.whole.scalar, NA)
+#   else apply(x, seq_along(dim(x)), is.whole.scalar)
+#
+# }
 
-  # this is a new version form sfsmisc
-  # replaced old solution in DescTools 0.99.12
+
+IsWhole <- function (x, all=FALSE, tol = sqrt(.Machine$double.eps), na.rm=FALSE) {
+
   if (na.rm)
-    x <- na.omit(x)
+    x <- x[!is.na(x)]
 
-  is.whole.scalar <- if (is.integer(x)) {
-  function(x) TRUE
-  }
-  else if (is.numeric(x)) {
-    function(x) isTRUE(all.equal(x, round(x), tol = tol))
-  }
-  else if (is.complex(x)) {
-    function(x) isTRUE(all.equal(Re(x), round(Re(x)), tol = tol)) &&
-      isTRUE(all.equal(Im(x), round(Im(x)), tol = tol))
-  }
-#  else stop("Input must be of type integer, numeric or complex.")
-  else   function(x) FALSE
+  if(all){
 
-  if (is.null(dim(x)))
-    vapply(x, is.whole.scalar, NA)
-  else apply(x, seq_along(dim(x)), is.whole.scalar)
+    if (is.integer(x)) {
+      TRUE
+
+    } else if (is.numeric(x)) {
+      isTRUE(all.equal(x, round(x), tol))
+
+    } else if (is.complex(x)) {
+      isTRUE(all.equal(Re(x), round(Re(x)), tol)) && isTRUE(all.equal(Im(x), round(Im(x)), tol))
+
+    } else FALSE
+
+
+  } else {
+    if (is.integer(x)) {
+      rep(TRUE, length(x))
+
+    } else if (is.numeric(x)) {
+      abs(x - round(x)) < tol
+
+    } else if (is.complex(x)) {
+      abs(Re(x) - round(Re(x))) < tol && abs(Im(x) - round(Im(x))) < tol
+
+    } else rep(FALSE, length(x))
+
+  }
 
 }
 
 
 
-IsZero <-function(x, tol = .Machine$double.eps^0.5, na.rm=FALSE) {
+IsZero <-function(x, tol = sqrt(.Machine$double.eps), na.rm=FALSE) {
   # Define check if a numeric is 0
 
   if (na.rm)
-    x <- na.omit(x)
+    x <- x[!is.na(x)]
   if(is.numeric(x))
     x < tol
   else
@@ -2884,7 +3114,7 @@ IsZero <-function(x, tol = .Machine$double.eps^0.5, na.rm=FALSE) {
 IsNumeric <- function (x, length.arg = Inf, integer.valued = FALSE, positive = FALSE, na.rm = FALSE){
 
   if (na.rm)
-    x <- na.omit(x)
+    x <- x[!is.na(x)]
 
   if (all(is.numeric(x)) && all(is.finite(x)) && (if (is.finite(length.arg)) length(x) ==
                                                     length.arg else TRUE) && (if (integer.valued) all(x == round(x)) else TRUE) &&
@@ -2894,7 +3124,7 @@ IsNumeric <- function (x, length.arg = Inf, integer.valued = FALSE, positive = F
 IsOdd <- function(x) x %% 2 == 1
 
 
-IsDichotomous <- function(x) length(unique(na.omit(x))) <= 2
+IsDichotomous <- function(x) length(unique(x[!is.na(x)])) <= 2
 
 
 StrIsNumeric <- function(x){
@@ -3852,6 +4082,46 @@ Format.default <- function(x, digits = NULL, sci = getOption("scipen")
 
   }
 
+  .format.eng <- function(x, digits = NULL, leading = NULL
+                          , zero.form = NULL, na.form = NULL){
+
+    s <- lapply(strsplit(format(x, scientific=TRUE), "e"), as.numeric)
+    y <- unlist(lapply(s, "[[", 1))
+    pwr <- unlist(lapply(s, "[", 2))
+
+    return(paste(Format(y * 10^(pwr %% 3), digits=digits, leading=leading,
+                        zero.form = zero.form, na.form=na.form)
+                 , "e"
+                 , c("-","+")[(pwr >= 0) + 1]
+                 , Format(abs((pwr - (pwr %% 3))), leading = "00", digits=0)
+                 , sep="")
+    )
+
+  }
+
+  .format.engabb <- function(x, digits = NULL, leading = NULL
+                          , zero.form = NULL, na.form = NULL){
+
+    s <- lapply(strsplit(format(x, scientific=TRUE), "e"), as.numeric)
+    y <- unlist(lapply(s, "[[", 1))
+    pwr <- unlist(lapply(s, "[", 2))
+
+    a <- paste("1e"
+               , c("-","+")[(pwr >= 0) + 1]
+               , Format(abs((pwr - (pwr %% 3))), leading = "00", digits=0)
+               , sep="")
+    am <- Lookup(as.numeric(a), d.prefix$mult, d.prefix$abbr)
+
+    a[!is.na(am)] <- am[!is.na(am)]
+    a[a == "1e+00"] <- ""
+
+    return(paste(Format(y * 10^(pwr %% 3), digits=digits, leading=leading,
+                        zero.form = zero.form, na.form=na.form)
+                 , " " , a
+                 , sep="")
+    )
+
+  }
 
 #   We accept here a fmt class to be used as user templates
 #   example:
@@ -3900,6 +4170,14 @@ Format.default <- function(x, digits = NULL, sci = getOption("scipen")
   } else if(fmt=="p"){
 
     r <- .format.pval(x)
+
+  } else if(fmt=="eng"){
+
+    r <- .format.eng(x, digits=digits, leading=leading, zero.form=zero.form, na.form=na.form)
+
+  } else if(fmt=="engabb"){
+
+    r <- .format.engabb(x, digits=digits, leading=leading, zero.form=zero.form, na.form=na.form)
 
   } else if(fmt=="e"){
     r <- formatC(x, digits = digits, width = width, format = "e",
@@ -4001,7 +4279,7 @@ Format.default <- function(x, digits = NULL, sci = getOption("scipen")
 }
 
 
-.fmt_num <- function(digits = getOption("digits"))
+.fmt_num <- function(digits = getOption("digfix", 3))
   getOption("fmt.num", structure(list(digits=digits,
                                       big.mark=Sys.localeconv()["thousands_sep"]), class="fmt"))
 
@@ -4035,10 +4313,10 @@ MaxDigits <- function(x){
 
 
 Recycle <- function(...){
-  lgp <- list(...)
-  maxdim <- max(unlist(lapply(lgp, length)))
+  lst <- list(...)
+  maxdim <- max(unlist(lapply(lst, length)))
   # recycle all params to maxdim
-  res <- lapply(lgp, rep, length.out=maxdim)
+  res <- lapply(lst, rep, length.out=maxdim)
   attr(res, "maxdim") <- maxdim
 
   return(res)
@@ -4386,292 +4664,306 @@ SampleTwins <- function (x, stratanames = NULL, twins,
 
 
 
-Conf <-  function(x, ref = NULL, pos = NULL, na.rm = TRUE, ...) {
+# Conf <-  function(x, ref = NULL, pos = NULL, na.rm = TRUE, ...) {
+#
+#   .Conf.table <- function(x, pos = NULL, ...) {
+#
+#     CollapseConfTab <- function(x, pos = NULL, ...) {
+#
+#       if(nrow(x) > 2) {
+#         names(attr(x, "dimnames")) <- c("pred", "obs")
+#         x <- CollapseTable(x, obs=c("neg", pos)[(rownames(x)==pos)+1],
+#                            pred=c("neg", pos)[(rownames(x)==pos)+1])
+#       }
+#
+#       # order confusion table so
+#       # that the positive class is the first and the others keep their position
+#       ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
+#       # the columnnames must be the same as the rownames
+#       x <- as.table(x[ord, ord])
+#       return(x)
+#     }
+#
+#     p <- (d <- dim(x))[1L]
+#     if(!is.numeric(x) || length(d) != 2L || p != d[2L]) # allow nxn!  || p != 2L)
+#       stop("'x' is not a nxn numeric matrix")
+#
+#     # observed in columns, predictions in rows
+#     if(!identical(rownames(x), colnames(x)))
+#       stop("rownames(x) and colnames(x) must be identical")
+#
+#     if(is.null(pos)) pos <- rownames(x)[1]
+#     if(nrow(x)!=2) {
+#       # ignore pos for nxn tables, pos makes only sense for sensitivity
+#       # and that is not defined for n-dim tables
+#       pos <- NULL
+#
+#     } else {
+#       # order 2x2-confusion table so that the positive class
+#       # is the first and the others keep their position
+#       ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
+#       # the columnnames must be the same as the rownames
+#       x <- as.table(x[ord, ord])
+#     }
+#
+#     # overall statistics first
+#     res <- list(
+#       table   = x,
+#       pos     = pos,
+#       diag    = sum(diag(x)),
+#       n       = sum(x)
+#     )
+#     res <- c(res,
+#              acc     = BinomCI(x=res$diag, n=res$n),
+#              sapply(binom.test(x=res$diag, n=res$n,
+#                                p=max(apply(x, 2, sum) / res$n),
+#                                alternative = "greater")[c("null.value", "p.value")], unname),
+#              kappa   = CohenKappa(x),
+#              mcnemar = mcnemar.test(x)$p.value
+#     )
+#     names(res) <- c("table","pos","diag","n","acc","acc.lci","acc.uci",
+#                     "nri","acc.pval","kappa","mcnemar.pval")
+#
+#     # byclass
+#     lst <- list()
+#     for(i in 1:nrow(x)){
+#
+#       z <- CollapseConfTab(x=x, pos=rownames(x)[i])
+#       A <- z[1, 1]; B <- z[1, 2]; C <- z[2, 1]; D <- z[2, 2]
+#
+#       lst[[i]] <- rbind(
+#         sens    = A / (A + C),                 # sensitivity
+#         spec    = D / (B + D),                 # specificity
+#         ppv     = A / (A + B),                 # positive predicted value
+#         npv     = D / (C + D),                 # negative predicted value
+#         prev    = (A + C) / (A + B + C + D),   # prevalence
+#         detrate = A / (A + B + C + D),         # detection rate
+#         detprev = (A + C) / (A + B + C + D),   # detection prevalence
+#         bacc    = mean(c(A / (A + C), D / (B + D)) ),  # balanced accuracy
+#         fval    = Hmean(c(A / (A + B), A / (A + C))) # guetemass wollschlaeger s. 150
+#       )
+#     }
+#
+#     res <- c(res, byclass=list(do.call(cbind, lst)))
+#     colnames(res[["byclass"]]) <- rownames(x)
+#
+#     if(nrow(x)==2) res[["byclass"]] <- res[["byclass"]][, res[["pos"]], drop=FALSE]
+#
+#     class(res) <- "Conf"
+#
+#     return(res)
+#
+#   }
+#
+#
+#   if(!is.null(ref)){
+#
+#     if(na.rm) {
+#       idx <- complete.cases(data.frame(x, ref))
+#       x <- x[idx]
+#       ref <- ref[idx]
+#     }
+#
+#     Conf(table(pred=x, obs=ref), pos = pos, ...)
+#
+#   } else
+#     switch(class(x)
+#            , "table"= .Conf.table(x, pos=pos, ...)
+#            , "matrix"= Conf(as.table(x), pos=pos, ...)
+#            , "rpart" = Conf(x=attr(x,"ylevels")[x$frame$yval[x$where]], ref=attr(x,"ylevels")[x$y], pos=pos, ...)
+#            , "randomForest" = Conf(x=x$predicted, ref=x$y, pos=pos, ... )
+#            , "svm" = Conf(x=predict(x), ref=model.frame(x)[,1], pos=pos, ... )
+#            , "multinom" = {
+#                 if(is.null(x$model)) stop("x does not contain model. Run multinom with argument model=TRUE!")
+#                 # attention: this will not handle correctly responses defined as dummy codes
+#                 # adapt for that!!  ************************************************************
+#                 # resp <- x$response[,1]
+#                 Conf(x=predict(x, type="class"), ref=model.extract(x$model, "response"), pos=pos, ... )
+#            }
+#            , "glm" = {
+#              cutoff <- 0.5
+#              resp <- factor(model.extract(x$model, "response"))
+#              pred <- levels(resp)[(predict(x, type="response") > cutoff) + 1]
+#              Conf(x = pred, ref = resp, pos=pos, ...)
+#            }
+#            , "regr" = {
+#              class(x) <- class(x)[class(x) != "regr"]
+#              Conf(x, pos=pos, ...)
+#            }
+#            , "lda" = Conf(predict(x)$class, model.response(model.frame(x)))
+#            , "qda" = Conf(predict(x)$class, model.response(model.frame(x)))
+#     )
+# }
+#
 
-  .Conf.table <- function(x, pos = NULL, ...) {
 
-    CollapseConfTab <- function(x, pos = NULL, ...) {
 
-      if(nrow(x) > 2) {
-        names(attr(x, "dimnames")) <- c("pred", "obs")
-        x <- CollapseTable(x, obs=c("neg", pos)[(rownames(x)==pos)+1],
-                           pred=c("neg", pos)[(rownames(x)==pos)+1])
-      }
+Conf <- function(x, ...) UseMethod("Conf")
 
-      # order confusion table so
-      # that the positive class is the first and the others keep their position
-      ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
-      # the columnnames must be the same as the rownames
-      x <- as.table(x[ord, ord])
-      return(x)
+
+Conf.table <- function(x, pos = NULL, ...) {
+
+  CollapseConfTab <- function(x, pos = NULL, ...) {
+
+    if(nrow(x) > 2) {
+      names(attr(x, "dimnames")) <- c("pred", "obs")
+      x <- CollapseTable(x, obs=c("neg", pos)[(rownames(x)==pos)+1],
+                         pred=c("neg", pos)[(rownames(x)==pos)+1])
     }
 
-    p <- (d <- dim(x))[1L]
-    if(!is.numeric(x) || length(d) != 2L || p != d[2L]) # allow nxn!  || p != 2L)
-      stop("'x' is not a nxn numeric matrix")
-
-    # observed in columns, predictions in rows
-    if(!identical(rownames(x), colnames(x)))
-      stop("rownames(x) and colnames(x) must be identical")
-
-    if(is.null(pos)) pos <- rownames(x)[1]
-    if(nrow(x)!=2) {
-      # ignore pos for nxn tables, pos makes only sense for sensitivity
-      # and that is not defined for n-dim tables
-      pos <- NULL
-
-    } else {
-      # order 2x2-confusion table so that the positive class
-      # is the first and the others keep their position
-      ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
-      # the columnnames must be the same as the rownames
-      x <- as.table(x[ord, ord])
-    }
-
-    # overall statistics first
-    res <- list(
-      table   = x,
-      pos     = pos,
-      diag    = sum(diag(x)),
-      n       = sum(x)
-    )
-    res <- c(res,
-             acc     = BinomCI(x=res$diag, n=res$n),
-             sapply(binom.test(x=res$diag, n=res$n,
-                               p=max(apply(x, 2, sum) / res$n),
-                               alternative = "greater")[c("null.value", "p.value")], unname),
-             kappa   = CohenKappa(x),
-             mcnemar = mcnemar.test(x)$p.value
-    )
-    names(res) <- c("table","pos","diag","n","acc","acc.lci","acc.uci",
-                    "nri","acc.pval","kappa","mcnemar.pval")
-
-    # byclass
-    lst <- list()
-    for(i in 1:nrow(x)){
-
-      z <- CollapseConfTab(x=x, pos=rownames(x)[i])
-      A <- z[1, 1]; B <- z[1, 2]; C <- z[2, 1]; D <- z[2, 2]
-
-      lst[[i]] <- rbind(
-        sens    = A / (A + C),                 # sensitivity
-        spec    = D / (B + D),                 # specificity
-        ppv     = A / (A + B),                 # positive predicted value
-        npv     = D / (C + D),                 # negative predicted value
-        prev    = (A + C) / (A + B + C + D),   # prevalence
-        detrate = A / (A + B + C + D),         # detection rate
-        detprev = (A + C) / (A + B + C + D),   # detection prevalence
-        bacc    = mean(c(A / (A + C), D / (B + D)) ),  # balanced accuracy
-        fval    = Hmean(c(A / (A + B), A / (A + C))) # guetemass wollschlaeger s. 150
-      )
-    }
-
-    res <- c(res, byclass=list(do.call(cbind, lst)))
-    colnames(res[["byclass"]]) <- rownames(x)
-
-    if(nrow(x)==2) res[["byclass"]] <- res[["byclass"]][, res[["pos"]], drop=FALSE]
-
-    class(res) <- "Conf"
-
-    return(res)
-
+    # order confusion table so
+    # that the positive class is the first and the others keep their position
+    ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
+    # the columnnames must be the same as the rownames
+    x <- as.table(x[ord, ord])
+    return(x)
   }
 
+  p <- (d <- dim(x))[1L]
+  if(!is.numeric(x) || length(d) != 2L || p != d[2L]) # allow nxn!  || p != 2L)
+    stop("'x' is not a nxn numeric matrix")
 
-  if(!is.null(ref)){
+  # observed in columns, predictions in rows
+  if(!identical(rownames(x), colnames(x)))
+    stop("rownames(x) and colnames(x) must be identical")
 
-    if(na.rm) {
-      idx <- complete.cases(data.frame(x, ref))
-      x <- x[idx]
-      ref <- ref[idx]
-    }
+  if(is.null(pos)) pos <- rownames(x)[1]
+  if(nrow(x)!=2) {
+    # ignore pos for nxn tables, pos makes only sense for sensitivity
+    # and that is not defined for n-dim tables
+    pos <- NULL
 
-    Conf(table(pred=x, obs=ref), pos = pos, ...)
+  } else {
+    # order 2x2-confusion table so
+    # that the positive class is the first and the others keep their position
+    ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
+    # the columnnames must be the same as the rownames
+    x <- as.table(x[ord, ord])
+  }
 
-  } else
-    switch(class(x)
-           , "table"= .Conf.table(x, pos=pos, ...)
-           , "matrix"= Conf(as.table(x), pos=pos, ...)
-           , "rpart" = Conf(x=attr(x,"ylevels")[x$frame$yval[x$where]], ref=attr(x,"ylevels")[x$y], pos=pos, ...)
-           , "randomForest" = Conf(x=x$predicted, ref=x$y, pos=pos, ... )
-           , "svm" = Conf(x=predict(x), ref=model.frame(x)[,1], pos=pos, ... )
-           , "multinom" = {
-                if(is.null(x$model)) stop("x does not contain model. Run multinom with argument model=TRUE!")
-                # attention: this will not handle correctly responses defined as dummy codes
-                # adapt for that!!  ************************************************************
-                # resp <- x$response[,1]
-                Conf(x=predict(x, type="class"), ref=model.extract(x$model, "response"), pos=pos, ... )
-           }
-           , "glm" = {
-             cutoff <- 0.5
-             resp <- factor(model.extract(x$model, "response"))
-             pred <- levels(resp)[(predict(x, type="response") > cutoff) + 1]
-             Conf(x = pred, ref = resp, pos=pos, ...)
-           }
-           , "regr" = {
-             class(x) <- class(x)[class(x) != "regr"]
-             Conf(x, pos=pos, ...)
-           }
-           , "lda" = Conf(predict(x)$class, model.response(model.frame(x)))
-           , "qda" = Conf(predict(x)$class, model.response(model.frame(x)))
+  # overall statistics first
+  res <- list(
+    table   = x,
+    pos     = pos,
+    diag    = sum(diag(x)),
+    n       = sum(x)
+  )
+  res <- c(res,
+           acc     = BinomCI(x=res$diag, n=res$n),
+           sapply(binom.test(x=res$diag, n=res$n,
+                             p=max(apply(x, 2, sum) / res$n),
+                             alternative = "greater")[c("null.value", "p.value")], unname),
+           kappa   = CohenKappa(x),
+           mcnemar = mcnemar.test(x)$p.value
+  )
+  names(res) <- c("table","pos","diag","n","acc","acc.lci","acc.uci",
+                  "nri","acc.pval","kappa","mcnemar.pval")
+
+  # byclass
+  lst <- list()
+  for(i in 1:nrow(x)){
+
+    z <- CollapseConfTab(x=x, pos=rownames(x)[i])
+    A <- z[1, 1]; B <- z[1, 2]; C <- z[2, 1]; D <- z[2, 2]
+
+    lst[[i]] <- rbind(
+      sens    = A / (A + C),                 # sensitivity
+      spec    = D / (B + D),                 # specificity
+      ppv     = A / (A + B),                 # positive predicted value
+      npv     = D / (C + D),                 # negative predicted value
+      prev    = (A + C) / (A + B + C + D),   # prevalence
+      detrate = A / (A + B + C + D),         # detection rate
+      detprev = (A + C) / (A + B + C + D),   # detection prevalence
+      bacc    = mean(c(A / (A + C), D / (B + D)) ),  # balanced accuracy
+      fval    = Hmean(c(A / (A + B), A / (A + C))) # guetemass wollschlaeger s. 150
     )
+  }
+
+  res <- c(res, byclass=list(do.call(cbind, lst)))
+  colnames(res[["byclass"]]) <- rownames(x)
+
+  if(nrow(x)==2) res[["byclass"]] <- res[["byclass"]][, res[["pos"]], drop=FALSE]
+
+  class(res) <- "Conf"
+
+  return(res)
+
+}
+
+
+Conf.default <-  function(x, ref, pos = NULL, na.rm = TRUE, ...) {
+  if(na.rm) {
+    idx <- complete.cases(data.frame(x, ref))
+    x <- x[idx]
+    ref <- ref[idx]
+  }
+  Conf.table(table(pred=x, obs=ref), pos = pos, ...)
+}
+
+Conf.matrix <- function(x, pos = NULL, ...) {
+  Conf.table(as.table(x), pos=pos, ...)
+}
+
+
+# the confusion interface for rpart
+Conf.rpart <- function(x, ...){
+  # y <- attr(x, "ylevels")
+  Conf(x=attr(x,"ylevels")[x$frame$yval[x$where]],
+       ref=attr(x,"ylevels")[x$y], ...)
+}
+
+Conf.multinom <- function(x, ...){
+  if(is.null(x$model)) stop("x does not contain model. Run multinom with argument model=TRUE!")
+  resp <- model.extract(x$model, "response")
+
+  # attention: this will not handle correctly responses defined as dummy codes
+  # adapt for that!!  ************************************************************
+  # resp <- x$response[,1]
+
+  pred <- predict(x, type="class")
+  Conf(x=pred, resp, ... )
+}
+
+
+Conf.glm <- function(x, cutoff = 0.5, ...){
+  resp <- model.extract(x$model, "response")
+  if(is.factor(resp)){
+    pred <- levels(resp)[(predict(x, type="response")>cutoff)+1]
+  } else {
+    pred <- levels(factor(resp))[(predict(x, type="response")>cutoff)+1]
+  }
+  Conf(x=pred, ref=resp, ... )
+}
+
+
+Conf.randomForest <- function(x, ...){
+  Conf(x=x$predicted, ref=x$y, ... )
+}
+
+
+Conf.svm <- function(x, ...){
+  Conf(x=predict(x), ref=model.extract(model.frame(x), "response"), ... )
+}
+
+Conf.lda <- function(x, ...){
+
+  # extract response from the model
+
+  Conf(x=predict(x)$class,
+       ref=model.extract(model.frame(x), "response") , ... )
+}
+
+Conf.qda <- function(x, ...){
+  Conf(x=predict(x)$class,
+       ref=model.extract(model.frame(x), "response") , ... )
 }
 
 
 
-#
-#
-#
-#
-# Conf <- function(x, ...) UseMethod("Conf")
-#
-#
-# Conf.table <- function(x, pos = NULL, ...) {
-#
-#   CollapseConfTab <- function(x, pos = NULL, ...) {
-#
-#     if(nrow(x) > 2) {
-#       names(attr(x, "dimnames")) <- c("pred", "obs")
-#       x <- CollapseTable(x, obs=c("neg", pos)[(rownames(x)==pos)+1],
-#                          pred=c("neg", pos)[(rownames(x)==pos)+1])
-#     }
-#
-#     # order confusion table so
-#     # that the positive class is the first and the others keep their position
-#     ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
-#     # the columnnames must be the same as the rownames
-#     x <- as.table(x[ord, ord])
-#     return(x)
-#   }
-#
-#   p <- (d <- dim(x))[1L]
-#   if(!is.numeric(x) || length(d) != 2L || p != d[2L]) # allow nxn!  || p != 2L)
-#     stop("'x' is not a nxn numeric matrix")
-#
-#   # observed in columns, predictions in rows
-#   if(!identical(rownames(x), colnames(x)))
-#     stop("rownames(x) and colnames(x) must be identical")
-#
-#   if(is.null(pos)) pos <- rownames(x)[1]
-#   if(nrow(x)!=2) {
-#     # ignore pos for nxn tables, pos makes only sense for sensitivity
-#     # and that is not defined for n-dim tables
-#     pos <- NULL
-#
-#   } else {
-#     # order 2x2-confusion table so
-#     # that the positive class is the first and the others keep their position
-#     ord <- c(pos, rownames(x)[-grep(pos, rownames(x))])
-#     # the columnnames must be the same as the rownames
-#     x <- as.table(x[ord, ord])
-#   }
-#
-#   # overall statistics first
-#   res <- list(
-#     table   = x,
-#     pos     = pos,
-#     diag    = sum(diag(x)),
-#     n       = sum(x)
-#   )
-#   res <- c(res,
-#            acc     = BinomCI(x=res$diag, n=res$n),
-#            sapply(binom.test(x=res$diag, n=res$n,
-#                              p=max(apply(x, 2, sum) / res$n),
-#                              alternative = "greater")[c("null.value", "p.value")], unname),
-#            kappa   = CohenKappa(x),
-#            mcnemar = mcnemar.test(x)$p.value
-#   )
-#   names(res) <- c("table","pos","diag","n","acc","acc.lci","acc.uci",
-#                   "nri","acc.pval","kappa","mcnemar.pval")
-#
-#   # byclass
-#   lst <- list()
-#   for(i in 1:nrow(x)){
-#
-#     z <- CollapseConfTab(x=x, pos=rownames(x)[i])
-#     A <- z[1, 1]; B <- z[1, 2]; C <- z[2, 1]; D <- z[2, 2]
-#
-#     lst[[i]] <- rbind(
-#       sens    = A / (A + C),                 # sensitivity
-#       spec    = D / (B + D),                 # specificity
-#       ppv     = A / (A + B),                 # positive predicted value
-#       npv     = D / (C + D),                 # negative predicted value
-#       prev    = (A + C) / (A + B + C + D),   # prevalence
-#       detrate = A / (A + B + C + D),         # detection rate
-#       detprev = (A + C) / (A + B + C + D),   # detection prevalence
-#       bacc    = mean(c(A / (A + C), D / (B + D)) ),  # balanced accuracy
-#       fval    = Hmean(c(A / (A + B), A / (A + C))) # guetemass wollschlaeger s. 150
-#     )
-#   }
-#
-#   res <- c(res, byclass=list(do.call(cbind, lst)))
-#   colnames(res[["byclass"]]) <- rownames(x)
-#
-#   if(nrow(x)==2) res[["byclass"]] <- res[["byclass"]][, res[["pos"]], drop=FALSE]
-#
-#   class(res) <- "Conf"
-#
-#   return(res)
-#
-# }
-#
-#
-# Conf.default <-  function(x, ref, pos = NULL, na.rm = TRUE, ...) {
-#
-#   if(na.rm) {
-#     idx <- complete.cases(data.frame(x, ref))
-#     x <- x[idx]
-#     ref <- ref[idx]
-#   }
-#   Conf.table(table(pred=x, obs=ref), pos = pos, ...)
-# }
-#
-# Conf.matrix <- function(x, pos = NULL, ...) {
-#   Conf.table(as.table(x), pos=pos, ...)
-# }
-#
-#
-# # the confusion interface for rpart
-# Conf.rpart <- function(x, ...){
-#   # y <- attr(x, "ylevels")
-#   Conf(x=attr(x, "ylevels")[x$frame$yval[x$where]], reference=attr(x, "ylevels")[x$y], ...)
-# }
-#
-# Conf.multinom <- function(x, ...){
-#   if(is.null(x$model)) stop("x does not contain model. Run multinom with argument model=TRUE!")
-#   resp <- model.extract(x$model, "response")
-#
-#   # attention: this will not handle correctly responses defined as dummy codes
-#   # adapt for that!!  ************************************************************
-#   # resp <- x$response[,1]
-#
-#   pred <- predict(x, type="class")
-#   Conf(x=pred, resp, ... )
-# }
-#
-#
-# Conf.glm <- function(x, cutoff = 0.5, ...){
-#   resp <- model.extract(x$model, "response")
-#   pred <- levels(resp)[(predict(x)>cutoff)+1]
-#   Conf(x=pred, reference=resp, ... )
-# }
-#
-#
-# Conf.randomForest <- function(x, ...){
-#   Conf(x=x$predicted, reference=x$y, ... )
-# }
-#
-#
-# Conf.svm <- function(x, ...){
-#   Conf(x=predict(x), reference=model.frame(x)[,1], ... )
-# }
-#
-#
-# Conf.regr <- function(x, ...){
-#   NextMethod()
-#   # Conf(x=Predict(x, type="class"), reference=x$response[,], ... )
-# }
-#
+Conf.regr <- function(x, ...){
+  NextMethod()
+  # Conf(x=Predict(x, type="class"), reference=x$response[,], ... )
+}
 
 
 
@@ -4681,7 +4973,7 @@ plot.Conf <- function(x, main="Confusion Matrix", ...){
 
 
 print.Conf <- function(x, digits = max(3, getOption("digits") - 3), ...) {
-  cat("Confusion Matrix and Statistics\n\n")
+  cat("\nConfusion Matrix and Statistics\n\n")
 
   names(attr(x$table, "dimnames")) <- c("Prediction","Reference")
   print(x$table, ...)
@@ -5377,7 +5669,7 @@ Rev.table <- function(x, margin, ...) {
 
   newdim <- rep("", length(dim(x)))
   newdim[margin] <- paste(dim(x), ":1", sep="")[margin]
-  z <- eval(parse(text=gettextf("x[%s]", paste(newdim, sep="", collapse=","))))
+  z <- eval(parse(text=gettextf("x[%s, drop = FALSE]", paste(newdim, sep="", collapse=","))))
   class(z) <- oldClass(x)
   return(z)
 
@@ -5459,6 +5751,19 @@ Untable.default <- function(x, dimnames=NULL, type = NULL, rownames = NULL, coln
 }
 
 
+AddClass  <- function(x, class, after=0) {
+  class(x) <- append(class(x), class, after = after)
+  x
+}
+
+
+RemoveClass  <- function(x, class) {
+  class(x) <- class(x)[class(x) %nin% class]
+  x
+}
+
+
+
 
 FixToTab <- function(txt, sep = " ", delim = "\t", trim = TRUE, header = TRUE){
 
@@ -5537,16 +5842,25 @@ SelectVarDlg <- function (x, ...) {
 }
 
 
-.writeCB <- function (dat, ...) {
+.ToClipboard <- function (x, ...) {
+
+  # This fails on Linux with
+  #
+  # * checking examples ... ERROR
+  # Running examples in 'DescTools-Ex.R' failed The error most likely occurred in:
+  #
+  #   > base::assign(".ptime", proc.time(), pos = "CheckExEnv") ### Name:
+  # > ToClipboard ### Title: Write Text to Clipboard ### Aliases:
+  # > ToClipboard
 
   sn <- Sys.info()["sysname"]
   if (sn == "Darwin") {
     file <- pipe("pbcopy")
-    cat(dat, file = file, ...)
+    cat(x, file = file, ...)
     close(file)
   }
   else if (sn == "Windows") {
-    cat(dat, file = "clipboard", ...)
+    cat(x, file = "clipboard", ...)
   }
   else {
     stop("Writing to the clipboard is not implemented for your system (",
@@ -5568,7 +5882,7 @@ SelectVarDlg.default <- function(x, useIndex = FALSE, ...){
     txt <- paste("c(", paste(xsel, collapse=","),")", sep="")
 
     # utils::writeClipboard(txt)
-    .writeCB(txt)
+    .ToClipboard(txt)
     options(op)
 
     invisible(txt)
@@ -5580,7 +5894,7 @@ SelectVarDlg.factor <- function(x, ...) { SelectVarDlg.default( x = levels(x), .
 SelectVarDlg.data.frame <- function(x, ...) {
   txt <- paste( deparse(substitute(x)), "[,", SelectVarDlg.default( x = colnames(x), ...), "]", sep="", collapse="")
 #  utils::writeClipboard(txt)
-  .writeCB(txt)
+  .ToClipboard(txt)
 
   invisible(txt)
 }
@@ -5612,7 +5926,7 @@ ImportDlg <- function(fmt=1) {
   rcmd <- gsub("%fname%", fname, gsub("%fxt%", fxt, gsub( "%path%", path, fmt)))
 
   # utils::writeClipboard(rcmd)
-  .writeCB(rcmd)
+  .ToClipboard(rcmd)
 
   options(op)
 
@@ -6935,7 +7249,10 @@ BoxedText <- function(x, y = NULL, labels = seq_along(x), adj = NULL,
     text(x=x, y=y, labels=labels, adj=adj, pos=pos, offset=offset, vfont=vfont, cex=cex, col=txt.col, font=font, srt=srt)
   }
 
-  if(is.null(adj)) adj <- c(0.5, 0.5)
+  if(is.null(adj))
+    adj <- c(0.5, 0.5)
+  else
+    adj <- rep(adj, length.out=2)
   if (is.null(pos)) pos <- NA
   if (is.null(vfont)) vfont <- NA
   if (is.null(txt.col)) txt.col <- par("fg")
@@ -6946,17 +7263,18 @@ BoxedText <- function(x, y = NULL, labels = seq_along(x), adj = NULL,
   #   which parameter has the highest dimension
   # attention: we cannot repeat NULLs but we can repeat NAs, so we swap NULLs to NAs and
   #            reset them to NULL above
-  lst <- list(x=x, y=y, labels=labels, adj=adj, pos=pos, offset=offset, vfont=vfont,
+  lst <- list(x=x, y=y, labels=labels, pos=pos, offset=offset, vfont=vfont,
      cex=cex, txt.col=txt.col, font=font, srt=srt, xpad=xpad, ypad=ypad,
      density=density, angle=angle, col=col, border=border, lty=lty, lwd=lwd)
   maxdim <- max(unlist(lapply(lst, length)))
 
   # recycle all params to maxdim
-  lgp <- lapply( lst, rep, length.out=maxdim )
+  lgp <- lapply(lst, rep, length.out=maxdim )
+  lgp$adj <- as.list(data.frame(replicate(adj, n=maxdim)))
 
   for( i in 1:maxdim){
     .BoxedText(
-      x=lgp$x[i], y=lgp$y[i], labels=lgp$labels[i], adj=lgp$adj[i], pos=lgp$pos[i], offset=lgp$offset[i]
+      x=lgp$x[i], y=lgp$y[i], labels=lgp$labels[i], adj=lgp$adj[[i]], pos=lgp$pos[i], offset=lgp$offset[i]
       , vfont=lgp$vfont[i], cex=lgp$cex[i], txt.col=lgp$txt.col[i], font=lgp$font[i]
       , srt=lgp$srt[i], xpad=lgp$xpad[i], ypad=lgp$ypad[i], density=lgp$density[i]
       , angle=lgp$angle[i], col=lgp$col[i], border=lgp$border[i], lty=lgp$lty[i], lwd=lgp$lwd[i] )
@@ -7832,6 +8150,7 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
                        , args.curve = NA           # list( ...), NA for no dcurve
                        , args.boxplot = NULL       # list( pars=list(boxwex=0.5), ...), NA for no boxplot
                        , args.ecdf = NULL          # list( col="#8296C4FF", ...), NA for no ecdf
+                       , args.curve.ecdf = NA      # list( ...), NA for no dcurve
                        , heights = NULL            # heights (hist, boxplot, ecdf) used by layout
                        , pdist = NULL              # distances of the plots, default = 0
                        , na.rm = FALSE, cex.axis = NULL, cex.main = NULL, mar = NULL) {
@@ -7852,6 +8171,7 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
   add.dens <- !identical(args.dens, NA)
   add.ecdf <- !identical(args.ecdf, NA)
   add.dcurve <- !identical(args.curve, NA)
+  add.pcurve <- !identical(args.curve.ecdf, NA)
 
   # preset heights
   if(is.null(heights)){
@@ -7891,7 +8211,7 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
   }
 
   # wait for omitting NAs until all arguments are evaluated, e.g. main...
-  if(na.rm) x <- na.omit(x)
+  if(na.rm) x <- x[!is.na(x)]
 
   # handle open list of arguments: args.legend in barplot is implemented this way...
   # we need histogram anyway to define xlim
@@ -7908,7 +8228,7 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
   args.histplot <- args.hist1[!names(args.hist1) %in% c("x", "breaks", "include.lowest", "right", "nclass")]
 
   if(is.null(do.hist))
-    do.hist <- !(isTRUE(all.equal(x, round(x), tol = .Machine$double.eps^0.5)) && length(unique(x)) < 13)
+    do.hist <- !(isTRUE(all.equal(x, round(x), tol = sqrt(.Machine$double.eps))) && length(unique(x)) < 13)
 
   if (do.hist) {
     # calculate max ylim for density curve, provided there should be one...
@@ -7917,7 +8237,7 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
     # plot density
     if (add.dens) {
       # preset default values
-      args.dens1 <- list(x = x,
+      args.dens1 <- list(x = x, bw = (if(length(x) > 1000){"nrd0"} else {"SJ"}),
                          col = getOption("col1", hred), lwd = 2, lty = "solid")
       if (!is.null(args.dens)) {
         args.dens1[names(args.dens)] <- args.dens
@@ -7988,9 +8308,13 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
     }
     plot(1, type="n", xlim=args.hist1$xlim, ylim=c(0,1)+.5, xlab="", ylab="", axes=FALSE)
     grid(ny=NA)
-    ci <- MeanCI(x, na.rm=TRUE)
-    rect(xleft = ci[2], ybottom = 0.62, xright = ci[3], ytop = 1.35,
-         col=args.boxplot1$col.meanci, border=NA)
+    if(length(x)>1){
+      ci <- MeanCI(x, na.rm=TRUE)
+      rect(xleft = ci[2], ybottom = 0.62, xright = ci[3], ytop = 1.35,
+           col=args.boxplot1$col.meanci, border=NA)
+    } else {
+      ci <- mean(x)
+    }
     args.boxplot1$add = TRUE
     DoCall("boxplot", args.boxplot1)
     points(x=ci[1], y=1, cex=2, col="grey65", pch=args.boxplot1$pch.mean, bg="white")
@@ -8005,13 +8329,12 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
 #                        xlab = xlab, yaxt = "n", ylab = "", verticals = TRUE,
 #                        do.points = FALSE, cex.axis = cex.axis)
     args.ecdf1 <- list(x = x, main = NA, breaks={if(length(x)>1000) 1000 else NULL}, ylim=c(0,1),
-                       xlim = args.hist1$xlim, col = getOption("col1", hblue), lwd = 2,
+                       xlim = args.hist1$xlim, col = getOption("col2", hblue), lwd = 2,
                        xlab = "", yaxt = "n", ylab = "", cex.axis = cex.axis,
                        frame.plot = FALSE)
     if (!is.null(args.ecdf)) {
       args.ecdf1[names(args.ecdf)] <- args.ecdf
     }
-
 
     DoCall("PlotECDF", args.ecdf1)
     #     DoCall("plot.ecdf", args.ecdf1)
@@ -8021,6 +8344,28 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
 #     abline(h = c(0.25, 0.5, 0.75), col = "grey", lty = "dotted")
 #     grid(ny = NA)
 #     points(x=range(x), y=c(0,1), col=args.ecdf1$col, pch=3, cex=2)
+
+
+    # plot special distribution ecdf curve
+    if (add.pcurve) {
+      # preset default values
+      args.curve.ecdf1 <- list(expr = parse(text = gettextf("pnorm(x, %s, %s)", mean(x), sd(x))),
+                               add = TRUE,
+                               n = 500, col = getOption("col3", hgreen), lwd = 2, lty = "solid")
+      if (!is.null(args.curve.ecdf)) {
+        args.curve.ecdf1[names(args.curve.ecdf)] <- args.curve.ecdf
+      }
+
+      if (is.character(args.curve.ecdf1$expr))
+        args.curve.ecdf1$expr <- parse(text=args.curve.ecdf1$expr)
+
+      # do.call("curve", args.curve1)
+      # this throws an error here:
+      # Error in eval(expr, envir, enclos) : could not find function "expr"
+      # so we roll back to do.call
+      do.call("curve", args.curve.ecdf1)
+
+    }
 
   }
 
@@ -8039,7 +8384,6 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
   layout(matrix(1))           # reset layout on exit
 
 }
-
 
 
 
@@ -8109,6 +8453,7 @@ PlotMultiDens.formula <- function (formula, data, subset, na.action, ...) {
 
 PlotMultiDens.default <- function( x, xlim = NULL, ylim = NULL
                                    , col = rainbow(length(x)), lty = "solid", lwd = 1
+                                   , fill = NA
                                    , xlab = "x", ylab = "density"
                                    # , type = c("line", "stack", "cond")
                                    , args.dens = NULL
@@ -8159,7 +8504,7 @@ PlotMultiDens.default <- function( x, xlim = NULL, ylim = NULL
 
   # recycle line attributes
   # which geom parameter has the highest dimension
-  l.par <- list(lty=lty, lwd=lwd, col=col)
+  l.par <- list(lty=lty, lwd=lwd, col=col, fill=fill)
   l.par <- lapply( l.par, rep, length.out = maxdim )
 
   if( missing("xlim") ) xlim <- range(pretty( unlist(lapply(l.dens, "[", "x")) ) )
@@ -8172,9 +8517,16 @@ PlotMultiDens.default <- function( x, xlim = NULL, ylim = NULL
 
 #   switch(match.arg(type,choices=c("line","stack","cond"))
 #     overlay = {
-              for(i in 1:length(l.dens))  {
-                lines( l.dens[[i]], col=l.par$col[i], lty=l.par$lty[i], lwd=l.par$lwd[i] )
-               }
+   if(identical(fill, NA)){
+      for(i in 1:length(l.dens))  {
+        lines( l.dens[[i]], col=l.par$col[i], lty=l.par$lty[i], lwd=l.par$lwd[i] )
+      }
+   } else {
+     for(i in 1:length(l.dens))  {
+       polygon(x = l.dens[[i]]$x, y=l.dens[[i]]$y,
+               col = l.par$fill[i], border=l.par$col[i], lty=l.par$lty[i], lwd=l.par$lwd[i])
+     }
+   }
 # },
 #     stack =   { },
 #     cond =    {
@@ -8215,6 +8567,8 @@ PlotMarDens <- function( x, y, grp=1, xlim = NULL, ylim = NULL
   , args.dens = NULL, ...){
 
   usr <- par("usr");  on.exit( par(usr) )
+
+  opt <- options(stamp=NULL)
 
   mardens <- match.arg(arg = mardens, choices = c("all", "x", "y"))
 
@@ -8299,6 +8653,10 @@ PlotMarDens <- function( x, y, grp=1, xlim = NULL, ylim = NULL
 
   }
   title(main=main, outer=TRUE)
+
+  options(opt)
+  if(!is.null(getOption("stamp")))
+    Stamp()
 
 }
 
@@ -8766,7 +9124,7 @@ PlotLinesA <- function(x, y, col=1:5, lty=1, lwd=1, lend = par("lend"), xlab = N
   # PlotLinesA(m, col=rev(c(PalHelsana(), "grey")), main="Dosw ~ age", lwd=3, ylim=c(1,10))
 
 
-  last <- Sort(data.frame(t(tail(as.matrix(x), 1))))
+  last <- Sort(data.frame(t(tail(apply(as.matrix(x), 2, LOCF), 1))))
   last <- setNames(last[,], nm = rownames(last))
 
   if(is.null(mar)) Mar(NULL, NULL, NULL, 10)  # this would be nice, but there's no plot so far... max(strwidth(names(last))) * 1.2
@@ -8891,6 +9249,8 @@ PlotFun <- function(FUN, args=NULL, from=NULL, to=NULL, by=NULL, xlim=NULL,
   }
 
   lines(y=y, x=x, type=type, col=col, lty=lty, lwd=lwd, pch=pch)
+
+  invisible(list(x=x, y=y))
 
 }
 
@@ -9797,7 +10157,7 @@ PlotCirc <- function(tab, acol = rainbow(sum(dim(tab))), aborder = "darkgrey",
 ## plots: PlotWeb ====
 
 
-PlotWeb <- function(m, col=c(hred, hblue), lty=par("lty"), args.legend=NULL, pch=21, pt.cex=2,
+PlotWeb <- function(m, col=c(hred, hblue), lty=par("lty"), lwd = NULL, args.legend=NULL, pch=21, pt.cex=2,
                     pt.col="black", pt.bg="darkgrey", cex.lab = 1.0,
                     las = 1, adj = NULL, dist = 0.5, ... ){
 
@@ -9851,14 +10211,23 @@ PlotWeb <- function(m, col=c(hred, hblue), lty=par("lty"), args.legend=NULL, pch
                     from.x=xy[[1]][i[,2]], to.x=xy[[1]][i[,1]],
                     from.y=xy[[2]][i[,2]], to.y=xy[[2]][i[,1]])
 
-  d.m$d.sc <- DescTools::LinScale(abs(d.m$d), newlow=a, newhigh=b )
+  if(is.null(lwd))
+    d.m$d.sc <- DescTools::LinScale(abs(d.m$d), newlow=a, newhigh=b )
+  else
+    d.m$d.sc <- lwd
+
   col <- rep(col, length.out=2)
+
   segments( x0=d.m$from.x, y0=d.m$from.y, x1 = d.m$to.x, y1 = d.m$to.y,
-         col = col[((sign(d.m$d)+1)/2)+1], lty = lty, lwd = d.m$d.sc, lend= 1)
+         col = col[((sign(d.m$d)+1)/2)+1], lty = lty, lwd=d.m$d.sc, lend= 1)
   points( xy, cex=pt.cex, pch=pch, col=pt.col, bg=pt.bg )
 
-  args.legend1 <- list( x="bottomright", inset=-0.05, legend=round(c(-min(abs(d.m$d), na.rm=TRUE), max(abs(d.m$d), na.rm=TRUE)), 3)
-                        , lwd = c(a,b), col=col, bg="white", cex=0.8)
+  # find min/max negative value and min/max positive value
+  i <- c(which.min(d.m$d), which.max(ifelse(d.m$d<=0, d.m$d, NA)), which.min(ifelse(d.m$d>0, d.m$d, NA)), which.max(d.m$d))
+
+  args.legend1 <- list( x="bottomright", inset=-0.05,
+                        legend=Format(d.m$d[i], digits=3, leading="drop"), lwd = d.m$d.sc[i],
+                        col=rep(col, each=2), bg="white", cex=0.8)
   if ( !is.null(args.legend) ) { args.legend1[names(args.legend)] <- args.legend }
   add.legend <- TRUE
   if(!is.null(args.legend)) if(all(is.na(args.legend))) {add.legend <- FALSE}
@@ -10455,8 +10824,12 @@ TOne <- function(x, grp = NA, add.length=TRUE,
   nfmt <- .fmt_num()
   #    fmt <- structure(list(digits=2, bigmark="'"), class="fmt")
 
-  if(is.null(vnames))
+  if(is.null(vnames)){
     vnames <- colnames(x)
+    default_vnames <- TRUE
+  } else {
+    default_vnames <- TRUE
+  }
 
   # creates the table one in a study
   if(is.null(FUN)){
@@ -10473,7 +10846,8 @@ TOne <- function(x, grp = NA, add.length=TRUE,
   num_row <- function(x, g, total=TRUE, test="kruskal.test", vname = deparse(substitute(x))){
     # wie soll die zeile aussehen fuer numerische Daten
     p <- eval(parse(text=gettextf("%s(x ~ g)", test)))
-    cbind(var=vname, total = num_fun(x), rbind(tapply(x, g, num_fun)), paste(Format(p$p.value, fmt="*"), getOption("footnote1", "'")))
+    cbind(var=vname, total = num_fun(x), rbind(tapply(x, g, num_fun)),
+          paste(Format(p$p.value, fmt="*"), getOption("footnote1", "'")))
   }
 
 
@@ -10547,7 +10921,13 @@ TOne <- function(x, grp = NA, add.length=TRUE,
       lst[[i]] <- cat_mat(x[,i], grp, vname=vnames[i])
 
     } else if(ctype[i] == "dich") {
-      lst[[i]] <- dich_mat(x[,i], grp, vname=gettextf("%s (= %s)", vnames[i], levels(factor(x[,i]))[2]))
+      if(default_vnames){
+        # only declare the ref level on default_vnames
+        lst[[i]] <- dich_mat(x[,i], grp, vname=gettextf("%s (= %s)", vnames[i], levels(factor(x[,i]))[2]))
+      } else {
+        # the user is expected to define ref level, ist he wants one
+        lst[[i]] <- dich_mat(x[,i], grp, vname=gettextf("%s", vnames[i]))
+      }
 
     } else {
       lst[[i]] <- rbind(c(colnames(x)[i], rep(NA, nlevels(grp) + 2)))
@@ -10604,6 +10984,12 @@ Flags <- function(x){
 PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = NULL,
                         off = 0.02, mar = NULL, xlab = NULL, ylab = NULL, cex=par("cex"), las=2, ...) {
 
+  if(length(dim(x))>2){
+    warning("PlotMosaic is restricted to max. 2 dimensions")
+    invisible()
+  }
+
+
   if (is.null(xlab))
     xlab <- Coalesce(names(dimnames(x)[2]), "x")
   if (is.null(ylab))
@@ -10611,6 +10997,7 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
   if (is.null(mar)){
     # ymar <- 5.1
     # xmar <- 6.1
+
     inches_to_lines <- (par("mar") / par("mai") )[1]  # 5
     lab.width <- max(strwidth(colnames(x), units="inches")) * inches_to_lines
     xmar <- lab.width + 1
@@ -10619,6 +11006,7 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
 
     mar <- c(ifelse(is.na(xlab), 2.1, 5.1), ifelse(is.na(ylab), ymar, ymar+2),
              ifelse(is.na(main), xmar, xmar+4), 1.6)
+
     # par(mai = c(par("mai")[1], max(par("mai")[2], strwidth(levels(grp), "inch")) +
     #               0.5, par("mai")[3], par("mai")[4]))
 
@@ -10632,65 +11020,116 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
   oldpar <- par(xpd = TRUE)
   on.exit(par(oldpar))
 
-  if (horiz) {
+
+  if(any(dim(x)==1)) {
 
     if (is.null(cols))
-      cols <- colorRampPalette(c(col1, "white", col2), space = "rgb")(ncol(x))
+      cols <- colorRampPalette(c(col1, "white", col2), space = "rgb")(length(x))
 
-    ptab <- Rev(prop.table(x, 1), margin = 1)
-    ptab <- ptab * (1 - (ncol(ptab) - 1) * off)
-    pxt <- Rev(prop.table(margin.table(x, 1)) * (1 - (nrow(x) - 1) * off))
 
-    y_from <- c(0, cumsum(pxt) + (1:(nrow(x))) * off)[-nrow(x) - 1]
-    y_to <- cumsum(pxt) + (0:(nrow(x) - 1)) * off
+    if(horiz){
 
-    x_from <- t((apply(cbind(0, ptab), 1, cumsum) + (0:ncol(ptab)) * off)[-(ncol(ptab) + 1), ])
-    x_to <- t((apply(ptab, 1, cumsum) + (0:(ncol(ptab) - 1) * off))[-(ncol(ptab) + 1), ])
+      ptab <- prop.table(as.vector(x))
+      pxt <- ptab * (1 - (length(ptab) - 1) * off)
 
-    for (j in 1:nrow(ptab)) {
-      rect(xleft = x_from[j,], ybottom = y_from[j],
-           xright = x_to[j,], ytop = y_to[j], col = cols)
+      y_from <- c(0, cumsum(pxt) + (1:(length(ptab))) * off)[-length(ptab) - 1]
+      y_to <- cumsum(pxt) + (0:(length(ptab) - 1)) * off
+
+      if(nrow(x) > ncol(x))
+        x <- t(x)
+
+      x_from <- y_from
+      x_to <- y_to
+
+      y_from <- 0
+      y_to <- 1
+
+
+    } else {
+
+      ptab <- rev(prop.table(as.vector(x)))
+      pxt <- ptab * (1 - (length(ptab) - 1) * off)
+
+      y_from <- c(0, cumsum(pxt) + (1:(length(ptab))) * off)[-length(ptab) - 1]
+      y_to <- cumsum(pxt) + (0:(length(ptab) - 1)) * off
+
+
+      x_from <- 0
+      x_to <- 1
+
+      if(ncol(x) > nrow(x))
+        x <- t(x)
+
     }
 
-    txt_y <- apply(cbind(y_from, y_to), 1, mean)
-    txt_x <- apply(cbind(x_from[nrow(x_from),], x_to[nrow(x_from),]), 1, mean)
+    rect(xleft = x_from, ybottom = y_from, xright = x_to, ytop = y_to, col = cols)
 
-    # srt.x <- if (las > 1) 90  else 0
-    # srt.y <- if (las == 0 || las == 3) 90 else 0
-    #
-    # text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, adj = ifelse(srt.y==90, 0.5, 1), cex=cex, srt=srt.y)
-    # text(labels = colnames(x), x = txt_x, y = 1.04, adj = ifelse(srt.x==90, 0, 0.5), cex=cex, srt=srt.x)
+    txt_y <- apply(cbind(y_from, y_to), 1, mean)
+    txt_x <-  Midx(c(x_from, 1))
 
   } else {
 
-    if (is.null(cols))
-      cols <- colorRampPalette(c(col1, "white", col2), space = "rgb")(nrow(x))
+    if (horiz) {
 
-    ptab <- Rev(prop.table(x, 2), margin = 1)
-    ptab <- ptab * (1 - (nrow(ptab) - 1) * off)
-    pxt <- (prop.table(margin.table(x, 2)) * (1 - (ncol(x) - 1) * off))
+      if (is.null(cols))
+        cols <- colorRampPalette(c(col1, "white", col2), space = "rgb")(ncol(x))
 
-    x_from <- c(0, cumsum(pxt) + (1:(ncol(x))) * off)[-ncol(x) - 1]
-    x_to <- cumsum(pxt) + (0:(ncol(x) - 1)) * off
+      ptab <- Rev(prop.table(x, 1), margin = 1)
+      ptab <- ptab * (1 - (ncol(ptab) - 1) * off)
+      pxt <- Rev(prop.table(margin.table(x, 1)) * (1 - (nrow(x) - 1) * off))
 
-    y_from <- (apply(rbind(0, ptab), 2, cumsum) + (0:nrow(ptab)) *
+      y_from <- c(0, cumsum(pxt) + (1:(nrow(x))) * off)[-nrow(x) - 1]
+      y_to <- cumsum(pxt) + (0:(nrow(x) - 1)) * off
+
+      x_from <- t((apply(cbind(0, ptab), 1, cumsum) + (0:ncol(ptab)) * off)[-(ncol(ptab) + 1), ])
+      x_to <- t((apply(ptab, 1, cumsum) + (0:(ncol(ptab) - 1) * off))[-(ncol(ptab) + 1), ])
+
+      for (j in 1:nrow(ptab)) {
+        rect(xleft = x_from[j,], ybottom = y_from[j],
+             xright = x_to[j,], ytop = y_to[j], col = cols)
+      }
+
+      txt_y <- apply(cbind(y_from, y_to), 1, mean)
+      txt_x <- apply(cbind(x_from[nrow(x_from),], x_to[nrow(x_from),]), 1, mean)
+
+      # srt.x <- if (las > 1) 90  else 0
+      # srt.y <- if (las == 0 || las == 3) 90 else 0
+      #
+      # text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, adj = ifelse(srt.y==90, 0.5, 1), cex=cex, srt=srt.y)
+      # text(labels = colnames(x), x = txt_x, y = 1.04, adj = ifelse(srt.x==90, 0, 0.5), cex=cex, srt=srt.x)
+
+    } else {
+
+      if (is.null(cols))
+        cols <- colorRampPalette(c(col1, "white", col2), space = "rgb")(nrow(x))
+
+      ptab <- Rev(prop.table(x, 2), margin = 1)
+      ptab <- ptab * (1 - (nrow(ptab) - 1) * off)
+      pxt <- (prop.table(margin.table(x, 2)) * (1 - (ncol(x) - 1) * off))
+
+      x_from <- c(0, cumsum(pxt) + (1:(ncol(x))) * off)[-ncol(x) - 1]
+      x_to <- cumsum(pxt) + (0:(ncol(x) - 1)) * off
+
+      y_from <- (apply(rbind(0, ptab), 2, cumsum) + (0:nrow(ptab)) *
                  off)[-(nrow(ptab) + 1), ]
-    y_to <- (apply(ptab, 2, cumsum) + (0:(nrow(ptab) - 1) *
+      y_to <- (apply(ptab, 2, cumsum) + (0:(nrow(ptab) - 1) *
                                          off))[-(nrow(ptab) + 1), ]
-    for (j in 1:ncol(ptab)) {
-      rect(xleft = x_from[j], ybottom = y_from[, j], xright = x_to[j],
-           ytop = y_to[, j], col = cols)
+
+      for (j in 1:ncol(ptab)) {
+        rect(xleft = x_from[j], ybottom = y_from[, j], xright = x_to[j],
+             ytop = y_to[, j], col = cols)
+      }
+
+      txt_y <- apply(cbind(y_from[, 1], y_to[, 1]), 1, mean)
+      txt_x <- apply(cbind(x_from, x_to), 1, mean)
+
+      # srt.x <- if (las > 1) 90  else 0
+      # srt.y <- if (las == 0 || las == 3) 90 else 0
+      #
+      # text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, adj = ifelse(srt.y==90, 0.5, 1), cex=cex, srt=srt.y)
+      # text(labels = colnames(x), x = txt_x, y = 1.04, adj = ifelse(srt.x==90, 0, 0.5), cex=cex, srt=srt.x)
+
     }
-
-    txt_y <- apply(cbind(y_from[, 1], y_to[, 1]), 1, mean)
-    txt_x <- apply(cbind(x_from, x_to), 1, mean)
-
-    # srt.x <- if (las > 1) 90  else 0
-    # srt.y <- if (las == 0 || las == 3) 90 else 0
-    #
-    # text(labels = Rev(rownames(x)), y = txt_y, x = -0.04, adj = ifelse(srt.y==90, 0.5, 1), cex=cex, srt=srt.y)
-    # text(labels = colnames(x), x = txt_x, y = 1.04, adj = ifelse(srt.x==90, 0, 0.5), cex=cex, srt=srt.x)
-
   }
 
   srt.x <- if (las > 1) 90  else 0
@@ -10703,9 +11142,12 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
   if (!is.na(main)) {
     usr <- par("usr")
     plt <- par("plt")
-    ym <- usr[4] + diff(usr[3:4])/diff(plt[3:4])*(plt[3]) + 1.2 * strheight('m', cex=1.2, font=2)
+    ym <- usr[4] + diff(usr[3:4])/diff(plt[3:4])*(plt[3]) + (1.2 + is.na(xlab)*4) * strheight('m', cex=1.2, font=2)
+
     text(x=0.5, y=ym, labels = main, cex=1.2, font=2)
   }
+
+
   if (!is.na(xlab)) title(xlab = xlab, line = 1)
   if (!is.na(ylab)) title(ylab = ylab)
 
@@ -10721,6 +11163,8 @@ PlotMosaic <- function (x, main = deparse(substitute(x)), horiz = TRUE, cols = N
 
 ###
 
+# see also package Mosaic
+# modelVars extract predictor variables from a model
 
 ParseFormula <- function(formula, data=parent.frame(), drop = TRUE) {
 
@@ -10960,9 +11404,19 @@ ToWrd.default <- function(x, font=NULL, ..., wrd=getOption("lastWord")){
 }
 
 
-ToWrd.TOne <- function(x, font=NULL, main=NULL, align=NULL, autofit=TRUE, ..., wrd=getOption("lastWord")){
+ToWrd.TOne <- function(x, font=NULL, para=NULL, main=NULL, align=NULL,
+                       autofit=TRUE, ..., wrd=getOption("lastWord")){
 
   wTab <- ToWrd.table(x, main=NULL, font=font, align=align, autofit=autofit, wrd=wrd, ...)
+
+  if(!is.null(para)){
+    wTab$Select()
+    WrdParagraphFormat(wrd=wrd) <- para
+
+    # move out of table
+    wrd[["Selection"]]$EndOf(wdConst$wdTable)
+    wrd[["Selection"]]$MoveRight(wdConst$wdCharacter, 2, 0)
+  }
 
   if(is.null(font)) font <- list()
   if(is.null(font$size))
@@ -10977,7 +11431,7 @@ ToWrd.TOne <- function(x, font=NULL, main=NULL, align=NULL, autofit=TRUE, ..., w
 
   if(!is.null(main)){
     sel <- wrd$Selection()  # "Abbildung"
-    sel$InsertCaption(Label=wdConst$wdCaptionTable, Title=main)
+    sel$InsertCaption(Label=wdConst$wdCaptionTable, Title=paste(" - ", main, sep=""))
     sel$TypeParagraph()
 
   }
@@ -10994,20 +11448,6 @@ ToWrd.lm <- function(x, font=NULL, ..., wrd=getOption("lastWord")){
 }
 
 
-# ToWrd.character <- function(x, font=NULL, ..., wrd=getOption("lastWord")){
-#
-#   if(!is.null(font)){
-#     currfont <- WrdFont(wrd)
-#     WrdFont(wrd) <- font
-#     on.exit(WrdFont(wrd) <- currfont)
-#   }
-#
-#   wrd[["Selection"]]$TypeText(paste(x, collapse="\n"))
-#
-#   invisible()
-# }
-#
-#
 
 
 ToWrd.character <- function (x, font = NULL, para = NULL, style = NULL, ..., wrd = getOption("lastWord")) {
@@ -11037,66 +11477,213 @@ ToWrd.character <- function (x, font = NULL, para = NULL, style = NULL, ..., wrd
 WrdCaption <- function(x, index = 1, wrd = getOption("lastWord")){
   ToWrd.character(paste(x, "\n", sep=""),
                   style=eval(parse(text=gettextf("wdConst$wdStyleHeading%s", index))))
+  invisible()
 }
 
 
+ToWrd.PercTable <- function(x, font=NULL, main = NULL, ..., wrd = getOption("lastWord")){
+  ToWrd.ftable(x$ftab, font=font, main=main, ..., wrd=wrd)
+}
+
+
+ToWrd.data.frame <- function(x, font=NULL, main = NULL, ..., wrd = getOption("lastWord")){
+  x <- apply(x, 2, as.character)
+  ToWrd.table(x=x, font=font, main=main, ..., wrd=wrd)
+}
+
+
+ToWrd.matrix <- function(x, font=NULL, main = NULL, ..., wrd = getOption("lastWord")){
+  ToWrd.table(x=x, font=font, main=main, ..., wrd=wrd)
+}
 
 
 ToWrd.Freq <- function(x, font=NULL, main = NULL, ..., wrd = getOption("lastWord")){
 
   x[,c(3,5)] <- sapply(round(x[,c(3,5)], 3), Format, digits=3)
 
-  res <- ToWrd.table(x=x, main=main, font=font, wrd=wrd)
+  res <- ToWrd.data.frame(x=x, main=main, font=font, wrd=wrd)
 
   invisible(res)
 
 }
 
 
-ToWrd.ftable <- function(x, font=NULL, main = NULL, ..., wrd = getOption("lastWord")) {
-  x <- FixToTab(capture.output(x))
-  NextMethod()
+# ToWrd.ftable <- function(x, font=NULL, main = NULL, ..., wrd = getOption("lastWord")) {
+#   x <- FixToTab(capture.output(x))
+#   ToWrd.character(x, font=font, main=main, ..., wrd=wrd)
+# }
+
+
+ToWrd.ftable <- function (x, font = NULL, main = NULL, align=NULL, method = "compact", ..., wrd = getOption("lastWord")) {
+
+  # let R do all the complicated formatting stuff
+  # but we can't import a not exported function, so we provide an own copy of it
+
+  # so this is a verbatim copy of it
+  .format.ftable <- function (x, quote = TRUE, digits = getOption("digits"), method = c("non.compact",
+                                                                      "row.compact", "col.compact", "compact"), lsep = " | ", ...)
+  {
+    if (!inherits(x, "ftable"))
+      stop("'x' must be an \"ftable\" object")
+    charQuote <- function(s) if (quote && length(s))
+      paste0("\"", s, "\"")
+    else s
+    makeLabels <- function(lst) {
+      lens <- lengths(lst)
+      cplensU <- c(1, cumprod(lens))
+      cplensD <- rev(c(1, cumprod(rev(lens))))
+      y <- NULL
+      for (i in rev(seq_along(lst))) {
+        ind <- 1 + seq.int(from = 0, to = lens[i] - 1) *
+          cplensD[i + 1L]
+        tmp <- character(length = cplensD[i])
+        tmp[ind] <- charQuote(lst[[i]])
+        y <- cbind(rep(tmp, times = cplensU[i]), y)
+      }
+      y
+    }
+    makeNames <- function(x) {
+      nmx <- names(x)
+      if (is.null(nmx))
+        rep_len("", length(x))
+      else nmx
+    }
+    l.xrv <- length(xrv <- attr(x, "row.vars"))
+    l.xcv <- length(xcv <- attr(x, "col.vars"))
+    method <- match.arg(method)
+    if (l.xrv == 0) {
+      if (method == "col.compact")
+        method <- "non.compact"
+      else if (method == "compact")
+        method <- "row.compact"
+    }
+    if (l.xcv == 0) {
+      if (method == "row.compact")
+        method <- "non.compact"
+      else if (method == "compact")
+        method <- "col.compact"
+    }
+    LABS <- switch(method, non.compact = {
+      cbind(rbind(matrix("", nrow = length(xcv), ncol = length(xrv)),
+                  charQuote(makeNames(xrv)), makeLabels(xrv)), c(charQuote(makeNames(xcv)),
+                                                                 rep("", times = nrow(x) + 1)))
+    }, row.compact = {
+      cbind(rbind(matrix("", nrow = length(xcv) - 1, ncol = length(xrv)),
+                  charQuote(makeNames(xrv)), makeLabels(xrv)), c(charQuote(makeNames(xcv)),
+                                                                 rep("", times = nrow(x))))
+    }, col.compact = {
+      cbind(rbind(cbind(matrix("", nrow = length(xcv), ncol = length(xrv) -
+                                 1), charQuote(makeNames(xcv))), charQuote(makeNames(xrv)),
+                  makeLabels(xrv)))
+    }, compact = {
+      xrv.nms <- makeNames(xrv)
+      xcv.nms <- makeNames(xcv)
+      mat <- cbind(rbind(cbind(matrix("", nrow = l.xcv - 1,
+                                      ncol = l.xrv - 1), charQuote(makeNames(xcv[-l.xcv]))),
+                         charQuote(xrv.nms), makeLabels(xrv)))
+      mat[l.xcv, l.xrv] <- paste(tail(xrv.nms, 1), tail(xcv.nms,
+                                                        1), sep = lsep)
+      mat
+    }, stop("wrong method"))
+    DATA <- rbind(if (length(xcv))
+      t(makeLabels(xcv)), if (method %in% c("non.compact",
+                                            "col.compact"))
+        rep("", times = ncol(x)), format(unclass(x), digits = digits,
+                                         ...))
+    cbind(apply(LABS, 2L, format, justify = "left"), apply(DATA,
+                                                           2L, format, justify = "right"))
+  }
+
+
+  tab <- .format.ftable(x, quote=FALSE, method=method, lsep="")
+  tab <- StrTrim(tab)
+
+  if(is.null(align))
+    align <- c(rep("l", length(attr(x, "row.vars"))), rep("r", ncol(x)))
+
+  wtab <- ToWrd.table(tab, font=font, main=main, align=align, ..., wrd=wrd)
+
+  invisible(wtab)
+
 }
 
 
-ToWrd.table <- function (x, font = NULL, main = NULL, align=NULL, autofit = TRUE,
-                              row.names=FALSE, ..., wrd = getOption("lastWord")) {
 
-  tab <- x
 
-  dim1 <- ncol(tab)
-  dim2 <- nrow(tab)
-  if(row.names) dim1 <- dim1 + 1
+ToWrd.table <- function (x, font = NULL, main = NULL, align=NULL, tablestyle=NULL, autofit = TRUE,
+                              row.names=FALSE, col.names=TRUE, ..., wrd = getOption("lastWord")) {
 
-  # wdConst ist ein R-Objekt (Liste mit 2755 Objekten!!!)
 
-  write.table(tab, file = "clipboard", sep = "\t", quote = FALSE, row.names=row.names)
+  x[] <- as.character(x)
 
-  myRange <- wrd[["Selection"]][["Range"]]
-  bm      <- wrd[["ActiveDocument"]][["Bookmarks"]]$Add("PasteHere", myRange)
-  myRange$Paste()
+  # add column names to character table
+  if(col.names)
+    x <- rbind(colnames(x), x)
+  if(row.names){
+    rown <- rownames(x)
+    # if(col.names)
+    #   rown <- c("", rown)
+    x <- cbind(rown, x)
+  }
+  # replace potential \n in table with /cr, as convertToTable would make a new cell for them
+  x <- gsub(pattern= "\n", replacement = "/cr", x = x)
+  # paste the cells and separate by \t
+  txt <- paste(apply(x, 1, paste, collapse="\t"), collapse="\n")
 
-  if(row.names) wrd[["Selection"]]$TypeText("\t")
+  nc <- ncol(x)
+  nr <- nrow(x)
 
-  myRange[["Start"]] <- bm[["Range"]][["Start"]]
-  myRange$Select()
-  bm$Delete()
-  wrd[["Selection"]]$ConvertToTable(Separator       = wdConst$wdSeparateByTabs,
-                                    NumColumns      = dim1,
-                                    NumRows         = dim2,
-                                    AutoFitBehavior = wdConst$wdAutoFitFixed)
+  # insert and convert
+  wrd[["Selection"]]$InsertAfter(txt)
+  wrdTable <- wrd[["Selection"]]$ConvertToTable(Separator = wdConst$wdSeparateByTabs,
+                                            NumColumns = nc,  NumRows = nr,
+                                            AutoFitBehavior = wdConst$wdAutoFitFixed)
 
-  wrdTable <- wrd[["Selection"]][["Tables"]]$Item(1)
+  wrdTable[["ApplyStyleHeadingRows"]] <- col.names
+
+  # replace /cr by \n again in word
+  wrd[["Selection"]][["Find"]]$ClearFormatting()
+  wsel <- wrd[["Selection"]][["Find"]]
+  wsel[["Text"]] <- "/cr"
+  wrep <- wsel[["Replacement"]]
+  wrep[["Text"]] <- "^l"
+  wsel$Execute(Replace=wdConst$wdReplaceAll)
+
+
   # http://www.thedoctools.com/downloads/DocTools_List_Of_Built-in_Style_English_Danish_German_French.pdf
-  wrdTable[["Style"]] <- -115 # "Tabelle Klassisch 1"
-  wrdSel <- wrd[["Selection"]]
+  if(is.null(tablestyle)){
+    WrdTableBorders(wrdTable, from=c(1,1), to=c(1, nc),
+                    border = wdConst$wdBorderTop, wrd=wrd)
+    if(col.names)
+      WrdTableBorders(wrdTable, from=c(1,1), to=c(1, nc),
+                    border = wdConst$wdBorderBottom, wrd=wrd)
+
+    WrdTableBorders(wrdTable, from=c(nr, 1), to=c(nr, nc),
+                    border = wdConst$wdBorderBottom, wrd=wrd)
+
+    space <- RoundTo((if(is.null(font$size)) WrdFont(wrd)$size else font$size) * .2, multiple = .5)
+    wrdTable$Rows(1)$Select()
+    WrdParagraphFormat(wrd) <- list(SpaceBefore=space, SpaceAfter=space)
+
+    if(col.names){
+      wrdTable$Rows(2)$Select()
+      WrdParagraphFormat(wrd) <- list(SpaceBefore=space)
+    }
+
+    wrdTable$Rows(nr)$Select()
+    WrdParagraphFormat(wrd) <- list(SpaceAfter=space)
+
+    # wrdTable[["Style"]] <- -115 # code for "Tabelle Klassisch 1"
+  } else
+    if(!is.na(tablestyle))
+      wrdTable[["Style"]] <- tablestyle
 
 
   # align the columns
   if(is.null(align))
-    align <- c("l", rep(x = "r", ncol(tab)-1))
+    align <- c(rep("l", row.names), rep(x = "r", nc-row.names))
   else
-    align <- rep(align, length.out=ncol(tab))
+    align <- rep(align, length.out=nc)
 
   align[align=="l"] <- wdConst$wdAlignParagraphLeft
   align[align=="c"] <- wdConst$wdAlignParagraphCenter
@@ -11104,7 +11691,8 @@ ToWrd.table <- function (x, font = NULL, main = NULL, align=NULL, autofit = TRUE
 
   for(i in seq_along(align)){
     wrdTable$Columns(i)$Select()
-    wrd[["Selection"]][["ParagraphFormat"]][["Alignment"]] <- align[i]
+    wrdSel <- wrd[["Selection"]]
+    wrdSel[["ParagraphFormat"]][["Alignment"]] <- align[i]
   }
 
   if(!is.null(font)){
@@ -11122,12 +11710,39 @@ ToWrd.table <- function (x, font = NULL, main = NULL, align=NULL, autofit = TRUE
   if(!is.null(main)){
     # insert caption
     sel <- wrd$Selection()  # "Abbildung"
-    sel$InsertCaption(Label=wdConst$wdCaptionTable, Title=main)
+    sel$InsertCaption(Label=wdConst$wdCaptionTable, Title=paste(" - ", main, sep=""))
     sel$TypeParagraph()
 
   }
 
+  wrd[["Selection"]]$TypeParagraph()
+
   invisible(wrdTable)
+
+}
+
+
+WrdTableBorders <- function(wtab, from=NULL, to=NULL,
+                            border=wdConst$wdBorderBottom,
+                            lty=wdConst$wdLineStyleSingle, wrd){
+
+  # paint borders of a table
+
+  if(is.null(from))
+    from <- c(1,1)
+
+  if(is.null(to))
+    to <- c(wtab[["Rows"]]$Count(), wtab[["Columns"]]$Count())
+
+  rng <- wrd[["ActiveDocument"]]$Range(start=wtab$Cell(from[1], from[2])[["Range"]][["Start"]],
+                                       end=wtab$Cell(to[1], to[2])[["Range"]][["End"]])
+
+  rng$Select()
+
+  wborder <- wrd[["Selection"]]$Borders(border)
+  wborder[["LineStyle"]] <- lty
+
+  invisible()
 
 }
 
@@ -11259,7 +11874,8 @@ WrdStyle <- function (wrd = getOption("lastWord")) {
 
 
 `WrdStyle<-` <- function (wrd, value) {
-  wrd[["Selection"]][["Style"]] <- value
+  wrdSel <- wrd[["Selection"]][["Paragraphs"]]
+  wrdSel[["Style"]] <- value
   return(wrd)
 }
 
@@ -11843,7 +12459,7 @@ GetCurrXL <- function() {
 
 
 
-XLView <- function (x, col.names = TRUE, row.names = TRUE, na = "") {
+XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "") {
 
   # define some XL constants
   xlToRight <- -4161
@@ -11854,6 +12470,12 @@ XLView <- function (x, col.names = TRUE, row.names = TRUE, na = "") {
   owb <- xl[["Workbooks"]]
 
   if(!missing(x)){
+
+    if(class(x) == "ftable"){
+      x <- FixToTab(capture.output(x), sep = " ", header = FALSE)
+      col.names <- FALSE
+    }
+
     write.table(x, file = fn, sep = ";", col.names = col.names,
                 qmethod = "double", row.names = row.names, na=na)
     ob <- owb$Open(fn)
@@ -12002,15 +12624,23 @@ XLKill <- function(){
   # Excel would only quit, when all workbooks are closed before, someone said.
   # http://stackoverflow.com/questions/15697282/excel-application-not-quitting-after-calling-quit
 
-  # We experience, that it Would not even then quit, when there's no workbook loaded at all.
+  # We experience, that it would not even then quit, when there's no workbook loaded at all.
+  # maybe gc() would help
   # so killing the task is "ultima ratio"...
 
   shell('taskkill /F /IM EXCEL.EXE')
 }
 
 
-XLDateToPOSIXct <- function(x, tz = "GMT"){
-  as.POSIXct(x * (60*60*24), origin="1899-12-30", tz=tz)
+
+XLDateToPOSIXct <- function (x, tz = "GMT", xl1904 = FALSE) {
+  # https://support.microsoft.com/en-us/kb/214330
+  if(xl1904)
+    origin <- "1904-01-01"
+  else
+    origin <- "1899-12-30"
+
+  as.POSIXct(x * (60 * 60 * 24), origin = origin, tz = tz)
 }
 
 

@@ -733,7 +733,7 @@ RunsTest.formula <- function (formula, data, subset, na.action, ...) {
 }
 
 
-RunsTest.default <- function(x, y=NULL, alternative=c("two.sided", "less", "greater"), exact=NULL, na.rm = FALSE, ...) {
+RunsTest.default <- function(x, y=NULL, alternative=c("two.sided", "less", "greater"), exact=NULL, correct=TRUE, na.rm = FALSE, ...) {
 
   # exact values:
   # http://www.reiter1.com/Glossar/Wald_Wolfowitz.htm
@@ -856,14 +856,15 @@ RunsTest.default <- function(x, y=NULL, alternative=c("two.sided", "less", "grea
 
   # this is the SPSS-Definition
   # http://publib.boulder.ibm.com/infocenter/spssstat/v20r0m0/index.jsp?topic=%2Fcom.ibm.spss.statistics.help%2Fidh_idd_npar_onesample_settings_tests_runs.htm
-  if( n+m >= 50) {
-    statistic <- (runs - E) / sqrt(s2)
-  } else {
+  # if( n+m >= 50) {
+  if(correct){
     switch( as.character(cut(runs - E, breaks=c(-Inf, -0.5, 0.5, Inf), labels=c("a", "b", "c")))
             , "a" = statistic <- (runs - E + 0.5) / sqrt(s2)
             , "b" = statistic <- 0
             , "c" = statistic <- (runs - E - 0.5) / sqrt(s2)
     )
+  } else {
+    statistic <- (runs - E) / sqrt(s2)
   }
 
   switch( alternative
@@ -2558,13 +2559,13 @@ StuartMaxwellTest <- function (x, y = NULL) {
 
 BreslowDayTest <- function(x, OR = NA, correct = FALSE) {
 
-  # Function to perform the Breslow and Day (1980) test including
-  # the corrected test by Tarone
-  # Uses the equations in Lachin (2000) p. 124-125.
+  # Function to perform the Breslow and Day (1980) test including the
+  # corrected test by Tarone Uses the equations in Lachin (2000),
+  # Biostatistical Methods, Wiley, p. 124-125.
   #
-  # Programmed by Michael Hoehle <http://www-m4.ma.tum.de/pers/hoehle>
-  # Note that the results of the Tarone corrected test do
-  # not correspond to the numbers in the Lachin book...
+  # Programmed by Michael Hoehle <http://www.math.su.se/~hoehle>
+  # Code taken originally from a Biostatistical Methods lecture
+  # held at the Technical University of Munich in 2008.
   #
   # Params:
   #  x - a 2x2xK contingency table
@@ -2622,7 +2623,10 @@ BreslowDayTest <- function(x, OR = NA, correct = FALSE) {
   }
 
   # Compute Tarone corrected test
-  X2.HBDT <-as.numeric( X2.HBD -  (sum(a) - sum(tildea))^2/sum(Var.aj) )
+  # Add on 2015: The original equation from the 2008 lecture is incorrect
+  # as pointed out by Jean-Francois Bouzereau.
+  # X2.HBDT <-as.numeric( X2.HBD -  (sum(a) - sum(tildea))^2/sum(Var.aj) )
+  X2.HBDT <-as.numeric( X2.HBD -  (sum(a) - sum(tildea))^2/sum(Var.a) )
 
   DNAME <- deparse(substitute(x))
 
@@ -2639,6 +2643,96 @@ BreslowDayTest <- function(x, OR = NA, correct = FALSE) {
   ), class = "htest")
 
 }
+
+
+
+
+# BreslowDayTest <- function(x, OR = NA, correct = FALSE) {
+#
+#   # Function to perform the Breslow and Day (1980) test including
+#   # the corrected test by Tarone
+#   # Uses the equations in Lachin (2000) p. 124-125.
+#   #
+#   # Programmed by Michael Hoehle <http://www-m4.ma.tum.de/pers/hoehle>
+#   # Note that the results of the Tarone corrected test do
+#   # not correspond to the numbers in the Lachin book...
+#   #
+#   # Params:
+#   #  x - a 2x2xK contingency table
+#   #  correct - if TRUE Tarones correction is returned
+#   #
+#   # Returns:
+#   #  a vector with three values
+#   #   statistic - Breslow and Day test statistic
+#   #   pval - p value evtl. based on the Tarone test statistic
+#   #               using a \chi^2(K-1) distribution
+#   #
+#
+#
+#   if(is.na(OR)) {
+#     #Find the common OR based on Mantel-Haenszel
+#     or.hat.mh <- mantelhaen.test(x)$estimate
+#   } else {
+#     or.hat.mh <- OR
+#   }
+#
+#   #Number of strata
+#   K <- dim(x)[3]
+#   #Value of the Statistic
+#   X2.HBD <- 0
+#   #Value of aj, tildeaj and Var.aj
+#   a <- tildea <- Var.a <- numeric(K)
+#
+#   for (j in 1:K) {
+#     #Find marginals of table j
+#     mj <- apply(x[,,j], MARGIN=1, sum)
+#     nj <- apply(x[,,j], MARGIN=2, sum)
+#
+#     #Solve for tilde(a)_j
+#     coef <- c(-mj[1]*nj[1] * or.hat.mh, nj[2]-mj[1]+or.hat.mh*(nj[1]+mj[1]),
+#               1-or.hat.mh)
+#     sols <- Re(polyroot(coef))
+#     #Take the root, which fulfills 0 < tilde(a)_j <= min(n1_j, m1_j)
+#     tildeaj <- sols[(0 < sols) &  (sols <= min(nj[1],mj[1]))]
+#     #Observed value
+#     aj <- x[1,1,j]
+#
+#     #Determine other expected cell entries
+#     tildebj <- mj[1] - tildeaj
+#     tildecj <- nj[1] - tildeaj
+#     tildedj <- mj[2] - tildecj
+#
+#     #Compute \hat{\Var}(a_j | \widehat{\OR}_MH)
+#     Var.aj <- (1/tildeaj + 1/tildebj + 1/tildecj + 1/tildedj)^(-1)
+#
+#     #Compute contribution
+#     X2.HBD <- X2.HBD + as.numeric((aj - tildeaj)^2 / Var.aj)
+#
+#     #Assign found value for later computations
+#     a[j] <- aj ;  tildea[j] <- tildeaj ; Var.a[j] <- Var.aj
+#   }
+#
+#   # Compute Tarone corrected test
+#   # This is incorrect as correctly pointed out by Jean-Francois Bouzereau..
+#   # X2.HBDT <-as.numeric( X2.HBD -  (sum(a) - sum(tildea))^2/sum(Var.aj) )
+#   X2.HBDT <-as.numeric( X2.HBD -  (sum(a) - sum(tildea))^2/sum(Var.a) )
+#
+#   DNAME <- deparse(substitute(x))
+#
+#   STATISTIC <- if(correct) X2.HBDT else X2.HBD
+#   PARAMETER <- K - 1
+#   # Compute p-value based on the Tarone corrected test
+#   PVAL <- 1 - pchisq(STATISTIC, PARAMETER)
+#   METHOD <- if(correct) "Breslow-Day Test on Homogeneity of Odds Ratios (with Tarone correction)" else
+#     "Breslow-Day test on Homogeneity of Odds Ratios"
+#   names(STATISTIC) <- "X-squared"
+#   names(PARAMETER) <- "df"
+#   structure(list(statistic = STATISTIC, parameter = PARAMETER,
+#                  p.value = PVAL, method = METHOD, data.name = DNAME
+#   ), class = "htest")
+#
+# }
+
 
 
 # the VCD package (available via CRAN) has a function called woolf_test()
@@ -3848,7 +3942,7 @@ PostHocTest.table <- function(x, method = c("none","fdr","BH","BY","bonferroni",
 
 
 
-print.PostHocTest <- function (x, digits = getOption("digits"), ...) {
+print.PostHocTest <- function (x, digits = getOption("digfix", 3), ...) {
 
   cat(attr(x, "method.str"))
   if (!is.na(attr(x, "conf.level")))
@@ -4050,7 +4144,7 @@ DunnTest.default <- function (x, g, method = c("holm","hochberg","hommel","bonfe
 
 
 
-print.DunnTest <- function (x, digits = getOption("digits"), ...) {
+print.DunnTest <- function (x, digits = getOption("digfix", 3), ...) {
 
   cat("\n", attr(x, "main"), "\n\n")
   xx <- unclass(x)

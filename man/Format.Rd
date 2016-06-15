@@ -98,6 +98,9 @@ Code \tab  \tab  \cr
 \cr \tab \tab and zero values are respected.\cr
 \tab\cr
 
+\code{eng} \tab engineering \tab  forces scientific representation of x, but only with powers that are a multiple of 3. \cr
+\code{engabb} \tab engineering abbr. \tab  same as \code{eng}, but replaces the exponential representation by codes. See \code{\link{d.prefix}}.\cr
+
 \code{\%} \tab percent \tab will divide the given number by 100 and append the \%-sign (without a separator).\cr
 \tab\cr
 \code{p} \tab p-value \tab will wrap the function \code{\link{format.pval}} and return a p-value format.\cr
@@ -110,14 +113,15 @@ Code \tab  \tab  \cr
 \tab \tab (0.01, 0.05] = \code{*}  \cr
 \tab \tab (0.05, 0.1] = \code{.}  \cr
 \tab \tab (0.1,1] = \code{ }\cr
+
+
 }
 
-\code{fmt} can as well be an object of class \code{fmt} consisting of a list of all arguments of the function.
-This allows the full format to be stored in a variable or as an option and be used as format template subsequently. \cr If we would want to use an user defined format for counts, we could define a format with a big mark and with 0 digits as:\cr
-\code{fmt.count <- structure(list(digits=0, big.mark="'"), class="fmt")} \cr\cr
-and subsequently call the \code{Format} function with this format:\cr
+\code{fmt} can as well be an object of class \code{fmt} consisting of a list out of the arguments above.
+This allows the full format to be stored in a variable or as an option and to be used as format template subsequently. \cr If we would want to define a format for counts, we could create a list  with a big mark and with 0 digits and subsequently call the \code{Format} function with this format:\cr\cr
+\code{fmt.count <- structure(list(digits=0, big.mark="'"), class="fmt")} \cr
 \code{Format(4231.2, fmt=fmt.count)} \cr \cr
-which again would return the same as \code{Format(4231.2, digits=0, big.mark="'")}.
+where the latter returns the same result as \code{Format(4231.2, digits=0, big.mark="'")}.
 
 }
 \value{the formatted values as characters. \cr
@@ -156,6 +160,16 @@ m <- matrix(runif(100), nrow=10,
             dimnames=list(LETTERS[1:10], LETTERS[1:10]))
 
 Format(m, digits=1)
+
+# engineering format
+Format(x, fmt="eng",  digits=2)
+Format(x, fmt="engabb", leading="00", digits=2)
+# combine with grams g
+paste(Format(x, fmt="engabb", leading="00", digits=2), "g", sep="")
+
+# example form symnum
+pval <- rev(sort(c(outer(1:6, 10^-(1:3)))))
+noquote(cbind(Format(pval, fmt="p"), Format(pval, fmt="*")))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

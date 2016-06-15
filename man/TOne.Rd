@@ -5,7 +5,7 @@
 %%  ~~function to do ... ~~
 }
 \description{
-Create a table summarizing continuous, categorical and dichotomous variables, optionally stratifyied by one or more variables, while performing adequate statistical tests.
+Create a table summarizing continuous, categorical and dichotomous variables, optionally stratified by one or more variables, while performing adequate statistical tests.
 }
 \usage{
 TOne(x, grp = NA, add.length = TRUE, colnames = NULL, vnames=NULL,

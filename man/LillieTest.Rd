@@ -33,7 +33,7 @@ the modified statistic \eqn{Z=D (\sqrt{n}-0.01+0.85/\sqrt{n})}, see Stephens (19
 the actual p-value formula being obtained by a simulation and approximation process.}
 
 \value{
-  A list with class \dQuote{htest} containing the following components:
+A list of class \code{htest}, containing the following components:
   \item{statistic}{the value of the Lilliefors (Kolomogorv-Smirnov) statistic.}
   \item{p.value }{the p-value for the test.}
   \item{method}{the character string \dQuote{Lilliefors (Kolmogorov-Smirnov) normality test}.}

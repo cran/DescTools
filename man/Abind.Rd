@@ -1,9 +1,8 @@
 \name{Abind}
 \alias{Abind}
-\title{Combine multi-dimensional arrays}
+\title{Combine Multidimensional Arrays}
 \description{
-Combine multi-dimensional arrays.  This is a
- generalization of \code{cbind} and \code{rbind}.  Takes a sequence of
+ Base R functions \code{cbind} and \code{rbind} bind columns and rows, but there's no built-in function for binding higher dimensional datastructures like matrices. \code{Abind} takes a sequence of
  vectors, matrices, or arrays and produces a single array of
  the same or higher dimension.
 }
@@ -25,7 +24,7 @@ whose components are the objects to be bound together.  Names of the
 list components are treated in the same way as argument names.
 }
 
-\item{along}{ (optional) The dimension along which to bind the arrays.
+\item{along}{The dimension along which to bind the arrays.
 The default is the last dimension, i.e., the maximum length of the dim
 attribute of the supplied arrays.  \code{along=} can take any
 non-negative value up to the minimum length of the dim attribute of
@@ -35,7 +34,7 @@ lengths of the dim attribute of the objects to be bound together), a new
 dimension is created in the result.  In these cases, the dimensions of
 all arguments must be identical.  }
 
-\item{rev.along}{ (optional)
+\item{rev.along}{
 Alternate way to specify the dimension along which to bind the arrays:
 \code{along = N + 1 - rev.along}.  This is provided mainly to allow easy
 specification of \code{along = N + 1} (by supplying
@@ -43,7 +42,7 @@ specification of \code{along = N + 1} (by supplying
 supplied, the supplied value of \code{along} is ignored.
 }
 
-\item{new.names}{ (optional)
+\item{new.names}{
 If new.names is a list, it is the first choice for the
 dimnames attribute of the result.  It should have the same
 structure as a dimnames attribute.  If the names for a
@@ -54,7 +53,7 @@ If \code{new.names} is a character vector, it is used for dimension
 names in the same way as argument names are used.  Zero
 length ("") names are ignored.
 }
-  \item{force.array}{ (optional) If \code{FALSE}, rbind or cbind are
+  \item{force.array}{  If \code{FALSE}, rbind or cbind are
 called when possible, i.e., when the arguments are all vectors, and
 along is not 1, or when the arguments are vectors or matrices or data
 frames and along is 1 or 2.  If rbind or cbind are used, they will
@@ -65,7 +64,7 @@ to guarantee that an array object is returned, supply the argument
 some subtle changes in the way default dimension names are constructed:
 see the examples below.  }
 
-\item{make.names}{ (optional)
+\item{make.names}{
 If \code{TRUE}, the last resort for dimnames for the along
 dimension will be the deparsed versions of anonymous
 arguments.  This can result in cumbersome names when
@@ -74,14 +73,14 @@ arguments are expressions.
     <p>The default is \code{FALSE}.
 }
 
-  \item{use.first.dimnames}{ (optional)
+  \item{use.first.dimnames}{
     When dimension names are present on more than one
 argument, should dimension names for the result be take from
 the first available (the default is to take them from the
 last available, which is the same behavior as
 \code{rbind} and \code{cbind}.)
 }
-\item{hier.names}{ (optional)
+\item{hier.names}{
   If \code{TRUE}, dimension names on the concatenated dimension will be
   composed of the argument name and the dimension names of the objects
   being bound.  If a single list argument is supplied, then the names of
@@ -131,7 +130,7 @@ unless \code{maken.ames=FALSE}.
 
   An array with a dim attribute calculated as follows.
 
-  Let \code{rMin=min(sapply(list(...), function(x) length(dim(x))))} and
+  Let \code{rMin=min(sapply(list(...), function(x) length(dim(x))))} and \cr
   \code{rMax=max(sapply(list(...), function(x) length(dim(x))))} (where
   the length of the dimensions of a vector are taken to be 1).  Then \code{rMax} should be
   equal to or one greater than \code{rMin}.
