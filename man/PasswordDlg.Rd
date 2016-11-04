@@ -12,20 +12,8 @@ PasswordDlg()
 }
 %- maybe also 'usage' for other objects documented here.
 \value{the entered password
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
 }
 \author{Markus Naepflin <markus@naepfl.in>
-%%  ~~who you are~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{\code{\link{ImportDlg}}
-%% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
 \dontrun{

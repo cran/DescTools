@@ -12,12 +12,13 @@ Add a loess smoother to an existing plot. The function first calculates the pred
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-\method{lines}{loess}(x, col = getOption("col1", hblue), lwd = 2, lty = "solid",
+\method{lines}{loess}(x, col = Pal()[1], lwd = 2, lty = "solid",
       type = "l", n = 100, conf.level = 0.95, args.band = NULL, ...)
 
-\method{lines}{smooth.spline}(x, col = getOption("col1", hblue), lwd = 2, lty = "solid",
+\method{lines}{smooth.spline}(x, col = Pal()[1], lwd = 2, lty = "solid",
       type = "l", conf.level = 0.95, args.band = NULL, ...)
-\method{lines}{SmoothSpline}(x, col = getOption("col1", hblue), lwd = 2, lty = "solid",
+
+\method{lines}{SmoothSpline}(x, col = Pal()[1], lwd = 2, lty = "solid",
       type = "l", conf.level = 0.95, args.band = NULL, ...)
 
 }

@@ -26,7 +26,7 @@ an optional character string giving a method for computing covariances in the pr
 This must be (an abbreviation of) one of the strings \code{"everything"}, \code{"all.obs"}, \code{"complete.obs"}, 
 \code{"na.or.complete"}, or \code{"pairwise.complete.obs"}.
 }
-  \item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated. 
+  \item{conf.level}{confidence level of the interval. If set to \code{NA} (which is the default) no confidence interval will be calculated. 
 %%     ~~Describe \code{conf.level} here~~
 }
 }

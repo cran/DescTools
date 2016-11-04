@@ -16,11 +16,11 @@ CombPairs(x, y = NULL)
 %%     ~~Describe \code{x} here~~
 }
   \item{y}{a vector of elements, need not be same dimension as x. 
-  If y is not NULL then all combination x and y are returned.
+  If y is not \code{NULL} then all combination x and y are returned.
 %%     ~~Describe \code{y} here~~
 }
 }
-\details{If y = NULL then all combination of 2 out of x are returned. \cr
+\details{If y = \code{NULL} then all combination of 2 out of x are returned. \cr
 If y is defined then all combinations of x and y are calculated.
 %%  ~~ If necessary, more details than the description above ~~
 }

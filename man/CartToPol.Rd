@@ -33,7 +33,7 @@ SphToCart(r, theta, phi, up = TRUE)
   \item{phi}{a vector with the angle(s) of the points.
 %%     ~~Describe \code{x} here~~
 }
-  \item{up}{logical. If set to TRUE (default) theta is measured from x-y plane, else theta is measured from the z-axis.
+  \item{up}{logical. If set to \code{TRUE} (default) theta is measured from x-y plane, else theta is measured from the z-axis.
 %%     ~~Describe \code{x} here~~
 }
 }

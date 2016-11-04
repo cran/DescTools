@@ -9,14 +9,14 @@ citEntry(entry="Manual",
          # list of all contributers removed: takes far too much space
          year = year,
          note = vers,
-         url = "http://CRAN.R-project.org/package=DescTools",
-		 
+         url = "https://cran.r-project.org/package=DescTools",
+
          textVersion =
          paste("Andri Signorell et mult. al. (",
                year,
                "). DescTools: Tools for descriptive statistics. ",
                vers, ".", sep=""))
 
- 
+
 
 

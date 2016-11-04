@@ -5,7 +5,7 @@
   This calculates a robust average that is unaffected by outliers.
 }
 \usage{
-TukeyBiweight(x, const = 9, na.rm = FALSE, 
+TukeyBiweight(x, const = 9, na.rm = FALSE,
               conf.level = NA, ci.type = "bca", R=1000, ...)
 }
 \arguments{
@@ -13,17 +13,17 @@ TukeyBiweight(x, const = 9, na.rm = FALSE,
   \item{const}{ a constant. \code{\var{const}} is preassigned a value of 9
     according to the Cook reference below but other values are
     possible. }
-  \item{na.rm}{logical, indicating whether NA values should be stripped before the computation proceeds. Defaults to FALSE. 
+  \item{na.rm}{logical, indicating whether \code{NA} values should be stripped before the computation proceeds. Defaults to FALSE.
 }
-   \item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated. 
+   \item{conf.level}{confidence level of the interval. If set to \code{NA} (which is the default) no confidence interval will be calculated.
 %%     ~~Describe \code{conf.level} here~~
 }
-  \item{ci.type}{The type of confidence interval required. The value should be any subset 
- of the values \code{"basic"}, \code{"stud"}, \code{"perc"}, \code{"bca"} or simply \code{"all"} 
- which will compute all four types of intervals. 
+  \item{ci.type}{The type of confidence interval required. The value should be any subset
+ of the values \code{"basic"}, \code{"stud"}, \code{"perc"}, \code{"bca"} or simply \code{"all"}
+ which will compute all four types of intervals.
 }
-\item{R}{The number of bootstrap replicates. Usually this will be a single positive integer. For importance resampling, 
- some resamples may use one set of weights and others use a different set of weights. In this case \code{R} would be a vector 
+\item{R}{The number of bootstrap replicates. Usually this will be a single positive integer. For importance resampling,
+ some resamples may use one set of weights and others use a different set of weights. In this case \code{R} would be a vector
  of integers where each component gives the number of resamples from each of the rows of weights.
 }
 \item{\dots}{the dots are passed to the function \code{\link{boot}}, when confidence intervalls are calculated.
@@ -67,7 +67,7 @@ TukeyBiweight(x, const = 9, na.rm = FALSE,
 }
 \author{ Mikko Korpela <mikko.korpela@aalto.fi> }
 
-\seealso{ \code{\link{HuberM}}, \code{\link{RobRange}}, \code{\link{RobScale}} }
+\seealso{ \code{\link{HuberM}}, \code{\link{Range}}, \code{\link{RobScale}} }
 \examples{
 TukeyBiweight(rnorm(100))
 }

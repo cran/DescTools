@@ -9,20 +9,36 @@ BoxCoxInv(x, lambda)
 \item{x}{a numeric vector }
 \item{lambda}{transformation parameter}
 }
-\description{BoxCox() returns a transformation of the input variable using a Box-Cox transformation.\cr
-BoxCoxInv() reverses the transformation.
+\description{\code{BoxCox()} returns a transformation of the input variable using a Box-Cox transformation.\cr
+\code{BoxCoxInv()} reverses the transformation.
 }
 \details{The Box-Cox transformation is given by
-\deqn{f_\lambda(x) =\frac{x^\lambda - 1}{\lambda}}{f(x;lambda)=(x^lambda - 1)/lambda}
-if \eqn{\lambda\ne0}{lambda is not equal to 0}. For \eqn{\lambda=0}{lambda=0},
-\deqn{f_0(x)=\log(x)}{f(x;0)=log(x)}.
+
+% \deqn{\theta(h) =
+%   \left\{\begin{array}{ll}
+%      u_\beta \left(\mu + \frac{\nu(h)}{\Gamma(1 - \xi)}
+%   \right),&\xi \neq 0\\
+%      \exp\left(\frac{\nu(h)}{\sigma}\right),&\xi = 0
+%   \end{array}\right.
+% }{u_beta (mu + nu(h) / Gamma(1 - \xi)), if \xi < 1,
+% exp(nu(h)/sigma), otherwise}
+
+\deqn{f_\lambda(x) =
+  \left\{\begin{array}{ll}
+     \frac{x^\lambda - 1}{\lambda} &\textup{for }\lambda \neq 0\\
+     log(x) &\textup{for }\lambda = 0
+  \end{array}\right.
+}{f(x;\lambda)=(x^\lambda - 1)/\lambda, if \lambda not 0,
+log(x), otherwise}
+
+
 }
 \value{a numeric vector of the same length as x.
 }
 \references{Box, G. E. P. and Cox, D. R. (1964) An analysis of transformations. \emph{JRSS B} \bold{26} 211--246.
 }
-\seealso{Use \code{\link{BoxCoxLambda}} or \code{\link[MASS]{boxcox}} in library(MASS) to find optimal lambda values. }
-\note{These two functions are borrowed from library(forecast).}
+\seealso{Use \code{\link{BoxCoxLambda}} or \code{\link[MASS]{boxcox}} in \code{library(MASS)} to find optimal lambda values. }
+\note{These two functions are borrowed from \code{library(forecast)}.}
 \author{Rob J Hyndman <rob.hyndman@monash.edu>}
 
 \examples{
@@ -34,11 +50,20 @@ qqnorm(x, main="Lognormal")
 qqnorm(BoxCox(x, 1/2), main="BoxCox(lambda=0.5)")
 qqnorm(BoxCox(x, 0), main="BoxCox(lambda=0)")
 
-hist(BoxCox(x, 0))
+PlotFdist(BoxCox(x, 0))
 
-bx <- BoxCox( x, lambda = BoxCoxLambda(x) )
+bx <- BoxCox(x, lambda = BoxCoxLambda(x) )
 }
 \keyword{univar}
 
 
+% Better representation like (https://en.wikibooks.org/wiki/LaTeX/Mathematics)
+% \[ f(n) =
+%   \begin{cases}
+%     n/2       & \quad \text{if } n \text{ is even}\\
+%     -(n+1)/2  & \quad \text{if } n \text{ is odd}\\
+%   \end{cases}
+% \]
+
+% \deqn{f_\lambda(x) =\frac{x^\lambda - 1}{\lambda}}
 

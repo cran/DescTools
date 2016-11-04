@@ -14,7 +14,7 @@ XLGetWorkbook does the same for all the sheets in an Excel workbook.
 XLGetRange(file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
            header = FALSE, stringsAsFactors = FALSE)
 
-XLGetWorkbook(file)
+XLGetWorkbook(file, compactareas = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -36,7 +36,7 @@ as this is probably the common use of this function.}
 \item{header}{a logical value indicating whether the range contains the names of the variables as its first line. Default is FALSE. \code{header} is ignored if \code{as.data.frame} has been set to FALSE. }
 
 \item{stringsAsFactors}{logical. Should character columns be coerced to factors? The default is FALSE, which will return character vectors.}
-
+\item{compactareas}{logical, defining if areas should be returned by \code{XLGetWorkbook} as list or as matrix (latter is default).}
 }
 \details{The result consists of a list of lists, if \code{as.data.frame} is set to \code{FALSE}.
 Be then prepared to encounter \code{NULL} values. Those will prevent from easily being able to coerce
@@ -48,7 +48,7 @@ The following code will replace the \code{NULL} values by \code{NA} and coerce t
   xlrng <- XLGetRange(file="myfile.xlsx", sheet="Tabelle1",
                       range="D1:J69", as.data.frame=FALSE)
 
-  # replace NULL values by NA
+  # replace \code{NULL} values by NA
   xlrng[unlist(lapply(xlrng, is.null))] <- NA
 
   # coerce the square data structure to a data.frame

@@ -29,7 +29,7 @@ return the result of \code{all(IsWhole(x))}. }
   \item{integer.valued}{logical, should x be checked as integer?}
   \item{positive}{logical, is x supposed to be positive?}
 
-  \item{na.rm}{logical, indicating whether NA values should be stripped before the computation proceeds. Defaults to FALSE.
+  \item{na.rm}{logical, indicating whether \code{NA} values should be stripped before the computation proceeds. Defaults to \code{FALSE}.
 %%     ~~Describe \code{na.rm} here~~
 }
 
@@ -57,7 +57,7 @@ IsNumeric combines a test for numeric and integers.
 }
 \examples{
 (x <- seq(1,5, by=0.5))
-IsWhole( x ) #-->  TRUE FALSE TRUE ...
+IsWhole( x ) #-->  \code{TRUE} \code{FALSE} \code{TRUE} ...
 
 
 # ... These are people who live in ignorance of the Floating Point Gods.

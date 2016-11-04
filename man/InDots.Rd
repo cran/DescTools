@@ -3,7 +3,7 @@
 
 \title{Is a Specific Argument in the Dots-Arguments?
 }
-\description{Returns TRUE if a specific named argument was given in the dots.
+\description{Returns \code{TRUE} if a specific named argument was given in the dots.
 }
 \usage{
 InDots(..., arg, default)

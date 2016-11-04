@@ -1,5 +1,6 @@
 \name{axTicks.POSIXct}
 \alias{axTicks.POSIXct}
+\alias{axTicks.Date}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Compute Axis Tickmark Locations (For POSIXct Axis)
 %%  ~~function to do ... ~~
@@ -9,6 +10,8 @@
 }
 \usage{
 axTicks.POSIXct(side, x, at, format, labels = TRUE, ...)
+
+axTicks.Date(side = 1, x, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

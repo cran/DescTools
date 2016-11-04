@@ -6,7 +6,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-WrdCaption(x, index = 1, wrd = getOption("lastWord"))
+WrdCaption(x, index = 1, wrd = DescToolsOptions("lastWord"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,7 +18,7 @@ WrdCaption(x, index = 1, wrd = getOption("lastWord"))
 }
   \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()}
   or an existing one, created by \code{GetCurrWrd()}.
-  Default is the last created pointer stored in \code{getOption("lastWord")}.}
+  Default is the last created pointer stored in \code{DescToolsOptions("lastWord")}.}
 }
 \author{
 Andri Signorell <andri@signorell.net>
@@ -26,7 +26,7 @@ Andri Signorell <andri@signorell.net>
 }
 
 \seealso{
-\code{\link{WrdText}}, \code{\link{WrdPlot}}, \code{\link{GetNewWrd}}, \code{\link{GetCurrWrd}}
+\code{\link{ToWrd}}, \code{\link{WrdPlot}}, \code{\link{GetNewWrd}}, \code{\link{GetCurrWrd}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

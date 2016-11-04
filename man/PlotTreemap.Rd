@@ -9,9 +9,9 @@ Creates a treemap where rectangular regions of different size, color,
   and groupings visualize the elements.
 }
 \usage{
-PlotTreemap(x, grp = NULL, labels = NULL, cex = 1, text.col = "black", 
-            col = rainbow(length(x)), labels.grp = NULL, cex.grp = 3, 
-            text.col.grp = "black", border.grp = "grey50", 
+PlotTreemap(x, grp = NULL, labels = NULL, cex = 1, text.col = "black",
+            col = rainbow(length(x)), labels.grp = NULL, cex.grp = 3,
+            text.col.grp = "black", border.grp = "grey50",
             lwd.grp = 5, main = "")
 }
 %- maybe also 'usage' for other objects documented here.
@@ -21,7 +21,7 @@ PlotTreemap(x, grp = NULL, labels = NULL, cex = 1, text.col = "black",
 %%     ~~Describe \code{x} here~~
 }
   \item{grp}{a vector specifying the group (i.e. country, sector,
-    etc.) to which each element belongs. 
+    etc.) to which each element belongs.
 %%     ~~Describe \code{grp} here~~
 }
   \item{labels}{a vector specifying the labels.
@@ -46,7 +46,7 @@ PlotTreemap(x, grp = NULL, labels = NULL, cex = 1, text.col = "black",
   \item{text.col.grp}{the text color of the group labels. Default is "black".
 %%     ~~Describe \code{text.col.grp} here~~
 }
-  \item{border.grp}{the border color for the group rectangles. Default is "grey50". Set this to NA if no special border 
+  \item{border.grp}{the border color for the group rectangles. Default is "grey50". Set this to \code{NA} if no special border
   is desired.
 %%     ~~Describe \code{border.grp} here~~
 }
@@ -80,20 +80,20 @@ set.seed(1789)
 N <- 20
 area <- rlnorm(N)
 
-PlotTreemap(x=sort(area, decreasing=TRUE), labels=letters[1:20], col=PalRedToBlack(20))
+PlotTreemap(x=sort(area, decreasing=TRUE), labels=letters[1:20], col=Pal("RedToBlack", 20))
 
 
 grp <- sample(x=1:3, size=20, replace=TRUE, prob=c(0.2,0.3,0.5))
 
 z <- Sort(data.frame(area=area, grp=grp), c("grp","area"), decreasing=c(FALSE,TRUE))
-z$col <- SetAlpha(c("steelblue","green","yellow")[z$grp], 
-                  unlist(lapply(split(z$area, z$grp), 
+z$col <- SetAlpha(c("steelblue","green","yellow")[z$grp],
+                  unlist(lapply(split(z$area, z$grp),
                   function(...) LinScale(..., newlow=0.1, newhigh=0.6))))
 
 PlotTreemap(x=z$area, grp=z$grp, labels=letters[1:20], col=z$col)
 
 
-b <- PlotTreemap(x=z$area, grp=z$grp, labels=letters[1:20], labels.grp=NA, 
+b <- PlotTreemap(x=z$area, grp=z$grp, labels=letters[1:20], labels.grp=NA,
                  col=z$col, main="Treemap")
 
 # the function returns the midpoints of the areas
@@ -101,7 +101,7 @@ b <- PlotTreemap(x=z$area, grp=z$grp, labels=letters[1:20], labels.grp=NA,
 mid <- do.call(rbind, lapply(lapply(b, "[", 1), data.frame))
 
 # and draw some visible text
-BoxedText( x=mid$grp.x, y=mid$grp.y, labels=LETTERS[1:3], cex=3, border=NA, 
+BoxedText( x=mid$grp.x, y=mid$grp.y, labels=LETTERS[1:3], cex=3, border=NA,
   col=SetAlpha("white",0.7) )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -18,7 +18,7 @@ The dataset is designed to be possibly evil. It contains the most used datatypes
     \item{\code{weekday}}{integer, the weekday}
     \item{\code{area}}{factor, the three London districts: \code{Brent}, \code{Camden}, \code{Westminster} }
     \item{\code{count}}{integer, the number of pizzas delivered}
-    \item{\code{rabate}}{logical, TRUE if a rabate has been given }
+    \item{\code{rabate}}{logical, \code{TRUE} if a rabate has been given }
     \item{\code{price}}{numeric, the total price of delivered pizza(s) }
     \item{\code{operator}}{a factor with levels \code{Allanah} \code{Maria} \code{Rhonda}}
     \item{\code{driver}}{a factor with levels \code{Carpenter} \code{Carter} \code{Taylor} \code{Butcher} \code{Hunter} \code{Miller} \code{Farmer}}
@@ -26,7 +26,7 @@ The dataset is designed to be possibly evil. It contains the most used datatypes
     \item{\code{temperature}}{numeric, the temperature of the pizza in degrees Celsius when delivered to the customer }
     \item{\code{wine_ordered}}{integer, 1 if wine was ordered, 0 if not}
     \item{\code{wine_delivered}}{integer, 1 if wine was delivered, 0 if not}
-    \item{\code{wrongpizza}}{logical, TRUE if a wrong pizza was delivered }
+    \item{\code{wrongpizza}}{logical, \code{TRUE} if a wrong pizza was delivered }
     \item{\code{quality}}{ordered factor with levels \code{low} < \code{medium} < \code{high}, defining the quality of the pizza when delivered}
   }
 }

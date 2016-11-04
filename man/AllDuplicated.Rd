@@ -29,7 +29,7 @@ AllDuplicated(x)
 \code{\link{union}}(A, B) returns a list with the unique values from A and B\cr
 \code{\link{intersect}} returns all elements which appear in A and in B\cr
 \code{\link{setdiff}}(A, B) returns all elements appearing in A but not in B \cr
-\code{\link{setequal}}(A, B) returns TRUE if A contains exactly the same elements as B\cr
+\code{\link{setequal}}(A, B) returns \code{TRUE} if A contains exactly the same elements as B\cr
 \code{\link{split}}(A, A) returns a list with all the tied values in A (see examples)\cr
 
 %% ~~objects to See Also as \code{\link{help}}, ~~~

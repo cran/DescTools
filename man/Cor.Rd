@@ -6,7 +6,7 @@
 \name{Cor}
 \title{Correlation, Variance and Covariance (Matrices)}
 \usage{
-Var(x, y = NULL, na.rm = FALSE, use)
+Var(x, weights = NULL, na.rm = FALSE, use)
 
 Cov(x, y = NULL, use = "everything",
     method = c("pearson", "kendall", "spearman"))
@@ -31,6 +31,9 @@ Cor(x, y = NULL, use = "everything",
   \item{y}{\code{NULL} (default) or a vector, matrix or data frame with
     compatible dimensions to \code{x}.   The default is equivalent to
     \code{y = x} (but more efficient).}
+  \item{weights}{a numerical vector of weights the same length as \code{x} giving the weights to use for elements of \code{x}.
+ }
+
   \item{na.rm}{logical. Should missing values be removed?}
   \item{use}{an optional character string giving a
     method for computing covariances in the presence

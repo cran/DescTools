@@ -67,7 +67,7 @@ data.frame(z1, z2, z3, z4, z5)
 
 lapply(data.frame(z1, z2, z3, z4, z5), levels)
 
-# empty level GH exits in z4...
+# empty level GH exists in z4...
 table(z4, useNA="ifany")
 # and is dropped in z5
 table(z5, useNA="ifany")

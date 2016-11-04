@@ -10,7 +10,7 @@ Zodiac(x, lang = c("engl", "deu"), stringsAsFactors = TRUE)
 \arguments{
   \item{x}{the date to be transformed.}
   \item{lang}{the language of the zodiac names, can be english (default) or german (\code{"deu"}).}
-  \item{stringsAsFactors}{logical. If set to TRUE (default) the result will consist of a factor with zodiac signs as levels.
+  \item{stringsAsFactors}{logical. If set to \code{TRUE} (default) the result will consist of a factor with zodiac signs as levels.
 }
 }
 \details{The really relevant things can sometimes hardly be found. You just discovered such a function... ;-)

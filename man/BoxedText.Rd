@@ -52,14 +52,14 @@ BoxedText(x, y = NULL, labels = seq_along(x), adj = NULL, pos = NULL, offset = 0
   \item{xpad, ypad}{The proportion of the rectangles to the extent of the text within.
 %%     ~~Describe \code{xpad} here~~
 }
-  \item{density}{the density of shading lines, in lines per inch. The default value of NULL means that no shading lines are drawn. 
+  \item{density}{the density of shading lines, in lines per inch. The default value of \code{NULL} means that no shading lines are drawn. 
   A zero value of density means no shading lines whereas negative values (and NA) suppress shading (and so allow color filling).
 %%     ~~Describe \code{density} here~~
 }
   \item{angle}{angle (in degrees) of the shading lines.
 %%     ~~Describe \code{angle} here~~
 }
-  \item{col}{color(s) to fill or shade the rectangle(s) with. The default NA (or also NULL) means do not fill, 
+  \item{col}{color(s) to fill or shade the rectangle(s) with. The default \code{NA} (or also NULL) means do not fill, 
   i.e., draw transparent rectangles, unless density is specified.
 %%     ~~Describe \code{col} here~~
 }

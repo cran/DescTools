@@ -5,7 +5,7 @@
 %%  ~~function to do ... ~~
 }
 \description{
-This function is designed to give a univariate graphic representation of a numeric vector's frequency distribution.
+This function is designed to give a univariate graphic representation of a numeric vectors frequency distribution.
 It combines a histogram, a density curve, a boxplot and the empirical cumulative distribution function (ecdf) in one single plot. A rug as well as a model distribution curve (e.g. a normal curve) can optionally be superposed. This results in a dense and informative picture of the facts.
 Still the function remains flexible as all possible arguments can be passed to the single components (\code{hist}, \code{boxplot} etc.) as a list (see examples).
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
@@ -15,7 +15,7 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
           do.hist = NULL, args.hist = NULL, args.rug = NA, args.dens = NULL,
           args.curve = NA, args.boxplot = NULL, args.ecdf = NULL,
           args.curve.ecdf = NA, heights = NULL, pdist = NULL,
-          na.rm = FALSE, cex.axis = NULL, cex.main = NULL, mar = NULL)
+          na.rm = FALSE, cex.axis = NULL, cex.main = NULL, mar = NULL, las = 1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -81,6 +81,8 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
 \item{cex.main}{character extension factor for the main title. Must be set in dependence of the plot parts in order to get a harmonic view.}
 
 \item{mar}{A numerical vector of the form \code{c(bottom, left, top, right)} which gives the number of lines of outer margin to be specified on the four sides of the plot. The default is \code{c(0, 0, 3, 0)}.}
+
+\item{las}{numeric in {0,1,2,3}; the style of axis labels. See \code{\link{par}}. }
 }
 
 \details{Performance has been significantly improved, but if \code{x} is growing large (n > 1e7) the function will take its time to complete. Especially the density curve and the ecdf, but as well as the boxplot (due to the chosen alpha channel) will take their time to calculate and plot.\cr

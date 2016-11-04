@@ -17,7 +17,7 @@ supposed to be a rare event).
   \item{x}{an ordered factor containing the values whose median is to be computed.
 %%     ~~Describe \code{x} here~~
 }
-  \item{na.rm}{a logical value indicating whether NA values should be stripped before the computation proceeds.
+  \item{na.rm}{a logical value indicating whether \code{NA} values should be stripped before the computation proceeds.
 %%     ~~Describe \code{na.rm} here~~
 }
 }

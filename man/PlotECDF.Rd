@@ -4,17 +4,17 @@
 \title{Empirical Cumulative Distribution Function
 %%  ~~function to do ... ~~
 }
-\description{Faster alternative for plotting the empirical cumulative distribution function.
-The function offers the option to construct ecdf on the base of a histogram, which makes sense, when x is large. So the plot process is much faster, without loosing much precision in the details.
+\description{Faster alternative for plotting the empirical cumulative distribution function (ecdf).
+The function offers the option to construct the ecdf on the base of a histogram, which makes sense, when x is large. So the plot process is much faster, without loosing much precision in the details.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-PlotECDF(x, breaks = NULL, col = getOption("col1", hblue), ylab = "", lwd = 2, 
+PlotECDF(x, breaks = NULL, col = Pal()[1], ylab = "", lwd = 2,
          xlab = NULL, cex.axis = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{numeric vector of the observations for ecdf. 
+  \item{x}{numeric vector of the observations for ecdf.
 %%     ~~Describe \code{x} here~~
 }
   \item{breaks}{will be passed directly to \code{\link{hist}}. If left to \code{NULL}, no histogram will be used.
@@ -39,7 +39,9 @@ PlotECDF(x, breaks = NULL, col = getOption("col1", hblue), ylab = "", lwd = 2,
 %%     ~~Describe \code{\dots} here~~
 }
 }
-\details{The stats function \code{\link{plot.ecdf}} is fine for vectors that are not too large. However for n ~ 1e7 it will be real slow. PlotECDF is designed as alternative for quicker plotting the ecdf for larger vectors. If \code{breaks} are provided as argument, a histogram with that number of breaks will be calculated and the ecdf will use those frequencies instead of respecting every single point. \cr Note that a plot will rarely need more than ~1'000 points on x to be quite precise. PlotFdist will use this number of breaks by default.
+\details{The stats function \code{\link{plot.ecdf}} is fine for vectors that are not too large. However for n ~ 1e7 we would observe a dramatic performance breakdown (possibly in combination with the use of \code{\link{do.call}}).
+
+\code{PlotECDF} is designed as alternative for quicker plotting the ecdf for larger vectors. If \code{breaks} are provided as argument, a histogram with that number of breaks will be calculated and the ecdf will use those frequencies instead of respecting every single point. \cr Note that a plot will rarely need more than ~1'000 points on x to have a sufficient resolution on usual terms. \code{\link{PlotFdist}} will also use this number of breaks by default.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{no value returned, use \code{\link{plot.ecdf}} if any results are required.

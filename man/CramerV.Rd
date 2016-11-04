@@ -49,7 +49,7 @@ which corresponds to the \code{pairwise.complete} option of \code{\link{cor}}.
 Use \code{\link{complete.cases}}, if only the complete cases of a \code{data.frame} are to be used. (see examples)
 
 
-The maximum value for Phi is \eqn{\sqrt(min(r, c) - 1)}. The contingency coefficient goes from 0 to \eqn{\sqrt(\frac{min(r, c) - 1}{min(r, c)})}. For the corrected contingency coefficient and for Cramer's V the range is 0 to 1 for \eqn{r \times c}{r x c} tables and -1 to 1 for \eqn{2 \times 2}{2 x 2}  tables. \cr A Cramer's V in the range of [0, 0.3] is considered as weak, [0.3,0.7] as medium and > 0.7 as strong.
+The maximum value for Phi is \eqn{\sqrt(min(r, c) - 1)}. The contingency coefficient goes from 0 to \eqn{\sqrt(\frac{min(r, c) - 1}{min(r, c)})}. For the corrected contingency coefficient and for Cramer's V the range is 0 to 1. \cr A Cramer's V in the range of [0, 0.3] is considered as weak, [0.3,0.7] as medium and > 0.7 as strong.
 The minimum value for all is 0 under statistical independence.
 }
 \value{

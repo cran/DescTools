@@ -18,13 +18,13 @@ Untable(x, ...)
   \item{x}{a numeric vector, a matrix, a table or a data.frame. If x is a vector, a matrix or a table it is  interpreted as frequencies which are to be inflated to the original list. \cr If x is a data.frame it is interpreted as a table in frequency form (containing one or more factors and a frequency variable).
 %%     ~~Describe \code{x} here~~
 }
-\item{dimnames}{the dimension names of x to be used for expanding. Can be used to expand a weight vector to its original values. If set to NULL (default) the dimnames of x will be used.}
+\item{dimnames}{the dimension names of x to be used for expanding. Can be used to expand a weight vector to its original values. If set to \code{NULL} (default) the dimnames of x will be used.}
 \item{type}{defines the data type generated. This allows to directly define factors or ordered factors, but also numeric values. See examples.
 }
-  \item{rownames}{A names vector for the rownames of the resulting data.frame. If set to NULL (default) the 
+  \item{rownames}{A names vector for the rownames of the resulting data.frame. If set to \code{NULL} (default) the 
   names will be defined according to the table's dimnames.
 }
-  \item{colnames}{A names vector for the colnames of the resulting data.frame. If set to NULL (default) the 
+  \item{colnames}{A names vector for the colnames of the resulting data.frame. If set to \code{NULL} (default) the 
   names will be defined according to the table's dimnames.
 }
 \item{freq}{character, the name of the frequency variable in case x is a data.frame.}

@@ -8,8 +8,8 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Canvas(xlim = NULL, ylim = xlim, xpd=par("xpd"), mar=c(5.1,5.1,5.1,5.1),
-       asp = 1, bg = par("bg"), usrbg = "white", ...)
+Canvas(xlim = NULL, ylim = xlim, main = NULL, xpd = par("xpd"),
+       mar=c(5.1,5.1,5.1,5.1), asp = 1, bg = par("bg"), usrbg = "white", ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,6 +17,9 @@ Canvas(xlim = NULL, ylim = xlim, xpd=par("xpd"), mar=c(5.1,5.1,5.1,5.1),
 %%     ~~Describe \code{xlim} here~~
 }
   \item{xpd}{expand drawing area, defaults to \code{par("xpd")}.
+%%     ~~Describe \code{xlim} here~~
+}
+  \item{main}{the main title on top of the plot.
 %%     ~~Describe \code{xlim} here~~
 }
   \item{mar}{set margins. Defaults to c(5.1,5.1,5.1,5.1).
@@ -40,6 +43,10 @@ Canvas(xlim = NULL, ylim = xlim, xpd=par("xpd"), mar=c(5.1,5.1,5.1,5.1),
 \code{asp = 1, xaxt = "n", yaxt = "n", xlab = "", ylab = "", frame.plot = FALSE}.
 %%  ~~ If necessary, more details than the description above ~~
 }
+\value{
+a list of all the previous values of the parameters changed (returned invisibly)
+}
+
 \author{Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~
 }

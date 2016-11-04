@@ -1,16 +1,21 @@
 \name{Extremes}
 \alias{Large}
 \alias{Small}
+
+\alias{HighLow}
+
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Kth Smallest/Largest Values
 %%  ~~function to do ... ~~
 }
-\description{This function returns the kth smallest, resp. largest values from a vector x.
+\description{Find the kth smallest, resp. largest values from a vector x and return the values, but also their frequencies.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 Small(x, k = 5, unique = FALSE, na.last = NA)
 Large(x, k = 5, unique = FALSE, na.last = NA)
+
+HighLow(x, nlow = 5, nhigh = nlow, na.last = NA)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -27,12 +32,20 @@ Large(x, k = 5, unique = FALSE, na.last = NA)
     If \code{TRUE}, missing values in the data are put last; if
     \code{FALSE}, they are put first; if \code{NA}, they are removed.}
 
+  \item{nlow}{a single integer. The number of the smallest elements of a vector to be printed. Defaults to 5.
+}
+  \item{nhigh}{a single integer. The number of the greatest elements of a vector to be printed. Defaults to the number of \code{nlow}.
+}
+
 }
 \details{There are several points of this problem discussed out there. This implementation is based on effective C++ code, which is quite fast.
-%%  ~~ If necessary, more details than the description above ~~
+
+HighLow enumerates the k extreme values (both sides) and their frequencies (in brackets). It is used for describing univariate variables and is interesting for checking the ends of the vector, where in real data often wrong values accumulate.
+This is merely a printing routine for the highest and the lowest values of x.
 }
-\value{either a vector with the k most extreme values, if \code{unique} is set to \code{FALSE}
-or a list, containing the k most extreme values and their respective frequency.
+\value{if \code{unique} is set to \code{FALSE}: a vector with the k most extreme values,
+\cr
+else: a list, containing the k most extreme values and their frequencies.
 }
 \author{Andri Signorell <andri@signorell.net>\cr
 C++ parts by Nathan Russell and Romain Francois
@@ -44,7 +57,7 @@ C++ parts by Nathan Russell and Romain Francois
 }
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{\code{\link{max}}, \code{\link{max}}, \code{\link{HighLow}}, \code{\link{sort}}, \code{\link{rank}}
+\seealso{\code{\link{max}}, \code{\link{max}}, \code{\link{sort}}, \code{\link{rank}}
 }
 \examples{
 x <- sample(1:10, 1000, rep=TRUE)
@@ -55,6 +68,10 @@ Large(x, k=3, unique=TRUE)
 x <- runif(1000000)
 Small(x, 3, unique=TRUE)
 Small(x, 3, unique=FALSE)
+
+# Both ends
+cat(HighLow(d.pizza$temperature, na.last=NA))
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

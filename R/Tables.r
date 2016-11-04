@@ -53,12 +53,17 @@ print.Freq <- function(x, digits=NULL, ...) {
     print.data.frame(x, digits=digits, ...)
   } else {
 
-    afmt <- .fmt_abs()
-    pfmt <- .fmt_per(digits=digits)
+    afmt <- Fmt("abs")
+    pfmt <- Fmt("per")
+    if(!is.null(digits))
+      pfmt$digits <- digits
 
     # object x comes as list lacking an as.data.frame option...
-    print(data.frame(level=x$level, freq=Format(x$freq, fmt=afmt), perc=Format(x$perc, fmt=pfmt),
-                     cumfreq=Format(x$cumfreq, fmt=afmt), cumperc=Format(x$cumperc, fmt=pfmt)),
+    print(data.frame(level=x$level,
+                     freq=Format(x$freq, fmt=afmt),
+                     perc=Format(x$perc, fmt=pfmt),
+                     cumfreq=Format(x$cumfreq, fmt=afmt),
+                     cumperc=Format(x$cumperc, fmt=pfmt)),
           print.gap = InDots(..., arg="print.gap", default=2))
   }
 }
@@ -149,7 +154,7 @@ PercTable.table <- function(tab, row.vars=NULL, col.vars = 2, justify = "right"
     }
 
     # get the percent format from global option
-    px[] <- Format(px, fmt=.fmt_per())
+    px[] <- Format(px, fmt=Fmt("per"))
 
     # set 100% margins to some zero value
     # but only if main percentages are requested
@@ -183,23 +188,23 @@ PercTable.table <- function(tab, row.vars=NULL, col.vars = 2, justify = "right"
   if(!is.null(margins)) tlst[["freq"]] <- addmargins(tab, if(length(dim(tab))==1) {1} else {3 - margins})
 
   # format tab as.character
-  tlst[["freq"]][] <- Format(tlst[["freq"]], fmt=.fmt_abs())
+  tlst[["freq"]][] <- Format(tlst[["freq"]], fmt=Fmt("abs"))
   if(freq == FALSE) tlst[["freq"]] <- NULL
 
   suppressWarnings(r.chisq <- chisq.test(tab))
 
   if(expected == TRUE) {
-    tlst[["exp"]] <- Format(r.chisq$expected, fmt=.fmt_num())
+    tlst[["exp"]] <- Format(r.chisq$expected, fmt=Fmt("num"))
     if(1 %in% margins) tlst[["exp"]] <- cbind(tlst[["exp"]], Sum=zero)
     if(2 %in% margins) tlst[["exp"]] <- rbind(tlst[["exp"]], Sum=zero)
   }
   if(residuals == TRUE){
-    tlst[["res"]] <- Format(r.chisq$residuals, fmt=.fmt_num())
+    tlst[["res"]] <- Format(r.chisq$residuals, fmt=Fmt("num"))
     if(1 %in% margins) tlst[["res"]] <- cbind(tlst[["res"]], Sum=zero)
     if(2 %in% margins) tlst[["res"]] <- rbind(tlst[["res"]], Sum=zero)
   }
   if(stdres == TRUE) {
-    tlst[["stdres"]] <-  Format(r.chisq$stdres, fmt=.fmt_num())
+    tlst[["stdres"]] <-  Format(r.chisq$stdres, fmt=Fmt("num"))
     if(1 %in% margins) tlst[["stdres"]] <- cbind(tlst[["stdres"]], Sum=zero)
     if(2 %in% margins) tlst[["stdres"]] <- rbind(tlst[["stdres"]], Sum=zero)
   }

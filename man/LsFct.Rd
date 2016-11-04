@@ -1,12 +1,12 @@
-\name{LsFct}
+\name{List Variety Of Objects}
 \alias{LsFct}
 \alias{LsObj}
 \alias{LsData}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{List Functions of a Package
+\title{List Objects, Functions Or Data in a Package
 %%  ~~function to do ... ~~
 }
-\description{List all the functions of a package.
+\description{List all the objects, functions or data in a package.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -20,8 +20,8 @@ LsData(package)
 %%     ~~Describe \code{package} here~~
 }
 }
-\details{This is just a wrapper for \code{\link{ls}}, \code{\link{ls.str}} and \code{\link{lsf.str}} with the appropriate arguments (as I always forgot how to do the trick). 
-LsObj lists all objects, LsFct just the functions and LsData the data in an package (strictly speaking the lists). 
+\details{This is just a wrapper for \code{\link{ls}}, \code{\link{ls.str}} and \code{\link{lsf.str}} with the appropriate arguments (as I always forgot how to do the trick).
+LsObj lists all objects, LsFct just the functions and LsData the data in a package.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \references{

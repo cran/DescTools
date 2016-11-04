@@ -4,13 +4,13 @@
 \title{Draw Regular Polygon(s)
 %%  ~~function to do ... ~~
 }
-\description{Draw a regular polygon with n corners. This is the workhorse function for drawing regular polygons. 
+\description{Draw a regular polygon with n corners. This is the workhorse function for drawing regular polygons.
 Drawing a circle can be done by setting the vertices to a value of say 100.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-DrawRegPolygon(x = 0, y = x, radius.x = 1, radius.y = radius.x, rot = 0, 
-            nv = 3, border = par("fg"), col = par("bg"), lty = par("lty"), 
+DrawRegPolygon(x = 0, y = x, radius.x = 1, radius.y = radius.x, rot = 0,
+            nv = 3, border = par("fg"), col = par("bg"), lty = par("lty"),
             lwd = par("lwd"), plot = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -59,25 +59,25 @@ structures to a polygon.
 %%  ~~who you are~~
 }
 
-\seealso{\code{\link{polygon}}, \code{\link{DrawAnnulus}}, \code{\link{DrawCircle}}, \code{\link{DrawArc}}
+\seealso{\code{\link{polygon}}, \code{\link{DrawCircle}}, \code{\link{DrawArc}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
 # Draw 4 triangles (nv = 3) with different rotation angles
 plot(c(0,1),c(0,1), asp=1, type="n", xaxt="n", yaxt="n", xlab="", ylab="")
-DrawRegPolygon(x = 0.5, y = 0.5, rot = (1:4)*pi/6, radius.x = 0.5, nv = 3, 
+DrawRegPolygon(x = 0.5, y = 0.5, rot = (1:4)*pi/6, radius.x = 0.5, nv = 3,
   col = SetAlpha("yellow",0.5))
 
 
 # Draw several polygons
 plot(c(0,1),c(0,1), asp=1, type="n", xaxt="n", yaxt="n", xlab="", ylab="")
-DrawRegPolygon(x = 0.5, y = 0.5, radius.x=seq(50, 5, -10) * 1 /100, 
+DrawRegPolygon(x = 0.5, y = 0.5, radius.x=seq(50, 5, -10) * 1 /100,
   rot=0, nv = c(50, 10, 7, 4, 3), col=SetAlpha("blue",seq(0.2,0.7,0.1)))
 
 
 # Combine several polygons by sorting the coordinates
 # Calculate the xy-points for two concentric pentagons
-d.pts <- do.call("rbind", lapply(DrawRegPolygon(radius.x=c(1,0.38), nv=5, 
+d.pts <- do.call("rbind", lapply(DrawRegPolygon(radius.x=c(1,0.38), nv=5,
   rot=c(pi/2, pi/2+pi/5), plot=FALSE ), data.frame))
 
 # prepare plot
@@ -91,8 +91,8 @@ polygon( d.pts[order(rep(1:6, times=2), rep(1:2, each=6)), c("x","y")], col="yel
 # Move the center
 plot(c(0,1),c(0,1), asp=1, type="n", xaxt="n", yaxt="n", xlab="", ylab="")
 theta <- seq(0, pi/6, length.out=5)
-xy <- PolToCart( exp(theta) /2, theta) 
-DrawRegPolygon(x=xy$x, y=xy$y + 0.5, radius.x=seq(0.5, 0.1, -0.1), 
+xy <- PolToCart( exp(theta) /2, theta)
+DrawRegPolygon(x=xy$x, y=xy$y + 0.5, radius.x=seq(0.5, 0.1, -0.1),
   nv=4, rot=seq(0, pi/2, length.out=5), col=rainbow(5) )
 
 
@@ -105,7 +105,7 @@ text(x=0,y=0, "Polygon", cex=6, srt=45)
 pts <- DrawRegPolygon(radius.x=c(0.7, 0.5), nv = c(100, 6), plot=FALSE )
 
 # combine the 2 shapes and plot the new structure
-polygon(x = unlist(lapply(pts, "[", "x")), 
+polygon(x = unlist(lapply(pts, "[", "x")),
   y=unlist(lapply(pts, "[", "y")), col="green", border=FALSE)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

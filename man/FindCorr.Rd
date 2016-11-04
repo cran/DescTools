@@ -15,7 +15,7 @@ FindCorr(x, cutoff = .90, verbose = FALSE)
   \item{verbose}{A boolean for printing the details}
 }
 \details{
-   The absolute values of pair-wise correlations are considered. If two variables have a high correlation, 
+   The absolute values of pair-wise correlations are considered. If two variables have a high correlation,
    the function looks at the mean absolute correlation of each variable and removes the variable with the
    largest mean absolute correlation.
 
@@ -29,7 +29,7 @@ FindCorr(x, cutoff = .90, verbose = FALSE)
   Max Kuhn. Contributions from Jed Wing, Steve Weston, Andre Williams, Chris Keefer,
   Allan Engelhardt, Tony Cooper, Zachary Mayer and the R Core Team (2014). caret:
   Classification and Regression Training. R package version 6.0-35.
-  \url{http://CRAN.R-project.org/package=caret}
+  \url{https://cran.r-project.org/package=caret}
 }
 \author{Original R code by Dong Li, modified by Max Kuhn}
 

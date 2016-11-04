@@ -4,8 +4,8 @@
 \title{Point in Polygon }
 
 \description{
-	\code{PtInPoly} works out if 2D points lie within the boundaries of a defined polygon. \cr \cr 
-	\bold{Note:} Points that lie on the boundaries of the polygon or vertices are assumed to be within the polygon.
+	\code{PtInPoly} works out, whether XY-points lie within the boundaries of a given polygon. \cr \cr
+	\bold{Note:} Points that lie on the boundaries of the polygon or vertices are assumed to lie within the polygon.
 }
 
 \usage{PtInPoly(pnts, poly.pnts) }

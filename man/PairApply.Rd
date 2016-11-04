@@ -22,7 +22,7 @@ PairApply(x, FUN = NULL, ..., symmetric = FALSE)
 %%     ~~Describe \code{\dots} here~~
 }
 \item{symmetric}{logical. Does the function yield the same result for FUN(x, y) and FUN(y, x)? \cr
- If TRUE just the lower triangular matrix is calculated and transposed. Default is FALSE.
+ If \code{TRUE} just the lower triangular matrix is calculated and transposed. Default is FALSE.
 %%     ~~Describe \code{x} here~~
 }
 }

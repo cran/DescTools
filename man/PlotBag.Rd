@@ -45,25 +45,25 @@ compute.bagplot(x, y, factor = 3, na.rm = FALSE, approx.limit = 300,
      computed by \code{compute.PlotBag} }
   \item{y}{ y values of the data set } 
   \item{factor}{ factor defining the loop }
-  \item{na.rm}{ if TRUE 'NA' values are removed otherwise exchanged by median}
+  \item{na.rm}{ if \code{TRUE} 'NA' values are removed otherwise exchanged by median}
   \item{approx.limit}{ if the number of data points exceeds 
           \code{approx.limit} a sample is used to compute 
           some of the quantities; default: 300 }
-  \item{show.outlier}{ if TRUE outlier are shown }
-  \item{show.whiskers}{ if TRUE whiskers are shown }
-  \item{show.looppoints}{ if TRUE loop points are plottet }
-  \item{show.bagpoints}{ if TRUE bag points are plottet }
-  \item{show.loophull}{ if TRUE the loop is plotted }
-  \item{show.baghull}{ if TRUE the bag is plotted }
-  \item{create.plot}{ if FALSE no plot is created }
-  \item{add}{ if TRUE the bagplot is added to an existing plot }
+  \item{show.outlier}{ if \code{TRUE} outlier are shown }
+  \item{show.whiskers}{ if \code{TRUE} whiskers are shown }
+  \item{show.looppoints}{ if \code{TRUE} loop points are plottet }
+  \item{show.bagpoints}{ if \code{TRUE} bag points are plottet }
+  \item{show.loophull}{ if \code{TRUE} the loop is plotted }
+  \item{show.baghull}{ if \code{TRUE} the bag is plotted }
+  \item{create.plot}{ if \code{FALSE} no plot is created }
+  \item{add}{ if \code{TRUE} the bagplot is added to an existing plot }
   \item{pch}{ sets the plotting character }
   \item{cex}{ sets characters size}
   \item{dkmethod}{ 1 or 2, there are two method of  
      approximating the bag, method 1 is very rough (only based on observations }
   \item{precision}{ precision of approximation, default: 1 }
   \item{verbose}{ automatic commenting of calculations }
-  \item{debug.plots}{ if TRUE additional plots describing 
+  \item{debug.plots}{ if \code{TRUE} additional plots describing 
                       intermediate results are constructed }
   \item{col.loophull}{ color of loop hull }
   \item{col.looppoints}{ color of the points of the loop }

@@ -6,19 +6,19 @@
 \title{Siegel-Tukey Test For Equality In Variability
 }
 \description{
-Non-parametric Siegel-Tukey test for equality in variability. 
-The null hypothesis is that the variability of x is equal between two 
-groups. A rejection of the null hypothesis indicates that variability differs between 
+Non-parametric Siegel-Tukey test for equality in variability.
+The null hypothesis is that the variability of x is equal between two
+groups. A rejection of the null hypothesis indicates that variability differs between
 the two groups. \code{SiegelTukeyRank} returns the ranks, calculated after Siegel Tukey logic.
 }
 \usage{
 SiegelTukeyTest(x, ...)
 
-\method{SiegelTukeyTest}{default}(x, y, adjust.median = FALSE,  
-                alternative = c("two.sided", "less", "greater"), 
-                mu = 0, exact = NULL, correct = TRUE, conf.int = FALSE, 
+\method{SiegelTukeyTest}{default}(x, y, adjust.median = FALSE,
+                alternative = c("two.sided", "less", "greater"),
+                mu = 0, exact = NULL, correct = TRUE, conf.int = FALSE,
                 conf.level = 0.95, \dots)
-         
+
 \method{SiegelTukeyTest}{formula}(formula, data, subset, na.action, \dots)
 
 
@@ -28,16 +28,18 @@ SiegelTukeyRank(x, g, drop.median = TRUE)
 \arguments{
   \item{x, y}{numeric vector of data values. Non-finite (e.g. infinite or missing) values will be omitted.
 }
-  \item{adjust.median}{Should between-group differences in medians be leveled 
-    before performing the test? In certain cases, the Siegel-Tukey test is 
-    susceptible to median differences and may indicate significant differences 
-    in variability that, in reality, stem from differences in medians. 
+\item{g}{a vector or factor object giving the group for the corresponding elements of x.
+}
+\item{adjust.median}{Should between-group differences in medians be leveled
+    before performing the test? In certain cases, the Siegel-Tukey test is
+    susceptible to median differences and may indicate significant differences
+    in variability that, in reality, stem from differences in medians. Default is \code{FALSE}.
 
 }
   \item{alternative}{a character string specifying the alternative hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"} or \code{"less"}. You can specify just the initial letter.
 }
   \item{mu}{a number specifying an optional parameter used to form the null hypothesis. See Details.}
-  
+
   \item{exact}{a logical indicating whether an exact p-value should be computed. This is passed directly to \code{\link{wilcox.test}}.
 }
   \item{correct}{a logical indicating whether to apply continuity correction in the normal approximation for the p-value.
@@ -45,23 +47,22 @@ SiegelTukeyRank(x, g, drop.median = TRUE)
   \item{conf.int}{a logical indicating whether a confidence interval should be computed.
 }
   \item{conf.level}{confidence level of the interval.}
-  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}  
-  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}. 
-    By default the variables are taken from \code{environment(formula)}.}  
-  \item{subset}{an optional vector specifying a subset of observations to be used.}  
-  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}  
+  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}
+  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}.
+    By default the variables are taken from \code{environment(formula)}.}
+  \item{subset}{an optional vector specifying a subset of observations to be used.}
+  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}
 
-\item{g}{a vector or factor object giving the group for the corresponding elements of x. 
-}
-\item{drop.median}{logical, defining whether the median of the combined samples should be left out, ensuring that there's an even number of elements (which is a requirement of the Siegel-Tukey test). Defaults to TRUE. 
+
+\item{drop.median}{logical, defining whether the median of the combined samples should be left out, ensuring that there's an even number of elements (which is a requirement of the Siegel-Tukey test). Defaults to \code{TRUE}.
 }
   \item{\dots}{further arguments to be passed to or from methods.}
 
 }
 \details{
-The Siegel-Tukey test has relatively low power and may, under certain 
-conditions, indicate significance due to differences in medians rather than 
-differences in variabilities (consider using the argument adjust.median). 
+The Siegel-Tukey test has relatively low power and may, under certain
+conditions, indicate significance due to differences in medians rather than
+differences in variabilities (consider using the argument \code{adjust.median}).
 Consider also using \code{\link{mood.test}} or \code{\link{ansari.test}}.
 
 }
@@ -79,8 +80,8 @@ A list of class \code{htest}, containing the following components:
 
 
 \references{
-Siegel, S., Tukey, J. W. (1960): A nonparametric sum of ranks procedure for relative spread in unpaired samples. 
-\emph{Journal of the American Statistical Association}. 
+Siegel, S., Tukey, J. W. (1960): A nonparametric sum of ranks procedure for relative spread in unpaired samples.
+\emph{Journal of the American Statistical Association}.
 
 Sheskin, D. J. (2004): \emph{Handbook of parametric and nonparametric statistical procedures} 3rd edition. Chapman and Hall/CRC. Boca Raton, FL.
 %% ~put references to the literature/web site here ~
@@ -116,7 +117,7 @@ SiegelTukeyTest(x ~ id)
 # Sachs, Angewandte Statistik, 12. Auflage, 2007, S. 314
 A <- c(10.1,7.3,12.6,2.4,6.1,8.5,8.8,9.4,10.1,9.8)
 B <- c(15.3,3.6,16.5,2.9,3.3,4.2,4.9,7.3,11.7,13.1)
-SiegelTukeyTest(A, B) 
+SiegelTukeyTest(A, B)
 
 
 
@@ -143,7 +144,7 @@ SiegelTukeyTest(x ~ id, adjust.median=TRUE)
 
 ### 5
 x <- c(33,62,84,85,88,93,97)
-y <- c(4,16,48,51,66,98) 
+y <- c(4,16,48,51,66,98)
 SiegelTukeyTest(x, y)
 
 ### 6

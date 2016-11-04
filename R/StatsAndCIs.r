@@ -14,11 +14,77 @@
 
 Mean <- mean
 
-Mean.default <- function (x, trim = 0, na.rm = FALSE, ...)
-  mean.default(x, trim, na.rm, ...)
+Mean.default <- function (x, weights = NULL, trim = 0, na.rm = FALSE, ...) {
 
-SD <- sd
-Var <- var
+  if(is.null(weights)) {
+    mean.default(x, trim, na.rm, ...)
+
+  } else {
+    if(trim!=0)
+      warning("trim can't be set together with weights, we fall back to trim=0!")
+
+    # # recycle weights
+    # weights <- rep(weights, length.out=length(x))
+    # sum(x*weights, na.rm=na.rm) / sum(weights, na.rm=na.rm)
+
+# from stats:::weighted.mean.default
+
+    if (length(weights) != length(x))
+      stop("'x' and 'w' must have the same length")
+    weights <- as.double(weights)
+    if (na.rm) {
+      i <- !is.na(x)
+      weights <- weights[i]
+      x <- x[i]
+    }
+    sum((x * weights)[weights != 0])/sum(weights)
+
+  }
+
+}
+
+# from stats
+SD <- function (x, weights = NULL, na.rm = FALSE)
+  sqrt(Var(if (is.vector(x) || is.factor(x)) x else as.double(x),
+           weights=weights, na.rm = na.rm))
+
+
+Var <- function (x, weights = NULL, na.rm = FALSE, use) {
+
+  wtd.var <- function (x, weights = NULL, normwt = FALSE, na.rm = TRUE,
+                       method = c("unbiased",  "ML")) {
+    # source Hmisc
+
+    method <- match.arg(method)
+    if (!length(weights)) {
+      if (na.rm)
+        x <- x[!is.na(x)]
+      return(var(x))
+    }
+    if (na.rm) {
+      s <- !is.na(x + weights)
+      x <- x[s]
+      weights <- weights[s]
+    }
+    if (normwt)
+      weights <- weights * length(x)/sum(weights)
+    if (method == "ML")
+      return(as.numeric(stats::cov.wt(cbind(x), weights, method = "ML")$cov))
+    sw <- sum(weights)
+    xbar <- sum(weights * x)/sw
+    sum(weights * ((x - xbar)^2))/(sw - (if (normwt)
+      sum(weights^2)/sw
+      else 1))
+  }
+
+  if(is.null(weights)) {
+    var(x=x, na.rm=na.rm, use=use)
+  } else {
+    wtd.var(x=x, weights=weights, na.rm=na.rm)
+  }
+}
+
+
 Cov <- cov
 Cor <- cor
 
@@ -41,37 +107,62 @@ MAD <- mad
 # "tanpi", "gamma", "lgamma", "digamma", "trigamma"
 
 
-Range <- function(x, trim=0, na.rm = FALSE)
-  diff(range(Trim(x, trim=trim, na.rm=na.rm), na.rm=na.rm))
+Range <- function(x, trim=NULL, robust=FALSE, na.rm = FALSE, ...){
 
+  RobRange <- function(x, trim = NULL, fac = 3, na.rm = FALSE) {
 
+    if(is.null(trim))
+      trim <- 0.2
+    # author: Werner Stahel
+    # from:   regr.r
 
-RobRange <- function(x, trim = 0.2, fac = 3, na.rm = FALSE) {
+    if(na.rm) x <- na.omit(x)
 
-  # author: Werner Stahel
-  # from:   regr.r
+    ldat <- x[is.finite(x)]
+    if (is.character(ldat)|length(ldat) == 0) stop("invalid data")
+    trim <- c(trim, 0.2)[1]
+    if (!is.finite(trim)) trim <- 0.2
+    lmn <- mean(ldat, trim=trim)
+    lds <- sort(abs(ldat - lmn))
+    ln <- ceiling((1 - trim) * length(ldat))
+    if (ln < 3) {
+      warning("Not enough valid data. returning ordinary range")
+      lsd <- Inf
+    } else {
+      lsd <- fac * sum(lds[1:ln] / (ln-1))
+      if (lsd == 0) {
+        warning("Robust range has width 0. returning ordinary range")
+        lsd <- Inf }
+    }
+    bounds <- c(max(lmn - lsd, min(ldat)), min(lmn + lsd, max(ldat)))
 
-  if(na.rm) x <- na.omit(x)
+    res <- diff(bounds)
+    attr(res, "bounds") <- bounds
 
-  ldat <- x[is.finite(x)]
-  if (is.character(ldat)|length(ldat) == 0) stop("invalid data")
-  trim <- c(trim, 0.2)[1]
-  if (!is.finite(trim)) trim <- 0.2
-  lmn <- mean(ldat, trim=trim)
-  lds <- sort(abs(ldat - lmn))
-  ln <- ceiling((1 - trim) * length(ldat))
-  if (ln < 3) {
-    warning("Not enough valid data. returning ordinary range")
-    lsd <- Inf
-  } else {
-    lsd <- fac * sum(lds[1:ln] / (ln-1))
-    if (lsd == 0) {
-      warning("Robust range has width 0. returning ordinary range")
-      lsd <- Inf }
+    return(res)
+
   }
-  c(max(lmn - lsd, min(ldat)), min(lmn + lsd, max(ldat)))
+
+
+  if(robust)
+    RobRange(x=x, trim=trim, na.rm=na.rm, ...)
+
+  else {
+    if(is.null(trim))
+      trim <- 0
+
+    rng <- range(Trim(x, trim=trim, na.rm=na.rm), na.rm=na.rm)
+    res <- diff(rng)
+    attr(res, "bounds") <- rng
+
+    res
+
+  }
 
 }
+
+
+
 
 
 
@@ -354,7 +445,7 @@ FindCorr <- function(x, cutoff = .90, verbose = FALSE) {
 
   deletecol <- 0
 
-  for(i in 1:(varnum-1))
+  for(i in 1L:(varnum-1))
   {
     for(j in (i+1):varnum)
     {
@@ -451,28 +542,57 @@ Mode <- function(x, na.rm=FALSE) {
 
 
 
-Gmean <- function (x, na.rm = FALSE) {
+Gmean <- function (x, method = c("classic", "boot"),
+                   conf.level = NA, sides = c("two.sided","left","right"),
+                   na.rm = FALSE, ...) {
+
+  # see also: http://www.stata.com/manuals13/rameans.pdf
+
   if (na.rm) x <- na.omit(x)
-  if(all(is.na(x)) || any(x < 0))
+  if(any(is.na(x)) || any(x < 0))
     return(NA)
-  else
-    return(exp(mean(log(x))))
+  else{
+    if(is.na(conf.level))
+      return(exp(mean(x=log(x), na.rm=na.rm)))
+    else
+      return(exp(MeanCI(x=log(x), method = method,
+                      conf.level = conf.level, sides = sides, na.rm=na.rm, ...)))
+  }
 }
 
 
 Gsd <- function (x, na.rm = FALSE) {
   if (na.rm) x <- na.omit(x)
-  if(all(is.na(x)) || any(x < 0))
+  if(any(is.na(x)) || any(x < 0))
     return(NA)
   else
     return(exp(sd(log(x))))
 }
 
-Hmean <- function(x, na.rm = FALSE) {
-  if(all(is.na(x)) || any(x <= 0))
+
+Hmean <- function(x, method = c("classic", "boot"),
+                  conf.level = NA, sides = c("two.sided","left","right"),
+                  na.rm = FALSE, ...) {
+  if (na.rm) x <- na.omit(x)
+  if(any(is.na(x)) || any(x <= 0))
     return(NA)
-  else
-    return(1 / mean(1/x, na.rm = na.rm))
+  else {
+    if(is.na(conf.level))
+      return(1 / mean(x, na.rm=na.rm))
+
+    else {
+
+      res <- (1 / MeanCI(x = 1/x, method = method,
+                        conf.level = conf.level, sides = sides, na.rm=na.rm, ...))
+      if(!is.na(conf.level)){
+        res[2:3] <- c(min(res[2:3]), max(res[2:3]))
+        if(res[2] < 0)
+          res[c(2,3)] <- NA
+      }
+    }
+    return(res)
+
+  }
 }
 
 
@@ -1506,7 +1626,7 @@ BinomRatioCI <- function(x1, n1, x2, n2, conf.level = 0.95, method = "katz.log",
         nd <- matrix(ncol = R, nrow = m)
         dd <- matrix(ncol = R, nrow = n)
         brat <- 1:R
-        for(i in 1:R){
+        for(i in 1L:R){
           nd[,i] <- sample(num.data, m, replace = TRUE)
           dd[,i] <- sample(den.data, n, replace = TRUE)
           brat[i] <- (sum(nd[,i])/m)/(sum(dd[,i])/n)
@@ -1750,7 +1870,7 @@ BinomRatioCI <- function(x1, n1, x2, n2, conf.level = 0.95, method = "katz.log",
   CI <- matrix(ncol = 3, nrow = length(x1))
   vh <- rep(NA, length(x1))
 
-  for(i in 1 : length(x1)){
+  for(i in 1L : length(x1)){
     temp <- ci.prat1(x = x[i], m = m[i], y = y[i], n = n[i], conf = conf, method = method, bonf = bonf)
     CI[i,] <- temp$CI
     vh[i] <- temp$varhat
@@ -1823,12 +1943,12 @@ MultinomCI <- function(x, conf.level = 0.95, method = c("sisonglaz", "cplus1", "
 
     m <- matrix(0, k, 5)
 
-    for(i in 1:k){
+    for(i in 1L:k){
       lambda <- x[i]
       mom <- .moments(c, lambda)
-      for(j in 1:5){ m[i,j] <- mom[j] }
+      for(j in 1L:5L){ m[i,j] <- mom[j] }
     }
-    for(i in 1:k){ m[i, 4] <- m[i, 4] - 3 * m[i, 2]^2 }
+    for(i in 1L:k){ m[i, 4] <- m[i, 4] - 3 * m[i, 2]^2 }
 
     s <- colSums(m)
     s1 <- s[1]
@@ -1845,7 +1965,7 @@ MultinomCI <- function(x, conf.level = 0.95, method = c("sisonglaz", "cplus1", "
     f <- poly*exp(-z^2/2)/(sqrt(2)*gamma(0.5))
 
     probx <- 1
-    for(i in 1:k){ probx <- probx * m[i,5]  }
+    for(i in 1L:k){ probx <- probx * m[i,5]  }
 
     return(probn * probx * f / sqrt(s2))
   }
@@ -2389,7 +2509,47 @@ CohenD <- function(x, y=NULL, pooled = TRUE, correct = FALSE, conf.level = NA, n
 }
 
 
-CoefVar <- function(x, unbiased = FALSE, conf.level = NA, na.rm = FALSE) {
+
+CoefVar <- function (x, unbiased = FALSE, conf.level = NA, na.rm = FALSE, ...) {
+  UseMethod("CoefVar")
+}
+
+
+
+CoefVar.lm <- function (x, unbiased = FALSE, conf.level = NA, na.rm = FALSE, ...) {
+
+  # source:  http://www.ats.ucla.edu/stat/mult_pkg/faq/general/coefficient_of_variation.htm
+
+  # In the modeling setting, the CV is calculated as the ratio of the root mean squared error (RMSE)
+  # to the mean of the dependent variable.
+
+  # root mean squared error
+  rmse <- sqrt(sum(x$residuals^2) / x$df.residual)
+  res <- rmse / mean(x$model[[1]], na.rm=na.rm)
+
+  # This is the same approach as in CoefVar.default, but it's not clear
+  # if it is correct in the enviroment of a model
+  n <- x$df.residual
+  if (unbiased) {
+    res <- res * ((1 - (1/(4 * (n - 1))) + (1/n) * res^2) +
+                    (1/(2 * (n - 1)^2)))
+  }
+  if (!is.na(conf.level)) {
+    ci <- .nctCI(sqrt(n)/res, df = n - 1, conf = conf.level)
+    res <- c(est = res, low.ci = unname(sqrt(n)/ci["upr.ci"]),
+             upr.ci = unname(sqrt(n)/ci["lwr.ci"]))
+  }
+
+  return(res)
+
+}
+
+# interface for lme???
+# dependent variable in lme
+# dv <- unname(nlme::getResponse(x))
+
+
+CoefVar.default <- function (x, unbiased = FALSE, conf.level = NA, na.rm = FALSE, ...) {
 
   if(na.rm) x <- na.omit(x)
 
@@ -2414,6 +2574,36 @@ CoefVar <- function(x, unbiased = FALSE, conf.level = NA, na.rm = FALSE) {
 # CoefVar.aov <- function(x){
 #   return(sqrt(sum(x$residual^2) / x$df.residual) / mean(x$fitted.values))
 # }
+
+
+CoefVar.aov <- function (x, unbiased = FALSE, conf.level = NA, na.rm = FALSE, ...) {
+
+  # source:  http://www.ats.ucla.edu/stat/mult_pkg/faq/general/coefficient_of_variation.htm
+
+  # In the modeling setting, the CV is calculated as the ratio of the root mean squared error (RMSE)
+  # to the mean of the dependent variable.
+
+  # root mean squared error
+  rmse <- sqrt(sum(x$residuals^2) / x$df.residual)
+  res <- rmse / mean(x$model[[1]], na.rm=na.rm)
+
+  # This is the same approach as in CoefVar.default, but it's not clear
+  # if it is correct in the enviroment of a model
+  n <- x$df.residual
+  if (unbiased) {
+    res <- res * ((1 - (1/(4 * (n - 1))) + (1/n) * res^2) +
+                    (1/(2 * (n - 1)^2)))
+  }
+  if (!is.na(conf.level)) {
+    ci <- .nctCI(sqrt(n)/res, df = n - 1, conf = conf.level)
+    res <- c(est = res, low.ci = unname(sqrt(n)/ci["upr.ci"]),
+             upr.ci = unname(sqrt(n)/ci["lwr.ci"]))
+  }
+
+  return(res)
+
+}
+
 
 
 VarCI <- function (x, method = c("classic", "norm","basic","stud","perc","bca"),
@@ -2491,6 +2681,9 @@ Lc.formula <- function(formula, data, subset, na.action, ...) {
 
 Lc.default <- function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
 
+  xx <- x
+  nn <- n
+
   g <- Gini(x, n, na.rm=na.rm)
 
   if(na.rm) x <- na.omit(x)
@@ -2506,8 +2699,8 @@ Lc.default <- function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
   p <- c(0,p)
   L <- c(0,L)
   L2 <- L * mean(x)
-  Lc <- list(p, L, L2, g)
-  names(Lc) <- c("p", "L", "L.general", "Gini")
+  Lc <- list(p, L, L2, g, xx, nn)
+  names(Lc) <- c("p", "L", "L.general", "Gini", "x", "n")
   class(Lc) <- "Lc"
 
   # no plot anymore, we have plot(lc) and Desc(lc, plotit=TRUE)
@@ -2526,13 +2719,40 @@ plot.Lc <- function(x, general=FALSE, lwd=2, type="l", xlab="p", ylab="L(p)",
   abline(0,max(L))
 }
 
-lines.Lc <- function(x, general=FALSE, lwd=2, ...) {
+
+lines.Lc <- function(x, general=FALSE, lwd=2, conf.level = NA, args.cband = NULL, ...) {
+
+  Lc.boot.ci <- function(x, conf.level=0.95, n=1000){
+
+    x <- rep(x$x, times=x$n)
+    m <- matrix(sapply(1:n, function(i) sample(x, replace = TRUE)), nrow=length(x))
+
+    lst <- apply(m, 2, Lc)
+    list(x=c(lst[[1]]$p, rev(lst[[1]]$p)),
+         y=c(apply(do.call(rbind, lapply(lst, "[[", "L")), 2, quantile, probs=(1-conf.level)/2),
+             rev(apply(do.call(rbind, lapply(lst, "[[", "L")), 2, quantile, probs=1-(1-conf.level)/2)))
+         )
+  }
+
 
   if(!general)
     L <- x$L
   else
     L <- x$L.general
+
+
+  if (!(is.na(conf.level) || identical(args.cband, NA)) ) {
+    args.cband1 <- list(col = SetAlpha(DescToolsOptions("col")[1], 0.12), border = NA)
+    if (!is.null(args.cband))
+      args.cband1[names(args.cband)] <- args.cband
+
+    ci <- Lc.boot.ci(x, conf.level=conf.level) # Vertrauensband
+    do.call("DrawBand", c(args.cband1, list(x = ci$x), list(y = ci$y)))
+  }
+
+
   lines(x$p, L, lwd=lwd, ...)
+
 }
 
 
@@ -2543,7 +2763,7 @@ plot.Lclist <- function(x, col=1, lwd=2, lty=1, main = "Lorenz curve",
   lgp <- Recycle(x=seq_along(x), col=col, lwd=lwd, lty=lty)
 
   plot(x[[1]], col=lgp$col[1], lwd=lgp$lwd[1], lty=lgp$lty[1], main=main, xlab=xlab, ylab=ylab, ...)
-  for(i in 2:length(x)){
+  for(i in 2L:length(x)){
     lines(x[[i]], col=lgp$col[i], lwd=lgp$lwd[i], lty=lgp$lty[i])
   }
 }
@@ -2566,6 +2786,10 @@ plot.Lclist <- function(x, col=1, lwd=2, lty=1, main = "Lorenz curve",
 
 
 Gini <- function(x, n = rep(1, length(x)), unbiased = TRUE, conf.level = NA, R = 1000, type = "bca", na.rm = FALSE) {
+
+  # cast to numeric, as else sum(x * 1:n) might overflow for integers
+  # http://stackoverflow.com/questions/39579029/integer-overflow-error-using-gini-function-of-package-desctools
+  x <- as.numeric(x)
 
   x <- rep(x, n)    # same handling as Lc
   if(na.rm) x <- na.omit(x)
@@ -4883,7 +5107,7 @@ BinTree <- function(n) {
     yet.to.do <- yet.to.do[-indx]
   }
 
-  ranks
+  return(ranks)
 
 }
 
@@ -4923,7 +5147,7 @@ PlotBinTree <- function(x, main="Binary tree", horiz=FALSE, cex=1.0, col=1, ...)
            asp=FALSE, mar=c(0,0,2,0)+1 )
 
     ii <- 0
-    for(i in 1:(length(lst)-1)){
+    for(i in 1L:(length(lst)-1)){
       for(j in seq_along(lst[[i]])){
         ii <- ii + 1
         if(ii < n)
@@ -4945,7 +5169,7 @@ PlotBinTree <- function(x, main="Binary tree", horiz=FALSE, cex=1.0, col=1, ...)
            asp=FALSE, mar=c(0,0,2,0)+1, ...)
 
     ii <- 0
-    for(i in 1:(length(lst)-1)){
+    for(i in 1L:(length(lst)-1)){
       for(j in seq_along(lst[[i]])){
         ii <- ii + 1
         if(ii < n)
@@ -4975,19 +5199,78 @@ PlotBinTree <- function(x, main="Binary tree", horiz=FALSE, cex=1.0, col=1, ...)
 
 
 
-  if(missing(wts)) wts <- rep(1, length(x))
+  if(missing(wts)) wts <- rep_len(1L, length(x))
 
   ord <- order(y)
   ux <- sort(unique(x))
   n2 <- length(ux)
-  index <- BinTree(n2)[match(x[ord], ux)] - 1L
+  idx <- BinTree(n2)[match(x[ord], ux)] - 1L
   y <- cbind(y,1)
   res <- .Call("conc", y[ord,], as.double(wts[ord]),
-               as.integer(index), as.integer(n2))
+               as.integer(idx), as.integer(n2))
 
   return(list(pi.c = NA, pi.d = NA, C = res[2], D = res[1]))
 
 }
+
+
+
+.assocs_condis <- function(x, y = NULL, conf.level = NA, ...) {
+
+  # (very) fast function for calculating all concordant/discordant pairs based measures
+  # all table operations are cheap compared to the counting of cons/disc...
+  # no implementation for confidence levels so far.
+
+  if(!is.null(y))
+    x <- table(x, y)
+
+  # we need rowsums and colsums, so tabling is mandatory...
+  # use weights
+  x <- as.table(x)
+  min_dim <- min(dim(x))
+  n <- sum(x)
+  ni. <- rowSums(x)
+  nj. <- colSums(x)
+
+  n0 <- n*(n-1L)/2
+  n1 <- sum(ni. * (ni.-1L) / 2)
+  n2 <- sum(nj. * (nj.-1L) / 2)
+
+  x <- as.data.frame(x)
+  z <- .DoCount(x[,1], x[,2], x[,3])
+
+  gamma <- (z$C - z$D)/(z$C + z$D)
+
+  somers_r <- (z$C - z$D) / (n0 - n2)
+  somers_c <- (z$C - z$D) / (n0 - n1)
+
+  taua <- (z$C - z$D) / n0
+  taub <- (z$C - z$D) / sqrt((n0-n1)*(n0-n2))
+  tauc <- (z$C - z$D) * 2 * min_dim / (n^2*(min_dim-1L))
+
+
+  if(is.na(conf.level)){
+    result <- c(gamma=gamma, somers_r=somers_r, somers_c=somers_c,
+                taua=taua, taub=taub, tauc=tauc)
+
+  } else {
+
+    # psi <- 2 * (x$D * x$pi.c - x$C * x$pi.d)/(x$C + x$D)^2
+    # # Asymptotic standard error: sqrt(sigma2)
+    # gamma_sigma2 <- sum(tab * psi^2) - sum(tab * psi)^2
+    #
+    # pr2 <- 1 - (1 - conf.level)/2
+    # ci <- qnorm(pr2) * sqrt(gamma_sigma2) * c(-1, 1) + gamma
+    # result <- c(gamma = gamma,  lwr.ci=max(ci[1], -1), ups.ci=min(ci[2], 1))
+
+    result <- NA
+
+  }
+
+  return(result)
+
+}
+
 
 
 

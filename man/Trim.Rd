@@ -28,7 +28,7 @@ Trim(x, trim = 0.1, na.rm = FALSE)
 \details{A symmetrically trimmed vector \code{x} with a fraction of trim observations (resp. the given number) deleted from each end will be returned. If \code{trim} is set to a value >0.5 or to an integer value > n/2 then the result will be \code{NA}. }
 
 \value{
-The trimmed vector \code{x}. The result vector will be sorted (as \code{\link{sort.int}} is used within the function).
+The trimmed vector \code{x}. The indices of the trimmed values will be attached as attribute named \code{"trim"}.
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}

@@ -25,7 +25,7 @@ PostHocTest(x, ...)
             conf.level = 0.95, ...)
 
 
-\method{print}{PostHocTest}(x, digits = getOption("digfix", 3), ...)
+\method{print}{PostHocTest}(x, digits = getOption("digits", 3), ...)
 \method{plot}{PostHocTest}(x, ...)
 }
 %- maybe also 'usage' for other objects documented here.

@@ -5,16 +5,18 @@
  \code{StrDist} computes distances between strings following to Levenshtein or Hamming method.
 }
 \usage{
-StrDist(x, y, method = "levenshtein", mismatch = 1, gap = 1)
+StrDist(x, y, method = "levenshtein", mismatch = 1, gap = 1, ignore.case = FALSE)
 }
 \arguments{
   \item{x}{character vector, first string.}
   \item{y}{character vector, second string.}
   \item{method}{character, name of the distance method. This must be
-        \code{"levenshtein"} or \code{"hamming"}. Default is the classical
+        \code{"levenshtein"}, \code{"normlevenshtein"} or \code{"hamming"}. Default is \code{"levenshtein"}, the classical
         Levenshtein distance.}
   \item{mismatch}{numeric, distance value for a mismatch between symbols.}
   \item{gap}{numeric, distance value for inserting a gap.}
+  \item{ignore.case}{if \code{FALSE} (default), the distance measure will be case sensitive and if \code{TRUE}, case is ignored.}
+
 }
 \details{
   The function computes the Hamming and the Levenshtein (edit) distance of two given strings
@@ -29,7 +31,7 @@ StrDist(x, y, method = "levenshtein", mismatch = 1, gap = 1)
 
   The edit distance is useful, but normalizing the distance to fall within the interval [0,1] is
 preferred because it is somewhat diffcult to judge whether an LD of for example 4 suggests a high or low degree of similarity.
-  The method "normallevenshtein" for normalizing the LD is sensitive to this scenario.
+  The method \code{"normlevenshtein"} for normalizing the LD is sensitive to this scenario.
 In this implementation, the Levenshtein distance is transformed to fall in this interval as
 follows:
 \deqn{lnd = 1 - \frac{ld}{max(length(x), length(y))}}{lnd = 1 - ld / max(length(x), length(y))}

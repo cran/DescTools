@@ -25,7 +25,7 @@ UncertCoef(x, y = NULL, direction = c("symmetric", "row", "column"),
   \code{"row"} calculates UncertCoef (R|C) ("column dependent").
 %%     ~~Describe \code{x} here~~
 }
-\item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated. 
+\item{conf.level}{confidence level of the interval. If set to \code{NA} (which is the default) no confidence interval will be calculated. 
 %%     ~~Describe \code{conf.level} here~~
 }
 \item{p.zero.correction}{slightly nudge zero values so that their logarithm can be calculated %%     ~~Describe \code{conf.level} here~~

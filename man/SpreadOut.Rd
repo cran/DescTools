@@ -10,14 +10,14 @@
 SpreadOut(x, mindist = NULL, cex = 1.0)
 }
 \arguments{
- \item{x}{a numeric vector which may contain NAs.}
+ \item{x}{a numeric vector which may contain \code{NA}s.}
  \item{mindist}{the minimum interval between any two values when in ascending
-  or descending order. If this is left to NULL (default) the function will check if a plot is open and then use 90\% of \code{\link{strheight}}.}
+  or descending order. If this is left to \code{NULL} (default) the function will check if a plot is open and then use 90\% of \code{\link{strheight}}.}
   \item{cex}{numeric character expansion factor; multiplied by \code{\link{par}("cex")} yields the final character size; the default \code{NULL} is equivalent to \code{1}.}
 }
 \details{
  \code{SpreadOut} starts at or near the middle of the vector and increases the
- intervals between the ordered values. NAs are preserved. \code{SpreadOut}
+ intervals between the ordered values. \code{NA}s are preserved. \code{SpreadOut}
  first tries to spread groups of values with intervals less than \code{mindist}
  out neatly away from the mean of the group. If this doesn't entirely succeed,
  a second pass that forces values away from the middle is performed.
@@ -29,10 +29,10 @@ SpreadOut(x, mindist = NULL, cex = 1.0)
  On success, the spread out values. If there are less than two valid values, the original vector is returned.
 }
 \note{ This function is borrowed from the package \pkg{plotrix} (\code{SpreadOut}) and has been
-integrated here with some minor changes. 
+integrated here with some minor changes.
 }
 
-\author{Jim Lemon <jim@bitwrit.com.au>\cr 
+\author{Jim Lemon <jim@bitwrit.com.au>\cr
 some extensions Andri Signorell <andri@signorell>}
 \examples{
 SpreadOut(c(1, 3, 3, 3, 3, 5), 0.2)

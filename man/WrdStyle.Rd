@@ -9,7 +9,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-WrdStyle(wrd = getOption("lastWord"))
+WrdStyle(wrd = DescToolsOptions("lastWord"))
 WrdStyle(wrd) <- value
 }
 %- maybe also 'usage' for other objects documented here.
@@ -19,7 +19,7 @@ WrdStyle(wrd) <- value
 }
   \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()}
   or an existing one, created by \code{GetCurrWrd()}.
-  Default is the last created pointer stored in \code{getOption("lastWord")}.}
+  Default is the last created pointer stored in \code{DescToolsOptions("lastWord")}.}
 
 }
 \value{

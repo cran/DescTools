@@ -17,8 +17,8 @@ HuberM(x, k = 1.345, mu = median(x), s = mad(x, center = mu),
     standard deviations.}
   \item{mu}{initial location estimator.}
   \item{s}{scale estimator held constant through the iterations.}
-  \item{na.rm}{logical, indicating whether NA values should be stripped before the computation proceeds. Defaults to FALSE.}
- \item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated. }
+  \item{na.rm}{logical, indicating whether \code{NA} values should be stripped before the computation proceeds. Defaults to FALSE.}
+ \item{conf.level}{confidence level of the interval. If set to \code{NA} (which is the default) no confidence interval will be calculated. }
  \item{ci.type}{The type of confidence interval required. The value should be any subset 
  of the values \code{"wald"}, \code{"boot"}. 
 }

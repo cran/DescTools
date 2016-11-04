@@ -24,7 +24,7 @@ GTest(x, y = NULL, correct = c("none", "williams", "yates"),
   \item{p}{a vector of probabilities of the same length of \code{x}.
   An error is given if any entry of \code{p} is negative.}
 
-%  \item{rescale.p}{a logical scalar; if TRUE then \code{p} is rescaled
+%  \item{rescale.p}{a logical scalar; if \code{TRUE} then \code{p} is rescaled
 %  (if necessary) to sum to 1.  If \code{rescale.p} is FALSE, and
 %  \code{p} does not sum to 1, an error is given.}
 

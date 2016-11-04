@@ -6,7 +6,7 @@ Confidence Interval for the Mean
 %%  ~~function to do ... ~~
 }
 \description{
-Collection of several approaches to determine confidence intervals for the mean. Both, the classical way and bootstrap intervals are implemented for normal and trimmed means.
+Collection of several approaches to determine confidence intervals for the mean. Both, the classical way and bootstrap intervals are implemented for both, normal and trimmed means.
 }
 
 \usage{
@@ -20,9 +20,9 @@ MeanCI(x, sd = NULL, trim = 0, method = c("classic", "boot"),
   \item{x}{a (non-empty) numeric vector of data values.
 %%     ~~Describe \code{x} here~~
 }
-\item{sd}{the standard deviation of x. If provided it's interpreted as sd of the population and the normal quantiles will be used for constructing the confidence intervals. If left to \code{NULL} (default) the sample sd(x) will be calculated and used in combination with the t-distribution.}
+\item{sd}{the standard deviation of x. If provided it's interpreted as sd of the population and the normal quantiles will be used for constructing the confidence intervals. If left to \code{NULL} (default) the sample \code{sd(x)} will be calculated and used in combination with the t-distribution.}
 
-  \item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each end of x before the mean is computed. Values of \code{trim} outside that range are taken as the nearest endpoint.
+  \item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each end of \code{x} before the mean is computed. Values of \code{trim} outside that range are taken as the nearest endpoint.
 %%     ~~Describe \code{x} here~~
 }
   \item{method}{A vector of character strings representing the type of intervals required. The value should be any subset of the values \code{"classic"}, \code{"boot"}.
@@ -34,7 +34,7 @@ MeanCI(x, sd = NULL, trim = 0, method = c("classic", "boot"),
 }
 \item{sides}{a character string specifying the side of the confidence interval, must be one of \code{"two.sided"} (default), \code{"left"} or \code{"right"}. You can specify just the initial letter. \code{"left"} would be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
 
-  \item{na.rm}{a logical value indicating whether NA values should be stripped before the computation proceeds. Defaults to FALSE.
+  \item{na.rm}{a logical value indicating whether \code{NA} values should be stripped before the computation proceeds. Defaults to FALSE.
 %%     ~~Describe \code{na.rm} here~~
 }
   \item{...}{further arguments are passed to the \code{\link{boot}} function. Supported arguments are \code{type} (\code{"norm"}, \code{"basic"}, \code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel} and the number of bootstrap replicates \code{R}. If not defined those will be set to their defaults, being \code{"basic"} for \code{type},  option \code{"boot.parallel"} (and if that is not set, \code{"no"}) for \code{parallel}
@@ -86,6 +86,6 @@ MeanCI(x, trim=0.1, method="boot", type="bca", na.rm=TRUE)
 MeanCI(x, trim=0.1, method="boot", type="bca", R=1999, na.rm=TRUE)
 
 # Getting the MeanCI for more than 1 column
-round( do.call("rbind", lapply(d.pizza[,1:4],  MeanCI, na.rm=TRUE)), 3)
+round( do.call("rbind", lapply(d.pizza[, 1:4],  MeanCI, na.rm=TRUE)), 3)
 }
 \keyword{univar }

@@ -53,13 +53,13 @@ open \tab \code{wrd[["Documents"]]$Open(Filename="C:/MyPath/MyDocument.docx")}. 
 save \tab \code{wrd$ActiveDocument()$SaveAs2(FileName="P:/MyFile.docx")} \cr
 quit word \tab \code{wrd$quit()} \cr
 kill word task \tab \code{WrdKill} kills a running word task (which might not be ended with quit.) \cr
-normal text \tab Use \code{\link{WrdText}} which offers many arguments as fontname, size, color, alignment etc. \cr
- \tab  \code{WrdText("Lorem ipsum dolor sit amet, consetetur", fontname="Arial",}\cr
- \tab    \code{fontsize=10, col=wdConst$wdColorRed)} \cr
+normal text \tab Use \code{\link{ToWrd}} which offers many arguments as fontname, size, color, alignment etc. \cr
+ \tab  \code{ToWrd("Lorem ipsum dolor sit amet, consetetur", }\cr
+ \tab    \code{font=list(name="Arial", size=10, col=wdConst$wdColorRed)} \cr
 simple text \tab \code{sel$TypeText("sed diam nonumy eirmod tempor invidunt ut labore")} \cr
 heading 1 \tab  \code{WrdCaption("My Word-Story", stylename = wdConst$wdStyleHeading1)} \cr
 heading 2 \tab  \code{WrdCaption("My Word-Story", stylename = wdConst$wdStyleHeading2)} \cr
-insert R output \tab \code{WrdText(capture.output(str(d.diamonds)))} \cr
+insert R output \tab \code{ToWrd(capture.output(str(d.diamonds)))} \cr
 pagebreak \tab \code{sel$InsertBreak(wdConst$wdPageBreak)} \cr
 move cursor right \tab \code{sel$MoveRight(Unit=wdConst$wdCharacter, Count=2, Extend=wdConst$wdExtend)} \cr
 goto end \tab \code{sel$EndKey(Unit=wdConst$wdStory)} \cr
@@ -67,7 +67,6 @@ pagesetup \tab \code{sel[["PageSetup"]][["Bottommargin"]] <- 4 * 72} \cr
 add bookmark \tab \code{wrd[["ActiveDocument"]][["Bookmarks"]]$Add("myBookmark")} \cr
 goto bookmark \tab \code{sel$GoTo(wdConst$wdGoToBookmark, 0, 0, "myBookmark")} \cr
 show document map \tab \code{ wrd[["ActiveWindow"]][["DocumentMap"]] <- TRUE} \cr
-insert table \tab  \code{\link{WrdTable}}() \cr
 create table \tab  \code{\link{WrdTable}}() which allows to define the table's geometry \cr
 insert caption \tab \code{sel$InsertCaption(Label="Abbildung", TitleAutoText="InsertCaption",}\cr
 \tab \code{Title="My Title")} \cr

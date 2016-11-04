@@ -50,7 +50,7 @@ RelRisk(x, y = NULL, conf.level = NA,
 
 }
 \value{
-If conf.level is not NA then the result will be
+If conf.level is not \code{NA} then the result will be
   a vector with 3 elements for estimate, lower confidence intervall and upper for the upper one.
   Else the relative risk will be reported as a single value. 
 

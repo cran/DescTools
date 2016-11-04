@@ -15,7 +15,7 @@ SplitPath(path, last.is.file = NULL)
   \item{path}{a path
 %%     ~~Describe \code{path} here~~
 }
-  \item{last.is.file}{logical, determining if the basename should be interpreted as filename or as last directory. If set to NULL (default), the last entry will be interpreted if the last character is either \ or / and as filename else.}
+  \item{last.is.file}{logical, determining if the basename should be interpreted as filename or as last directory. If set to \code{NULL} (default), the last entry will be interpreted if the last character is either \ or / and as filename else.}
 }
 \value{
 A list, containing the following components:

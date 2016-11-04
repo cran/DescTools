@@ -24,7 +24,7 @@ The same measure is usually known as the Simpson index in ecology, and as the He
   the value of the concentration measure
 }
 \note{ These functions were previously published as \code{conc()} in the  \pkg{ineq} package and have been
-integrated here without logical changes. NA and weights support were added.
+integrated here without logical changes. \code{NA} and weights support were added.
 }
 
 \references{Cowell, F. A. (2000) Measurement of Inequality, in Atkinson, A. B., Bourguignon, F.  \emph{Handbook of Income Distribution}. (Eds) Amsterdam

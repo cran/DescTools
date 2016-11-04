@@ -97,7 +97,7 @@ PlotFaces <- function( xy = rbind(1:3,5:3,3:5,5:7), which.row, fill = FALSE, nro
 
 
   #6:
-  for(ind in 1:n){
+  for(ind in 1L:n){
 
     #7: ind <- 1
     factors <- xy[ind,]
@@ -445,7 +445,7 @@ compute.bagplot <- function(x,y,
     lam<-((0:resolution)^1)/resolution^1
 
     pg.new<-pg
-    for(i in 1:nrow(pg)){
+    for(i in 1L:nrow(pg)){
       tp<-cbind(pg[i,1]+lam*(end.points[i,1]-pg[i,1]),
                 pg[i,2]+lam*(end.points[i,2]-pg[i,2]))
       # hd.tp<-hdepth.of.points(tp)
@@ -467,7 +467,7 @@ compute.bagplot <- function(x,y,
     pg.add<-0.5*(pg.new+rbind(pg.new[-1,],pg.new[1,]))
     # end.points<-find.cut.z.pg(pg,pg0,center=center)
     end.points<-find.cut.z.pg(pg.add,pg0,center=center) #### 070824
-    for(i in 1:nrow(pg.add)){
+    for(i in 1L:nrow(pg.add)){
       tp<-cbind(pg.add[i,1]+lam*(end.points[i,1]-pg.add[i,1]),
                 pg.add[i,2]+lam*(end.points[i,2]-pg.add[i,2]))
       # hd.tp<-hdepth.of.points(tp)

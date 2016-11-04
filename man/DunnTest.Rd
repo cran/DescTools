@@ -18,7 +18,7 @@ DunnTest(x, \dots)
 
 \method{DunnTest}{formula}(formula, data, subset, na.action, \dots)
 
-\method{print}{DunnTest}(x, digits = getOption("digfix", 3), ...)
+\method{print}{DunnTest}(x, digits = getOption("digits", 3), ...)
 
 }
 \arguments{

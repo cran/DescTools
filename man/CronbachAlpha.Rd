@@ -2,9 +2,7 @@
 \alias{CronbachAlpha}
 \title{Cronbach's Coefficient Alpha}
 \description{
-  Compute Cronbach's alpha. 
-  Cronbach's alpha determines the internal consistency or average correlation of items in a survey instrument to gauge its reliability. 
-  This reduces to KR-20 when the columns of the data matrix are dichotomous.
+  Cronbach's alpha is a measure of internal consistency and often used for validating psychometric tests. It determines the internal consistency or average correlation of items in a survey instrument to gauge its reliability. This reduces to Kuder-Richardson formula 20 (KR-20) when the columns of the data matrix are dichotomous.
 }
 \usage{
 CronbachAlpha(x, conf.level = NA, cond = FALSE, na.rm = FALSE)
@@ -31,7 +29,7 @@ a list containing the following components, if the argument \code{cond} is set t
 \seealso{ \code{\link{CohenKappa}}, \code{\link{KappaM}}
 }
 \references{
-Cohen, J. (1960), A coefficient of agreement for nominal scales. \emph{Educational and Psychological Measurement}, 20, 37-46. 
+Cohen, J. (1960), A coefficient of agreement for nominal scales. \emph{Educational and Psychological Measurement}, 20, 37-46.
 }
 
 
@@ -39,7 +37,7 @@ Cohen, J. (1960), A coefficient of agreement for nominal scales. \emph{Education
 \examples{
 set.seed(1234)
 tmp <- data.frame(
-  item1 = sample(c(0,1), 20, replace=TRUE), 
+  item1 = sample(c(0,1), 20, replace=TRUE),
   item2 = sample(c(0,1), 20, replace=TRUE),
   item3 = sample(c(0,1), 20, replace=TRUE),
   item4 = sample(c(0,1), 20, replace=TRUE),
@@ -52,7 +50,7 @@ CronbachAlpha(tmp[,1:4], cond=TRUE, conf.level=0.95)
 CronbachAlpha(tmp[,1:4], cond=FALSE)
 CronbachAlpha(tmp[,1:2], cond=TRUE, conf.level=0.95)
 
-\dontrun{ 
+\dontrun{
 # Calculate bootstrap confidence intervals for CronbachAlpha
 library(boot)
 cronbach.boot <- function(data,x) {CronbachAlpha(data[x,])[[3]]}

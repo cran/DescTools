@@ -7,7 +7,7 @@
 }
 \description{Start a new instance of PowerPoint and return its handle. A new presentation with one empty slide will be created.
 The handle is needed for addressing the presentation afterwards.\cr
-GetCurrPP will look for a running PowerPoint instance and return its handle. NULL is returned if nothing's found.
+GetCurrPP will look for a running PowerPoint instance and return its handle. \code{NULL} is returned if nothing's found.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

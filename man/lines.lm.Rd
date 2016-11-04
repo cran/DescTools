@@ -8,9 +8,9 @@
 Add a linear regression line to an existing plot. The function first calculates the prediction of a lm object for a reasonable amount of points, then adds the line to the plot and inserts a polygon with the confidence and prediction intervals.
 }
 \usage{
-\method{lines}{lm}(x, col = getOption("col1", hblue), lwd = 2, lty = "solid", 
-        type = "l", n = 100, conf.level = 0.95, args.cband = NULL, 
-        pred.level = NA, args.pband = NULL, ...) 
+\method{lines}{lm}(x, col = Pal()[1], lwd = 2, lty = "solid",
+        type = "l", n = 100, conf.level = 0.95, args.cband = NULL,
+        pred.level = NA, args.pband = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -35,14 +35,14 @@ Add a linear regression line to an existing plot. The function first calculates 
   Default is \code{0.95}.
 %%     ~~Describe \code{type} here~~
 }
-  \item{args.cband}{list of arguments for the confidence band, such as color or border (see \code{\link{DrawBand}}). 
+  \item{args.cband}{list of arguments for the confidence band, such as color or border (see \code{\link{DrawBand}}).
 %%     ~~Describe \code{type} here~~
 }
   \item{pred.level}{confidence level for the prediction interval. Set this to NA, if no prediction band should be plotted.
   Default is \code{0.95}.
 %%     ~~Describe \code{type} here~~
 }
-  \item{args.pband}{list of arguments for the prediction band, such as color or border (see \code{\link{DrawBand}}). 
+  \item{args.pband}{list of arguments for the prediction band, such as color or border (see \code{\link{DrawBand}}).
 %%     ~~Describe \code{type} here~~
 }
 
@@ -54,7 +54,7 @@ Add a linear regression line to an existing plot. The function first calculates 
 It's sometimes illuminating to plot a regression line with it's prediction, resp. confidence intervals over an existing xy-plot. This only makes sense, if just a simple regression model y ~ x is to be visualized.
 %%  ~~ If necessary, more details than the description above ~~
 }
-\value{nothing 
+\value{nothing
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -67,7 +67,7 @@ Andri Signorell <andri@signorell.net>
 }
 
 \seealso{
-\code{\link{lines}}, \code{\link{lines.loess}}, \code{\link{lm}}  
+\code{\link{lines}}, \code{\link{lines.loess}}, \code{\link{lm}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

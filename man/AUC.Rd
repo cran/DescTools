@@ -18,7 +18,7 @@ AUC(x, y, method = c("trapezoid", "step", "spline"), na.rm = FALSE)
   \item{method}{can be \code{"trapezoid"} (default), \code{"step"} or \code{"spline"}.
 %%     ~~Describe \code{type} here~~
 }
-  \item{na.rm}{logical, indicating whether NA values should be stripped before the computation proceeds. In this case only the complete.cases of x and y will be used. \code{na.rm} defaults to \code{FALSE}. 
+  \item{na.rm}{logical, indicating whether \code{NA} values should be stripped before the computation proceeds. In this case only the complete.cases of x and y will be used. \code{na.rm} defaults to \code{FALSE}. 
 %%     ~~Describe \code{na.rm} here~~
 }
 }

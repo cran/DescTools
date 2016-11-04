@@ -25,7 +25,7 @@ PlotWeb(m, col = c(hred, hblue), lty = par("lty"), lwd = NULL, args.legend=NULL,
   \item{lty}{the line type for the connecting lines
 %%     ~~Describe \code{lty} here~~
 }
-  \item{lwd}{the line widths for the connecting lines. If left to NULL it will be linearly scaled between the minimum and maximum value of \code{m}.
+  \item{lwd}{the line widths for the connecting lines. If left to \code{NULL} it will be linearly scaled between the minimum and maximum value of \code{m}.
 %%     ~~Describe \code{lty} here~~
 }
 

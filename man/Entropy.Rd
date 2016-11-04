@@ -20,7 +20,7 @@ MutInf(x, y, base = 2, \dots)
   contingency table.
 %%     ~~Describe \code{x} here~~
 }
-  \item{y}{a vector with the same type and dimension as x. If y is not NULL then the entropy of \code{table(x, y, ...)} 
+  \item{y}{a vector with the same type and dimension as x. If y is not \code{NULL} then the entropy of \code{table(x, y, ...)} 
   will be calculated.
 %%     ~~Describe \code{x} here~~
 }

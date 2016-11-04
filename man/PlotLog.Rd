@@ -1,25 +1,37 @@
-\name{Ray}
-\alias{Ray}
+\name{PlotLog}
+\alias{PlotLog}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Compact Information About the Columns of a Data Frame
+\title{Logarithmic Plot
 %%  ~~function to do ... ~~
 }
-\description{An alternative description of a data.frame.
+\description{Create a plot with at least one logarithmic axis and a logarithmic grid.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Ray(x)
+PlotLog(x, y = NULL, ..., grid = TRUE, log = "xy")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{a data.frame to be described.
+  \item{x}{ asdf
 %%     ~~Describe \code{x} here~~
 }
+  \item{y}{asdf
+%%     ~~Describe \code{y} here~~
 }
-\details{I always missed the index of the variables in \code{\link{str}}...
+  \item{\dots}{asdf
+%%     ~~Describe \code{\dots} here~~
+}
+  \item{grid}{asdf
+%%     ~~Describe \code{grid} here~~
+}
+  \item{log}{asdf
+%%     ~~Describe \code{log} here~~
+}
+}
+\details{asdf
 %%  ~~ If necessary, more details than the description above ~~
 }
-\value{a list with the results
+\value{nothin
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -32,13 +44,12 @@ Ray(x)
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{\code{\link{str}}, \code{\link{summary}}
+\seealso{\code{\link{axis}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-Ray(d.pizza)
+PlotLog(cars)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ math }
-
+\keyword{ hplot}% __ONLY ONE__ keyword per line

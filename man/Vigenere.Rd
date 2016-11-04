@@ -14,7 +14,7 @@ Vigenere(x, key = NULL, decrypt = FALSE)
   \item{x}{the text to be encrypted
 %%     ~~Describe \code{x} here~~
 }
-  \item{key}{the key to be used. If this remains to NULL the PasswordDlg will be presented and the key can be entered there.
+  \item{key}{the key to be used. If this remains to \code{NULL} the PasswordDlg will be presented and the key can be entered there.
 %%     ~~Describe \code{key} here~~
 }
   \item{decrypt}{boolean defining if the text should be encrypted or decrypted.

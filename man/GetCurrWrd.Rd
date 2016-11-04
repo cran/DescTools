@@ -5,7 +5,7 @@
 \title{Get a Handle to a Running Word Instance
 %%  ~~function to do ... ~~
 }
-\description{Look for a running Word instance and return its handle. NULL is returned if nothing's found.
+\description{Look for a running Word instance and return its handle. \code{NULL} is returned if nothing's found.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

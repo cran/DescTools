@@ -17,7 +17,7 @@ Closest(x, a, which = FALSE, na.rm = FALSE)
 %%     ~~Describe \code{a} here~~
 }
 \item{which}{a logical value defining if the index position or the value should be returned. By default will the value be returned.}
-  \item{na.rm}{a logical value indicating whether NA values should be stripped before the computation proceeds.
+  \item{na.rm}{a logical value indicating whether \code{NA} values should be stripped before the computation proceeds.
 %%     ~~Describe \code{na.rm} here~~
 }
 }

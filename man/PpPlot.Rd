@@ -14,14 +14,14 @@ size factor for inserting.\cr
 PpText inserts a new textbox with given text and box properties.
 }
 \usage{
-PpAddSlide(pos = NULL, pp = getOption("lastPP"))
+PpAddSlide(pos = NULL, pp = DescToolsOptions("lastPP"))
 
 PpPlot(type = "png", crop = c(0, 0, 0, 0), picscale = 100, x = 1, y = 1, 
-       height = NA, width = NA, res=200, dfact=1.6, pp = getOption("lastPP"))
+       height = NA, width = NA, res=200, dfact=1.6, pp = DescToolsOptions("lastPP"))
 
 PpText(txt, x = 1, y = 1, height = 50, width = 100, fontname = "Calibri", fontsize = 18, 
        bold = FALSE, italic = FALSE, col = "black", bg = "white", 
-       hasFrame = TRUE, pp = getOption("lastPP")) 
+       hasFrame = TRUE, pp = DescToolsOptions("lastPP")) 
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -39,14 +39,14 @@ PpText(txt, x = 1, y = 1, height = 50, width = 100, fontname = "Calibri", fontsi
   \item{txt}{text to be placed in the textbox}
   \item{fontname}{used font for textbox}
   \item{fontsize}{used fontsize for textbox}
-  \item{bold}{logic. Text is set bold if this is set to TRUE (default is FALSE).}
-  \item{italic}{logic. Text is set italic if this is to TRUE (default is FALSE).}
+  \item{bold}{logic. Text is set bold if this is set to \code{TRUE} (default is FALSE).}
+  \item{italic}{logic. Text is set italic if this is to \code{TRUE} (default is FALSE).}
   \item{col}{font color, defaults to \code{"black"}.}
   \item{bg}{background color for textboxdefaults to \code{"white"}.}
   \item{hasFrame}{logical. Defines if a textbox is to be framed. Default is TRUE.}
 
   \item{pp}{the pointer to a PowerPoint instance, can be a new one, created by \code{GetNewPP()} or 
-    the last created by \code{getOption("lastPP")} (default).}
+    the last created by \code{DescToolsOptions("lastPP")} (default).}
 
     }
 \details{See PowerPoint-objectmodel for further informations.

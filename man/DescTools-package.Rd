@@ -6,7 +6,7 @@
 }
 \description{
 A collection of miscellaneous basic statistic functions and convenience wrappers for efficiently describing data. The author's intention was to create a toolbox, which facilitates the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results. The package contains furthermore functions to produce documents using MS Word (or PowerPoint) and functions to import data from Excel. \cr
-Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, NA handling, recycling rules etc. are concerned. Google style guides were used as naming rules (in absence of convincing alternatives). The 'CamelStyle' was consequently applied to functions borrowed from contributed R packages as well.
+Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, \code{NA} handling, recycling rules etc. are concerned. Google style guides were used as naming rules (in absence of convincing alternatives). The 'CamelStyle' was consequently applied to functions borrowed from contributed R packages as well.
 \cr
 
 Feedback, feature requests, bugreports and other suggestions are welcome! Please report problems to Stack Overflow mentioning DescTools or directly to the maintainer.\cr
@@ -14,7 +14,7 @@ Feedback, feature requests, bugreports and other suggestions are welcome! Please
 
 }
 
-\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in, hmm - I need another 3-6 months, mid of 2016) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.
+\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in, hmm - there's still so much room for improvement - spring 2017) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.
 }
 
 \details{
@@ -71,7 +71,7 @@ A grouped list of the functions:
 \bold{Information and manipulation functions:}\tab\cr
 \link{AllDuplicated}       \tab Find all values involved in ties \cr
 \link{Closest}       \tab Return the value in a vector being closest to a given one\cr
-\link{Coalesce}       \tab      Return the first value in a vector not being NA \cr
+\link{Coalesce}       \tab      Return the first value in a vector not being \code{NA} \cr
 \link{ZeroIfNA}       \tab   Replace NAs by 0 \cr
 \link{Impute}       \tab   Replace NAs by the median or another value \cr
 \link{CombN}       \tab      Returns the number of subsets out of a list of elements \cr
@@ -133,7 +133,7 @@ A grouped list of the functions:
 \link{FindColor}  \tab   Get color on a defined color range    \cr
 \link{MixColor}  \tab   Get the mix of two colors  \cr
 \link{TextContrastColor} \tab   Choose textcolor depending on background color    \cr
-\link{PalRedToBlack}, \link{PalTibco}  \tab   Defined color palettes    \cr
+\link{Pal} \tab   Some custom color palettes    \cr
 \cr\cr
 \bold{Plots:}\tab\cr
 \link{Canvas}  \tab    Canvas for geometric plotting   \cr
@@ -143,9 +143,8 @@ A grouped list of the functions:
 \link{lines.smooth.spline}       \tab  Add the prediction of a smooth.spline and its CIs to a plot   \cr
 \link{ErrBars}   \tab    Add horizontal or vertical error bars to an existing plot   \cr
 \link{DrawArc}, \link{DrawRegPolygon}  \tab  Draw elliptic, circular arc(s) or regular polygon(s)     \cr
-\link{DrawCircle}, \link{DrawEllipse}  \tab  Draw a circle, ellipse   \cr
+\link{DrawCircle}, \link{DrawEllipse}  \tab  Draw a circle, a circle annulus or a sector or an annulus   \cr
 \link{DrawBezier}  \tab    Draw a Bezier curve   \cr
-\link{DrawAnnulus}, \link{DrawAnnulusSector}  \tab    Draw one or several annuli, resp. sector of an annulus  \cr
 \link{DrawBand}    \tab  Draw confidence band  \cr
 \link{BoxedText}  \tab   Add text surrounded by a box to a plot    \cr
 \link{Rotate}  \tab  Rotate a geometric structure     \cr
@@ -208,7 +207,7 @@ A grouped list of the functions:
 \link{VarCI}  \tab    Confidence interval for the variance   \cr
 \link{CoefVar} \tab Coefficient of variation and its confidence interval \cr
 \link{RobScale}  \tab   Robust data standardization  \cr
-\link{RobRange}  \tab   Robust range  \cr
+\link{Range}  \tab   (Robust) range  \cr
 \link{BinomCI}, \link{MultinomCI}  \tab   Confidence intervals for binomial and multinomial proportions    \cr
 \link{BinomDiffCI}  \tab   Calculate confidence interval for a risk difference  \cr
 \link{BinomRatioCI}  \tab   Calculate confidence interval for the ratio of binomial proportions.  \cr
@@ -311,7 +310,7 @@ A grouped list of the functions:
 \bold{GUI-Helpers:}\tab\cr
 \link{ChooseColorDlg}    \tab  Display color dialog to choose a color \cr
 %% \link{DescDlg}    \tab  Display a Dialog Containing Univariate Descriptive Statistis and a Plot \cr
-\link{ImportDlg}    \tab  Get path of a data file to be opened \cr
+\link{FileOpenCmd}    \tab  Get path of a data file to be opened \cr
 \link{SaveAsDlg}    \tab  Save a data object by dialog \cr
 \link{SelectVarDlg}    \tab  Select elements of a set by click \cr
 \link{PasswordDlg}    \tab  Display a dialog containing an edit field, showing only ***. \cr
@@ -327,11 +326,9 @@ A grouped list of the functions:
 \link{IsValidWrd}       \tab  Check if the handle to a Word instance is valid or outdated \cr
 \link{WrdCaption}    \tab Insert a title in Word   \cr
 \link{WrdPlot}    \tab   Insert the active plot to Word \cr
-\link{WrdR}    \tab  Insert an R command and its output in a Word document \cr
 \link{WrdFont}, WrdFont<-     \tab  Get, resp. set the font on the current cursorposition in Word \cr
 \link{WrdTable}       \tab      Create a table in Word \cr
 \link{ToWrd}    \tab  Mord flexible wrapper to send diverse objects to Word \cr
-\link{WrdText}    \tab  Insert normal text to Word \cr
 \link{WrdInsertBookmark}    \tab Insert a new bookmark in a Word document \cr
 \link{WrdGoto}    \tab Place cursor to a specific bookmark, or another text position. \cr
 \link{WrdUpdateBookmark}    \tab Update the text of a bookmark's range\cr
@@ -357,14 +354,11 @@ A grouped list of the functions:
 \link{SysInfo}    \tab  Get some more information about system and environment\cr
 \link{DescToolsOptions}    \tab  Get the DescTools specific options\cr
 \cr
-\link{ClipToVect}       \tab      Return \cr
 
 \link{PlotBagPairs}       \tab      Return \cr
 \link{PlotGACF}       \tab      Return \cr
-\link{PlotHorizBar}       \tab      Return \cr
 \link{PlotMatrix}       \tab      Return \cr
 
-\link{Ray}       \tab      Return \cr
 \link{SampleTwins}       \tab      Return \cr
 
 }
@@ -383,11 +377,11 @@ Helsana Versicherungen AG, Health Sciences, Zurich\cr
 HWZ University of Applied Sciences in Business Administration Zurich.\cr
 
 Includes R source code and/or documentation previously published by (in alphabetical order): \cr
-Ken Aho, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Clint Cummins, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Dirk Eddelbuettel, Jeff Enos, Claus Ekstrom, Martin Elff, Kamil Erguler, Richard W. Farebrother, John Fox, Romain Francois, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Richard Heiberger, Michael Hoehle, Christian W. Hoffmann, Torsten Hothorn, Markus Huerzeler, Wallace W. Hui, Pete Hurd, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Giovanni Millo, Yongyi Min, David Mitchell, Markus Naepflin, Daniel Navarro, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Tony Plate, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Nathan Russell, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Mark Stevenson, Terry Therneau, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Hadley Wickham, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis
+Ken Aho, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Kamil Barton, Ben Bolker, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Clint Cummins, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Dirk Eddelbuettel, Jeff Enos, Claus Ekstrom, Martin Elff, Kamil Erguler, Richard W. Farebrother, John Fox, Romain Francois, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Richard Heiberger, Michael Hoehle, Christian W. Hoffmann, Torsten Hothorn, Markus Huerzeler, Wallace W. Hui, Pete Hurd, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Giovanni Millo, Yongyi Min, David Mitchell, Markus Naepflin, Daniel Navarro, Henric Nilsson, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Tony Plate, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Nathan Russell, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Werner A. Stahel, Mark Stevenson, Terry Therneau, Yves Tille, Adrian Trapletti, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Hadley Wickham, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis
 
 Thank you all!
 
-Special thanks go to Beat Bruengger, Mathias Frueh, Daniel Wollschlaeger for their valuable contributions.
+Special thanks go to Beat Bruengger, Mathias Frueh, Daniel Wollschlaeger for their valuable contributions and testing.
 
 The good things come from all these guys, any problems are likely due to my tweaking.
 

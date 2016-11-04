@@ -5,12 +5,11 @@
 \title{Add and Remove Classes From an Object
 %%  ~~function to do ... ~~
 }
-\description{A simple wrapper for adding and remove classes from an object.
+\description{A simple wrapper for adding and removing classes from an object.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 AddClass(x, class, after = 0)
-
 RemoveClass(x, class)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -33,6 +32,10 @@ RemoveClass(x, class)
 }
 \examples{
 x <- letters[1:5]
-x <- AddClass(x, "special")
+x <- AddClass(x, c("special", "letter"))
+class(x)
+
+x <- RemoveClass(x, "character")
+class(x)
 }
 

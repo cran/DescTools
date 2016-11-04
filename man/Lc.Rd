@@ -22,12 +22,15 @@ Lc(x, ...)
 \method{plot}{Lclist}(x, col = 1, lwd = 2, lty = 1, main = "Lorenz curve",
      xlab = "p", ylab = "L(p)", ...)
 
+\method{lines}{Lc}(x, general = FALSE, lwd = 2, conf.level = NA, args.cband = NULL, ...)
+
+
 }
 \arguments{
- \item{x}{a vector containing non-negative elements.}
+ \item{x}{a vector containing non-negative elements, or a Lc-object for plot and lines.}
  \item{n}{a vector of frequencies, must be same length as \code{x}.}
  \item{na.rm}{logical. Should missing values be removed? Defaults to FALSE.}
- \item{general}{logical. If TRUE the empirical Lorenz curve will be plotted.}
+ \item{general}{logical. If \code{TRUE} the empirical Lorenz curve will be plotted.}
  \item{col}{color of the curve}
  \item{lwd}{the linewidth of the curve}
  \item{lty}{the linetype of the curve}
@@ -43,6 +46,14 @@ Lc(x, ...)
     By default the variables are taken from \code{environment(formula)}.}
   \item{subset}{an optional vector specifying a subset of observations to be used.}
   \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}
+
+  \item{conf.level}{confidence level for the bootstrap confidence interval. Set this to \code{NA}, if no confidence band should be plotted.
+  Default is \code{NA}.
+%%     ~~Describe \code{type} here~~
+}
+  \item{args.cband}{list of arguments for the confidence band, such as color or border (see \code{\link{DrawBand}}).
+%%     ~~Describe \code{type} here~~
+}
 
  \item{\dots}{further argument to be passed to methods.}
 
@@ -62,21 +73,23 @@ Lc(x, ...)
 \item{p}{vector of percentages}
 \item{L}{vector with values of the ordinary Lorenz curve}
 \item{L.general}{vector with values of the generalized Lorenz curve}
+\item{x}{the original x values (needed for computing confidence intervals)}
+\item{n}{the original n values}
 }
 \note{ These functions were previously published as \code{Lc()} in the  \pkg{ineq} package and have been
 integrated here without logical changes.
 }
 
 \references{
-Arnold, B. C. (1987) \emph{Majorization and the Lorenz Order: A Brief Introduction}, Springer
+Arnold, B. C. (1987) Majorization and the Lorenz Order: A Brief Introduction, \emph{Springer}
 
 Cowell, F. A. (2000) Measurement of Inequality in Atkinson, A. B. / Bourguignon, F. (Eds): \emph{Handbook of Income Distribution}. Amsterdam.
 
-Cowell, F. A. (1995) \emph{Measuring Inequality} Harvester Wheatshef: Prentice Hall.
+Cowell, F. A. (1995) Measuring Inequality \emph{Harvester Wheatshef: Prentice Hall}.
 
 }
 
-\author{Achim Zeileis <Achim.Zeileis@R-project.org>, minor changes Andri Signorell <andri@signorell.net>}
+\author{Achim Zeileis <Achim.Zeileis@R-project.org>, extensions Andri Signorell <andri@signorell.net>}
 
 
 \seealso{The original location \code{\link[ineq]{Lc}()}, \cr
@@ -122,6 +135,9 @@ plot(Lc(fl, n),                 # Lorenz-Curve
      xlab="Percent farmers (cumulative)",
      ylab="Percent of area (\%)"
 )
+# add confidence band
+lines(Lc(fl, n), conf.level=0.95,
+      args.cband=list(col=SetAlpha(DescToolsOptions("col")[2], 0.3)))
 
 Gini(fl, n)
 

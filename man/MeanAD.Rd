@@ -15,7 +15,7 @@ MeanAD(x, FUN = mean, na.rm = FALSE)
   \item{x}{a vector containing the observations.
 %%     ~~Describe \code{x} here~~
 }
-  \item{FUN}{the name of a function to be used as center. Can as well be a self defined function. 
+  \item{FUN}{the name of a function to be used as center. Can as well be a self defined function.
   Default is mean.
 
 %%     ~~Describe \code{na.rm} here~~
@@ -26,9 +26,9 @@ MeanAD(x, FUN = mean, na.rm = FALSE)
 }
 }
 \details{
-The MeanAD function calculates the mean absolute deviation from the mean value (or from another 
+The MeanAD function calculates the mean absolute deviation from the mean value (or from another
 supplied center point) of
-x, after having removed NA values (if requested): 
+x, after having removed \code{NA} values (if requested):
 \deqn{\frac{1}{n} \cdot \sum_{i=1}^{n}\left | x_{i}-c \right |  \; \; \; \textup{where} \; c=mean(x) \; \textup{or} \; c=med(x)}{1/n sum(|x_i - c|) where c=mean(x) or c=med(x)}
 \cr
 It exists primarily to simplify the discussion of

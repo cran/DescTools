@@ -34,9 +34,9 @@ Desc(x, ..., main = NULL, plotit = NULL, wrd = NULL)
      conf.level = 0.95, verbose = 2, rfrq = "111", margins = c(1,2),
      dprobs = NULL, mprobs = NULL, plotit = NULL, sep = NULL, digits = NULL, ...)
 
-\method{Desc}{data.frame}(x, main = NULL, plotit = NULL, enum = TRUE, ...)
+\method{Desc}{data.frame}(x, main = NULL, plotit = NULL, enum = TRUE, sep = NULL, ...)
 
-\method{Desc}{list}(x, main = NULL, plotit = NULL, enum = TRUE, ...)
+\method{Desc}{list}(x, main = NULL, plotit = NULL, enum = TRUE, sep = NULL, ...)
 
 \method{Desc}{numeric}(x, main = NULL, maxrows = NULL, plotit = NULL,
      sep = NULL, digits = NULL, ...)
@@ -89,7 +89,7 @@ Desc(x, ..., main = NULL, plotit = NULL, wrd = NULL)
   or by \code{GetCurrWrd()} for an existing one.
   All output will then be redirected there. Default is \code{NULL}, which will report all results to the console.}
 
-\item{digits}{integer. With how many digits shoud the relative frequencies be formatted? Default can be set by \code{options(digits=x)}. }
+\item{digits}{integer. With how many digits shoud the relative frequencies be formatted? Default can be set by \code{DescToolsOptions(digits=x)}. }
 
 \item{maxrows}{numeric value, defining the maximum number of rows of a frequency table to be reported. For factors with many levels it is often not interesting to see
   all of them. Default is hence set to 12 most frequent ones (resp. the first ones if \code{ord} is set to \code{levels} or \code{names}). If for numeric object the value is left to its default \code{NULL}, the list of extreme values will be displayed, when x has more than 12 single values and the frequency table else.\cr
@@ -322,12 +322,12 @@ plot(tab, col1=cols1, col2=cols2)
 
 
 # use global format options for presentation
-options(fmt.abs=structure(list(digits=0, big.mark=""), class="fmt"))
-options(fmt.per=structure(list(digits=2, fmt="\%"), class="fmt"))
+Fmt(abs=as.fmt(digits=0, big.mark=""))
+Fmt(per=as.fmt(digits=2, fmt="\%"))
 Desc(area ~ driver, d.pizza, plotit=FALSE)
 
-options(fmt.abs=structure(list(digits=0, big.mark="'"), class="fmt"))
-options(fmt.per=structure(list(digits=3, leading="drop"), class="fmt"))
+Fmt(abs=as.fmt(digits=0, big.mark="'"))
+Fmt(per=as.fmt(digits=3, leading="drop"))
 Desc(area ~ driver, d.pizza, plotit=FALSE)
 
 # plot arguments can be fixed in detail

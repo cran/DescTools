@@ -5,14 +5,14 @@
 This function performs the Jarque-Bera tests of normality either the robust or the classical way.
 }
 \usage{
-JarqueBeraTest(x, robust = TRUE, method = c("chisq", "mc"), 
+JarqueBeraTest(x, robust = TRUE, method = c("chisq", "mc"),
                N = 0, na.rm = FALSE)
 }
 \arguments{
   \item{x}{a numeric vector of data values.}
-  \item{robust}{defines, whether the robust version should be used. 
+  \item{robust}{defines, whether the robust version should be used.
   Default is TRUE.}
-  \item{method}{a character string out of \code{chisq} or \code{mc}, specifying how the critical 
+  \item{method}{a character string out of \code{chisq} or \code{mc}, specifying how the critical
                  values should be obtained. Default is approximated by the
                  chisq-distribution or empirically via Monte Carlo.}
   \item{N}{number of Monte Carlo simulations for the empirical critical values}
@@ -22,7 +22,7 @@ JarqueBeraTest(x, robust = TRUE, method = c("chisq", "mc"),
 The test is based on a joint statistic using skewness and kurtosis
 coefficients. The robust Jarque-Bera (RJB) version of utilizes
 the robust standard deviation (namely the mean absolute deviation
-from the Median (\code{\link{MeanAD}}) to estimate sample kurtosis and skewness. For more details see Gel and Gastwirth (2006).
+from the median, as provided e. g. by \code{\link{MeanAD}(x, FUN=median)}) to estimate sample kurtosis and skewness. For more details see Gel and Gastwirth (2006).
 \cr
 Users can also choose to perform the classical Jarque-Bera test (see
 Jarque, C. and Bera, A (1980)).
@@ -42,7 +42,7 @@ Gastwirth, J. L.(1982) \emph{Statistical Properties of A Measure
 of Tax Assessment Uniformity}, Journal of Statistical Planning
 and Inference 6, 1-12.\cr
 
-Gel, Y. R. and Gastwirth, J. L. (2008) \emph{A robust modification of 
+Gel, Y. R. and Gastwirth, J. L. (2008) \emph{A robust modification of
 the Jarque-Bera test of normality}, Economics Letters 99, 30-32.\cr
 
 Jarque, C. and Bera, A. (1980) \emph{Efficient tests for
@@ -51,7 +51,7 @@ residuals}, Economics Letters 6, 255-259.
 }
 \author{W. Wallace Hui, Yulia R. Gel, Joseph L. Gastwirth, Weiwen Miao}
 \seealso{Alternative tests for normality as
-\code{\link{shapiro.test}}, 
+\code{\link{shapiro.test}},
 \code{\link{AndersonDarlingTest}}, \code{\link{CramerVonMisesTest}}, \code{\link{LillieTest}}, \code{\link{PearsonTest}}, \code{\link{ShapiroFranciaTest}}
 
 \code{\link{qqnorm}}, \code{\link{qqline}} for producing a normal quantile-quantile plot

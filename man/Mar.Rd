@@ -12,16 +12,16 @@ Mar(bottom = NULL, left = NULL, top = NULL, right = NULL, outer = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{bottom}{the bottom margin, if set to NULL the current value will be maintained.
+  \item{bottom}{the bottom margin, if set to \code{NULL} the current value will be maintained.
 %%     ~~Describe \code{bottom} here~~
 }
-  \item{left}{the left margin, if set to NULL the current value will be maintained.
+  \item{left}{the left margin, if set to \code{NULL} the current value will be maintained.
 %%     ~~Describe \code{left} here~~
 }
-  \item{top}{the top margin, if set to NULL the current value will be maintained.
+  \item{top}{the top margin, if set to \code{NULL} the current value will be maintained.
 %%     ~~Describe \code{top} here~~
 }
-  \item{right}{the right margin, if set to NULL the current value will be maintained.
+  \item{right}{the right margin, if set to \code{NULL} the current value will be maintained.
 %%     ~~Describe \code{right} here~~
 }
   \item{outer}{logical, defining if inner margins (\code{par("mar")}) or the outer margins (\code{par("oma")}) should be set. Default is FALSE, meaning that the inner margins will be concerned.

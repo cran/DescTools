@@ -1,10 +1,10 @@
 \name{DigitSum}
 \alias{DigitSum}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Calcute Digit Sum
+\title{Calculate Digit Sum
 %%  ~~function to do ... ~~
 }
-\description{Calcutes digit sum of a number x.
+\description{Calculate digit sum of a number x.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -23,7 +23,10 @@ DigitSum(x)
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
-\author{Andri Signorell <andri@signorell.net>
+\references{
+URL: \url{http://stackoverflow.com/questions/18675285/digit-sum-function-in-r}
+}
+\author{Andri Signorell <andri@signorell.net> based on code by Julius
 %%  ~~who you are~~
 }
 

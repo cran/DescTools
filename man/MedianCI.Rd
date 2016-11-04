@@ -18,7 +18,7 @@ MedianCI(x, conf.level = 0.95, sides = c("two.sided", "left", "right"),
 }
 \item{sides}{a character string specifying the side of the confidence interval, must be one of \code{"two.sided"} (default), \code{"left"} or \code{"right"}. You can specify just the initial letter. \code{"left"} would be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
 
-  \item{na.rm}{logical. Should missing values be removed? Defaults to FALSE.
+  \item{na.rm}{logical. Should missing values be removed? Defaults to \code{FALSE}.
 }
   \item{method}{defining the type of interval that should be calculated (one out of \code{"exact"}, \code{"boot"}). Default is \code{"exact"}. See Details.}
 

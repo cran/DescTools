@@ -29,7 +29,7 @@ Sort(x, ...)
   \item{decreasing}{logical. Should the sort be increasing or decreasing? }
   %\item{bycol}{data.frame only. A vector with the position or the names of columns to be sorted after.}
   \item{factorsAsCharacter}{logical. Should factors be sorted by the alphabetic order of their labels or by the order or their levels. 
-     Default is TRUE (by labels).}
+     Default is \code{TRUE} (by labels).}
 
   \item{ord}{vector of integers or columnames. Defines the columns in a table, in a matrix or in a data.frame to be sorted for. \cr
     0 means row.names, 1:n the columns and n+1 the marginal sum. See examples.}

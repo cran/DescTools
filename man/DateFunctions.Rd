@@ -28,11 +28,11 @@
 \usage{
 Year(x)
 Quarter(x)
-Month(x, fmt = c("m", "mm", "mmm"), lang = getOption("lang", "local"),
+Month(x, fmt = c("m", "mm", "mmm"), lang = DescToolsOptions("lang"),
       stringsAsFactors = TRUE)
 Week(x, method = c("iso", "us"))
 Day(x)
-Weekday(x, fmt = c("d", "dd", "ddd"), lang = getOption("lang", "local"),
+Weekday(x, fmt = c("d", "dd", "ddd"), lang = DescToolsOptions("lang"),
         stringsAsFactors = TRUE)
 YearDay(x)
 YearMonth(x)

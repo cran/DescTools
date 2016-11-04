@@ -7,7 +7,7 @@
 \title{Last Observation Carried Forward
 %%   ~~ data name/kind ... ~~
 }
-\description{Replace NAs by the last observed value (aka "Last Observation Carried Forward").
+\description{Replace \code{NA}s by the last observed value (aka "Last Observation Carried Forward").
 %%  ~~ A concise (1-5 lines) description of the dataset. ~~
 }
 \usage{
@@ -24,7 +24,7 @@ LOCF(x)
 %%     ~~Describe \code{x} here~~
 }
 }
-\details{The function will replace all NAs found in a vector with the last earlier value not being NA. 
+\details{The function will replace all NAs found in a vector with the last earlier value not being NA.
 In data.frames each column will be treated as described. }
 \value{a vector with the same dimension as x.
 %%  ~Describe the value returned
@@ -38,7 +38,7 @@ In data.frames each column will be treated as described. }
 }
 \seealso{See also the package \pkg{Hmisc} for less coarse imputation functions.}
 \examples{
-d.frm <- data.frame( 
+d.frm <- data.frame(
   tag=rep(c("mo", "di", "mi", "do", "fr", "sa", "so"), 4)
 , val=rep(c(runif(5), rep(NA,2)), 4) )
 

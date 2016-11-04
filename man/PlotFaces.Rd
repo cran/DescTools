@@ -75,7 +75,7 @@ means <- lapply(iris[,-5], tapply, iris$Species, mean)
 m <- t(do.call(rbind, means))
 m <- cbind(m, matrix(rep(1, 11*3), nrow=3))
 
-PlotFaces(m, ncol=3, col=PalTibco())
+PlotFaces(m, ncol=3, col=Pal("Tibco"))
 }
 
 \keyword{ hplot }

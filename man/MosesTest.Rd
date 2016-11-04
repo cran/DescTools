@@ -16,19 +16,18 @@ MosesTest(x, ...)
 
 }
 \arguments{
-  \item{x}{numeric vector of data values. x will be treated as control group. Non-finite (e.g. infinite or missing) values will be omitted.
+  \item{x}{numeric vector of data values. \code{x} will be treated as control group. Non-finite (e.g. infinite or missing) values will be omitted.
 }
-  \item{y}{numeric vector of data values. y will be treated as experiment group. Non-finite (e.g. infinite or missing) values will be omitted.
+  \item{y}{numeric vector of data values. \code{y} will be treated as experiment group. Non-finite (e.g. infinite or missing) values will be omitted.
 }
   \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}
   \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}.
     By default the variables are taken from \code{environment(formula)}.}
   \item{subset}{an optional vector specifying a subset of observations to be used.}
-  \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}
+  \item{na.action}{a function which indicates what should happen when the data contain \code{NA}s. Defaults to \code{getOption("na.action")}.}
 \item{extreme}{integer, defines the number of extreme values to be dropped from the control group before calculating the
-span. Default (NULL) is the integer part of 0.05 * length(x) or 1, whichever is greater. If extreme is too large, it will be cut down to floor(length(x)-2)/2. }
+span. Default (\code{NULL}) is the integer part of \code{0.05 * length(x)} or \code{1}, whichever is greater. If extreme is too large, it will be cut down to \code{floor(length(x)-2)/2}. }
   \item{\dots}{further arguments to be passed to or from methods.}
-%\item{g}{a vector or factor object giving the group for the corresponding elements of x. }
 
 }
 \details{

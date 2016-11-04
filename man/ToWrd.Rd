@@ -16,26 +16,26 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-ToWrd(x, font = NULL, ..., wrd = getOption("lastWord"))
+ToWrd(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"))
 
-\method{ToWrd}{Freq}(x, font = NULL, main = NULL, ..., wrd = getOption("lastWord"))
+\method{ToWrd}{Freq}(x, font = NULL, main = NULL, ..., wrd = DescToolsOptions("lastWord"))
 
 \method{ToWrd}{table}(x, font = NULL, main = NULL, align = NULL,
       tablestyle = NULL, autofit = TRUE,
-      row.names = FALSE, col.names = TRUE, ..., wrd = getOption("lastWord"))
+      row.names = FALSE, col.names = TRUE, ..., wrd = DescToolsOptions("lastWord"))
 
 \method{ToWrd}{ftable}(x, font = NULL, main = NULL, align = NULL,
-      method = "compact", ..., wrd = getOption("lastWord"))
+      method = "compact", ..., wrd = DescToolsOptions("lastWord"))
 
 \method{ToWrd}{TOne}(x, font = NULL, para = NULL, main = NULL, align = NULL,
-      autofit = TRUE, ..., wrd = getOption("lastWord"))
+      autofit = TRUE, ..., wrd = DescToolsOptions("lastWord"))
 
-\method{ToWrd}{lm}(x, font = NULL, ..., wrd = getOption("lastWord"))
+\method{ToWrd}{lm}(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"))
 
 \method{ToWrd}{character}(x, font = NULL, para = NULL, style = NULL, ...,
-      wrd = getOption("lastWord"))
+      wrd = DescToolsOptions("lastWord"))
 
-\method{ToWrd}{default}(x, font = NULL, ..., wrd = getOption("lastWord"))
+\method{ToWrd}{default}(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"))
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -90,7 +90,7 @@ ToWrd(x, font = NULL, ..., wrd = getOption("lastWord"))
 }
   \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()}
   or an existing one, created by \code{GetCurrWrd()}.
-  Default is the last created pointer stored in \code{getOption("lastWord")}.
+  Default is the last created pointer stored in \code{DescToolsOptions("lastWord")}.
 %%     ~~Describe \code{wrd} here~~
 }
 }

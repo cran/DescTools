@@ -18,7 +18,7 @@ ICC(x, type = c("all", "ICC1", "ICC2", "ICC3", "ICC1k", "ICC2k", "ICC3k"),
 \item{x}{\eqn{n \times m}{k x m} matrix or dataframe, k subjects (in rows) m raters (in columns).}
 \item{type}{one out of "all", "ICC1", "ICC2", "ICC3", "ICC1k", "ICC2k", "ICC3k". See details.}
 
-\item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence intervals will be calculated.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA} (which is the default) no confidence intervals will be calculated.}
 \item{na.rm}{logical, indicating whether \code{NA} values should be stripped before the computation proceeds. If set to \code{TRUE} only      the complete cases of the ratings will be used. Defaults to \code{FALSE}. }
 \item{digits}{number of digits to use in printing}
 \item{\dots}{further arguments to be passed to or from methods.}

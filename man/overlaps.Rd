@@ -25,7 +25,7 @@ Interval(x, y)
 }
 }
 \details{
-\code{\%overlaps\%} returns TRUE or FALSE depending on if the two ranges overlap. The function \code{Overlap} returns the range of the overlapping region as numeric value. This will be 0, if the ranges do not overlap. \cr 
+\code{\%overlaps\%} returns \code{TRUE} or \code{FALSE} depending on if the two ranges overlap. The function \code{Overlap} returns the range of the overlapping region as numeric value. This will be 0, if the ranges do not overlap. \cr 
 \code{Interval} returns the width of the empty space between 2 ranges. Again this will be 0 if the ranges overlap.
 
 To handle overlapping ranges there are 4 cases to consider:

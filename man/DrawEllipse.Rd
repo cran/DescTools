@@ -8,8 +8,8 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-DrawEllipse(x = 0, y = x, radius.x = 1, radius.y = 0.5, rot = 0, 
-            nv = 100, border = par("fg"), col = par("bg"), 
+DrawEllipse(x = 0, y = x, radius.x = 1, radius.y = 0.5, rot = 0,
+            nv = 100, border = par("fg"), col = par("bg"),
             lty = par("lty"), lwd = par("lwd"), plot = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -20,7 +20,7 @@ DrawEllipse(x = 0, y = x, radius.x = 1, radius.y = 0.5, rot = 0,
   \item{radius.x}{a scalar or a vector giving the semi-major axis of the ellipse.
 %%     ~~Describe \code{radius.x} here~~
 }
-  \item{radius.y}{a scalar or a vector giving the semi-minor axis of the ellipse. 
+  \item{radius.y}{a scalar or a vector giving the semi-minor axis of the ellipse.
 %%     ~~Describe \code{radius.y} here~~
 }
   \item{rot}{angle of rotation in radians.
@@ -67,7 +67,7 @@ The function invisibly returns a list of the calculated coordinates for all shap
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{\code{\link{polygon}}, \code{\link{DrawRegPolygon}}, \code{\link{DrawCircle}}, \code{\link{DrawArc}}, \code{\link{DrawAnnulus}}
+\seealso{\code{\link{polygon}}, \code{\link{DrawRegPolygon}}, \code{\link{DrawCircle}}, \code{\link{DrawArc}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

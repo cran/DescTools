@@ -33,10 +33,10 @@ PolarGrid(nr = NULL, ntheta = NULL, col = "lightgray", lty = "dotted", lwd = par
 
 %%     ~~Describe \code{lwd} here~~
 }
-   \item{rlabels}{the radius labels. Use NA if no labels should be to be added.
+   \item{rlabels}{the radius labels. Use \code{NA} if no labels should be to be added.
 %%     ~~Describe \code{rlabels} here~~
 }
-  \item{alabels}{the labels for the angles, they are printed on a circle outside the plot. Use NA for no angle labels.
+  \item{alabels}{the labels for the angles, they are printed on a circle outside the plot. Use \code{NA} for no angle labels.
 %%     ~~Describe \code{anglabels} here~~
 }
   \item{lblradians}{logic, defines if angle labels will be in degrees (default) or in radians.

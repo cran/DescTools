@@ -10,7 +10,7 @@ KappaM(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA)
 \arguments{
   \item{x}{\eqn{n \times m}{n x m} matrix or dataframe, n subjects m raters.}
   \item{method}{a logical indicating whether the exact Kappa (Conger, 1980), the Kappa described by Fleiss (1971) or Light's Kappa (1971) should be computed.}
-\item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence intervals will be calculated. 
+\item{conf.level}{confidence level of the interval. If set to \code{NA} (which is the default) no confidence intervals will be calculated. 
 }
 }
 

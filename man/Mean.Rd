@@ -8,7 +8,7 @@
 \usage{
 Mean(x, \dots)
 
-\method{Mean}{default}(x, trim = 0, na.rm = FALSE, \dots)
+\method{Mean}{default}(x, weights = NULL, trim = 0, na.rm = FALSE, \dots)
 }
 \alias{Mean}
 \alias{Mean.default}
@@ -17,6 +17,8 @@ Mean(x, \dots)
     numeric/logical vectors and \link[=Dates]{date},
     \link{date-time} and \link{time interval} objects.  Complex vectors
     are allowed for \code{trim = 0}, only.}
+  \item{weights}{a numerical vector of weights the same length as \code{x} giving the weights to use for elements of \code{x}.
+ }
   \item{trim}{the fraction (0 to 0.5) of observations to be
     trimmed from each end of \code{x} before the mean is computed.
     Values of trim outside that range are taken as the nearest endpoint.
@@ -26,7 +28,7 @@ Mean(x, \dots)
   \item{\dots}{further arguments passed to or from other methods.}
 }
 \description{
-  Generic function for the (trimmed) arithmetic mean.
+  Generic function for the (trimmed) arithmetic mean, possibly with given weights.
 }
 \value{
   If \code{trim} is zero (the default), the arithmetic mean of the
@@ -37,6 +39,8 @@ Mean(x, \dots)
   If \code{trim} is non-zero, a symmetrically trimmed mean is computed
   with a fraction of \code{trim} observations deleted from each end
   before the mean is computed.
+
+  \code{trim} and \code{weights} can't be used together.
 }
 \references{
   Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)

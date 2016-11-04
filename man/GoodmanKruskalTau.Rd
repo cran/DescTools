@@ -23,7 +23,7 @@ GoodmanKruskalTau(x, y = NULL, direction = c("row", "column"), conf.level = NA, 
   \code{"row"} calculates Goodman Kruskal's tau-a (R|C) ("column dependent").
 %%     ~~Describe \code{x} here~~
 }
-\item{conf.level}{confidence level of the interval. If set to NA (which is the default) no confidence interval will be calculated.
+\item{conf.level}{confidence level of the interval. If set to \code{NA} (which is the default) no confidence interval will be calculated.
 %%     ~~Describe \code{conf.level} here~~
 }
   \item{\dots}{further arguments are passed to the function \code{\link{table}}, allowing i.e. to set useNA. This refers only to the vector interface.

@@ -58,7 +58,7 @@ PlotFun(FUN, args = NULL, from = NULL, to = NULL, by = NULL,
 This enables as well a parametric equation to be entered straight forward. Parameters of a function can be set separatedly.
 The aspect ratio y/x will be set to 1 by default. (See \code{\link{plot.window}} for details.)
 
-If axes are not set to FALSE centered axis at a horizontal and vertical position of 0 will be drawn, containing major and minor ticks.
+If axes are not set to \code{FALSE} centered axis at a horizontal and vertical position of 0 will be drawn, containing major and minor ticks.
 %%     ~~Describe \code{asp} here~~
 }
 

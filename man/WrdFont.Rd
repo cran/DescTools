@@ -9,7 +9,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-WrdFont(wrd = getOption("lastWord"))
+WrdFont(wrd = DescToolsOptions("lastWord"))
 WrdFont(wrd) <- value
 }
 %- maybe also 'usage' for other objects documented here.
@@ -19,7 +19,7 @@ WrdFont(wrd) <- value
 }
   \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()}
   or an existing one, created by \code{GetCurrWrd()}.
-  Default is the last created pointer stored in \code{getOption("lastWord")}.}
+  Default is the last created pointer stored in \code{DescToolsOptions("lastWord")}.}
 
 }
 \details{The font color can be defined by a Word constant beginning with \code{wdConst$wdColor}.
@@ -38,7 +38,7 @@ a list of the attributes of the font in the current cursor position:
 Andri Signorell <andri@signorell.net>
 }
 
-\seealso{\code{\link{WrdText}}, \code{\link{WrdPlot}}, \code{\link{GetNewWrd}}, \code{\link{GetCurrWrd}}
+\seealso{\code{\link{ToWrd}}, \code{\link{WrdPlot}}, \code{\link{GetNewWrd}}, \code{\link{GetCurrWrd}}
 }
 \examples{
 \dontrun{ # Windows-specific example

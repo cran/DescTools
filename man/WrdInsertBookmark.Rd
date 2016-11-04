@@ -10,10 +10,11 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-WrdInsertBookmark(name, wrd = getOption("lastWord"))
-WrdGoto(name, what = wdConst$wdGoToBookmark, wrd = getOption("lastWord"))
+WrdInsertBookmark(name, wrd = DescToolsOptions("lastWord"))
+WrdGoto(name, what = wdConst$wdGoToBookmark, wrd = DescToolsOptions("lastWord"))
 
-WrdUpdateBookmark(name, text, what = wdConst$wdGoToBookmark, wrd = getOption("lastWord"))
+WrdUpdateBookmark(name, text, what = wdConst$wdGoToBookmark,
+                  wrd = DescToolsOptions("lastWord"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,7 +29,7 @@ WrdUpdateBookmark(name, text, what = wdConst$wdGoToBookmark, wrd = getOption("la
 }
   \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()}
   or an existing one, created by \code{GetCurrWrd()}.
-  Default is the last created pointer stored in \code{getOption("lastWord")}.}
+  Default is the last created pointer stored in \code{DescToolsOptions("lastWord")}.}
 }
 
 \details{Bookmarks are useful to build structured documents, which can be updated later.

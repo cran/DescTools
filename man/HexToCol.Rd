@@ -30,7 +30,7 @@ The colorname(s) of the closest match(es) (if more than one).
 ColToHex(c("lightblue", "salmon"))
 
 HexToCol(c("#ADD8E6", "#FA1572"))
-HexToCol(PalHelsana())
+HexToCol(Pal("Helsana"))
 
 x <- ColToRgb("darkmagenta")
 x[2,] <- x[2,] + 155

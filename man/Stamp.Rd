@@ -16,13 +16,15 @@ Stamp(txt = NULL, las = par("las"), cex = 0.6)
 }
 \details{
 The text can be freely defined as option. If user and date should be included by default, the following option using an expression will help:
-\code{options(stamp=expression(gettextf('\%s/\%s', Sys.getenv('USERNAME'), Format(Today(), fmt='yyyy-mm-dd'))))}
+\preformatted{DescToolsOptions(stamp=expression(gettextf('\%s/\%s',
+          Sys.getenv('USERNAME'), Format(Today(), fmt='yyyy-mm-dd') )))}
 
   For \R results may not be satisfactory if \code{par(mfrow=)} is in effect.
 }
 \seealso{\code{\link{text}}}
 
-\author{Frank E Harrell Jr <f.harrell@vanderbilt.edu> with some amendments by Andri Signorell <andri@signorell.net>}
+\author{Frank E Harrell Jr <f.harrell@vanderbilt.edu>\cr
+with some amendments by Andri Signorell <andri@signorell.net>}
 \examples{
 plot(1:20)
 Stamp()

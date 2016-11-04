@@ -20,7 +20,7 @@ PlotMosaic(x, main = deparse(substitute(x)), horiz = TRUE, cols = NULL,
   \item{main}{character string for the mosaic title.
 %%     ~~Describe \code{main} here~~
 }
-  \item{horiz}{logical, defining the orientation of the mosaicplot. TRUE (default) makes a horizontal plot.
+  \item{horiz}{logical, defining the orientation of the mosaicplot. \code{TRUE} (default) makes a horizontal plot.
 %%     ~~Describe \code{horiz} here~~
 }
   \item{cols}{the colors of the plot.

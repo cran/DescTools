@@ -13,11 +13,14 @@
   computation proceeds.
 }
 \usage{
-SD(x, na.rm = FALSE)
+SD(x, weights = NULL, na.rm = FALSE)
 }
 \arguments{
   \item{x}{a numeric vector or an \R object which is coercible to one
     by \code{as.double(x)}.}
+
+  \item{weights}{a numerical vector of weights the same length as \code{x} giving the weights to use for elements of \code{x}. }
+
   \item{na.rm}{logical.  Should missing values be removed?}
 }
 \details{

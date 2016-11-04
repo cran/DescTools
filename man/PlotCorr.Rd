@@ -8,8 +8,8 @@
 The cells of the matrix can be shaded or colored to show the correlation value.
 }
 \usage{
-PlotCorr(x, cols = colorRampPalette(c(getOption("col1", hred), "white",
-                                      getOption("col2", hblue)), space = "rgb")(20),
+PlotCorr(x, cols = colorRampPalette(c(Pal()[2], "white",
+                                      Pal()[1]), space = "rgb")(20),
          breaks = seq(-1, 1, length = length(cols) + 1),
          border = "grey", lwd = 1,
          args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"),
@@ -32,7 +32,7 @@ PlotCorr(x, cols = colorRampPalette(c(getOption("col1", hred), "white",
   \item{lwd}{line width for borders. Default is 1.
 %%     ~~Describe \code{lwd} here~~
 }
-\item{args.colorlegend}{list of arguments for the \code{\link{ColorLegend}}. Use NA if no color legend should be painted.
+\item{args.colorlegend}{list of arguments for the \code{\link{ColorLegend}}. Use \code{NA} if no color legend should be painted.
 %%
 }
   \item{xaxt}{parameter to define, whether to draw an x-axis, defaults to \code{"n"}.
@@ -90,7 +90,7 @@ csp <- cor(data.frame(lapply(d.diamonds[,c("carat", "clarity", "cut", "polish",
 PlotCorr(csp)
 
 # some more colors
-PlotCorr(cor(mtcars), col=PalDescTools("RedWhiteBlue1", 100), border="grey",
+PlotCorr(cor(mtcars), col=Pal("RedWhiteBlue1", 100), border="grey",
          args.colorlegend=list(labels=Format(seq(-1,1,.25), digits=2), frame="grey"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

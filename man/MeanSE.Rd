@@ -5,7 +5,7 @@
 %%  ~~function to do ... ~~
 }
 \description{
-Calculates the standard error of mean.  
+Calculates the standard error of mean.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -16,14 +16,14 @@ MeanSE(x, sd = NULL, na.rm = FALSE)
   \item{x}{a (non-empty) numeric vector of data values.
 %%     ~~Describe \code{x} here~~
 }
-\item{sd}{the standard deviation of x. If provided it's interpreted as sd of the population. If left to \code{NULL} (default) the sample sd(x) will be used.}
+\item{sd}{the standard deviation of \code{x}. If provided it's interpreted as sd of the population. If left to \code{NULL} (default) the sample \code{sd(x)} will be used.}
 
-  \item{na.rm}{logical. Should missing values be removed? Defaults to FALSE.
+  \item{na.rm}{logical. Should missing values be removed? Defaults to \code{FALSE}.
 %%     ~~Describe \code{na.rm} here~~
 }
 }
 \details{MeanSE calculates the standard error of the mean defined as: \deqn{\frac{\sigma}{\sqrt{n}}}
-\eqn{\sigma} being standard deviation of x and n the length of x.
+\eqn{\sigma} being standard deviation of \code{x} and n the length of \code{x}.
 }
 
 \value{the standard error as numeric value.

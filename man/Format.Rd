@@ -3,31 +3,40 @@
 \alias{Format.default}
 \alias{Format.matrix}
 \alias{Format.table}
+\alias{Fmt}
+\alias{as.fmt}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Format Numbers and Dates
 %%  ~~function to do ... ~~
 }
-\description{Formatting numbers in R often degenerates into a major intellectual challenge for us little guys. We have several functions available and quite often it's hard to work out which one to use, when a special option is needed.
+\description{Formatting numbers in R often degenerates into a major intellectual challenge for us little guys. We have several functions available and quite often it's hard to work out which one to use, when an uncommon option is needed.
 This function wraps those functions and tries to offer a simpler, less technical, but still flexible interface.
+
+There's also an easygoing interface for format templates, defined as a list consisting of any accepted format features. In this way templates can be defined outside and may easily be changed or modified later.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Format(x, digits = NULL, sci = getOption("scipen"), big.mark="",
+Format(x, digits = NULL, sci = NULL, big.mark = NULL,
        leading = NULL, zero.form = NULL, na.form = NULL,
-       fmt = NULL, align = NULL, width = NULL, lang = getOption("lang", "local"), ...)
+       fmt = NULL, align = NULL, width = NULL, lang = NULL, ...)
 
-\method{Format}{table}(x, digits = NULL, sci = getOption("scipen"), big.mark="",
+\method{Format}{table}(x, digits = NULL, sci = NULL, big.mark = NULL,
        leading = NULL, zero.form = NULL, na.form = NULL,
-       fmt = NULL, align = NULL, width = NULL, lang = getOption("lang", "local"), ...)
+       fmt = NULL, align = NULL, width = NULL, lang = NULL, ...)
 
-\method{Format}{matrix}(x, digits = NULL, sci = getOption("scipen"), big.mark="",
+\method{Format}{matrix}(x, digits = NULL, sci = NULL, big.mark = NULL,
        leading = NULL, zero.form = NULL, na.form = NULL,
-       fmt = NULL, align = NULL, width = NULL, lang = getOption("lang", "local"), ...)
+       fmt = NULL, align = NULL, width = NULL, lang = NULL, ...)
 
-\method{Format}{default}(x, digits = NULL, sci = getOption("scipen"), big.mark="",
+\method{Format}{default}(x, digits = NULL, sci = NULL, big.mark = NULL,
        leading = NULL, zero.form = NULL, na.form = NULL,
-       fmt = NULL, align = NULL, width = NULL, lang = getOption("lang", "local"), ...)
+       fmt = NULL, align = NULL, width = NULL, lang = NULL, ...)
+
+Fmt(...)
+
+as.fmt(...)
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -37,10 +46,11 @@ Format(x, digits = NULL, sci = getOption("scipen"), big.mark="",
   \item{digits}{integer, the desired (fixed) number of digits after the decimal point. Unlike \code{\link{formatC}} you will always get this number of digits even if the last digit is 0.
 %%     ~~Describe \code{digits} here~~
 }
-  \item{sci}{integer. The power of 10 to be set when deciding to print numeric values in exponential notation. Fixed notation will be preferred unless the number is larger than 10^scipen. If just one value is set it will be used for the left border 10^(-scipen) as well as for the right one (10^scipen). A negative and a positive value can also be set independently.
+  \item{sci}{integer. The power of 10 to be set when deciding to print numeric values in exponential notation. Fixed notation will be preferred unless the number is larger than 10^scipen. If just one value is set it will be used for the left border 10^(-scipen) as well as for the right one (10^scipen). A negative and a positive value can also be set independently. Default is
+  \code{getOption("scipen")}.
 %%     ~~Describe \code{sci} here~~
 }
-  \item{big.mark}{character; if not empty used as mark between every 3 decimals before the decimal point.
+  \item{big.mark}{character; if not empty used as mark between every 3 decimals before the decimal point. Default is "" (none).
 %%     ~~Describe \code{big.mark} here~~  big.interval is not implemented, would anyone need that??
 }
   \item{leading}{character string that can be used for setting leading zeros. "000" would make sure that at least 3 digits on the left side will be printed. Setting leading to "drop" will yield results like ".452" for 0.452. The default \code{NULL} will leave the numbers as they are.
@@ -68,8 +78,10 @@ This argument is send directly to the function \code{\link{StrAlign}} as argumen
   \item{lang}{optional value setting the language for the months and daynames. Can be either \code{"local"} for current locale or \code{"engl"} for english. If left to \code{NULL}, the option \code{"lang"} will be searched for and if not found \code{"local"} will be taken as default.
 %%     ~~Describe \code{value} here~~
 }
-
+% \item{value}{the value to be overridden in the function \code{fmt}}.
+% \item{name}{the name of the format in \code{fmt}.}
 \item{\dots}{further arguments to be passed to or from methods. }
+
 }
 \details{
 The argument \code{fmt} can be used for defining several formats. \cr
@@ -118,10 +130,12 @@ Code \tab  \tab  \cr
 }
 
 \code{fmt} can as well be an object of class \code{fmt} consisting of a list out of the arguments above.
-This allows the full format to be stored in a variable or as an option and to be used as format template subsequently. \cr If we would want to define a format for counts, we could create a list  with a big mark and with 0 digits and subsequently call the \code{Format} function with this format:\cr\cr
-\code{fmt.count <- structure(list(digits=0, big.mark="'"), class="fmt")} \cr
+This allows to store the full format in a variable or as an option and use it as format template subsequently. \cr If we would want to define a format for counts, we could create a list  with a big mark and with 0 digits and subsequently call the \code{Format} function with this format:\cr\cr
+\code{fmt.count <- as.fmt(digits=0, big.mark="'")} \cr
 \code{Format(4231.2, fmt=fmt.count)} \cr \cr
-where the latter returns the same result as \code{Format(4231.2, digits=0, big.mark="'")}.
+where the latter returns the same result as if the arguments would have been supplied directly: \code{Format(4231.2, digits=0, big.mark="'")}.
+
+The formats can as well be organized as \code{options}. The function \code{fm()} can be used to get, modify and store new formats in dependency of the arguments given. See examples.
 
 }
 \value{the formatted values as characters. \cr
@@ -141,8 +155,8 @@ If x was a matrix, then a the result will also be a matrix. (Hope this will not 
 
 \seealso{\code{\link{format}}, \code{\link{formatC}}, \code{\link{prettyNum}}, \code{\link{sprintf}}, \code{\link{symnum}},\cr
 \code{\link{StrAlign}}, \code{\link{StrPad}}, \code{\link{Sys.setlocale}},\cr
-\code{\link{Weekday}}, \code{\link{Month}}
-
+\code{\link{Weekday}}, \code{\link{Month}},
+\code{\link{DescToolsOptions}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
@@ -164,12 +178,23 @@ Format(m, digits=1)
 # engineering format
 Format(x, fmt="eng",  digits=2)
 Format(x, fmt="engabb", leading="00", digits=2)
-# combine with grams g
+# combine with grams [g]
 paste(Format(x, fmt="engabb", leading="00", digits=2), "g", sep="")
 
 # example form symnum
 pval <- rev(sort(c(outer(1:6, 10^-(1:3)))))
 noquote(cbind(Format(pval, fmt="p"), Format(pval, fmt="*")))
+
+# use Fmt() to get and define new formats stored as option
+Fmt()                        # all defined formats
+Fmt("abs")                   # only format named "abs"
+Fmt("nexist")                # only format named "nexist" (nonexisting)
+Fmt("abs", "per", "nexist")
+Fmt("abs", digits=3)         # get Fmt("abs") and overwrite digits
+Fmt("abs", na.form="-")      # get Fmt("abs") and add user defined na.form
+
+# define totally new format and store as option
+Fmt(nob=as.fmt(digits=10, na.form="nodat"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

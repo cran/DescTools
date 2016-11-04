@@ -26,7 +26,7 @@ ColorLegend(x, y = NULL, cols = rev(heat.colors(100)), labels = NULL,
   
   \item{height}{the height of the colorlegend. }
   
-  \item{horiz}{logical indicating if the colorlegend should be horizontal; default FALSE means vertical alignment. }
+  \item{horiz}{logical indicating if the colorlegend should be horizontal; default \code{FALSE} means vertical alignment. }
   
   \item{xjust}{how the colorlegend is to be justified relative to the colorlegend x location. 
     A value of 0 means left justified, 0.5 means centered and 1 means right justified. }

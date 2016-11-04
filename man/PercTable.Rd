@@ -23,6 +23,7 @@ All the frequencies are nested into one single table.
           stdres = FALSE, margins = NULL, \dots)
 
 \method{PercTable}{formula}(formula, data, subset, na.action, \dots)
+
 \method{print}{PercTable}(x, vsep = NULL, ...)
 
 Margins(tab, ...)
@@ -62,7 +63,7 @@ Margins(tab, ...)
     (for the case where x is a matrix, n * p * (1 - p) otherwise).
 }
   \item{margins}{a vector, consisting out of 1 and/or 2. Defines the margin sums to be included.
-  1 stands for row margins, 2 for column margins, c(1,2) for both. Default is NULL (none).
+  1 stands for row margins, 2 for column margins, c(1,2) for both. Default is \code{NULL} (none).
 %%     ~~Describe \code{margins} here~~
 }
    \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} will be tabled versus rhs (\code{table(lhs, rhs)}).}
@@ -71,7 +72,7 @@ Margins(tab, ...)
   \item{subset}{an optional vector specifying a subset of observations to be used.}
   \item{na.action}{a function which indicates what should happen when the data contain NAs. Defaults to \code{getOption("na.action")}.}
 
-  \item{vsep}{logical, defining if an empty row should be introduced between the table rows. Default is FALSE, if only a table with one single description (either frequencies or percents) should be returned and TRUE in any other case.
+  \item{vsep}{logical, defining if an empty row should be introduced between the table rows. Default is FALSE, if only a table with one single description (either frequencies or percents) should be returned and \code{TRUE} in any other case.
 %%     ~~Describe \code{digits} here~~
 }
   \item{\dots}{the dots are passed from \code{PercTable.default()} to \code{PercTable.table()} and from \code{Margins} to the function \code{\link{Freq}}.
@@ -83,9 +84,11 @@ Margins(tab, ...)
 the dimensions (included percentages are named \code{"idx"}) or numbers (1:3, where 1 is the first dimension of the table,
 2 the second and 3 the percentages). \cr
 Use \code{Sort()} if you want to have your table sorted by rows.\cr\cr
-The number format can be set via the options \code{"fmt.abs"} for the absolute values and \code{"fmt.per"} for the percentages. These options must be of class \code{"fmt"} which is basically a list containing any format information used in \code{\link{Format}}.
+The style in which numbers are formatted is selected by
+\code{\link{Fmt}()} from the DescTools options.
+Absolute frequencies will use \code{Fmt("abs")} and \code{Fmt("per")} will do it for the percentages. The options can be changed with \code{Fmt(abs=as.fmt(...))} which is basically a \code{"fmt"}-object containing any format information used in \code{\link{Format}}.
 
-Margins returns a list containing all the one dimensional margin tables of a n-dimensional table along the given dimensions. It uses \code{\link{margin.table}} for all the dimensions and adds the appropriate percentages.
+\code{Margins()} returns a list containing all the one dimensional margin tables of a n-dimensional table along the given dimensions. It uses \code{\link{margin.table}()} for all the dimensions and adds the appropriate percentages.
 
 %%  ~~ If necessary, more details than the description above ~~
 }
@@ -108,7 +111,7 @@ Andri Signorell <andri@signorell.net>
 
 
 \seealso{
-\code{\link{Freq}}, \code{\link{table}}, \code{\link{ftable}}, \code{\link{prop.table}}, \code{\link{addmargins}}\cr
+\code{\link{Freq}}, \code{\link{table}}, \code{\link{ftable}}, \code{\link{prop.table}}, \code{\link{addmargins}}, \code{\link{DescToolsOptions}}, \code{\link{Fmt}}\cr
 There are similar functions in package \pkg{sfsmisc} \code{\link[sfsmisc]{printTable2}} and package \pkg{vcd} \code{\link[vcd]{table2d_summary}}, both
 lacking some of the flexibility we needed here. \cr
 

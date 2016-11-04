@@ -30,7 +30,7 @@ data(d.prefix)
 }
 }
 \details{
-The following units can be chosen. Conversions will work with units within the group. NA wil be returned if a conversion can't be found. \cr
+The following units can be chosen. Conversions will work with units within the group. \code{NA} wil be returned if a conversion can't be found. \cr
 The multipliers can be found in the dataset \code{d.units}.
 
 \tabular{lll}{

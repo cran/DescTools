@@ -11,7 +11,7 @@ ImportFileDlg(auto_type = TRUE, env = .GlobalEnv)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{auto_type}{determins if the type dialog should be displayed. Default is FALSE, so that if the file extensions are ".sav", "dta" the appropiate dialog will be called directly.}
+  \item{auto_type}{determines if the type dialog should be displayed. Default is \code{FALSE}, so that if the file extensions are ".sav", "dta" the appropiate dialog will be called directly.}
 \item{env}{environment in which the dataset should be created.}
 
 }
@@ -20,6 +20,6 @@ ImportFileDlg(auto_type = TRUE, env = .GlobalEnv)
 \author{Andri Signorell <andri@signorell.net>
 }
 
-\seealso{\code{\link{ImportDlg}}
+\seealso{\code{\link{FileOpenCmd}}
 }
 \keyword{ manip }

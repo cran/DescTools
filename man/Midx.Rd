@@ -15,7 +15,7 @@ Midx(x, incl.zero = FALSE, cumulate = FALSE)
   \item{x}{the numeric vector
 %%     ~~Describe \code{x} here~~
 }
-  \item{incl.zero}{should zero be appended to x before proceeding? If TRUE the first value will be one half of the first value of x. Default is FALSE.}
+  \item{incl.zero}{should zero be appended to x before proceeding? If \code{TRUE} the first value will be one half of the first value of x. Default is FALSE.}
   \item{cumulate}{should the result be calculated as cumulative sum? Default is FALSE.}
 }
 \value{numeric vector with the calculated midpoins

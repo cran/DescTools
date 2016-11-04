@@ -47,12 +47,12 @@ PlotPolar(r, theta = NULL, type = "p", rlim = NULL, main = "", lwd = par("lwd"),
   \item{pch}{a vector of plotting characters or symbols: see \code{\link{points}}.
 %%     ~~Describe \code{pch} here~~
 }
-  \item{fill}{fill color, defaults to NA (none).
+  \item{fill}{fill color, defaults to \code{NA} (none).
 %%     ~~Describe \code{fill} here~~
 }
   \item{cex}{a numerical vector giving the amount by which plotting characters and symbols should
   be scaled relative to the default. This works as a multiple of \code{par("cex")}.
-  NULL and NA are equivalent to 1.0.
+  \code{NULL} and \code{NA} are equivalent to 1.0.
 %%     ~~Describe \code{cex} here~~
 }
   \item{mar}{A numerical vector of the form c(bottom, left, top, right) which gives the number of lines of
@@ -153,8 +153,8 @@ x <- c(4,8,2,8,2,6,5,7,3,3,5,3)
 theta <- (0:12) * pi / 6
 PlotPolar(x, type = "n", main="Some data")
 PolarGrid(nr = 0:9, ntheta = 24, col="grey", lty=1, rlabels = NA, alabels = NA)
-DrawAnnulusSector(x=0, y=0, radius.in=0, radius.out=x,
-                  angle.beg = theta[-length(theta)], angle.end = theta[-1],
+DrawCircle(x=0, y=0, r.in=0, r.out=x,
+                  theta.1 = theta[-length(theta)], theta.2 = theta[-1],
                   col=SetAlpha(rainbow(12), 0.7), border=NA)
 
 segments(x0 = -10:10, y0 = -.2, y1=0.2)

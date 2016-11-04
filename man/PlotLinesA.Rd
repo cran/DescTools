@@ -10,7 +10,7 @@
 \usage{
 PlotLinesA(x, y, col = 1:5, lty = 1, lwd = 1, lend = par("lend"),
            xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL,
-           cex = 1, cex.legend = 1, main = NULL, grid = TRUE, mar = NULL,
+           cex = 1, args.legend = NULL, main = NULL, grid = TRUE, mar = NULL,
            pch = NA, pch.col = par("fg"), pch.bg = par("bg"), pch.cex = 1)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -30,9 +30,11 @@ PlotLinesA(x, y, col = 1:5, lty = 1, lwd = 1, lend = par("lend"),
   \item{xlim, ylim}{ranges of x and y axes, as in \link{plot}.
 %%     ~~Describe \code{xlim} here~~
 }
-  \item{cex, cex.legend}{character expansion factor relative to current \code{par("cex")}. Can be set for matplot and for the legend text independently.
+  \item{cex}{character expansion factor relative to current \code{par("cex")}.
 %%     ~~Describe \code{xlim} here~~
 }
+\item{args.legend}{list of additional arguments for the legend; names of the list are used as argument names. If set to NA, the legend will be suppressed.}
+
   \item{main}{an overall title for the plot.
 %%     ~~Describe \code{main} here~~
 }
@@ -69,7 +71,7 @@ m <- matrix(c(3,4,5,1,5,4,2,6,2), nrow = 3,
             dimnames = list(dose = c("A","B","C"),
                             age  = c("2010","2011","2012")))
 
-PlotLinesA(m, col=c(PalHelsana()), main="Dose ~ age_grp", lwd=3, ylim=c(1, 10))
+PlotLinesA(m, col=c(Pal("Helsana")), main="Dose ~ age_grp", lwd=3, ylim=c(1, 10))
 
 
 # example from MASS

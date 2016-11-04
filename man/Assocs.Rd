@@ -18,7 +18,7 @@ Assocs(x, conf.level = 0.95, verbose = NULL)
   \item{x}{a 2 dimensional contingency table or a matrix.
 %%     ~~Describe \code{x} here~~
 }
-  \item{conf.level}{confidence level of the interval. If set to NA no confidence interval will be calculated. Default is 0.95.
+  \item{conf.level}{confidence level of the interval. If set to \code{NA} no confidence interval will be calculated. Default is 0.95.
 
 %%     ~~Describe \code{conf.level} here~~
 }

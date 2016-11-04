@@ -1,32 +1,21 @@
-\name{Label}
+\name{Label, Unit}
 \alias{Label}
 \alias{Label<-}
-\alias{Label.default}
-\alias{Label<-.default}
-\alias{Label.data.frame}
-\alias{Label<-.data.frame}
-\alias{SetLabel}
+\alias{Unit}
+\alias{Unit<-}
 
-\title{Label Attribute of an Object
+\title{Label, Unit Attribute of an Object
 %%  ~~function to do ... ~~
 }
-\description{ Set and retrieve the \code{label} attribute of \code{x}. This can be helpful for documenting the specific meaning of a variable. 
+\description{ Set and retrieve the \code{label}, resp. \code{unit} attribute of \code{x}. This can be helpful for documenting the specific meaning of a variable, of an entire data.frame or any other object. For single vectors it can be useful to store the unit.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Label(x, default = NULL, ...)
+Label(x)
+Label(x) <- value
 
-\method{Label}{default}(x, ...)
-
-\method{Label}{data.frame}(x, ...)
-
-Label(x, ...) <- value
-
-\method{Label}{default}(x, ...) <- value
-
-\method{Label}{data.frame}(x, self = TRUE, ...) <- value
-
-SetLabel(object = nm, nm)
+Unit(x)
+Unit(x) <- value
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -34,39 +23,23 @@ SetLabel(object = nm, nm)
   \item{x}{any object
 %%     ~~Describe \code{x} here~~
 }
- \item{default}{any default
+  \item{value}{a single string describing the object
 %%     ~~Describe \code{x} here~~
-}
-  \item{value}{any object
-%%     ~~Describe \code{x} here~~
-}
-  \item{self}{any object
-%%     ~~Describe \code{x} here~~
-}
-  \item{object}{an object for which a names attribute will be meaningful
-%%     ~~Describe \code{object} here~~
-}
-  \item{nm}{a character vector of names to assign to the object
-%%     ~~Describe \code{nm} here~~
-}
-
-  \item{\dots}{the dots are passed to the specific function.
-%%     ~~Describe \code{} here~~
 }
 }
 
-\details{The label should consist of a single text (length of 1). The text may contain any line feeds.
-It can be deleted by setting the label to \code{NULL}. 
+\details{The label should consist of a single text (length of 1). The text may contain line feeds.
+It can be deleted by setting the label to \code{NULL}.
 }
 \value{
-\code{Label} returns the label attribute of x, if any; otherwise, NULL. 
+\code{Label} and \code{Unit} return the label attribute of x, if any; otherwise, NULL.
 }
 
 \author{Andri Signorell <andri@signorell.net>
 }
 
 \seealso{
-A more elaborated version can be found in package \pkg{Hmisc} \code{\link[Hmisc]{label}()}.
+A more elaborated label version can be found in package \pkg{Hmisc} \code{\link[Hmisc]{label}()}.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

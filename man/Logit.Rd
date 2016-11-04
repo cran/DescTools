@@ -26,12 +26,12 @@ LogitInv(x, min = 0, max = 1)
 %s    \deqn{y = log(\frac{p}{(1-p)})}{y = log(p/(1-p))}
 %s
 %s  where
-%s    
+%s
 %s    \deqn{p=\frac{(x-min)}{(max-min)}}{p=(x-min)/(max-min)}
 
   The generalized inverse logit function provides the inverse
   transformation:
-    
+
     \deqn{x = p' \cdot (max-min) + min  \;\;\;  \; \textup{where} \; \;\;  p'=\frac{exp(y)}{1+exp(y)}}{x = p' * (max-min) + min   where  p' = exp(y)/(1+exp(y))}
 
 
@@ -50,7 +50,7 @@ LogitInv(x, min = 0, max = 1)
   cbind(x,xt)
 
   y <- LogitInv(xt, min=0, max=10)
-  cbind(x, xt, y)  
+  cbind(x, xt, y)
 
 }
 \keyword{math}

@@ -9,7 +9,7 @@
 }
 \usage{
 WrdTable(nrow = 1, ncol = 1, heights = NULL, widths = NULL, main = NULL,
-         wrd = getOption("lastWord"))
+         wrd = DescToolsOptions("lastWord"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,17 +19,17 @@ WrdTable(nrow = 1, ncol = 1, heights = NULL, widths = NULL, main = NULL,
   \item{ncol}{number of columns.
 %%     ~~Describe \code{ncol} here~~
 }
-  \item{heights}{a vector of the row heights (in [cm]). If set to NULL (which is the default) the Word defaults will be used. The values will be recyled, if necessary.
+  \item{heights}{a vector of the row heights (in [cm]). If set to \code{NULL} (which is the default) the Word defaults will be used. The values will be recyled, if necessary.
 %%     ~~Describe \code{ncol} here~~
 }
-  \item{widths}{a vector of the column widths (in [cm]). If set to NULL (which is the default) the Word defaults will be used. The values will be recyled, if necessary.
+  \item{widths}{a vector of the column widths (in [cm]). If set to \code{NULL} (which is the default) the Word defaults will be used. The values will be recyled, if necessary.
 %%     ~~Describe \code{ncol} here~~
 }
 \item{main}{a caption for the plot. This will be inserted by InserCaption in Word. Default is NULL, which will insert nothing.}
 
 \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()}
   or an existing one, created by \code{GetCurrWrd()}.
-  Default is the last created pointer stored in \code{getOption("lastWord")}.
+  Default is the last created pointer stored in \code{DescToolsOptions("lastWord")}.
 }
 }
 \value{A pointer to the inserted table.
@@ -45,7 +45,7 @@ WrdTable(nrow = 1, ncol = 1, heights = NULL, widths = NULL, main = NULL,
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{\code{\link{GetNewWrd}}, \code{\link{WrdText}}
+\seealso{\code{\link{GetNewWrd}}, \code{\link{ToWrd}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

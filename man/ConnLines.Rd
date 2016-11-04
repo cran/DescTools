@@ -4,7 +4,7 @@
 \title{Add Connection Lines to a Barplot
 %%  ~~function to do ... ~~
 }
-\description{Add connection lines to a stacked barplot (beside = TRUE is not supported). The function expects exactly the same arguments, that were 
+\description{Add connection lines to a stacked barplot (beside = \code{TRUE} is not supported). The function expects exactly the same arguments, that were
 used to create the barplot.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
@@ -22,14 +22,14 @@ ConnLines(..., col = 1, lwd = 1, lty = "solid", xalign = c("mar","mid"))
   \item{lwd}{the line width for the connection lines. Default is 1.
 %%     ~~Describe \code{lwd} here~~
 }
-  \item{lty}{the line type for the connection lines. Line types can either be specified as an integer 
-  (0=blank, 1=solid (default), 2=dashed, 3=dotted, 4=dotdash, 5=longdash, 6=twodash) or as one of the 
-  character strings \code{"blank"}, \code{"solid"}, \code{"dashed"}, \code{"dotted"}, \code{"dotdash"}, \code{"longdash"}, or \code{"twodash"}. 
+  \item{lty}{the line type for the connection lines. Line types can either be specified as an integer
+  (0=blank, 1=solid (default), 2=dashed, 3=dotted, 4=dotdash, 5=longdash, 6=twodash) or as one of the
+  character strings \code{"blank"}, \code{"solid"}, \code{"dashed"}, \code{"dotted"}, \code{"dotdash"}, \code{"longdash"}, or \code{"twodash"}.
   Default is \code{"solid"}.
 }
 
 \item{xalign}{defines where the lines should be aligned to on the x-axis. Can be set
-either to the margins of the bars ("mar" which is the default) or to "mid". The latter will lead the connecting lines to the middle of the bars.}  
+either to the margins of the bars ("mar" which is the default) or to "mid". The latter will lead the connecting lines to the middle of the bars.}
 %%     ~~Describe \code{lty} here~~
 }
 \author{Andri Signorell <andri@signorell.net>
@@ -39,33 +39,33 @@ either to the margins of the bars ("mar" which is the default) or to "mid". The 
 \seealso{\code{\link{barplot}}
 }
 \examples{
-tab <- with( 
-  subset(d.pizza, driver \%in\% c("Carpenter","Miller","Farmer","Butcher")), 
+tab <- with(
+  subset(d.pizza, driver \%in\% c("Carpenter","Miller","Farmer","Butcher")),
   table(factor(driver), Weekday(date, "dd", stringsAsFactor=TRUE))
 )
 tab
 
-barplot(tab, beside=FALSE, space=1.2) 
-ConnLines(tab, beside=FALSE, space=1.2, lcol="grey50", lwd=1, lty=2) 
+barplot(tab, beside=FALSE, space=1.2)
+ConnLines(tab, beside=FALSE, space=1.2, lcol="grey50", lwd=1, lty=2)
 
-barplot(tab, beside=FALSE, space=1.2, horiz=TRUE) 
+barplot(tab, beside=FALSE, space=1.2, horiz=TRUE)
 ConnLines(tab, beside=FALSE, space=1.2, horiz=TRUE, lcol="grey50", lwd=1, lty=2)
 
 
-cols <- PalHelsana()[1:4]
-b <- barplot(tab, beside=FALSE, horiz=FALSE, col=cols) 
-ConnLines(tab, beside=FALSE, horiz=FALSE, lcol="grey50", lwd=1, lty=2) 
+cols <- Pal("Helsana")[1:4]
+b <- barplot(tab, beside=FALSE, horiz=FALSE, col=cols)
+ConnLines(tab, beside=FALSE, horiz=FALSE, lcol="grey50", lwd=1, lty=2)
 
 # set some labels
 txt <- tab
 txt[] <- gsub(pattern="^0", "", t(tab))       # do not print 0s
 text(x=b, y=t(apply(apply(rbind(0,tab), 2, Midx), 2, cumsum)), labels=txt,
-     col=(matrix(rep(TextContrastColor(cols), each=ncol(tab)), 
+     col=(matrix(rep(TextContrastColor(cols), each=ncol(tab)),
           nrow=nrow(tab), byrow=FALSE )))
 
 # align to the middle of the bars
-barplot(tab, beside=FALSE, space=1.2) 
-ConnLines(tab, beside=FALSE, space=1.2, lcol="grey50", lwd=1, lty=2, method="mid") 
+barplot(tab, beside=FALSE, space=1.2)
+ConnLines(tab, beside=FALSE, space=1.2, lcol="grey50", lwd=1, lty=2, method="mid")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

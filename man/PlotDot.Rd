@@ -48,7 +48,7 @@ PlotDot(x, labels = NULL, groups = NULL, gdata = NULL,
   \item{main}{overall title for the plot, see \code{\link{title}}.}
   \item{xlab, ylab}{axis annotations as in \code{title}.}
   \item{add}{logical specifying if bars should be added to an already existing plot; defaults to \code{FALSE}.}
-  \item{args.errbars}{optional arguments for adding error bars. All arguments for \code{\link{ErrBars}} can be supplied. If left to NULL (default), no error bars will be plotted.}
+  \item{args.errbars}{optional arguments for adding error bars. All arguments for \code{\link{ErrBars}} can be supplied. If left to \code{NULL} (default), no error bars will be plotted.}
   \item{\dots}{\link{graphical parameters} can also be specified as arguments.}
 }
 \details{
@@ -123,11 +123,16 @@ PlotDot(xci[,1], main="delivery_min ~ driver",
   args.errbars=list(from=xci[,-1]))
 
 # Setting the colours
-PlotDot(VADeaths, main="This should only show how to set the colours, not be pretty",
-        col=c("red", "blue"), pch=NA, gcolor = "green", lcolor = "orange",
-        args.errbars = list(from=VADeaths-2, to=VADeaths+2, mid=VADeaths,
-                          pch=21, cex=1.4, col="blue", col.pch="green", bg.pch="red"))
+# define some error bars first
+lci <- sweep(x = VADeaths, MARGIN = 2, FUN = "-", 1:4)
+uci <- sweep(x = VADeaths, MARGIN = 1, FUN = "+", 1:5)
 
+PlotDot(VADeaths, main="This should only show how to set the colours, not be pretty",
+        col=c("red", "blue"), pch=NA,
+        gcolor = c("green", "blue", "orange", "magenta"), gdata=c(10,20,30,40),
+        gpch = c(15:18), lcolor = "orange",
+        args.errbars = list(from=lci, to=uci, mid=VADeaths,
+                            pch=21, cex=1.4, col="blue", col.pch="green", bg.pch="red"))
 }
 
 \keyword{hplot}

@@ -15,6 +15,11 @@ Desc <- function (x, ..., main=NULL, plotit=NULL, wrd = NULL) {
         main <- deparse(substitute(x))
 
       z <- Desc(x, main=main, plotit=FALSE, ..., wrd=NULL)
+
+      # only if header exists (it does not for single variables!!)
+      if(!is.null(z[["_objheader"]]))
+        z[["_objheader"]]["main"] <- gettextf("Describe %s (%s):", deparse(substitute(x)), class(x))
+
       printWrd(x=z, main=main, plotit=plotit, ..., wrd=wrd)
 
     }
@@ -104,7 +109,10 @@ desc <- function (x, main=NULL, xname=deparse(substitute(x)), digits=NULL, maxro
 
   # z <- list(xname = deparse(substitute(x)),
   #           label = attr(x, "label"))
-  z <- list(xname = xname,
+
+  # we have to collapse xname here, else there are some breaks like in
+  # Desc(Recode(d.pizza$driver, carp=c("Carpenter","Carter"), arm=c("Butcher","Farmer"), elselevel = "Anyone"))
+  z <- list(xname = paste(StrTrim(xname), collapse=""),
             label = attr(x, "label"))
 
   if(any(class(x) %in% c("table","matrix"))) {
@@ -159,7 +167,8 @@ desc <- function (x, main=NULL, xname=deparse(substitute(x)), digits=NULL, maxro
     z <- c(z, calcDesc(x=x, n=n, digits=digits, conf.level=conf.level, ord=ord, maxrows=maxrows,
                        verbose=verbose, rfrq=rfrq, margins=margins, ... ))
 
-    if(z$class!="numeric" && !is.null(z$unique) && !is.na(z$unique) && z$unique <= 2){
+    if(z$class!="numeric" && !is.null(z$unique) && !is.na(z$unique) && z$unique <= 2
+       && !(z$class %in% c("factor","ordered") && z$levels>2)) {
       # escalate to logical description if only two values
 
       if(is.null(main))
@@ -202,13 +211,23 @@ desc <- function (x, main=NULL, xname=deparse(substitute(x)), digits=NULL, maxro
 }
 
 
-Desc.data.frame <- function (x, main = NULL, plotit=NULL, enum = TRUE, ...) {
+Desc.data.frame <- function (x, main = NULL, plotit=NULL, enum = TRUE, sep=NULL, ...) {
 
-  Desc.list(x=x, main=main, plotit=plotit, enum=enum, ...)
+  res <- Desc.list(x=x, main=main, plotit=plotit, enum=enum, sep=sep, ...)
+
+  res[["_objheader"]][["main"]] <- gettextf("Describe %s (%s):", deparse(substitute(x)), class(x))
+
+  res[["_objheader"]][["abstract"]] <- Abstract(x)
+  attr(res[["_objheader"]][["abstract"]], "main") <- res[["_objheader"]][["main"]]
+  res[["_objheader"]][["str"]] <- .CaptOut(res[["_objheader"]][["abstract"]],
+                                           width = getOption("width"))[-c(1:3)]
+
+  return(res)
+
 }
 
 
-Desc.list <- function (x, main=NULL, plotit=NULL, enum = TRUE, ...) {
+Desc.list <- function (x, main=NULL, plotit=NULL, enum = TRUE, sep=NULL, ...) {
 
   # header for the data.frame of the list
 
@@ -224,7 +243,7 @@ Desc.list <- function (x, main=NULL, plotit=NULL, enum = TRUE, ...) {
   lst <- list()
   for (i in seq_along(x)) {
     xn <- names(x)[i]
-    lst[[xn]] <- Desc(x[[xn]], plotit=plotit, ...)[[1]]
+    lst[[xn]] <- Desc(x[[xn]], plotit=plotit, sep=sep, ...)[[1]]
     lst[[xn]]["xname"] <- xn
     if(def.main)
       lst[[xn]]["main"] <- gsub("x[[xn]]", main[i], lst[[xn]]["main"], fixed=TRUE)
@@ -234,15 +253,18 @@ Desc.list <- function (x, main=NULL, plotit=NULL, enum = TRUE, ...) {
   }
 
 
-  header <- list(str   = .CaptOut(Str(x, list.len = Inf)),
+  header <- list(str   = .CaptOut(
+                 Str(x, list.len = Inf)),
                  xname = deparse(substitute(x)),
-                 label = Label.default(x),
+                 label = Label(x),
                  class = "header",
-                 main  = "Describe data.frame"  # gettextf("%s (%s)", deparse(substitute(x)), class(x))
+                 sep = sep,
+                 main  = gettextf("Describe %s (%s):", deparse(substitute(x)), class(x))
              )
-  class(header) <- "Desc"
+  # class(header) <- "Desc"
 
   lst <- append(lst, list(header), after = 0)
+  names(lst)[1] <- "_objheader"
   class(lst) <- "Desc"
 
   return(lst)
@@ -282,8 +304,8 @@ Desc.formula <- function(formula, data = parent.frame(), subset, main=NULL, plot
       y <- mm$lhs$mf.eval[, resp]
       x <- mm$rhs$mf.eval[, pred]
 
-      if(IsDichotomous(y)) y <- factor(y)
-      if(IsDichotomous(x)) x <- factor(x)
+      if(IsDichotomous(y, na.rm=TRUE)) y <- factor(y)
+      if(IsDichotomous(x, na.rm=TRUE)) x <- factor(x)
 
       names(y) <- resp
       names(x) <- pred
@@ -690,7 +712,16 @@ calcDesc.bivar     <- function(x, g, xname = NULL, gname = NULL, margin=FALSE, b
 
 print.Desc <- function(x, digits=NULL, plotit=NULL, nolabel=FALSE, sep=NULL, ...) {
 
-  .print <- function(x, plotit=NULL, ...) {
+  .print <- function(x, digits=NULL, plotit=NULL, ...) {
+
+
+    digits <- Coalesce(digits, x$digits, NULL)
+    if(!is.null(digits)){
+      opt <- DescToolsOptions(digits=digits)
+      on.exit(DescToolsOptions(opt))
+    }
+
+    plotit <- Coalesce(plotit, x$plotit, DescToolsOptions("plotit"), FALSE)
 
     # if(!is.null(attr(x, "call"))) {
     #   cat("\nCall:\n")
@@ -699,7 +730,7 @@ print.Desc <- function(x, digits=NULL, plotit=NULL, nolabel=FALSE, sep=NULL, ...
     # }
 
     # define the separator, "-------..." if not given
-    sep <- Coalesce(sep, x$sep, paste(rep("-", (as.numeric(options("width")) - 2)), collapse = ""))
+    sep <- Coalesce(sep, x$sep, paste(rep("-", (getOption("width") - 2)), collapse = ""))
     cat(sep, "\n")
 
     if (!identical(x$main, NA))
@@ -723,7 +754,6 @@ print.Desc <- function(x, digits=NULL, plotit=NULL, nolabel=FALSE, sep=NULL, ...
         eval(parse(text=gettextf("print.Desc.%s(x, digits, ...)", x$class)))
       }
 
-      plotit <- Coalesce(plotit, x$plotit, getOption("plotit"), FALSE)
       if(plotit){
         eval(parse(text=gettextf("plot.Desc.%s(x, ...)", x$class)))
 
@@ -743,14 +773,9 @@ print.Desc <- function(x, digits=NULL, plotit=NULL, nolabel=FALSE, sep=NULL, ...
 
   }
 
-  digits <- Coalesce(digits, x$digits, NULL)
-  if(!is.null(digits)){
-    opt <- options(digits=digits)
-    on.exit(options(opt))
-  }
 
 
-  lapply(x, .print, plotit=plotit, ...)
+  lapply(x, .print, digits=digits, plotit=plotit, ...)
 
   invisible()
 }
@@ -773,7 +798,7 @@ print.Desc.numeric  <- function(x, digits = NULL, ...) {
   defdigits <- is.null(digits)
 
   x[c("length","n","NAs","unique","0s")] <- lapply(x[c("length","n","NAs","unique","0s")],
-                                                    Format, fmt=.fmt_abs())
+                                                    Format, fmt=Fmt("abs"))
   if(defdigits){
     # how many digits do we want to use?
     # we would use the same number as quantile does...
@@ -784,11 +809,11 @@ print.Desc.numeric  <- function(x, digits = NULL, ...) {
 
   }
 
-  x[["quant"]][] <- Format(x[["quant"]], fmt=.fmt_num(digits))
+  x[["quant"]][] <- Format(x[["quant"]], fmt=Fmt("num", digits=digits))
 
   x[c("mean","meanSE","range","sd","vcoef","mad","IQR","skew","kurt")] <-
     lapply(x[c("mean","meanSE","range","sd","vcoef","mad","IQR","skew","kurt")],
-           Format, fmt=.fmt_num(digits))
+           Format, fmt=Fmt("num", digits=digits))
 
   lst <- list(l1 = unlist(x[c("length","n","NAs","unique","0s","mean","meanSE")]),
               l2=x[["quant"]][-c(1,9)],
@@ -805,9 +830,9 @@ print.Desc.numeric  <- function(x, digits = NULL, ...) {
 
   # we need to do that even if highlow == FALSE, as Desc.integer could need the result!!
   if(x$class == "numeric"){
-    vals <- Format(c(x$small$val, x$large$val), fmt=.fmt_num(digits=digits))
+    vals <- Format(c(x$small$val, x$large$val), fmt=Fmt("num", digits=digits))
   } else {
-    vals <- Format(c(x$small$val, x$large$val), fmt=.fmt_abs())
+    vals <- Format(c(x$small$val, x$large$val), fmt=Fmt("abs"))
   }
   # we don't want too many digits but as well no trailing 0s by default
   if(defdigits)
@@ -815,7 +840,7 @@ print.Desc.numeric  <- function(x, digits = NULL, ...) {
 
   if(is.null(x$freq)){
     frq <- c(x$small$freq, x$large$freq)
-    frqtxt <- paste(" (", Format(frq, fmt=.fmt_abs()), ")", sep = "")
+    frqtxt <- paste(" (", Format(frq, fmt=Fmt("abs")), ")", sep = "")
     frqtxt[frq < 2] <- ""
     txt <- StrTrim(paste(vals, frqtxt, sep = ""))
     x$lowtxt <- paste(head(txt, min(length(x$small$val), nlow)), collapse = ", ")
@@ -848,7 +873,7 @@ print.Desc.logical  <- function(x, digits = NULL, ...) {
 
   m <- rbind(
     c("length","n","NAs","unique"),
-    c(Format(unlist(x[c("length","n","NAs","unique")]), fmt=.fmt_abs()) )
+    c(Format(unlist(x[c("length","n","NAs","unique")]), fmt=Fmt("abs")) )
   )
   m[] <- StrAlign(m, sep = "\\r")
   cat(paste(" ", apply(m, 1, paste, collapse= " ")), sep="\n")
@@ -857,8 +882,8 @@ print.Desc.logical  <- function(x, digits = NULL, ...) {
   if(!is.null(x$afrq)){
 
     out <- cbind(
-      freq=Format(x$afrq, fmt = .fmt_abs()),
-      Format(x$rfrq, fmt = .fmt_per(digits)))
+      freq=Format(x$afrq, fmt = Fmt("abs")),
+      Format(x$rfrq, fmt = Fmt("per", digits=digits)))
 
     rownames(out) <- rownames(x$afrq)
     colnames(out) <- c("freq", "perc",
@@ -866,10 +891,10 @@ print.Desc.logical  <- function(x, digits = NULL, ...) {
                                 Format(x$conf.level, digits=2, leading="drop")))
 
     txt <- capture.output(print(StrTrim(out), quote=FALSE, right=TRUE, print.gap=2))
-    cat(paste(txt[1], getOption("footnote1", "'"),
+    cat(paste(txt[1], DescToolsOptions("footnote")[1],
               sep = ""), txt[-1], sep = "\n")
     cat(gettextf("\n%s %s%s-CI Wilson\n\n",
-                 getOption("footnote1", "'"), x$conf.level * 100, "%"))
+                 DescToolsOptions("footnote")[1], x$conf.level * 100, "%"))
   }
 
   if(identical(x$noplot, TRUE))
@@ -881,7 +906,7 @@ print.Desc.factor   <- function(x, digits = NULL, ...) {
 
   m <- rbind(
     c("length","n","NAs","unique","levels","dupes"),
-    c(Format(unlist(x[c("length","n","NAs","unique","levels")]), fmt=.fmt_abs()),
+    c(Format(unlist(x[c("length","n","NAs","unique","levels")]), fmt=Fmt("abs")),
       c("n","y")[x$dupes+1])
   )
   m[] <- StrAlign(m[], sep = "\\r")
@@ -926,7 +951,7 @@ print.Desc.table    <- function(x, digits = NULL, ...) {
   if(x$ttype == "tndim") { # multdim table
 
     cat("Summary: \n",
-        "n: ", Format(x$n, fmt=.fmt_abs()), ", ", length(x$dim), "-dim table: ", paste(x$dim, collapse=" x ")
+        "n: ", Format(x$n, fmt=Fmt("abs")), ", ", length(x$dim), "-dim table: ", paste(x$dim, collapse=" x ")
         , "\n\n", sep="" )
 
     cat(gettextf("%s\n  X-squared = %s, df = %s, p-value = %s", x[["chisq.test"]][["method"]],
@@ -944,7 +969,7 @@ print.Desc.table    <- function(x, digits = NULL, ...) {
 
     if(x$ttype=="t1dim") {       # 1-dim table ****
       cat("Summary: \n",
-          "n: ", Format(x$n, fmt=.fmt_abs()),
+          "n: ", Format(x$n, fmt=Fmt("abs")),
           ", rows: ", x$dim[1]
           , "\n\n", sep="" )
       cat("Pearson's Chi-squared test (1-dim uniform):\n  "
@@ -963,9 +988,9 @@ print.Desc.table    <- function(x, digits = NULL, ...) {
         missn <- ""
 
       cat("Summary: \n",
-          "n: ", Format(x$n, fmt=.fmt_abs()),
-          ", rows: ", Format(x$dim[1], fmt=.fmt_abs()),
-          ", columns: ", Format(x$dim[2], fmt=.fmt_abs()),
+          "n: ", Format(x$n, fmt=Fmt("abs")),
+          ", rows: ", Format(x$dim[1], fmt=Fmt("abs")),
+          ", columns: ", Format(x$dim[2], fmt=Fmt("abs")),
           missn
           , "\n\n", sep="" )
 
@@ -994,7 +1019,7 @@ print.Desc.table    <- function(x, digits = NULL, ...) {
 
           attr(m, "col.vars")[[1]][1] <- "estimate"
           txt <- capture.output(print(m))
-          txt[1] <- paste(txt[1], getOption("footnote1"), sep="")
+          txt[1] <- paste(txt[1], DescToolsOptions("footnote")[1], sep="")
           cat(txt, sep="\n")
           cat("\n")
         }
@@ -1037,7 +1062,7 @@ print.Desc.table    <- function(x, digits = NULL, ...) {
              , "3" = {
                cat("\n")
                txt <- capture.output(x$assocs)
-               txt[1] <- paste(txt[1], getOption("footnote1"), sep="")
+               txt[1] <- paste(txt[1], DescToolsOptions("footnote")[1], sep="")
                cat(txt, sep="\n")
                cat("\n")
              }
@@ -1047,7 +1072,7 @@ print.Desc.table    <- function(x, digits = NULL, ...) {
       print(x$perctab)
 
       if((x$verbose=="3") || (x$ttype=="t2x2"))
-        cat(gettextf("\n----------\n%s %s%s conf. level\n", getOption("footnote1"), x$conf.level*100, "%"))
+        cat(gettextf("\n----------\n%s %s%s conf. level\n", DescToolsOptions("footnote")[1], x$conf.level*100, "%"))
 
     }
 
@@ -1067,7 +1092,7 @@ print.Desc.Date     <- function(x, digits = NULL, ... ) {
 
   m <- rbind(
     c("length","n","NAs","unique"),
-    c(Format(unlist(x[c("length","n","NAs","unique")]), fmt=.fmt_abs()) )
+    c(Format(unlist(x[c("length","n","NAs","unique")]), fmt=Fmt("abs")) )
   )
   m[] <- StrAlign(m, sep = "\\r")
   cat(paste(" ", apply(m, 1, paste, collapse= " ")), sep="\n")
@@ -1117,28 +1142,28 @@ print.Desc.factfact <- function(x, digits = NULL, ...){
 print.Desc.numfact  <- function(x, digits = NULL, ...){
 
   cat( "Summary: \n",
-       "n pairs: ", Format(x$n, fmt=.fmt_abs()),
-       ", valid: ", Format(x$nvalid, fmt=.fmt_abs()),
-       " (", Format(x$nvalid/x$n, fmt=.fmt_per()), ")",
-       ", missings: ", Format(x$n-x$nvalid, fmt=.fmt_abs()),
-       " (", Format((x$n - x$nvalid)/x$n, fmt=.fmt_per()), "),",
+       "n pairs: ", Format(x$n, fmt=Fmt("abs")),
+       ", valid: ", Format(x$nvalid, fmt=Fmt("abs")),
+       " (", Format(x$nvalid/x$n, fmt=Fmt("per")), ")",
+       ", missings: ", Format(x$n-x$nvalid, fmt=Fmt("abs")),
+       " (", Format((x$n - x$nvalid)/x$n, fmt=Fmt("per")), "),",
        " groups: ", x$nlevel
        , sep="" )
   cat("\n\n")
 
   digits <- Coalesce(digits, x$digits, NULL)
-  if(is.null(digits)) digits <- getOption("digfix", 3)
+  if(is.null(digits)) digits <- DescToolsOptions("digits", default=3)
   digits <- rep(digits, length.out=5)
 
   z <- rbind(
-    Format(x$mean, fmt=.fmt_num(digits[1]))
-    , Format(x$median, fmt=.fmt_num(digits[2]))
-    , Format(x$sd, fmt=.fmt_num(digits[3]))
-    , Format(x$IQR, fmt=.fmt_num(digits[4]))
-    , Format(x$ns, fmt=.fmt_abs())
-    , Format(x$np, fmt=.fmt_per(digits[5]))
-    , Format(x$NAs, fmt=.fmt_abs())
-    , Format(x$Zeros, fmt=.fmt_abs())
+    Format(x$mean, fmt=Fmt("num", digits=digits[1]))
+    , Format(x$median, fmt=Fmt("num", digits=digits[2]))
+    , Format(x$sd, fmt=Fmt("num", digits=digits[3]))
+    , Format(x$IQR, fmt=Fmt("num", digits=digits[4]))
+    , Format(x$ns, fmt=Fmt("abs"))
+    , Format(x$np, fmt=Fmt("per", digits=digits[5]))
+    , Format(x$NAs, fmt=Fmt("abs"))
+    , Format(x$Zeros, fmt=Fmt("abs"))
   )
   rownames(z) <- c("mean","median","sd","IQR","n","np","NAs","0s")  # cannot use names as 0s is replaced by X.0s....
   colnames(z) <- rep("", ncol(z))
@@ -1164,20 +1189,20 @@ print.Desc.numfact  <- function(x, digits = NULL, ...){
 print.Desc.numnum   <- function(x, digits = NULL, ...) {
 
   cat( "Summary: \n",
-       "n pairs: ", Format(x$n, fmt=.fmt_abs()),
-       ", valid: ", Format(x$nvalid, fmt=.fmt_abs()),
-       " (", Format(x$nvalid/x$n, fmt=.fmt_per()), ")",
-       ", missings: ", Format(x$n-x$nvalid, fmt=.fmt_abs()),
-       " (", Format((x$n - x$nvalid)/x$n, fmt=.fmt_per()), ")"
+       "n pairs: ", Format(x$n, fmt=Fmt("abs")),
+       ", valid: ", Format(x$nvalid, fmt=Fmt("abs")),
+       " (", Format(x$nvalid/x$n, fmt=Fmt("per")), ")",
+       ", missings: ", Format(x$n-x$nvalid, fmt=Fmt("abs")),
+       " (", Format((x$n - x$nvalid)/x$n, fmt=Fmt("per")), ")"
        , sep="" )
   cat("\n\n")
 
   cat(gettextf(
     "\nPearson corr. : %s\nSpearman corr.: %s\nKendall corr. : %s\n"
-    , Format(x$cor.p, fmt=.fmt_num())
-    , Format(x$cor.s, fmt=.fmt_num())
+    , Format(x$cor.p, fmt=Fmt("num"))
+    , Format(x$cor.s, fmt=Fmt("num"))
     , if(x$nvalid < 5000){
-      Format(x$cor.k, fmt=.fmt_num())
+      Format(x$cor.k, fmt=Fmt("num"))
     } else {
       "(sample too large)"
     }
@@ -1192,7 +1217,7 @@ print.Desc.factnum  <- function(x, digits = NULL, ...) {
 
   cat(gettextf("\n\nProportions of %s in the quantiles of %s:\n", x$xname , x$gname))
   ptab <- x$ptab
-  ptab[] <- StrAlign(Format(x$ptab, fmt=.fmt_per()))
+  ptab[] <- StrAlign(Format(x$ptab, fmt=Fmt("per")))
   print(ptab, quote=FALSE, print.gap = 3, right=TRUE)
   cat("\n")
 }
@@ -1212,6 +1237,9 @@ plot.Desc <- function(x, main = NULL, ...){
 
     else if(z$class %in% c("header")) {
       # do nothing
+
+    } else if(z$class %in% c("palette")) {
+      # eval(parse(text=gettextf("plot.%s(z, ...)", z$class)))
 
     } else {
       plot.Desc.default(z, main=main, ...)
@@ -1283,7 +1311,7 @@ plot.Desc.factor    <- function (x, main=NULL, maxlablen = 25,
 
              if(is.null(xlim)) xlim <- range(pretty(tab)) + c(-1,1) * diff(range(pretty(tab))) * 0.04
 
-             if(is.null(col)) col <- getOption("col1", hblue)
+             if(is.null(col)) col <- Pal()[1]
              if(is.null(border)) border <- "black"
              b <- barplot( rev(tab), horiz=TRUE, border=NA, col="white", las=1,
                            xlim=xlim,
@@ -1344,7 +1372,7 @@ plot.Desc.factor    <- function (x, main=NULL, maxlablen = 25,
       text(x = par()$usr[2], y = 0.4, labels = " ...[list output truncated]  ",
            cex = 0.6, adj = c(1, 0.5))
 
-    if(!is.null(getOption("stamp")))
+    if(!is.null(DescToolsOptions("stamp")))
       Stamp()
 
   invisible()
@@ -1382,7 +1410,7 @@ plot.Desc.logical   <- function(x, main=NULL, xlab="", col=NULL, legend=TRUE, xl
 
 
   if(is.null(col))
-    col <- c(PalDefault()[2], PalDefault()[1], "grey80","grey60","grey40")
+    col <- c(Pal()[1:2], "grey80","grey60","grey40")
   else
     col <- rep(col, length.out=5)
 
@@ -1423,7 +1451,7 @@ plot.Desc.logical   <- function(x, main=NULL, xlab="", col=NULL, legend=TRUE, xl
 
   if(!is.na(main)) title(main=main, outer=TRUE)
 
-  if(!is.null(getOption("stamp")))    Stamp()
+  if(!is.null(DescToolsOptions("stamp")))    Stamp()
 
   invisible()
 
@@ -1501,7 +1529,7 @@ plot.Desc.Date      <- function(x, main=NULL, breaks=NULL, type=c(1,2,3), ...) {
 
     if(!is.na(main)) title(main=gettextf("%s (a: weekday)", main))
 
-    if(!is.null(getOption("stamp")))
+    if(!is.null(DescToolsOptions("stamp")))
       Stamp()
   }
 
@@ -1521,7 +1549,7 @@ plot.Desc.Date      <- function(x, main=NULL, breaks=NULL, type=c(1,2,3), ...) {
     # if(!is.na(main) & is.null(wrd)) title(main=gettextf("%s (b: month)", main))
     if(!is.na(main)) title(main=gettextf("%s (b: month)", main))
 
-    if(!is.null(getOption("stamp")))
+    if(!is.null(DescToolsOptions("stamp")))
       Stamp()
   }
 
@@ -1535,7 +1563,7 @@ plot.Desc.Date      <- function(x, main=NULL, breaks=NULL, type=c(1,2,3), ...) {
 
     if(!is.na(main)) title(main=gettextf("%s (c: %s)", main, x$hbreaks))
 
-    if(!is.null(getOption("stamp")))
+    if(!is.null(DescToolsOptions("stamp")))
       Stamp()
   }
 
@@ -1544,7 +1572,7 @@ plot.Desc.Date      <- function(x, main=NULL, breaks=NULL, type=c(1,2,3), ...) {
 plot.Desc.table     <- function(x, main=NULL, col1 = NULL, col2 = NULL, horiz = TRUE, ...){
 
 
-  opt <- options(stamp=NULL)
+  opt <- DescToolsOptions(stamp=NULL)
 
   oldpar <- par(no.readonly=TRUE)
   on.exit(par(oldpar))
@@ -1573,9 +1601,9 @@ plot.Desc.table     <- function(x, main=NULL, col1 = NULL, col2 = NULL, horiz = 
   } else {
 
     if(is.null(col1))
-      col1 <- colorRampPalette(c(PalDefault()[2], "white", PalDefault()[1]), space = "rgb")(ncol(x$tab))
+      col1 <- colorRampPalette(c(Pal()[1], "white", Pal()[2]), space = "rgb")(ncol(x$tab))
     if(is.null(col2))
-      col2 <- colorRampPalette(c(PalDefault()[2], "white", PalDefault()[1]), space = "rgb")(nrow(x$tab))
+      col2 <- colorRampPalette(c(Pal()[1], "white", Pal()[2]), space = "rgb")(nrow(x$tab))
 
     if(horiz){
       # width <- 16
@@ -1601,7 +1629,7 @@ plot.Desc.table     <- function(x, main=NULL, col1 = NULL, col2 = NULL, horiz = 
   if(!is.na(main) && (length(dim(x$tab)) == 2))     title(main, outer=TRUE)
 
   options(opt)
-  if(!is.null(getOption("stamp"))) Stamp()
+  if(!is.null(DescToolsOptions("stamp"))) Stamp()
 
   # invisible(list(width=width, height=height))
   invisible()
@@ -1651,7 +1679,7 @@ plot.Desc.numfact   <- function(x, main=NULL, notch=FALSE, add_ni = TRUE, ... ){
 
   title(main=main, outer=TRUE)
 
-  if(!is.null(getOption("stamp")))  Stamp()
+  if(!is.null(DescToolsOptions("stamp")))  Stamp()
 
   # reset layout
   layout(1)
@@ -1745,7 +1773,7 @@ plot.Desc.factnum   <- function(x, main=NULL, col=NULL, notch=FALSE,
   } else {
 
     if(is.null(col))
-      col <- colorRampPalette(c(PalDefault()[1], "white", PalDefault()[2]), space = "rgb")(nrow(x$ptab))
+      col <- colorRampPalette(c(Pal()[1], "white", Pal()[2]), space = "rgb")(nrow(x$ptab))
 
     PlotMosaic(x$ptab, main=NA, xlab=NA, ylab=NA, horiz=FALSE, cols = col, cex=cex, las=las, mar=mar)
 
@@ -1753,7 +1781,7 @@ plot.Desc.factnum   <- function(x, main=NULL, col=NULL, notch=FALSE,
 
   title(main=main, outer=TRUE)
 
-  if(!is.null(getOption("stamp")))
+  if(!is.null(DescToolsOptions("stamp")))
     Stamp()
 
   invisible()
@@ -1805,46 +1833,53 @@ printWrd <- function(x, main=NULL, plotit=NULL, ..., wrd=wrd){
 
     .plotReset()
 
-    if(any(z[[1]]$class %in% c("factor","ordered") || (z[[1]]$class=="integer" && !is.null(z[[1]]$freq)))) {
-      plot.Desc(z, main=NA)
-      WrdPlot(width=8, height=pmin(2+3/6*nrow(z[[1]]$freq), 10), dfact=2.7, crop=c(0,0,0,0), wrd=wrd, append.cr=FALSE)
+    if(identical(z[[1]]$noplot, TRUE)) {
+      # identical as noplot will not be present in filled objects!!
+      # there's nothing to plot, the variable might be empty, so just leave here
 
-    } else if(any(z[[1]]$class %in% c("numeric","integer"))){
-      plot.Desc(z, main=NA)
-      WrdPlot(width=8, height=5.0, dfact=2.3, crop=c(0,0,0,0), wrd=wrd, append.cr=FALSE)
+    } else {
 
-    } else if(any(z[[1]]$class %in% "logical")){
-      plot.Desc(z, main=NA)
-      WrdPlot(width=6, height=4, dfact=2.6, crop=c(0.2,0.2,1,0), wrd=wrd, append.cr=FALSE)
+      if(any(z[[1]]$class %in% c("factor","ordered") || (z[[1]]$class=="integer" && !is.null(z[[1]]$freq)))) {
+        plot.Desc(z, main=NA)
+        WrdPlot(width=8, height=pmin(2+3/6*nrow(z[[1]]$freq), 10), dfact=2.7, crop=c(0,0,0,0), wrd=wrd, append.cr=FALSE)
 
-    } else if(z[[1]]$class == "Date"){
-      plot.Desc(z, main=NA, type=1)
-      WrdPlot(width=6.5, height=5, dfact=2.5, wrd=wrd, append.cr=TRUE)
-      plot.Desc(z, main=NA, type=2)
-      WrdPlot(width=6.5, height=6.2, dfact=2.5, wrd=wrd, append.cr=TRUE)
-      plot.Desc(z, main=NA, type=3)
-      WrdPlot(width=6.5, height=4, dfact=2.5, wrd=wrd, append.cr=TRUE)
+      } else if(any(z[[1]]$class %in% c("numeric","integer"))){
+        plot.Desc(z, main=NA)
+        WrdPlot(width=8, height=5.0, dfact=2.3, crop=c(0,0,0,0), wrd=wrd, append.cr=FALSE)
 
-    } else if(z[[1]]$class %in% c("table","matrix", "factfact")) {
-      plot.Desc(z, main=NA, horiz=z[[1]]$horiz)
-      if(z[[1]]$horiz)
-        WrdPlot(width=16, height=6.5, dfact=2.5, wrd=wrd, append.cr=TRUE)
-      else
-        WrdPlot(width=7, height=14, dfact=2.5, wrd=wrd, append.cr=TRUE)
+      } else if(any(z[[1]]$class %in% "logical")){
+        plot.Desc(z, main=NA)
+        WrdPlot(width=6, height=4, dfact=2.6, crop=c(0.2,0.2,1,0), wrd=wrd, append.cr=FALSE)
 
-    } else if(z[[1]]$class %in% c("numnum")) {
-      plot.Desc(z, main=NA)
-      WrdPlot(width=6.5, height=6.5/gold_sec_c, dfact=2.5, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
+      } else if(z[[1]]$class == "Date"){
+        plot.Desc(z, main=NA, type=1)
+        WrdPlot(width=6.5, height=5, dfact=2.5, wrd=wrd, append.cr=TRUE)
+        plot.Desc(z, main=NA, type=2)
+        WrdPlot(width=6.5, height=6.2, dfact=2.5, wrd=wrd, append.cr=TRUE)
+        plot.Desc(z, main=NA, type=3)
+        WrdPlot(width=6.5, height=4, dfact=2.5, wrd=wrd, append.cr=TRUE)
 
-    } else if(z[[1]]$class %in% c("numfact")) {
-      plot.Desc(z, main=NA)
-      WrdPlot(width=15, height=7, dfact=2.2, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
+      } else if(z[[1]]$class %in% c("table","matrix", "factfact")) {
+        plot.Desc(z, main=NA, horiz=z[[1]]$horiz)
+        if(z[[1]]$horiz)
+          WrdPlot(width=16, height=6.5, dfact=2.5, wrd=wrd, append.cr=TRUE)
+        else
+          WrdPlot(width=7, height=14, dfact=2.5, wrd=wrd, append.cr=TRUE)
 
-    } else if(z[[1]]$class %in% c("factnum")) {
-      plot.Desc(z, main=NA)
-      WrdPlot(width=15, height=7, dfact=2.2, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
+      } else if(z[[1]]$class %in% c("numnum")) {
+        plot.Desc(z, main=NA)
+        WrdPlot(width=6.5, height=6.5/gold_sec_c, dfact=2.5, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
+
+      } else if(z[[1]]$class %in% c("numfact")) {
+        plot.Desc(z, main=NA)
+        WrdPlot(width=15, height=7, dfact=2.2, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
+
+      } else if(z[[1]]$class %in% c("factnum")) {
+        plot.Desc(z, main=NA)
+        WrdPlot(width=15, height=7, dfact=2.2, crop=c(0,0,0.2,0), wrd=wrd, append.cr=TRUE)
+      }
+
     }
-
     invisible()
 
   }
@@ -1852,21 +1887,41 @@ printWrd <- function(x, main=NULL, plotit=NULL, ..., wrd=wrd){
 
   # start main proc  ****************
 
+  # get fixed font
+  fixedfont <- getOption("fixedfont", list(name="Consolas", size=7))
+
   for(i in seq_along(x)){
+
+    # # skip object header entries
+    # if(names(x[i]) == "_objheader")
+    #   next
 
     if(x[[i]]$class == "header"){
 
-      txt <- .CaptOut(print.Desc(x[i]))[-(1:2)]
-      WrdCaption(x[[i]]$main, wrd=wrd)
-      WrdText(txt=txt, wrd=wrd )
+      if(is.null(x[[i]][["abstract"]])) {
+
+        txt <- .CaptOut(print.Desc(x[i]))[-(1:2)]
+        WrdCaption(x[[i]]$main, wrd=wrd)
+        ToWrd(txt=txt, wrd=wrd)
+        # WrdText(txt=txt, wrd=wrd )
+
+      } else {
+
+        attr(x[[i]]$abstract, "main") <-  x[[i]][["main"]]
+        ToWrd(x[[i]]$abstract, wrd=wrd)
+      }
 
     } else {
 
       WrdCaption(x[[i]]$main, wrd=wrd)
 
       if(!is.null(x[[i]]$label)){
-        WrdText(paste("\n", x[[i]]$label, "\n", sep=""), wrd=wrd, fontname = "Arial", fontsize = 8)
+        lblfont <- InDots(..., arg="font", default=list(size=8))
+        lblfont$size <- 8
+        ToWrd.character(x=paste("\n", x[[i]]$label, "\n", sep=""),
+                        font = lblfont, wrd=wrd)
       }
+
 
       txt <- .CaptOut(print.Desc(x[i], nolabel=TRUE))[-(1:2)]
 
@@ -1876,9 +1931,9 @@ printWrd <- function(x, main=NULL, plotit=NULL, ..., wrd=wrd){
         wrd[["Selection"]]$MoveRight(Unit=wdConst$wdCharacter, Count=2, Extend=wdConst$wdExtend)
         wrd[["Selection"]][["Cells"]]$Merge()
 
-        WrdText( txt=txt[1:6], wrd=wrd )
+        ToWrd(x=txt[1:6], font=fixedfont, wrd=wrd)
         wrd[["Selection"]]$MoveRight( wdConst$wdCell, 1, 0)
-        WrdText( txt=txt[-c(1:6)], wrd=wrd )
+        ToWrd(x=txt[-c(1:6)],  font=fixedfont, wrd=wrd)
 
       } else {
         if(max(unlist(lapply(txt, nchar))) < 59){  # decide if two rows or 2 columns ist adequate
@@ -1889,13 +1944,13 @@ printWrd <- function(x, main=NULL, plotit=NULL, ..., wrd=wrd){
           x[[i]]$horiz <- TRUE
         }
 
-        WrdText(txt=txt, wrd=wrd)
+        ToWrd(x=txt, font=fixedfont, wrd=wrd)
 
       }
 
       wrd[["Selection"]]$MoveRight( wdConst$wdCell, 1, 0)
 
-      plotit <- Coalesce(plotit, x$plotit, getOption("plotit"), FALSE)
+      plotit <- Coalesce(plotit, x$plotit, DescToolsOptions("plotit"), FALSE)
       if(plotit)
         WrdPlotDesc(x[i], wrd=wrd)
 
@@ -1912,8 +1967,239 @@ printWrd <- function(x, main=NULL, plotit=NULL, ..., wrd=wrd){
 }
 
 
+
+
+ColumnWrap <- function(x, width=NULL){
+
+  if(is.null(width))
+    width <- getOption("width") / length(x)
+
+  width <- rep(width, length.out=length(x))
+
+  lst <- lapply(seq_along(x), function(i) strwrap(x[[i]], width=width[i]))
+
+  maxdim <- max(unlist(lapply(lst, length)))
+  lst <- lapply(lst, function(z) c(z, rep("", maxdim-length(z))))
+
+  do.call(cbind, lst)
+
+}
+
+
+
+
+
+
+
+Abstract <- function (x, sep = ", ", zero.form = ".", maxlevels = 5, trunc = TRUE, list.len = 99) {
+
+  res <- data.frame(
+    nr = 1:ncol(x),
+    varname = colnames(x),
+    class = unlist(lapply(x, function(z) paste(class(z), collapse = ", "))),
+    label = unlist(lapply(lapply(x, Label), Coalesce, "-")),
+
+    levels = unlist(lapply(x,
+                           function(z) {
+                             if (nlevels(z) > 0) {
+
+                               maxlevels <- ifelse(is.na(maxlevels) || is.infinite(maxlevels),
+                                                   nlevels(z), min(nlevels(z), maxlevels))
+
+                               txt <- gettextf("(%s): %s", nlevels(z),
+                                               paste(1:maxlevels, "-", levels(z)[1:maxlevels],
+                                                     sep = "", collapse = sep))
+
+                               if(maxlevels < nlevels(z))
+                                 txt <- paste(txt, ", ...", sep="")
+
+                               txt
+
+                             } else {
+                               ""
+                             }
+                           })),
+    NAs = unlist(lapply(x, function(z) sum(is.na(z)))),
+    stringsAsFactors = FALSE)
+
+  res$NAs <- ifelse(res$NAs != 0,
+                    paste(res$NAs, " (",
+                          Format(res$NAs/dim(x)[1], fmt = "%", digits = 1), ")",
+                          sep = ""), zero.form)
+
+  rownames(res) <- NULL
+  res <- res[, c("nr", "varname", "class", "NAs", "levels", "label")]
+  colnames(res) <- c("Nr", "ColName", "Class", "NAs", "Levels", "Label")
+
+  res <- res[1:min(nrow(res), list.len), ]
+
+  attr(res, "main") <- deparse(substitute(x))
+  attr(res, "nrow") <- dim(x)[1]
+  attr(res, "ncol") <- dim(x)[2]
+  attr(res, "trunc") <- trunc
+
+  if (!is.null(attr(x, "label")))
+    attr(res, "label") <- attr(x, "label")
+
+  res <- AddClass(res, "abstract", after = 0)
+
+  return(res)
+
+}
+
+
+
+print.abstract <- function (x, sep = NULL, width = NULL,
+                            trunc = NULL, print.gap = 2, ...) {
+
+  # check if there are labels, if there aren't, we will hide the labels column
+  lbl_fg <- !all(x["Label"] == "-")
+
+  if (is.null(width)) {
+    width <- unlist(lapply(x, function(x) max(nchar(as.character(x))) +
+                             1))[1:4]
+    width <- c(width, rep((getOption("width") - (sum(width) + 6 * print.gap))/
+                            (1 + lbl_fg), (1 + lbl_fg)))
+  }
+
+  #   # define the separator, "-------..." if not given
+  sep <- Coalesce(sep, x$sep, paste(rep("-", (getOption("width") - 2)), collapse = ""))
+
+  cat(sep, "\n")
+  cat(attr(x, "main"))
+
+  label <- attr(x, "label")
+
+  if (!is.null(label))
+    cat(" :", strwrap(label, indent = 2, exdent = 2), sep = "\n")
+  else cat("\n")
+
+  cat(gettextf("\ndata.frame:\t%s obs. of  %s variables\n\n",
+               attr(x, "nrow"), attr(x, "ncol")))
+
+  class(x) <- "data.frame"
+
+  if (!lbl_fg)
+    x["Label"] <- NULL
+
+  res <- apply(x, 1, ColumnWrap, width = width)
+  res <- data.frame(
+    if (is.matrix(res)) {
+      t(res)
+    } else {
+      do.call(rbind, res)
+    }, stringsAsFactors = FALSE)
+
+  colnames(res) <- colnames(x)
+
+  if(Coalesce(trunc, attr(x, "trunc"), TRUE))
+    res[,] <- sapply(1:ncol(res), function(i) StrTrunc(res[,i], maxlen = width[i]))
+
+  res$NAs <- StrAlign(res$NAs, " ")
+
+  print(x = res, print.gap = print.gap, right = FALSE, row.names = FALSE, ...)
+  cat("\n")
+
+}
+
+
+
+
+# Abstract <- function(x, sep=", ", zero.form=".", maxlevels=12, trunc=TRUE) {
 #
-# Desc.Lc <- function (x, main = NULL, p = c(0.8,0.9,0.95,0.99), plotit=getOption("plotit", FALSE), ...) {
+#   res <- data.frame(
+#     nr = 1:ncol(x)
+#     , varname=colnames(x)
+#     #, type=unlist(lapply(x, typeof))
+#     , class=unlist(lapply(x, function(z) paste(class(z), collapse=", ")))
+#     , label= unlist(lapply(lapply(x, Label), Coalesce, "-"))
+#     , levels=unlist(lapply(x, function(z) {
+#       if(nlevels(z) > 0)
+#         gettextf("(%s): %s", nlevels(z), paste(1:nlevels(z), "-",
+#             levels(z)[1:ifelse(is.na(maxlevels) || is.infinite(maxlevels), nlevels(z), maxlevels)], sep="", collapse=sep))
+#       else
+#         "" }))
+#     , NAs=unlist(lapply(x, function(z) sum(is.na(z))))
+#     , stringsAsFactors = FALSE
+#   )
+#
+#
+#   res$NAs <- StrAlign(ifelse(res$NAs != 0,
+#                 paste(res$NAs, " (", Format(res$NAs/dim(x)[1], fmt="%", digits=1), ")", sep="")
+#               , zero.form)
+#               , sep=" ")
+#
+#   rownames(res) <- NULL
+#
+#   res <- res[, c("nr","varname","class","NAs","levels","label")]
+#   colnames(res) <- c("Nr","ColName","Class","NAs","Levels","Label")
+#
+#   attr(res, "main") <- deparse(substitute(x))
+#   attr(res, "nrow") <- dim(x)[1]
+#   attr(res, "ncol") <- dim(x)[2]
+#
+#   attr(res, "trunc") <- trunc
+#
+#   if(!is.null(attr(x, "label")))
+#      attr(res, "label") <- attr(x, "label")
+#
+#   res <- AddClass(res, "abstract", after=0)
+#   return (res)
+#
+# }
+#
+#
+# print.abstract <- function (x, sep=NULL, width=NULL, trunc=NULL,  print.gap=2, ...){
+#
+#   # check if there are labels, if there aren't, we will hide the labels column
+#   lbl_fg <- !all(x["Label"]=="-")
+#
+#   if(is.null(width)){
+#     width <- unlist(lapply(x, function(x) max(nchar(as.character(x))) + 1))[1:4]
+#     width <- c(width, rep((getOption("width") - (sum(width) + 6*print.gap))/ (1+lbl_fg), (1+lbl_fg)))
+#   }
+#
+#
+#   # define the separator, "-------..." if not given
+#   sep <- Coalesce(sep, x$sep, paste(rep("-", (getOption("width") - 2)), collapse = ""))
+#   cat(sep, "\n")
+#
+#   cat(attr(x, "main"))
+#
+#   label <- attr(x, "label")
+#
+#   if (!is.null(label))
+#     cat(" :", strwrap(label, indent = 2, exdent = 2), sep = "\n")
+#   else
+#     cat("\n")
+#
+#   cat(gettextf("\ndata.frame:	%s obs. of  %s variables\n\n", attr(x, "nrow"), attr(x, "ncol")))
+#
+#   class(x) <- "data.frame"
+#
+#   if(!lbl_fg)
+#     x["Label"] <- NULL
+#
+#   trunc <- Coalesce(trunc, attr(x, "trunc"), TRUE)
+#
+#   res <- apply(x, 1, ColumnWrap, width=width)
+#   res <- data.frame( if(is.matrix(res)){
+#             t(res)
+#           } else {
+#             do.call(rbind,  res)
+#           } )
+#   colnames(res) <- colnames(x)
+#
+#
+#   print(x=res, print.gap=print.gap, right=FALSE, row.names=FALSE, ...)
+#   cat("\n")
+# }
+#
+
+
+
+#
+# Desc.Lc <- function (x, main = NULL, p = c(0.8,0.9,0.95,0.99), plotit=DescToolsOptions("plotit"), ...) {
 #
 #   # Describe a Lorenz curve
 #
@@ -2012,7 +2298,11 @@ printWrd <- function(x, main=NULL, plotit=NULL, ..., wrd=wrd){
 #
 
 
-
+Desc.palette <- function(x, ...){
+  print(x, ...)
+  if(DescToolsOptions("plotit"))
+    plot(x)
+}
 
 
 

@@ -19,7 +19,7 @@ TOne(x, grp = NA, add.length = TRUE, colnames = NULL, vnames=NULL,
   \item{grp}{the grouping variable.
 %%     ~~Describe \code{grp} here~~
 }
-  \item{add.length}{logical. If set to TRUE (default), a row with the lengths of the group will be inserted as first row of the table.
+  \item{add.length}{logical. If set to \code{TRUE} (default), a row with the lengths of the group will be inserted as first row of the table.
 %%     ~~Describe \code{grp} here~~
 }
   \item{colnames}{a vector of columnnames for the result table.
@@ -28,10 +28,10 @@ TOne(x, grp = NA, add.length = TRUE, colnames = NULL, vnames=NULL,
   \item{vnames}{a vector of variablenames to be placed in the first column instead of the real names.
 %%     ~~Describe \code{grp} here~~
 }
-  \item{align}{the character on whose position the strings will be aligned. Left alignment can be requested by setting \code{sep = "\\\\l"}, right alignment by \code{"\\\\r"} and center alignment by \code{"\\\\c"}. Mind the backslashes, as if they are omitted, strings would be aligned to the \bold{character} l, r or c respectively. Default value is "\\\\r", thus right alignment.
+  \item{align}{the character on whose position the strings will be aligned. Left alignment can be requested by setting \code{sep = "\\\\l"}, right alignment by \code{"\\\\r"} and center alignment by \code{"\\\\c"}. Mind the backslashes, as if they are omitted, strings would be aligned to the \bold{character} l, r or c respectively. Default value is "\\\\l", thus left alignment.
 %%     ~~Describe \code{sep} here~~
 }
-\item{FUN}{the function to be used as location and dispersion measure (typically mean/sd or median/(IQR))}
+\item{FUN}{the function to be used as location and dispersion measure (typically \code{mean}/\code{sd} or \code{median}/\code{IQR})}
 }
 \details{There are three types of variables currently implemented: numeric, factor and variables with only two levels.
 %%  ~~ If necessary, more details than the description above ~~
@@ -52,13 +52,13 @@ TOne(x, grp = NA, add.length = TRUE, colnames = NULL, vnames=NULL,
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-opt <- options()
+opt <- DescToolsOptions()
 
 # define some special formats for count data, percentages and numeric results
 # (those will be supported by TOne)
-options(fmt.abs=structure(list(digits=0, big.mark="'"), class="fmt"))
-options(fmt.per=structure(list(digits=1, fmt="\%"), class="fmt"))
-options(fmt.num=structure(list(digits=1, big.mark="'"), class="fmt"))
+Fmt(abs=as.fmt(digits=0, big.mark="'"))
+Fmt(per=as.fmt(digits=1, fmt="\%"))
+Fmt(num=as.fmt(digits=1, big.mark="'"))
 
 TOne(x = d.pizza[, c("temperature","delivery_min","driver","wine_ordered")],
      grp=d.pizza$quality)

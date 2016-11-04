@@ -1,5 +1,7 @@
 \name{IdentifyA}
 \alias{IdentifyA}
+\alias{IdentifyA.default}
+\alias{IdentifyA.formula}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Identify Points in Plot Lying within a Rectangle or Polygon
 %%  ~~function to do ... ~~
@@ -8,11 +10,16 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-IdentifyA(formula, data, subset, poly = FALSE)
+IdentifyA(x, ...)
+
+\method{IdentifyA}{formula} (formula, data, subset, poly = FALSE, \dots)
+\method{IdentifyA}{default} (x, y = NULL, poly = FALSE, \dots)
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{formula}{a \code{\link{formula}}, such as \code{y ~ x} specifying x and y values. \cr 
+\item{x, y}{x and y values of the points used to create the plot.}
+  \item{formula}{a \code{\link{formula}}, such as \code{y ~ x} specifying x and y values. \cr
     Here the formula must be entered that was used to create the scatterplot.
 %%     ~~Describe \code{formula} here~~
 }
@@ -25,9 +32,11 @@ IdentifyA(formula, data, subset, poly = FALSE)
 %%     ~~Describe \code{subset} here~~
 }
   \item{poly}{logical. Defines if a polygon or a rectangle should be used to select the points. Default is rectangle.
-  If a polygon should be used, set this argument to TRUE and select all desired points. The polygon will be closed 
+  If a polygon should be used, set this argument to \code{TRUE} and select all desired points. The polygon will be closed
   automatically when finished.
 }
+  \item{\dots}{Other arguments to be passed to \code{IdentifyA}.}
+
 }
 \value{Index vector with the points lying within the selected area.
 The coordinates are returned as text in the attribute \code{"cond"}.
@@ -46,7 +55,7 @@ The coordinates are returned as text in the attribute \code{"cond"}.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-\dontrun{ 
+\dontrun{
 # run the example via copy and paste
 
 plot(temperature ~ delivery_min, data=d.pizza)
@@ -60,7 +69,7 @@ points(temperature ~ delivery_min, data = d.pizza[idx,], col="green")
 attr(idx, "cond")
 
 # create a group variable for the found points
-d.pizza$grp <- seq(nrow(d.pizza)) \%in\% idx 
+d.pizza$grp <- seq(nrow(d.pizza)) \%in\% idx
 
 # try the polygon option
 idx <- IdentifyA(temperature ~ delivery_min, data=d.pizza, poly=TRUE)
