@@ -5,7 +5,7 @@
 \encoding{utf-8}
 \newcommand{\myequation}{\ifelse{latex}{\eqn{#1}{#3}}{\ifelse{html}{\enc{\eqn{#2}}{#3}}{#3}}}
 
-\title{Standardized model coefficients}
+\title{Standardized Model Coefficients}
 \description{
 Standardize model coefficients by Standard Deviation or Partial Standard Deviation.
 }
@@ -39,7 +39,9 @@ for binary input variables, increasing the variable by one standard deviation is
 increase can only occur from 0 to 1, and therefore, the standardized coeffient is somewhat counterintuitive in this case.
 
 	Standardizing model coefficients has the same effect as centring and
-	scaling the input variables. \dQuote{Classical} standardized coefficients
+	scaling the input variables.
+
+	\dQuote{Classical} standardized coefficients
 	are calculated as
     \myequation{\beta^{*}_i = \beta_i\frac{s_{X_{i}}}{s_{y}}
         }{\betaᵢ* = \betaᵢ (sₓᵢ / Sᵧ)
@@ -83,7 +85,7 @@ increase can only occur from 0 to 1, and therefore, the standardized coeffient i
 }
 
 
-\author{Kamil Barto\enc{ń}{n}.
+\author{Kamil Barto\enc{ń}{n}
 }
 
 \references{

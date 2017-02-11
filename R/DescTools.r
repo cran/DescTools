@@ -5,7 +5,7 @@
 #	          Univariat, pairwise bivariate, groupwise und multivariate
 #
 # Author:   Andri Signorell
-# Version:	0.99.12 (under construction)
+# Version:	0.99.19 (under construction)
 #
 # Depends:  tcltk
 # Imports:  boot
@@ -334,6 +334,8 @@ gold_sec_c <- (1+sqrt(5)) / 2
 # save(cards, file="cards.rda")
 # save(roulette, file="roulette.rda")
 
+# Define some alias(es)
+N <- as.numeric
 
 
 Primes <- function (n) {
@@ -618,6 +620,13 @@ Fibonacci <- function(n) {
   z[n+1]
 
 }
+
+
+###  M^k  for a matrix  M and non-negative integer 'k'
+## Matrixpower
+
+"%^%" <- expm::"%^%"
+
 
 
 
@@ -1081,6 +1090,41 @@ DenseRank <- function(x, na.last = TRUE) {
 }
 
 
+Unwhich <- function(idx, n, useNames=TRUE){
+
+  # Author: Nick Sabbe
+
+  # http://stackoverflow.com/questions/7659833/inverse-of-which
+
+  # less performant, but oneliner:
+  #   is.element(seq_len(n), i)
+
+  res <- logical(n)
+
+  if(length(idx) > 0) {
+    res[idx] <- TRUE
+    if(useNames) names(res)[idx] <- names(idx)
+  }
+
+  return(res)
+
+}
+
+
+
+CombLevels <- function(...){
+
+  dots <- list( ... )
+
+  unique(unlist(lapply(dots, function(x) {
+    if(!inherits(x, "factor")) x <- factor(x)
+    levels(x)
+  }
+  )))
+
+}
+
+
 
 ###
 
@@ -1176,15 +1220,76 @@ StrAbbr <- function(x, minchar=1, method=c("left","fix")){
 }
 
 
-StrCap <- function(x) {
-  # Source: Hmisc
-  # Author: Charles Dupont
-  capped <- grep('^[^A-Z]*', x, perl=TRUE)
+# replaced by 0.99.19 with method by word and title
+# StrCap <- function(x) {
+#   # Source: Hmisc
+#   # Author: Charles Dupont
+#   capped <- grep('^[^A-Z]*', x, perl=TRUE)
+#
+#   substr(x[capped], 1,1) <- toupper(substr(x[capped], 1,1))
+#   return(x)
+#
+# }
 
-  substr(x[capped], 1,1) <- toupper(substr(x[capped], 1,1))
-  return(x)
+
+
+StrCap <- function(x, method=c("first", "word", "title")) {
+
+  .cap <- function(x){
+    # Source: Hmisc
+    # Author: Charles Dupont
+    capped <- grep('^[^A-Z]*', x, perl=TRUE)
+
+    substr(x[capped], 1,1) <- toupper(substr(x[capped], 1,1))
+    return(x)
+  }
+
+  na <- is.na(x)
+
+  switch(match.arg(method),
+         first = {
+           res <- .cap(x)
+         },
+         word = {
+           res <- unlist(lapply(lapply(strsplit(x, split="\\b\\W+\\b"), .cap), paste, collapse=" "))
+         },
+         title={
+           z <- strsplit(x, split="\\b\\W+\\b")
+           low <- c("a","an","the","at","by","for","in","of","on","to","up","and","as","but","or","nor","s")
+           z <- lapply(z, function(y) {
+             y[y %nin% low] <- StrCap(y[y %nin% low])
+             y[y %in% low] <- tolower(y[y %in% low])
+             y}
+           )
+
+           nn <- strsplit(x, split="\\w+")
+
+           res <- unlist(lapply(1:length(z), function(i) {
+             if(length(nn[[i]]) != length(z[[i]])){
+               if(z[[i]][1] == "" ){
+                 z[[i]] <- z[[i]][-1]
+               } else {
+                 z[[i]] <- c(z[[i]], "")
+               }
+             } else {
+               if(z[[i]][1] == "" & length(z[[i]])>1)
+                 z[[i]] <- VecRot(z[[i]], -1)
+             }
+             do.call(paste, list(nn[[i]], z[[i]], sep="", collapse=""))
+           }
+           ))
+
+         }
+  )
+
+  res[na] <- NA
+  return(res)
 
 }
+
+
+
+
 
 
 StrDist <- function (x, y, method = "levenshtein", mismatch = 1, gap = 1, ignore.case = FALSE){
@@ -1389,16 +1494,48 @@ StrAlign <- function(x, sep = "\\r"){
 
 
 
-StrChop <- function(x, len) {
-  # Splits a string into a number of pieces of fixed length
-  # example: StrChop(x=paste(letters, collapse=""), len = c(3,5,0))
-  xsplit <- character(0)
-  for(i in 1:length(len)){
-    xsplit <- append(xsplit, substr(x, 1, len[i]))
-    x <- substr(x, len[i]+1, nchar(x))
+# replaced by 0.99.19: new argument pos for cutting positions and vector support
+# StrChop <- function(x, len) {
+#   # Splits a string into a number of pieces of fixed length
+#   # example: StrChop(x=paste(letters, collapse=""), len = c(3,5,0))
+#   xsplit <- character(0)
+#   for(i in 1:length(len)){
+#     xsplit <- append(xsplit, substr(x, 1, len[i]))
+#     x <- substr(x, len[i]+1, nchar(x))
+#   }
+#   return(xsplit)
+# }
+
+
+StrChop <- function(x, len, pos) {
+
+  .chop <- function(x, len, pos) {
+    # Splits a string into a number of pieces of fixed length
+    # example: StrChop(x=paste(letters, collapse=""), len = c(3,5,0))
+    if(!missing(len)){
+      if(!missing(pos))
+        stop("too many arguments")
+    } else {
+      len <- c(pos[1], diff(pos), nchar(x))
+    }
+
+    xsplit <- character(0)
+    for(i in 1:length(len)){
+      xsplit <- append(xsplit, substr(x, 1, len[i]))
+      x <- substr(x, len[i]+1, nchar(x))
+    }
+    return(xsplit)
   }
-  return(xsplit)
+
+  res <- lapply(x, .chop, len=len, pos=pos)
+
+  if(length(x)==1)
+    res <- res[[1]]
+
+  return(res)
+
 }
+
 
 
 StrCountW <- function(x){
@@ -2072,8 +2209,8 @@ BoxCoxLambda <- function(x, method=c("guerrero","loglik"), lower=-1, upper=2) {
     #             lam = lambda
     #             x = original time series as a time series object
     # Output: coefficient of variation
-    guer.cv <- function(lam, x, nonseasonal.length=2)
-    {
+    guer.cv <- function(lam, x, nonseasonal.length=2) {
+
       period <- max(nonseasonal.length, frequency(x))
       nobsf <- length(x)
       nyr <- floor(nobsf / period)
@@ -2091,8 +2228,8 @@ BoxCoxLambda <- function(x, method=c("guerrero","loglik"), lower=-1, upper=2) {
 
 
   # Modified version of boxcox from MASS package
-  BCLogLik <- function(x, lower=-1, upper=2)
-  {
+  BCLogLik <- function(x, lower=-1, upper=2) {
+
     n <- length(x)
     if (any(x <= 0))
       stop("x must be positive")
@@ -2147,7 +2284,12 @@ LOCF.default <- function(x) {
 #   return(x)
 
   # faster solution from Daniel Wollschlaeger:
-  rep(x[!is.na(x)], diff(c(which(!is.na(x)), length(x)+1)))
+
+  # corrected by 0.99.19, as this didn't handle c(NA, 3.0, NA, 5,5) correctly
+  # rep(x[!is.na(x)], diff(c(which(!is.na(x)), length(x)+1)))
+
+  l <- !is.na(x)
+  rep(c(NA, x[l]), diff(c(1, which(l), length(x) + 1)))
 
 }
 
@@ -2158,6 +2300,7 @@ LOCF.data.frame <- function(x){
 LOCF.matrix <- function(x){
   apply(x, 2, LOCF)
 }
+
 
 # Alternative names: PairApply, PwApply, pwapply, papply, ...
 PairApply <- function(x, FUN = NULL, ..., symmetric = FALSE){
@@ -3036,7 +3179,7 @@ AllDuplicated <- function(x){
 # }
 
 
-Dummy <- function (x, method = c("treatment", "sum", "helmert", "poly", "full"),  base = 1) {
+Dummy <- function (x, method = c("treatment", "sum", "helmert", "poly", "full"),  base = 1, levels=NULL) {
 
   # Alternatives:
   # options(contrasts = c("contr.sum", "contr.poly"))
@@ -3044,7 +3187,11 @@ Dummy <- function (x, method = c("treatment", "sum", "helmert", "poly", "full"),
   # or Ripley's brilliant shorty-function:
   #   diag(nlevels(x))[x,]
 
-  x <- as.factor(x)
+  if(is.null(levels))
+    x <- factor(x)
+  else
+    x <- factor(x, levels=levels)
+
   if(!is.numeric(base)) base <- match(base, levels(x))
 
   method <- match.arg( arg = method, choices = c("treatment", "sum", "helmert", "poly", "full") )
@@ -3256,7 +3403,7 @@ IsOdd <- function(x) x %% 2 == 1
 IsDichotomous <- function(x, strict=FALSE, na.rm=FALSE) {
   if(na.rm)
     x <- x[!is.na(x)]
-	
+
   if(strict)
     length(unique(x)) == 2
   else
@@ -4032,9 +4179,15 @@ Format.data.frame <- function(x, digits = NULL, sci = NULL
                           , big.mark=NULL, leading = NULL
                           , zero.form = NULL, na.form = NULL
                           , fmt = NULL, align = NULL, width = NULL, lang = NULL, ...){
-  as.data.frame(Format.matrix(x=as.matrix(x), digits=digits, sci=sci, big.mark=big.mark,
-                         leading=leading, zero.form=zero.form, na.form=na.form,
-                         fmt=fmt, align=align, width=width, lang=lang, ...), stringsAsFactors=FALSE)
+
+  x[] <- lapply(x, Format, digits = digits,
+                sci = sci, big.mark = big.mark, leading = leading, zero.form = zero.form,
+                na.form = na.form, fmt = fmt, align = align, width = width,
+                lang = lang, ...)
+
+  class(x) <- c("Format", class(x))
+  return(x)
+
 }
 
 
@@ -4045,6 +4198,8 @@ Format.matrix <- function(x, digits = NULL, sci = NULL
   x[,] <- Format.default(x=x, digits=digits, sci=sci, big.mark=big.mark,
                          leading=leading, zero.form=zero.form, na.form=na.form,
                          fmt=fmt, align=align, width=width, lang=lang, ...)
+
+  class(x) <- c("Format", class(x))
   return(x)
 }
 
@@ -4056,8 +4211,103 @@ Format.table <- function(x, digits = NULL, sci = NULL
   x[] <- Format.default(x=x, digits=digits, sci=sci, big.mark=big.mark,
                          leading=leading, zero.form=zero.form, na.form=na.form,
                          fmt=fmt, align=align, width=width, lang=lang, ...)
+
+  class(x) <- c("Format", class(x))
   return(x)
 }
+
+
+
+as.CDateFmt <- function(fmt) {
+
+  # fine format codes
+  # http://www.autohotkey.com/docs/commands/FormatTime.htm
+
+  pat <- ""
+  fpat <- ""
+
+  i <- 1
+  # we used here:
+  #       if(length(grep("\\bd{4}\\b", fmt)) > 0)
+  # which found dddd only as separated string from others (\b ... blank)
+  # this is not suitable for formats like yyyymmdd
+  # hence this was changed to d{4}
+
+  #      if(length(grep("\\bd{4}\\b", fmt)) > 0) {
+  if(length(grep("d{4}", fmt)) > 0) {
+    fmt <- gsub(pattern = "dddd", replacement = paste("\\\\", i, sep=""), x = fmt)
+    pat <- paste(pat, "(.+)-", sep="")
+    fpat <- paste(fpat, "%A-", sep="")
+    i <- i+1
+  }
+  #      if(length(grep("\\bd{3}\\b", fmt)) > 0) {
+  if(length(grep("d{3}", fmt)) > 0) {
+    fmt <- gsub(pattern = "ddd", replacement = paste("\\\\", i, sep=""), x = fmt)
+    pat <- paste(pat, "(.+)-", sep="")
+    fpat <- paste(fpat, "%a-", sep="")
+    i <- i+1
+  }
+  if(length(grep("d{2}", fmt)) > 0) {
+    fmt <- gsub(pattern = "dd", replacement = paste("\\\\", i, sep=""), x = fmt)
+    pat <- paste(pat, "(.+)-", sep="")
+    fpat <- paste(fpat, "%d-", sep="")
+    i <- i+1
+  }
+  if(length(grep("d{1}", fmt)) > 0) {
+    fmt <- gsub(pattern = "d", replacement = paste("\\\\", i, sep=""), x = fmt)
+    pat <- paste(pat, "0?(.+)-", sep="")
+    fpat <- paste(fpat, "%e-", sep="")
+    i <- i+1
+  }
+  if(length(grep("m{4}", fmt)) > 0) {
+    fmt <- gsub(pattern = "mmmm", replacement = paste("\\\\", i, sep=""), x = fmt)
+    pat <- paste(pat, "(.+)-", sep="")
+    fpat <- paste(fpat, "%B-", sep="")
+    i <- i+1
+  }
+  if(length(grep("m{3}", fmt)) > 0) {
+    fmt <- gsub(pattern = "mmm", replacement = paste("\\\\", i, sep=""), x = fmt)
+    pat <- paste(pat, "(.+)-", sep="")
+    fpat <- paste(fpat, "%b-", sep="")
+    i <- i+1
+  }
+  if(length(grep("m{2}", fmt)) > 0) {
+    fmt <- gsub(pattern = "mm", replacement = paste("\\\\", i, sep=""), x = fmt)
+    pat <- paste(pat, "(.+)-", sep="")
+    fpat <- paste(fpat, "%m-", sep="")
+    i <- i+1
+  }
+  if(length(grep("m{1}", fmt)) > 0) {
+    fmt <- gsub(pattern = "m", replacement = paste("\\\\", i, sep=""), x = fmt)
+    pat <- paste(pat, "0?(.+)-", sep="")
+    fpat <- paste(fpat, "%m-", sep="")
+    i <- i+1
+  }
+  if(length(grep("y{4}", fmt)) > 0) {
+    fmt <- gsub(pattern = "yyyy", replacement = paste("\\\\", i, sep=""), x = fmt)
+    pat <- paste(pat, "(.+)-", sep="")
+    fpat <- paste(fpat, "%Y-", sep="")
+    i <- i+1
+  }
+  if(length(grep("y{2}", fmt)) > 0) {
+    fmt <- gsub(pattern = "yy", replacement = paste("\\\\", i, sep=""), x = fmt)
+    pat <- paste(pat, "(.+)-", sep="")
+    fpat <- paste(fpat, "%y-", sep="")
+    i <- i+1
+  }
+  if(length(grep("y{1}", fmt)) > 0) {
+    fmt <- gsub(pattern = "y", replacement = paste("\\\\", i, sep=""), x = fmt)
+    pat <- paste(pat, "0?(.+)-", sep="")
+    fpat <- paste(fpat, "%y-", sep="")
+    i <- i+1
+  }
+
+  sub(pat, fmt, fpat)
+
+
+}
+
+
 
 
 Format.default <- function(x, digits = NULL, sci = NULL
@@ -4068,93 +4318,93 @@ Format.default <- function(x, digits = NULL, sci = NULL
 
 
 
-  .format.date <- function(x, fmt) {
-
-    # fine format codes
-    # http://www.autohotkey.com/docs/commands/FormatTime.htm
-
-    pat <- ""
-    fpat <- ""
-
-    i <- 1
-    # we used here:
-    #       if(length(grep("\\bd{4}\\b", fmt)) > 0)
-    # which found dddd only as separated string from others (\b ... blank)
-    # this is not suitable for formats like yyyymmdd
-    # hence this was changed to d{4}
-
-    #      if(length(grep("\\bd{4}\\b", fmt)) > 0) {
-    if(length(grep("d{4}", fmt)) > 0) {
-      fmt <- gsub(pattern = "dddd", replacement = paste("\\\\", i, sep=""), x = fmt)
-      pat <- paste(pat, "(.+)-", sep="")
-      fpat <- paste(fpat, "%A-", sep="")
-      i <- i+1
-    }
-    #      if(length(grep("\\bd{3}\\b", fmt)) > 0) {
-    if(length(grep("d{3}", fmt)) > 0) {
-      fmt <- gsub(pattern = "ddd", replacement = paste("\\\\", i, sep=""), x = fmt)
-      pat <- paste(pat, "(.+)-", sep="")
-      fpat <- paste(fpat, "%a-", sep="")
-      i <- i+1
-    }
-    if(length(grep("d{2}", fmt)) > 0) {
-      fmt <- gsub(pattern = "dd", replacement = paste("\\\\", i, sep=""), x = fmt)
-      pat <- paste(pat, "(.+)-", sep="")
-      fpat <- paste(fpat, "%d-", sep="")
-      i <- i+1
-    }
-    if(length(grep("d{1}", fmt)) > 0) {
-      fmt <- gsub(pattern = "d", replacement = paste("\\\\", i, sep=""), x = fmt)
-      pat <- paste(pat, "0?(.+)-", sep="")
-      fpat <- paste(fpat, "%d-", sep="")
-      i <- i+1
-    }
-    if(length(grep("m{4}", fmt)) > 0) {
-      fmt <- gsub(pattern = "mmmm", replacement = paste("\\\\", i, sep=""), x = fmt)
-      pat <- paste(pat, "(.+)-", sep="")
-      fpat <- paste(fpat, "%B-", sep="")
-      i <- i+1
-    }
-    if(length(grep("m{3}", fmt)) > 0) {
-      fmt <- gsub(pattern = "mmm", replacement = paste("\\\\", i, sep=""), x = fmt)
-      pat <- paste(pat, "(.+)-", sep="")
-      fpat <- paste(fpat, "%b-", sep="")
-      i <- i+1
-    }
-    if(length(grep("m{2}", fmt)) > 0) {
-      fmt <- gsub(pattern = "mm", replacement = paste("\\\\", i, sep=""), x = fmt)
-      pat <- paste(pat, "(.+)-", sep="")
-      fpat <- paste(fpat, "%m-", sep="")
-      i <- i+1
-    }
-    if(length(grep("m{1}", fmt)) > 0) {
-      fmt <- gsub(pattern = "m", replacement = paste("\\\\", i, sep=""), x = fmt)
-      pat <- paste(pat, "0?(.+)-", sep="")
-      fpat <- paste(fpat, "%m-", sep="")
-      i <- i+1
-    }
-    if(length(grep("y{4}", fmt)) > 0) {
-      fmt <- gsub(pattern = "yyyy", replacement = paste("\\\\", i, sep=""), x = fmt)
-      pat <- paste(pat, "(.+)-", sep="")
-      fpat <- paste(fpat, "%Y-", sep="")
-      i <- i+1
-    }
-    if(length(grep("y{2}", fmt)) > 0) {
-      fmt <- gsub(pattern = "yy", replacement = paste("\\\\", i, sep=""), x = fmt)
-      pat <- paste(pat, "(.+)-", sep="")
-      fpat <- paste(fpat, "%y-", sep="")
-      i <- i+1
-    }
-    if(length(grep("y{1}", fmt)) > 0) {
-      fmt <- gsub(pattern = "y", replacement = paste("\\\\", i, sep=""), x = fmt)
-      pat <- paste(pat, "0?(.+)-", sep="")
-      fpat <- paste(fpat, "%y-", sep="")
-      i <- i+1
-    }
-
-    sub(pat, fmt, format(x, fpat))
-
-  }
+  # .format.date <- function(x, fmt) {
+  #
+  #   # fine format codes
+  #   # http://www.autohotkey.com/docs/commands/FormatTime.htm
+  #
+  #   pat <- ""
+  #   fpat <- ""
+  #
+  #   i <- 1
+  #   # we used here:
+  #   #       if(length(grep("\\bd{4}\\b", fmt)) > 0)
+  #   # which found dddd only as separated string from others (\b ... blank)
+  #   # this is not suitable for formats like yyyymmdd
+  #   # hence this was changed to d{4}
+  #
+  #   #      if(length(grep("\\bd{4}\\b", fmt)) > 0) {
+  #   if(length(grep("d{4}", fmt)) > 0) {
+  #     fmt <- gsub(pattern = "dddd", replacement = paste("\\\\", i, sep=""), x = fmt)
+  #     pat <- paste(pat, "(.+)-", sep="")
+  #     fpat <- paste(fpat, "%A-", sep="")
+  #     i <- i+1
+  #   }
+  #   #      if(length(grep("\\bd{3}\\b", fmt)) > 0) {
+  #   if(length(grep("d{3}", fmt)) > 0) {
+  #     fmt <- gsub(pattern = "ddd", replacement = paste("\\\\", i, sep=""), x = fmt)
+  #     pat <- paste(pat, "(.+)-", sep="")
+  #     fpat <- paste(fpat, "%a-", sep="")
+  #     i <- i+1
+  #   }
+  #   if(length(grep("d{2}", fmt)) > 0) {
+  #     fmt <- gsub(pattern = "dd", replacement = paste("\\\\", i, sep=""), x = fmt)
+  #     pat <- paste(pat, "(.+)-", sep="")
+  #     fpat <- paste(fpat, "%d-", sep="")
+  #     i <- i+1
+  #   }
+  #   if(length(grep("d{1}", fmt)) > 0) {
+  #     fmt <- gsub(pattern = "d", replacement = paste("\\\\", i, sep=""), x = fmt)
+  #     pat <- paste(pat, "0?(.+)-", sep="")
+  #     fpat <- paste(fpat, "%d-", sep="")
+  #     i <- i+1
+  #   }
+  #   if(length(grep("m{4}", fmt)) > 0) {
+  #     fmt <- gsub(pattern = "mmmm", replacement = paste("\\\\", i, sep=""), x = fmt)
+  #     pat <- paste(pat, "(.+)-", sep="")
+  #     fpat <- paste(fpat, "%B-", sep="")
+  #     i <- i+1
+  #   }
+  #   if(length(grep("m{3}", fmt)) > 0) {
+  #     fmt <- gsub(pattern = "mmm", replacement = paste("\\\\", i, sep=""), x = fmt)
+  #     pat <- paste(pat, "(.+)-", sep="")
+  #     fpat <- paste(fpat, "%b-", sep="")
+  #     i <- i+1
+  #   }
+  #   if(length(grep("m{2}", fmt)) > 0) {
+  #     fmt <- gsub(pattern = "mm", replacement = paste("\\\\", i, sep=""), x = fmt)
+  #     pat <- paste(pat, "(.+)-", sep="")
+  #     fpat <- paste(fpat, "%m-", sep="")
+  #     i <- i+1
+  #   }
+  #   if(length(grep("m{1}", fmt)) > 0) {
+  #     fmt <- gsub(pattern = "m", replacement = paste("\\\\", i, sep=""), x = fmt)
+  #     pat <- paste(pat, "0?(.+)-", sep="")
+  #     fpat <- paste(fpat, "%m-", sep="")
+  #     i <- i+1
+  #   }
+  #   if(length(grep("y{4}", fmt)) > 0) {
+  #     fmt <- gsub(pattern = "yyyy", replacement = paste("\\\\", i, sep=""), x = fmt)
+  #     pat <- paste(pat, "(.+)-", sep="")
+  #     fpat <- paste(fpat, "%Y-", sep="")
+  #     i <- i+1
+  #   }
+  #   if(length(grep("y{2}", fmt)) > 0) {
+  #     fmt <- gsub(pattern = "yy", replacement = paste("\\\\", i, sep=""), x = fmt)
+  #     pat <- paste(pat, "(.+)-", sep="")
+  #     fpat <- paste(fpat, "%y-", sep="")
+  #     i <- i+1
+  #   }
+  #   if(length(grep("y{1}", fmt)) > 0) {
+  #     fmt <- gsub(pattern = "y", replacement = paste("\\\\", i, sep=""), x = fmt)
+  #     pat <- paste(pat, "0?(.+)-", sep="")
+  #     fpat <- paste(fpat, "%y-", sep="")
+  #     i <- i+1
+  #   }
+  #
+  #   sub(pat, fmt, format(x, fpat))
+  #
+  # }
 
   .format.pval <- function(x){
     # format p-values  *********************************************************
@@ -4309,7 +4559,8 @@ Format.default <- function(x, digits = NULL, sci = NULL
       on.exit(Sys.setlocale("LC_TIME", loc))
     }
 
-    r <- .format.date(x, fmt=fmt)
+    # r <- .format.date(x, fmt=fmt)
+    r <- format(x, as.CDateFmt(fmt=fmt))
 
   } else if(all(class(x) %in% c("character","factor","ordered"))) {
     r <- format(x)
@@ -4337,6 +4588,10 @@ Format.default <- function(x, digits = NULL, sci = NULL
       r <- paste(suppressWarnings(formatC(x * 100, digits = digits, width = width, format = "f",
                                           big.mark=big.mark, drop0trailing = FALSE)),
                  "%", sep="")
+
+  } else if(fmt=="frac"){
+
+    r <- as.character(MASS::fractions(x))
 
   } else {  # format else   ********************************************
 
@@ -4404,10 +4659,18 @@ Format.default <- function(x, digits = NULL, sci = NULL
   }
 
 
+  class(r) <- c("Format", class(r))
   return(r)
 
 }
 
+
+
+print.Format <- function (x, ...) {
+
+  class(x) <- class(x)[class(x)!="Format"]
+  NextMethod("print", quote = FALSE, right=TRUE, ...)
+}
 
 
 
@@ -4506,9 +4769,12 @@ Fmt <- function(...){
 
         # modify additional arguments in the template definition
         for(z in names(res)){
-          if(!is.null(res[[z]]))
-            # use named dots
-            res[[z]][names(dots[names(dots)!=""])] <- dots[names(dots)!=""]
+          if(!is.null(res[[z]])){
+            # use named dots, but only those which are not NULL
+            idx <- names(dots) != "" & !sapply(dots[names(dots)], is.null)
+#           res[[z]][names(dots[names(dots)!=""])] <- dots[names(dots)!=""]
+            res[[z]][names(dots[idx])] <- dots[idx]
+          }
         }
 
         # return(res)
@@ -5321,7 +5587,7 @@ DescToolsOptions <- function (..., default = NULL, reset = FALSE) {
 
   # all system defaults
   def <- list(
-    col       = c(hred, hblue, hgreen),
+    col       = c(hblue, hred,  horange),
     digits    = 3,
     fixedfont = structure(list(name = "Consolas", size = 7), class = "font"),
     fmt       = structure(list(
@@ -6189,6 +6455,8 @@ FileOpenCmd <- function(fmt=NULL) {
   tcltk::tkwm.geometry(top, geom)
   tcltk::tkwm.title(top, main)
   tcltk::tkwm.resizable(top, resizex, resizey)
+  # alternative:
+  #    system.file("extdata", paste(ico, "ico", sep="."), package="DescTools")
   tcltk::tkwm.iconbitmap(top, file.path(find.package("DescTools"), "extdata", paste(ico, "ico", sep=".")))
 
   return(top)
@@ -6434,7 +6702,7 @@ ImportFileDlg <- function(auto_type = TRUE, env = .GlobalEnv)  {
   # nicht topmost, aber wie mach ich das dann??
   # tcl("wm", "attributes", root, topmost=TRUE)
 
-  if (filename=="") return
+  if (filename=="") return()
 
   path <- SplitPath(filename)
 
@@ -7430,16 +7698,6 @@ Canvas <- function(xlim=NULL, ylim=xlim, main=NULL, xpd=par("xpd"), mar=c(5.1,5.
 }
 
 
-
-# This is erroneous, but what did I then need, when I did that?
-# Midx <- function(x, first=NULL){
-#   if(!is.null(first)) x <- c(first, x)
-#   res <- cumsum(filter(x, rep(1/2,2)))
-#   res <-  res[-length(res)]
-#   return(res)
-# }
-
-
 Midx <- function(x, incl.zero = FALSE, cumulate = FALSE){
   if(incl.zero) x <- c(0, x)
   res <- filter(x, rep(1/2,2))
@@ -7447,7 +7705,6 @@ Midx <- function(x, incl.zero = FALSE, cumulate = FALSE){
   if(cumulate) res <- cumsum(res)
   return(res)
 }
-
 
 
 ###
@@ -8270,6 +8527,28 @@ SpreadOut <- function(x, mindist = NULL, cex = 1.0) {
 
 
 
+BarText <- function(height, b, labels=height, beside = FALSE, horiz = FALSE, ...) {
+
+  if(beside)
+    warning("not implemented")
+
+  else {
+    if(horiz){
+      x <- t(apply(height, 2, Midx, incl.zero=TRUE, cumulate=TRUE))
+      text(labels=t(labels), x=x, y=b, ...)
+    } else {
+      x <- t(apply(height, 2, Midx, incl.zero=TRUE, cumulate=TRUE))
+      text(labels=t(labels), x=b, y=x, ...)
+    }
+
+  }
+
+  invisible()
+
+}
+
+
+
 ConnLines <- function(..., col = 1, lwd = 1, lty = "solid", xalign = c("mar","mid") ) {
 
   # add connection lines to a barplot
@@ -8701,6 +8980,68 @@ SetAlpha <- function(col, alpha=0.5) {
 ###
 
 
+
+PlotDev <- function(fn, type=c("tif", "pdf", "eps", "bmp", "png", "jpg"),
+                    width=NULL, height=NULL, units="cm", res=300, open=TRUE,
+                    expr, ...) {
+
+  # PlotDev(fn="bar", type="tiff", expr=
+  #  barplot(1:5, col=Pal("Helsana"))
+  # )
+
+  type <- match.arg(type)
+
+  # golden ratio
+  golden <- (1+sqrt(5))/2
+
+  if(is.null(width))
+    width <- 8
+
+  if(is.null(height))
+    height <- width/golden
+
+
+  # check if filename fn contains a path, if not appende getwd()
+  if(!grepl("/", fn))
+    fn <- paste(getwd(), fn, sep="/")
+
+  switch(type,
+         "tif" = { fn <- paste(fn, ".tif", sep="")
+         tiff(filename = fn, width = width, height = height, units=units, res=res, ...)
+         }
+         , "pdf" = { fn <- paste(fn, ".pdf", sep="")
+         pdf(file=fn, width = width, height = height)
+         }
+         , "eps" = { fn <- paste(fn, ".eps", sep="")
+         postscript(file=fn, width = width, height = height)
+         }
+         , "bmp" = { fn <- paste(fn, ".bmp", sep="")
+         bitmap(file=fn, width = width, height = height, units=units, res=res, ...)
+         }
+         , "png" = { fn <- paste(fn, ".png", sep="")
+         png(filename=fn, width = width, height = height, units=units, res=res, ...)
+         }
+         , "jpg" = { fn <- paste(fn, ".jpg", sep="")
+         jpeg(filename=fn, width = width, height = height, units=units, res=res, ...)
+         }
+
+  )
+
+  # http://stackoverflow.com/questions/4692231/r-passing-expression-to-an-inner-function
+  expr <- deparse(substitute(expr))
+
+  eval(parse(text=expr))
+
+  dev.off()
+  cat(gettextf("plot produced:\n  %s\n", fn))
+
+  if(open)
+    shell(gettextf("\"%s\"", fn))
+
+}
+
+
+
 ## plots: PlotBubble ====
 
 PlotBubble <-function(x, ...)
@@ -8880,7 +9221,7 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
   }
 
   # plot histogram, change margin if no main title
-  par(mar = c(ifelse(add.boxplot || add.ecdf, 0, 5.1), 6.1, 1, 2.1))
+  par(mar = c(ifelse(add.boxplot || add.ecdf, 0, 5.1), 6.1, 2.1, 2.1))
 
   if(!is.null(mar)) {
     par(oma=mar)
@@ -9500,9 +9841,10 @@ PlotArea.formula <- function (formula, data, subset, na.action, ...) {
 ###
 
 ## plots: PlotDotCI ====
+
 PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("cex"),
                      pch = 21, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"),
-                     lcolor = "gray", xlim = NULL, main = NULL, xlab = NULL, ylab = NULL,
+                     lcolor = "gray", xlim = NULL, main = NULL, xlab = NULL, ylab = NULL, xaxt=NULL, yaxt=NULL,
                      add = FALSE, args.errbars = NULL, ...) {
 
   ErrBarArgs <- function(from, to = NULL, pos = NULL, mid = NULL,
@@ -9602,7 +9944,7 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
     ginch <- max(strwidth(glabels, "inch"), na.rm = TRUE)
     goffset <- 0.4
   }
-  if (!(is.null(labels) && is.null(glabels))) {
+  if (!(is.null(labels) && is.null(glabels) || identical(yaxt, "n"))) {
     nmai <- par("mai")
     nmai[2L] <- nmai[4L] + max(linch + goffset, ginch) +
       0.1
@@ -9630,7 +9972,8 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
     linch <- max(strwidth(labels, "inch"), na.rm = TRUE)
     loffset <- (linch + 0.1)/lheight
     labs <- labels[o]
-    mtext(labs, side = 2, line = loffset, at = y, adj = 0,
+    if (!identical(yaxt, "n"))
+      mtext(labs, side = 2, line = loffset, at = y, adj = 0,
           col = color, las = 2, cex = cex[2], ...)
   }
   if (!add)
@@ -9641,14 +9984,15 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
                          2) - 1)
     ginch <- max(strwidth(glabels, "inch"), na.rm = TRUE)
     goffset <- (max(linch + 0.2, ginch, na.rm = TRUE) + 0.1)/lheight
-    mtext(glabels, side = 2, line = goffset, at = gpos, adj = 0,
-          col = gcolor, las = 2, cex = cex[3], ...)
+    if (!identical(yaxt, "n"))
+      mtext(glabels, side = 2, line = goffset, at = gpos, adj = 0,
+            col = gcolor, las = 2, cex = cex[3], ...)
     if (!is.null(gdata)) {
       abline(h = gpos, lty = "dotted")
       points(gdata, gpos, pch = gpch, col = gcolor, bg = bg, ...)
     }
   }
-  if (!add)
+  if (!(add || identical(xaxt, "n") ))
     axis(1)
 
   if (!add)
@@ -9676,188 +10020,66 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
 }
 
 
-# PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("cex"),
-#                       pch = 21, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"),
-#                       lcolor = "gray", xlim = NULL, main = NULL, xlab = NULL, ylab = NULL,
-#                       add = FALSE, args.errbars = NULL, ...) {
-#
-#   # this is mainly R-Core code from dotchart
-#   # extended by argument add and returning y-coordinates
-#
-#
-#   ErrBarArgs <- function (from, to = NULL, pos = NULL, mid = NULL, horiz = FALSE,
-#                           col = par("fg"), lty = par("lty"), lwd = par("lwd"), code = 3,
-#                           length = 0.05, pch = NA, cex.pch = par("cex"), col.pch = NULL,
-#                           bg.pch = par("bg"), ...) {
-#
-#     col <- Rev(col)
-#     lty <- Rev(lty)
-#     lwd <- Rev(lwd)
-#     length <- Rev(length)
-#     pch <- Rev(pch)
-#     cex.pch <- Rev(cex.pch)
-#     if(is.null(col.pch))
-#       col.pch <- col
-#     else
-#       col.pch <- Rev(col.pch)
-#     bg.pch <- Rev(bg.pch)
-#
-#     if (is.null(to)) {
-#       if (dim(from)[2] %nin% c(2, 3))
-#         stop("'from' must be a kx2 or a kx3 matrix, when 'to' is not provided.")
-#       if (dim(from)[2] == 2) {
-#         to <- from[, 2]
-#         from <- from[, 1]
-#       }
-#       else {
-#         mid <- from[, 1]
-#         to <- from[, 3]
-#         from <- from[, 2]
-#       }
-#     }
-#
-#     return(list(from=from, to=to, mid=mid, col = col, col.axis = 1, lty = lty,
-#                 lwd = lwd, angle = 90, code = code, length = length, pch=pch,
-#                 cex.pch=cex.pch, col.pch=col.pch, bg.pch=bg.pch))
-#
-#   }
-#
-#   x <- Rev(x, 1)
-#   labels <- rev(labels)
-#   groups <- rev(groups)
-#   gdata <- Rev(gdata, 1)
-#
-#
-#   cex <- rep(cex, length.out=3)
-#
-#   if (!is.null(args.errbars))
-#     errb <- do.call(ErrBarArgs, args.errbars)
-#
-#   if (!add && is.null(xlim)) {
-#     if (is.null(args.errbars)) {
-#       xlim <- range(x[is.finite(x)])
-#     }
-#     else {
-#       rng <- c(errb$from, errb$to)
-#       xlim <- range(pretty(rng[is.finite(rng)]))
-#     }
-#   }
-#
-#
-#   opar <- par("mai", "mar", "cex", "yaxs")
-#   on.exit(par(opar))
-#   par(cex = cex[1], yaxs = "i")
-#   if (!is.numeric(x))
-#     stop("'x' must be a numeric vector or matrix")
-#   n <- length(x)
-#   if (is.matrix(x)) {
-#     if (is.null(labels))
-#       labels <- rownames(x)
-#     if (is.null(labels))
-#       labels <- as.character(1L:nrow(x))
-#     labels <- rep_len(labels, n)
-#     if (is.null(groups))
-#       groups <- col(x, as.factor = TRUE)
-#     glabels <- levels(groups)
-#
-#   }  else {
-#     if (is.null(labels))
-#       labels <- names(x)
-#     glabels <- if (!is.null(groups))
-#       levels(groups)
-#     if (!is.vector(x)) {
-#       warning("'x' is neither a vector nor a matrix: using as.numeric(x)")
-#       x <- as.numeric(x)
-#     }
-#   }
-#   if(!add) plot.new()
-#   linch <- if (!is.null(labels))
-#     max(strwidth(labels, "inch"), na.rm = TRUE)
-#   else 0
-#   if (is.null(glabels)) {
-#     ginch <- 0
-#     goffset <- 0
-#
-#   }  else {
-#     ginch <- max(strwidth(glabels, "inch"), na.rm = TRUE)
-#     goffset <- 0.4
-#   }
-#   if (!(is.null(labels) && is.null(glabels))) {
-#     nmai <- par("mai")
-#     nmai[2L] <- nmai[4L] + max(linch + goffset, ginch) +
-#       0.1
-#     par(mai = nmai)
-#   }
-#   if (is.null(groups)) {
-#     o <- 1L:n
-#     y <- o
-#     ylim <- c(0, n + 1)
-#
-#   }  else {
-#     o <- sort.list(as.numeric(groups), decreasing = TRUE)
-#     x <- x[o]
-#     groups <- groups[o]
-#     color <- rep_len(color, length(groups))[o]
-#     lcolor <- rep_len(lcolor, length(groups))[o]
-#     offset <- cumsum(c(0, diff(as.numeric(groups)) != 0))
-#     y <- 1L:n + 2 * offset
-#     ylim <- range(0, y + 2)
-#   }
-#   if(!add) plot.window(xlim = xlim, ylim = ylim, log = "")
-#   lheight <- par("csi")
-#   if (!is.null(labels)) {
-#     linch <- max(strwidth(labels, "inch"), na.rm = TRUE)
-#     loffset <- (linch + 0.1)/lheight
-#     labs <- labels[o]
-#     mtext(labs, side = 2, line = loffset, at = y, adj = 0,
-#           col = color, las = 2, cex = cex[2], ...)
-#   }
-#   if(!add) abline(h = y, lty = "dotted", col = lcolor)
-#   points(x, y, pch = pch, col = color, bg = bg)
-#
-#
-#   if (!is.null(groups)) {
-#     gpos <- rev(cumsum(rev(tapply(groups, groups, length)) +
-#                          2) - 1)
-#     ginch <- max(strwidth(glabels, "inch"), na.rm = TRUE)
-#     goffset <- (max(linch + 0.2, ginch, na.rm = TRUE) + 0.1)/lheight
-#     mtext(glabels, side = 2, line = goffset, at = gpos, adj = 0,
-#           col = gcolor, las = 2, cex = cex[3], ...)
-#     if (!is.null(gdata)) {
-#       abline(h = gpos, lty = "dotted")
-#       points(gdata, gpos, pch = gpch, col = gcolor, bg = bg,
-#              ...)
-#     }
-#   }
-#
-#   if(!add) axis(1)
-#   if(!add) box()
-#   if(!add) title(main = main, xlab = xlab, ylab = ylab, ...)
-#
-#   # draw the error bars
-#   if (!is.null(args.errbars)) {
-#     arrows(x0 = rev(errb$from)[o], x1 = rev(errb$to)[o], y0 = y, col = errb$col, angle = 90, code = errb$code,
-#            lty = errb$lty, lwd = errb$lwd,  length = errb$length)
-#
-#     if(!is.null(errb$mid))
-#       points(rev(errb$mid)[o], y=y, pch=errb$pch, col=errb$col.pch, cex=errb$cex.pch, bg=errb$bg.pch)
-#
-#   }
-#
-#   if (!is.null(DescToolsOptions("stamp")))
-#     Stamp()
-#
-#   # return y-values
-#   invisible(y[order(o, decreasing=TRUE)])
-#
-# }
-#
+
+TitleRect <- function(label, bg = "grey", border=1, col="black", xjust=0.5, ...){
+
+  xpd <- par(xpd=TRUE); on.exit(par(xpd))
+
+  usr <- par("usr")
+  rect(xleft = usr[1], ybottom = usr[4], xright = usr[2], ytop = LineToUser(2,3),
+       col="white")
+  rect(xleft = usr[1], ybottom = usr[4], xright = usr[2], ytop = LineToUser(2,3),
+       col=bg)
+  text(x = mean(usr[c(1,2)]), y = mean(c(usr[4], LineToUser(2,3))), labels=label,
+       adj = c(xjust, 0.5), col=col, ...)
+}
+
+
+
+# not yet exported
+
+PlotFacet <- function(x, FUN, mfrow, titles, main="", oma=NULL,
+                      args.titles = NULL, ...){
+
+
+  par(mfrow=mfrow, xpd=TRUE)
+  nr <- mfrow[1]
+  nc <- mfrow[2]
+
+  if(is.null(oma))
+    oma <- c(5,5,5,2)
+
+  par(mar=c(0,0,2.0,0), oma=oma, las=par("las"))
+
+  args.titles1 <- list(col=1, bg="grey", border=1)
+  if(!is.null(args.titles))
+    args.titles1[names(args.titles)] <- args.titles
+
+  for(i in 1:length(x)){
+
+    # nur unterste Zeile, und auch da nur Beschriftung in jedem 2. Plot
+    xaxt <- c("s","n")[((i <= (max(nr)-1)*nc) || IsOdd(i)) + 1]
+    # nur unterste Zeile, und auch da nur Beschriftung in jedem 2. Plot
+    yaxt <- c("s","n")[((i %% nc) != 1) + 1]
+
+    # the plot function
+    FUN(x[[i]], xaxt, yaxt)
+
+
+    do.call(TitleRect, c(args.titles1, label=titles[i]))
+
+  }
+
+  title(main, outer=TRUE, xpd=NA)
+
+}
+
 
 
 
 PlotLinesA <- function(x, y, col=1:5, lty=1, lwd=1, lend = par("lend"), xlab = NULL,
-                       ylab = NULL, xlim = NULL, ylim = NULL, cex = 1, args.legend = NULL,
-                       main=NULL, grid=TRUE, mar=NULL, pch=NA, pch.col=par("fg"), pch.bg=par("bg"), pch.cex=1){
+                       ylab = NULL, xlim = NULL, ylim = NULL, xaxt=NULL, yaxt=NULL, cex = 1, args.legend = NULL,
+                       main=NULL, grid=TRUE, mar=NULL, pch=NA, pch.col=par("fg"), pch.bg=par("bg"), pch.cex=1, ...){
 
   # example:
   #
@@ -9895,12 +10117,14 @@ PlotLinesA <- function(x, y, col=1:5, lty=1, lwd=1, lend = par("lend"), xlab = N
     if(!identical(args.legend, NA))
       # no convincing solution before plot.new is called
       # http://stackoverflow.com/questions/16452368/calculate-strwidth-without-calling-plot-new
-      Mar(NULL, NULL, NULL, 10)  # this would be nice, but there's no plot so far... max(strwidth(names(last))) * 1.2
+      Mar(right = 10)  # this would be nice, but there's no plot so far... max(strwidth(names(last))) * 1.2
   else
     do.call(Mar, as.list(mar))
 
-  matplot(x, y, type="n", las=1, xlim=xlim, ylim=ylim, xaxt="n", main=main, xlab=xlab, ylab=ylab, cex = cex)
-  axis(side = 1, at=c(1:nrow(x)), rownames(x))
+  matplot(x, y, type="n", las=1, xlim=xlim, ylim=ylim, xaxt="n", yaxt=yaxt, main=main, xlab=xlab, ylab=ylab, cex = cex, ...)
+  if(!identical(xaxt, "n"))
+    axis(side = 1, at=c(1:nrow(x)), rownames(x))
+
   if(grid) grid()
   matplot(x, type="l", lty=lty, col=col, lwd=lwd, lend=lend, xaxt="n", add=TRUE)
 
@@ -10004,7 +10228,7 @@ PlotLog <- function(x, y=NULL, ..., grid=TRUE, log="xy"){
 
 PlotFun <- function(FUN, args=NULL, from=NULL, to=NULL, by=NULL, xlim=NULL,
                     ylim = NULL, polar = FALSE, type="l",
-                    col = par("col"), lwd= par("lwd"), lty=par("lty"), pch=NA,
+                    col = par("col"), lwd= par("lwd"), lty=par("lty"), pch=NA, mar=NULL,
                     add = FALSE, ...){
 
 #   # all dot arguments
@@ -10016,6 +10240,10 @@ PlotFun <- function(FUN, args=NULL, from=NULL, to=NULL, by=NULL, xlim=NULL,
 
   # see also Hmisc::minor.tick
 
+  if(is.null(mar))
+    Mar(1,1,1,1)
+  else
+    par(mar=mar)
 
   vars <- all.vars(FUN)
   vars <- vars[vars %nin% names(args)]
@@ -10078,19 +10306,26 @@ PlotFun <- function(FUN, args=NULL, from=NULL, to=NULL, by=NULL, xlim=NULL,
   }
 
   if(!add){
-    do.call(plot, c(list(y=1, x=1, xlim=xlim, ylim=ylim, type="n"), m$...))
+    do.call(plot, c(list(y=1, x=1, xlim=xlim, ylim=ylim, type="n", mar=mar), m$...))
   }
 
   if(add.axes) {
-    axis(1, pos = 0)
+    tck <- axTicks(side=1)
+    if(sign(min(tck)) != sign(max(tck)))
+      tck <- tck[tck!=0]
+    axis(1, pos = 0, col="darkgrey", at=tck)
     # we set minor ticks for the axes, 4 ticks between 2 major ticks
     axp <- par("xaxp")
     axp[3] <- 5 * axp[3]
-    axis(1, pos = 0, TRUE, at=axTicks(side=1, axp=axp), labels = NA, tck=-0.01)
-    axis(2, pos = 0,las=1)
+    axis(1, pos = 0, TRUE, at=axTicks(side=1, axp=axp), labels = NA, tck=-0.01, col="darkgrey")
+
+    tck <- axTicks(side=2)
+    if(sign(min(tck)) != sign(max(tck)))
+      tck <- tck[tck!=0]
+    axis(2, pos = 0, las=1, col="darkgrey", at=tck)
     axp <- par("yaxp")
     axp[3] <- 5 * axp[3]
-    axis(2, pos = 0, TRUE, at=axTicks(side=1, axp=axp), labels = NA, tck=-0.01)
+    axis(2, pos = 0, TRUE, at=axTicks(side=1, axp=axp), labels=NA, tck=-0.01, col="darkgrey")
   }
 
   lines(y=y, x=x, type=type, col=col, lty=lty, lwd=lwd, pch=pch)
@@ -10199,30 +10434,6 @@ PlotPyramid <- function(lx, rx = NA, ylab = "",
 
   return(b)   # return the same result as barplot
 }
-
-
-
-# old version:
-
-# PlotPyramid <- function( x, y, col=c("blue","red"),...) {
-
-  # plot( 1, type="n", xlim=range(pretty(c(-x,y))), ylim=c(0,length(x)), frame.plot=TRUE
-    # , xlab="", ylab="", axes=FALSE, ... )
-  # abline(v=0)
-  # barplot(-x, horiz=TRUE, col=col[1], add=T, names.arg="", space=0, axes=FALSE)
-  # barplot(y, horiz=TRUE, col=col[2], add=T, names.arg="", space=0, axes=FALSE)
-
-  # axt <- axTicks(1)
-  # print(axt)
-  # abline(v=axt, col="grey", lty="dotted")
-  # axis(side=1, labels=sprintf("%.0f%s", abs(axt)*100, "%"), at=axt, las=1, cex.axis=0.8)
-  # axis(side=2, labels=axTicks(2), at=axTicks(2), las=2, cex.axis=0.8)
-
-# }
-
-# x <- c(0.32,.2,.1,.051,.08,.07,.05,.01)
-# y <- c(0.2,.21,.15,.01,.08,.07,.05,.01)
-# PlotPyramid(x, y)
 
 
 ###
@@ -10448,17 +10659,6 @@ PlotPolar <- function(r, theta = NULL, type="p"
   } else {
     if( ncol(theta <- as.matrix(theta)) == 1) theta <- t(theta)
   }
-
-  # kang <- ncol(theta <- as.matrix(theta))
-  # n <- nrow(r)
-  # ### if (n != nrow(theta))
-      # ### stop("'r' and 'theta' must have same number of rows")
-  # if (kr > 1 && kang > 1 && kr != kang)
-      # stop("'r' and 'theta' must have only 1 or the same number of columns")
-  # if (kr == 1)
-      # r <- matrix(r, nrow = n, ncol = kang)
-  # if (kang == 1)
-      # theta <- matrix(theta, nrow = n, ncol = kr)
 
 
   if (length(type) < k) type <- rep(type, length.out = k)
@@ -11364,11 +11564,6 @@ PlotMatrix <- function(x, y=NULL, data=NULL, panel=l.panel,
 ###
 
 
-# Descriptive functions
-# Descriptive summaries for univariate description: Desc. ...
-
-
-# Decriptive Tools *********************************
 
 ## plots: ACF, GACF and other TimeSeries plots ----------
 
@@ -11543,58 +11738,6 @@ PlotMonth <- function(x, type = "l", labels, xlab = "", ylab = deparse(substitut
   invisible()
 }
 
-# eval-version:
-#
-# PlotQQ <- function(x, qdist, ..., main=NULL, xlab=NULL, ylab=NULL, args.qqline=NULL){
-#
-#   # qqplot for an optional distribution
-#
-#   # example:
-#   # y <- rexp(100, 1/10)
-#   # PlotQQ(y, "qexp", rate=1/10)
-#   # PlotQQ(y, qexp, rate=1/10)  # the function name can also be passed as function
-#
-#   if(is.function(qdist)) {
-#     # if qdist is a function, then save it under new name and
-#     # overwrite function name in fct, which has to be character
-#     fct <- qdist
-#     qdist <- "fct"
-#   }
-#
-#   y <- sort(x)
-#   x <- ppoints(y)
-#   x <- eval(parse(text=gettextf("%s(x, ...)", qdist)))
-#
-#   if(is.null(main)) main <- gettextf("Q-Q-Plot", qdist)
-#   if(is.null(xlab)) xlab <- gettextf("Theoretical Quantiles (%s)", parse(text = gettextf("%s(x, ...)", fct)))
-#   if(is.null(ylab)) ylab <- "Sample Quantiles"
-#
-#   plot(x=x, y, main=main, xlab=xlab, ylab=ylab)
-#
-#   # add qqline if desired
-#   add.qqline <- TRUE
-#   if(!is.null(args.qqline)) if(all(is.na(args.qqline))) {add.qqline <- FALSE}
-#
-#   if(add.qqline) {
-#
-#     # define default arguments for ci.band
-#     args.qqline1 <- list(probs = c(0.25, 0.75), qtype=7, col=par("fg"), lwd=par("lwd"), lty=par("lty"))
-#     # override default arguments with user defined ones
-#     if (!is.null(args.qqline)) args.qqline1[names(args.qqline)] <- args.qqline
-#
-#     # estimate qqline, instead of set it to abline(a = 0, b = 1)
-#     # plot qqline through the 25% and 75% quantiles (same as qqline does for normal dist)
-#     ly <- quantile(y, prob=args.qqline1[["probs"]], type=args.qqline1[["qtype"]], na.rm = TRUE)
-#     lx <- eval(parse(text = gettextf("%s(c(%s,%s), ...)", qdist,
-#                                      args.qqline1[["probs"]][1], args.qqline1[["probs"]][2])))
-#
-#     slope <- diff(ly) / diff(lx)
-#     int <- ly[1L] - slope * lx[1L]
-#     do.call("abline", c(args.qqline1[c("col","lwd","lty")], list(a=int, b=slope)) )
-#
-#   }
-#
-# }
 
 
 PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, add=FALSE, args.qqline=NULL,  ...){
@@ -11664,37 +11807,19 @@ PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, add=FALSE, args.qq
 ## Describe  ====
 
 
-# Format-Funktion, brauchen wir ueberall
-# .fmt <- function(x, digits=3, sdigits=7, big.mark="'") {
-#   x <- as.numeric(x)
-#   if(is.finite(x)){
-#     fdigits <- ifelse( IsWhole(x), 0
-#       , ifelse(x > 1e3, digits - (round(log(abs(x),10),0)-3), digits )
-#     )
-#     switch( findInterval( abs(x), c(0,.Machine$double.eps^0.5, 1e-4, 1e6) )
-#                     , "1" = { formatC(x, digits=fdigits, format="f", big.mark=big.mark ) }
-#                     , "2" = { formatC(x, digits=digits, format="e", big.mark=big.mark ) }
-#                     , "3" = { formatC(x, digits=fdigits, format="f", big.mark=big.mark ) }
-#                     , "4" = { formatC(x, digits=digits, format="e", big.mark=big.mark ) }
-#     )
-#   } else {
-#     formatC(x)
-#   }
+# not needed anymore, by 0.99.19
+# .txtline <- function(txt, width, space="", ind="") {
+#   paste(
+#     ind, paste(format(names(txt), width=width, justify="right"), collapse=space), "\n",
+#     ind, paste(format(txt, width=width, justify="right"), collapse=space), "\n",
+#     sep="" )
 # }
-
-
-.txtline <- function(txt, width, space="", ind="") {
-  paste(
-    ind, paste(format(names(txt), width=width, justify="right"), collapse=space), "\n",
-    ind, paste(format(txt, width=width, justify="right"), collapse=space), "\n",
-    sep="" )
-}
 
 
 
 TOne <- function(x, grp = NA, add.length=TRUE,
-                 colnames=NULL, vnames=NULL,
-                 align="\\l", FUN = NULL){
+                 colnames=NULL, vnames=NULL, total=TRUE,
+                 align="\\l", FUN = NULL, NUMTEST = NULL, numtestlab = NULL){
 
 
   afmt <- Fmt("abs")
@@ -11720,12 +11845,37 @@ TOne <- function(x, grp = NA, add.length=TRUE,
     num_fun <- FUN
   }
 
-  num_row <- function(x, g, total=TRUE, test="kruskal.test", vname = deparse(substitute(x))){
-    # wie soll die zeile aussehen fuer numerische Daten
-    p <- eval(parse(text=gettextf("%s(x ~ g)", test)))
+  # define test for numeric values
+  if(is.null(NUMTEST)){
+    num_test <- function(x, g){
+      # how should the test be calculated and represented
+      Format(kruskal.test(x = x, g = g)$p.value, fmt="*", na.form = "   ")
+    }
+    numtestlab <- "Kruskal-Wallis test"
+  } else {
+    num_test <- NUMTEST
+    if(is.null(numtestlab)) numtestlab <- "numeric test"
+  }
+
+  # replaced for flexible test in 0.99.19
+  # num_row <- function(x, g, total=TRUE, test="kruskal.test", vname = deparse(substitute(x))){
+  #   # wie soll die zeile aussehen fuer numerische Daten
+  #   p <- eval(parse(text=gettextf("%s(x ~ g)", test)))
+  #   cbind(var=vname, total = num_fun(x), rbind(tapply(x, g, num_fun)),
+  #   #      paste(Format(p$p.value, fmt="*", na.form = "   "), ifelse(is.na(p), "", .FootNote(1))))
+  #         paste(Format(p$p.value, fmt="*", na.form = "   "), ifelse(is.na(p$p.value), "", .FootNote(1))))
+  # }
+
+
+  num_row <- function(x, g, total=TRUE, vname = deparse(substitute(x))){
+    if(!identical(g, NA)) {
+      res <- num_test(x, g)
+      num_test_label <- names(res)
+    } else {
+      res <- ""
+    }
     cbind(var=vname, total = num_fun(x), rbind(tapply(x, g, num_fun)),
-    #      paste(Format(p$p.value, fmt="*", na.form = "   "), ifelse(is.na(p), "", .FootNote(1))))
-          paste(Format(p$p.value, fmt="*", na.form = "   "), ifelse(is.na(p$p.value), "", .FootNote(3))))
+          paste(res, .FootNote(1)))
   }
 
 
@@ -11835,9 +11985,12 @@ TOne <- function(x, grp = NA, add.length=TRUE,
   if(align != "\\l")
     res[,-c(1, ncol(res))] <- StrAlign(res[,-c(1, ncol(res))], sep = align)
 
-  attr(res, "legend") <- gettextf("%s) Kruskal-Wallis test, %s) Fisher exact test, %s) Chi-Square test",
-                                  .FootNote(1), .FootNote(2), .FootNote(3))
+  attr(res, "legend") <- gettextf("%s) %s, %s) Fisher exact test, %s) Chi-Square test\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1",
+                                  .FootNote(1), numtestlab, .FootNote(2), .FootNote(3))
 
+
+  if(!total)
+    res <- res[, -2]
   class(res) <- "TOne"
   return(res)
 }
@@ -12309,7 +12462,7 @@ ToWrd.TOne <- function(x, font=NULL, para=NULL, main=NULL, align=NULL,
 
   if(!is.null(para)){
     wTab$Select()
-    WrdParagraphFormat(wrd=wrd) <- para
+    WrdParagraphFormat(wrd) <- para
 
     # move out of table
     wrd[["Selection"]]$EndOf(wdConst$wdTable)
@@ -12412,10 +12565,38 @@ ToWrd.PercTable <- function(x, font=NULL, main = NULL, ..., wrd = DescToolsOptio
 }
 
 
-ToWrd.data.frame <- function(x, font=NULL, main = NULL, ..., wrd = DescToolsOptions("lastWord")){
+
+ToWrd.data.frame <- function(x, font=NULL, main = NULL, row.names=NULL, ..., wrd = DescToolsOptions("lastWord")){
   x <- apply(x, 2, as.character)
-  ToWrd.table(x=x, font=font, main=main, ..., wrd=wrd)
+
+  if(is.null(row.names))
+    if(identical(row.names(x), as.character(1:nrow(x))))
+      row.names <- FALSE
+    else
+      row.names <- TRUE
+
+  ToWrd.table(x=x, font=font, main=main, row.names=row.names, ..., wrd=wrd)
 }
+
+
+# ToWrd.data.frame <- function(x, font=NULL, main = NULL, row.names=NULL, as.is=FALSE, ..., wrd = DescToolsOptions("lastWord")){
+#
+#   if(as.is)
+#     x <- apply(x, 2, as.character)
+#   else
+#     x <- FixToTab(capture.output(x))
+#
+#   if(is.null(row.names))
+#     if(identical(row.names, seq_along(1:nrow(x))))
+#       row.names <- FALSE
+#     else
+#       row.names <- TRUE
+#
+#     if(row.names==TRUE)
+#       x <- cbind(row.names(x), x)
+#
+#     ToWrd.table(x=x, font=font, main=main, ..., wrd=wrd)
+# }
 
 
 ToWrd.matrix <- function(x, font=NULL, main = NULL, ..., wrd = DescToolsOptions("lastWord")){
@@ -12434,13 +12615,13 @@ ToWrd.Freq <- function(x, font=NULL, main = NULL, ..., wrd = DescToolsOptions("l
 }
 
 
-# ToWrd.ftable <- function(x, font=NULL, main = NULL, ..., wrd = DescToolsOptions("lastWord")) {
-#   x <- FixToTab(capture.output(x))
-#   ToWrd.character(x, font=font, main=main, ..., wrd=wrd)
-# }
 
 
 ToWrd.ftable <- function (x, font = NULL, main = NULL, align=NULL, method = "compact", ..., wrd = DescToolsOptions("lastWord")) {
+
+  # simple version:
+  #   x <- FixToTab(capture.output(x))
+  #   ToWrd.character(x, font=font, main=main, ..., wrd=wrd)
 
   # let R do all the complicated formatting stuff
   # but we can't import a not exported function, so we provide an own copy of it
@@ -13146,6 +13327,66 @@ WrdTable <- function(nrow = 1, ncol = 1, heights = NULL, widths = NULL, main = N
 
 
 
+
+Phrase <- function(x, g, glabels=NULL, xname=NULL, unit=NULL, lang="engl") {
+
+  if(is.null(xname))
+    xname <- deparse(substitute(x))
+
+  if(is.null(glabels))
+    glabels <- levels(g)
+
+  if(is.null(unit))
+    unit <- ""
+
+  if(lang=="engl"){
+    txt1 <- "The collective consists of a total of %s elements. Of these, %s are %s (%s, mean %s %s %s) and %s %s (%s, mean %s %s %s).\n"
+    txt2 <- "The difference is significant (t-test, p = %s) and is %s %s [%s, %s] (95%s CI)."
+    txt3 <- "The difference is not significant.\n"
+
+  } else {
+    txt1 <- "Das Kollektiv besteht aus insgesamt %s Elementen. Davon sind %s %s (%s, mittleres %s %s %s) und %s %s (%s, mittleres %s %s %s).\n"
+    txt2 <- "Der Unterschied ist signifikant (t-test, p = %s) und betraegt %s %s [%s, %s] (95%s-CI).\n"
+    txt3 <- "Der Unterschied ist nicht signifikant.\n"
+  }
+
+
+  lst <- split(x, g)
+  names(lst) <- c("x","y")
+
+  n <- tapply(x, g, length)
+  meanage <- tapply(x, g, mean)
+
+  txt <- gettextf(txt1
+                  , Format(sum(n), digits=0, big.mark="'")
+                  , Format(n[1], digits=0, big.mark="'")
+                  , glabels[1]
+                  , Format(n[1]/sum(n), digits=1, fmt="%")
+                  , xname
+                  , round(meanage[1], 1)
+                  , unit
+                  , Format(n[2], digits=0, big.mark="'")
+                  , glabels[2]
+                  , Format(n[2]/sum(n), digits=1, fmt="%")
+                  , xname
+                  , round(meanage[2],1)
+                  , unit
+  )
+
+
+  r.t <- t.test(lst$x, lst$y)
+
+  if(r.t$p.value < 0.05){
+    md <- round(MeanDiffCI(lst$x, lst$y), 1)
+    txt <- paste(txt, gettextf(txt2, format.pval(r.t$p.value), md[1], unit, md[2], md[3], "%"), sep="" )
+  } else {
+    txt <- paste(txt, txt3, sep="")
+  }
+
+  # pasting "" uses collapse character, so get rid of multiple spaces here
+  gsub(" )", ")", gsub(" +", " ", txt))
+
+}
 
 
 ###

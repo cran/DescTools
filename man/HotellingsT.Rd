@@ -5,7 +5,8 @@
 
 \title{Hotelling's T2 Test}
 \description{
-  Hotelling's T2 test for the one and two sample case.
+
+Hotelling's T2 test is the multivariate generlisation of the Student's t test. A one-sample Hotelling's T2 test can be used to test if a set of vectors of data (which should be a sample of a single statistical population) has a mean equal to a hypothetical mean. A two-sample Hotelling's T2 test may be used to test for significant differences between the mean vectors (multivariate means) of two multivariate data sets are different.
 }
 
 \usage{HotellingsT2Test(x, \dots)
@@ -19,7 +20,7 @@
   \item{y}{an optional numeric data frame or matrix for the two sample test. If \code{NULL} a one sample test is performed.}
   \item{mu}{a vector indicating the hypothesized value of the mean (or difference
           in means if a two sample test is performed). \code{NULL} represents origin or no difference between the groups. }
-  \item{test}{if 'f', the decision is based on the F-distribution, if 'chi' a chi-squared approximation is used. }
+  \item{test}{if \code{"f"}, the decision is based on the F-distribution, if \code{"chi"} a chi-squared approximation is used. }
   \item{formula}{a formula of the form \code{x ~ g} where \code{x} is a numeric matrix giving  the data values and \code{g} a factor
     with two levels giving the corresponding groups.}
   \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}.
@@ -70,12 +71,11 @@ multivariate analysis}, New Jersey: Wiley.  }
 \examples{
 math.teach <- data.frame(
   teacher = factor(rep(1:2, c(3, 6))),
-  satis = c(1, 3, 2, 4, 6, 6, 5, 5, 4),
-  know = c(3, 7, 2, 6, 8, 8, 10, 10, 6))
+  satis   = c(1, 3, 2, 4, 6, 6, 5, 5, 4),
+  know    = c(3, 7, 2, 6, 8, 8, 10, 10, 6))
 
-(m1 <- with(math.teach,
+with(math.teach,
   HotellingsT2Test(cbind(satis, know) ~ teacher))
-)
 }
 
 \keyword{htest }

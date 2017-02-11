@@ -103,7 +103,9 @@ Conf.default <-  function(x, ref, pos = NULL, na.rm = TRUE, ...) {
     x <- x[idx]
     ref <- ref[idx]
   }
-  Conf.table(table(pred=x, obs=ref), pos = pos, ...)
+  clvl <- CombLevels(x, ref)
+
+  Conf.table(table(pred=factor(x, levels=clvl), obs=factor(ref, levels=clvl)), pos = pos, ...)
 }
 
 Conf.matrix <- function(x, pos = NULL, ...) {
@@ -188,13 +190,13 @@ print.Conf <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   if(nrow(x$table)!=2) cat("\nOverall Statistics\n")
 
   txt <- gettextf("
-                  Accuracy : %s
-                  95%s CI : (%s, %s)
-                  No Information Rate : %s
-                  P-Value [Acc > NIR] : %s
+               Accuracy : %s
+                 95%s CI : (%s, %s)
+    No Information Rate : %s
+    P-Value [Acc > NIR] : %s
 
                   Kappa : %s
-                  Mcnemar's Test P-Value : %s\n\n",
+ Mcnemar's Test P-Value : %s\n\n",
                   Format(x$acc, digits=digits), "%",
                   Format(x$acc.lci, digits=digits), Format(x$acc.uci, digits=digits),
                   Format(x$nri, digits=digits), Format(x$acc.pval, fmt="p", na.form="NA"),
@@ -354,13 +356,36 @@ BrierScore.mult <- function(x, scaled=FALSE, ...){
 }
 
 
-Cstat <- function(x){
+# Cstat <- function(x){
+#
+#   y <- as.numeric(factor(model.response(x$model)))
+#
+#   probs <- predict(x, type = "response")
+#   d.comb <- expand.grid(pos = probs[y == 2L],
+#                         neg = probs[y == 1L])
+#
+#   mean(d.comb$pos > d.comb$neg)
+#
+# }
 
-  y <- as.numeric(factor(model.response(x$model)))
 
-  probs <- predict(x, type = "response")
-  d.comb <- expand.grid(pos = probs[y == 2L],
-                        neg = probs[y == 1L])
+Cstat <- function (x, ...)
+  UseMethod("Cstat")
+
+
+Cstat.glm <- function(x, ...) {
+  Cstat.default(predict(x, type = "response"), model.response(x$model))
+}
+
+
+Cstat.default <- function(x, resp, ...) {
+
+  # the response ("class")
+  y <- as.numeric(factor(resp))
+
+  prob <- x # predicted probs
+  d.comb <- expand.grid(pos = prob[y == 2L],
+                        neg = prob[y == 1L])
 
   mean(d.comb$pos > d.comb$neg)
 
@@ -594,7 +619,10 @@ ModSummary.glm <- function(x, conf.level=0.95, ...){
 
     statsx <- c(statsx[],
              "MAE" = MAE(pred, model.response(x$model)),
-             "MAPE" = MAPE(pred, model.response(x$model))
+             "MAPE" = MAPE(pred, model.response(x$model)),
+             "MSE" = MSE(pred, model.response(x$model)),
+             "RMSE" = RMSE(pred, model.response(x$model))
+
     )
   }
 
@@ -606,43 +634,6 @@ ModSummary.glm <- function(x, conf.level=0.95, ...){
   list(coef=coefx, ncoef=length(x$coefficients), statsx=statsx, contrasts=x$contrasts, xlevels=x$xlevels, call=x$call)
 
 }
-
-
-# TMod <- function(...){
-#
-#   modname <- match.call(expand.dots=FALSE)$...
-#
-#   lmod <- list(...)
-#   lst <- lapply(lmod,
-#                 function(x) {
-#                   z <- summary(x)$coefficients[, 1, drop =FALSE]
-#                   z <- data.frame(name=rownames(z), coef=z)
-#                   return(z)
-#                 } )
-#
-#   m <- lst[[1]]
-#   colnames(m) <- c("name", modname[1])
-#   for(i in 2:length(lst)){
-#     m <- merge(x=m, y=lst[[i]], by.x="name", by.y="name", all.x=TRUE, all.y=TRUE)
-#     colnames(m)[i+1] <- modname[i]
-#   }
-#   colnames(m)[1] <- "coef"
-#
-#
-#   # tcoef <- TMod(r.glm, r.glm1, r.glm2)
-#   # tvalid <- do.call(cbind, lapply(list(r.glm, r.glm1, r.glm2), Valid))
-#   # tvalid <- SetColNames(data.frame(row.names(tvalid), tvalid), nm = colnames(tcoef))
-#   # tvalid
-#   #
-#   # tmod <- rbind(tcoef, tvalid)
-#   # row.names(tmod) <- NULL
-#
-#
-#   class(m) <- "TMod"
-#   return(m)
-#
-#
-# }
 
 
 TMod <- function(..., FUN = NULL){
@@ -672,14 +663,6 @@ TMod <- function(..., FUN = NULL){
   lcoef <- lapply(lst, "[[", "coef")
   lstatsx <- lapply(lst, "[[", "statsx")
 
-
-  # m <- lcoef[[1]][, c("name", "est")]
-  # colnames(m) <- c("name", modname[1])
-  # for(i in 2:length(lcoef)){
-  #   m <- merge(x=m, y=lcoef[[i]][, c("name", "est")], by.x="name", by.y="name", all.x=TRUE, all.y=TRUE)
-  #   colnames(m)[i+1] <- modname[i]
-  # }
-  # colnames(m)[1] <- "coef"
 
   # merge coefficients of all models
   m <- lcoef[[1]][, c("name", "est")]

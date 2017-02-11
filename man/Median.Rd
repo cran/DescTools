@@ -6,14 +6,29 @@
 \name{Median}
 \title{Median Value}
 \alias{Median}
+\alias{Median.Freq}
+\alias{Median.default}
+
 \usage{
-Median(x, na.rm = FALSE)
+Median(x, \dots)
+
+\method{Median}{Freq}(x, breaks, \dots)
+
+\method{Median}{default}(x, weights = NULL, na.rm = FALSE, \dots)
 }
 \arguments{
   \item{x}{an object for which a method has been defined, or a
     numeric vector containing the values whose median is to be computed.}
+
+\item{weights}{a numerical vector of weights the same length as \code{x} giving the weights to use for elements of \code{x}.
+ }
+  \item{breaks}{breaks for calculating the mean for classified data as composed by \code{\link{Freq}}.}
+
   \item{na.rm}{a logical value indicating whether \code{NA}
     values should be stripped before the computation proceeds.}
+
+  \item{\dots}{further arguments passed to or from other methods.}
+
 }
 \description{
   Compute the sample median.
@@ -44,6 +59,15 @@ Median(x, na.rm = FALSE)
 \examples{
 Median(1:4)                # = 2.5 [even number]
 Median(c(1:3, 100, 1000))  # = 3 [odd, robust]
+
+# Approximation for classified data
+breaks <- seq(10,70, 10)
+Median(
+  Freq(cut(d.pizza$temperature, breaks=breaks)),
+  breaks=breaks)
+
+# compared to
+Median(d.pizza$temperature)
 }
 \keyword{univar}
 \keyword{robust}

@@ -5,49 +5,49 @@
 \alias{plot.bagplot}
 
 
-\title{ PlotBag, a bivariate boxplot }
+\title{ PlotBag, a Bivariate Boxplot }
 \description{
-  \code{compute.PlotBag()} computes an object describing a PlotBag 
-   of a bivariate data set. \code{plot.PlotBag()} plots a bagplot object. 
+  \code{compute.PlotBag()} computes an object describing a PlotBag
+   of a bivariate data set. \code{plot.PlotBag()} plots a bagplot object.
   \code{PlotBag()} computes and plots a bagplot.
 }
 \usage{
-PlotBag(x, y, factor = 3, na.rm = FALSE, approx.limit = 300,  
-        show.outlier = TRUE, show.whiskers = TRUE, 
+PlotBag(x, y, factor = 3, na.rm = FALSE, approx.limit = 300,
+        show.outlier = TRUE, show.whiskers = TRUE,
         show.looppoints = TRUE, show.bagpoints = TRUE,
-        show.loophull = TRUE, show.baghull = TRUE, 
-        create.plot = TRUE, add = FALSE, pch = 16, cex = 0.4, 
-        dkmethod = 2, precision = 1, verbose = FALSE, 
-        debug.plots = "no",   col.loophull = "#aaccff", 
-        col.looppoints = "#3355ff", col.baghull = "#7799ff", 
+        show.loophull = TRUE, show.baghull = TRUE,
+        create.plot = TRUE, add = FALSE, pch = 16, cex = 0.4,
+        dkmethod = 2, precision = 1, verbose = FALSE,
+        debug.plots = "no",   col.loophull = "#aaccff",
+        col.looppoints = "#3355ff", col.baghull = "#7799ff",
         col.bagpoints = "#000088", transparency = FALSE, ...
 )
-PlotBagPairs(dm, trim = 0.0, main, numeric.only = TRUE, 
-        factor = 3, approx.limit = 300, pch = 16, 
+PlotBagPairs(dm, trim = 0.0, main, numeric.only = TRUE,
+        factor = 3, approx.limit = 300, pch = 16,
         cex = 0.8, precision = 1, col.loophull = "#aaccff",
         col.looppoints = "#3355ff", col.baghull = "#7799ff",
         col.bagpoints = "#000088", ...)
 
-compute.bagplot(x, y, factor = 3, na.rm = FALSE, approx.limit = 300, 
+compute.bagplot(x, y, factor = 3, na.rm = FALSE, approx.limit = 300,
         dkmethod = 2, precision = 1, verbose = FALSE, debug.plots = "no" )
 
-\method{plot}{bagplot}(x, show.outlier = TRUE, show.whiskers = TRUE, 
-         show.looppoints = TRUE, show.bagpoints = TRUE, 
-         show.loophull = TRUE, show.baghull = TRUE, add = FALSE, 
-         pch = 16, cex = .4, verbose = FALSE, col.loophull = "#aaccff", 
-         col.looppoints = "#3355ff", col.baghull = "#7799ff", 
+\method{plot}{bagplot}(x, show.outlier = TRUE, show.whiskers = TRUE,
+         show.looppoints = TRUE, show.bagpoints = TRUE,
+         show.loophull = TRUE, show.baghull = TRUE, add = FALSE,
+         pch = 16, cex = .4, verbose = FALSE, col.loophull = "#aaccff",
+         col.looppoints = "#3355ff", col.baghull = "#7799ff",
          col.bagpoints = "#000088", transparency = FALSE,...)
-       
+
 }
 \arguments{
-  \item{x}{ x values of a data set; 
+  \item{x}{ x values of a data set;
      in \code{PlotBag}: an object of class \code{PlotBag}
      computed by \code{compute.PlotBag} }
-  \item{y}{ y values of the data set } 
+  \item{y}{ y values of the data set }
   \item{factor}{ factor defining the loop }
   \item{na.rm}{ if \code{TRUE} 'NA' values are removed otherwise exchanged by median}
-  \item{approx.limit}{ if the number of data points exceeds 
-          \code{approx.limit} a sample is used to compute 
+  \item{approx.limit}{ if the number of data points exceeds
+          \code{approx.limit} a sample is used to compute
           some of the quantities; default: 300 }
   \item{show.outlier}{ if \code{TRUE} outlier are shown }
   \item{show.whiskers}{ if \code{TRUE} whiskers are shown }
@@ -59,11 +59,11 @@ compute.bagplot(x, y, factor = 3, na.rm = FALSE, approx.limit = 300,
   \item{add}{ if \code{TRUE} the bagplot is added to an existing plot }
   \item{pch}{ sets the plotting character }
   \item{cex}{ sets characters size}
-  \item{dkmethod}{ 1 or 2, there are two method of  
+  \item{dkmethod}{ 1 or 2, there are two method of
      approximating the bag, method 1 is very rough (only based on observations }
   \item{precision}{ precision of approximation, default: 1 }
   \item{verbose}{ automatic commenting of calculations }
-  \item{debug.plots}{ if \code{TRUE} additional plots describing 
+  \item{debug.plots}{ if \code{TRUE} additional plots describing
                       intermediate results are constructed }
   \item{col.loophull}{ color of loop hull }
   \item{col.looppoints}{ color of the points of the loop }
@@ -79,57 +79,57 @@ compute.bagplot(x, y, factor = 3, na.rm = FALSE, approx.limit = 300,
 \details{
 A bagplot is a bivariate generalization of the well known
 boxplot. It has been proposed by Rousseeuw, Ruts, and Tukey.
-In the bivariate case the box of the boxplot changes to a 
+In the bivariate case the box of the boxplot changes to a
 convex polygon, the bag of bagplot. In the bag are 50 percent
-of all points. The fence separates points within the fence from 
+of all points. The fence separates points within the fence from
 points outside. It is computed by increasing the
-the bag. The loop is defined as the convex hull containing 
-all points inside the fence. 
+the bag. The loop is defined as the convex hull containing
+all points inside the fence.
 If all points are on a straight line you get a classical
 boxplot.
-\code{PlotBag()} plots bagplots that are very similar 
-to the one described in Rousseeuw et al. 
+\code{PlotBag()} plots bagplots that are very similar
+to the one described in Rousseeuw et al.
 Remarks:
 The two dimensional median is approximated.
 For large data sets the error will be very small.
-On the other hand it is not very wise to make a (graphical) 
+On the other hand it is not very wise to make a (graphical)
 summary of e.g. 10 bivariate data points.
 
-In case you want to plot multiple (overlapping) bagplots, 
-you may want plots that are semi-transparent. For this 
-you can use the \code{transparency} flag. 
+In case you want to plot multiple (overlapping) bagplots,
+you may want plots that are semi-transparent. For this
+you can use the \code{transparency} flag.
 If \code{transparency==TRUE} the alpha layer is set to '99' (hex).
-This causes the bagplots to appear semi-transparent, 
+This causes the bagplots to appear semi-transparent,
 but ONLY if the output device is PDF and opened using:
-\code{pdf(file="filename.pdf", version="1.4")}. 
-For this reason, the default is \code{transparency==FALSE}. 
+\code{pdf(file="filename.pdf", version="1.4")}.
+For this reason, the default is \code{transparency==FALSE}.
 This feature as well as the arguments
 to specify different colors has been proposed by Wouter Meuleman.
 }
 \value{
   \code{compute.bagplot} returns an object of class
-  \code{bagplot} that could be plotted by 
+  \code{bagplot} that could be plotted by
   \code{plot.bagplot()}.
-  An object of the bagplot class is a list with the following 
-  elements: \code{center} is a two dimensional vector with 
-  the coordinates of the center. \code{hull.center} is a 
+  An object of the bagplot class is a list with the following
+  elements: \code{center} is a two dimensional vector with
+  the coordinates of the center. \code{hull.center} is a
   two column matrix, the rows are the coordinates of the
-  corners of the center region. \code{hull.bag} and 
+  corners of the center region. \code{hull.bag} and
   \code{hull.loop} contain the coordinates of the hull of the bag
-  and the hull of the loop. \code{pxy.bag} shows you the 
-  coordinates of the points of the bag. \code{pxy.outer} is 
-  the two column matrix of the points that are within the 
+  and the hull of the loop. \code{pxy.bag} shows you the
+  coordinates of the points of the bag. \code{pxy.outer} is
+  the two column matrix of the points that are within the
   fence. \code{pxy.outlier} represent the outliers. The vector
   \code{hdepths} shows the depths of data points. \code{is.one.dim}
-  is \code{TRUE} if the data set is (nearly) one dimensional. 
+  is \code{TRUE} if the data set is (nearly) one dimensional.
   The dimensionality is decided by analysing the result of \code{prcomp}
-  which is stored in the element \code{prdata}. \code{xy} shows you 
+  which is stored in the element \code{prdata}. \code{xy} shows you
   the data that are used for the bagplot. In the case of very large
-  data sets subsets of the data are used for constructing the 
+  data sets subsets of the data are used for constructing the
   bagplot. A data set is very large if there are more data points
-  than \code{approx.limit}. \code{xydata} are the input data structured 
+  than \code{approx.limit}. \code{xydata} are the input data structured
   in a two column matrix.
-} 
+}
 \references{ P. J. Rousseeuw, I. Ruts, J. W. Tukey (1999):
     The bagplot: a bivariate boxplot, \emph{The American
     Statistician}, vol. 53, no. 4, 382--387 }
@@ -160,7 +160,7 @@ to specify different colors has been proposed by Wouter Meuleman.
    107, 109, 121, 151, 133, 181, 141, 132, 133, 122, 181, 146,
    151, 116, 135, 122, 141, 163, 151, 153, 202, 180, 182, 232,
    143, 180, 180, 151, 189, 180, 231, 305, 302, 151, 202, 182,
-   181, 143, 146, 146)), .Dim = as.integer(c(60, 2)), 
+   181, 143, 146, 146)), .Dim = as.integer(c(60, 2)),
    .Dimnames = list(NULL, c("Weight", "Disp.")))
   PlotBag(cardata,factor=3,show.baghull=TRUE,
     show.loophull=TRUE,precision=1, dkmethod=2)

@@ -2,7 +2,7 @@
 \alias{\%like\%}
 \alias{\%like any\%}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Like operator
+\title{Like Operator
 %%  ~~function to do ... ~~
 }
 \description{The like operator is a simple wrapper for \code{\link{grep}(..., value=TRUE)}, whose complexity is hard to crack for R-newbies.

@@ -35,8 +35,8 @@ Mar(bottom = NULL, left = NULL, top = NULL, right = NULL, outer = FALSE)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-# enlarge the left margin only
-Mar(,10.1)
+# largen the left margin only
+Mar(left=10.1)   # or as alternative: Mar(, 10.1)
 barplot(1:7, names=levels(d.pizza$driver))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

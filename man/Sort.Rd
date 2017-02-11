@@ -17,9 +17,9 @@
 Sort(x, ...)
 
 \method{Sort}{default}(x, ...)
-\method{Sort}{matrix}(x, ord = NULL, decreasing = FALSE, na.last = TRUE, ...) 
-\method{Sort}{table}(x, ord = NULL, decreasing = FALSE, na.last = TRUE, ...) 
-\method{Sort}{data.frame}(x, ord = NULL, decreasing = FALSE, 
+\method{Sort}{matrix}(x, ord = NULL, decreasing = FALSE, na.last = TRUE, ...)
+\method{Sort}{table}(x, ord = NULL, decreasing = FALSE, na.last = TRUE, ...)
+\method{Sort}{data.frame}(x, ord = NULL, decreasing = FALSE,
                 factorsAsCharacter = TRUE, na.last = TRUE, ...)
 
 }
@@ -28,17 +28,17 @@ Sort(x, ...)
   \item{x}{a numeric, complex. character or logical vector, a factor, a table or a data.frame to be sorted. }
   \item{decreasing}{logical. Should the sort be increasing or decreasing? }
   %\item{bycol}{data.frame only. A vector with the position or the names of columns to be sorted after.}
-  \item{factorsAsCharacter}{logical. Should factors be sorted by the alphabetic order of their labels or by the order or their levels. 
+  \item{factorsAsCharacter}{logical. Should factors be sorted by the alphabetic order of their labels or by the order or their levels.
      Default is \code{TRUE} (by labels).}
 
   \item{ord}{vector of integers or columnames. Defines the columns in a table, in a matrix or in a data.frame to be sorted for. \cr
     0 means row.names, 1:n the columns and n+1 the marginal sum. See examples.}
   \item{na.last}{for controlling the treatment of \code{NAs}. If \code{TRUE}, missing values in the data are put last; if \code{FALSE}, they are put first; if \code{NA}, they are removed (see \code{\link{order}}.)}
-  
+
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
-The sort order for factors is the order of their levels (which is particularly appropriate for ordered factors), 
+The sort order for factors is the order of their levels (which is particularly appropriate for ordered factors),
 and usually confusing for unordered factors, whose levels may be defined in the sequence in which they appear in the data (which normally is unordered).
 }
 \value{the sorted object.
@@ -62,7 +62,7 @@ Sort(x=d.frm, ord="driver", decreasing=FALSE, factorsAsCharacter=TRUE)
 Sort(x=d.frm, ord=c("driver","delivery_min"), factorsAsCharacter = TRUE)
 Sort(x=d.frm, ord=c("driver","delivery_min"), factorsAsCharacter = FALSE)
 
-Sort(x=d.frm, ord=c("driver","delivery_min"), decreasing=c(FALSE, TRUE), 
+Sort(x=d.frm, ord=c("driver","delivery_min"), decreasing=c(FALSE, TRUE),
   factorsAsCharacter = FALSE)
 
 # Sorting tables

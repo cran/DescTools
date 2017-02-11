@@ -1,6 +1,6 @@
 \name{LillieTest}
 \alias{LillieTest}
-\title{Lilliefors (Kolmogorov-Smirnov) test for  normality}
+\title{Lilliefors (Kolmogorov-Smirnov) Test for Normality}
 \description{
   Performs the Lilliefors (Kolmogorov-Smirnov) test for the composite hypothesis of normality,
   see e.g. Thode (2002, Sec. 5.1.1).

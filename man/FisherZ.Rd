@@ -4,7 +4,7 @@
 \alias{CorCI}
 
 
-\title{Fisher r to z and z to r and confidence intervals}
+\title{Fisher-Transformation for Correlation to z-Score}
 
 \description{Convert a correlation to a z score or z to r using the Fisher transformation or find the confidence intervals for a specified correlation.}
 \usage{
@@ -21,9 +21,9 @@ CorCI(rho, n, conf.level = 0.95, alternative = c("two.sided", "less", "greater")
 
   \item{alternative}{is a character string, one of \code{"greater"},
   \code{"less"}, or \code{"two.sided"}, or the initial letter of each,
-  indicating the specification of the alternative hypothesis. 
+  indicating the specification of the alternative hypothesis.
   \code{"greater"} corresponds to positive association, \code{"less"} to negative association.}
-  
+
   \item{conf.level}{confidence level for the returned confidence
   interval, restricted to lie between zero and one.}
 

@@ -3,7 +3,7 @@
 \alias{IdentifyA.default}
 \alias{IdentifyA.formula}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Identify Points in Plot Lying within a Rectangle or Polygon
+\title{Identify Points in Plot Lying Within a Rectangle or Polygon
 %%  ~~function to do ... ~~
 }
 \description{Find all the points lying either in a rectangle area, spanned by an upper left point and a bottom-right point clicked by the user or in a polygon area defined by the user.

@@ -9,9 +9,9 @@
 }
 \usage{
 PlotLinesA(x, y, col = 1:5, lty = 1, lwd = 1, lend = par("lend"),
-           xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL,
+           xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL, xaxt = NULL, yaxt = NULL,
            cex = 1, args.legend = NULL, main = NULL, grid = TRUE, mar = NULL,
-           pch = NA, pch.col = par("fg"), pch.bg = par("bg"), pch.cex = 1)
+           pch = NA, pch.col = par("fg"), pch.bg = par("bg"), pch.cex = 1, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -30,6 +30,7 @@ PlotLinesA(x, y, col = 1:5, lty = 1, lwd = 1, lend = par("lend"),
   \item{xlim, ylim}{ranges of x and y axes, as in \link{plot}.
 %%     ~~Describe \code{xlim} here~~
 }
+\item{xaxt, yaxt}{a character which specifies the x axis type. Specifying "\code{n}" suppresses plotting of the axis. The standard value is "\code{s}", any value other than "\code{n}" implies plotting.}
   \item{cex}{character expansion factor relative to current \code{par("cex")}.
 %%     ~~Describe \code{xlim} here~~
 }
@@ -52,7 +53,7 @@ PlotLinesA(x, y, col = 1:5, lty = 1, lwd = 1, lend = par("lend"),
 }
   \item{pch.cex}{vector of character expansion sizes, used cyclically. This works as a multiple of \code{\link{par}("cex")}. Default is 1.0. Ignored if \code{pch = NA}.
 }
-
+\item{\dots}{the dots are sent to \code{\link{matplot}}}.
 
 }
 \details{This function is rather a template, than a function. It wraps \code{\link{matplot}} to generate a lines plot and adds a rather sophisticated legend on the right side, while calculating appropriate margins. A grid option is included (as \code{panel.first} does not work in matplot).

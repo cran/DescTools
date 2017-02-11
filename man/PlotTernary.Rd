@@ -1,8 +1,8 @@
 \name{PlotTernary}
 \alias{PlotTernary}
-\title{Ternary or Triangular Plots.}
+\title{Ternary or Triangular Plots}
 \description{
-  \code{PlotTernary} plots in a triangle the values of three variables. Useful for mixtures 
+  \code{PlotTernary} plots in a triangle the values of three variables. Useful for mixtures
 	(chemistry etc.).
 }
 \usage{
@@ -44,8 +44,8 @@ PlotTernary(c1, c2, c3, args.grid=NA)
 # plot with different symbols and a grid using a dataset from MASS
 data(Skye, package="MASS")
 
-PlotTernary(Skye[c(1,3,2)], pch=15, col=hred, main="Skye", 
+PlotTernary(Skye[c(1,3,2)], pch=15, col=hred, main="Skye",
             lbl=c("A Sodium", "F Iron", "M Magnesium"))
-}            
+}
 }
 \keyword{hplot}

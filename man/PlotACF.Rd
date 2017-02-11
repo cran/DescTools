@@ -2,7 +2,7 @@
 \alias{PlotACF}
 \alias{PlotGACF}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Combined Plot of a Time Series and its ACF and PACF
+\title{Combined Plot of a Time Series and Its ACF and PACF
 %%  ~~function to do ... ~~
 }
 \description{Combined plot of a time Series and its autocorrelation and partial autocorrelation
@@ -19,7 +19,7 @@ PlotGACF(series, lag.max = 10 * log10(length(series)), type = "cor", ylab = NULL
 %%     ~~Describe \code{series} here~~
 }
   \item{lag.max}{integer. Defines the number of lags to be displayed. The default
-  is 10 * log10(length(series)). 
+  is 10 * log10(length(series)).
 %%     ~~Describe \code{lag.max} here~~
 }
   \item{type}{character string giving the type of acf to be computed. Allowed values are \code{"cor"} (the default), \code{"cov"} or \code{"part"} for autocorrelation, covariance or partial correlation.
@@ -32,7 +32,7 @@ PlotGACF(series, lag.max = 10 * log10(length(series)), type = "cor", ylab = NULL
 %%     ~~Describe \code{\dots} here~~
 }
 }
-\details{PlotACF plots a combination of the time series and its autocorrelation and partial autocorrelation. PlotGACF is used as 
+\details{PlotACF plots a combination of the time series and its autocorrelation and partial autocorrelation. PlotGACF is used as
 subfunction to produce the acf- and pacf-plots.
 %%  ~~ If necessary, more details than the description above ~~
 }

@@ -1,8 +1,8 @@
 \name{KappaM}
 \alias{KappaM}
-\title{Kappa for m raters}
+\title{Kappa for m Raters}
 \description{
-Computes kappa as an index of interrater agreement between m raters on categorical data. 
+Computes kappa as an index of interrater agreement between m raters on categorical data.
 }
 \usage{
 KappaM(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA)
@@ -10,7 +10,7 @@ KappaM(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA)
 \arguments{
   \item{x}{\eqn{n \times m}{n x m} matrix or dataframe, n subjects m raters.}
   \item{method}{a logical indicating whether the exact Kappa (Conger, 1980), the Kappa described by Fleiss (1971) or Light's Kappa (1971) should be computed.}
-\item{conf.level}{confidence level of the interval. If set to \code{NA} (which is the default) no confidence intervals will be calculated. 
+\item{conf.level}{confidence level of the interval. If set to \code{NA} (which is the default) no confidence intervals will be calculated.
 }
 }
 
@@ -21,7 +21,7 @@ Light's Kappa equals the average of all possible combinations of bivariate Kappa
 The confidence levels can only be reported using Fleiss' formulation of Kappa.
 }
 \value{
-a single numeric value if no confidence intervals are requested,\cr 
+a single numeric value if no confidence intervals are requested,\cr
 and otherwise a numeric vector with 3 elements for the estimate, the lower and the upper confidence interval
 }
 

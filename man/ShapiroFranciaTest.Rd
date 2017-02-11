@@ -1,6 +1,6 @@
 \name{ShapiroFranciaTest}
 \alias{ShapiroFranciaTest}
-\title{Shapiro-Francia test for normality}
+\title{Shapiro-Francia Test for Normality}
 \description{
   Performs the Shapiro-Francia test for the composite hypothesis of normality.
 }

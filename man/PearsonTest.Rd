@@ -1,6 +1,6 @@
 \name{PearsonTest}
 \alias{PearsonTest}
-\title{Pearson chi-square test for  normality}
+\title{Pearson Chi-Square Test for Normality}
 \description{
   Performs the Pearson chi-square test for the composite hypothesis of normality.
 }

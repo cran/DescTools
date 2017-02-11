@@ -1,7 +1,7 @@
 \name{MixColor}
 \alias{MixColor}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Compute the convex combination of two colors}
+\title{Compute the Convex Combination of Two Colors}
 \description{
   This function can be used to compute the result of color
   mixing (it assumes additive mixing).

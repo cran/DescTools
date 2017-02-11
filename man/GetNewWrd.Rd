@@ -4,7 +4,7 @@
 \alias{createCOMReference}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Create a new Word Instance
+Create a New Word Instance
 %%  ~~function to do ... ~~
 }
 \description{Start a new instance of Word and return its handle.

@@ -55,6 +55,4 @@ a list of all the previous values of the parameters changed (returned invisibly)
 Canvas(7)
 text(0, 0, "Hello world!", cex=5)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ hplot }

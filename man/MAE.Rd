@@ -77,7 +77,7 @@ MAPE calculates the mean absolute percentage error:
 \cr
 
 SMAPE calculates the symmetric mean absolute percentage error:
-\deqn{\frac{1}{n} \cdot \sum_{i=1}^{n}frac{2 \cdot \left | ref_{i}-x_{i} \right |}{\left | ref_{i} \right | + \left | x_{i} \right |}}{1/n sum(| ref_i-x_i | / (|ref_i| + |x_i|)) }
+\deqn{\frac{1}{n} \cdot \sum_{i=1}^{n}\frac{2 \cdot \left | ref_{i}-x_{i} \right |}{\left | ref_{i} \right | + \left | x_{i} \right |}}{1/n sum(| ref_i-x_i | / (|ref_i| + |x_i|)) }
 \cr
 
 MSE calculates mean squared error:

@@ -12,12 +12,20 @@
 
 # some aliases
 
-Mean <- mean
+Mean <- function (x, ...)
+  UseMethod("Mean")
+
+Mean.Freq <- function(x, breaks, ...)  {
+  sum(diff(breaks) * x$perc)
+}
+
 
 Mean.default <- function (x, weights = NULL, trim = 0, na.rm = FALSE, ...) {
 
   if(is.null(weights)) {
-    mean.default(x, trim, na.rm, ...)
+    # use mean here instead of mean.default in order to be able to handle
+    # mean.Date, mean.POSIXct etc.
+    mean(x, trim, na.rm, ...)
 
   } else {
     if(trim!=0)
@@ -27,7 +35,7 @@ Mean.default <- function (x, weights = NULL, trim = 0, na.rm = FALSE, ...) {
     # weights <- rep(weights, length.out=length(x))
     # sum(x*weights, na.rm=na.rm) / sum(weights, na.rm=na.rm)
 
-# from stats:::weighted.mean.default
+# verbatim from stats:::weighted.mean.default
 
     if (length(weights) != length(x))
       stop("'x' and 'w' must have the same length")
@@ -42,6 +50,7 @@ Mean.default <- function (x, weights = NULL, trim = 0, na.rm = FALSE, ...) {
   }
 
 }
+
 
 # from stats
 SD <- function (x, weights = NULL, na.rm = FALSE)
@@ -88,13 +97,8 @@ Var <- function (x, weights = NULL, na.rm = FALSE, use) {
 Cov <- cov
 Cor <- cor
 
-Median <- median
 MAD <- mad
 
-
-# Cov <- cov
-# Cor <- cor
-# Quantile <- quantile
 
 # Length(x)
 # Table(x)
@@ -161,6 +165,162 @@ Range <- function(x, trim=NULL, robust=FALSE, na.rm = FALSE, ...){
 
 }
 
+
+
+# ------------------------------------------
+# Authors: Andreas Alfons and Matthias Templ
+#          Vienna University of Technology
+# ------------------------------------------
+
+#' Weighted median
+#'
+#' Compute the weighted median (Eurostat definition).
+#'
+#' The implementation strictly follows the Eurostat definition.
+#'
+#' @param x a numeric vector.
+#' @param weights an optional numeric vector giving the sample weights.
+#' @param sorted a logical indicating whether the observations in \code{x} are
+#' already sorted.
+#' @param na.rm a logical indicating whether missing values in \code{x} should
+#' be omitted.
+#' @return The weighted median of values in \code{x} is returned.
+#'
+#' @author Andreas Alfons and Matthias Templ
+#'
+#' @seealso \code{\link{arpt}}, \code{\link{incMedian}},
+#' \code{\link{weightedQuantile}}
+#'
+#' @references Working group on Statistics on Income and Living Conditions
+#' (2004) Common cross-sectional EU indicators based on EU-SILC; the gender pay
+#' gap.  \emph{EU-SILC 131-rev/04}, Eurostat.
+#'
+#' @keywords survey
+#'
+#' @examples
+#' data(eusilc)
+#' weightedMedian(eusilc$eqIncome, eusilc$rb050)
+#'
+#' @export
+
+
+
+Median <- function(x, ...)
+  UseMethod("Median")
+
+
+Median.default <- function(x, weights = NULL, na.rm = FALSE, ...) {
+  Quantile(x, weights, probs=0.5, na.rm=na.rm)
+
+}
+
+
+
+Median.Freq <- function(x, breaks, ...)  {
+
+  mi <- min(which(x$cumperc > 0.5))
+  breaks[mi] + (tail(x$cumfreq, 1)/2 - x[mi-1, "cumfreq"]) /
+    x[mi, "freq"] * diff(breaks[c(mi, mi+1)])
+
+}
+
+
+
+
+# ------------------------------------------
+# Authors: Andreas Alfons and Matthias Templ
+#          Vienna University of Technology
+# ------------------------------------------
+
+#' Weighted quantiles
+#'
+#' Compute weighted quantiles (Eurostat definition).
+#'
+#' The implementation strictly follows the Eurostat definition.
+#'
+#' @param x a numeric vector.
+#' @param weights an optional numeric vector giving the sample weights.
+#' @param probs numeric vector of probabilities with values in \eqn{[0,1]}.
+#' @param sorted a logical indicating whether the observations in \code{x} are
+#' already sorted.
+#' @param na.rm a logical indicating whether missing values in \code{x} should
+#' be omitted.
+#'
+#' @return A numeric vector containing the weighted quantiles of values in
+#' \code{x} at probabilities \code{probs} is returned.  Unlike
+#' \code{\link[stats]{quantile}}, this returns an unnamed vector.
+#'
+#' @author Andreas Alfons and Matthias Templ
+#'
+#' @seealso \code{\link{incQuintile}}, \code{\link{weightedMedian}}
+#'
+#' @references Working group on Statistics on Income and Living Conditions
+#' (2004) Common cross-sectional EU indicators based on EU-SILC; the gender pay
+#' gap.  \emph{EU-SILC 131-rev/04}, Eurostat.
+#'
+#' @keywords survey
+#'
+#' @examples
+#' data(eusilc)
+#' weightedQuantile(eusilc$eqIncome, eusilc$rb050)
+#'
+#' @export
+
+
+Quantile <- function(x, weights = NULL, probs = seq(0, 1, 0.25),
+                             na.rm = FALSE, names = TRUE, type = 7) {
+
+  sorted <- FALSE
+
+  # initializations
+  if (!is.numeric(x)) stop("'x' must be a numeric vector")
+  n <- length(x)
+  if (n == 0 || (!isTRUE(na.rm) && any(is.na(x)))) {
+    # zero length or missing values
+    return(rep.int(NA, length(probs)))
+  }
+  if (!is.null(weights)) {
+    if (!is.numeric(weights)) stop("'weights' must be a numeric vector")
+    else if (length(weights) != n) {
+      stop("'weights' must have the same length as 'x'")
+    } else if (!all(is.finite(weights))) stop("missing or infinite weights")
+    if (any(weights < 0)) warning("negative weights")
+    if (!is.numeric(probs) || all(is.na(probs)) ||
+        isTRUE(any(probs < 0 | probs > 1))) {
+      stop("'probs' must be a numeric vector with values in [0,1]")
+    }
+    if (all(weights == 0)) { # all zero weights
+      warning("all weights equal to zero")
+      return(rep.int(0, length(probs)))
+    }
+  }
+  # remove NAs (if requested)
+  if(isTRUE(na.rm)){
+    indices <- !is.na(x)
+    x <- x[indices]
+    if(!is.null(weights)) weights <- weights[indices]
+  }
+  # sort values and weights (if requested)
+  if(!isTRUE(sorted)) {
+    #        order <- order(x, na.last=NA)  ## too slow
+    order <- order(x)
+    x <- x[order]
+    weights <- weights[order]  # also works if 'weights' is NULL
+  }
+  # some preparations
+  if(is.null(weights)) rw <- (1:n)/n
+  else rw <- cumsum(weights)/sum(weights)
+  # obtain quantiles
+  q <- sapply(probs,
+              function(p) {
+                if (p == 0) return(x[1])
+                else if (p == 1) return(x[n])
+                select <- min(which(rw >= p))
+                if(rw[select] == p) mean(x[select:(select+1)])
+                else x[select]
+              })
+  return(unname(q))
+}
 
 
 
@@ -576,9 +736,10 @@ Hmean <- function(x, method = c("classic", "boot"),
   if (na.rm) x <- na.omit(x)
   if(any(is.na(x)) || any(x <= 0))
     return(NA)
+
   else {
     if(is.na(conf.level))
-      return(1 / mean(x, na.rm=na.rm))
+      return(1 / mean(1/x, na.rm = na.rm))
 
     else {
 
@@ -979,7 +1140,9 @@ Skew <- function (x, na.rm = FALSE, method = 3, conf.level = NA, ci.type = "bca"
 
     if(ci.type == "classic") {
       res <- i.skew(x, method=method)
-      res <- c(skewness=res[1], lwr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]), upr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]))
+      res <- c(skewness=res[1],
+               lwr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]),
+               upr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]))
 
     } else {
       # Problematic standard errors and confidence intervals for skewness and kurtosis.
@@ -1035,7 +1198,9 @@ Kurt <- function (x, na.rm = FALSE, method = 3, conf.level = NA, ci.type = "bca"
   } else {
     if(ci.type == "classic") {
       res <- i.kurt(x, method=method)
-      res <- c(kurtosis=res[1], lwr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]), upr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]))
+      res <- c(kurtosis=res[1],
+               lwr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]),
+               upr.ci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]))
 
     } else {
 
@@ -1246,6 +1411,46 @@ LOF <- function(data,k) {
   #return lof, a vector with the local outlier factor of each observation
   lof
 }
+
+
+
+
+BootCI <- function(x, y=NULL, FUN, ..., bci.method = c("norm", "basic", "stud", "perc", "bca"),
+                   conf.level = 0.95, sides = c("two.sided", "left", "right"), R = 999) {
+
+  dots <- as.list(substitute(list( ... ))) [-1]
+  bci.method <- match.arg(bci.method)
+
+  sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
+  if(sides!="two.sided")
+    conf.level <- 1 - 2*(1-conf.level)
+
+  if(is.null(y))
+    boot.fun <- boot(x, function(x, d) do.call(FUN, append(list(x[d]), dots)), R = R)
+  else
+    boot.fun <- boot(x, function(x, d) do.call(FUN, append(list(x[d], y[d]), dots)), R = R)
+
+  ci <- boot.ci(boot.fun, conf=conf.level, type=bci.method)
+
+  if (bci.method == "norm") {
+    res <- c(est = boot.fun$t0, lwr.ci = ci[[4]][2],
+             upr.ci = ci[[4]][3])
+
+  } else {
+    res <- c(est = boot.fun$t0, lwr.ci = ci[[4]][4],
+             upr.ci = ci[[4]][5])
+  }
+
+  if(sides=="left")
+    res[3] <- Inf
+  else if(sides=="right")
+    res[2] <- -Inf
+
+  names(res)[1] <- deparse(substitute(FUN))
+  return(res)
+
+}
+
 
 
 
@@ -2116,6 +2321,8 @@ median.factor <- function(x, na.rm = FALSE) {
 }
 
 
+
+
 # Konfidenzintervall fuer den Median
 
 MedianCI <- function(x, conf.level=0.95, sides = c("two.sided","left","right"), na.rm=FALSE, method=c("exact","boot"), R=999) {
@@ -2982,6 +3189,13 @@ Phi  <- function (x, y = NULL, ...) {
   if(!is.null(y)) x <- table(x, y, ...)
   # when computing phi, note that Yates' correction to chi-square must not be used.
   as.numeric( sqrt( suppressWarnings(chisq.test(x, correct=FALSE)$statistic) / sum(x) ) )
+
+  # should we implement: ??
+  # following http://technology.msb.edu/old/training/statistics/sas/books/stat/chap26/sect19.htm#idxfrq0371
+  # (Liebetrau 1983)
+  # this makes phi -1 < phi < 1 for 2x2 tables  (same for CramerV)
+  # (prod(diag(x)) - prod(diag(Rev(x, 2)))) / sqrt(prod(colSums(x), rowSums(x)))
+
 }
 
 
@@ -2999,7 +3213,8 @@ ContCoef <- function(x, y = NULL, correct = FALSE, ...) {
 }
 
 
-CramerV <- function(x, y = NULL, conf.level = NA, ...){
+CramerV <- function(x, y = NULL, conf.level = NA,
+                    method = c("ncchisq", "ncchisqadj", "fisher", "fisheradj"), ...){
 
   if(!is.null(y)) x <- table(x, y, ...)
 
@@ -3009,6 +3224,9 @@ CramerV <- function(x, y = NULL, conf.level = NA, ...){
 
   # author:   Michael Smithson
   # http://psychology3.anu.edu.au/people/smithson/details/CIstuff/Splusnonc.pdf
+
+  # see also: MBESS::conf.limits.nc.chisq, Ken Kelly
+
 
   lochi <- function(chival, df, conf) {
     ulim <- 1 - (1-conf)/2
@@ -3064,16 +3282,43 @@ CramerV <- function(x, y = NULL, conf.level = NA, ...){
   # we don't need test results here, so we suppress those warnings
   chisq.hat <- suppressWarnings(chisq.test(x, correct = FALSE)$statistic)
   df <- prod(dim(x)-1)
-  v <- as.numeric(sqrt(chisq.hat/(sum(x) * (min(dim(x)) - 1))))
+  n <- sum(x)
+  v <- as.numeric(sqrt(chisq.hat/(n * (min(dim(x)) - 1))))
 
   if (is.na(conf.level)) {
     res <- v
 
   } else {
-    ci <- c(lochi(chisq.hat, df, conf.level)[1], hichi(chisq.hat, df, conf.level)[1])
-    # corrected by michael smithson, 17.5.2014:
-    #    ci <- unname(sqrt( (ci + df) / (sum(x) * (min(dim(x)) - 1)) ))
-    ci <- unname(sqrt( (ci) / (sum(x) * (min(dim(x)) - 1)) ))
+
+    switch(match.arg(method),
+      ncchisq={
+            ci <- c(lochi(chisq.hat, df, conf.level)[1], hichi(chisq.hat, df, conf.level)[1])
+            # corrected by michael smithson, 17.5.2014:
+            #    ci <- unname(sqrt( (ci + df) / (sum(x) * (min(dim(x)) - 1)) ))
+            ci <- unname(sqrt( (ci) / (n * (min(dim(x)) - 1)) ))
+            },
+
+      ncchisqadj={
+        ci <- c(lochi(chisq.hat, df, conf.level)[1] + df, hichi(chisq.hat, df, conf.level)[1] + df)
+        # corrected by michael smithson, 17.5.2014:
+        #    ci <- unname(sqrt( (ci + df) / (sum(x) * (min(dim(x)) - 1)) ))
+        ci <- unname(sqrt( (ci) / (n * (min(dim(x)) - 1)) ))
+      },
+
+      fisher={
+              se <- 1 / sqrt(n-3) * qnorm(1-(1-conf.level)/2)
+              ci <- tanh(atanh(v) + c(-se, se))
+            },
+
+      fisheradj={
+                se <- 1 / sqrt(n-3) * qnorm(1-(1-conf.level)/2)
+                # bias correction
+                adj <- 0.5 * v / (n-1)
+                ci <- tanh(atanh(v) + c(-se, se) + adj)
+
+      })
+
+    #    "Cram\u00E9r's association coefficient"
     res <- c("Cramer V"=v, lwr.ci=max(0, ci[1]), upr.ci=min(1, ci[2]))
 
   }
@@ -3220,25 +3465,37 @@ CohenKappa <- function (x, y = NULL, weights = c("Unweighted", "Equal-Spacing", 
 
 KappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) {
 
-  ratings <- as.matrix(na.omit(x))
+  # ratings <- as.matrix(na.omit(x))
+  #
+  # ns <- nrow(ratings)
+  # nr <- ncol(ratings)
+  #
+  # # Build table
+  # lev <- levels(as.factor(ratings))
+  #
+  # for (i in 1:ns) {
+  #   frow <- factor(ratings[i,],levels=lev)
+  #
+  #   if (i==1)
+  #     ttab <- as.numeric(table(frow))
+  #   else
+  #     ttab <- rbind(ttab, as.numeric(table(frow)))
+  # }
+  #
+  # ttab <- matrix(ttab, nrow=ns)
 
-  ns <- nrow(ratings)
-  nr <- ncol(ratings)
+  x <- na.omit(x)
+  ns <- nrow(x)
+  nr <- ncol(x)
 
-  # Build table
-  lev <- levels(as.factor(ratings))
+  # find all levels in the data (data.frame)
+  lev <- levels(factor(unlist(x)))
+  # apply the same levels to all variables and switch to integer matrix
+  xx <- do.call(cbind, lapply(x, factor, levels=lev))
 
-  for (i in 1:ns) {
-    frow <- factor(ratings[i,],levels=lev)
+  ttab <- apply(Abind(lapply(as.data.frame(xx), function(z) Dummy(z, method="full", levels=seq_along(lev))), along = 3),
+                c(1,2), sum)
 
-    if (i==1)
-      ttab <- as.numeric(table(frow))
-    else
-      ttab <- rbind(ttab, as.numeric(table(frow)))
-  }
-
-  ttab <- matrix(ttab, nrow=ns)
-  # agreeP <- sum((apply(ttab^2, 1, sum)-nr)/(nr*(nr-1))/ns)
   agreeP <- sum((rowSums(ttab^2)-nr)/(nr*(nr-1))/ns)
 
   switch( match.arg(method, choices= c("Fleiss", "Conger", "Light"))
@@ -3255,14 +3512,17 @@ KappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) 
             ci <- value + c(1,-1) * qnorm((1-conf.level)/2) * SEkappa
           }
           , "Conger" = {
-            for (i in 1:nr) {
-              rcol <- factor(ratings[,i],levels=lev)
+            # for (i in 1:nr) {
+            #   rcol <- factor(x[,i],levels=lev)
+            #
+            #   if (i==1)
+            #     rtab <- as.numeric(table(rcol))
+            #   else
+            #     rtab <- rbind(rtab, as.numeric(table(rcol)))
+            # }
 
-              if (i==1)
-                rtab <- as.numeric(table(rcol))
-              else
-                rtab <- rbind(rtab, as.numeric(table(rcol)))
-            }
+            rtab <- apply(Abind(lapply(as.data.frame(t(xx)), function(z) Dummy(z, method="full", levels=seq_along(lev))), along = 3),
+                          c(1,2), sum)
 
             rtab <- rtab/ns
 
@@ -3274,15 +3534,15 @@ KappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) 
 
           }
           , "Light" = {
-            m <- DescTools::PairApply(ratings, DescTools::CohenKappa, symmetric=TRUE)
+            m <- DescTools::PairApply(x, DescTools::CohenKappa, symmetric=TRUE)
             value <- mean(m[upper.tri(m)])
 
             levlen <- length(lev)
             for (nri in 1:(nr - 1)) for (nrj in (nri + 1):nr) {
               for (i in 1:levlen) for (j in 1:levlen) {
                 if (i != j) {
-                  r1i <- sum(ratings[, nri] == lev[i])
-                  r2j <- sum(ratings[, nrj] == lev[j])
+                  r1i <- sum(x[, nri] == lev[i])
+                  r2j <- sum(x[, nrj] == lev[j])
                   if (!exists("dis"))
                     dis <- r1i * r2j
                   else dis <- c(dis, r1i * r2j)

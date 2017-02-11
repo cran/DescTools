@@ -1,7 +1,7 @@
 \name{Logit}
 \alias{Logit}
 \alias{LogitInv}
-\title{Generalized Logit and Inverse Logit function}
+\title{Generalized Logit and Inverse Logit Function}
 \description{
   Compute generalized logit and generalized inverse logit functions.
 }

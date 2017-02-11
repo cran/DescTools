@@ -1,7 +1,7 @@
 \name{MeanSE}
 \alias{MeanSE}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Standard error of mean
+\title{Standard Error of Mean
 %%  ~~function to do ... ~~
 }
 \description{

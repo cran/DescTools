@@ -1,10 +1,10 @@
 \name{IsDate}
 \alias{IsDate}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Check if an Object is of Type Date
+\title{Check If an Object Is of Type Date
 %%  ~~function to do ... ~~
 }
-\description{Check if the given x is of any known Date type. 
+\description{Check if the given x is of any known Date type.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

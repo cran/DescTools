@@ -48,7 +48,7 @@ Association}, 58, 310-364.
 
 \seealso{
 Association measures: \cr
-\code{\link{KendallTauA}} (tau-c), \code{\link{cor}} (method="kendall") for tau-b, \code{\link{StuartTauC}} (tau-c), \code{\link{SomersDelta}}\cr
+\code{\link{KendallTauA}} (tau-a), \code{\link{cor}} (method="kendall") for tau-b, \code{\link{StuartTauC}} (tau-c), \code{\link{SomersDelta}}\cr
 \code{\link{Lambda}}, \code{\link{GoodmanKruskalTau}} (tau), \code{\link{UncertCoef}}, \code{\link{MutInf}}
 
 }

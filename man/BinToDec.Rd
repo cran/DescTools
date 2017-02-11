@@ -6,12 +6,12 @@
 \alias{HexToDec}
 \alias{DecToHex}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Converts numbers from binmode, octmode or hexmode to decimal and vice versa
+\title{Converts Numbers From Binmode, Octmode or Hexmode to Decimal and Vice Versa
 %%  ~~function to do ... ~~
 }
-\description{These functions convert numbers from one base to another. 
-There are several solutions for this problem out there, but the naming is quite heterogeneous and so 
-consistent function names might be helpful. 
+\description{These functions convert numbers from one base to another.
+There are several solutions for this problem out there, but the naming is quite heterogeneous and so
+consistent function names might be helpful.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -34,7 +34,7 @@ Oct means octal system and hex hexadecimal.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-A numeric or character vector of the same length as x containing the converted values. 
+A numeric or character vector of the same length as x containing the converted values.
 Binary, octal and decimal values are numeric, hex-values are returned in character mode.
 %%  ~Describe the value returned
 %%  If it is a LIST, use

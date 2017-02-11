@@ -1,6 +1,6 @@
 \name{CramerVonMisesTest}
 \alias{CramerVonMisesTest}
-\title{Cramer-von Mises test for normality}
+\title{Cramer-von Mises Test for Normality}
 \description{
   Performs the Cramer-von Mises test for the composite hypothesis of normality,
   see e.g. Thode (2002, Sec. 5.1.3).

@@ -1,6 +1,6 @@
 \name{ColToHex}
 \alias{ColToHex}
-\title{Convert a Color into Hex String
+\title{Convert a Color Into Hex String
 }
 \description{Convert a color given by name, by its palette index or by rgb-values into a string of the form "#rrggbb" or "#rrggbbaa".
 }
@@ -9,8 +9,8 @@ ColToHex(col, alpha = 1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{col}{vector of any of either a color name (an element of colors()), 
-  or an integer i meaning palette()[i]. 
+  \item{col}{vector of any of either a color name (an element of colors()),
+  or an integer i meaning palette()[i].
   Non-string values are coerced to integer.}
   \item{alpha}{the alpha value to be used. This can be any value from 0 (fully transparent) to 1 (opaque). Default is 1.}
 

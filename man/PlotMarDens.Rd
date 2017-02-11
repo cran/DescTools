@@ -1,7 +1,7 @@
 \name{PlotMarDens}
 \alias{PlotMarDens}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Scatterplot with Marginal Densities
+\title{Scatterplot With Marginal Densities
 %%  ~~function to do ... ~~
 }
 \description{Draw a scatter plot with marginal densities on the x- and y-axis. Groups can be defined by grp.
@@ -11,14 +11,14 @@
 PlotMarDens(x, y, grp = 1, xlim = NULL, ylim = NULL,
             col = rainbow(nlevels(factor(grp))),
             mardens = c("all","x","y"), pch = 1, pch.cex = 1,
-            main = "", na.rm = FALSE, args.legend = NULL, 
+            main = "", na.rm = FALSE, args.legend = NULL,
             args.dens = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{numeric vector of x values.  
+  \item{x}{numeric vector of x values.
 }
-  \item{y}{numeric vector of y values (of same length as x).  
+  \item{y}{numeric vector of y values (of same length as x).
 }
   \item{grp}{grouping variable(s), typically factor(s), all of the same length as x.
 }
@@ -28,7 +28,7 @@ PlotMarDens(x, y, grp = 1, xlim = NULL, ylim = NULL,
 }
   \item{col}{the colors for lines and points. Uses \code{rainbow()} colors by default.
 }
- \item{mardens}{which marginal densities to plot. Can be set to either just x or y, or both (\code{"all"}, latter being the default). 
+ \item{mardens}{which marginal densities to plot. Can be set to either just x or y, or both (\code{"all"}, latter being the default).
 }
   \item{pch}{a vector of plotting characters or symbols.
 }
@@ -57,7 +57,7 @@ Andri Signorell <andri@signorell.net>
 }
 
 \seealso{
-\code{\link{plot}}, \code{\link{points}}, \code{\link{density}}, \code{\link{layout}} 
+\code{\link{plot}}, \code{\link{points}}, \code{\link{density}}, \code{\link{layout}}
 }
 \examples{
 # best seen with: x11(7.5, 4.7)

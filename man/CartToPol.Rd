@@ -6,7 +6,7 @@
 
 
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Transform Cartesian to Polar/Spherical Coordinates and vice versa
+\title{Transform Cartesian to Polar/Spherical Coordinates and Vice Versa
 %%  ~~function to do ... ~~
 }
 \description{Transform cartesian into polar coordinates, resp. to spherical coordinates and vice versa.
@@ -38,7 +38,7 @@ SphToCart(r, theta, phi, up = TRUE)
 }
 }
 \details{
-Angles are in radians, not degrees (i.e., a right angle is pi/2). Use \code{\link{DegToRad}} to convert, 
+Angles are in radians, not degrees (i.e., a right angle is pi/2). Use \code{\link{DegToRad}} to convert,
 if you don't wanna do it by yourself.\cr
 All parameters are recycled if necessary.
 %%  ~~ If necessary, more details than the description above ~~

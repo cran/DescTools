@@ -11,7 +11,7 @@
 PlotFun(FUN, args = NULL, from = NULL, to = NULL, by = NULL,
         xlim = NULL, ylim = NULL, polar = FALSE, type = "l",
         col = par("col"), lwd = par("lwd"), lty = par("lty"),
-        pch = NA, add = FALSE, ...)
+        pch = NA, mar = NULL, add = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -47,8 +47,9 @@ PlotFun(FUN, args = NULL, from = NULL, to = NULL, by = NULL,
 }
   \item{pch}{plotting 'character', i.e., symbol to use.
 }
+\item{mar}{A numerical vector of the form \code{c(bottom, left, top, right)} which gives the number of lines of margin to be specified on the four sides of the plot. The default is \code{c(1, 1, 1, 1)}.}
+
   \item{add}{logical; if \code{TRUE} add to an already existing plot; if \code{NA} start a new plot taking the defaults for the limits and log-scaling of the x-axis from the previous plot. Taken as \code{FALSE} (with a warning if a different value is supplied) if no graphics device is open.
-%%     ~~Describe \code{add} here~~
 }
   \item{\dots}{the dots are passed to the plot, resp. lines function.
 %%     ~~Describe \code{\dots} here~~

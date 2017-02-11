@@ -7,6 +7,7 @@
 \alias{ToWrd.TOne}
 \alias{ToWrd.Freq}
 \alias{ToWrd.default}
+\alias{ToWrd.data.frame}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Send Objects to Word
@@ -23,6 +24,9 @@ ToWrd(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"))
 \method{ToWrd}{table}(x, font = NULL, main = NULL, align = NULL,
       tablestyle = NULL, autofit = TRUE,
       row.names = FALSE, col.names = TRUE, ..., wrd = DescToolsOptions("lastWord"))
+
+\method{ToWrd}{data.frame}(x, font = NULL, main = NULL, row.names = NULL, ...,
+      wrd = DescToolsOptions("lastWord"))
 
 \method{ToWrd}{ftable}(x, font = NULL, main = NULL, align = NULL,
       method = "compact", ..., wrd = DescToolsOptions("lastWord"))

@@ -1,7 +1,7 @@
 \name{HexToCol}
 \alias{HexToCol}
 
-\title{Identify closest match to a color given by a hexadecimal string}
+\title{Identify Closest Match to a Color Given by a Hexadecimal String}
 \description{
  Given a color as a hex string #rrggbb, find the closest match in the
  table of known (named) colors.
@@ -11,7 +11,7 @@ HexToCol(hexstr, method = "rgb", metric = "euclidean")
 }
 \arguments{
   \item{hexstr}{a color or a vector of colors specified as hexadecimal string of the form "#rrggbb" or "#rrggbbaa"}
-  \item{method}{character string specifying the color space to be used. Can be "rgb" (default) or "hsv".}    
+  \item{method}{character string specifying the color space to be used. Can be "rgb" (default) or "hsv".}
    \item{metric}{character string specifying the metric to be used for calculating distances between the colors.
 Available options are "euclidean" (default) and "manhattan". Euclidean distances are root sum-of-squares of differences, and manhattan distances are the sum of absolute differences.}
 

@@ -1,53 +1,51 @@
 \name{Dummy}
 \alias{Dummy}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Generate Dummy Codes for a Factor 
+\title{Generate Dummy Codes for a Factor
 %%  ~~function to do ... ~~
 }
-\description{Generates a matrix of dummy codes (class indicators) for a given factor. 
+\description{Generates a matrix of dummy codes (class indicators) for a given factor.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Dummy(x, method = c("treatment", "sum", "helmert", "poly", "full"), base = 1)
+Dummy(x, method = c("treatment", "sum", "helmert", "poly", "full"),
+      base = 1, levels = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{factor or vector of classes for cases.
 %%     ~~Describe \code{x} here~~
 }
-  \item{method}{defines the method of the contrasts being formed. Can be one 
-  out of \code{"treatment"}, \code{"sum"}, \code{"helmert"}, \code{"poly"}, \code{"full"}, 
+  \item{method}{defines the method of the contrasts being formed. Can be one
+  out of \code{"treatment"}, \code{"sum"}, \code{"helmert"}, \code{"poly"}, \code{"full"},
   whereas \code{"treatment"} is the default one. Abbreviations are accepted.\cr
-  The option \code{"full"} returns a full set of class indicators, say a dummy factor for EACH level of x. 
+  The option \code{"full"} returns a full set of class indicators, say a dummy factor for EACH level of x.
   Note that this would be redundant for lm and friends!
 %%     ~~Describe \code{method} here~~
 }
-  \item{base}{an integer specifying which group is considered the baseline group. 
-%%     ~~Describe \code{base} here~~
+  \item{base}{an integer specifying which group is considered the baseline group.
+}
+  \item{levels}{an optional vector of the values (as character strings) that \code{x} might have taken.
+  The default is the unique set of values taken by as.character(x), sorted into increasing order of x.\cr
+  This is directly passed on to \code{\link{factor}}.
 }
 }
-\value{a matrix with the dummy codes. 
-The rows correspond to the number of elements in x and the columns to it's levels.
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+\value{a matrix with the dummy codes.
+The number of rows correspond to the number of elements in \code{x} and the number of columns to the number of its levels - 1, respectively to the number of levels given as argument -1.
+
+When \code{method} \code{full} is chosen the number of columns will correspond to the number of levels.
 }
 \references{
-Venables, W N and Ripley, B D (2002): \emph{Modern Applied Statistics with S}. Fourth edition. Springer. 
-%% ~put references to the literature/web site here ~
+Venables, W N and Ripley, B D (2002): \emph{Modern Applied Statistics with S}. Fourth edition. Springer.
 }
 \author{Andri Signorell <andri@signorell.net>
-%%  ~~who you are~~
 }
 
-\seealso{\code{\link{model.frame}},  \code{\link{contrasts}}, \code{\link[nnet]{class.ind}} in the package \pkg{nnet} 
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\seealso{\code{\link{model.frame}},  \code{\link{contrasts}}, \code{\link[nnet]{class.ind}} in the package \pkg{nnet}
 }
 \examples{
-x <- c("red","blue","green","blue","green","red","red","blue") 
-Dummy(x) 
+x <- c("red","blue","green","blue","green","red","red","blue")
+Dummy(x)
 Dummy(x, base = 2)
 
 Dummy(x, method = "sum")
@@ -55,13 +53,13 @@ Dummy(x, method = "sum")
 
 y <- c("Max","Max","Max","Max","Max","Bill","Bill","Bill")
 
-Dummy(y) 
+Dummy(y)
 Dummy(y, base = "Max")
 
 Dummy(y, base = "Max", method="full")
 
 
-# "Undummy" (revert the dummy coding) 
+# "Undummy" (revert the dummy coding)
 m <- Dummy(y, method="full")
 m
 z <- apply(m, 1, function(x) colnames(m)[x==1])
@@ -73,6 +71,4 @@ m
 z <- apply(m, 1, function(x) ifelse(sum(x)==0, attr(m,"base"), colnames(m)[x==1]))
 z
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ math }

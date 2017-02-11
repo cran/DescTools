@@ -1,12 +1,65 @@
 
-DescTools 0.99.18 (2016-08-15)
+DescTools 0.99.19 (2017-02-09)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+   * Unwhich() returns a logical vector with TRUEs on given positions (inverse which()).
+   * BootCI() is a wrapper for calculating simple bootstrap confidence intervals for
+     univariate and bivariate measures.
+   * MatrixPower %^% from expm has been added.
+   * PlotDev() is a wrapper useful for creating graphic files (TIF, ...).
+   * AllSubsets() composes formulas and calculates brute force lms and glms.
+   * Mean.Freq() and Median.Freq() added for calculating mean and median from
+     grouped data.
+   * BarText() places text in stacked barplots.
+   * TitleRect() places a rectangular title in a plot.
+   * as.CDateFmt() converts "dd-mm-yy" format to C format codes.
+   * Phrase() assembles a small text for describing the means of two groups.
+
+UPDATED FUNCTIONS:
+   * CramerV() gets a new argument "method" for calculating confidence intervals by
+     using fisher transformation, which is considerably faster than using the noncentral
+     chisquare distribution for bigger n.
+   * As usual numerous updates in help files.
+   * KappaM() will run faster avoiding table function in a for loop.
+   * The data.frame interface of ToWrd() gets two new arguments, as.is and row.names.
+   * Format() gains a new format option "frac" for displaying fractions (based on
+     MASS::fractions()).
+   * Format's results have the additional class "Format", which is used to define
+     a print function, displaying the values without quotes and aligned to the right.
+     (print(x, ..., quote=FALSE, right=TRUE))
+   * StrChop() gains a new argument pos for entering the positions of the cuts and
+     supports vectors of x now.
+   * StrCap() gains new method for capitalizing titles.
+   * PlotFun() experiences some slight adaptations in axes defaults.
+   * Desc will report the percentages for NAs and 0s.
+   * Desc.numeric looses the standard error for the mean and gains the according
+     confidence interval.
+   * TOne will accept a function for the test, allowing to change the used test
+     (typically aov or kruskal.test) and format the p value.
+   * TOne gets an argument to omit totals.
+
+BUGFIXES:
+   * WrdParagraphFormat(wrd=wrd) <- para would have prevented compilation on R-devel
+     because of the named argument. (Credits to Tomas Kalibera)
+   * TOne() would have mixed up footnote signs for numeric tests.
+   * Hmean() returned 1/mean(x) instead 1/mean(1/x) since 0.99.18. (Credits to
+     Christian Koot)
+   * LOCF() would not have returned leading NAs in a vector correctly. (Credits to
+     Daniel Wollschlaeger)
+   * Desc data.frame displayed a title with multiple lines for long definitions.
+
+
+
+
+DescTools 0.99.18 (2016-11-04)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
    * ColumnWrap wraps texts within columns. This allows data.frames with wide
      texts to be printed wrapped over several lines in the same column.
-   * Abstract generates a somewhat less technical summary of a data.frame than str.
-   * CoefVar returning the coefficient of variation gains an interface
+   * Abstract() generates a somewhat less technical summary of a data.frame than str().
+   * CoefVar() returning the coefficient of variation gains an interface
      for lm- and aov-objects.
    * WrdTableRange, WrdMergeCells, WrdFormatCells are functions useful to format
      cells in a Word table.
@@ -24,13 +77,13 @@ NEW FUNCTIONS ADDED:
    * axTicks.Date returns the tick positions for a Date axis.
    * A handful new functions for validating GLMs have been added: PseudoR2, MAE,
      MSE, RMSE, MAPE, NMSE, NMAE, BrierScore
-   * A new function Fmt() returns user defined format templates. as.fmt creates
+   * A new function Fmt() returns user defined format templates. as.fmt() creates
      the structure for such formats.
-   * ModSummary and TMod build a table of given linear models, useful to compare.
+   * ModSummary() and TMod() build a table of given linear models, useful to compare.
    * HosmerLemeshowTest used for testing glms has been integrated.
-   * GeomTrans can be used to transform a geometric structure by translating,
+   * GeomTrans() can be used to transform a geometric structure by translating,
      scaling and rotating.
-   * Basic linear modeling functions VIF and StdCoef have been added.
+   * Basic linear modeling functions VIF() and StdCoef() have been added.
 
 
 UPDATED FUNCTIONS:
@@ -42,7 +95,7 @@ UPDATED FUNCTIONS:
      Workbook as list.
    * XLGetRange will now do what was promised in the help when no range is defined.
    * FileOpenCmd gets new format options compared to old ImportDlg.
-   * PlotFdist gets a new logic for the y-axis of it's histogram.
+   * PlotFdist gets a new logic for the y-axis of its histogram.
    * Palette has been reorganised. PalHelsana, PalTibco etc. have been replaced by
      Pal("Helsana") etc. Pal() takes its default value from the options("palette").
      `Pal()<-` can be used to set the option.
@@ -57,24 +110,23 @@ UPDATED FUNCTIONS:
      legend text. The distance of line segements can now be controlled in more
      detail.
    * DescToolsOptions have been fundamentally reorganized, as they were grown
-     organically and organized chaotically (say no order at all ...).
+     organically and organized chaotically (for not saying: not organized at all ...).
      See ?DescToolsOptions for all the details.
      "fixedfont" must now be defined as list, "footnote", "col" are now vectors instead
      single values and formats (fmt) are organized as list. (see also new function Fmt()).
-   * In Gini x will be casted to numeric avoiding overflow for large integer vectors.
-   * Hmean and Gmean get an option for calculating confidence intervals.
-   * lines.Lc for plotting Lorenz curve gets an CI-option.
+   * In Gini() x will be casted to numeric avoiding overflow for large integer vectors.
+   * Hmean() and Gmean() get an option for calculating confidence intervals.
+   * lines.Lc for plotting Lorenz curve gets a CI-option.
    * StrDist gets an ignore.case argument.
    * Functions using ConDis for calculating concordant discordant pairs, as
      Kendall Tau-B, Somers Delta and Stuart Tau-C, will run much faster
-     with a O(n log(n)) implementation (as long as not CIs will be needed).
+     with a O(n log(n)) implementation (as long as no CIs are needed).
    * IsDichotomous gets a new argument strict for checking for strictly two levels
      and a na.rm argument, which is set to FALSE by default.
 
 
-
 BUGFIXES:
-   * PairApply simply overwrote the diagonal with 1, which was unappropriate.
+   * PairApply simply overwrote the diagonal with 1, which was inappropriate.
      Functions are now also evaluated for diagonal elements.
    * TOne would not have displayed column names, in case there were only
      boolean variables in the data.frame to describe. (credits to Beat Bruengger)
@@ -188,7 +240,7 @@ UPDATED FUNCTIONS:
    * PlotLines gain new arguments pch, pch.col, etc. for superposing points.
    * DunnTest gets an "alternative" argument, the default p-value changes from "one-sided"
      to "two-sided".
-   * MeanCI, MedianCI and VarCI get a new argument "sides" for one sided confidence interavals.
+   * MeanCI, MedianCI and VarCI get a new argument "sides" for one sided confidence intervals.
    * PlotFdist displays the mean and its confidence intervall by default in the boxplot.
    * BarnardTest and BartelsRankTest have other alternative options.
 

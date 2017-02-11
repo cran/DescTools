@@ -1,10 +1,10 @@
 \name{CombPairs}
 \alias{CombPairs}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Get All Pairs out of one or two Sets of Elements
+\title{Get All Pairs Out of One or Two Sets of Elements
 %%  ~~function to do ... ~~
 }
-\description{Returns all combinations of 2 out of the elements in x or x and y (if defined). Combinations of the same elements will be dropped (no replacing). 
+\description{Returns all combinations of 2 out of the elements in x or x and y (if defined). Combinations of the same elements will be dropped (no replacing).
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -15,7 +15,7 @@ CombPairs(x, y = NULL)
   \item{x}{a vector of elements
 %%     ~~Describe \code{x} here~~
 }
-  \item{y}{a vector of elements, need not be same dimension as x. 
+  \item{y}{a vector of elements, need not be same dimension as x.
   If y is not \code{NULL} then all combination x and y are returned.
 %%     ~~Describe \code{y} here~~
 }
@@ -24,7 +24,7 @@ CombPairs(x, y = NULL)
 If y is defined then all combinations of x and y are calculated.
 %%  ~~ If necessary, more details than the description above ~~
 }
-\value{\code{CombPairs} returns a data.frame with 2 columns X1 and X2. 
+\value{\code{CombPairs} returns a data.frame with 2 columns X1 and X2.
 }
 \author{
 Andri Signorell <andri@signorell.net>

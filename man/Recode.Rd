@@ -44,14 +44,17 @@ There's another possible solution in the package car.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-x <- factor(sample(letters, 20))
+set.seed(1984)
+x <- factor(sample(1:15, 20, replace=TRUE))
+levels(x) <- paste("old", levels(x), sep="_")
 
 y <- Recode(x,
-  "good" = c("a","b","c"),           # the old levels "a","b","c" get the new level "good"
-  "bad"  = c("d","e","f"),           # the old levels "d","e","f" get the new level "bad" etc.
-  "ugly" = c("g","h","k"), elselevel="other")
+            "new_1" = c("old_1","old_4","old_5"), 
+            "new_2" = c("old_6","old_10","old_11"), 
+            "new_3" = c("old_12","old_13"), 
+            elselevel="other")
 
-data.frame(x, y)
+data.frame(x=x, y=y)
 
 
 

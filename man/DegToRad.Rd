@@ -2,7 +2,7 @@
 \alias{DegToRad}
 \alias{RadToDeg}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Convert Degrees to Radians and vice versa
+\title{Convert Degrees to Radians and Vice Versa
 %%  ~~function to do ... ~~
 }
 \description{Convert degrees to radians (and back again).

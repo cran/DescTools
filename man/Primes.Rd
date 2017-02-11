@@ -1,6 +1,6 @@
 \name{Primes}
 \alias{Primes}
-\title{Find all Primes Less Than n}
+\title{Find All Primes Less Than n}
 \description{
     Find all prime numbers aka \sQuote{primes} less than \eqn{n}.
 

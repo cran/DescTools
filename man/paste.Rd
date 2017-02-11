@@ -2,7 +2,7 @@
 \alias{\%c\%}
 \alias{Concatenate Strings}
 
-\title{Concatenates two strings without any separator. 
+\title{Concatenates Two Strings Without Any Separator
 }
 \description{\%c\% is just a short operator implementation for paste(x, y, separator="").
 }
@@ -12,7 +12,7 @@ x \%c\% y
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{first string 
+  \item{x}{first string
 }
   \item{y}{second string, which will be pasted behind the first one.
 }

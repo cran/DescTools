@@ -1,8 +1,8 @@
 \name{DivCoef}
 \alias{DivCoef}
-\title{Rao's diversity coefficient also called quadratic entropy}
+\title{Rao's Diversity Coefficient }
 \description{
-Calculates Rao's diversity coefficient within samples.
+Calculates Rao's diversity coefficient (also known as "Quadratic Entropy") within samples.
 }
 \usage{
 DivCoef(df, dis, scale)
@@ -30,7 +30,7 @@ Champely, S. and Chessel, D. (2002) Measuring biological diversity using Euclide
 \emph{Environmental and Ecological Statistics}, \bold{9}, 167--177.
 
 }
-\note{ This function was previously published as \code{divc()} in the  \pkg{ade4} package and has been integrated here without logical changes. 
+\note{ This function was previously published as \code{divc()} in the  \pkg{ade4} package and has been integrated here without logical changes.
 }
 
 \author{Sandrine Pavoine \email{pavoine@biomserv.univ-lyon1.fr}

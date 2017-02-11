@@ -6,7 +6,7 @@
 \alias{aovlDetails}
 \alias{aovlErrorTerms}
 
-\title{Effect size calculations for ANOVAs}
+\title{Effect Size Calculations for ANOVAs}
 
 \description{
 Calculates eta-squared, partial eta-squared and generalized eta-squared
@@ -54,7 +54,7 @@ outcome <- c(1.4,2.1,3.0,2.1,3.2,4.7,3.5,4.5,5.4)    # data
 treatment1 <- factor(c(1,1,1,2,2,2,3,3,3))           # grouping variable
 anova1 <- aov(outcome ~ treatment1)                  # run the ANOVA
 summary(anova1)                                      # print the ANOVA table
-EtaSq(anova1)                                        # effect size                            
+EtaSq(anova1)                                        # effect size
 
 #### Example 2: two-way ANOVA ####
 

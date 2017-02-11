@@ -10,7 +10,7 @@ PlotDot(x, labels = NULL, groups = NULL, gdata = NULL,
         cex = par("cex"), pch = 21, gpch = 21, bg = par("bg"),
         color = par("fg"), gcolor = par("fg"), lcolor = "gray",
         xlim = NULL, main = NULL, xlab = NULL, ylab = NULL,
-        add = FALSE, args.errbars = NULL, \dots)
+        xaxt=NULL, yaxt=NULL, add = FALSE, args.errbars = NULL, \dots)
 }
 \arguments{
   \item{x}{either a vector or matrix of numeric values (\code{NA}s are
@@ -47,6 +47,8 @@ PlotDot(x, labels = NULL, groups = NULL, gdata = NULL,
     \code{\link{plot.window}}, e.g.}
   \item{main}{overall title for the plot, see \code{\link{title}}.}
   \item{xlab, ylab}{axis annotations as in \code{title}.}
+  \item{xaxt}{a character which specifies the x axis type. Specifying \code{"n"} suppresses plotting of the axis.}
+  \item{yaxt}{a character which specifies the y axis type. Specifying \code{"n"} suppresses plotting of the axis.}
   \item{add}{logical specifying if bars should be added to an already existing plot; defaults to \code{FALSE}.}
   \item{args.errbars}{optional arguments for adding error bars. All arguments for \code{\link{ErrBars}} can be supplied. If left to \code{NULL} (default), no error bars will be plotted.}
   \item{\dots}{\link{graphical parameters} can also be specified as arguments.}

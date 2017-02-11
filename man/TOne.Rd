@@ -8,8 +8,8 @@
 Create a table summarizing continuous, categorical and dichotomous variables, optionally stratified by one or more variables, while performing adequate statistical tests.
 }
 \usage{
-TOne(x, grp = NA, add.length = TRUE, colnames = NULL, vnames=NULL,
-     align = "\\\\l", FUN = NULL)
+TOne(x, grp = NA, add.length = TRUE, colnames = NULL, vnames = NULL, total = TRUE,
+     align = "\\\\l", FUN = NULL, NUMTEST = NULL, numtestlab = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,10 +28,14 @@ TOne(x, grp = NA, add.length = TRUE, colnames = NULL, vnames=NULL,
   \item{vnames}{a vector of variablenames to be placed in the first column instead of the real names.
 %%     ~~Describe \code{grp} here~~
 }
+\item{total}{logical, \code{TRUE} if totals should be added.}
+
   \item{align}{the character on whose position the strings will be aligned. Left alignment can be requested by setting \code{sep = "\\\\l"}, right alignment by \code{"\\\\r"} and center alignment by \code{"\\\\c"}. Mind the backslashes, as if they are omitted, strings would be aligned to the \bold{character} l, r or c respectively. Default value is "\\\\l", thus left alignment.
 %%     ~~Describe \code{sep} here~~
 }
 \item{FUN}{the function to be used as location and dispersion measure (typically \code{mean}/\code{sd} or \code{median}/\code{IQR})}
+\item{NUMTEST}{the function to be used to compare location (default \code{kruskal.test}). Must be defined as function with arguments \code{(x, g)}, generating something similar to a p.value. (See examples.) }
+\item{numtestlab}{string, describing the test for numeric variables. Default is "Kruskal-Wallis test". Alternative could be "ANOVA".}
 }
 \details{There are three types of variables currently implemented: numeric, factor and variables with only two levels.
 %%  ~~ If necessary, more details than the description above ~~
@@ -68,6 +72,16 @@ TOne(iris[, -5], iris[, 5],
   FUN = function(x) gettextf("\%s / \%s",
          Format(median(x, na.rm=TRUE), digits=1),
          Format(IQR(x, na.rm=TRUE), digits=3))
+)
+
+# replace kruskal.test by ANOVA and report the p.value
+TOne(x = iris[, -5], grp = iris[, 5],
+     FUN = function(x) gettextf("\%s / \%s",
+            Format(mean(x, na.rm=TRUE), digits=1),
+            Format(sd(x, na.rm=TRUE), digits=3)),
+     NUMTEST = function(x, g)
+            Format(summary(aov(x ~ g))[[1]][1, "Pr(>F)"], fmt="p"),
+     numtestlab = "ANOVA"
 )
 
 options(opt)

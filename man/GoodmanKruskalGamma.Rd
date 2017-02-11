@@ -63,7 +63,7 @@ Association}, 58, 310-364.
 \seealso{There's another implementation of gamma in \pkg{vcdExtra} \code{\link[vcdExtra]{GKgamma}}\cr
 \code{\link{ConDisPairs}} yields concordant and discordant pairs \cr\cr
 Other association measures: \cr
-\code{\link{KendallTauA}} (tau-c), \code{\link{KendallTauB}} (tau-b), \code{\link{cor}} (method="kendall") for tau-b, \code{\link{StuartTauC}} (tau-c), \code{\link{SomersDelta}}\cr
+\code{\link{KendallTauA}} (tau-a), \code{\link{KendallTauB}} (tau-b), \code{\link{cor}} (method="kendall") for tau-b, \code{\link{StuartTauC}} (tau-c), \code{\link{SomersDelta}}\cr
 \code{\link{Lambda}}, \code{\link{GoodmanKruskalTau}} (tau), \code{\link{UncertCoef}}, \code{\link{MutInf}}
 
 %% ~~objects to See Also as \code{\link{help}}, ~~~

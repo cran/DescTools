@@ -1,6 +1,6 @@
 \name{FindCorr}
 \alias{FindCorr}
-\title{Determine highly correlated variables}
+\title{Determine Highly Correlated Variables}
 \description{
 This function searches through a correlation matrix and returns a vector of integers
 corresponding to columns to remove to reduce pair-wise correlations.

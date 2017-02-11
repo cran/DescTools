@@ -21,7 +21,7 @@ To set a new value use the same rationale as with the R options:  \code{DescTool
 
 \bold{Options used by DescTools}
   \describe{
-    \item{\code{col}:}{a vector of colours, defined as names or as RGB-longs (\code{"#RRGGBB"}). By now three colors are used in several plots as defaults. By default they're set to \code{hred}, \code{hblue} and \code{horange}. Change the values by defining \code{DescToolsOptions(col=c("pink", "blue", "yellow"))}. Any color definition can be used here.}
+    \item{\code{col}:}{a vector of colours, defined as names or as RGB-longs (\code{"#RRGGBB"}). By now three colors are used in several plots as defaults. By default they're set to \code{hblue}, \code{hred} and \code{horange}. Change the values by defining \code{DescToolsOptions(col=c("pink", "blue", "yellow"))}. Any color definition can be used here.}
 
     \item{\code{digits}:}{the number of \bold{FIXED} digits, used throughout the print functions.}
 
@@ -48,13 +48,13 @@ To set a new value use the same rationale as with the R options:  \code{DescTool
 Calling \code{DescToolsOptions(reset=TRUE)} will reset the options to these defaults:
 \preformatted{
 options(DescTools = list(
-  col       = c(hblue="#8296C4", hred="#9A0941", hgreen="#B3BA12"),
+  col       = c(hblue="#8296C4", hred="#9A0941", horange="#F08100"),
   digits    = 3,
   fixedfont = structure(list(name = "Consolas", size = 7), class = "font"),
   fmt       = list(abs = structure(list(digits = 0, big.mark = "'"),
                      name = "abs", label = "Number format for counts", default = TRUE,
                      class = "fmt"),
-                   per = structure(list(digits = 1, big.mark = "\%"),
+                   per = structure(list(digits = 1, fmt = "\%"),
                      name = "per", label = "Percentage number format", default = TRUE,
                      class = "fmt"),
                    num = structure(list(digits = 3, big.mark = "'"),
@@ -78,6 +78,8 @@ For a given vector of strings the current value set for option \code{x}, or \cod
 
 For a list of named values the options will be set and a list with the previous values of the options changed will be returned invisibly.
 }
+
+\seealso{\code{\link{Format}}, \code{\link{Pal}}}
 
 \author{Andri Signorell <andri@signorell.net>}
 

@@ -1,7 +1,7 @@
 \name{TheilU}
 \alias{TheilU}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Theil's U index of inequality
+\title{Theil's U Index of Inequality
 %%  ~~function to do ... ~~
 }
 \description{Calculate Theil's U index of inequality.
@@ -27,7 +27,7 @@ TheilU(a, p, type = c(2, 1), na.rm = FALSE)
 }
 }
 
-\details{Theil proposed two error measures, but at different times and under the same symbol U, which has caused some confusion. 
+\details{Theil proposed two error measures, but at different times and under the same symbol U, which has caused some confusion.
 U \code{type = 1} is taken from Theil  (1958, pp. 31-42). The argument \code{a} represents the actual observations and \code{p} the corresponding predictions. He left it open whether \code{a} and \code{p} should be used as absolute values or as observed and predicted changes. \cr
 Theil (1966, chapter 2) proposed U \code{type = 2} as a measure of forecast quality: \emph{"...where \eqn{A_i} and \eqn{P_i} stand for a pair of predicted and observed changes. ..."} \cr
 As \eqn{U_1} has some serious disadvantages (see Bliemel 1973) it is recommended to use \eqn{U_2}.

@@ -8,10 +8,14 @@
 \usage{
 Mean(x, \dots)
 
+\method{Mean}{Freq}(x, breaks, \dots)
+
 \method{Mean}{default}(x, weights = NULL, trim = 0, na.rm = FALSE, \dots)
 }
 \alias{Mean}
 \alias{Mean.default}
+\alias{Mean.Freq}
+
 \arguments{
   \item{x}{An \R object.  Currently there are methods for
     numeric/logical vectors and \link[=Dates]{date},
@@ -23,6 +27,7 @@ Mean(x, \dots)
     trimmed from each end of \code{x} before the mean is computed.
     Values of trim outside that range are taken as the nearest endpoint.
   }
+  \item{breaks}{breaks for calculating the mean for classified data as composed by \code{\link{Freq}}.}
   \item{na.rm}{a logical value indicating whether \code{NA}
     values should be stripped before the computation proceeds.}
   \item{\dots}{further arguments passed to or from other methods.}

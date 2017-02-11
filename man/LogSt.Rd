@@ -5,7 +5,7 @@
 \title{Started Logarithmic Transformation and Its Inverse
 %%  ~~function to do ... ~~
 }
-\description{Transforms the data by a log10 transformation, modifying small and zero observations such that the
+\description{Transforms the data by a \eqn{log_{10}}{log10} transformation, modifying small and zero observations such that the
 transformation yields finite values.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
@@ -20,45 +20,53 @@ LogStInv(x, threshold = NULL)
 %%     ~~Describe \code{x} here~~
 }
   \item{calib}{a vector or matrix of data used to calibrate the transformation(s), i.e., to determine
-the constant c needed
+the constant \eqn{c} needed
 %%     ~~Describe \code{calib} here~~
 }
-  \item{threshold}{constant c that determines the transformation. The inverse function will
-  look for an attribute named "threshold" if the argument is set to NULL.
+  \item{threshold}{constant \eqn{c} that determines the transformation. The inverse function \code{LogStInv} will
+  look for an attribute named \code{"threshold"} if the argument is set to \code{NULL}.
 %%     ~~Describe \code{threshold} here~~
 }
-  \item{mult}{a tuning constant affecting the transformation of small values, see Details
+  \item{mult}{a tuning constant affecting the transformation of small values, see \code{Details}.
 %%     ~~Describe \code{mult} here~~
 }
 }
-\details{Small values are determined by the threshold c. If not given by the argument threshold, then it is determined by the quartiles q1 and q3 of the non-zero data as those smaller than c = q1=(q3=q1)mult.
-The rationale is that for lognormal data, this constant identifies 2 percent of the data as small.
-Beyond this limit, the transformation continues linear with the derivative of the log curve at this
-point. See code for the formula.\cr
-Another possible value for the threshold c was: median(x) / (median(x)/quantile(x, 0.25))^2.9)\cr\cr
-The function chooses log10 rather than natural logs because they can be backtransformed relatively
-easily in the mind.
+\details{
+In order to avoid \eqn{log(x) = -\infty}{log(x) = -inf} for \eqn{x=0} in log-transformations there's often a constant added to the variable before taking the \eqn{log}. This is not always a pleasable strategy.
+The function
+\code{LogSt} handles this problem based on the following ideas:
+\itemize{
+\item{The modification should only affect the values for "small" arguments.}
+\item{What "small" is should be determined in connection with the non-zero values of the original variable, since it should behave well (be equivariant) with respect to a change in the "unit of measurement".}
+\item{The function must remain monotone, and it should remain (weakly) convex.}
+}
+These criteria are implemented here as follows: The shape is determined by a
+threshold \eqn{c} at which - coming from above - the log function switches to a linear function with the same slope at this point.
 
-%%  ~~ If necessary, more details than the description above ~~
+This is obtained by
+
+\deqn{g(x) =
+  \left\{\begin{array}{ll}
+     log_{10}(x) &\textup{for }x \ge c\\
+     log_{10}(c) - \frac{c - x}{c \cdot log(10)} &\textup{for } x < c
+  \end{array}\right.
+}{g(x)=log_10(x), if x>c,
+log_10(c) - (c-x)/(c log(10)), otherwise}
+
+Small values are determined by the threshold \eqn{c}. If not given by the argument \code{threshold}, it is determined by the quartiles \eqn{q_1} and \eqn{q_3} of the non-zero data as those smaller than \eqn{c = \frac{q_1^{1+r}}{q_3^r}}{c=q_1^{1+r}/q_3^r} where \eqn{r} can be set by the argument \code{mult}.
+The rationale is, that, for lognormal data, this constant identifies 2 percent of the data as small.\cr
+Beyond this limit, the transformation continues linear with the derivative of the log curve at this point. \cr
+
+Another idea for choosing the threshold \eqn{c} was: median(x) / (median(x)/quantile(x, 0.25))^2.9)\cr\cr
+The function chooses \eqn{log_{10}} rather than natural logs because they can be backtransformed relatively easily in the mind.
 }
-\value{the transformed data. The value c needed for the transformation is returned as \code{attr(.,"threshold")}.
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+\value{the transformed data. The value \eqn{c} used for the transformation and needed for inverse transformation is returned as \code{attr(.,"threshold")}.
 }
-\note{The names of the function alludes to Tukey's idea of "started logs".
-}
-\author{Werner A. Stahel, ETH Zurich, slight modifications Andri Signorell <andri@signorell.net>
-%%  ~~who you are~~
+\author{Werner A. Stahel, ETH Zurich \cr slight modifications Andri Signorell <andri@signorell.net>
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+\seealso{\code{\link{LogLin}}}
 
-\seealso{\code{\link{LogLin}}
-%% ~~objects to See Also as , ~~~
-}
 \examples{
 dd <- c(seq(0,1,0.1), 5 * 10^rnorm(100, 0, 0.2))
 dd <- sort(dd)
@@ -70,6 +78,4 @@ x <- rchisq(df=3, n=100)
 # should give 0 (or at least something small):
 LogStInv(LogSt(x)) - x
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ math }

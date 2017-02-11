@@ -5,6 +5,7 @@
 \alias{Format.table}
 \alias{Fmt}
 \alias{as.fmt}
+\alias{as.CDateFmt}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Format Numbers and Dates
@@ -37,6 +38,7 @@ Fmt(...)
 
 as.fmt(...)
 
+as.CDateFmt(fmt)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -75,7 +77,7 @@ This argument is send directly to the function \code{\link{StrAlign}} as argumen
   \item{width}{integer, the defined width of the strings.
 %%     ~~Describe \code{width} here~~
 }
-  \item{lang}{optional value setting the language for the months and daynames. Can be either \code{"local"} for current locale or \code{"engl"} for english. If left to \code{NULL}, the option \code{"lang"} will be searched for and if not found \code{"local"} will be taken as default.
+  \item{lang}{optional value setting the language for the months and daynames. Can be either \code{"local"} for current locale or \code{"engl"} for english. If left to \code{NULL}, the DescToolsOption \code{"lang"} will be searched for and if not found \code{"local"} will be taken as default.
 %%     ~~Describe \code{value} here~~
 }
 % \item{value}{the value to be overridden in the function \code{fmt}}.
@@ -116,6 +118,8 @@ Code \tab  \tab  \cr
 \code{\%} \tab percent \tab will divide the given number by 100 and append the \%-sign (without a separator).\cr
 \tab\cr
 \code{p} \tab p-value \tab will wrap the function \code{\link{format.pval}} and return a p-value format.\cr
+\tab\cr
+\code{frac} \tab fractions \tab will try to convert numbers to fractions. See \code{\link[MASS]{fractions}()}.\cr
 \tab\cr
 
 \code{*} \tab significance \tab will produce a significance representation of a p-value consisting of *  and .,  \cr

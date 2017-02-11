@@ -34,7 +34,6 @@ By computing the Pearson correlation coefficient and specifying a threshold valu
 %%  ~~ reference to a publication or URL from which the data were obtained ~~
 }
 \references{
-\url{http://www.whiskyclassified.com}\cr
 \url{http://www.mathstat.strath.ac.uk/outreach/nessie/index.html}
 %%  ~~ possibly secondary sources and usages ~~
 }

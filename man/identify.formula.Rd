@@ -1,6 +1,6 @@
 \name{identify.formula}
 \alias{identify.formula}
-\title{Identify Points In a Plot Using a Formula.}
+\title{Identify Points In a Plot Using a Formula}
 \usage{
   \method{identify}{formula} (formula, data, subset, na.action, \dots)
 }

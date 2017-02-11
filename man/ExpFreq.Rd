@@ -1,7 +1,7 @@
 \name{ExpFreq}
 \alias{ExpFreq}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Expected frequencies
+\title{Expected Frequencies
 %%  ~~function to do ... ~~
 }
 \description{Calculate the expected frequencies of an n-way table assuming independence.

@@ -3,7 +3,7 @@
 \alias{PlotPch}
 \alias{PlotMar}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Information plots
+\title{Information Plots
 %%  ~~function to do ... ~~
 }
 \description{The function \code{PlotPar()} plots the typically used parameters and their values. \cr

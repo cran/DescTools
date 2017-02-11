@@ -21,6 +21,11 @@ VIF(mod, ...)
   If all terms in an unweighted linear model have 1 df, then the usual variance-inflation
   factors are calculated.
 
+  The vif are defined as
+  \deqn{vif_j=\frac{1}{1-R_j^2}}{vif_j = 1/(1-R_j^2)}
+
+where \eqn{R_j^2} equals the coefficient of determination for regressing the explanatory variable \code{j} in question on the other terms in the model. This is one of the well-known collinearity diagnostics.
+
   If any terms in an unweighted linear model have more than 1 df, then generalized variance-inflation factors
   (Fox and Monette, 1992) are calculated. These are interpretable as the inflation
   in size of the confidence ellipse or ellipsoid for the coefficients of the term in
@@ -35,6 +40,8 @@ VIF(mod, ...)
 
   Through a further generalization, the implementation here is applicable as well to other sorts of models,
   in particular weighted linear models and  generalized linear models.
+
+  Values of vif up to 5 are usually interpreted as uncritical, values above 5 denote a considerable multicollinearity.
 }
 \value{
   A vector of vifs, or a matrix containing one row for each term in the model, and

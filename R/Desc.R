@@ -215,7 +215,9 @@ Desc.data.frame <- function (x, main = NULL, plotit=NULL, enum = TRUE, sep=NULL,
 
   res <- Desc.list(x=x, main=main, plotit=plotit, enum=enum, sep=sep, ...)
 
-  res[["_objheader"]][["main"]] <- gettextf("Describe %s (%s):", deparse(substitute(x)), class(x))
+  res[["_objheader"]][["main"]] <- gettextf("Describe %s (%s):",
+                                            gsub(" +", " ", paste(deparse(substitute(x)), collapse=" ")),
+                                            class(x))
 
   res[["_objheader"]][["abstract"]] <- Abstract(x)
   attr(res[["_objheader"]][["abstract"]], "main") <- res[["_objheader"]][["main"]]
@@ -710,6 +712,20 @@ calcDesc.bivar     <- function(x, g, xname = NULL, gname = NULL, margin=FALSE, b
 
 
 
+.print.charmatrix <- function(x, quote=FALSE, print.gap = 2, right=TRUE, ...){
+
+  # prints a character matrix without rownames, by default right aligned and
+  # with gap = 2
+  # this is used by the print.Desc routines
+
+  rownames(x) <- rep("", nrow(x))
+  print(x, quote=quote, print.gap = print.gap, right=right, ...)
+
+}
+
+
+
+
 print.Desc <- function(x, digits=NULL, plotit=NULL, nolabel=FALSE, sep=NULL, ...) {
 
   .print <- function(x, digits=NULL, plotit=NULL, ...) {
@@ -789,6 +805,7 @@ print.Desc.header   <- function(x, digits = NULL, ...){
 }
 
 
+
 print.Desc.numeric  <- function(x, digits = NULL, ...) {
 
   nlow <- 5
@@ -796,6 +813,18 @@ print.Desc.numeric  <- function(x, digits = NULL, ...) {
 
   if(is.null(digits) && !is.null(x$digits)) digits <- x$digits
   defdigits <- is.null(digits)
+
+  x["nperc"] <- Format(x[["n"]]/x[["length"]], fmt="%", digits=1)
+  x["naperc"] <- Format(x[["NAs"]]/x[["length"]], fmt="%", digits=1)
+  x["zeroperc"] <- Format(x[["0s"]]/x[["length"]], fmt="%", digits=1)
+
+  if(x[["n"]]>1)
+    a <- qt(p=.025, df=x[["n"]] - 1) * x[["meanSE"]]
+  else
+    a <- NA
+
+  x["meanCI"] <- x[["mean"]] + a
+  x["meanUCI"] <- x[["mean"]] - a
 
   x[c("length","n","NAs","unique","0s")] <- lapply(x[c("length","n","NAs","unique","0s")],
                                                     Format, fmt=Fmt("abs"))
@@ -811,22 +840,28 @@ print.Desc.numeric  <- function(x, digits = NULL, ...) {
 
   x[["quant"]][] <- Format(x[["quant"]], fmt=Fmt("num", digits=digits))
 
-  x[c("mean","meanSE","range","sd","vcoef","mad","IQR","skew","kurt")] <-
-    lapply(x[c("mean","meanSE","range","sd","vcoef","mad","IQR","skew","kurt")],
+  x[c("mean","meanCI","meanUCI","range","sd","vcoef","mad","IQR","skew","kurt")] <-
+    lapply(x[c("mean","meanCI","meanUCI","range","sd","vcoef","mad","IQR","skew","kurt")],
            Format, fmt=Fmt("num", digits=digits))
 
-  lst <- list(l1 = unlist(x[c("length","n","NAs","unique","0s","mean","meanSE")]),
-              l2=x[["quant"]][-c(1,9)],
-              l3=unlist(x[c("range","sd","vcoef","mad","IQR","skew","kurt")]))
+  lst <- list(l1 = unlist(x[c("length","n","NAs","unique","0s","mean","meanCI")]),
+              l2 = c("", x[["nperc"]], x[["naperc"]], "", x[["zeroperc"]], "", x[["meanUCI"]]),
+              l3=x[["quant"]][-c(1,9)],
+              l4=unlist(x[c("range","sd","vcoef","mad","IQR","skew","kurt")]))
 
   width <- max(c(unlist(lapply(lst, nchar)), unlist(lapply(lapply(lst, names), nchar))), na.rm=TRUE)
   if (x$unique == x$n)
     lst$l1["unique"] <- "= n"
 
-  cat(paste(lapply(lst, .txtline, width = width, ind = "  ",
-                   space = "  "), collapse = "\n"), "\n")
+
+  # replaced by 0.99.19
+  # cat(paste(lapply(lst, .txtline, width = width, ind = "  ",
+  #                  space = "  "), collapse = "\n"), "\n")
   # clarify: print.gap can be set with space, which is set here to 2 spaces
   # should we make an argument out of that?
+
+  m <- rbind(lst$l1, lst$l2, "", names(lst$l3), lst$l3, "", names(lst$l4), lst$l4, "")
+  .print.charmatrix(m)
 
   # we need to do that even if highlow == FALSE, as Desc.integer could need the result!!
   if(x$class == "numeric"){
@@ -873,7 +908,9 @@ print.Desc.logical  <- function(x, digits = NULL, ...) {
 
   m <- rbind(
     c("length","n","NAs","unique"),
-    c(Format(unlist(x[c("length","n","NAs","unique")]), fmt=Fmt("abs")) )
+    c(Format(unlist(x[c("length","n","NAs","unique")]), fmt=Fmt("abs")) ),
+    c("", x["nperc"] <- Format(x[["n"]]/x[["length"]], fmt="%", digits=1),
+      x["naperc"] <- Format(x[["NAs"]]/x[["length"]], fmt="%", digits=1), "")
   )
   m[] <- StrAlign(m, sep = "\\r")
   cat(paste(" ", apply(m, 1, paste, collapse= " ")), sep="\n")
@@ -902,13 +939,17 @@ print.Desc.logical  <- function(x, digits = NULL, ...) {
 
 }
 
+
 print.Desc.factor   <- function(x, digits = NULL, ...) {
 
   m <- rbind(
     c("length","n","NAs","unique","levels","dupes"),
     c(Format(unlist(x[c("length","n","NAs","unique","levels")]), fmt=Fmt("abs")),
-      c("n","y")[x$dupes+1])
+      c("n","y")[x$dupes+1]),
+    c("", x["nperc"] <- Format(x[["n"]]/x[["length"]], fmt="%", digits=1),
+    x["naperc"] <- Format(x[["NAs"]]/x[["length"]], fmt="%", digits=1), "","","")
   )
+
   m[] <- StrAlign(m[], sep = "\\r")
   cat(paste(" ", apply(m, 1, paste, collapse= " ")), sep="\n")
 
@@ -1092,7 +1133,9 @@ print.Desc.Date     <- function(x, digits = NULL, ... ) {
 
   m <- rbind(
     c("length","n","NAs","unique"),
-    c(Format(unlist(x[c("length","n","NAs","unique")]), fmt=Fmt("abs")) )
+    c(Format(unlist(x[c("length","n","NAs","unique")]), fmt=Fmt("abs")) ),
+    c("", x["nperc"] <- Format(x[["n"]]/x[["length"]], fmt="%", digits=1),
+      x["naperc"] <- Format(x[["NAs"]]/x[["length"]], fmt="%", digits=1), "")
   )
   m[] <- StrAlign(m, sep = "\\r")
   cat(paste(" ", apply(m, 1, paste, collapse= " ")), sep="\n")
@@ -2033,7 +2076,7 @@ Abstract <- function (x, sep = ", ", zero.form = ".", maxlevels = 5, trunc = TRU
 
   res <- res[1:min(nrow(res), list.len), ]
 
-  attr(res, "main") <- deparse(substitute(x))
+  attr(res, "main") <- gsub(" +", " ", paste(deparse(substitute(x)), collapse=" "))
   attr(res, "nrow") <- dim(x)[1]
   attr(res, "ncol") <- dim(x)[2]
   attr(res, "trunc") <- trunc

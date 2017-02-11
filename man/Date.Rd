@@ -1,11 +1,11 @@
 \name{Date}
 \alias{Date}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Create a Date from Numeric Representation
+\title{Create a Date From Numeric Representation
 %%  ~~function to do ... ~~
 }
-\description{Create a date out of either year, month and day supplied by single values or out of one 
-single numeric valu in the form yyyymmdd. 
+\description{Create a date out of either year, month and day supplied by single values or out of one
+single numeric valu in the form yyyymmdd.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -20,7 +20,7 @@ Date(year, month = NA, day = NA)
 \details{
 All arguments are recycled if necessary.\cr
 
-The function is a convenience wrapper for ISOdate, which yields a datetime object, which again is 
+The function is a convenience wrapper for ISOdate, which yields a datetime object, which again is
 an overkill, if only dates are needed.
 }
 

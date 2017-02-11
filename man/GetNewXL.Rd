@@ -1,10 +1,10 @@
 \name{GetNewXL}
 \alias{GetNewXL}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Create a new Excel Instance
+\title{Create a New Excel Instance
 %%  ~~function to do ... ~~
 }
-\description{Start a new instance of Excel and return its handle. 
+\description{Start a new instance of Excel and return its handle.
 This is needed to address XL afterwards.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }

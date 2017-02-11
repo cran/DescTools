@@ -2,7 +2,7 @@
 \alias{GetNewPP}
 \alias{GetCurrPP}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Create a new PowerPoint Instance
+\title{Create a New PowerPoint Instance
 %%  ~~function to do ... ~~
 }
 \description{Start a new instance of PowerPoint and return its handle. A new presentation with one empty slide will be created.
@@ -24,7 +24,7 @@ GetCurrPP()
 %%     ~~Describe \code{template} here~~
 }
 }
-\value{a handle (pointer) to the created PowerPoint instance. 
+\value{a handle (pointer) to the created PowerPoint instance.
 }
 \author{Andri Signorell <andri@signorell.net>
 }
