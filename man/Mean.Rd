@@ -45,7 +45,7 @@ Mean(x, \dots)
   with a fraction of \code{trim} observations deleted from each end
   before the mean is computed.
 
-  \code{trim} and \code{weights} can't be used together.
+  \code{trim} and \code{weights} can't be used together at the same time.
 }
 \references{
   Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)

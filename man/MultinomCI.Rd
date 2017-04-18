@@ -8,10 +8,10 @@ Confidence intervals for multinomial proportions are often approximated by singl
 to Goodman's method.
 }
 \author{Pablo J. Villacorta Iglesias <pjvi@decsai.ugr.es>\cr
-Department of Computer Science and Artificial Intelligence, University of Granada (Spain) 
+Department of Computer Science and Artificial Intelligence, University of Granada (Spain)
 (Sison-Glaz)
 
-Andri Signorell <andri@signorell.net> 
+Andri Signorell <andri@signorell.net>
 (Goodman)
 }
 \usage{
@@ -22,8 +22,8 @@ MultinomCI(x, conf.level = 0.95, method = c("sisonglaz", "cplus1", "goodman"))
 A vector of positive integers representing the number of occurrences of each class. The total number of samples equals the sum of such elements.
 }
   \item{conf.level}{ confidence level, defaults to 0.95. }
-  
-  \item{method}{ character string specifing which method to use; can be one out of 
+
+  \item{method}{ character string specifing which method to use; can be one out of
   \code{"sisonglaz"}, \code{"cplus1"}, \code{"goodman"}.
   Method can be abbreviated. See details. Defaults to \code{"sisonglaz"}. }
 
@@ -31,29 +31,27 @@ A vector of positive integers representing the number of occurrences of each cla
 }
 \details{
 Given a vector of observations with the number of samples falling in each class of a multinomial distribution,
-builds the simultaneous confidence intervals for the multinomial probabilities according to the method proposed by 
+builds the simultaneous confidence intervals for the multinomial probabilities according to the method proposed by
 Sison and Glaz (1995). The R code has been translated from the SAS code written by May and Johnson (2000).
 
 }
 \value{
-A matrix with 3 columns: 
+A matrix with 3 columns:
   \item{est}{estimate}
   \item{lwr.ci}{lower bound of the confidence interval}
   \item{upr.ci}{upper bound of the confidence interval}
 
-The number of rows correspond to the dimension of x. 
+The number of rows correspond to the dimension of x.
 
 }
 \references{
 Sison, C.P and Glaz, J. (1995) Simultaneous confidence intervals and sample size determination
 for multinomial proportions. \emph{Journal of the American Statistical Association}, 90:366-369.
 
-\url{http://tx.liberal.ntu.edu.tw/~purplewoo/Literature/!Methodology/!Distribution_SampleSize/SimultConfidIntervJASA.pdf}
+Glaz, J., Sison, C.P. (1999) Simultaneous confidence intervals for multinomial proportions.
+\emph{Journal of Statistical Planning and Inference} 82:251-262.
 
-Glaz, J., Sison, C.P. (1999) Simultaneous confidence intervals for multinomial proportions. 
-\emph{Journal of Statistical Planning and Inference} 82:251-262. 
-
-May, W.L., Johnson, W.D.(2000) Constructing two-sided simultaneous confidence intervals for 
+May, W.L., Johnson, W.D.(2000) Constructing two-sided simultaneous confidence intervals for
 multinomial proportions for small counts in a large number of cells. \emph{Journal of Statistical Software} 5(6) .
 Paper and code available at \url{http://www.jstatsoft.org/v05/i06}.
 
@@ -62,11 +60,11 @@ Proportions \emph{Technometrics}, 7, 247-254.
 }
 
 \examples{
-# Multinomial distribution with 3 classes, from which a sample of 79 elements 
-# were drawn: 23 of them belong to the first class, 12 to the 
-# second class and 44 to the third class. Punctual estimations 
-# of the probabilities from this sample would be 23/79, 12/79 
-# and 44/79 but we want to build 95% simultaneous confidence intervals 
+# Multinomial distribution with 3 classes, from which a sample of 79 elements
+# were drawn: 23 of them belong to the first class, 12 to the
+# second class and 44 to the third class. Punctual estimations
+# of the probabilities from this sample would be 23/79, 12/79
+# and 44/79 but we want to build 95% simultaneous confidence intervals
 # for the true probabilities
 
 MultinomCI(c(23, 12, 44), conf.level=0.95)

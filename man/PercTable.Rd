@@ -20,7 +20,7 @@ All the frequencies are nested into one single table.
 
 \method{PercTable}{table}(tab, row.vars = NULL, col.vars = 2, justify = "right",
           freq = TRUE, rfrq = "100", expected = FALSE, residuals = FALSE,
-          stdres = FALSE, margins = NULL, \dots)
+          stdres = FALSE, margins = NULL, digits = NULL, \dots)
 
 \method{PercTable}{formula}(formula, data, subset, na.action, \dots)
 
@@ -66,6 +66,8 @@ Margins(tab, ...)
   1 stands for row margins, 2 for column margins, c(1,2) for both. Default is \code{NULL} (none).
 %%     ~~Describe \code{margins} here~~
 }
+\item{digits}{integer. With how many digits shoud the relative frequencies be formatted? Default can be set by \code{DescToolsOptions(digits=x)}. }
+
    \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} will be tabled versus rhs (\code{table(lhs, rhs)}).}
   \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}.
     By default the variables are taken from \code{environment(formula)}.}

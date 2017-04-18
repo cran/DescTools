@@ -7,8 +7,10 @@
 \title{Last Observation Carried Forward
 %%   ~~ data name/kind ... ~~
 }
-\description{Replace \code{NA}s by the last observed value (aka "Last Observation Carried Forward").
-%%  ~~ A concise (1-5 lines) description of the dataset. ~~
+\description{In longitudinal studies it's common that individuals drop out before all responses can be obtained. Measurements obtained before the individual dropped out can be used to impute the unknown measurement(s). The last observation carried forward method is one way to impute values for the missing observations. For the last observation carried forward (LOCF) approach the missing values are replaced by the last observed value of
+that variable for each individual regardless of when it occurred.
+
+\code{LOCF()} replaces \code{NA}s with the most recent non-NA prior to it.
 }
 \usage{
 LOCF(x)
@@ -25,17 +27,14 @@ LOCF(x)
 }
 }
 \details{The function will replace all NAs found in a vector with the last earlier value not being NA.
-In data.frames each column will be treated as described. }
+In data.frames each column will be treated as described.
+
+It should be noted, that the last observation carried forward approach may result in biased estimates and may underestimate
+the variability.
+}
 \value{a vector with the same dimension as x.
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
 }
-\author{Daniel Wollschlaeger <dwoll@psychologie.uni-kiel.de>
-%%  ~~who you are~~
-}
+\author{Daniel Wollschlaeger <dwoll@psychologie.uni-kiel.de>}
 \seealso{See also the package \pkg{Hmisc} for less coarse imputation functions.}
 \examples{
 d.frm <- data.frame(

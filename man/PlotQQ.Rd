@@ -10,7 +10,7 @@ The assumed underlying distribution can be defined as a function including all r
 }
 \usage{
 PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL, add = FALSE,
-       args.qqline = NULL, ...)
+       args.qqline = NULL, conf.level = 0.95, args.cband = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -36,6 +36,14 @@ PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL, add = FALSE,
    distribution (instead of set it to abline(a = 0, b = 1)). The line defaults are set to col = par("fg"), lwd = par("lwd") and lty = par("lty").
    No line will be plotted if args.qqline is set to NA.
 }
+  \item{conf.level}{confidence level for the confidence interval. Set this to \code{NA}, if no confidence band should be plotted.
+  Default is \code{0.95}.
+%%     ~~Describe \code{type} here~~
+}
+  \item{args.cband}{list of arguments for the confidence band, such as color or border (see \code{\link{DrawBand}}).
+%%     ~~Describe \code{type} here~~
+}
+
   \item{\dots}{the dots are passed to the plot function.
 %%     ~~Describe \code{\dots} here~~
 }
@@ -66,8 +74,8 @@ PlotQQ(z, function(p) qchisq(p, df=5), args.qqline=list(col=2, probs=c(0.1,0.6))
        main=expression("Q-Q plot for" ~~ {chi^2}[nu == 3]))
 abline(0,1)
 
-# add 20 random sets
-for(i in 1:20){
+# add 5 random sets
+for(i in 1:5){
   z <- rchisq(100, df=5)
   PlotQQ(z, function(p) qchisq(p, df=5), add=TRUE, args.qqline = NA,
          col="grey", lty="dotted")

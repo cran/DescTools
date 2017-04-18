@@ -199,6 +199,15 @@ Fmt("abs", na.form="-")      # get Fmt("abs") and add user defined na.form
 
 # define totally new format and store as option
 Fmt(nob=as.fmt(digits=10, na.form="nodat"))
+
+# overwrite an existing format
+Fmt(nob=Fmt("nob", digits=5))
+Fmt("nob")
+
+# change the character to be used as the decimal point
+opt <- options(OutDec=",")
+Format(1200, digits=2, big.mark = ".")
+options(opt)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

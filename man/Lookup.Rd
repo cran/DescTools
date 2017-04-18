@@ -22,12 +22,12 @@ Lookup(x, ref, val)
 %%     ~~Describe \code{ret} here~~
 }
 }
-\details{This function is wrapping the function \code{\link{match}} allowing to pass a vector from which the found elements should be returned. This is often used in a code lookup situation and might be simpler than using match or merge.
+\details{This function is wrapping the function \code{\link{match}} allowing to pass a vector from which the found elements should be returned. This is often used in a code lookup situation and might be simpler than using \code{\link{match}} or \code{\link{merge}}.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
 A vector of the same length as \code{x}
-giving the elements in \code{ret} at the position in \code{idx} of the first match if there is a match, otherwise nomatch.
+giving the elements in \code{ret} at the position in \code{idx} of the first match if there is a match. If there's no match \code{NA} will be returned.
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}

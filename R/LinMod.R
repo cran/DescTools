@@ -248,7 +248,11 @@ PseudoR2 <- function(x, which = NULL) {
   # x.base <- update(x, . ~ 1, trace = FALSE)
   # degf <- x$df.null - x$df.residual must be > 0, check for that???
 
-  L.base <- -x$null.deviance/2
+  if(inherits(x, what="multinom")) {
+    L.base <- logLik(update(x, ~1))
+  } else {
+    L.base <- -x$null.deviance/2
+  }
   L.full <- -x$deviance/2
   G2 <- x$null.deviance - x$deviance
 

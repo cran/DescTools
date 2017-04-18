@@ -74,16 +74,16 @@ BinomCI(x, n, conf.level = 0.95,
 
 
 \references{
-  A. Agresti and B.A. Coull (1998) Approximate is better than "exact" for interval
+  Agresti A. and Coull B.A. (1998) Approximate is better than "exact" for interval
   estimation of binomial proportions.
   \emph{American Statistician}, \bold{52}, pp. 119-126.
 
-  L.D. Brown, T.T. Cai and A. Dasgupta (2001) Interval estimation for a binomial
+  Brown L.D., Cai T.T. and Dasgupta A. (2001) Interval estimation for a binomial
   proportion \emph{Statistical Science}, \bold{16}(2), pp. 101-133.
 
-  H. Witting (1985) \emph{Mathematische Statistik I}. Stuttgart: Teubner.
+  Witting H. (1985) \emph{Mathematische Statistik I}. Stuttgart: Teubner.
 
-  Pratt, J. W. (1968) A normal approximation for binomial, F, Beta, and other
+  Pratt J. W. (1968) A normal approximation for binomial, F, Beta, and other
 common, related tail probabilities \emph{Journal of the American Statistical Association}, 63, 1457-
 1483.
 

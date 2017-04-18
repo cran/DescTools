@@ -15,8 +15,9 @@
 Mean <- function (x, ...)
   UseMethod("Mean")
 
+
 Mean.Freq <- function(x, breaks, ...)  {
-  sum(diff(breaks) * x$perc)
+  sum(head(MoveAvg(breaks, order=2, align="left"), -1) * x$perc)
 }
 
 
@@ -213,6 +214,32 @@ Median.default <- function(x, weights = NULL, na.rm = FALSE, ...) {
   Quantile(x, weights, probs=0.5, na.rm=na.rm)
 
 }
+
+
+# ordered interface for the median
+Median.factor <- function(x, na.rm = FALSE, ...) {
+
+  # Answered by Hong Ooi on 2011-10-28T00:37:08-04:00
+  # http://www.rqna.net/qna/nuiukm-idiomatic-method-of-finding-the-median-of-an-ordinal-in-r.html
+
+  # return NA, if x is not ordered
+  # clearme: why not median.ordered?
+  if(!is.ordered(x)) return(NA)
+
+  if(na.rm) x <- na.omit(x)
+  if(any(is.na(x))) return(NA)
+
+  levs <- levels(x)
+  m <- median(as.integer(x), na.rm = na.rm)
+  if(floor(m) != m)
+  {
+    warning("Median is between two values; using the first one")
+    m <- floor(m)
+  }
+  ordered(m, labels = levs, levels = seq_along(levs))
+}
+
+
 
 
 
@@ -783,13 +810,13 @@ TukeyBiweight <- function(x, const=9, na.rm = FALSE, conf.level = NA, ci.type = 
 
   if(is.na(conf.level)){
     #  .Call("tbrm", as.double(x[!is.na(x)]), const)
-    res <- .Call("tbrm", as.double(x), const)
+    res <- .Call("tbrm", PACKAGE="DescTools", as.double(x), const)
 
   } else {
 
 
     # adjusted bootstrap percentile (BCa) interval
-    boot.tbw <- boot(x, function(x, d) .Call("tbrm", as.double(x[d]), const), R=R, ...)
+    boot.tbw <- boot(x, function(x, d) .Call("tbrm", PACKAGE="DescTools", as.double(x[d]), const), R=R, ...)
     ci <- boot.ci(boot.tbw, conf=conf.level, type=ci.type)
     res <- c(tbw=boot.tbw$t0, lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])
   }
@@ -822,9 +849,20 @@ TukeyBiweight <- function(x, const=9, na.rm = FALSE, conf.level = NA, ci.type = 
   if(n != length(weights))
     stop("'weights' must have same length as 'x'")
   # if(is.integer(weights)) message("using integer weights")
-  .C(if(is.integer(weights)) "wgt_himed_i" else "wgt_himed",
+  # Original
+  # .C(if(is.integer(weights)) "wgt_himed_i" else "wgt_himed",
+  #    x, n, weights,
+  #    res = double(1))$res
+
+  if(is.integer(weights))
+    .C("wgt_himed_i",
      x, n, weights,
      res = double(1))$res
+  else
+    .C("wgt_himed",
+       x, n, weights,
+       res = double(1))$res
+
 }
 
 
@@ -2293,31 +2331,6 @@ PoissonCI <- function(x, n = 1, conf.level = 0.95,
 
   return(t(res))
 
-}
-
-
-
-# ordered interface for the median
-median.factor <- function(x, na.rm = FALSE) {
-
-  # Answered by Hong Ooi on 2011-10-28T00:37:08-04:00
-  # http://www.rqna.net/qna/nuiukm-idiomatic-method-of-finding-the-median-of-an-ordinal-in-r.html
-
-  # return NA, if x is not ordered
-  # clearme: why not median.ordered?
-  if(!is.ordered(x)) return(NA)
-
-  if(na.rm) x <- na.omit(x)
-  if(any(is.na(x))) return(NA)
-
-  levs <- levels(x)
-  m <- median(as.integer(x), na.rm = na.rm)
-  if(floor(m) != m)
-  {
-    warning("Median is between two values; using the first one")
-    m <- floor(m)
-  }
-  ordered(m, labels = levs, levels = seq_along(levs))
 }
 
 
@@ -5466,14 +5479,13 @@ PlotBinTree <- function(x, main="Binary tree", horiz=FALSE, cex=1.0, col=1, ...)
   n2 <- length(ux)
   idx <- BinTree(n2)[match(x[ord], ux)] - 1L
   y <- cbind(y,1)
-  res <- .Call("conc", y[ord,], as.double(wts[ord]),
+  res <- .Call("conc", PACKAGE="DescTools", y[ord,], as.double(wts[ord]),
                as.integer(idx), as.integer(n2))
 
   return(list(pi.c = NA, pi.d = NA, C = res[2], D = res[1]))
 
 }
-
-
+    
 
 .assocs_condis <- function(x, y = NULL, conf.level = NA, ...) {
 

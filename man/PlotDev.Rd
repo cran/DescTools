@@ -10,7 +10,7 @@
 \usage{
 PlotDev(fn, type = c("tif", "pdf", "eps", "bmp", "png", "jpg"),
         width = NULL, height = NULL, units="cm", res = 300, open = TRUE,
-        expr, ...)
+        compression = "lzw", expr, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -35,6 +35,8 @@ PlotDev(fn, type = c("tif", "pdf", "eps", "bmp", "png", "jpg"),
   \item{open}{logical. Should the graphic be opened after having being created?
 %%     ~~Describe \code{open} here~~
 }
+\item{compression}{the type of compression to be used (tif only).}
+
   \item{expr}{the plot expression
 %%     ~~Describe \code{expr} here~~
 }

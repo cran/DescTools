@@ -127,7 +127,7 @@ PercTable.formula <- function(formula, data, subset, na.action, ...)
 PercTable.table <- function(tab, row.vars=NULL, col.vars = 2, justify = "right"
                             , freq=TRUE, rfrq="100",
                             expected = FALSE, residuals = FALSE, stdres = FALSE, margins = NULL
-                            , ...) {
+                            , digits = NULL, ...) {
 
   # labels = c("Sum", "freq", "perc", "p.row", "p.col"),
 
@@ -154,7 +154,7 @@ PercTable.table <- function(tab, row.vars=NULL, col.vars = 2, justify = "right"
     }
 
     # get the percent format from global option
-    px[] <- Format(px, fmt=Fmt("per"))
+    px[] <- Format(px, fmt=Fmt("per", digits=digits))
 
     # set 100% margins to some zero value
     # but only if main percentages are requested

@@ -112,6 +112,7 @@ desc <- function (x, main=NULL, xname=deparse(substitute(x)), digits=NULL, maxro
 
   # we have to collapse xname here, else there are some breaks like in
   # Desc(Recode(d.pizza$driver, carp=c("Carpenter","Carter"), arm=c("Butcher","Farmer"), elselevel = "Anyone"))
+
   z <- list(xname = paste(StrTrim(xname), collapse=""),
             label = attr(x, "label"))
 
@@ -342,18 +343,23 @@ calcDesc           <- function(x, n, ...) {
   UseMethod("calcDesc")
 }
 
+
 calcDesc.default   <- function(x, n, ...) {
 
   if (!is.null(class(x))) {
-    cat(gettextf("\nSorry, don't know how to handle class(es) %s (%s)!\n\n",
-                 paste(class(x), collapse = ", "), deparse(substitute(x))))
+    # cat(gettextf("\nSorry, don't know how to Desc class(es) %s (%s)!\n\n",
+    #              paste(class(x), collapse = ", "), deparse(substitute(x))))
+    r <- "unhandled class"
 
   } else {
-    cat(gettextf("\nObject %s does not exist!\n\n", deparse(substitute(x))))
+    # cat(gettextf("\nObject %s does not exist!\n\n", deparse(substitute(x))))
+    r <- "no object"
+
   }
 
-  invisible()
+  invisible(r)
 }
+
 
 calcDesc.numeric   <- function(x, n, maxrows = NULL, ...) {
 
@@ -533,7 +539,7 @@ calcDesc.Date      <- function(x, n, dprobs = NULL, mprobs=NULL, ...) {
 }
 
 
-calcDesc.table     <- function(x, n, conf.level=0.95, verbose, rfrq, margins, p, ...) {
+calcDesc.table     <- function(x, n, conf.level=0.95, verbose, rfrq, margins, p, digits, ...) {
 
   loglik.chisq <- function(r.chisq) {
     # Log-likelihood chi-squared (G2) test of independence (homogeneity)
@@ -594,7 +600,7 @@ calcDesc.table     <- function(x, n, conf.level=0.95, verbose, rfrq, margins, p,
     pfreqc            = if(ttype != "t1dim") prop.table(x, 2),
     perctab           = if(ttype == "t1dim") Freq(x)
                           else if(ttype=="tndim")  NULL
-                          else PercTable(x, rfrq=rfrq, margins=margins, ...),
+                          else PercTable(x, rfrq=rfrq, margins=margins, digits=digits, ...),
     approx.ok         = if(ttype=="tndim") r.chisq$approx.ok else !(any(r.chisq$expected < 5) && is.finite(r.chisq$parameter))
   )
 
@@ -602,8 +608,9 @@ calcDesc.table     <- function(x, n, conf.level=0.95, verbose, rfrq, margins, p,
 
 }
 
-calcDesc.matrix    <- function(x, n, conf.level=0.95, verbose, rfrq, margins, p, ...){
-  calcDesc.table(x=x, n=n, conf.level=conf.level, verbose=verbose, rfrq=rfrq, margins=margins, p=p, ...)
+calcDesc.matrix    <- function(x, n, conf.level=0.95, verbose, rfrq, margins, p, digits, ...){
+  calcDesc.table(x=x, n=n, conf.level=conf.level, verbose=verbose, rfrq=rfrq, margins=margins,
+                 p=p, digits=digits, ...)
 }
 
 
@@ -1298,20 +1305,24 @@ plot.Desc <- function(x, main = NULL, ...){
 
 
 plot.Desc.default   <- function(x, main=NULL, ...){
-  cat(gettextf("should plot %s ", deparse(substitute(x))))
-  cat("but might not be able to plot that stuff...")
+  return(gettextf("should plot %s \nbut might not be able to plot that stuff...", deparse(substitute(x))))
 }
 
-plot.Desc.numeric   <- function(x, main=NULL, ...){
+
+plot.Desc.numeric   <- function(x, main=NULL, args.hist = NULL, ...){
 
   # return the first value not being null of main, x$main, deparse(substitute(x))
   # (remind to allow NA here, for choosing no main title)
   main <- Reduce(function (x, y) ifelse(!is.null(x), x, y),
                  c(main, x$main, deparse(substitute(x))))
 
-  PlotFdist(x=x$x, main=main, do.hist=x$unique > 12, ...)
+  if(is.null(args.hist))
+    args.hist <- list(type=if(x$unique > 12) "hist" else "mass")
+
+  PlotFdist(x=x$x, main=main, args.hist=args.hist, ...)
 
 }
+
 
 plot.Desc.character <- function(x, main=NULL, ...){
   plot.Desc.factor(x, main=main, ...)
@@ -1433,7 +1444,7 @@ plot.Desc.integer   <- function(x, main=NULL, ...) {
   if(x$unique %[]% c(0, 2)){
     plot.Desc.logical(x, main=main, ...)
   } else if(x$unique %(]% c(2, 12)| (x$maxrows > 0)){
-    plot.Desc.factor(x, main=main, ..., type="dot")
+    plot.Desc.numeric(x, main=main, args.hist=list(type="mass"), ...)
   } else {
     plot.Desc.numeric(x, main=main, ...)
   }

@@ -16,7 +16,7 @@ NemenyiTest(x, ...)
 
 \method{NemenyiTest}{default}(x, g, dist = c("tukey", "chisq"), out.list = TRUE, ...)
 
-\method{NemenyiTest}{formula}(formula, data, subset, na.action, ...) 
+\method{NemenyiTest}{formula}(formula, data, subset, na.action, ...)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -26,8 +26,8 @@ NemenyiTest(x, ...)
   \item{g}{a vector or factor object giving the group for the
     corresponding elements of \code{x}.  Ignored if \code{x} is a
     list.}
-    
-  \item{dist}{the distribution used for the test. Can be "tukey" or "chisq" (default is "tukey").}
+
+  \item{dist}{the distribution used for the test. Can be \code{tukey} (default) or \code{chisq}.}
   \item{out.list}{logical, defining if the output should be organized in listform.}
 
   \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs}
@@ -44,7 +44,10 @@ NemenyiTest(x, ...)
 
   \item{\dots}{further arguments to be passed to or from methods.}
 }
-\details{ToDo!! Tell when to use this test. References needed!
+\details{
+%% ToDo!! Tell when to use this test. References needed!
+Nemenyi proposed a test based on rank sums and the application of the family-wise error method to control Type I error inflation, if multiple comparisons are done. The Tukey and Kramer approach uses mean rank sums and can be employed for equally as well as unequally sized samples without ties.
+
 %%  ~~ If necessary, more details than the description above ~~
 }
 
@@ -75,7 +78,7 @@ Andri Signorell <andri@signorell.net>
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{\code{\link{DunnTest}}
+\seealso{\code{\link{DunnTest}}, \code{\link{ConoverTest}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
@@ -107,8 +110,6 @@ d.frm <- data.frame(x=c(28,30,33,35,38,41, 36,39,40,43,45,50, 44,45,47,49,53,54)
                     g=c(rep(LETTERS[1:3], each=6)))
 
 NemenyiTest(x~g, d.frm)
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

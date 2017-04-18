@@ -12,7 +12,7 @@ Still the function remains flexible as all possible arguments can be passed to t
 }
 \usage{
 PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
-          do.hist = NULL, args.hist = NULL, args.rug = NA, args.dens = NULL,
+          args.hist = NULL, args.rug = NA, args.dens = NULL,
           args.curve = NA, args.boxplot = NULL, args.ecdf = NULL,
           args.curve.ecdf = NA, heights = NULL, pdist = NULL,
           na.rm = FALSE, cex.axis = NULL, cex.main = NULL, mar = NULL, las = 1)
@@ -31,12 +31,10 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
   \item{xlim}{range of the x-axis, defaults to a pretty \code{range(x, na.rm = TRUE)}.
 %%     ~~Describe \code{xlim} here~~
 }
-   \item{do.hist}{defines, whether a histogram or a plot with \code{type = "h"} should be used.
-  Set this to \code{NULL} (default) will use a histogram, unless \code{x} is an integer with up to 12 unique values!
-%%     ~~Describe \code{do.hist} here~~
-}
-  \item{args.hist}{list of additional arguments to be passed to the histogram \code{hist()}, ignored if \code{do.hist = FALSE}.
-  The defaults chosen when setting \code{args.hist = NULL} are more or less the same as in \code{\link{hist}}.
+  \item{args.hist}{list of additional arguments to be passed to the histogram \code{hist()}.
+  The defaults chosen when setting \code{args.hist = NULL} are more or less the same as in \code{\link{hist}}. The argument \code{type} defines, whether a histogram (\code{"hist"}) or a plot with \code{type = "h"} (\code{"mass"})should be used.
+  The arguments for a "h" plot will be \code{col}, \code{lwd}, \code{pch.col}, \code{pch}, \code{pch.bg} for the line and for an optional point character on top.
+  By default a histogram, unless \code{x} is an integer with up to 12 unique values!
 %%     ~~Describe \code{args.hist} here~~
 }
   \item{args.rug}{list of additional arguments to be passed to the function \code{rug()}.
@@ -109,7 +107,12 @@ PlotFdist(d.pizza$delivery_min, args.hist=list(breaks=50),
 
 # do a "h"-plot instead of a histogram for integers
 x <- sample(runif(10), 100, replace = TRUE)
-PlotFdist(x, do.hist=FALSE)
+PlotFdist(x, args.hist=list(type="mass"))
+
+pp <- rpois(n = 100, lambda = 3)
+PlotFdist(pp, args.hist = list(type="mass", pch=21, col=horange,
+          cex.pch=2.5, col.pch=hred, lwd=3, bg.pch="white"),
+          args.boxplot = NULL, args.ecdf = NA, main="Probability mass function")
 
 # special arguments for hist, density and ecdf
 PlotFdist(x=faithful$eruptions,

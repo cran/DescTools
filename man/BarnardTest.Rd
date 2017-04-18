@@ -63,7 +63,7 @@ Barnard, G.A. (1947) Significance tests for 2x2 tables. \emph{Biometrika}, 34:12
 
 Suissa, S. and Shuster, J. J. (1985), Exact Unconditional Sample Sizes for the 2x2 Binomial Trial, \emph{Journal of the Royal Statistical Society}, Ser. A, 148, 317-327.
 
-Cardillo G. (2009) MyBarnard: a very compact routine for Barnard's exact test on 2x2 matrix. \url{http://www.mathworks.com/matlabcentral/fileexchange/25760}
+Cardillo G. (2009) MyBarnard: a very compact routine for Barnard's exact test on 2x2 matrix. \url{http://ch.mathworks.com/matlabcentral/fileexchange/25760-mybarnard}
 
 Galili T. (2010) \url{http://www.r-statistics.com/2010/02/barnards-exact-test-a-powerful-alternative-for-fishers-exact-test-implemented-in-r/}
 

@@ -5,7 +5,7 @@
 \title{Binary Tree
 %%  ~~function to do ... ~~
 }
-\description{Create a binary tree
+\description{Create a binary tree of a given number of nodes \code{n}. Can be used to organize a sorted numeric vector as  a binary tree.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -43,12 +43,12 @@ traversal becomes particularly easy.
 The basic idea is that the rows of the tree start at indices 1, 2, 4, \ldots.
 
 BinTree(13) yields the vector
-[[8  4  9  2 10  5 11  1 12  6 13  3  7]] meaning that the smallest element
+\code{c(8, 4, 9, 2, 10, 5, 11, 1, 12, 6, 13, 3, 7)} meaning that the smallest element
 will be in position 8 of the tree, the next smallest in position 4, etc.
 
 %%  ~~ If necessary, more details than the description above ~~
 }
-\value{a vector
+\value{an integer vector of length n
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -67,7 +67,7 @@ x <- sort(sample(100, 24))
 z <- PlotBinTree(x, cex=0.8)
 
 
-# Plot example - Titanic once somwhat different
+# Plot example - Titanic data, for once from a somwhat different perspective
 tab <- apply(Titanic, c(2,3,4), sum)
 cprob <- c(1, prop.table(apply(tab, 1, sum))
            , as.vector(aperm(prop.table(apply(tab, c(1,2), sum), 1), c(2, 1)))

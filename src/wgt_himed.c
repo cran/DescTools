@@ -30,18 +30,18 @@
 /* --> int64_t ; if people don't have the above, they can forget about it.. */
 /* #include "int64.h" */
 
-#include <R.h>
 #include <Rmath.h> /* -> <math.h> and much more */
 
-/* Interface routines to be called via .C() : */
 #include "robustbase.h"
 
+// whimed() and whimed_i()  function called from C : in ./mc.c , ./qn_sn.c :
 #define _i_whimed_
 #include "wgt_himed_templ.h"
 
 #define _d_whimed_
 #include "wgt_himed_templ.h"
 
+/* Interface routines to be called via .C() : */
 
 void wgt_himed_i(double *x, Sint *n, Sint *iw, double *res)
 {
@@ -72,6 +72,3 @@ void wgt_himed(double *x, Sint *n, double *w, double *res)
     *res = whimed(x, w, nn, a_cand, a_srt, w_cand);
     vmaxset(vmax);
 }
-
-
-

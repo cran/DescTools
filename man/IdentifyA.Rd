@@ -6,7 +6,7 @@
 \title{Identify Points in Plot Lying Within a Rectangle or Polygon
 %%  ~~function to do ... ~~
 }
-\description{Find all the points lying either in a rectangle area, spanned by an upper left point and a bottom-right point clicked by the user or in a polygon area defined by the user.
+\description{Find all the points lying either in a rectangle area spanned by an upper left and a bottom-right point or by a polygon area consisting of any number of points defined by point and click.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

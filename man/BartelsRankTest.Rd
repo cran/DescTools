@@ -5,7 +5,7 @@
 Bartels Rank Test
 }
 \description{
-Performs the Bartels rank test of randomness.
+Performs the Bartels rank test of randomness, which tests if a sample is sampled randomly from an underlying population. Data must at least be measured on an ordinal scale.
 }
 \usage{
 BartelsRankTest(x, alternative = c("two.sided", "trend", "oscillation"),
@@ -19,14 +19,15 @@ BartelsRankTest(x, alternative = c("two.sided", "trend", "oscillation"),
   \item{method}{a character string specifying the method used to compute the p-value. Must be one of \code{normal} (default), \code{beta} or \code{auto}. }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
-Missing values are removed.
-
 The RVN test statistic is
 \deqn{RVN=\frac{\sum_{i=1}^{n-1}(R_i-R_{i+1})^2}{\sum_{i=1}^{n}\left(R_i-(n+1)/2\right)^2}}{RVN=\sum(R_i-R_{i+1})^2 / \sum(R_i-(n+1)/2)^2}
 where \eqn{R_i=rank(X_i), i=1,\dots, n}{R_i=rank(X_i), i=1,...,n}. It is known that \eqn{(RVN-2)/\sigma} is asymptotically standard normal, where \eqn{\sigma^2=\frac{4(n-2)(5n^2-2n-9)}{5n(n+1)(n-1)^2}}{\sigma^2=[4(n-2)(5n^2-2n-9)]/[5n(n+1)(n-1)^2]}.
 
 By using the alternative "\code{trend}" the null hypothesis of randomness is tested against a trend. By using the alternative "\code{oscillation}" the null hypothesis of randomness is tested against a systematic oscillation.
+
+Missing values are silently removed.
+
+Bartels test is a rank version of von Neumann's test.
 }
 \value{
 A list with class "htest" containing the components:
@@ -42,15 +43,18 @@ A list with class "htest" containing the components:
 \item{var}{the variance of the RVN statistic (not show on screen).}
 }
 \references{
-Bartels, R. (1982). The Rank Version of von Neumann's Ratio Test for Randomness, \emph{Journal of the American Statistical Association}, \bold{77}(377), 40-46.
+Bartels, R. (1982) The Rank Version of von Neumann's Ratio Test for Randomness, \emph{Journal of the American Statistical Association}, \bold{77} (377), 40-46.
 
-Gibbons, J.D. and Chakraborti, S. (2003). \emph{Nonparametric Statistical Inference}, 4th ed. (pp. 97-98).
+Gibbons, J.D. and Chakraborti, S. (2003) \emph{Nonparametric Statistical Inference}, 4th ed. (pp. 97-98).
 URL: \url{http://books.google.pt/books?id=dPhtioXwI9cC&lpg=PA97&ots=ZGaQCmuEUq}
+
+von Neumann, J. (1941) Distribution of the ratio of the mean square successive difference to the variance.
+\emph{Annals of Mathematical Statistics} \bold{12}, 367-395.
 }
 \author{Frederico Caeiro <fac@fct.unl.pt>}
 
 \seealso{
-\code{\link[randtests]{rank.test}}
+\code{\link[randtests]{rank.test}}, \code{\link{RunsTest}}
 }
 \examples{
 ## Example 5.1 in Gibbons and Chakraborti (2003), p.98.

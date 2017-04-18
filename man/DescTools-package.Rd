@@ -156,8 +156,9 @@ A grouped list of the functions:
 \link{PtInPoly}  \tab  Identify all the points within a polygon. \cr
 \link{ConnLines}       \tab   Calculate and insert connecting lines in a barplot \cr
 \link{AxisBreak}       \tab      Place a break mark on an axis \cr
-\link{PlotACF}, \link{PlotMonth}    \tab  Create a combined plot of a time series and its autocorrelation\cr
-\tab and partial autocorrelation \cr
+\link{PlotACF}  \tab  Create a combined plot of a time series including its \cr
+\tab autocorrelation and partial autocorrelation\cr
+\link{PlotMonth} \tab     Plot seasonal effects of a univariate time series\cr
 \link{PlotArea}    \tab  Create an area plot \cr
 \link{PlotBag}    \tab  Create a two-dimensional boxplot \cr
 \link{PlotBubble}    \tab  Draw a bubble plot \cr
@@ -195,7 +196,7 @@ A grouped list of the functions:
 \link{Mode}  \tab     Mode, the most frequent value   \cr
 \link{Gmean}, \link{Gsd}  \tab  Geometric mean and geometric standard deviation     \cr
 \link{Hmean}  \tab    Harmonic Mean   \cr
-\link{median.factor}       \tab   Interface for the median of ordered factors \cr
+\link{Median}       \tab   Extended median function supporting weights and ordered factors \cr
 \link{HuberM}, \link{TukeyBiweight}  \tab    Huber M-estimator of location and Tukey's biweight robust mean   \cr
 \link{HodgesLehmann}       \tab the Hodges-Lehmann estimator\cr
 \link{HoeffD}       \tab   Hoeffding's D statistic \cr

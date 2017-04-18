@@ -1010,9 +1010,83 @@ DurbinWatsonTest <- function(formula, order.by = NULL, alternative = c("greater"
 
 
 
-##
-##  Bartels' Rank Test
-##
+
+VonNeumannTest <- function (x, alternative = c("two.sided", "less", "greater"), unbiased=TRUE) {
+
+
+  ## ToDo: use incomplete beta for exact p-values
+  ## ************************
+  ## see: von Neumann Successive Difference 1941
+  ##
+  # n <- 50
+  # vx <- 1
+  #
+  # mu2 <- (4 * (3*n - 4)/(n-1)^2) * vx^2
+  #
+  # q2 <- (3*n^4 - 10*n^3 -18*n^2 + 79*n - 60) / (8*n^3 - 50*n + 48)
+  # q1 <- (4 - mu2 * (q2 + 1) * (q2 + 3)) / (4 - mu2 * (q2 + 1))
+  # a2 <- 2 * (q1 - q2 - 2) / (q2 + 1)
+  # cc <- a2 ^(q1 - q2 - 2) / beta(q1 - q2 -1, q2+1)
+  #
+  # c(q1, q2, a2, cc)
+  #
+  # pbeta(0.75, shape1 = q1 - q2 -1, shape2= q2+1)
+  # pbeta(0.75, shape1 = q1 - q2 -1, shape2= q2+1)
+  #
+  # beta(q1 - q2 -1, q2+1)
+
+
+  alternative <- match.arg(alternative)
+
+  dname <- deparse(substitute(x))
+
+  x <- x[!is.na(x)]
+
+  d <- diff(x)
+  n <- length(x)
+  mx <- mean(x)
+
+  if(unbiased) {
+
+    # http://www.chegg.com/homework-help/detecting-autocorrelation-von-neumann-ratio-test-assuming-re-chapter-12-problem-4-solution-9780073375779-exc
+
+    VN <- sum(d^2) / sum((x - mx)^2) * n/(n-1)
+    Ex <- 2 * n/(n-1)
+    Vx <- 4 * n^2 * (n-2) / ((n+1) * (n-1)^3)
+    z <- (VN - Ex) / Vx
+
+  } else {
+    VN <- sum(d^2) / sum((x - mx)^2)
+    z <- (1-(VN/2)) / sqrt((n-2)/(n^2 - 1))
+  }
+
+
+  if (alternative == "less") {
+    pval <- pnorm(z)
+  }
+  else if (alternative == "greater") {
+    pval <- pnorm(z, lower.tail = FALSE)
+  }
+  else {
+    pval <- 2 * pnorm(-abs(z))
+  }
+  names(VN) <- "VN"
+  method <- "Von Neumann Successive Difference Test"
+
+  rval <- list(statistic = c(VN, z=z), p.value = pval,
+               method = method,
+               alternative = alternative, data.name = dname,
+               z = z)
+
+  class(rval) <- "htest"
+  return(rval)
+
+}
+
+
+
+
+
 BartelsRankTest <- function(x, alternative = c("two.sided", "trend", "oscillation"),
                             method = c("normal", "beta", "auto")) {
 
@@ -1054,37 +1128,39 @@ BartelsRankTest <- function(x, alternative = c("two.sided", "trend", "oscillatio
   # unique
   rk <- rank(x)
   d <- diff(rk)
-  #d.rank <- n*(n^2-1)/12
-  d.rank <- sum(rk^2)-n*(mean(rk)^2)
-  RVN <- sum(d^2)/d.rank
+  d.rank <- sum(rk^2) - n * (mean(rk)^2)
+  RVN <- sum(d^2) / d.rank
   mu <- 2
   vr <- (4*(n-2)*(5*n^2-2*n-9))/(5*n*(n+1)*(n-1)^2)
 
   # Computes the p-value
-  if (pvalue == "auto"){pvalue<-ifelse(n<=100, "beta", "normal")}
+  if (pvalue == "auto"){
+    pvalue <- ifelse(n <= 100, "beta", "normal")
+  }
+
   if (pvalue == "beta"){
     btp <- (5*n*(n+1)*(n-1)^2)/(2*(n-2)*(5*n^2-2*n-9))-1/2
-    pv0 <- pbeta(RVN/4,shape1=btp,shape2=btp)
+    pv0 <- pbeta(RVN/4, shape1=btp, shape2=btp)
   }
   if (pvalue=="normal"){
     pv0 <- pnorm((RVN - mu) / sqrt(vr))
   }
 
   if (alternative=="two.sided"){
-    pv <- 2*min(pv0,1-pv0)
-    alternative<-"nonrandomness"
+    pv <- 2 * min(pv0, 1 - pv0)
+    alternative <- "nonrandomness"
   }
-  if (alternative=="trend"){
+  if (alternative == "trend"){
     pv <- pv0
-    alternative<-"trend"
+    alternative <- "trend"
   }
-  if (alternative=="oscillation"){
-    pv <- 1-pv0
-    alternative<-"systematic oscillation"
+  if (alternative == "oscillation"){
+    pv <- 1 - pv0
+    alternative <- "systematic oscillation"
   }
 
   test <- (RVN - mu) / sqrt(vr)
-  rval <- list(statistic = c(statistic=test), nm=sum(d^2), rvn=RVN, mu=mu, var=vr, p.value = pv,
+  rval <- list(statistic = c(RVN=RVN, z=test), nm=sum(d^2), rvn=RVN, mu=mu, var=vr, p.value = pv,
                method = "Bartels Ratio Test", data.name = dname, parameter=c(n=n), n=n, alternative=alternative)
   class(rval) <- "htest"
   return(rval)
@@ -2910,14 +2986,22 @@ BarnardTest <- function (x, y = NULL, alternative = c("two.sided", "less", "grea
   vec.size <- 1.0 + 1.0 / dp
   mat.size <- 4.0 * prod(rowSums(x) + 1) # (n1 + n3 + 1) * (n2 + n4 + 1)
 
-  meth <- paste(method, "S", sep="")
 
-  ret1 <- .C( meth,
-              as.integer(x[1]), as.integer(x[2]), as.integer(x[3]), as.integer(x[4]),
-              as.numeric(dp),
-              mat.size = as.integer(0),
-              statistic.table = as.double(vector("double", mat.size)),
-              statistic = as.double(0.0))
+  if(pooled)
+    ret1 <- .C( "ScoreS",
+                as.integer(x[1]), as.integer(x[2]), as.integer(x[3]), as.integer(x[4]),
+                as.numeric(dp),
+                mat.size = as.integer(0),
+                statistic.table = as.double(vector("double", mat.size)),
+                statistic = as.double(0.0))
+  else
+    ret1 <- .C( "WaldS",
+                as.integer(x[1]), as.integer(x[2]), as.integer(x[3]), as.integer(x[4]),
+                as.numeric(dp),
+                mat.size = as.integer(0),
+                statistic.table = as.double(vector("double", mat.size)),
+                statistic = as.double(0.0))
+
 
   xr <- seq(1, ret1$mat.size, 4) + 2
 
@@ -4168,6 +4252,134 @@ print.DunnTest <- function (x, digits = getOption("digits", 3), ...) {
 
 
 
+ConoverTest <- function (x, ...)
+  UseMethod("ConoverTest")
+
+
+ConoverTest.default <- function (x, g,
+  method = c("holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"),
+  alternative = c("two.sided", "less", "greater"), out.list = TRUE, ...) {
+
+  alternative <- match.arg(alternative)
+
+  if (is.list(x)) {
+    if (length(x) < 2L)
+      stop("'x' must be a list with at least 2 elements")
+    DNAME <- deparse(substitute(x))
+    x <- lapply(x, function(u) u <- u[complete.cases(u)])
+    k <- length(x)
+    l <- sapply(x, "length")
+    if (any(l == 0))
+      stop("all groups must contain data")
+    g <- factor(rep(1:k, l))
+    x <- unlist(x)
+  } else {
+    if (length(x) != length(g))
+      stop("'x' and 'g' must have the same length")
+    DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(g)))
+    OK <- complete.cases(x, g)
+    x <- x[OK]
+    g <- g[OK]
+    if (!all(is.finite(g)))
+      stop("all group levels must be finite")
+    g <- factor(g)
+    k <- nlevels(g)
+    if (k < 2)
+      stop("all observations are in the same group")
+  }
+
+  N <- length(x)
+  if (N < 2)
+    stop("not enough observations")
+  method <- match.arg(method)
+  nms <- levels(g)
+  n <- tapply(g, g, length)
+  rnk <- rank(x)
+  mrnk <- tapply(rnk, g, mean)
+  tau <- table(rnk[AllDuplicated(rnk)])
+  tiesadj <- 1-sum(tau^3 - tau)/(N^3 - N)
+  mrnkdiff <- outer(mrnk, mrnk, "-")
+
+  # Kruskal-Wallis H statistic
+  H <- (12 / (N * (N + 1))) * sum(tapply(rnk, g, sum)^2 / n) - 3 * (N + 1)
+  if (tiesadj == 1) {
+    s2 <- N * (N + 1) / 12
+  } else {
+    s2 <-   ( 1 / (N - 1)) * (sum(rnk^2) - (N * (((N + 1)^2) / 4)))
+  }
+
+  tval <- mrnkdiff/sqrt(s2 * ((N - 1 - H/tiesadj) / (N - k)) * outer(1/n, 1/n, "+"))
+
+  if (alternative == "less") {
+    pvals <- pt(abs(tval), df=N - k)
+
+  } else if (alternative == "greater") {
+    pvals <- pt(abs(tval), df=N - k, lower.tail = FALSE)
+
+  } else {
+    pvals <- 2 * pt(abs(tval), df=N - k, lower.tail = FALSE)
+
+  }
+
+  keep <- lower.tri(pvals)
+  pvals <- pvals[keep]
+  m <- sum(keep)
+  out <- list()
+  pvals <- p.adjust(pvals, method = method)
+  method.str <- method
+  if (out.list) {
+    dnames <- list(NULL, c("mean rank diff", "pval"))
+    if (!is.null(nms))
+      dnames[[1L]] <- outer(nms, nms, paste, sep = "-")[keep]
+    out[[1]] <- array(c(mrnkdiff[keep], pvals), c(length(mrnkdiff[keep]),
+                                                  2L), dnames)
+  } else {
+    out[[1]] <- matrix(NA, nrow = length(nms), ncol = length(nms))
+    out[[1]][lower.tri(out[[1]], diag = FALSE)] <- pvals
+    dimnames(out[[1]]) <- list(nms, nms)
+    out[[1]] <- out[[1]][-1, -ncol(out[[1]])]
+  }
+
+  class(out) <- c("DunnTest")
+  attr(out, "main") <- gettextf("Conover's test of multiple comparisons : %s ",
+                                method.str)
+  attr(out, "method") <- method.str
+  attr(out, "out.list") <- out.list
+
+  return(out)
+
+}
+
+
+
+
+ConoverTest.formula <- function (formula, data, subset, na.action, ...) {
+
+  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
+                                                                  "term.labels")) != 1L))
+    stop("'formula' missing or incorrect")
+  m <- match.call(expand.dots = FALSE)
+  if (is.matrix(eval(m$data, parent.frame())))
+    m$data <- as.data.frame(data)
+  m[[1L]] <- quote(stats::model.frame)
+  m$... <- NULL
+  mf <- eval(m, parent.frame())
+  if (length(mf) > 2L)
+    stop("'formula' should be of the form response ~ group")
+  DNAME <- paste(names(mf), collapse = " by ")
+
+  names(mf) <- NULL
+  response <- attr(attr(mf, "terms"), "response")
+  y <- DoCall("ConoverTest", c(as.list(mf), list(...)))
+  y$data.name <- DNAME
+
+  y
+
+}
+
+
+
+
 # Test  NemenyiTest
 #
 # d.frm <- data.frame(x=c(28,30,33,35,38,41, 36,39,40,43,45,50, 44,45,47,49,53,54),
@@ -4653,5 +4865,7 @@ HosmerLemeshowTest <- function (fit, obs, ngr = 10, X, verbose = FALSE){
 
   list(C = C, H = H)
 }
+
+
 
 

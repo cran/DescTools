@@ -24,7 +24,7 @@ coefficients. The robust Jarque-Bera (RJB) version of utilizes
 the robust standard deviation (namely the mean absolute deviation
 from the median, as provided e. g. by \code{\link{MeanAD}(x, FUN=median)}) to estimate sample kurtosis and skewness. For more details see Gel and Gastwirth (2006).
 \cr
-Users can also choose to perform the classical Jarque-Bera test (see
+Setting \code{robust} to \code{FALSE} will perform the original Jarque-Bera test (see
 Jarque, C. and Bera, A (1980)).
 }
 \value{

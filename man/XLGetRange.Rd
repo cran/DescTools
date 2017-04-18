@@ -12,7 +12,7 @@ XLGetWorkbook does the same for all the sheets in an Excel workbook.
 }
 \usage{
 XLGetRange(file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
-           header = FALSE, stringsAsFactors = FALSE)
+           header = FALSE, stringsAsFactors = FALSE, echo = FALSE)
 
 XLGetWorkbook(file, compactareas = TRUE)
 }
@@ -36,6 +36,7 @@ as this is probably the common use of this function.}
 \item{header}{a logical value indicating whether the range contains the names of the variables as its first line. Default is FALSE. \code{header} is ignored if \code{as.data.frame} has been set to FALSE. }
 
 \item{stringsAsFactors}{logical. Should character columns be coerced to factors? The default is FALSE, which will return character vectors.}
+\item{echo}{logical. If set to \code{TRUE}, the function will print the full command used, such that it can be copied into the R-script for future use.}
 \item{compactareas}{logical, defining if areas should be returned by \code{XLGetWorkbook} as list or as matrix (latter is default).}
 }
 \details{The result consists of a list of lists, if \code{as.data.frame} is set to \code{FALSE}.

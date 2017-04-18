@@ -1,10 +1,10 @@
 \name{PDFManual}
 \alias{PDFManual}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Get PDF Manual Of a Package From CRAN
+\title{Get PDF Manual of a Package From CRAN
 %%  ~~function to do ... ~~
 }
-\description{PDF versions of the manual are usually not included as vignettes in R packages. Still this format is convenient for reading. \cr This function creates the appropriate link to the pdf file on CRAN and opens the pdf manual in a browser window.
+\description{PDF versions of the manual are usually not included as vignettes in R packages. Still this format is convenient for reading and doing full text search. \cr This function creates the appropriate link to the pdf file on CRAN and opens the pdf manual in a browser window.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

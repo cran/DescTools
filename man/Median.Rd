@@ -7,10 +7,13 @@
 \title{Median Value}
 \alias{Median}
 \alias{Median.Freq}
+\alias{Median.factor}
 \alias{Median.default}
 
 \usage{
 Median(x, \dots)
+
+\method{Median}{factor}(x, na.rm = FALSE, \dots)
 
 \method{Median}{Freq}(x, breaks, \dots)
 
@@ -40,6 +43,13 @@ Median(x, \dots)
   the default method will work for most classes
   (e.g., \code{"\link{Date}"}) for which a median is a reasonable
   concept.
+
+  Calculating the median for ordered factors is not implemented in standard R, as
+it's not well defined (it is not clear what to do if the median sits between two levels in factors of even length).
+This function returns the high median and prints a warning if the low median would be different (which is
+supposed to be a rare event).
+There's a vivid discussion between experts going on whether this should be defined or not.
+We'll wait for definitive results and enjoy the function's comfort so far...
 }
 \value{
   The default method returns a length-one object of the same type as
@@ -55,7 +65,11 @@ Median(x, \dots)
   \emph{The New S Language}.
   Wadsworth & Brooks/Cole.
 }
-\seealso{\code{\link{quantile}} for general quantiles.}
+\seealso{\code{\link{quantile}} for general quantiles.
+\url{https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html}
+
+\url{http://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}
+}
 \examples{
 Median(1:4)                # = 2.5 [even number]
 Median(c(1:3, 100, 1000))  # = 3 [odd, robust]

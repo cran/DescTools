@@ -1,4 +1,34 @@
 
+DescTools 0.99.20 (2017-04-16)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+   * VonNeumannTest() testing for the randomness of a sequence has been added.
+   * VecShift() shifts the elements of a vector, filling the opened positions
+     with NAs.
+   * New functions InsRow() and InsCol() will quickly insert vectors in a matrix.
+   * New ConoverTest() posthoc test can be used as alternative to DunnTest().
+   * ModelDlg() displays a dialog for interactively composing a model formula.
+
+UPDATED FUNCTIONS:
+   * PlotQQ() gets new arguments for adding a confidence band.
+   * Parameter n in VecRot() has been renamed to k.
+   * digits will be passed through to PercTable() from Desc().
+   * ParseSASDatlines() accepts "cards" in addition to "datalines" now.
+   * PlotFdist() loses its "do.hist" argument. The bar chart for counts can be
+     required with args.hist(type="mass") now.
+   * BarText() gains an implementation for unstacked bars.
+   * XLGetRange() gains a new argument echo for printing the used command.
+   * Further changes due to CRANs updated policies.
+
+BUGFIXES:
+   * Mean.Freq() slipped through quality control last time...
+
+DEFUNCT:
+   * median.factor() has been transferred to Median.factor().
+
+
+
 DescTools 0.99.19 (2017-02-09)
 ------------------------------
 

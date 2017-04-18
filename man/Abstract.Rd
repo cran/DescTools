@@ -4,7 +4,7 @@
 \title{Abstract
 %%  ~~function to do ... ~~
 }
-\description{Compactly display the content and structure of a data.frame, including variable labels. \code{str} is optimised for lists and it's output is relatively technical, when it comes to e.g. attributes. \code{summary} on the other side already calculates some basic statistics.
+\description{Compactly display the content and structure of a data.frame, including variable labels. \code{str} is optimised for lists and its output is relatively technical, when it comes to e.g. attributes. \code{summary} on the other side already calculates some basic statistics.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -43,11 +43,9 @@ containing a sequential nr (Nr), the name of the column (ColName), the class (Cl
 
 
 \author{Andri Signorell <andri@signorell.net>
-%%  ~~who you are~~
 }
 
 \seealso{\code{\link{str}}, \code{\link{summary}}, \code{\link{ColumnWrap}}
-%% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
 d.mydata <- d.pizza

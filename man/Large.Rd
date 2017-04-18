@@ -8,7 +8,7 @@
 \title{Kth Smallest/Largest Values
 %%  ~~function to do ... ~~
 }
-\description{Find the kth smallest, resp. largest values from a vector x and return the values, but also their frequencies.
+\description{Find the kth smallest, resp. largest values from a vector \code{x} and return the values and their frequencies.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -38,7 +38,8 @@ HighLow(x, nlow = 5, nhigh = nlow, na.last = NA)
 }
 
 }
-\details{There are several points of this problem discussed out there. This implementation is based on effective C++ code, which is quite fast.
+\details{This does not seem to be a difficult problem at first sight. We could simply tabulate and sort the vector and finally take the first or last k values. However sorting and tabulating the whole vector when we're just interested in the few smallest values is a considerable waste of resources. This approach becomes already impracticable for medium vector lengths. There are several points and solutions of this problem discussed out there.
+The present implementation is based on highly efficient C++ code and proved to be very fast.
 
 HighLow enumerates the k extreme values (both sides) and their frequencies (in brackets). It is used for describing univariate variables and is interesting for checking the ends of the vector, where in real data often wrong values accumulate.
 This is merely a printing routine for the highest and the lowest values of x.
