@@ -1552,12 +1552,17 @@ BinomCI <- function(x, n, conf.level = 0.95, method = c("wilson", "wald", "agres
               est <- p.hat
               term1 <- (x + kappa^2/2)/(n + kappa^2)
               term2 <- kappa*sqrt(n)/(n + kappa^2)*sqrt(p.hat*q.hat + kappa^2/(4*n))
-              if((n <= 50 & x %in% c(1, 2)) | (n >= 51 & n <= 100 & x %in% c(1:3)))
+              ## comment by Andre Gillibert, 19.6.2017:
+              ## old:
+              ## if((n <= 50 & x %in% c(1, 2)) | (n >= 51 & n <= 100 & x %in% c(1:3)))
+              ## new:
+              if((n <= 50 & x %in% c(1, 2)) | (n >= 51 &            x %in% c(1:3)))
                 CI.lower <- 0.5*qchisq(alpha, 2*x)/n
               else
                 CI.lower <-  max(0, term1 - term2)
 
-              if((n <= 50 & x %in% c(n-1, n-2)) | (n >= 51 & n <= 100 & x %in% c(n-(1:3))))
+              ## if((n <= 50 & x %in% c(n-1, n-2)) | (n >= 51 & n <= 100 & x %in% c(n-(1:3))))
+              if((n <= 50 & x %in% c(n-1, n-2)) | (n >= 51 &            x %in% c(n-(1:3))))
                 CI.upper <- 1 - 0.5*qchisq(alpha, 2*(n-x))/n
               else
                 CI.upper <- min(1, term1 + term2)
@@ -2144,7 +2149,8 @@ BinomRatioCI <- function(x1, n1, x2, n2, conf.level = 0.95, method = "katz.log",
 
 
 
-MultinomCI <- function(x, conf.level = 0.95, method = c("sisonglaz", "cplus1", "goodman")) {
+MultinomCI <- function(x, conf.level = 0.95,
+                       method = c("sisonglaz", "cplus1", "goodman", "wald", "waldcc", "wilson")) {
 
   # Code mainly by:
   # Pablo J. Villacorta Iglesias <pjvi@decsai.ugr.es>\n
@@ -2220,14 +2226,38 @@ MultinomCI <- function(x, conf.level = 0.95, method = c("sisonglaz", "cplus1", "
 
   if (missing(method)) method <- "sisonglaz"
 
-  method <- match.arg(arg = method, choices = c("sisonglaz", "cplus1", "goodman"))
+  method <- match.arg(arg = method, choices = c("sisonglaz", "cplus1", "goodman", "wald", "waldcc", "wilson"))
   if(method == "goodman") {
 
     q.chi <- qchisq(conf.level, k - 1)
     lci <- (q.chi + 2*x - sqrt(q.chi*(q.chi + 4*x*(n-x)/n))) / (2*(n+q.chi))
     uci <- (q.chi + 2*x + sqrt(q.chi*(q.chi + 4*x*(n-x)/n))) / (2*(n+q.chi))
 
-    res <- cbind(est=p, lwr.ci=lci, upr.ci=uci)
+    res <- cbind(est=p, lwr.ci=pmax(0, lci), upr.ci=pmin(1, uci))
+
+  } else if(method == "wald") {
+
+    q.chi <- qchisq(conf.level, 1)
+    lci <- p - sqrt(q.chi * p * (1 - p)/n)
+    uci <- p + sqrt(q.chi * p * (1 - p)/n)
+
+    res <- cbind(est=p, lwr.ci=pmax(0, lci), upr.ci=pmin(1, uci))
+
+  } else if(method == "waldcc") {
+
+    q.chi <- qchisq(conf.level, 1)
+    lci <- p - sqrt(q.chi * p * (1 - p)/n) - 1/(2*n)
+    uci <- p + sqrt(q.chi * p * (1 - p)/n) + 1/(2*n)
+
+    res <- cbind(est=p, lwr.ci=pmax(0, lci), upr.ci=pmin(1, uci))
+
+  } else if(method == "wilson") {
+
+    q.chi <- qchisq(conf.level, 1)
+    lci <- (q.chi + 2*x - sqrt(q.chi^2 + 4*x*q.chi * (1 - p))) / (2*(q.chi + n))
+    uci <- (q.chi + 2*x + sqrt(q.chi^2 + 4*x*q.chi * (1 - p))) / (2*(q.chi + n))
+
+    res <- cbind(est=p, lwr.ci=pmax(0, lci), upr.ci=pmin(1, uci))
 
   } else {  # sisonglaz, cplus1
 
@@ -5485,7 +5515,7 @@ PlotBinTree <- function(x, main="Binary tree", horiz=FALSE, cex=1.0, col=1, ...)
   return(list(pi.c = NA, pi.d = NA, C = res[2], D = res[1]))
 
 }
-    
+
 
 .assocs_condis <- function(x, y = NULL, conf.level = NA, ...) {
 

@@ -10,7 +10,7 @@ in proportion to the correlation of two variables. It will place the elements ho
 connecting lines between the points.
 }
 \usage{
-PlotWeb(m, col = c(hred, hblue), lty = par("lty"), lwd = NULL, args.legend=NULL,
+PlotWeb(m, col = c(hred, hblue), lty = NULL, lwd = NULL, args.legend=NULL,
         pch = 21, pt.cex = 2, pt.col = "black", pt.bg = "darkgrey",
         cex.lab = 1, las = 1, adj = NULL, dist = 0.5, ...)
 }
@@ -22,7 +22,7 @@ PlotWeb(m, col = c(hred, hblue), lty = par("lty"), lwd = NULL, args.legend=NULL,
   \item{col}{the color for the connecting lines
 %%     ~~Describe \code{col} here~~
 }
-  \item{lty}{the line type for the connecting lines
+  \item{lty}{the line type for the connecting lines, the default will be \code{par("lty")}.
 %%     ~~Describe \code{lty} here~~
 }
   \item{lwd}{the line widths for the connecting lines. If left to \code{NULL} it will be linearly scaled between the minimum and maximum value of \code{m}.
@@ -55,8 +55,10 @@ PlotWeb(m, col = c(hred, hblue), lty = par("lty"), lwd = NULL, args.legend=NULL,
 %%     ~~Describe \code{\dots} here~~
 }
 }
+
+\details{The function uses the lower triangular matrix of \code{m}, so this is the order colors, linewidth etc. must be given, when the defaults are to be overrun.}
 \value{
-A list of x and y coordinates, giving the coordinates of all the points drawn, useful for adding to the graph.
+A list of x and y coordinates, giving the coordinates of all the points drawn, useful for adding other elements to the plot.
 }
 
 \author{Andri Signorell <andri@signorell.net>

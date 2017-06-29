@@ -4,9 +4,8 @@
 \alias{MosesTest.formula}
 \title{Moses Test of Extreme Reactions
 }
-\description{
-Perform Moses test of extreme reactions, which can be used to determine the difference
-in range between two samples. The exact one-tailed probability is calculated. }
+\description{Perform Moses test of extreme reactions, which is a distribution-free non-parametric test for the difference between two independent groups in the extremity of scores (in both directions) that the groups contain. 
+Scores from both groups are pooled and converted to ranks, and the test statistic is the span of scores (the range plus 1) in one of the groups chosen arbitrarily. An exact probability is computed for the span and then recomputed after dropping a specified number of extreme scores from each end of its range. The exact one-tailed probability is calculated. }
 \usage{
 MosesTest(x, ...)
 
@@ -38,7 +37,6 @@ from which the sample with the larger range was drawn.
 Note that the ranks are calculated in decreasing mode.
 
 }
-
 \value{
   A list with class \dQuote{htest} containing the following components:
   \item{statistic}{the value of the Moses Test statistic.}

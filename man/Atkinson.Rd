@@ -1,6 +1,6 @@
 \name{Atkinson}
 \alias{Atkinson}
-\title{Calculate the Atkinson Index}
+\title{Atkinson Index - A Measure of Inequality. }
 \description{
 The Atkinson index is an inequality measure and is useful in determining which end of the distribution contributed most to the observed inequality. }
 \usage{

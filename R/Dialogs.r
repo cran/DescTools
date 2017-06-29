@@ -6,7 +6,7 @@ ModelDlg <- function(x, ...){
     tcltk::tclvalue(tcltk::tkget(tfModx, "0.0", "end"))
 
 
-  .AddVar <- function(sep) {
+  .AddVar <- function(sep, pack = NULL) {
 
     var.name <- as.numeric(tcltk::tkcurselection(tlist.var))
 
@@ -17,8 +17,13 @@ ModelDlg <- function(x, ...){
     if (length(var.name) > 0) {
 
       txt <- DescTools::StrTrim(.GetModTxt())
+      if(is.null(pack))
+        vn <- colnames(x)[var.name + 1]
+      else
+        vn <- gettextf(pack, colnames(x)[var.name + 1])
+
       tcltk::tkinsert(tfModx, "insert",
-                      paste(ifelse(txt=="", "", " +"), paste(colnames(x)[var.name + 1], collapse=sep))
+                      paste(ifelse(txt=="", "", " +"), paste(vn, collapse=sep))
                       , "notwrapped")
     }
   }
@@ -26,6 +31,7 @@ ModelDlg <- function(x, ...){
   .BtnAddVar <- function() .AddVar(" + ")
   .BtnAddMult <- function() .AddVar(" * ")
   .BtnAddInt <- function() .AddVar(" : ")
+  .BtnAddPoly <- function() .AddVar(sep=" + ", pack="Poly(%s, 2)")
 
   .InsertLHS <- function() {
 
@@ -62,8 +68,8 @@ ModelDlg <- function(x, ...){
 
   OnOK <- function() {
     assign("modx", paste("(",
-      DescTools::StrTrim(tcltk::tclvalue(tflhs)), "~",
-      DescTools::StrTrim(.GetModTxt()), "\n, data=", xname, ")"), envir = e1)
+      DescTools::StrTrim(tcltk::tclvalue(tflhs)), " ~ ",
+      DescTools::StrTrim(.GetModTxt()), ", data=", xname, ")", sep=""), envir = e1)
     tcltk::tkdestroy(root)
   }
 
@@ -72,7 +78,7 @@ ModelDlg <- function(x, ...){
 
   # create window
   root <- .InitDlg(width = 840, height = 480, resizex=TRUE, resizey=TRUE,
-                   main="Build Model", ico="R")
+                   main="Build Model Formula", ico="R")
 
   # define widgets
   content = tcltk::tkframe(root, padx=10, pady=10)
@@ -115,12 +121,16 @@ ModelDlg <- function(x, ...){
   tfButInt <- tcltk::tkbutton(frmButtons, text = ":",
              command = .BtnAddInt,
              height = 1, width = 2, font=myfont)
+  tfButPoly <- tcltk::tkbutton(frmButtons, text = "x\U00B2",
+                              command = .BtnAddPoly,
+                              height = 1, width = 2, font=myfont)
 
   tcltk::tkgrid(tfButLHS, row = 0, rowspan=10, padx = 5, sticky = "s")
   tcltk::tkgrid(tcltk::tklabel(frmButtons, text="\n\n"))
   tcltk::tkgrid(tfButAdd, row = 40, padx = 5, sticky = "s")
   tcltk::tkgrid(tfButMult, row = 50, padx = 5, sticky = "s")
   tcltk::tkgrid(tfButInt, row = 60, padx = 5, sticky = "s")
+  tcltk::tkgrid(tfButPoly, row = 70, padx = 5, sticky = "s")
 
 
   # Model textbox

@@ -3,10 +3,10 @@
 \alias{BrierScore.glm}
 \alias{BrierScore.default}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Brier Score
+\title{Brier Score for Assessing Prediction Accuracy
 %%  ~~function to do ... ~~
 }
-\description{Calculate Brier score.
+\description{Calculate Brier score for assessing the quality of the probabilistic predictions of binary events.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

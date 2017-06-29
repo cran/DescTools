@@ -1,10 +1,10 @@
 \name{Arrow}
 \alias{Arrow}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Insert an Arrow
+\title{Insert an Arrow Into a Plot
 %%  ~~function to do ... ~~
 }
-\description{Places an arrow into a plot. Two more arrow heads are implemented.
+\description{Places an arrow into a plot. Two additional arrow heads are implemented.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

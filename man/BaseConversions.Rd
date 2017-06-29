@@ -1,4 +1,4 @@
-\name{BinToDec}
+\name{Base Conversions}
 \alias{BinToDec}
 \alias{DecToBin}
 \alias{OctToDec}

@@ -5,7 +5,7 @@
 
 \name{SD}
 \alias{SD}
-\title{Standard Deviation}
+\title{(Weighted) Standard Deviation}
 \description{
   This function computes the standard deviation of the values in
   \code{x}.

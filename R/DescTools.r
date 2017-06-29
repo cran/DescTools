@@ -1383,11 +1383,12 @@ StrRev <- function(x) {
 }
 
 
-StrRep <- function(x, times, sep=""){
-  # same as strrep which seems to be new in 3.4.0
-  z <- Recycle(x=x, times=times, sep=sep)
-  sapply(1:attr(z, "maxdim"), function(i) paste(rep(z$x[i], times=z$times[i]), collapse=z$sep[i]))
-}
+# defunct by 0.99.21
+# StrRep <- function(x, times, sep=""){
+#   # same as strrep which seems to be new in 3.4.0
+#   z <- Recycle(x=x, times=times, sep=sep)
+#   sapply(1:attr(z, "maxdim"), function(i) paste(rep(z$x[i], times=z$times[i]), collapse=z$sep[i]))
+# }
 
 
 
@@ -5890,7 +5891,13 @@ ParseSASDatalines <- function(x, env = .GlobalEnv, overwrite = FALSE) {
     if( overwrite | ! exists(dsname, envir=env) ) {
       assign(dsname, res, envir=env)
     } else {
-      stop(gettextf("%s already exists in %s. Use overwrite = TRUE to overwrite it.", dsname, deparse(substitute(env))))
+      cat(gettextf("The file %s already exists in %s. Should it be overwritten? (y/n)\n"
+                   , dsname, deparse(substitute(env))))
+      ans <- readline()
+      if(ans == "y")
+        assign(dsname, res, envir = env)
+
+      # stop(gettextf("%s already exists in %s. Use overwrite = TRUE to overwrite it.", dsname, deparse(substitute(env))))
     }
   }
   return(res)
@@ -6373,6 +6380,7 @@ SelectVarDlg.default <- function(x, useIndex = FALSE, ...){
 
     # example: Sel(d.pizza)
     op <- options(useFancyQuotes = FALSE)
+
     xsel <- select.list(x, multiple = TRUE, graphics = TRUE)
     if(useIndex == TRUE) {
       xsel <- which(x %in% xsel)
@@ -6386,6 +6394,20 @@ SelectVarDlg.default <- function(x, useIndex = FALSE, ...){
     options(op)
 
     invisible(txt)
+}
+
+
+SelectVarDlg.numeric <- function(x, ...) {
+  if(!is.null(names(x)))
+     z <- names(x)
+  else
+     z <- as.character(x)
+
+  txt <- paste( deparse(substitute(x)), "[", SelectVarDlg.default( x = z, ...), "]", sep="", collapse="")
+  .ToClipboard(txt)
+
+  invisible(txt)
+
 }
 
 
@@ -7418,10 +7440,20 @@ lines.lm <- function (x, col = Pal()[1], lwd = 2, lty = "solid",
   # thiss is not a really new problem:
   # http://faustusnotes.wordpress.com/2012/02/16/problems-with-out-of-sample-prediction-using-r/
 
+  # we would only plot lines if there's only one predictor
 
-  newx <- data.frame(seq(from = min(mod[,2], na.rm = TRUE), to = max(mod[,2],
-                                                                     na.rm = TRUE), length = n))
-  colnames(newx) <- names(mod)[2]
+  pred <- all.vars(formula(x)[[3]])
+  if(length(pred) > 1) {
+    stop("Can't plot a linear model with more than 1 predictor.")
+  }
+
+  # the values of the predictor
+  xpred <- eval(x$call$data)[, pred]
+
+  newx <- data.frame(seq(from = min(xpred, na.rm = TRUE),
+                         to = max(xpred, na.rm = TRUE), length = n))
+
+  colnames(newx) <- pred
   fit <- predict(x, newdata = newx)
 
   if (!(is.na(pred.level) || identical(args.pband, NA)) ) {
@@ -9218,10 +9250,15 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
                         xaxt = ifelse(add.boxplot || add.ecdf, "n", "s"), xlim = xlim, ylim = NULL, main = NA, las = 1,
                         yaxt="n", col=1, lwd=3, pch=NA, col.pch=1, cex.pch=1, bg.pch=0, cex.axis=cex.axis, ...)   {
 
-    plot(pp <- prop.table(table(x)), type = "h", lwd=lwd, col=col,
-         xlab = "", ylab = "", cex.axis=cex.axis,
-         xaxt = "n", main = NA, frame.plot = FALSE,
-         las = 1, panel.first = {
+    pp <- prop.table(table(x))
+
+    if(is.null(ylim))
+      ylim <- c(0, max(pp))
+
+    plot(pp, type = "h", lwd=lwd, col=col,
+         xlab = "", ylab = "", cex.axis=cex.axis, xlim=xlim, ylim=ylim,
+         xaxt = xaxt, main = NA, frame.plot = FALSE,
+         las = las, panel.first = {
            abline(h = axTicks(2), col = "grey", lty = "dotted")
            abline(h = 0, col = "black")
          })
@@ -10256,12 +10293,26 @@ PlotLinesA <- function(x, y, col=1:5, lty=1, lwd=1, lend = par("lend"), xlab = N
 
 
 
-PlotLog <- function(x, y=NULL, ..., grid=TRUE, log="xy"){
+PlotLog <- function(x, ..., args.grid=NULL, log="xy"){
 
-  # if(inherits(x, "formula"))
-  #   plot.formula(x, ..., type="n", log=log, xaxt="n", yaxt="n", xaxs="i", yaxs="i")
-  # else
-  plot(x=x, y=y, ..., type="n", log=log, xaxt="n", yaxt="n", xaxs="i", yaxs="i")
+  add.grid <- !identical(args.grid, NA)
+
+  # default grid arguments
+  args.grid1 <- list(
+    lwd = 1,
+    lty = 3, #"dotted",
+    col = "grey85",
+    lwd.min = 1,
+    lty.min = 3,
+    col.min = "grey60"
+  )
+
+  if (!is.null(args.grid)) {
+    args.grid1[names(args.grid)] <- args.grid
+  }
+
+
+  plot(x, ..., type="n", log=log, xaxt="n", yaxt="n", xaxs="i", yaxs="i")
 
   if(grepl("x", log)){
 
@@ -10273,10 +10324,10 @@ PlotLog <- function(x, y=NULL, ..., grid=TRUE, log="xy"){
     sapply(ticks,
            function(n) mtext(side=1, line=1, at = 10^n, text = bquote(~10^.(n))))
 
-    if(grid){
+    if(add.grid){
       abline(v=unique(as.vector(sapply(c(ticks, tail(ticks, 1)+1), function(n) seq(0, 0.1, 0.01)*10^n))),
-             col="grey85", lty=3)
-      abline(v=10^(ticks), col="grey60", lty=3)
+             col=args.grid1$col, lty=args.grid1$lty, lwd=args.grid1$lwd)
+      abline(v=10^(ticks), col=args.grid1$col.min, lty=args.grid1$lty.min, lwd=args.grid1$lwd.min)
     }
 
     axis(1, at=c(0, 10^(ticks)), labels=NA)
@@ -10293,10 +10344,10 @@ PlotLog <- function(x, y=NULL, ..., grid=TRUE, log="xy"){
     sapply(ticks,
            function(n) mtext(side=2, line=1, at = 10^n, text = bquote(~10^.(n)), las=1))
 
-    if(grid){
+    if(add.grid){
       abline(h=unique(as.vector(sapply(c(ticks, tail(ticks, 1)+1), function(n) seq(0, 0.1, 0.01)*10^n))),
-             col="grey85", lty=3)
-      abline(h=10^(ticks), col="grey60", lty=3)
+             col=args.grid1$col, lty=args.grid1$lty, lwd=args.grid1$lwd)
+      abline(h=10^(ticks), col=args.grid1$col.min, lty=args.grid1$lty.min, lwd=args.grid1$lwd.min)
     }
 
     axis(2, at=c(0, 10^(ticks)), labels=NA)
@@ -10304,6 +10355,8 @@ PlotLog <- function(x, y=NULL, ..., grid=TRUE, log="xy"){
   }
 
   box()
+
+  points(x, ...)
 
 }
 
@@ -11323,7 +11376,7 @@ PlotCirc <- function(tab, acol = rainbow(sum(dim(tab))), aborder = "darkgrey",
 ## plots: PlotWeb ====
 
 
-PlotWeb <- function(m, col=c(hred, hblue), lty=par("lty"), lwd = NULL, args.legend=NULL, pch=21, pt.cex=2,
+PlotWeb <- function(m, col=c(hred, hblue), lty=NULL, lwd = NULL, args.legend=NULL, pch=21, pt.cex=2,
                     pt.col="black", pt.bg="darkgrey", cex.lab = 1.0,
                     las = 1, adj = NULL, dist = 0.5, ... ){
 
@@ -11382,10 +11435,16 @@ PlotWeb <- function(m, col=c(hred, hblue), lty=par("lty"), lwd = NULL, args.lege
   else
     d.m$d.sc <- lwd
 
+  if(is.null(lwd))
+    d.m$lty <- par("lty")
+  else
+    d.m$lty <- lty
+
+
   col <- rep(col, length.out=2)
 
   segments( x0=d.m$from.x, y0=d.m$from.y, x1 = d.m$to.x, y1 = d.m$to.y,
-         col = col[((sign(d.m$d)+1)/2)+1], lty = lty, lwd=d.m$d.sc, lend= 1)
+         col = col[((sign(d.m$d)+1)/2)+1], lty = d.m$lty, lwd=d.m$d.sc, lend= 1)
   points( xy, cex=pt.cex, pch=pch, col=pt.col, bg=pt.bg )
 
   # find min/max negative value and min/max positive value
@@ -12637,6 +12696,10 @@ ToWrd.lm <- function(x, font=NULL, ..., wrd=DescToolsOptions("lastWord")){
 
 ToWrd.character <- function (x, font = NULL, para = NULL, style = NULL, ..., wrd = DescToolsOptions("lastWord")) {
 
+  # we will convert UTF-8 strings to Latin-1, if the local info is Latin-1
+  if(l10n_info()[["Latin-1"]] & Encoding(x)=="UTF-8")
+    x <- iconv(x, from="UTF-8", to="latin1")
+
   wrd[["Selection"]]$InsertAfter(paste(x, collapse = "\n"))
 
   if (!is.null(style))
@@ -13796,7 +13859,7 @@ XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "") {
 
 
 XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
-                        header = FALSE, stringsAsFactors = FALSE, echo = FALSE) {
+                        header = FALSE, stringsAsFactors = FALSE, echo = FALSE, datecols = NA) {
 
   A1ToZ1S1 <- function(x){
     xlcol <- c( LETTERS
@@ -13880,6 +13943,22 @@ XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame =
         names(lst[[i]]) <- paste("X", 1:ncol(lst[[i]]), sep="")
       }
     }
+
+    # convert date columns to date
+    if(!identical(datecols, NA)){
+      # apply to all selections
+      for(i in seq_along(lst)){
+
+        # switch to colindex if given as text
+        if(!is.numeric(datecols) && header)
+          datecols <- which(names(lst[[i]]) %in% datecols)
+
+        for(j in datecols)
+          lst[[i]][,j] <- as.Date(XLDateToPOSIXct(lst[[i]][,j]))
+      }
+
+    }
+
   }
 
   # just return a single object (for instance data.frame) if only one range was supplied

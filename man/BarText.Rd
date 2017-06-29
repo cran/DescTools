@@ -1,10 +1,10 @@
 \name{BarText}
 \alias{BarText}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Add Text to a Barplot
+\title{Add the Value Labels to a Barplot
 %%  ~~function to do ... ~~
 }
-\description{Places text either in the middle of the stacked bars of a barplot or on top of a side by side barplot.
+\description{Place text either in the middle of the stacked bars of a barplot or on top of a side by side barplot.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -36,8 +36,9 @@ BarText(height, b, labels = height, beside = FALSE, horiz = FALSE,
 %%     ~~Describe \code{\dots} here~~
 }
 }
-\details{It sometimes makes sense to place the results directly on the bars.
-%%  ~~ If necessary, more details than the description above ~~
+\details{
+It sometimes makes sense to place the data values directly on the bars. The x coordinates of the labels can be found by using \code{\link{barplot}()} result, if they are to be centered at the top of each bar. \code{BarText()} calculates the rest.
+Notice that when the labels are placed on top of the bars, they may be clipped. This can be avoided by setting \code{xpd=TRUE}.
 }
 \author{Andri Signorell <andri@signorell.net>
 }

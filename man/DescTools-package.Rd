@@ -367,7 +367,7 @@ A grouped list of the functions:
 
 \section{MS-Office}{To make use of MS-Office features you must have Office in one of its variants installed.
 All Wrd*, XL* and Pp* functions require as well the package RDCOMClient to be installed. Hence the use of these functions is restricted to Windows systems.
-RDCOMClient is available at: \cr\url{http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/3.2/}.
+RDCOMClient is available at: \cr\url{http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/3.2/} and can be installed with \cr \code{install.packages("RDCOMClient", repos="http://www.stats.ox.ac.uk/pub/RWin")}\cr
 RDCOMClient does not exist for Mac or Linux, sorry.
 }
 

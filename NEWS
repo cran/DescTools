@@ -1,4 +1,29 @@
 
+
+DescTools 0.99.21 (2017-06-29)
+------------------------------
+
+UPDATED FUNCTIONS:
+   * lines.lm would not have handled transformed predictors.
+   * XLGetRange gets an argument to determine date columns.
+   * Two new methods for MultinomCI implemented: wald, wilson.
+   * PseudoR2 will work with vglms by now.
+
+BUGFIXES:
+   * PseudoR2 for multinom models did not always return a value.
+   * PlotFdist did not synchronize the main xlims to a h-plot.
+   * Adapted a supposed inconsistency in BinomCI "modified Wilson".
+     (Credits to Andre Gillibert)
+   * PercTable mismatched the names of columns and rows, when we would
+     have changed the column order.
+   * Vignettes had not been compiled by v.0.99.20.
+
+DEFUNCT:
+   * StrRep() does not offer more functionality than strrep() and has
+     therefore been removed.
+
+
+
 DescTools 0.99.20 (2017-04-16)
 ------------------------------
 

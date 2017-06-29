@@ -12,7 +12,7 @@ XLGetWorkbook does the same for all the sheets in an Excel workbook.
 }
 \usage{
 XLGetRange(file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
-           header = FALSE, stringsAsFactors = FALSE, echo = FALSE)
+           header = FALSE, stringsAsFactors = FALSE, echo = FALSE, datecols = NA)
 
 XLGetWorkbook(file, compactareas = TRUE)
 }
@@ -37,7 +37,11 @@ as this is probably the common use of this function.}
 
 \item{stringsAsFactors}{logical. Should character columns be coerced to factors? The default is FALSE, which will return character vectors.}
 \item{echo}{logical. If set to \code{TRUE}, the function will print the full command used, such that it can be copied into the R-script for future use.}
+
+\item{datecols}{a character or integer vector, defining which columns in Excel are of date type and should directly be converted to Date columns in R. Ignored if \code{as.data.frame} is \code{FALSE}.}
+
 \item{compactareas}{logical, defining if areas should be returned by \code{XLGetWorkbook} as list or as matrix (latter is default).}
+
 }
 \details{The result consists of a list of lists, if \code{as.data.frame} is set to \code{FALSE}.
 Be then prepared to encounter \code{NULL} values. Those will prevent from easily being able to coerce
@@ -49,7 +53,7 @@ The following code will replace the \code{NULL} values by \code{NA} and coerce t
   xlrng <- XLGetRange(file="myfile.xlsx", sheet="Tabelle1",
                       range="D1:J69", as.data.frame=FALSE)
 
-  # replace \code{NULL} values by NA
+  # replace NULL values by NA
   xlrng[unlist(lapply(xlrng, is.null))] <- NA
 
   # coerce the square data structure to a data.frame
@@ -59,7 +63,7 @@ This of course can be avoided by setting \code{as.data.frame} = \code{TRUE}.
 
 The function will return dates as integer values, because XL stores them as integers.
 An Excel date can be converted with the (unusual) origin of
-\code{as.Date(myDate, origin="1899-12-30")}. See also \code{\link{XLDateToPOSIXct}}, which does the job.
+\code{as.Date(myDate, origin="1899-12-30")}. See also \code{\link{XLDateToPOSIXct}}, which does the job. The conversion can be applied directly by using \code{datecols} and enumerate date columns in the sheet data.
 }
 \value{If \code{as.data.frame} is set to \code{TRUE}, a single data.frame or a list of data.frames will be returned.
 If set to \code{FALSE} a list of the cell values in the specified Excel range, resp. a list of lists will be returned.

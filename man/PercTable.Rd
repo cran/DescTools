@@ -18,7 +18,7 @@ All the frequencies are nested into one single table.
 
 \method{PercTable}{default}(x, y = NULL, \dots)
 
-\method{PercTable}{table}(tab, row.vars = NULL, col.vars = 2, justify = "right",
+\method{PercTable}{table}(tab, row.vars = NULL, col.vars = NULL, justify = "right",
           freq = TRUE, rfrq = "100", expected = FALSE, residuals = FALSE,
           stdres = FALSE, margins = NULL, digits = NULL, \dots)
 
@@ -42,7 +42,7 @@ Margins(tab, ...)
   \item{row.vars}{a vector of row variables (see Details).
 %%     ~~Describe \code{row.vars} here~~
 }
-  \item{col.vars}{a vector of column variables (see Details).
+  \item{col.vars}{a vector of column variables (see Details). If this is left to \code{NULL} the table structure will be preserved.
 %%     ~~Describe \code{col.vars} here~~
 }
   \item{justify}{either \code{"left"} or \code{"right"} for defining the alignment of the table cells.
@@ -119,7 +119,7 @@ lacking some of the flexibility we needed here. \cr
 
 }
 \examples{
-tab <- table(d.pizza$driver, d.pizza$area)
+tab <- table(driver=d.pizza$driver, area=d.pizza$area)
 
 PercTable(tab=tab, col.vars=2)
 
@@ -143,7 +143,7 @@ PercTable(tab=tab, rfrq="000", expected = TRUE, stdres = TRUE)
 # rearrange output such that freq are inserted as columns instead of rows
 PercTable(tab=tab, col.vars=c(3,2), rfrq="111")
 
-# putting the cities in rows
+# putting the areas in rows
 PercTable(tab=tab, col.vars=c(3,1), rfrq="100", margins=c(1,2))
 
 # formula interface with subset

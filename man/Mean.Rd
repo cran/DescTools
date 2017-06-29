@@ -4,7 +4,7 @@
 %% Distributed under GPL 2 or later
 
 \name{Mean}
-\title{Arithmetic Mean}
+\title{(Weighted) Arithmetic Mean}
 \usage{
 Mean(x, \dots)
 

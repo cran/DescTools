@@ -1,7 +1,7 @@
 \name{Asp}
 \alias{Asp}
 \docType{data}
-\title{Aspect Ratio
+\title{Get Aspect Ratio of the Current Plot
 %%   ~~ data name/kind ... ~~
 }
 \description{Returns the aspect ratio of the current plot in user coordinates.

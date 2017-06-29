@@ -5,18 +5,19 @@
 %%  ~~function to do ... ~~
 }
 \description{
-Add a linear regression line to an existing plot. The function first calculates the prediction of a lm object for a reasonable amount of points, then adds the line to the plot and inserts a polygon with the confidence and prediction intervals.
+Add a linear regression line to an existing plot. The function first calculates the prediction of a \code{lm} object for a reasonable amount of points, then adds the line to the plot and inserts a polygon with the confidence and, if required, the prediction intervals.
+In addition to \code{\link{abline}} the function will also display polynomial models.
 }
 \usage{
 \method{lines}{lm}(x, col = Pal()[1], lwd = 2, lty = "solid",
-        type = "l", n = 100, conf.level = 0.95, args.cband = NULL,
-        pred.level = NA, args.pband = NULL, ...)
+      type = "l", n = 100, conf.level = 0.95, args.cband = NULL,
+      pred.level = NA, args.pband = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{linear model object as result from lm(y~x).
 }
-  \item{col}{linecolor of the line. Default is DescTools's lightblue.
+  \item{col}{linecolor of the line. Default is the color returned by \code{Pal()[1]}.
 %%     ~~Describe \code{col} here~~
 }
   \item{lwd}{line width of the line.
@@ -51,7 +52,7 @@ Add a linear regression line to an existing plot. The function first calculates 
 }
 }
 \details{
-It's sometimes illuminating to plot a regression line with it's prediction, resp. confidence intervals over an existing xy-plot. This only makes sense, if just a simple regression model y ~ x is to be visualized.
+It's sometimes illuminating to plot a regression line with its prediction, resp. confidence intervals over an existing scatterplot. This only makes sense, if just a simple linear model explaining a target variable by (a function of) one single predictor is to be visualized.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{nothing
@@ -80,6 +81,10 @@ lines(lm(hp ~ wt, mtcars), col="steelblue")
 plot(hp ~ wt, mtcars)
 r.lm <- lm(hp ~ wt, mtcars)
 lines(r.lm, col="red", pred.level=0.95, args.pband=list(col=SetAlpha("grey",0.3)) )
+
+# works with transformations too
+plot(dist ~ speed, cars)
+lines(lm(dist ~ poly(speed, degree=2), cars), col=hred)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

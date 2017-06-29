@@ -2,7 +2,7 @@
 \alias{Freq}
 \alias{print.Freq}
 \title{
-Frequency Table
+Frequency Table for a Single Variable
 }
 \description{
 Calculates absolute and relative frequencies of a vector x. Continuous (numeric) variables

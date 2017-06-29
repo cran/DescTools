@@ -237,70 +237,127 @@ Spec <- function(x, ...) Conf(x, ...)[["byclass"]]["spec",]
 
 PseudoR2 <- function(x, which = NULL) {
 
+  # this function will not work with weights, neither with cbind lhs!!
   # http://stats.stackexchange.com/questions/183699/how-to-calculate-pseudo-r2-when-using-logistic-regression-on-aggregated-data-fil
 
-  if (!(inherits(x, what="glm") || !inherits(x, what="polr") || !inherits(x, what = "multinom")))
+  # test: https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faq-what-are-pseudo-r-squareds/
+  # library(haven)
+  # hsb2 <- as.data.frame(read_dta("https://stats.idre.ucla.edu/stat/stata/notes/hsb2.dta"))
+  # hsb2$honcomp <- hsb2$write >= 60
+  # r.logit <- glm(honcomp ~ female + read + science, hsb2, family="binomial")
+  # PseudoR2(r.logit, "a")
+
+
+
+  # http://digitalcommons.wayne.edu/cgi/viewcontent.cgi?article=2150&context=jmasm
+  # Walker, Smith (2016) JMASM36: Nine Pseudo R^2 Indices for Binary Logistic Regression Models (SPSS)
+  # fuer logit Korrektur https://langer.soziologie.uni-halle.de/pdf/papers/rc33langer.pdf
+
+  # check with pscl::pR2(x); rcompanion::nagelkerke(x)
+
+
+  if (!(inherits(x, what="glm") || inherits(x, what="polr")
+        || inherits(x, what = "multinom") || inherits(x, what = "vglm")))
     return(NA)
 
-  if (!is.null(x$call$summ) && !identical(x$call$summ, 0))
+
+  if (!(inherits(x, what="vglm")) && !is.null(x$call$summ) && !identical(x$call$summ, 0))
     stop("can NOT get Loglik when 'summ' argument is not zero")
 
-  # x.base <- update(x, . ~ 1, trace = FALSE)
-  # degf <- x$df.null - x$df.residual must be > 0, check for that???
+  L.full <- logLik(x)
+  D.full <- -2 * L.full # deviance(x)
 
-  if(inherits(x, what="multinom")) {
+  if(inherits(x, what="multinom"))
+    L.base <- logLik(update(x, ~1, trace=FALSE))
+  else
     L.base <- logLik(update(x, ~1))
-  } else {
-    L.base <- -x$null.deviance/2
-  }
-  L.full <- -x$deviance/2
-  G2 <- x$null.deviance - x$deviance
 
-  n <- sum(x$prior.weights)
+  D.base <- -2 * L.base # deviance(update(x, ~1))
+  G2 <- -2 * (L.base - L.full)
 
-  # n <- nrow(x$model)
-  # polr:       n <- x$nobs
-  # multinom:   n <- nrow(x$fitted.values)
+  # n <- if(length(weights(x)))
+  #   sum(weights(x))
+  # else
+  n <- attr(L.full, "nobs")   # alternative: n <- dim(x$residuals)[1]
 
 
-  # Aldrich/Nelson
-  s2 <- switch(x$family$link, probit = 1, logit = pi^2/3, NA)
-  AldrichNelson <- L.full/(L.full + n * s2)
+  if(inherits(x, "multinom"))
+    edf <- x$edf
+  else if(inherits(x, "vglm")){
+    edf <- x@rank
+    n <- nobs(x)  # logLik does not return nobs for vglm
+  } else
+    edf <- x$rank
 
   # McFadden
   McFadden <- 1 - (L.full/L.base)
-  McFaddenAdj <- 1 - ((L.full - x$rank-1)/L.base)
+  # adjusted to penalize for the number of predictors (k) in the model
+  McFaddenAdj <- 1 - ((L.full - edf)/L.base)
 
   # Nagelkerke / CraggUhler
-  Nagelkerke <- (1 - exp((x$deviance - x$null.deviance)/n))/(1 - exp(-x$null/n))
+  Nagelkerke <- (1 - exp((D.full - D.base)/n))/(1 - exp(-D.base/n))
 
   # CoxSnell / Maximum Likelihood R2
   CoxSnell <- 1 - exp(-G2/n)
 
-  # EffronR2
-  Effron <- (1 - (sum((x$y - predict(x, type = "response"))^2)) /
-               (sum((x$y - mean(x$y))^2)))
-
-  # McKelveyZvoina
-  sse <- sum((predict(x) - mean(predict(x)))^2)
-  s2 <- switch(x$family$link, probit = 1, logit = pi^2/3, NA)
-  McKelveyZavoina <- sse/(n * s2 + sse)
-
-  # Tjur's D
-  if(x$family$family == "binomial")
-    Tjur <- unname(diff(tapply(predict(x, type="response"), x$y, mean, na.rm=TRUE)))
-  else
-    Tjur <- NA
-
   res <- c(McFadden=McFadden, McFaddenAdj=McFaddenAdj,
-           Nagelkerke=Nagelkerke, CoxSnell=CoxSnell,
-           Effron=Effron, McKelveyZavoina=McKelveyZavoina, Tjur=Tjur,
-           AIC=x$aic, BIC=BIC(x), logLik=L.full, logLik0=L.base, G2=G2)
+           CoxSnell=CoxSnell, Nagelkerke=Nagelkerke, AldrichNelson=NA,
+           VeallZimmermann=NA,
+           Effron=NA, McKelveyZavoina=NA, Tjur=NA,
+           AIC=AIC(x), BIC=BIC(x), logLik=L.full, logLik0=L.base, G2=G2)
+
+
+  if(inherits(x, what="glm") || inherits(x, what="vglm") ) {
+
+    if(inherits(x, what="vglm")){
+      fam <- x@family@vfamily
+      link <- if(all(x@extra$link == "logit")){
+                  "logit"
+                } else if(all(x@extra$link == "probit")){
+                  "probit"
+                } else {
+                  NA
+                }
+      y <- x@y
+
+    } else {
+      fam <- x$family$family
+      link <- x$family$link
+      y <- x$y
+    }
+
+
+    s2 <- switch(link, probit = 1, logit = pi^2/3, NA)
+
+    # Aldrich/Nelson
+    res["AldrichNelson"] <- G2 / (G2 + n * s2)
+
+    # Veall/Zimmermann
+    res["VeallZimmermann"] <- res["AldrichNelson"] * (2*L.base - n * s2)/(2*L.base)
+
+
+    # McKelveyZavoina
+    y.hat <- predict(x)
+    sse <- sum((y.hat - mean(y.hat))^2)
+    res["McKelveyZavoina"] <- sse/(n * s2 + sse)
+
+    # EffronR2
+    y.hat.resp <- predict(x, type="response")
+    res["Effron"] <- (1 - (sum((y - y.hat.resp)^2)) /
+                        (sum((y - mean(y))^2)))
+
+    # Tjur's D
+    # compare with binomTools::Rsq.glm()
+    if(identical(fam, "binomial"))
+      res["Tjur"] <- unname(diff(tapply(y.hat.resp, y, mean, na.rm=TRUE)))
+
+  }
+
 
   if(is.null(which))
     which <- "McFadden"
   else
-    which <- match.arg(which, c("McFadden","AldrichNelson","McFaddenAdj", "Nagelkerke", "CoxSnell",
+    which <- match.arg(which, c("McFadden","AldrichNelson","VeallZimmermann","McFaddenAdj", "CoxSnell", "Nagelkerke",
                                 "Effron", "McKelveyZavoina", "Tjur","AIC", "BIC", "logLik", "logLik0","G2","all"),
                        several.ok = TRUE)
 

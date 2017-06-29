@@ -4,7 +4,7 @@
 % Distributed under GPL 2 or later
 
 \name{Median}
-\title{Median Value}
+\title{(Weighted) Median Value}
 \alias{Median}
 \alias{Median.Freq}
 \alias{Median.factor}

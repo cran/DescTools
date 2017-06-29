@@ -2,10 +2,10 @@
 \alias{VecRot}
 \alias{VecShift}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Vector Rotation
+\title{Vector Rotation (Shift Elements)
 %%  ~~function to do ... ~~
 }
-\description{Shift the elements of a vector in circular mode to the right or to the left by \code{k} elements, such that the kth element is the first one of the new vector and the first k-1 elements are appended to the end. \code{VecShift} will fill the gaps with \code{NA}s.
+\description{Shift the elements of a vector in circular mode to the right or to the left by \code{k} elements, such that the kth element is the first one of the new vector and the first k-1 elements are appended to the end.\cr \code{VecShift} does not attach the superfluous elements on one side to the other, but fills the resulting gaps with \code{NA}s.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

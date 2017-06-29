@@ -6,7 +6,7 @@ export(
 "%c%","%like%","%like any%", "%nin%","%overlaps%","AddMonths","AddMonthsYM","Agree","AllDuplicated","aovlDetails","aovlErrorTerms","as.matrix.xtabs","AscToChar","Assocs","Atkinson","AUC","AxisBreak","BartelsRankTest","BinomCI","BinomDiffCI","BinomRatioCI","BinToDec","BoxCox","BoxCoxInv","BoxCoxLambda","BoxedText","BreslowDayTest","BubbleLegend","Canvas","CartToPol","CartToSph","CatTable","CCC","CharToAsc","ChooseColorDlg","ClipToVect","Clockwise","Closest","Coalesce",
 "CochranArmitageTest",
 "CochranQTest",
-"CoefVar","CohenD","CohenKappa","CollapseTable","ColorLegend","ColToGray","ColToGrey","ColToHex","ColToHsv","ColToRgb","CombN","CombPairs","CombSet","compute.bagplot","ConDisPairs","Conf","ConnLines","ContCoef","Contrasts","CorCI",
+"CoefVar","CohenD","CohenKappa","CollapseTable","ColorLegend","ColToGray","ColToGrey","ColToHex","ColToHsv","ColToRgb","CombN","CombPairs","CombSet","ConDisPairs","Conf","ConnLines","ContCoef","Contrasts","CorCI",
 "CorPolychor","CramerV","CramerVonMisesTest","createCOMReference","CronbachAlpha","CutQ","Date","Day","Day<-","dBenf",
 "DecToHex","DecToOct","DegToRad","DenseRank",
 
@@ -52,7 +52,7 @@ export(
 "WrdParagraphFormat", "WrdParagraphFormat<-", "WrdFont", "WrdFont<-","WrdStyle", "WrdStyle<-", "WrdTableBorders",
 "DigitSum",
 "Range","Mean","SD","Var","Cov","Cor","Median","MAD","Quantile",
-"AddClass", "RemoveClass", "StrRep", "ORToRelRisk", "Abstract", "ColumnWrap",
+"AddClass", "RemoveClass", "ORToRelRisk", "Abstract", "ColumnWrap",
 "WrdCellRange", "WrdMergeCells", "WrdFormatCells", "PlotPch", "Some","PlotFdist", "plot.palette",
 "Pal", "Shade", "StrExtract", "Arrow", "Asp", "PlotLog", "axTicks.Date", "LineToUser",
 "PseudoR2", "MAE","MSE","RMSE","MAPE","NMSE","NMAE", "BrierScore", "Unwhich",
@@ -166,6 +166,7 @@ S3method(ScheffeTest, default)
 S3method(SelectVarDlg, data.frame)
 S3method(SelectVarDlg, default)
 S3method(SelectVarDlg, factor)
+S3method(SelectVarDlg, numeric)
 S3method(SiegelTukeyTest, default)
 S3method(SiegelTukeyTest, formula)
 S3method(SignTest, default)

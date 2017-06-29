@@ -1,6 +1,6 @@
 \name{WoolfTest}
 \alias{WoolfTest}
-\title{Woolf Test}
+\title{Woolf Test For Homogeneity in 2x2xk Tables}
 \description{
   Test for homogeneity on \eqn{2 \times 2 \times k}{2 x 2 x k} tables
   over strata (i.e., whether the log odds ratios are the same in all
@@ -14,7 +14,7 @@ WoolfTest(x)
 }
 \value{
   A list of class \code{"htest"} containing the following
-  components: 
+  components:
   \item{statistic}{the chi-squared test statistic.}
   \item{parameter}{degrees of freedom of the approximate chi-squared
     distribution of the test statistic.}
@@ -28,18 +28,18 @@ WoolfTest(x)
 \seealso{
   \code{\link{mantelhaen.test}}, \code{\link{BreslowDayTest}}
 }
-\note{ This function was previously published as \code{woolf_test()} in the  \pkg{vcd} package and has been integrated here without logical changes. 
+\note{ This function was previously published as \code{woolf_test()} in the  \pkg{vcd} package and has been integrated here without logical changes.
 }
 
 \author{David Meyer, Achim Zeileis, Kurt Hornik, Michael Friendly}
 \references{
-Woolf, B. 1955: On estimating the relation between blood group and 
+Woolf, B. 1955: On estimating the relation between blood group and
 disease. \emph{Ann. Human Genet.} (London) \bold{19}, 251-253.
 }
 \examples{
-migraine <- xtabs(freq ~ ., 
-            cbind(expand.grid(treatment=c("active","placebo"), 
-                               response=c("better","same"), 
+migraine <- xtabs(freq ~ .,
+            cbind(expand.grid(treatment=c("active","placebo"),
+                               response=c("better","same"),
                                gender=c("female","male")),
                   freq=c(16,5,11,20,12,7,16,19))
             )

@@ -4,7 +4,7 @@
 \title{Convert Line Coordinates To User Coordinates
 %%  ~~function to do ... ~~
 }
-\description{Convert Line Coordinates To User Coordinates
+\description{Functions like \code{mtext} or \code{axis} use the \code{line} argument to set the distance from plot. Sometimes it's useful to have the distance in user coordinates. \code{LineToUser()} does this nontrivial conversion.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -19,10 +19,8 @@ LineToUser(line, side)
 %%     ~~Describe \code{side} here~~
 }
 }
-\details{Not trivial
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{user coordinates
+\details{For the \code{LineToUser} function to work, there must be an open plot.}
+\value{the user coordinates for the given lines
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}

@@ -1,17 +1,17 @@
 \name{Winsorize}
 \alias{Winsorize}
-\title{Winsorize}
+\title{Winsorize (Replace Extreme Values by Less Extreme Ones) }
 \usage{
-Winsorize(x, minval = NULL, maxval = NULL, probs = c(0.05, 0.95), 
-          na.rm = FALSE)          
+Winsorize(x, minval = NULL, maxval = NULL, probs = c(0.05, 0.95),
+          na.rm = FALSE)
 }
 \arguments{
   \item{x}{a numeric vector to be winsorized.}
 
-  \item{minval}{the low border, all values being lower than this will be replaced by this value. 
+  \item{minval}{the low border, all values being lower than this will be replaced by this value.
   The default is set to the 5\%-quantile of x.}
-  
-  \item{maxval}{the high border, all values being larger than this will be replaced by this value. 
+
+  \item{maxval}{the high border, all values being larger than this will be replaced by this value.
   The default is set to the 95\%-quantile of x.}
 
   \item{probs}{numeric vector of probabilities with values in [0,1] as used in \code{\link{quantile}}.  }
@@ -24,10 +24,8 @@ Winsorize(x, minval = NULL, maxval = NULL, probs = c(0.05, 0.95),
   A vector of the same length as the original data
   \code{x} containing the winsorized data.
 }
-\description{
-  Clean data by means of winsorization, i.e., by shrinking
-  outlying observations to the border of the main part of
-  the data.
+\description{Winsorizing a vector means that
+  a predefined quantum of the smallest and/or the largest values are replaced by less extreme values. Thereby the substitute values are the most extreme retained values.
 }
 \details{
   Consider standardizing (possibly robust) the data before winsorizing.

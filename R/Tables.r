@@ -124,7 +124,7 @@ PercTable.formula <- function(formula, data, subset, na.action, ...)
 
 
 
-PercTable.table <- function(tab, row.vars=NULL, col.vars = 2, justify = "right"
+PercTable.table <- function(tab, row.vars=NULL, col.vars = NULL, justify = "right"
                             , freq=TRUE, rfrq="100",
                             expected = FALSE, residuals = FALSE, stdres = FALSE, margins = NULL
                             , digits = NULL, ...) {
@@ -171,6 +171,10 @@ PercTable.table <- function(tab, row.vars=NULL, col.vars = 2, justify = "right"
 
   # set zero element
   zero <- "."
+
+  # set default
+  if(is.null(col.vars) && is.null(row.vars))
+    col.vars <- 2
 
   tlst <- list(freq=tab)
 
@@ -224,7 +228,7 @@ PercTable.table <- function(tab, row.vars=NULL, col.vars = 2, justify = "right"
     if(length(dim(tab))==1){
       ma <- do.call("cbind", tlst)
     } else {
-      ma <- do.call("Abind", c(tlst, along = 3))
+      ma <- do.call("Abind", c(tlst, along = 3, use.dnns = TRUE))
     }
     ftab <- ftable(ma, col.vars=col.vars, row.vars=row.vars)
 
@@ -235,10 +239,10 @@ PercTable.table <- function(tab, row.vars=NULL, col.vars = 2, justify = "right"
     # align the whole stuff to the right
     ftab[] <- StrAlign(ftab, "\\r")
 
-  names(attr(ftab, "row.vars"))[1] <- names(dimnames(tab))[1]
-  if(length(names(attr(ftab, "row.vars"))) == 2)
-    names(attr(ftab, "row.vars"))[2] <- ""
-  names(attr(ftab, "col.vars")) <- names(dimnames(tab))[2]
+  # names(attr(ftab, "row.vars"))[1] <- names(dimnames(tab))[1]
+  # if(length(names(attr(ftab, "row.vars"))) == 2)
+  #   names(attr(ftab, "row.vars"))[2] <- ""
+  # names(attr(ftab, "col.vars")) <- names(dimnames(tab))[2]
 
   res <- list(ftab=ftab, tlst=tlst)
   vsep <- InDots(..., arg="vsep", default=ifelse(length(dim(tab)) == 1, FALSE, NA))
@@ -253,7 +257,9 @@ PercTable.table <- function(tab, row.vars=NULL, col.vars = 2, justify = "right"
 
 print.PercTable <- function(x, vsep=NULL, ...){
 
-  vsep <- Coalesce(vsep, x[["vsep"]], (length(x[["tlst"]]) > 1))
+  # vsep <- Coalesce(vsep, x[["vsep"]], (length(x[["tlst"]]) > 1))
+  # replaced by 0.99.21
+  vsep <- Coalesce(vsep, x[["vsep"]], (length(attr(x[["ftab"]], "row.vars")) > 1))
 
   x <- x[["ftab"]]
   cat(paste(c(rep(" ", times=max(nchar(c(names(attr(x, "row.vars")), attr(x, "row.vars")[[1]])), na.rm=TRUE) +

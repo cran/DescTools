@@ -1,7 +1,7 @@
 \name{Abstract}
 \alias{Abstract}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Abstract
+\title{Display Compact Abstract of a Data Frame
 %%  ~~function to do ... ~~
 }
 \description{Compactly display the content and structure of a data.frame, including variable labels. \code{str} is optimised for lists and its output is relatively technical, when it comes to e.g. attributes. \code{summary} on the other side already calculates some basic statistics.

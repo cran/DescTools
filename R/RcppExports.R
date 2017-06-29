@@ -2,34 +2,34 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 compute_GCD <- function(a, b) {
-    .Call('DescTools_compute_GCD', PACKAGE = 'DescTools', a, b)
+    .Call(DescTools_compute_GCD, a, b)
 }
 
 compute_LCM <- function(a, b) {
-    .Call('DescTools_compute_LCM', PACKAGE = 'DescTools', a, b)
+    .Call(DescTools_compute_LCM, a, b)
 }
 
 n_pow_sum <- function(x) {
-    .Call('DescTools_n_pow_sum', PACKAGE = 'DescTools', x)
+    .Call(DescTools_n_pow_sum, x)
 }
 
 conv_DecToBin <- function(n) {
-    .Call('DescTools_conv_DecToBin', PACKAGE = 'DescTools', n)
+    .Call(DescTools_conv_DecToBin, n)
 }
 
 top_n <- function(x, n = 5L) {
-    .Call('DescTools_top_n', PACKAGE = 'DescTools', x, n)
+    .Call(DescTools_top_n, x, n)
 }
 
 bottom_n <- function(x, n = 5L) {
-    .Call('DescTools_bottom_n', PACKAGE = 'DescTools', x, n)
+    .Call(DescTools_bottom_n, x, n)
 }
 
 top_i <- function(v, n) {
-    .Call('DescTools_top_i', PACKAGE = 'DescTools', v, n)
+    .Call(DescTools_top_i, v, n)
 }
 
 bottom_i <- function(v, n) {
-    .Call('DescTools_bottom_i', PACKAGE = 'DescTools', v, n)
+    .Call(DescTools_bottom_i, v, n)
 }
 

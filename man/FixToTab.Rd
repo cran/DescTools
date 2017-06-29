@@ -1,7 +1,7 @@
 \name{FixToTab}
 \alias{FixToTab}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Text to Table
+\title{Convert a Text to a Table
 %%  ~~function to do ... ~~
 }
 \description{Convert a text to a table by using complete columns of spaces (or any other separator) as delimiting point.
@@ -28,7 +28,7 @@ FixToTab(txt, sep = " ", delim = "\t", trim = TRUE, header = TRUE)
 %%     ~~Describe \code{header} here~~
 }
 }
-\details{Only a complete appearance of the separator character in the same position over all rows will 
+\details{Only a complete appearance of the separator character in the same position over all rows will
 be accepted as column delimiter.
 %%  ~~ If necessary, more details than the description above ~~
 }

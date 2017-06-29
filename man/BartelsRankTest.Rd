@@ -2,7 +2,7 @@
 \alias{BartelsRankTest}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Bartels Rank Test
+Bartels Rank Test of Randomness
 }
 \description{
 Performs the Bartels rank test of randomness, which tests if a sample is sampled randomly from an underlying population. Data must at least be measured on an ordinal scale.
