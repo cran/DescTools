@@ -6,8 +6,8 @@
 \title{Determines If And How Extensively Two Date Ranges Overlap
 %%  ~~function to do ... ~~
 }
-\description{\%overlaps\% determines if two date ranges overlap at all and returns a logical value. 
-Interval returns the number of days of the overlapping part of the 
+\description{\%overlaps\% determines if two date ranges overlap at all and returns a logical value.
+Interval returns the number of days of the overlapping part of the
 two date periods. Inspired by the eponymous SQL-functions.
 }
 \usage{
@@ -25,7 +25,7 @@ Interval(x, y)
 }
 }
 \details{
-\code{\%overlaps\%} returns \code{TRUE} or \code{FALSE} depending on if the two ranges overlap. The function \code{Overlap} returns the range of the overlapping region as numeric value. This will be 0, if the ranges do not overlap. \cr 
+\code{\%overlaps\%} returns \code{TRUE} or \code{FALSE} depending on if the two ranges overlap. The function \code{Overlap} returns the range of the overlapping region as numeric value. This will be 0, if the ranges do not overlap. \cr
 \code{Interval} returns the width of the empty space between 2 ranges. Again this will be 0 if the ranges overlap.
 
 To handle overlapping ranges there are 4 cases to consider:
@@ -59,14 +59,16 @@ for calculating the overlapping time: \code{\link{difftime}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-c(Date(2012,1,3), Date(2012,2,3)) \%overlaps\% c(Date(2012,3,1), Date(2012,3,3))
-c(Date(2012,1,3), Date(2012,2,3)) \%overlaps\% c(Date(2012,1,15), Date(2012,1,21))
+as.Date(c("2012-01-03", "2012-02-03")) \%overlaps\%
+  as.Date(c("2012-03-01", "2012-03-03"))
+as.Date(c("2012-01-03", "2012-02-03")) \%overlaps\%
+  as.Date(c("2012-01-15", "2012-01-21"))
 
-Interval(c(Date(2012,1,3), Date(2012,2,3)), c(Date(2012,3,1), Date(2012,3,3)))
+Interval(as.Date(c("2012-01-03", "2012-02-03")), as.Date(c("2012-03-01", "2012-03-03")))
 
 
 # both ranges are recyled if necessary
-Date(2012,1,3) \%overlaps\% c(Date(2012,3,1), Date(2012,3,3))
+as.Date("2012-01-03") \%overlaps\% as.Date(c("2012-03-01", "2012-03-03"))
 
 # works with numerics as well
 c(1, 18) \%overlaps\% c(10, 45)

@@ -13,7 +13,7 @@ PlotCorr(x, cols = colorRampPalette(c(Pal()[2], "white",
          breaks = seq(-1, 1, length = length(cols) + 1),
          border = "grey", lwd = 1,
          args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"),
-         cex.axis = 0.8, las = 2, mar = c(3, 8, 8, 8), ...)
+         cex.axis = 0.8, las = 2, mar = c(3, 8, 8, 8), mincor = 0, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -50,6 +50,7 @@ PlotCorr(x, cols = colorRampPalette(c(Pal()[2], "white",
   \item{mar}{sets the margins, defaults to mar = c(3, 8, 8, 8) as we need a bit more room on the right.
 %%     ~~Describe \code{mar} here~~
 }
+\item{mincor}{numeric value between 0 and 1, defining the smallest correlation that is to be displayed. If this is >0 then all correlations with a lower value are suppressed.  }
   \item{\dots}{the dots are passed to the function \code{\link{image}}, which produces the plot.
 %%     ~~Describe \code{\dots} here~~
 }

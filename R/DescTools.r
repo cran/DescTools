@@ -414,12 +414,12 @@ GCD <- function(..., na.rm = FALSE) {
   } else if (n == 1) {
     g <- x
   } else if (n == 2) {
-    g <- .Call("DescTools_compute_GCD", PACKAGE = "DescTools", x[1], x[2])
+    g <- .Call("_DescTools_compute_GCD", PACKAGE = "DescTools", x[1], x[2])
   } else {
     # g <- .GCD(x[1], x[2])
-    g <- .Call("DescTools_compute_GCD", PACKAGE = "DescTools", x[1], x[2])
+    g <- .Call("_DescTools_compute_GCD", PACKAGE = "DescTools", x[1], x[2])
     for (i in 3:n) {
-      g <- .Call("DescTools_compute_GCD", PACKAGE = "DescTools", g, x[i])
+      g <- .Call("_DescTools_compute_GCD", PACKAGE = "DescTools", g, x[i])
       if (g == 1) break
     }
   }
@@ -458,13 +458,13 @@ LCM <- function(..., na.rm = FALSE) {
     l <- x
   } else if (n == 2) {
     # l <- .LCM(x[1], x[2])
-    l <- .Call("DescTools_compute_LCM", PACKAGE = "DescTools", x[1], x[2])
+    l <- .Call("_DescTools_compute_LCM", PACKAGE = "DescTools", x[1], x[2])
   } else {
 #    l <- .LCM(x[1], x[2])
-    l <- .Call("DescTools_compute_LCM", PACKAGE = "DescTools", x[1], x[2])
+    l <- .Call("_DescTools_compute_LCM", PACKAGE = "DescTools", x[1], x[2])
     for (i in 3:n) {
 #      l <- .LCM(l, x[i])
-      l <- .Call("DescTools_compute_LCM", PACKAGE = "DescTools", l, x[i])
+      l <- .Call("_DescTools_compute_LCM", PACKAGE = "DescTools", l, x[i])
     }
   }
   return(l)
@@ -839,7 +839,7 @@ Large <- function (x, k = 5, unique = FALSE, na.last = NA) {
 
   if (unique==TRUE) {
 
-    res <- .Call("DescTools_top_n", PACKAGE = "DescTools", x, k)
+    res <- .Call("_DescTools_top_n", PACKAGE = "DescTools", x, k)
 
     if(na_n > 0){
       if(!is.na(na.last)){
@@ -864,7 +864,7 @@ Large <- function (x, k = 5, unique = FALSE, na.last = NA) {
     # do not allow k be bigger than n
     k <- min(k, n)
 
-    res <- x[.Call("DescTools_top_i", PACKAGE = "DescTools", x, k)]
+    res <- x[.Call("_DescTools_top_i", PACKAGE = "DescTools", x, k)]
 
     if(!is.na(na.last)){
       if(na.last==FALSE)
@@ -936,7 +936,7 @@ Small <- function (x, k = 5, unique = FALSE, na.last = NA) {
 
   if (unique==TRUE) {
 
-    res <- .Call("DescTools_bottom_n", PACKAGE = "DescTools", x, k)
+    res <- .Call("_DescTools_bottom_n", PACKAGE = "DescTools", x, k)
 
     if(na_n > 0){
       if(!is.na(na.last)){
@@ -962,7 +962,7 @@ Small <- function (x, k = 5, unique = FALSE, na.last = NA) {
     # do not allow k be bigger than n
     k <- min(k, n)
 
-    res <- rev(x[.Call("DescTools_bottom_i", PACKAGE = "DescTools", x, k)])
+    res <- rev(x[.Call("_DescTools_bottom_i", PACKAGE = "DescTools", x, k)])
 
     if(!is.na(na.last)){
       if(na.last==FALSE)
@@ -1083,6 +1083,11 @@ Closest <- function(x, a, which = FALSE, na.rm = FALSE){
 DenseRank <- function(x, na.last = TRUE) {
   as.numeric(as.factor(rank(x, na.last)))
 }
+
+
+PercentRank <- function(x)
+  trunc(rank(x, na.last="keep"))/sum(!is.na(x))
+
 
 
 Unwhich <- function(idx, n, useNames=TRUE){
@@ -1683,7 +1688,7 @@ BinToDec <- function(x) {
 # }
 
 DecToBin <- function (x) {
-  z <- .Call("DescTools_conv_DecToBin", PACKAGE = "DescTools", x)
+  z <- .Call("_DescTools_conv_DecToBin", PACKAGE = "DescTools", x)
   z[x > 536870911] <- NA
   return(sub("^0+", "", z))
 }
@@ -2020,7 +2025,8 @@ Lookup <- function(x, ref, val){
 
 
 
-LogSt <- function(x, calib = x, threshold = NULL, mult = 1) {
+
+LogSt <- function(x, base = 10, calib = x, threshold = NULL, mult = 1) {
 
 # original function logst in source regr
 #
@@ -2081,24 +2087,26 @@ LogSt <- function(x, calib = x, threshold = NULL, mult = 1) {
   res <- rep(NA, length(x))
   idx <- (x < threshold)
   idx.na <- is.na(idx)
-  res[idx & !idx.na] <- log10(threshold) + ((x[idx & !idx.na] - threshold)/(threshold * log(10)))
-  res[!idx & !idx.na] <- log10(x[!idx & !idx.na])
+  res[idx & !idx.na] <- log(x = threshold, base=base) + ((x[idx & !idx.na] - threshold)/(threshold * log(base)))
+  res[!idx & !idx.na] <- log(x = x[!idx & !idx.na], base=base)
 
   attr(res, "threshold") <- threshold
+  attr(res, "base") <- base
   return(res)
 
 }
 
 
-LogStInv <- function (x, threshold = NULL) {
+LogStInv <- function (x, base=NULL, threshold = NULL) {
 
   if(is.null(threshold)) threshold <- attr(x, "threshold")
+  if(is.null(base)) base <- attr(x, "base")
 
   res <- rep(NA, length(x))
   idx <- (x < log10(threshold))
   idx.na <- is.na(idx)
-  res[idx & !idx.na] <- threshold - threshold * log(10) *( log10(threshold) - x[idx & !idx.na])
-  res[!idx & !idx.na] <- 10^(x[!idx & !idx.na])
+  res[idx & !idx.na] <- threshold - threshold * log(base) *( log(x = threshold, base=base) - x[idx & !idx.na])
+  res[!idx & !idx.na] <- base^(x[!idx & !idx.na])
 
   return(res)
 
@@ -2113,17 +2121,17 @@ LogStInv <- function (x, threshold = NULL) {
 # 1/x
 # arcsinh(x)
 
-LogGen <- function(x, a) { return( log((x + sqrt(x^2 + a^2)) / 2)) }
-
-
-LogLin <- function(x, a) {
-  # log-linear hybrid transformation
-  # introduced by Rocke and Durbin (2003)
-  x[x<=a] <- x[x<=a] / a + log(a) - 1
-  x[x>a] <- log(x[x>a])
-
-  return(x)
-}
+# LogGen <- function(x, a) { return( log((x + sqrt(x^2 + a^2)) / 2)) }
+#
+#
+# LogLin <- function(x, a) {
+#   # log-linear hybrid transformation
+#   # introduced by Rocke and Durbin (2003)
+#   x[x<=a] <- x[x<=a] / a + log(a) - 1
+#   x[x>a] <- log(x[x>a])
+#
+#   return(x)
+# }
 
 
 Logit <- function(x, min=0, max=1) {
@@ -2413,15 +2421,17 @@ IsWeekend <- function(x) {
 }
 
 
-Date <- function(year, month = NA, day = NA) {
-  if(is.na(month) && is.na(day)) {
-    # try to interpret year as yearmonthday yyyymmdd
-    res <- as.Date(ISOdate(year %/% 10000, (year %% 10000) %/% 100, (year %% 100)))
-  } else {
-    res <- as.Date(ISOdate(year, month, day))
-  }
-  return(res)
-}
+# This is not useful anymore. Use: as.Date(ISODate())
+# Date <- function(year, month = NA, day = NA) {
+#   if(is.na(month) && is.na(day)) {
+#     # try to interpret year as yearmonthday yyyymmdd
+#     res <- as.Date(ISOdate(year %/% 10000, (year %% 10000) %/% 100, (year %% 100)))
+#   } else {
+#     res <- as.Date(ISOdate(year, month, day))
+#   }
+#   return(res)
+# }
+
 
 # Year <- function(x){ as.integer( format(as.Date(x), "%Y") ) }
 Year <- function(x){ as.POSIXlt(x)$year + 1900 }
@@ -2598,6 +2608,10 @@ Second <- function(x) {
   as.POSIXlt(x)$sec
 }
 
+Timezone <- function(x) {
+  as.POSIXlt(x)$zone
+}
+
 
 DiffDays360 <- function(start_d, end_d, method=c("eu","us")){
 
@@ -2717,7 +2731,8 @@ Zodiac <- function(x, lang = c("engl","deu"), stringsAsFactors = TRUE) {
     , deu =  {z <- c("Steinbock","Wassermann","Fische","Widder","Stier","Zwillinge","Krebs","Loewe","Jungfrau","Waage","Skorpion","Schuetze","Steinbock") }
   )
 
-  i <- cut(DescTools::Month(x)*100 + DescTools::Day(x), breaks=c(0,120,218,320,420,520,621,722,822,923,1023,1122,1221,1231))
+  i <- cut(DescTools::Month(x)*100 + DescTools::Day(x),
+           breaks=c(0,120,218,320,420,520,621,722,822,923,1023,1122,1221,1231))
   if(stringsAsFactors){
     res <- i
     levels(res) <- z
@@ -3048,41 +3063,6 @@ axTicks.Date <- function(side = 1, x, ...) {
 `%c%` <- function(x, y) paste(x, y, sep="")
 
 
-# Alternative paste allowing to omit NAs
-
-# Paste <- function(..., sep = " ", collapse = NULL, na.rm = FALSE) {
-#
-#   # Author JWilliam
-#   # http://stackoverflow.com/questions/13673894/suppress-nas-in-paste
-#
-#   if (na.rm == FALSE)
-#     paste(..., sep = sep, collapse = collapse)
-#
-#   else
-#     if (na.rm == TRUE) {
-#
-#       paste.na <- function(x, sep) {
-#         x <- gsub("^\\s+|\\s+$", "", x)
-# # orig:    ret <- paste(na.omit(x), collapse = sep)
-# # but here: omit "" as well
-#         ret <- paste(x[!is.na(x) & !(x %in% "")], collapse = sep)
-#         is.na(ret) <- ret == ""
-#         return(ret)
-#       }
-#
-#       df <- data.frame(..., stringsAsFactors = FALSE)
-#       ret <- apply(df, 1, FUN = function(x) paste.na(x, sep))
-#
-#       if (is.null(collapse))
-#         ret
-#       else {
-#         paste.na(ret, sep = collapse)
-#       }
-#     }
-#
-# }
-
-
 
 `%like%` <- function(x, pattern) {
   return(`%like any%`(x, pattern))
@@ -3128,6 +3108,7 @@ axTicks.Date <- function(side = 1, x, ...) {
 #   # calculates the number of days of the overlapping part of two date periods
 #   length(intersect(xp[1]:xp[2], yp[1]:yp[2]))
 # }
+
 
 Interval <- function(x, y){
 
@@ -3274,52 +3255,6 @@ Coalesce <- function(..., method = c("is.na", "is.finite")) {
 }
 
 
-# Coalesce <- function(..., method = c("is.na", "is.finite")) {
-#
-#   .CoalesceNA <- function(...) {
-#     ans <- ..1
-#     for (elt in list(...)[-1]) {
-#       i <- is.na(ans)
-#       ans[i] <- elt[i]
-#     }
-#     ans
-#   }
-#
-#   .CoalesceFinite <- function(...) {
-#     ans <- ..1
-#     for (elt in list(...)[-1]) {
-#       i <- !is.finite(ans)
-#       ans[i] <- elt[i]
-#     }
-#     ans
-#   }
-#
-#   # Returns the first element in x which is not NA
-#
-#   if(length(list(...)) > 1) {
-#     if(all(lapply(list(...), length) > 1)){
-#       x <- data.frame(..., stringsAsFactors = FALSE)
-#     } else {
-#       x <- list(...)[[1]]
-#     }
-#   } else {
-#     if(is.matrix(...)) {
-#       x <- data.frame(..., stringsAsFactors = FALSE)
-#     } else {
-#       x <- (...)
-#     }
-#   }
-#
-#   switch(match.arg(method, choices=c("is.na", "is.finite")),
-#          "is.na" = res <- DoCall(.CoalesceNA, x),
-#          "is.finite" = res <- DoCall(.CoalesceFinite, x)
-#   )
-#   return(res)
-# }
-
-
-
-
 
 
 
@@ -3342,31 +3277,6 @@ PartitionBy <- function(x, by, FUN, ...){
 }
 
 
-# IsWhole <-function(x, tol = .Machine$double.eps^0.5, na.rm=FALSE) {
-#
-#   # this is a new version form sfsmisc
-#   # replaced old solution in DescTools 0.99.12
-#   if (na.rm)
-#     x <- na.omit(x)
-#
-#   is.whole.scalar <- if (is.integer(x)) {
-#   function(x) TRUE
-#   }
-#   else if (is.numeric(x)) {
-#     function(x) isTRUE(all.equal(x, round(x), tol = tol))
-#   }
-#   else if (is.complex(x)) {
-#     function(x) isTRUE(all.equal(Re(x), round(Re(x)), tol = tol)) &&
-#       isTRUE(all.equal(Im(x), round(Im(x)), tol = tol))
-#   }
-# #  else stop("Input must be of type integer, numeric or complex.")
-#   else   function(x) FALSE
-#
-#   if (is.null(dim(x)))
-#     vapply(x, is.whole.scalar, NA)
-#   else apply(x, seq_along(dim(x)), is.whole.scalar)
-#
-# }
 
 
 IsWhole <- function (x, all=FALSE, tol = sqrt(.Machine$double.eps), na.rm=FALSE) {
@@ -3551,46 +3461,6 @@ RoundTo <- function(x, multiple = 1, FUN = round) {
 
 
 
-# Ray <- function(x){
-#   nidx <- sort(c(which(sapply(x, inherits, "numeric")), which(sapply(x, inherits, "integer")))  )
-#   nums <- data.frame(
-#     idx= nidx,
-#     classes=do.call("rbind", lapply(x[,nidx], class)),
-#     typeof=do.call("rbind", lapply(x[,nidx], typeof)),
-#     mode=do.call("rbind", lapply(x[,nidx], mode)),
-#     NAs=do.call("rbind", lapply(x[,nidx], function(x) sum(is.na(x)))),
-#     mean=do.call("rbind", lapply(x[,nidx], mean, na.rm=TRUE)),
-#     sd=do.call("rbind", lapply(x[,nidx], sd, na.rm=TRUE)),
-#     median=do.call("rbind", lapply(x[,nidx], median, na.rm=TRUE)),
-#     IQR=do.call("rbind", lapply(x[,nidx], IQR, na.rm=TRUE)),
-#     min=do.call("rbind", lapply(x[,nidx], min, na.rm=TRUE)),
-#     max=do.call("rbind", lapply(x[,nidx], max, na.rm=TRUE))
-#   )
-#
-#   fidx <- which(sapply(x, is.factor))
-#   facts <- data.frame(
-#     idx=fidx,
-#     classes=do.call("rbind", lapply(x[,fidx], function(x) paste(class(x), collapse=", "))),
-#     typeof=do.call("rbind", lapply(x[,fidx], typeof)),
-#     mode=do.call("rbind", lapply(x[,fidx], mode)),
-#     NAs=do.call("rbind", lapply(x[,fidx], function(x) sum(is.na(x)))),
-#     nlevels=do.call("rbind", lapply(x[,fidx], nlevels))
-#   )
-#
-#   idx <- seq_along(x)[-c(nidx, fidx)]
-#   elses <- data.frame(
-#     idx=idx,
-#     classes=do.call("rbind", lapply(x[,idx], class)),
-#     typeof=do.call("rbind", lapply(x[,idx], typeof)),
-#     mode=do.call("rbind", lapply(x[,idx], mode)),
-#     NAs=do.call("rbind", lapply(x[,idx], function(x) sum(is.na(x))))
-#   )
-#
-#   return(list("numeric"=nums, "factors"=facts, "rest"=elses))
-#
-# }
-
-
 
 Str <- function(x, ...){
   if(identical(class(x), "data.frame")) {
@@ -3660,12 +3530,12 @@ LsFct <- function(package){
 
 }
 
-LsData <- function(package){
-  # example  lsf("DescTools")
-  ls(pos = gettextf("package:%s", package))
-  as.vector(unclass(ls.str(gettextf("package:%s", package), mode="list")))
-
-}
+# LsData <- function(package){
+#   # example  lsf("DescTools")
+#   ls(pos = gettextf("package:%s", package))
+#   as.vector(unclass(ls.str(gettextf("package:%s", package), mode="list")))
+#
+# }
 
 LsObj <- function(package){
   # example  lsf("DescTools")
@@ -4879,8 +4749,6 @@ Recycle <- function(...){
 
 
 
-
-
 ###
 
 
@@ -5397,15 +5265,19 @@ OPR <- function (K, D = NULL, log = FALSE) {
 
 }
 
-
-## utils: manipulation, utilities ====
-
-
-Exec <- function(x) {
-  # execute a command in a string, just as reminder
-  eval(parse(text=x))
+NPVFixBond <- function(i, Co, RV, n){
+  # net present value for fixed bonds
+  sum(Co / (1+i)^(1:n), RV / (1+i)^n)
 }
 
+YTM <- function(Co, PP, RV, n){
+  # yield to maturity (irr)
+  uniroot(function(i) -PP + sum(Co / (1+i)^(1:n), RV / (1+i)^n)
+          , c(0,1))$root
+}
+
+
+## utils: manipulation, utilities ====
 
 
 InDots <- function(..., arg, default){
@@ -5847,7 +5719,10 @@ fmt <- function(...){
 
 as.fmt <- function(...){
 
-  dots <- match.call(expand.dots=FALSE)$...
+  # dots <- match.call(expand.dots=FALSE)$...
+  # new by 0.99.22
+
+  dots <- list(...)
 
   structure(dots,
             .Names = names(dots),
@@ -5904,15 +5779,34 @@ ParseSASDatalines <- function(x, env = .GlobalEnv, overwrite = FALSE) {
 
 }
 
+#
+# SetRowNames <- function (object = nm, nm) {
+#   rownames(object) <- nm
+#   object
+# }
+#
+# SetColNames <- function (object = nm, nm) {
+#   colnames(object) <- nm
+#   object
+# }
+#
 
-SetRowNames <- function (object = nm, nm) {
-  rownames(object) <- nm
-  object
-}
 
-SetColNames <- function (object = nm, nm) {
-  colnames(object) <- nm
-  object
+
+SetNames <- function (x, ...) {
+
+  # see also setNames()
+  # args <- match.call(expand.dots = FALSE)$...
+  args <- list(...)
+  if("colnames" %in% names(args))
+    colnames(x) <- args[["colnames"]]
+  if("rownames" %in% names(args))
+    rownames(x) <- args[["rownames"]]
+  if("names" %in% names(args))
+    names(x) <- args[["names"]]
+
+  x
+
 }
 
 
@@ -5955,24 +5849,34 @@ InsCol <- function(m, x, i, col.names=NULL){
 Rename <- function(x, ..., gsub=FALSE, fixed=TRUE, warn=TRUE){
 
   subst <- c(...)
+
+  # if ... do not have names use those from x, assigned by sequence
+  if(is.null(names(subst)))
+    names(subst) <- names(x)[1:length(subst)]
+
+
   if(gsub){
     names.x <- names(x)
     for(i in 1:length(subst)){
-      names.x <- gsub(names(subst[i]),subst[i],names.x,fixed=fixed)
+      names.x <- gsub(names(subst[i]), subst[i], names.x, fixed=fixed)
     }
     names(x) <- names.x
-  }
-  else {
-    i <- match(names(subst),names(x))
+
+  } else {
+    i <- match(names(subst), names(x))
+
     if(any(is.na(i))) {
       if(warn) warning("unused name(s) selected")
+
       if(any(!is.na(i)))
         subst <- subst[!is.na(i)]
+
       i <- i[!is.na(i)]
     }
     if(length(i))
       names(x)[i] <- subst
   }
+
   return(x)
 }
 
@@ -6255,16 +6159,16 @@ Untable.default <- function(x, dimnames=NULL, type = NULL, rownames = NULL, coln
 
 
 
-AddClass  <- function(x, class, after=0) {
-  class(x) <- append(class(x), class, after = after)
-  x
-}
-
-
-RemoveClass  <- function(x, class) {
-  class(x) <- class(x)[class(x) %nin% class]
-  x
-}
+# AddClass  <- function(x, class, after=0) {
+#   class(x) <- append(class(x), class, after = after)
+#   x
+# }
+#
+#
+# RemoveClass  <- function(x, class) {
+#   class(x) <- class(x)[class(x) %nin% class]
+#   x
+# }
 
 
 
@@ -6301,24 +6205,24 @@ FixToTab <- function(txt, sep = " ", delim = "\t", trim = TRUE, header = TRUE){
 }
 
 
-ClipToVect <- function(doubleQuote = TRUE){
-
-  # vectorizes the clipboard content
-
-  x <- read.table("clipboard", sep="\t")
-
-  if(!all(sapply(x, is.numeric))){
-    if(doubleQuote)x <- sapply(x, dQuote)
-    else x <- sapply(x, sQuote)
-  }
-
-  res <- paste(apply(x, 2, function(x) paste("c(", paste(x, collapse=",") , ")", sep="")), collapse=",\n")
-
-
-  cat(res)
-  invisible(res)
-
-}
+# ClipToVect <- function(doubleQuote = TRUE){
+#
+#   # vectorizes the clipboard content
+#
+#   x <- read.table("clipboard", sep="\t")
+#
+#   if(!all(sapply(x, is.numeric))){
+#     if(doubleQuote)x <- sapply(x, dQuote)
+#     else x <- sapply(x, sQuote)
+#   }
+#
+#   res <- paste(apply(x, 2, function(x) paste("c(", paste(x, collapse=",") , ")", sep="")), collapse=",\n")
+#
+#
+#   cat(res)
+#   invisible(res)
+#
+# }
 
 ###
 
@@ -7630,10 +7534,10 @@ ColorLegend <- function( x, y=NULL, cols=rev(heat.colors(100)), labels=NULL
 
 
 
-BubbleLegend <- function(x, y=NULL, radius, cols
+BubbleLegend <- function(x, y=NULL, area, cols
                          , labels=NULL, cols.lbl = "black"
                          , width = NULL, xjust = 0, yjust = 1, inset=0, border="black", frame=TRUE
-                         , adj=c(0.5,0.5), cex=1.0, bg = NULL, asp = NULL, ...){
+                         , adj=c(0.5,0.5), cex=1.0, cex.names=1, bg = NULL, ...){
 
   # positionierungscode aus legend
   auto <- if(is.character(x))
@@ -7641,13 +7545,16 @@ BubbleLegend <- function(x, y=NULL, radius, cols
                    "left", "topleft", "top", "topright", "right", "center"))
   else NA
 
+  radius <- sqrt((area * cex)/pi)
+
   usr <- par("usr")
-  if(is.null(width) ) width <- 2*max(radius) * 1.1
+  if(is.null(width))
+    width <- 2*max(radius) * 1.1 / Asp()
 
-  if(is.null(asp)) # get aspect ratio from plot  w/h
-    asp <- par("pin")[1]/diff(par("usr")[1:2]) / par("pin")[2]/diff(par("usr")[3:4])
+  # if(is.null(asp)) # get aspect ratio from plot  w/h
+  #   asp <- par("pin")[1]/diff(par("usr")[1:2]) / par("pin")[2]/diff(par("usr")[3:4])
 
-  height <- width * asp
+  height <- width * Asp()
 
   if (is.na(auto)) {
     left <- x - xjust * width
@@ -7673,24 +7580,24 @@ BubbleLegend <- function(x, y=NULL, radius, cols
     rect( xleft=left, ybottom=top-height, xright=left+width, ytop=top,
           col=bg, border=frame)
 
-  DrawCircle(x = left + width/2, y = (top - height/2) + max(radius) - radius,
-             r.out = radius, col=cols, border=border)
+  # DrawCircle(x = left + width/2, y = (top - height/2) + max(radius) - radius,
+  #            r.out = radius, col=cols, border=border)
+
+  DrawEllipse(x = left + width/2, y = top-height/2 + max(radius) - radius,
+              radius.x = radius / Asp(), radius.y = radius,
+              col = cols, border=border)
 
   if(!is.null(labels)){
     d <- c(0, 2*radius)
     # ylbl <- (top - height/2) + max(radius) - diff(d) /2 + d[-length(d)]
     ylbl <- rev((top - height/2) + max(radius) - Midx(rev(2*radius), incl.zero = TRUE))
-    text(x=left + width/2, y=ylbl, labels=labels, adj=adj, cex=cex, col=cols.lbl, ... )
+    text(x=left + width/2, y=ylbl, labels=labels, adj=adj, cex=cex.names, col=cols.lbl, ... )
   }
 
 }
 
-# PlotBubble(y ~ x, data=d.world,  area=pop/90, col="steelblue",
-#            border="darkblue", xlab="", ylab="", panel.first=quote(grid()),
-#            main="World population")
-# BubbleLegend("bottomright", frame=TRUE, cols=SetAlpha("steelblue",0.5), bg="green",
-#              radius = c(1500, 1000, 500), labels=c(1500, 1000, 500), cex=0.8,
-#              cols.lbl=c("yellow", "red","blue"))
+
+
 
 
 Canvas <- function(xlim=NULL, ylim=xlim, main=NULL, xpd=par("xpd"), mar=c(5.1,5.1,5.1,5.1),
@@ -7837,7 +7744,7 @@ Pal <- function(pal, n=100, alpha=1) {
     )
 
     attr(res, "name") <- pal
-    res <- AddClass(res, "palette")
+    class(res) <- append(class(res), "palette")
 
   }
 
@@ -7969,7 +7876,7 @@ Stamp <- function(txt=NULL, las=par("las"), cex=0.6) {
       txt <- format(Sys.time(), '%Y-%m-%d')
       } else {
       if(is.expression(txt)){
-        txt <- Exec(txt)
+        txt <- eval(parse(text = txt))
       }
     }
   }
@@ -9118,21 +9025,42 @@ PlotBubble <-function(x, ...)
   UseMethod("PlotBubble")
 
 
-PlotBubble.default <- function(x, y, area, col, border = NA, na.rm = FALSE, inches=FALSE, ...) {
+PlotBubble.default <- function(x, y, area, col, cex=1, border = NA, xlim = NULL, ylim=NULL,
+                               na.rm = FALSE, ...) {
 
   # http://blog.revolutionanalytics.com/2010/11/how-to-make-beautiful-bubble-charts-with-r.html
 
-  d.frm <- data.frame(x=x, y=y, area=area, col=col)
+
+  d.frm <- Sort(as.data.frame(Recycle(x=x, y=y, area=area, col=col, border=border,
+                                      ry = sqrt((area * cex)/pi)),
+                              stringsAsFactors=FALSE), ord=3, decreasing=TRUE)
   if(na.rm) d.frm <- d.frm[complete.cases(d.frm),]
 
-  xlim <- range(pretty( sqrt(area[c(which.min(d.frm$x), which.max(d.frm$x))] / pi) * c(-1,1) + c(min(d.frm$x),max(d.frm$x)) ))
-  ylim <- range(pretty( sqrt(area[c(which.min(d.frm$y), which.max(d.frm$y))] / pi) * c(-1,1) + c(min(d.frm$y),max(d.frm$y)) ))
+
+  if(is.null(xlim))
+    xlim <- range(pretty( sqrt((area * cex / pi)[c(which.min(d.frm$x), which.max(d.frm$x))] / pi) * c(-1,1) + c(min(d.frm$x),max(d.frm$x)) ))
+  if(is.null(ylim))
+    ylim <- range(pretty( sqrt((area * cex / pi)[c(which.min(d.frm$y), which.max(d.frm$y))] / pi) * c(-1,1) + c(min(d.frm$y),max(d.frm$y)) ))
 
   # make sure we see all the bubbles
   plot(x = x, y = y, xlim=xlim, ylim=ylim, type="n", ...)
-  symbols(x=x, y=y, circles=sqrt(area / pi), fg=border, bg=col, inches=inches, add=TRUE)
+  # symbols(x=x, y=y, circles=sqrt(area / pi), fg=border, bg=col, inches=inches, add=TRUE)
+
+  rx <- d.frm$ry / Asp()
+
+  DrawEllipse(x = d.frm$x, y = d.frm$y, radius.x = rx, radius.y = d.frm$ry,
+              col = d.frm$col, border=d.frm$border)
+
+  # if(!identical(args.legend, NA)){
+  #
+  #   rx <- d.l$ry / Asp()
+  #   DrawEllipse(x = d.l$x, y = d.l$y, radius.x = rx, radius.y = d.frm$ry,
+  #               col = d.l$col, border=d.l$border)
+  # }
+
 
 }
+
 
 
 
@@ -10450,7 +10378,7 @@ PlotFun <- function(FUN, args=NULL, from=NULL, to=NULL, by=NULL, xlim=NULL,
     do.call(plot, c(list(y=1, x=1, xlim=xlim, ylim=ylim, type="n", mar=mar), m$...))
   }
 
-  if(add.axes) {
+  if(add.axes && !add) {
     tck <- axTicks(side=1)
     if(sign(min(tck)) != sign(max(tck)))
       tck <- tck[tck!=0]
@@ -10584,7 +10512,7 @@ PlotPyramid <- function(lx, rx = NA, ylab = "",
 PlotCorr <- function(x, cols = colorRampPalette(c(Pal()[2], "white", Pal()[1]), space = "rgb")(20)
   , breaks = seq(-1, 1, length = length(cols)+1), border="grey", lwd=1
   , args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"), cex.axis = 0.8, las = 2
-  , mar = c(3,8,8,8), ...){
+  , mar = c(3,8,8,8), mincor=0, ...){
 
   # example:
   # m <- cor(d.pizza[,WhichNumerics(d.pizza)][,1:5], use="pairwise.complete.obs")
@@ -10596,6 +10524,10 @@ PlotCorr <- function(x, cols = colorRampPalette(c(Pal()[2], "white", Pal()[1]), 
   # PlotCorr(round(CramerV(d.pizza[,c("driver","operator","city", "quality")]),3))
 
   pars <- par(mar=mar); on.exit(par(pars))
+
+  # if mincor is set delete all correlations with abs. val. < mincor
+  if(mincor!=0)
+    x[abs(x) < abs(mincor)] <- NA
 
   x <- x[,ncol(x):1]
   image(x=1:nrow(x), y=1:ncol(x), xaxt="n", yaxt="n", z=x, frame.plot=FALSE, xlab="", ylab=""
@@ -10832,15 +10764,16 @@ PlotPolar <- function(r, theta = NULL, type="p"
     }
   }
 
-  if(!is.null(DescToolsOptions("stamp")))
+  if(!add && !is.null(DescToolsOptions("stamp")))
     Stamp()
 
 }
 
 
 
-PolarGrid <- function(nr = NULL, ntheta = NULL, col = "lightgray"
-  , lty = "dotted", lwd = par("lwd"), rlabels = NULL, alabels = NULL, lblradians = FALSE) {
+PolarGrid <- function(nr = NULL, ntheta = NULL, col = "lightgray",
+  lty = "dotted", lwd = par("lwd"), rlabels = NULL, alabels = NULL,
+  lblradians = FALSE, cex.lab = 1, las = 1, adj = NULL, dist = NULL) {
 
   if (is.null(nr)) {             # use standard values with pretty axis values
       # at <- seq.int(0, par("xaxp")[2L], length.out = 1L + abs(par("xaxp")[3L]))
@@ -10869,24 +10802,75 @@ PolarGrid <- function(nr = NULL, ntheta = NULL, col = "lightgray"
 
   # plot radius labels
   if(!is.null(at)){
-    if(is.null(rlabels)) rlabels <- signif(at[-1],3)   # standard values
-    if(!all(is.na(rlabels))) BoxedText( x=at[-1], y=0, labels=rlabels, border=FALSE, col="white")
+    if(is.null(rlabels)) rlabels <- signif(at[-1], 3)   # standard values
+    if(!all(is.na(rlabels)))
+      BoxedText(x=at[-1], y=0, labels=rlabels, border=FALSE, col="white", cex=cex.lab)
   }
+
+
+  # # plot angle labels
+  # if(!is.null(at.ang)){
+  #   if(is.null(alabels))
+  #     if( lblradians == FALSE ){
+  #       alabels <- RadToDeg(at.ang[-length(at.ang)])   # standard values in degrees
+  #     } else {
+  #       alabels <- Format(at.ang[-length(at.ang)], digits=2)   # standard values in radians
+  #     }
+  #   if(!all(is.na(alabels)))
+  #     BoxedText( x=par("usr")[2]*1.07*cos(at.ang)[-length(at.ang)], y=par("usr")[2]*1.07*sin(at.ang)[-length(at.ang)]
+  #                , labels=alabels, border=FALSE, col="white")
+  # }
+
 
   # plot angle labels
   if(!is.null(at.ang)){
+
     if(is.null(alabels))
-      if( lblradians == FALSE ){
+      if(lblradians == FALSE){
         alabels <- RadToDeg(at.ang[-length(at.ang)])   # standard values in degrees
       } else {
         alabels <- Format(at.ang[-length(at.ang)], digits=2)   # standard values in radians
       }
+
+    if(is.null(dist))
+      dist <- par("usr")[2]*1.07
+
+    out <- DescTools::PolToCart(r = dist, theta=at.ang)
+
     if(!all(is.na(alabels)))
-      BoxedText( x=par("usr")[2]*1.07*cos(at.ang)[-length(at.ang)], y=par("usr")[2]*1.07*sin(at.ang)[-length(at.ang)]
-        , labels=alabels, border=FALSE, col="white")
+
+      #     BoxedText(x=par("usr")[2]*1.07*cos(at.ang)[-length(at.ang)],
+      #               y=par("usr")[2]*1.07*sin(at.ang)[-length(at.ang)]
+      #       , labels=alabels, border=FALSE, col="white")
+
+      if(is.null(adj)) {
+        adj <- ifelse(at.ang %(]% c(pi/2, 3*pi/2), 1, 0)
+        adj[at.ang %in% c(pi/2, 3*pi/2)] <- 0.5
+      }
+      adj <- rep(adj, length_out=length(alabels))
+
+      if(las == 2){
+        sapply(seq_along(alabels),
+               function(i) text(out$x[i], out$y[i], labels=alabels[i], cex=cex.lab,
+                                srt=DescTools::RadToDeg(atan(out$y[i]/out$x[i])), adj=adj[i]))
+      } else {
+        sapply(seq_along(alabels),
+               function(i) BoxedText(x=out$x[i], y=out$y[i], labels=alabels[i], cex=cex.lab,
+                                     srt=ifelse(las==3, 90, 0), adj=adj[i],
+                                     border=NA, col="white"))
+        # text(out, labels=alabels, cex=cex.lab, srt=ifelse(las==3, 90, 0), adj=adj)
+        # BoxedText(x=out$x, y=out$y, labels=alabels, cex=cex.lab,
+        #           srt=ifelse(las==3, 90, 0), adj=adj, border=FALSE, col="white")
+
+      }
   }
 
+  invisible()
+
 }
+
+
+
 
 ###
 
@@ -12697,7 +12681,7 @@ ToWrd.lm <- function(x, font=NULL, ..., wrd=DescToolsOptions("lastWord")){
 ToWrd.character <- function (x, font = NULL, para = NULL, style = NULL, ..., wrd = DescToolsOptions("lastWord")) {
 
   # we will convert UTF-8 strings to Latin-1, if the local info is Latin-1
-  if(l10n_info()[["Latin-1"]] & Encoding(x)=="UTF-8")
+  if(any(l10n_info()[["Latin-1"]] & Encoding(x)=="UTF-8"))
     x <- iconv(x, from="UTF-8", to="latin1")
 
   wrd[["Selection"]]$InsertAfter(paste(x, collapse = "\n"))
@@ -12708,6 +12692,12 @@ ToWrd.character <- function (x, font = NULL, para = NULL, style = NULL, ..., wrd
   if (!is.null(para))
     WrdParagraphFormat(wrd) <- para
 
+
+  if(identical(font, "fix")){
+    font <- DescToolsOptions("fixedfont")
+    if(is.null(font))
+      font <- structure(list(name="Courier New", size=8), class="font")
+  }
 
   if(!is.null(font)){
       currfont <- WrdFont(wrd)
@@ -12998,10 +12988,11 @@ ToWrd.table <- function (x, font = NULL, main = NULL, align=NULL, tablestyle=NUL
 }
 
 
-WrdTableBorders <- function(wtab, from=NULL, to=NULL,
-                            border=wdConst$wdBorderBottom,
-                            lty=wdConst$wdLineStyleSingle, wrd){
 
+
+WrdTableBorders <- function (wtab, from = NULL, to = NULL, border = NULL,
+                              lty = wdConst$wdLineStyleSingle, col=wdConst$wdColorBlack,
+                              lwd = wdConst$wdLineWidth050pt, wrd) {
   # paint borders of a table
 
   if(is.null(from))
@@ -13015,12 +13006,24 @@ WrdTableBorders <- function(wtab, from=NULL, to=NULL,
 
   rng$Select()
 
-  wborder <- wrd[["Selection"]]$Borders(border)
-  wborder[["LineStyle"]] <- lty
+  if(is.null(border))
+    # use all borders by default
+    border <- wdConst[c("wdBorderTop","wdBorderBottom","wdBorderLeft","wdBorderRight",
+                        "wdBorderHorizontal","wdBorderVertical")]
+
+  for(b in border){
+    wborder <- wrd[["Selection"]]$Borders(b)
+    wborder[["LineStyle"]] <- lty
+    wborder[["Color"]] <- col
+    wborder[["LineWidth"]] <- lwd
+  }
 
   invisible()
-
 }
+
+
+
+
 
 
 WrdCellRange <- function(wtab, rstart, rend) {

@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // compute_GCD
 int compute_GCD(int a, int b);
-RcppExport SEXP DescTools_compute_GCD(SEXP aSEXP, SEXP bSEXP) {
+RcppExport SEXP _DescTools_compute_GCD(SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -19,7 +19,7 @@ END_RCPP
 }
 // compute_LCM
 int compute_LCM(int a, int b);
-RcppExport SEXP DescTools_compute_LCM(SEXP aSEXP, SEXP bSEXP) {
+RcppExport SEXP _DescTools_compute_LCM(SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -31,7 +31,7 @@ END_RCPP
 }
 // n_pow_sum
 List n_pow_sum(NumericVector x);
-RcppExport SEXP DescTools_n_pow_sum(SEXP xSEXP) {
+RcppExport SEXP _DescTools_n_pow_sum(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -42,7 +42,7 @@ END_RCPP
 }
 // conv_DecToBin
 std::vector< std::string > conv_DecToBin(std::vector< int > n);
-RcppExport SEXP DescTools_conv_DecToBin(SEXP nSEXP) {
+RcppExport SEXP _DescTools_conv_DecToBin(SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -53,7 +53,7 @@ END_RCPP
 }
 // top_n
 Rcpp::List top_n(Rcpp::NumericVector x, int n);
-RcppExport SEXP DescTools_top_n(SEXP xSEXP, SEXP nSEXP) {
+RcppExport SEXP _DescTools_top_n(SEXP xSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -65,7 +65,7 @@ END_RCPP
 }
 // bottom_n
 Rcpp::List bottom_n(Rcpp::NumericVector x, int n);
-RcppExport SEXP DescTools_bottom_n(SEXP xSEXP, SEXP nSEXP) {
+RcppExport SEXP _DescTools_bottom_n(SEXP xSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -77,7 +77,7 @@ END_RCPP
 }
 // top_i
 IntegerVector top_i(NumericVector v, unsigned int n);
-RcppExport SEXP DescTools_top_i(SEXP vSEXP, SEXP nSEXP) {
+RcppExport SEXP _DescTools_top_i(SEXP vSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -89,7 +89,7 @@ END_RCPP
 }
 // bottom_i
 IntegerVector bottom_i(NumericVector v, unsigned int n);
-RcppExport SEXP DescTools_bottom_i(SEXP vSEXP, SEXP nSEXP) {
+RcppExport SEXP _DescTools_bottom_i(SEXP vSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;

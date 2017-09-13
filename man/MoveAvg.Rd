@@ -36,7 +36,7 @@ MoveAvg(x, order, align = c("center", "left", "right"),
 
 \author{Andri Signorell <andri@signorell.net> }
 
-\seealso{There's a faster implementation of running mean in the package \pkg{caTools} \code{\link[caTools]{runmean}()} and a slower one in \pkg{forecast} \code{\link[forecast]{ma}()}.
+\seealso{There's a faster implementation of running mean in the package \pkg{caTools} \code{\link[caTools]{runmean}()} and a slower one in \pkg{forecast} \code{\link[forecast]{ma}()}. There's similar code in \code{\link{Midx}()}.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

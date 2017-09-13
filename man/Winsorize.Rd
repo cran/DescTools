@@ -28,12 +28,44 @@ Winsorize(x, minval = NULL, maxval = NULL, probs = c(0.05, 0.95),
   a predefined quantum of the smallest and/or the largest values are replaced by less extreme values. Thereby the substitute values are the most extreme retained values.
 }
 \details{
-  Consider standardizing (possibly robust) the data before winsorizing.
-  See \code{\link{scale}}, \code{\link{RobScale}}
+
+The winsorized vector is obtained by
+%% \deqn{wins(x) =
+%%   \left\{\begin{array}{ll}
+%%      -c &\textup{for }x \le -c\\
+%%      x  &\textup{for } |x| < c\\
+%%      c &\textup{for }x \ge c
+%%   \end{array}\right.
+%% %% }{wins(x) = -c if x < -c,
+%% c if x > c, x otherwise}
+%% }
+
+
+\deqn{g(x) =
+  \left\{\begin{array}{ll}
+      -c &\textup{for }x \le -c\\
+      x  &\textup{for } |x| < c\\
+      c &\textup{for }x \ge c
+  \end{array}\right.
+}{wins(x) = -c if x < -c,
+ c if x > c, x otherwise}
+
+Consider standardizing (possibly robust) the data before winsorizing.
 }
+%% \deqn{g(x) =
+%%  \left\{\begin{array}{ll}
+%%     log_{10}(x) &\textup{for }x \ge c\\
+%%     log_{10}(c) - \frac{c - x}{c \cdot log(10)} &\textup{for } x < c
+%%  \end{array}\right.
+%%}{g(x)=log_10(x), if x>c,
+%%log_10(c) - (c-x)/(c log(10)), otherwise}
+
+
 
 \seealso{
-\code{\link{Winsorize}} \code{library(robustHD)} contains an option to winsorize multivariate data
+\code{\link{Winsorize}} from the package \code{robustHD} contains an option to winsorize multivariate data
+
+\code{\link{scale}}, \code{\link{RobScale}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 

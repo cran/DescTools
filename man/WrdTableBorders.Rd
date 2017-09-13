@@ -8,8 +8,9 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-WrdTableBorders(wtab, from = NULL, to = NULL, border = wdConst$wdBorderBottom,
-                lty = wdConst$wdLineStyleSingle, wrd)
+WrdTableBorders(wtab, from = NULL, to = NULL, border = NULL,
+                lty = wdConst$wdLineStyleSingle, col = wdConst$wdColorBlack,
+                lwd = wdConst$wdLineWidth050pt, wrd)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -26,6 +27,12 @@ WrdTableBorders(wtab, from = NULL, to = NULL, border = wdConst$wdBorderBottom,
 %%     ~~Describe \code{border} here~~
 }
   \item{lty}{a Word constant (\code{wdConst$wdLineStyle...}) defining the line type.
+%%     ~~Describe \code{lty} here~~
+}
+  \item{col}{a Word constant (\code{wdConst$wdColor...}) defining the color of the border. See examples for converting R colors to Word colors.
+%%     ~~Describe \code{lty} here~~
+}
+  \item{lwd}{a Word constant (\code{wdConst$wdLineWidth...pt}) defining the line width.
 %%     ~~Describe \code{lty} here~~
 }
   \item{wrd}{a pointer to the current Word instance.
@@ -61,6 +68,21 @@ wtab <- ToWrd(tab, wrd=wrd, tablestyle = NA)
 # draw borders
 WrdTableBorders(wtab, from=c(2,2), to=c(3,3), border=wdConst$wdBorderBottom, wrd=wrd)
 WrdTableBorders(wtab, from=c(2,2), to=c(3,3), border=wdConst$wdBorderDiagonalUp, wrd=wrd)
+
+# demonstrate linewidth and color
+wtab <- ToWrd(tab, wrd=wrd, tablestyle = NA)
+WrdTableBorders(wtab, col=RgbToLong(ColToRgb("olivedrab")),
+                lwd=wdConst$wdLineWidth150pt, wrd=wrd)
+
+WrdTableBorders(wtab, border=wdConst$wdBorderBottom,
+                col=RgbToLong(ColToRgb("dodgerblue")),
+                lwd=wdConst$wdLineWidth300pt, wrd=wrd)
+
+# use an R color in Word
+RgbToLong(ColToRgb("olivedrab"))
+
+# find a similar R-color for a Word color
+ColToRgb(RgbToCol(LongToRgb(wdConst$wdColorAqua)))
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -11,13 +11,13 @@
 \usage{
 LeveneTest(y, ...)
 
-\method{LeveneTest}{formula}(y, data, ...)
+\method{LeveneTest}{formula}(formula, data, ...)
 \method{LeveneTest}{lm}(y, ...)
 \method{LeveneTest}{default}(y, group, center=median, ...)
 }
 
 \arguments{
-  \item{y}{response variable for the default method, or a \code{lm} or 
+  \item{y}{response variable for the default method, or a \code{lm} or
   \code{formula} object. If \code{y} is a linear-model object or a formula,
   the variables on the right-hand-side of the model must all be factors and
   must be completely crossed.}
@@ -25,25 +25,38 @@ LeveneTest(y, ...)
   \item{center}{The name of a function to compute the center of each group;
   	\code{mean} gives the original Levene's test; the default, \code{median},
   	provides a more robust test (Brown-Forsythe-Test). }
-  \item{data}{a data frame for evaluating the \code{formula}.}
+
+  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs}
+    gives the data values and \code{rhs} the corresponding groups.}
+  \item{data}{an optional matrix or data frame (or similar: see
+    \code{\link{model.frame}}) containing the variables in the
+    formula \code{formula}.  By default the variables are taken from
+    \code{environment(formula)}.}
+
+
   \item{...}{arguments to be passed down, e.g., \code{data} for the
   	\code{formula} and \code{lm} methods; can also be used to pass arguments to
   	the function given by \code{center} (e.g., \code{center=mean} and
   	\code{trim=0.1} specify the 10\% trimmed mean).}
 }
+%%  \item{subset}{an optional vector specifying a subset of observations
+%%    to be used.}
+%%  \item{na.action}{a function which indicates what should happen when
+%%    the data contain \code{NA}s.  Defaults to
+%%    \code{getOption("na.action")}.}
 
 \value{
 returns an object meant to be printed showing the results of the test.
 }
-\note{ This function was previously published as leveneTest() in the library(car) 
+\note{ This function was previously published as leveneTest() in the library(car)
   and has been integrated here without logical changes.
 }
 \references{
   Fox, J. (2008)
   \emph{Applied Regression Analysis and Generalized Linear Models},
-  Second Edition. Sage.  
-  
-  Fox, J. and Weisberg, S. (2011) 
+  Second Edition. Sage.
+
+  Fox, J. and Weisberg, S. (2011)
   \emph{An R Companion to Applied Regression}, Second Edition, Sage.
 }
 \seealso{
@@ -58,8 +71,8 @@ returns an object meant to be printed showing the results of the test.
   for exact and approximate \emph{conditional} p-values for the
   Ansari-Bradley test, as well as different methods for handling ties.
 }
-     
-\author{John Fox \email{jfox@mcmaster.ca}; original generic version 
+
+\author{John Fox \email{jfox@mcmaster.ca}; original generic version
     contributed by Derek Ogle\cr
     adapted from a response posted by Brian Ripley to the r-help email list.}
 
@@ -72,7 +85,7 @@ ramsay <- c(111, 107, 100, 99, 102, 106, 109, 108, 104, 99,
 jung.parekh <- c(107, 108, 106, 98, 105, 103, 110, 105, 104,
             100, 96, 108, 103, 104, 114, 114, 113, 108, 106, 99)
 
-LeveneTest( c(ramsay, jung.parekh), 
+LeveneTest( c(ramsay, jung.parekh),
   factor(c(rep("ramsay",length(ramsay)), rep("jung.parekh",length(jung.parekh)))))
 
 LeveneTest( c(rnorm(10), rnorm(10, 0, 2)), factor(rep(c("A","B"),each=10)) )
@@ -89,6 +102,6 @@ LeveneTest(conformity ~ fcategory * partner.status, data = Moore, center = mean,
 
 LeveneTest(lm(conformity ~ fcategory*partner.status, data = Moore))
 }
-}        
+}
 
 \keyword{htest}

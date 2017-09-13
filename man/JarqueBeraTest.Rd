@@ -11,12 +11,12 @@ JarqueBeraTest(x, robust = TRUE, method = c("chisq", "mc"),
 \arguments{
   \item{x}{a numeric vector of data values.}
   \item{robust}{defines, whether the robust version should be used.
-  Default is TRUE.}
+  Default is \code{TRUE}.}
   \item{method}{a character string out of \code{chisq} or \code{mc}, specifying how the critical
                  values should be obtained. Default is approximated by the
                  chisq-distribution or empirically via Monte Carlo.}
   \item{N}{number of Monte Carlo simulations for the empirical critical values}
-  \item{na.rm}{defines if NAs should be omitted. Default is FALSE.}
+  \item{na.rm}{defines if \code{NAs} should be omitted. Default is \code{FALSE}.}
 }
 \details{
 The test is based on a joint statistic using skewness and kurtosis
@@ -28,7 +28,7 @@ Setting \code{robust} to \code{FALSE} will perform the original Jarque-Bera test
 Jarque, C. and Bera, A (1980)).
 }
 \value{
-A list with class htest containing the following components:
+A list with class \code{htest} containing the following components:
   \item{statistic}{the value of the test statistic.}
   \item{parameter}{the degrees of freedom.}
   \item{p.value}{the p-value of the test.}

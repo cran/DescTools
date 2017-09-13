@@ -8,9 +8,10 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-BubbleLegend(x, y = NULL, radius, cols, labels = NULL, cols.lbl = "black",
+BubbleLegend(x, y = NULL, area, cols, labels = NULL, cols.lbl = "black",
              width = NULL, xjust = 0, yjust = 1, inset = 0, border = "black",
-             frame = TRUE, adj = c(0.5, 0.5), cex = 1, bg = NULL, asp = NULL, ...)
+             frame = TRUE, adj = c(0.5, 0.5), cex = 1, cex.names = 1,
+             bg = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,7 +20,7 @@ BubbleLegend(x, y = NULL, radius, cols, labels = NULL, cols.lbl = "black",
 
   \item{y}{the top y-coordinate to be used to position the legend. See 'Details'. }
 
-  \item{radius}{the radii for the bubbles in BubbleLegend.}
+  \item{area}{the area(s) for the bubbles in bubble legend.}
   \item{cols}{the color appearing in the legend.}
 
   \item{labels}{a vector of labels to be placed at the right side of the legend.}
@@ -40,12 +41,12 @@ BubbleLegend(x, y = NULL, radius, cols, labels = NULL, cols.lbl = "black",
 
   \item{adj}{text alignment, horizontal and vertical. }
 
-  \item{cex}{character extension for the labels, default 1.0. }
+  \item{cex}{extension factor for the area, default 1.0. }
+  \item{cex.names}{character extension for the labels, default 1.0. }
 
 \item{bg}{the background color for the bubble legend.}
 
-\item{asp}{the aspect ratio width/height. If this is left blank it will be calculated automatically.}
-  \item{\dots}{further arguments are passed to the function \kbd{text}. }
+\item{\dots}{further arguments are passed to the function \kbd{text}. }
 
 }
 \details{
@@ -66,7 +67,8 @@ PlotBubble(x=d.pizza$delivery_min, y=d.pizza$temperature, area=d.pizza$price,
            col=SetAlpha(as.numeric(d.pizza$area)+2, .5), border="darkgrey",
            na.rm=TRUE, main="Price-Bubbles", panel.first=grid())
 
-BubbleLegend("bottomleft", frame=TRUE, cols=SetAlpha("steelblue",0.5), bg="green",
+BubbleLegend("bottomleft", area=c(1500, 1000, 500), frame=TRUE,
+             cols=SetAlpha("steelblue",0.5), bg="green",
              radius = c(1, 2.5, 5), labels=c(1500, 1000, 500), cex=0.8,
              cols.lbl=c("yellow", "red","blue"))
 }

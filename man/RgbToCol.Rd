@@ -3,11 +3,8 @@
 \alias{RgbToLong}
 \alias{LongToRgb}
 
+\title{Find the Nearest Named R-Color to a Given RGB-Color }
 
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{Find the Named R-Color Which Is Nearest to a Given RGB-Color
-%%  ~~function to do ... ~~
-}
 \description{Convert a RGB-color to a named R-Color means looking for a color in the R-palette, which is nearest to the given RGB-color.
 The function uses the minimum of squared distance as proximity measure. \cr
 RgbToLong converts an RGB-color to a long integer in numeric format.

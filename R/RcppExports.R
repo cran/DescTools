@@ -2,34 +2,34 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 compute_GCD <- function(a, b) {
-    .Call(DescTools_compute_GCD, a, b)
+    .Call(`_DescTools_compute_GCD`, a, b)
 }
 
 compute_LCM <- function(a, b) {
-    .Call(DescTools_compute_LCM, a, b)
+    .Call(`_DescTools_compute_LCM`, a, b)
 }
 
 n_pow_sum <- function(x) {
-    .Call(DescTools_n_pow_sum, x)
+    .Call(`_DescTools_n_pow_sum`, x)
 }
 
 conv_DecToBin <- function(n) {
-    .Call(DescTools_conv_DecToBin, n)
+    .Call(`_DescTools_conv_DecToBin`, n)
 }
 
 top_n <- function(x, n = 5L) {
-    .Call(DescTools_top_n, x, n)
+    .Call(`_DescTools_top_n`, x, n)
 }
 
 bottom_n <- function(x, n = 5L) {
-    .Call(DescTools_bottom_n, x, n)
+    .Call(`_DescTools_bottom_n`, x, n)
 }
 
 top_i <- function(v, n) {
-    .Call(DescTools_top_i, v, n)
+    .Call(`_DescTools_top_i`, v, n)
 }
 
 bottom_i <- function(v, n) {
-    .Call(DescTools_bottom_i, v, n)
+    .Call(`_DescTools_bottom_i`, v, n)
 }
 

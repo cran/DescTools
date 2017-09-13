@@ -43,7 +43,6 @@ A grouped list of the functions:
 \link{Ndec}       \tab      Count decimal places of a number \cr
 \link{BoxCox}, \link{BoxCoxInv}     \tab      Box Cox transformation and its inverse transformation \cr
 \link{BoxCoxLambda}       \tab      Return the optimal lambda for a BoxCox transformation \cr
-\link{LogGen}, \link{LogLin}     \tab      Log linear hybrid, generalized log \cr
 \link{LogSt}, \link{LogStInv}      \tab      Calculate started logarithmic transformation and it's inverse\cr
 \link{Logit}, \link{LogitInv}      \tab      Generalized logit and inverse logit function \cr
 \link{LinScale}       \tab      Simple linear scaling of a vector x \cr
@@ -343,15 +342,12 @@ A grouped list of the functions:
 \cr\cr
 \bold{Tools:}\tab\cr
 \link{PairApply}       \tab  Helper for calculating functions pairwise \cr
-\link{LsFct}, \link{LsData}, \link{LsObj}      \tab  List the functions (or the data, all objects) of a package \cr
+\link{LsFct}, \link{LsObj}      \tab  List the functions (or the data, all objects) of a package \cr
 \link{FctArgs}      \tab            Retrieve the arguments of a functions \cr
 \link{InDots}       \tab  Check if an argument is contained in ... argument and return it's value \cr
 \link{ParseFormula}      \tab     Parse a formula and return the splitted parts of if \cr
 \link{Recycle}       \tab      Recycle a list of elements to the maximal found dimension \cr
-\link{AddClass}    \tab  Add a class to an object\cr
-\link{RemoveClass}    \tab Remove a class from an object\cr
 \link{Keywords}    \tab  Get the keywords of a man page\cr
-\link{Exec}       \tab      Execute a R-command given as text \cr
 \link{SysInfo}    \tab  Get some more information about system and environment\cr
 \link{DescToolsOptions}    \tab  Get the DescTools specific options\cr
 \cr

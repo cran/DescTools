@@ -23,7 +23,9 @@ Freq <- function(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE
     tab <- table(x, useNA = useNA)
   }
 
-  # how should the table be sorted, by name, level or frq? (NULL means "desc")
+  names(tab)[is.na(names(tab))] <- "<NA>"
+
+    # how should the table be sorted, by name, level or frq? (NULL means "desc")
   switch(match.arg(ord, c("level", "desc", "asc", "name")),
          level  = {  }
          , name   = { tab <- tab[rownames(tab)] }
@@ -32,7 +34,6 @@ Freq <- function(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE
   )
 
   ptab <- prop.table(tab)
-  names(tab)[is.na(names(tab))] <- "<NA>"
 
   z <- data.frame(level = names(tab),
                   freq = as.vector(tab[]), perc = as.vector(ptab[]),

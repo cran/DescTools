@@ -1,7 +1,6 @@
 \name{List Variety Of Objects}
 \alias{LsFct}
 \alias{LsObj}
-\alias{LsData}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{List Objects, Functions Or Data in a Package
 %%  ~~function to do ... ~~
@@ -12,7 +11,6 @@
 \usage{
 LsObj(package)
 LsFct(package)
-LsData(package)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,7 +19,7 @@ LsData(package)
 }
 }
 \details{This is just a wrapper for \code{\link{ls}}, \code{\link{ls.str}} and \code{\link{lsf.str}} with the appropriate arguments (as I always forgot how to do the trick).
-LsObj lists all objects, LsFct just the functions and LsData the data in a package.
+\code{LsObj()} lists all objects, \code{LsFct()} just the functions in a package.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \references{

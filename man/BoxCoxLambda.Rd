@@ -5,9 +5,9 @@
 }
 \arguments{
 \item{x}{a numeric vector or time series}
-\item{method}{Choose method to be used in calculating lambda.}
-\item{lower}{Lower limit for possible lambda values.}
-\item{upper}{Upper limit for possible lambda values.}
+\item{method}{method to be used in calculating lambda. Can be either "guerrero" (default) or "loglik".}
+\item{lower}{lower limit for possible lambda values, default is -1.}
+\item{upper}{upper limit for possible lambda values, default is 2.}
 }
 \description{An automatic selection of the Box Cox transformation parameter is estimated with two methods.\cr 
 Guerrero's (1993) method yields a lambda which minimizes the coefficient of variation for subseries of \code{x}. 

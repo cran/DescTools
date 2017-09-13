@@ -120,7 +120,7 @@ Canvas(xlim=c(-5,5), bg="black")
 
 sapply( (0:11) * pi/6, function(theta) {
   xy <- Rotate(x, y=y, theta=theta)
-  DrawCircle (x=xy$x, y=xy$y, r.in=2.4, border="white")
+  DrawCircle (x=xy$x, y=xy$y, r.in=2.4, border=SetAlpha("white", 0.2))
 } )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

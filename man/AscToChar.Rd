@@ -31,6 +31,7 @@ CharToAsc(x)
 }
 \author{unknown guy out there, help text partly taken from M. Maechler's \pkg{sfsmisc}.
 }
+\seealso{\code{\link{charToRaw}}}
 
 \examples{
 (x <- CharToAsc("Silvia"))
@@ -40,6 +41,10 @@ AscToChar(x)
 
 # use strsplit if the single characters are needed
 strsplit(AscToChar(x), split=NULL)
+
+# this would be an alternative, but the latter would be of class raw
+DecToHex(CharToAsc("Silvia"))
+charToRaw("Silvia")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

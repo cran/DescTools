@@ -1,16 +1,19 @@
 \name{DenseRank}
 \alias{DenseRank}
+\alias{PercentRank}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Dense Ranks
+\title{Dense Ranks and Percent Ranks
 %%  ~~function to do ... ~~
 }
-\description{Returns the dense ranks of the values in a vector. 
+\description{Returns the dense ranks of the values in a vector.
 DenseRank gives the ranking within the vector x, but the ranks are consecutive. No ranks are skipped if there are ranks with multiple items. (Unlike \code{\link{rank}} gives the ranking within the vector x too, but ties are assigned the same rank, with the next ranking(s) skipped.)
 
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 DenseRank(x, na.last = TRUE)
+
+PercentRank(x)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -45,6 +48,7 @@ names(x2) <- letters[1:11]
 (r2 <- rank(x2))        # ties are averaged
 (r2 <- DenseRank(x2))   # ranks are enumerated
 
+PercentRank(x2)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

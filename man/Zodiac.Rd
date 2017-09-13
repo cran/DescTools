@@ -22,8 +22,8 @@ Zodiac(x, lang = c("engl", "deu"), stringsAsFactors = TRUE)
 \seealso{\code{\link{Year}} and other date functions
 }
 \examples{
-Zodiac(c(Date(1937,7,28), Date(1936,6,1), Date(1966,2,25),
-         Date(1964,11,17), Date(1972,4,25)), lang="deu")
+Zodiac(as.Date(c("1937-07-28", "1936-06-01", "1966-02-25",
+                 "1964-11-17", "1972-04-25")), lang="deu")
 
 d <- sample(seq(as.Date("2015-01-01"), as.Date("2015-12-31"), 1), 120)
 z <- Zodiac(d)

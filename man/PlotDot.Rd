@@ -112,7 +112,7 @@ PlotDot(VADeaths, main="Death Rates in Virginia - 1940", pch=NA, lcolor = hecru,
 
 # Error bars for binomial confidence intervals
 tab <- table(d.pizza$driver, d.pizza$wine_delivered)
-xci <- SetRowNames(BinomCI(tab[,1], rowSums(tab)), rownames(tab))
+xci <- SetNames(BinomCI(tab[,1], rowSums(tab)), rownames=rownames(tab))
 PlotDot(xci[,1], main="wine delivered ~ driver ", xlim=c(0,1),
         args.errbars=list(from=xci[,-1], mid=xci[,1], pch=21))
 

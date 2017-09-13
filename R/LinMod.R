@@ -136,9 +136,9 @@ Conf.multinom <- function(x, ...){
 Conf.glm <- function(x, cutoff = 0.5, ...){
   resp <- model.extract(x$model, "response")
   if(is.factor(resp)){
-    pred <- levels(resp)[(predict(x, type="response")>cutoff)+1]
+    pred <- levels(resp)[(predict(x, type="response") > cutoff)+1]
   } else {
-    pred <- levels(factor(resp))[(predict(x, type="response")>cutoff)+1]
+    pred <- levels(factor(resp))[(predict(x, type="response") > cutoff)+1]
   }
   Conf(x=pred, ref=resp, ... )
 }
@@ -150,7 +150,9 @@ Conf.randomForest <- function(x, ...){
 
 
 Conf.svm <- function(x, ...){
-  Conf(x=predict(x), ref=model.extract(model.frame(x), "response"), ... )
+
+# old:  Conf(x=predict(x), ref=model.extract(model.frame(x), "response"), ... )
+  Conf(x=predict(x, type="class"), ref=model.response(model.frame(x)), ... )
 }
 
 

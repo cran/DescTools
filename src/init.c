@@ -29,14 +29,14 @@ extern SEXP between_num_m(SEXP, SEXP, SEXP);
 extern SEXP between_num_r(SEXP, SEXP, SEXP);
 extern SEXP between_num_rm(SEXP, SEXP, SEXP);
 extern SEXP conc(SEXP, SEXP, SEXP, SEXP);
-extern SEXP DescTools_bottom_i(SEXP, SEXP);
-extern SEXP DescTools_bottom_n(SEXP, SEXP);
-extern SEXP DescTools_compute_GCD(SEXP, SEXP);
-extern SEXP DescTools_compute_LCM(SEXP, SEXP);
-extern SEXP DescTools_conv_DecToBin(SEXP);
-extern SEXP DescTools_n_pow_sum(SEXP);
-extern SEXP DescTools_top_i(SEXP, SEXP);
-extern SEXP DescTools_top_n(SEXP, SEXP);
+extern SEXP _DescTools_bottom_i(SEXP, SEXP);
+extern SEXP _DescTools_bottom_n(SEXP, SEXP);
+extern SEXP _DescTools_compute_GCD(SEXP, SEXP);
+extern SEXP _DescTools_compute_LCM(SEXP, SEXP);
+extern SEXP _DescTools_conv_DecToBin(SEXP);
+extern SEXP _DescTools_n_pow_sum(SEXP);
+extern SEXP _DescTools_top_i(SEXP, SEXP);
+extern SEXP _DescTools_top_n(SEXP, SEXP);
 extern SEXP pip(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP rkurt(SEXP, SEXP);
 extern SEXP rskew(SEXP, SEXP);
@@ -71,14 +71,14 @@ static const R_CallMethodDef CallEntries[] = {
   {"between_num_r",           (DL_FUNC) &between_num_r,           3},
   {"between_num_rm",          (DL_FUNC) &between_num_rm,          3},
   {"conc",                    (DL_FUNC) &conc,                    4},
-  {"DescTools_bottom_i",      (DL_FUNC) &DescTools_bottom_i,      2},
-  {"DescTools_bottom_n",      (DL_FUNC) &DescTools_bottom_n,      2},
-  {"DescTools_compute_GCD",   (DL_FUNC) &DescTools_compute_GCD,   2},
-  {"DescTools_compute_LCM",   (DL_FUNC) &DescTools_compute_LCM,   2},
-  {"DescTools_conv_DecToBin", (DL_FUNC) &DescTools_conv_DecToBin, 1},
-  {"DescTools_n_pow_sum",     (DL_FUNC) &DescTools_n_pow_sum,     1},
-  {"DescTools_top_i",         (DL_FUNC) &DescTools_top_i,         2},
-  {"DescTools_top_n",         (DL_FUNC) &DescTools_top_n,         2},
+  {"_DescTools_bottom_i",     (DL_FUNC) &_DescTools_bottom_i,      2},
+  {"_DescTools_bottom_n",     (DL_FUNC) &_DescTools_bottom_n,      2},
+  {"_DescTools_compute_GCD",  (DL_FUNC) &_DescTools_compute_GCD,   2},
+  {"_DescTools_compute_LCM",  (DL_FUNC) &_DescTools_compute_LCM,   2},
+  {"_DescTools_conv_DecToBin",(DL_FUNC) &_DescTools_conv_DecToBin, 1},
+  {"_DescTools_n_pow_sum",    (DL_FUNC) &_DescTools_n_pow_sum,     1},
+  {"_DescTools_top_i",        (DL_FUNC) &_DescTools_top_i,         2},
+  {"_DescTools_top_n",        (DL_FUNC) &_DescTools_top_n,         2},
   {"pip",                     (DL_FUNC) &pip,                     6},
   {"rkurt",                   (DL_FUNC) &rkurt,                   2},
   {"rskew",                   (DL_FUNC) &rskew,                   2},

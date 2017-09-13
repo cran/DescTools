@@ -17,6 +17,7 @@
 \alias{Today}
 \alias{DiffDays360}
 \alias{LastDayOfMonth}
+\alias{Timezone}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Basic Date Functions
@@ -45,6 +46,7 @@ IsLeapYear(x)
 Hour(x)
 Minute(x)
 Second(x)
+Timezone(x)
 
 Now()
 Today()
@@ -90,7 +92,7 @@ Based on the requested time component, the output is as follows:\cr\cr
 \kbd{YearDay} returns the day of the year numbering (1 to 366). \cr
 \kbd{Day} returns the day of the month (1 to 31). \cr
 \kbd{YearMonth} returns the yearmonth representation (yyyymm) of a date as long integer. \cr
-\kbd{Hour, Minute Second} return the hour, minute resp. second from a Posixlt object. \cr
+\kbd{Hour, Minute, Second, Timezone} return the hour, minute, second or timezone from a POSIXlt object. \cr
 \kbd{Today, Now} return the current date, resp. the current date and time.\cr
 
 \kbd{IsWeekend} returns TRUE, if the date x falls on a weekend. \cr

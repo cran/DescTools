@@ -48,7 +48,8 @@ ModelDlg <- function(x, ...){
 
   e1 <- environment()
   modx <- character()
-  xname <- deparse(substitute(x))
+  # old, repl. by 0.99.22: xname <- deparse(substitute(x))
+  xname <- paste(StrTrim(deparse(substitute(x))), collapse=" ")
 
   if (!missing(x)) {
     if(!is.data.frame(x))
@@ -67,9 +68,9 @@ ModelDlg <- function(x, ...){
   tflhs <- tcltk::tclVar("")
 
   OnOK <- function() {
-    assign("modx", paste("(",
+    assign("modx", paste(
       DescTools::StrTrim(tcltk::tclvalue(tflhs)), " ~ ",
-      DescTools::StrTrim(.GetModTxt()), ", data=", xname, ")", sep=""), envir = e1)
+      DescTools::StrTrim(.GetModTxt()), ", data=", xname, sep=""), envir = e1)
     tcltk::tkdestroy(root)
   }
 

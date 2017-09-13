@@ -35,6 +35,8 @@ GTest(x, y = NULL, correct = c("none", "williams", "yates"),
 %  Monte Carlo test.}
   }
   \details{
+The G-test is also called "Likelihood Ratio Test" and is asymptotically equivalent to the Pearson ChiSquare-test but not usually used when analyzing 2x2 tables. It is used in logistic regression and loglinear modeling which involves contingency tables. The G-test is also reported in the standard summary of \code{Desc} for tables.
+
   If \code{x} is a matrix with one row or column, or if \code{x} is a
   vector and \code{y} is not given, then a \emph{goodness-of-fit test}
   is performed (\code{x} is treated as a one-dimensional
@@ -42,7 +44,7 @@ GTest(x, y = NULL, correct = c("none", "williams", "yates"),
   integers.  In this case, the hypothesis tested is whether the
   population probabilities equal those in \code{p}, or are all equal if
   \code{p} is not given.
-  
+
   If \code{x} is a matrix with at least two rows and columns, it is
   taken as a two-dimensional contingency table: the entries of \code{x}
   must be non-negative integers.  Otherwise, \code{x} and \code{y} must
@@ -52,13 +54,15 @@ GTest(x, y = NULL, correct = c("none", "williams", "yates"),
   performed on the null hypothesis that the joint distribution of the
   cell counts in a 2-dimensional contingency table is the product of the
   row and column marginals.
-  
+
+
+
 %  If \code{simulate.p.value} is \code{FALSE}, the p-value is computed
 %  from the asymptotic chi-squared distribution of the test statistic;
 %  continuity correction is only used in the 2-by-2 case (if \code{correct}
 %                                                         is \code{TRUE}, the default).  Otherwise the p-value is computed for a
 %  Monte Carlo test (Hope, 1968) with \code{B} replicates.
-  
+
 %  In the contingency table case simulation is done by random sampling
 %  from the set of all contingency tables with given marginals, and works
 %  only if the marginals are strictly positive.  (A C translation of the
@@ -66,12 +70,12 @@ GTest(x, y = NULL, correct = c("none", "williams", "yates"),
 %  never used, and the statistic is quoted without it.  Note that this is
 %  not the usual sampling situation assumed for the chi-squared test but
 %  rather that for Fisher's exact test.
-  
+
 %  In the goodness-of-fit case simulation is done by random sampling from
 %  the discrete distribution specified by \code{p}, each sample being
 %  of size \code{n = sum(x)}.  This simulation is done in \R and may be
 %  slow.
-  TOI Yates' correction taken from Mike Camann's 2x2 G-test fn.
+  TOI Yates' correction taken from Mike Camann's 2x2 G-test function.
   GOF Yates' correction as described in Zar (2000)
   }
   \value{
@@ -97,21 +101,21 @@ GTest(x, y = NULL, correct = c("none", "williams", "yates"),
   Hope, A. C. A. (1968)
   A simplified Monte Carlo significance test procedure.
   \emph{J. Roy, Statist. Soc. B} \bold{30}, 582--598.
-  
+
   Patefield, W. M. (1981)
   Algorithm AS159.  An efficient method of generating r x c tables
   with given row and column totals.
   \emph{Applied Statistics} \bold{30}, 91--97.
-  
+
   Agresti, A. (2007)
   \emph{An Introduction to Categorical Data Analysis, 2nd ed.},
   New York: John Wiley & Sons.
   Page 38.
 
-Sokal, R. R., F. J. Rohlf (2012) \emph{Biometry: the principles and practice of statistics in biological research}. 4th edition. W. H. Freeman and Co.: New York. 937 pp. 
+Sokal, R. R., F. J. Rohlf (2012) \emph{Biometry: the principles and practice of statistics in biological research}. 4th edition. W. H. Freeman and Co.: New York. 937 pp.
 
 
-  
+
   }
 \examples{
 
@@ -122,7 +126,7 @@ dimnames(M) <- list(gender=c("M","F"),
 
 (Xsq <- GTest(M))   # Prints test summary
 
-Xsq$observed        # observed counts (same as M) 
+Xsq$observed        # observed counts (same as M)
 Xsq$expected        # expected counts under the null
 
 
@@ -148,5 +152,5 @@ GTest(table(x))                # NOT 'GTest(x)'!
 }
 \keyword{htest}
 \keyword{distribution}
-  
-  
+
+

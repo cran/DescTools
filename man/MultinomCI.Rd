@@ -14,8 +14,8 @@ Andri Signorell <andri@signorell.net>
 (Goodman, Wald, Wilson)
 }
 \usage{
-MultinomCI(x, conf.level = 0.95,
-           method = c("sisonglaz", "cplus1", "goodman", "wald", "waldcc", "wilson"))
+MultinomCI(x, conf.level = 0.95, method = c("sisonglaz", "cplus1",
+           "goodman", "wald", "waldcc", "wilson"))
 }
 \arguments{
 \item{x}{

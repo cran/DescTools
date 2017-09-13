@@ -49,6 +49,17 @@ Desc.factor <- function (x, main=NULL,
   return(desc(x=x, xname= deparse(substitute(x)), main=main, digits=digits, maxrows=maxrows, ord=ord, plotit=plotit, sep=sep, ...))
 }
 
+Desc.labelled <- function (x, main=NULL,
+                         maxrows=NULL, ord=NULL,
+                         plotit=NULL, sep=NULL, digits=NULL, ...) {
+  xname <- deparse(substitute(x))
+  lbl <- Label(x)
+  x <- factor(x, labels=names(attr(x, "labels")))
+  Label(x) <- lbl
+  return(desc(x=x, xname= xname, main=main, digits=digits, maxrows=maxrows, ord=ord, plotit=plotit, sep=sep, ...))
+}
+
+
 
 Desc.ordered <- function (x, main=NULL,
                           maxrows=NULL, ord=NULL,
@@ -96,6 +107,7 @@ Desc.default <- function (x, main=NULL, maxrows=NULL, ord=NULL, conf.level=0.95,
                     , plotit=NULL, sep=NULL, ...)
 
 }
+
 
 
 
@@ -218,7 +230,7 @@ Desc.data.frame <- function (x, main = NULL, plotit=NULL, enum = TRUE, sep=NULL,
 
   res[["_objheader"]][["main"]] <- gettextf("Describe %s (%s):",
                                             gsub(" +", " ", paste(deparse(substitute(x)), collapse=" ")),
-                                            class(x))
+                                            paste(class(x), collapse=", "))
 
   res[["_objheader"]][["abstract"]] <- Abstract(x)
   attr(res[["_objheader"]][["abstract"]], "main") <- res[["_objheader"]][["main"]]
@@ -390,7 +402,7 @@ calcDesc.numeric   <- function(x, n, maxrows = NULL, ...) {
     # meanx <- mean.default(x)      # somewhat faster than mean
 
     # we send the SORTED vector WITHOUT NAs to the C++ function to calc the power sum(s)
-    psum <- .Call("DescTools_n_pow_sum", PACKAGE = "DescTools", x)
+    psum <- .Call("_DescTools_n_pow_sum", PACKAGE = "DescTools", x)
 
     # this is method 3 in the usual functions Skew and Kurt
     skewx <- ((1/n * psum$sum3) /  (psum$sum2 / n)^1.5) * ((n - 1)/n)^(3/2)
@@ -2095,7 +2107,8 @@ Abstract <- function (x, sep = ", ", zero.form = ".", maxlevels = 5, trunc = TRU
   if (!is.null(attr(x, "label")))
     attr(res, "label") <- attr(x, "label")
 
-  res <- AddClass(res, "abstract", after = 0)
+  class(res) <- append(class(res), "abstract", after = 0)
+  # res <- AddClass(res, "abstract", after = 0)
 
   return(res)
 

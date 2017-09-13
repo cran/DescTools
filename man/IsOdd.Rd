@@ -4,8 +4,7 @@
 \title{Checks If An Integer Is Even Or Odd
 %%  ~~function to do ... ~~
 }
-\description{Checks if the integers in a vector are even (FALSE) or odd (TRUE)
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+\description{Checks if the elements of an integer vector \code{x} are even or odd.
 }
 \usage{
 IsOdd(x)

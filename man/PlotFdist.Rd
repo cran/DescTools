@@ -32,9 +32,9 @@ PlotFdist(x, main = deparse(substitute(x)), xlab = "", xlim = NULL,
 %%     ~~Describe \code{xlim} here~~
 }
   \item{args.hist}{list of additional arguments to be passed to the histogram \code{hist()}.
-  The defaults chosen when setting \code{args.hist = NULL} are more or less the same as in \code{\link{hist}}. The argument \code{type} defines, whether a histogram (\code{"hist"}) or a plot with \code{type = "h"} (\code{"mass"})should be used.
-  The arguments for a "h" plot will be \code{col}, \code{lwd}, \code{pch.col}, \code{pch}, \code{pch.bg} for the line and for an optional point character on top.
-  By default a histogram, unless \code{x} is an integer with up to 12 unique values!
+  The defaults chosen when setting \code{args.hist = NULL} are more or less the same as in \code{\link{hist}}. The argument \code{type} defines, whether a histogram (\code{"hist"}) or a plot with \code{type = "h"} (for 'histogram' like vertical lines for \code{mass} representation) should be used.
+  The arguments for a "h-plot"" will be \code{col}, \code{lwd}, \code{pch.col}, \code{pch}, \code{pch.bg} for the line and for an optional point character on top.
+  The default type used will be chosen on the structure of \code{x}. If \code{x} is an integer with up to 12 unique values there will be a "h-plot" and else a histogram!
 %%     ~~Describe \code{args.hist} here~~
 }
   \item{args.rug}{list of additional arguments to be passed to the function \code{rug()}.

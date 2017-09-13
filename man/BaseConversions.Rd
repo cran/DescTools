@@ -35,7 +35,7 @@ Oct means octal system and hex hexadecimal.
 }
 \value{
 A numeric or character vector of the same length as x containing the converted values.
-Binary, octal and decimal values are numeric, hex-values are returned in character mode.
+Binary, octal and decimal values are numeric, hex-values are returned as class \code{hexmode}.
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}

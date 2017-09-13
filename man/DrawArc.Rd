@@ -1,10 +1,10 @@
 \name{DrawArc}
 \alias{DrawArc}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Draw Elliptic or Circular Arc(s)
+\title{Draw Elliptic Arc(s)
 %%  ~~function to do ... ~~
 }
-\description{ Draw one or more elliptic or circular arcs from \code{angle.beg} to \code{angle.end} on an existing plot using classic graphics.
+\description{ Draw one or more elliptic (or circular) arcs from \code{theta.1} to \code{theta.2} on an existing plot using classic graphics.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

@@ -70,7 +70,7 @@ as.CDateFmt(fmt)
 %%     ~~Describe \code{fmt} here~~
 }
 \item{align}{ the character on whose position the strings will be aligned. Left alignment can be requested by setting \code{sep = "\\\\l"}, right alignment by \code{"\\\\r"} and center alignment by \code{"\\\\c"}. Mind the backslashes, as if they are omitted, strings would be aligned to the \bold{character} l, r or c respectively. The default is \code{NULL} which would just leave the strings as they are.\cr
-This argument is send directly to the function \code{\link{StrAlign}} as argument \code{sep}.
+This argument is send directly to the function \code{\link{StrAlign}()} as argument \code{sep}.
 %%     ~~Describe \code{sep} here~~
 }
 
@@ -86,8 +86,9 @@ This argument is send directly to the function \code{\link{StrAlign}} as argumen
 
 }
 \details{
-The argument \code{fmt} can be used for defining several formats. \cr
-Dates can be formatted with any combination of the format codes \code{d}, \code{m} and \code{y} for day, month or year.
+\code{Format()} is used to format numbers. \code{Fmt()} can be used to display existing or define new format templates. \code{as.fmt()} will convert a list to a format object (class \code{fmt}).\cr\cr
+The argument \code{fmt} can be used be used to generate different formats. When \code{x} is a date,
+it can be formatted with any combination of the format codes \code{d}, \code{m} and \code{y} for day, month or year.
 Repeting the specific code defines the degree of abbreviation:
 \tabular{ll}{
 Date codes \tab  \cr
@@ -137,13 +138,14 @@ Code \tab  \tab  \cr
 This allows to store the full format in a variable or as an option and use it as format template subsequently. \cr If we would want to define a format for counts, we could create a list  with a big mark and with 0 digits and subsequently call the \code{Format} function with this format:\cr\cr
 \code{fmt.count <- as.fmt(digits=0, big.mark="'")} \cr
 \code{Format(4231.2, fmt=fmt.count)} \cr \cr
-where the latter returns the same result as if the arguments would have been supplied directly: \code{Format(4231.2, digits=0, big.mark="'")}.
+where the latter returns the same result as if the arguments would have been supplied directly: \cr
+\code{Format(4231.2, digits=0, big.mark="'")}.
 
-The formats can as well be organized as \code{options}. The function \code{fm()} can be used to get, modify and store new formats in dependency of the arguments given. See examples.
+The formats can as well be organized as options. \code{DescToolsOptions("fmt")} would display the currently defined formats. The function \code{Fmt()} can be used to get, modify and store new formats in dependency of the arguments given. See examples.
 
 }
 \value{the formatted values as characters. \cr
-If x was a matrix, then a the result will also be a matrix. (Hope this will not surprise you...)
+If \code{x} was a \code{matrix}, then a the result will also be a \code{matrix}. (Hope this will not surprise you...)
 
 %%  ~Describe the value returned
 %%  If it is a LIST, use

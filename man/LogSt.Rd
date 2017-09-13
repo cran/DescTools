@@ -5,20 +5,23 @@
 \title{Started Logarithmic Transformation and Its Inverse
 %%  ~~function to do ... ~~
 }
-\description{Transforms the data by a \eqn{log_{10}}{log10} transformation, modifying small and zero observations such that the
-transformation yields finite values.
+\description{Transforms the data by a log transformation, modifying small and zero observations such that the transformation is linear for \eqn{x <= threshold}{x <= threshold} and logarithmic for x > threshold. So the transformation yields finite values and is continuously differentiable.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-LogSt(x, calib = x, threshold = NULL, mult = 1)
+LogSt(x, base = 10, calib = x, threshold = NULL, mult = 1)
 
-LogStInv(x, threshold = NULL)
+LogStInv(x, base = NULL, threshold = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a vector or matrix of data, which is to be transformed
 %%     ~~Describe \code{x} here~~
 }
+  \item{base}{a positive or complex number: the base with respect to which logarithms are computed. Defaults to 10. Use=exp(1) for natural log.
+%%     ~~Describe \code{x} here~~
+}
+
   \item{calib}{a vector or matrix of data used to calibrate the transformation(s), i.e., to determine
 the constant \eqn{c} needed
 %%     ~~Describe \code{calib} here~~
@@ -58,14 +61,24 @@ The rationale is, that, for lognormal data, this constant identifies 2 percent o
 Beyond this limit, the transformation continues linear with the derivative of the log curve at this point. \cr
 
 Another idea for choosing the threshold \eqn{c} was: median(x) / (median(x)/quantile(x, 0.25))^2.9)\cr\cr
-The function chooses \eqn{log_{10}} rather than natural logs because they can be backtransformed relatively easily in the mind.
+The function chooses \eqn{log_{10}} rather than natural logs by default because they can be backtransformed relatively easily in mind.
+
+A generalized log (see: Rocke 2003) can be calculated in order to stabilize the variance as:
+\preformatted{function (x, a) {
+ return(log((x + sqrt(x^2 + a^2)) / 2))
+}}
 }
-\value{the transformed data. The value \eqn{c} used for the transformation and needed for inverse transformation is returned as \code{attr(.,"threshold")}.
+\value{the transformed data. The value \eqn{c} used for the transformation and needed for inverse transformation is returned as \code{attr(.,"threshold")} and the used base as  \code{attr(.,"base")}.
 }
 \author{Werner A. Stahel, ETH Zurich \cr slight modifications Andri Signorell <andri@signorell.net>
 }
 
-\seealso{\code{\link{LogLin}}}
+\references{
+Rocke, D M, Durbin B (2003): Approximate variance-stabilizing transformations for gene-expression microarray data, \emph{Bioinformatics}. 22;19(8):966-72.
+}
+
+
+\seealso{\code{\link{log}}, \code{\link{log10}}}
 
 \examples{
 dd <- c(seq(0,1,0.1), 5 * 10^rnorm(100, 0, 0.2))

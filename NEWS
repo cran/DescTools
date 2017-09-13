@@ -1,5 +1,43 @@
 
 
+DescTools 0.99.22 (2017-09-14)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+   * Timezone will extract the timezone from a POSIXct object.
+   * SetNames() can set rownames, columnnames or names.
+   * PercentRank() calculate percent ranks.
+
+UPDATED FUNCTIONS:
+   * PlotCorr() gets a new argument "mincor" for preventing small
+     correlations from being displayed.
+   * PlotBubble() would use better graphical functions to display the bubbles.
+   * BubbleLegend() offers some more arguments.
+   * LogSt() can now do what LogLin could.
+   * PolarGrid() offers more control for axis labels.
+   * WrdTableBorders get arguments for width and color of the borders.
+
+BUGFIXES:
+   * ModelDlg would not have returned long data.frames correctly.
+   * Freq would not have calculated percentages, when NAs were to be included
+     and a userdefined order was desired.
+
+DEFUNCT:
+   * Date() was needless, as ISODate does the same job.
+   * Exec(x), consisting out of eval(parse(text=x)) did not contain enough
+     functionality to justify an own function.
+   * Same applies to AddClass() and RemoveClass().
+   * ClipToVect() read the clipboard and printed the enquoted content.
+     This operation is implemented in DescToolsAddIns::Enquote() resulting in
+     a more usable approach.
+   * LogLin() has been integrated in LogSt() with an option for the base.
+   * LogGen is not needed anymore.
+   * SetRowNames(), SetColNames() have been condensed into SetNames().
+   * LsData() did not survive the "functionality" check, data() can do
+     everything it could.
+
+
+
 DescTools 0.99.21 (2017-06-29)
 ------------------------------
 

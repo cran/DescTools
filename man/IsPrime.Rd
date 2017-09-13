@@ -2,22 +2,20 @@
 \alias{IsPrime}
 \title{IsPrime Property}
 \description{
-  Vectorized version, returning for a vector or matrix of positive integers
-  a vector of the same size containing 1 for the elements that are prime and
-  0 otherwise.
+Returns for a vector or matrix of positive integers a logical object of the same dimension(s) containing \code{TRUE} for the elements that are prime and \code{FALSE} otherwise.
 }
 \usage{
-  IsPrime(x)
+IsPrime(x)
 }
 \arguments{
-  \item{x}{vector or matrix of nonnegative integers}
+\item{x}{vector or matrix of nonnegative integers}
 }
 \details{
-  Given an array of positive integers returns an array of the same size
-  of 0 and 1, where the i indicates a prime number in the same position.
+  Given a vector or a matrix of positive integers returns a vector of the same size
+  of \code{FALSE} and \code{TRUE}. Use \code{which(IsPrime(1:21))} to get the positions.
 }
 \value{
-  array of elements 0, 1 with 1 indicating prime numbers
+logical vector
 }
 \author{Hans W. Borchers <hwborchers@googlemail.com>}
 
@@ -25,16 +23,16 @@
   \code{\link{Factorize}, \link{Primes}}
 }
 \examples{
-  x <- matrix(1:10, nrow=10, ncol=10, byrow=TRUE)
-  x * IsPrime(x)
+x <- matrix(1:10, nrow=10, ncol=10, byrow=TRUE)
+x * IsPrime(x)
 
-  # Find first prime number octett:
-  octett <- c(0, 2, 6, 8, 30, 32, 36, 38) - 19
-  while (TRUE) {
-      octett <- octett + 210
-      if (all(IsPrime(octett))) {
-          cat(octett, "\n", sep="  ")
-          break
-      }
-  }
+# Find first prime number octett:
+octett <- c(0, 2, 6, 8, 30, 32, 36, 38) - 19
+while (TRUE) {
+    octett <- octett + 210
+    if (all(IsPrime(octett))) {
+        cat(octett, "\n", sep="  ")
+        break
+    }
+}
 }
