@@ -1,5 +1,5 @@
-\name{FixToTab}
-\alias{FixToTab}
+\name{FixToTable}
+\alias{FixToTable}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Convert a Text to a Table
 %%  ~~function to do ... ~~
@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-FixToTab(txt, sep = " ", delim = "\t", trim = TRUE, header = TRUE)
+FixToTable(txt, sep = " ", delim = "\t", trim = TRUE, header = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -49,7 +49,7 @@ be accepted as column delimiter.
 \examples{
 # let's get some tabbed text
 txt <- matrix(capture.output(Titanic[,,2,1]))
-FixToTab(txt[-1,])
+FixToTable(txt[-1,])
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

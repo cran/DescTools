@@ -66,7 +66,7 @@ Spec(x, ...)
 
   }
 \details{
-The functions requires that the factors have exactly the same levels.
+The functions require the factors to have the same levels.
 
 For two class problems, the sensitivity, specificity, positive
 predictive value and negative predictive value is calculated using the
@@ -109,7 +109,7 @@ The overall accuracy rate is computed along with a 95 percent confidence interva
  results, specificity is not defined and a value of \code{NA} is returned. Similar
  statements are true for predictive values.
 
-
+Confidence intervals for sensitivity, specificity etc. could be calculated as binomial confidence intervals (see \code{\link{BinomCI}}). \code{BinomCI(A, A+C)} yields the ci for sensitivity.
 }
 \value{
 a list with elements
@@ -123,8 +123,10 @@ a list with elements
 Kuhn, M. (2008) Building predictive models in R using the caret package \emph{Journal of Statistical Software}, (\url{http://www.jstatsoft.org/v28/i05/}).
 
 Powers, David M W (2011) Evaluation: From Precision, Recall and F-Measure to ROC, Informedness, Markedness & Correlation (PDF). \emph{Journal of Machine Learning Technologies} 2 (1): 37-63.
-%% ~put references to the literature/web site here ~
+
+Collett D (1999) Modelling Binary Data. \emph{Chapman & Hall/CRC}, Boca Raton Florida, pp. 24.
 }
+
 \author{
 Andri Signorell <andri@signorell.net> \cr
 rewritten based on the ideas of \code{\link[caret]{confusionMatrix}} by Max Kuhn <Max.Kuhn@pfizer.com>

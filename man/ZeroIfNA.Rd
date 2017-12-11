@@ -1,16 +1,18 @@
 \name{ZeroIfNA}
 \alias{ZeroIfNA}
+\alias{NAIfZero}
 \alias{Impute}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Replace NAs by 0
 %%  ~~function to do ... ~~
 }
-\description{Replace NAs in a vector x with 0. This function has the same logic as the zeroifnull function in SQL.
+\description{Replace NAs in a vector x with 0. This function has the same logic as the zeroifnull function in SQL. NAIfZero does replace zeros with NA.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 ZeroIfNA(x)
+NAIfZero(x)
 
 Impute(x, FUN = function(x) median(x, na.rm = TRUE))
 }

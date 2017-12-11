@@ -14,7 +14,7 @@ Feedback, feature requests, bugreports and other suggestions are welcome! Please
 
 }
 
-\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in, hmm - there's still so much room for improvement - spring 2017) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.
+\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in, ... ok, I think we're ready: spring 2018) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.
 }
 
 \details{
@@ -71,8 +71,10 @@ A grouped list of the functions:
 \link{AllDuplicated}       \tab Find all values involved in ties \cr
 \link{Closest}       \tab Return the value in a vector being closest to a given one\cr
 \link{Coalesce}       \tab      Return the first value in a vector not being \code{NA} \cr
-\link{ZeroIfNA}       \tab   Replace NAs by 0 \cr
+\link{ZeroIfNA}, \link{NAIfZero}       \tab   Replace NAs by 0, resp. vice versa \cr
 \link{Impute}       \tab   Replace NAs by the median or another value \cr
+\link{LOCF}      \tab         Imputation of datapoints following the "last observation \cr
+\tab carried forward" rule \cr
 \link{CombN}       \tab      Returns the number of subsets out of a list of elements \cr
 \link{CombSet}       \tab      Generates all possible subsets out of a list of elements \cr
 \link{CombPairs}      \tab            Generates all pairs out of one or two sets of elements \cr
@@ -88,8 +90,6 @@ A grouped list of the functions:
 \link{Clockwise}       \tab      Transform angles from counter clock into clockwise mode \cr
 \link{split.formula}       \tab      A formula interface for the base function split \cr
 \link{reorder.factor}       \tab      Reorder the levels of a factor \cr
-\link{LOCF}      \tab         Imputation of datapoints following the "last observation \cr
-\tab carried forward" rule \cr
 \link{Lookup}       \tab      Simple lookup if merge seems cumbersome \cr
 \link{ToLong}, \link{ToWide}     \tab Simple reshaping of a vector \cr
 \cr\cr
@@ -107,7 +107,7 @@ A grouped list of the functions:
 \link{StrVal}      \tab          Extract numeric values from a string \cr
 \link{StrPos}       \tab      Find position of first occurrence of a string in another one \cr
 \link{StrIsNumeric}       \tab    Check whether a string does only contain numeric data \cr
-\link{FixToTab}       \tab      Create table out of a running text, by using columns of spaces as delimiter \cr
+\link{FixToTable}       \tab      Create table out of a running text, by using columns of spaces as delimiter \cr
 \cr\cr
 \bold{Conversion functions:}\tab\cr
 \link{AscToChar}, \link{CharToAsc}       \tab      Converts ASCII codes to characters and vice versa  \cr
@@ -120,7 +120,7 @@ A grouped list of the functions:
 \cr\cr
 \bold{Colors:}\tab\cr
 \link{SetAlpha}   \tab  Add transperancy (alpha channel) to a color.     \cr
-\link{ChooseColorDlg}  \tab   Display the system's color dialog to choose a color     \cr
+\link{ColorDlg}  \tab   Display the system's color dialog to choose a color     \cr
 \link{ColPicker}    \tab  Display R colors in a dialog\cr
 \link{ColorLegend}  \tab   Add a color legend to a plot    \cr
 \link{ColToGray}, \link{ColToGrey}  \tab  Convert colors to gcrey/grayscale     \cr
@@ -308,7 +308,6 @@ A grouped list of the functions:
 \link{IRR} \tab  Internal rate of return\cr
 \cr\cr
 \bold{GUI-Helpers:}\tab\cr
-\link{ChooseColorDlg}    \tab  Display color dialog to choose a color \cr
 %% \link{DescDlg}    \tab  Display a Dialog Containing Univariate Descriptive Statistis and a Plot \cr
 \link{FileOpenCmd}    \tab  Get path of a data file to be opened \cr
 \link{SaveAsDlg}    \tab  Save a data object by dialog \cr
@@ -352,7 +351,7 @@ A grouped list of the functions:
 \link{DescToolsOptions}    \tab  Get the DescTools specific options\cr
 \cr
 
-\link{PlotBagPairs}       \tab      Return \cr
+\link{PlotBagPairs}       \tab      Produce pairwise bagplots (2-dimensional boxplots) \cr
 \link{PlotGACF}       \tab      Return \cr
 \link{PlotMatrix}       \tab      Return \cr
 

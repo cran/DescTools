@@ -24,7 +24,7 @@ ColPicker(locator = TRUE, ord = c("hsv", "default"), label = c("text", "hex", "d
   \item{newwin}{logical, defining if a new graphic device should be used. Default is \code{FALSE}.}
 }
 \details{
-The function plots all the colors but leaves out the grey scales grey() and gray().
+The function plots all the colors but leaves out the grey scales \code{grey()} and \code{gray()}.
 }
 
 \author{
@@ -34,8 +34,7 @@ Andri Signorell <andri@signorell.net>
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{\code{\link{par}}, \code{\link{colors}}, \code{\link{PlotPch}}
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\seealso{\code{\link{ColorDlg}}, \code{\link{par}}, \code{\link{colors}}, \code{\link{PlotPch}}
 }
 \examples{
 ColPicker(locator=FALSE, ord="hsv")

@@ -26,43 +26,45 @@ BinomCI(x, n, conf.level = 0.95,
 \details{
   All arguments are being recycled.
 
-  The Wald interval is obtained by inverting the acceptance region of the Wald
+  The \bold{Wald } interval is obtained by inverting the acceptance region of the Wald
   large-sample normal test.
 
-  The Wilson interval, which is the default, was introduced by Wilson (1927) and is
+  The \bold{Wilson} interval, which is the default, was introduced by Wilson (1927) and is
   the inversion of the CLT approximation to the family of equal tail tests of p = p0.
   The Wilson interval is recommended by Agresti and Coull (1998) as well as by
   Brown et al (2001).
 
-  The Agresti-Coull interval was proposed by Agresti and Coull (1998) and is a slight
+  The \bold{Agresti-Coull} interval was proposed by Agresti and Coull (1998) and is a slight
   modification of the Wilson interval. The Agresti-Coull intervals are never shorter
   than the Wilson intervals; cf. Brown et al (2001).
 
-  The Jeffreys interval is an implementation of the equal-tailed Jeffreys prior interval
+  The \bold{Jeffreys} interval is an implementation of the equal-tailed Jeffreys prior interval
   as given in Brown et al (2001).
 
-  The modified Wilson interval is a modification of the Wilson interval for x close to 0
+  The \bold{modified Wilson} interval is a modification of the Wilson interval for x close to 0
   or n as proposed by Brown et al (2001).
 
-  The modified Jeffreys interval is a modification of the Jeffreys interval for
+  The \bold{modified Jeffreys} interval is a modification of the Jeffreys interval for
   \code{x == 0 | x == 1} and \code{x == n-1 | x == n} as proposed by
   Brown et al (2001).
 
-  The Clopper-Pearson interval is based on quantiles of corresponding beta
+  The \bold{Clopper-Pearson} interval is based on quantiles of corresponding beta
   distributions. This is sometimes also called exact interval.
 
-  The arcsine interval is based on the variance stabilizing distribution for the binomial
+  The \bold{arcsine} interval is based on the variance stabilizing distribution for the binomial
   distribution.
 
-  The logit interval is obtained by inverting the Wald type interval for the log odds.
+  The \bold{logit} interval is obtained by inverting the Wald type interval for the log odds.
 
-  The Witting interval (cf. Beispiel 2.106 in Witting (1985)) uses randomization to
+  The \bold{Witting} interval (cf. Beispiel 2.106 in Witting (1985)) uses randomization to
   obtain uniformly optimal lower and upper confidence bounds (cf. Satz 2.105 in
   Witting (1985)) for binomial proportions.
 
   For more details we refer to Brown et al (2001) as well as Witting (1985).
 
-  And so, which interval to choose? The Wald interval often has inadequate coverage, particularly for small n and values of p close to 0 or 1. Conversely, the Clopper-Pearson Exact method is very conservative and tends to produce wider intervals than necessary. Brown et al. recommends the Wilson or Jeffreys methods for small n and Agresti-Coull, Wilson, or Jeffreys, for larger n as providing more reliable coverage than the alternatives. Also note that the point estimate for the Agresti-Coull method is slightly larger than for other methods because of the way this interval is calculated.
+Some approaches for the confidence intervals can potentially yield negative results or values beyond 1. These would be reset such as not to exceed the range of [0, 1].
+
+  And now, which interval should we use? The Wald interval often has inadequate coverage, particularly for small n and values of p close to 0 or 1. Conversely, the Clopper-Pearson Exact method is very conservative and tends to produce wider intervals than necessary. Brown et al. recommends the Wilson or Jeffreys methods for small n and Agresti-Coull, Wilson, or Jeffreys, for larger n as providing more reliable coverage than the alternatives. Also note that the point estimate for the Agresti-Coull method is slightly larger than for other methods because of the way this interval is calculated.
 
 }
 \value{

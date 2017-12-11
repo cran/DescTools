@@ -9,7 +9,7 @@ Sometimes the area under a density on a graphic has to be color shaded, for inst
 This function offers a function interface for doing this with less code.
 }
 \usage{
-Shade(FUN, col = par("fg"), xlim, density = 10, step = 0.01, ...)
+Shade(FUN, col = par("fg"), breaks, density = 10, step = 0.01, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,7 +19,7 @@ Shade(FUN, col = par("fg"), xlim, density = 10, step = 0.01, ...)
   \item{col}{color to fill or shade the shape with. The default is taken from \code{par("fg")}.
 %%     ~~Describe \code{col} here~~
 }
-  \item{xlim}{range of the x-range.
+  \item{breaks}{numeric, a vector giving the breakpoints between the distinct areas to be shaded differently. Should be finite as there are no plots with infinite limits.
 %%     ~~Describe \code{xlim} here~~
 }
   \item{density}{the density of the lines as needed in polygon.
@@ -54,9 +54,8 @@ curve(dt(x, df=5), xlim=c(-6,6),
       main=paste("Student t-Distribution Probability Density Function, df = ", 5, ")", sep=""),
       type="n", las=1, ylab="probability", xlab="t")
 
-Shade(FUN="dt(x, df=5)", xlim=c(-6, qt(0.025, df=5)), col="red")
-Shade(FUN="dt(x, df=5)", xlim=c(qt(0.025, df=5), qt(0.975, df=5)), col="green")
-Shade(FUN="dt(x, df=5)", xlim=c(qt(0.975, df=5), 6), col="red")
+Shade(FUN="dt(x, df=5)", breaks=c(-6, qt(0.025, df=5), qt(0.975, df=5), 6),
+      col=c(hred, hblue), density=c(20, 7))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

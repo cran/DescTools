@@ -76,7 +76,7 @@ This code can as well be copied and pasted to the users' \code{RProfile} file, i
 
 For a given vector of strings the current value set for option \code{x}, or \code{NULL} if the option is unset.
 
-For a list of named values the options will be set and a list with the previous values of the options changed will be returned invisibly.
+If called with no arguments, returns all option settings in a list. Otherwise, it changes the named settings and invisibly returns their previous values.
 }
 
 \seealso{\code{\link{Format}}, \code{\link{Pal}}}

@@ -6,7 +6,13 @@
 \name{Cor}
 \title{Correlation, Variance and Covariance (Matrices)}
 \usage{
-Var(x, weights = NULL, na.rm = FALSE, use)
+
+Var(x, \dots)
+
+\method{Var}{Freq}(x, breaks, \dots)
+
+\method{Var}{default}(x, weights = NULL, na.rm = FALSE, use, \dots)
+
 
 Cov(x, y = NULL, use = "everything",
     method = c("pearson", "kendall", "spearman"))
@@ -16,6 +22,8 @@ Cor(x, y = NULL, use = "everything",
 
 }
 \alias{Var}
+\alias{Var.default}
+\alias{Var.Freq}
 \alias{Cov}
 \alias{Cor}
 \description{
@@ -44,6 +52,10 @@ Cor(x, y = NULL, use = "everything",
     coefficient (or covariance) is to be computed.  One of
     \code{"pearson"} (default), \code{"kendall"}, or \code{"spearman"}:
     can be abbreviated.}
+ \item{breaks}{breaks for calculating the variance for classified data as composed by \code{\link{Freq}}.}
+
+  \item{\dots}{further arguments passed to or from other methods.}
+
 }
 \value{For \code{r <- Cor(*, use = "all.obs")}, it is now guaranteed that
   \code{all(abs(r) <= 1)}.
@@ -180,6 +192,10 @@ summary(abs(c(1 - Rc/R.)))
 ## but "complete" is closer in Eigen space:
 EV <- function(m) eigen(m, only.values=TRUE)$values
 summary(abs(1 - EV(Rp)/EV(R.)) / abs(1 - EV(Rc)/EV(R.)))
+
+# Variance for frequency tables
+Var(Freq(as.table(c(6,16,24,25,17))),
+     breaks=c(0, 10, 20, 30, 40, 50))
 }
 \keyword{univar}
 \keyword{multivariate}

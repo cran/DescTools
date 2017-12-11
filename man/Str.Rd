@@ -1,10 +1,10 @@
 \name{Str}
 \alias{Str}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Compactly Display the Structure of an Arbitrary R Object
+\title{Compactly Display the Structure of any R Object
 %%  ~~function to do ... ~~
 }
-\description{Just a wrapper for \code{\link{str}} with the variables of a data.frame enumerated.
+\description{Basically a wrapper for \code{\link{str}()}, extended with an enumeration for the variables of a data.frame.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -15,7 +15,7 @@ Str(x, ...)
   \item{x}{any \code{R} object about which you want to have some information.
 %%     ~~Describe \code{x} here~~
 }
-  \item{\dots}{all the dots are passed to \code{\link{str}}. 
+  \item{\dots}{dots are passed to \code{\link{str}}.
 %%     ~~Describe \code{\dots} here~~
 }
 }
@@ -23,7 +23,7 @@ Str(x, ...)
 %%  ~~who you are~~
 }
 
-\seealso{\code{\link{str}} 
+\seealso{\code{\link{str}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

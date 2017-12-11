@@ -13,7 +13,7 @@
   computation proceeds.
 }
 \usage{
-SD(x, weights = NULL, na.rm = FALSE)
+SD(x, weights = NULL, na.rm = FALSE, ...)
 }
 \arguments{
   \item{x}{a numeric vector or an \R object which is coercible to one
@@ -22,6 +22,9 @@ SD(x, weights = NULL, na.rm = FALSE)
   \item{weights}{a numerical vector of weights the same length as \code{x} giving the weights to use for elements of \code{x}. }
 
   \item{na.rm}{logical.  Should missing values be removed?}
+
+  \item{\dots}{further arguments passed to or from other methods.}
+
 }
 \details{
   Like \code{\link{var}} this uses denominator \eqn{n - 1}.
@@ -35,6 +38,6 @@ SD(x, weights = NULL, na.rm = FALSE)
   robust alternative.
 }
 \examples{
-SD(1:2) ^ 2
+SD(1:2)^2
 }
 \keyword{univar}

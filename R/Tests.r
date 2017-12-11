@@ -297,6 +297,107 @@ YuenTTest.default <- function (x, y = NULL, alternative = c("two.sided", "less",
 
 
 
+TTestA <- function (mx, sx, nx, my=NULL, sy = NULL, ny=NULL,
+                     alternative = c("two.sided", "less", "greater"),
+          mu = 0, paired = FALSE, var.equal = FALSE, conf.level = 0.95,
+          ...) {
+
+  alternative <- match.arg(alternative)
+  if (!missing(mu) && (length(mu) != 1 || is.na(mu)))
+    stop("'mu' must be a single number")
+  if (!missing(conf.level) && (length(conf.level) != 1 || !is.finite(conf.level) ||
+                               conf.level < 0 || conf.level > 1))
+    stop("'conf.level' must be a single number between 0 and 1")
+
+  if (!is.null(my)) {
+    dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
+
+  } else {
+    dname <- deparse(substitute(x))
+    if (paired)
+      stop("'y' is missing for paired test")
+  }
+
+  vx <- sx^2
+
+  if (is.null(my)) {
+    if (nx < 2)
+      stop("not enough 'x' observations")
+    df <- nx - 1
+    stderr <- sqrt(vx/nx)
+    if (stderr < 10 * .Machine$double.eps * abs(mx))
+      stop("data are essentially constant")
+    tstat <- (mx - mu)/stderr
+    method <- if (paired)
+      "Paired t-test"
+    else "One Sample t-test"
+    estimate <- setNames(mx, if (paired)
+      "mean of the differences"
+      else "mean of x")
+
+  } else {
+    # ny <- length(y)
+    if (nx < 1 || (!var.equal && nx < 2))
+      stop("not enough 'x' observations")
+    if (ny < 1 || (!var.equal && ny < 2))
+      stop("not enough 'y' observations")
+    if (var.equal && nx + ny < 3)
+      stop("not enough observations")
+    # my <- mean(y)
+    # vy <- var(y)
+    vy <- sy^2
+    method <- paste(if (!var.equal)
+      "Welch", "Two Sample t-test")
+    estimate <- c(mx, my)
+    names(estimate) <- c("mean of x", "mean of y")
+    if (var.equal) {
+      df <- nx + ny - 2
+      v <- 0
+      if (nx > 1)
+        v <- v + (nx - 1) * vx
+      if (ny > 1)
+        v <- v + (ny - 1) * vy
+      v <- v/df
+      stderr <- sqrt(v * (1/nx + 1/ny))
+    }
+    else {
+      stderrx <- sqrt(vx/nx)
+      stderry <- sqrt(vy/ny)
+      stderr <- sqrt(stderrx^2 + stderry^2)
+      df <- stderr^4/(stderrx^4/(nx - 1) + stderry^4/(ny - 1))
+    }
+    if (stderr < 10 * .Machine$double.eps * max(abs(mx),
+                                                abs(my)))
+      stop("data are essentially constant")
+    tstat <- (mx - my - mu)/stderr
+  }
+  if (alternative == "less") {
+    pval <- pt(tstat, df)
+    cint <- c(-Inf, tstat + qt(conf.level, df))
+  }
+  else if (alternative == "greater") {
+    pval <- pt(tstat, df, lower.tail = FALSE)
+    cint <- c(tstat - qt(conf.level, df), Inf)
+  }
+  else {
+    pval <- 2 * pt(-abs(tstat), df)
+    alpha <- 1 - conf.level
+    cint <- qt(1 - alpha/2, df)
+    cint <- tstat + c(-cint, cint)
+  }
+  cint <- mu + cint * stderr
+  names(tstat) <- "t"
+  names(df) <- "df"
+  names(mu) <- if (paired || !is.null(my))
+    "difference in means"
+  else "mean"
+  attr(cint, "conf.level") <- conf.level
+  rval <- list(statistic = tstat, parameter = df, p.value = pval,
+               conf.int = cint, estimate = estimate, null.value = mu,
+               alternative = alternative, method = method, data.name = dname)
+  class(rval) <- "htest"
+  return(rval)
+}
 
 
 
@@ -1645,6 +1746,7 @@ JonckheereTerpstraTest.default <- function (x, g, alternative = c("two.sided", "
 # Tests aus library(nortest)
 
 ShapiroFranciaTest <- function (x) {
+
   DNAME <- deparse(substitute(x))
   x <- sort(x[complete.cases(x)])
   n <- length(x)
@@ -1661,7 +1763,9 @@ ShapiroFranciaTest <- function (x) {
   RVAL <- list(statistic = c(W = W), p.value = pval, method = "Shapiro-Francia normality test",
                data.name = DNAME)
   class(RVAL) <- "htest"
+
   return(RVAL)
+
 }
 
 
@@ -3434,228 +3538,6 @@ aovlErrorTerms <- function(aovObj) {
   return(list(SS=SS, MS=MS, DF=DF))
 }
 
-# # RB-p
-# N      <- 10
-# P      <- 4
-# id     <- factor(rep(1:N, times=P))
-# IV     <- factor(rep(1:P,  each=N))
-# DV_t1  <- round(rnorm(N, -0.3, 1), 2)
-# DV_t2  <- round(rnorm(N, -0.2, 1), 2)
-# DV_t3  <- round(rnorm(N,  0.1, 1), 2)
-# DV_t4  <- round(rnorm(N,  0.4, 1), 2)
-# DV     <- c(DV_t1, DV_t2, DV_t3, DV_t4)
-# dfRBpL <- data.frame(id, IV, DV)
-# rbp <- aov(DV ~ IV + Error(id/IV), data=dfRBpL)
-# EtaSq(rbp)
-#
-# ez::ezANOVA(data=dfRBpL, wid=id, dv=DV, within=.(IV))
-
-# # RBF-pq
-# N        <- 10
-# P        <- 2
-# Q        <- 3
-# id       <- factor(rep(1:N,              times=P*Q))
-# IV1      <- factor(rep(rep(1:P, each=N), times=Q))
-# IV2      <- factor(rep(rep(1:Q,           each=N*P)))
-# DV_t11   <- round(rnorm(N, -0.8, 1), 2)
-# DV_t12   <- round(rnorm(N, -0.7, 1), 2)
-# DV_t13   <- round(rnorm(N,  0.0, 1), 2)
-# DV_t21   <- round(rnorm(N,  0.2, 1), 2)
-# DV_t22   <- round(rnorm(N,  0.3, 1), 2)
-# DV_t23   <- round(rnorm(N,  1.0, 1), 2)
-# DV       <- c(DV_t11, DV_t21, DV_t12, DV_t22, DV_t13, DV_t23)
-# dfRBFpqL <- data.frame(id, IV1, IV2, DV)
-# rbfpq <- aov(DV ~ IV1*IV2 + Error(id/(IV1*IV2)), data=dfRBFpqL)
-# EtaSq(rbfpq)
-#
-# ez::ezANOVA(data=dfRBFpqL, wid=id, dv=DV, within=.(IV1, IV2))
-#
-# # SPF-p.q
-# Nj       <- 10
-# P        <- 3
-# Q        <- 3
-# id       <- factor(rep(1:(P*Nj),     times=Q))
-# IVbtw    <- factor(rep(LETTERS[1:P], times=Q*Nj))
-# IVwth    <- factor(rep(1:Q,           each=P*Nj))
-# DV_t1    <- round(rnorm(P*Nj, -0.5, 1), 2)
-# DV_t2    <- round(rnorm(P*Nj,  0,   1), 2)
-# DV_t3    <- round(rnorm(P*Nj,  0.5, 1), 2)
-# DV       <- c(DV_t1, DV_t2, DV_t3)
-# dfSPFpqL <- data.frame(id, IVbtw, IVwth, DV)
-# spfp.q <- aov(DV ~ IVbtw*IVwth + Error(id/IVwth), data=dfSPFpqL)
-# EtaSq(spfp.q)
-#
-# ez::ezANOVA(data=dfSPFpqL, wid=id, dv=DV, within=.(IVwth), between=.(IVbtw))
-#
-# ##### SPF-p.qr
-# Nj     <- 10
-# P      <- 2
-# Q      <- 3
-# R      <- 2
-# id     <- factor(rep(1:(P*Nj),            times=Q*R))
-# IVbtw  <- factor(rep(LETTERS[1:P],        times=Q*R*Nj))
-# IVwth1 <- factor(rep(1:Q,                  each=P*R*Nj))
-# IVwth2 <- factor(rep(rep(1:R, each=P*Nj), times=Q))
-# DV_t11 <- round(rnorm(P*Nj,  8, 2), 2)
-# DV_t21 <- round(rnorm(P*Nj, 13, 2), 2)
-# DV_t31 <- round(rnorm(P*Nj, 13, 2), 2)
-# DV_t12 <- round(rnorm(P*Nj, 10, 2), 2)
-# DV_t22 <- round(rnorm(P*Nj, 15, 2), 2)
-# DV_t32 <- round(rnorm(P*Nj, 15, 2), 2)
-# DV     <- c(DV_t11, DV_t12, DV_t21, DV_t22, DV_t31, DV_t32)
-# dfSPFp.qrL <- data.frame(id, IVbtw, IVwth1, IVwth2, DV)
-#
-# spfp.qr <- aov(DV ~ IVbtw*IVwth1*IVwth2 + Error(id/(IVwth1*IVwth2)), data=dfSPFp.qrL)
-# EtaSq(spfp.qr)
-#
-# ez::ezANOVA(data=dfSPFp.qrL, wid=id, dv=DV, within=.(IVwth1,IVwth2), between=.(IVbtw))
-#
-# ##### SPF-pq.r
-# Njk    <- 20
-# P      <- 2
-# Q      <- 2
-# R      <- 3
-# id     <- factor(rep(1:(P*Q*Njk),          times=R))
-# IVbtw1 <- factor(rep(1:P,                  times=Q*R*Njk))
-# IVbtw2 <- factor(rep(rep(1:Q, each=P*Njk), times=R))
-# IVwth  <- factor(rep(1:R,                   each=P*Q*Njk))
-# DV_t1  <- round(rnorm(P*Q*Njk, -3, 2), 2)
-# DV_t2  <- round(rnorm(P*Q*Njk,  1, 2), 2)
-# DV_t3  <- round(rnorm(P*Q*Njk,  2, 2), 2)
-# DV     <- c(DV_t1, DV_t2, DV_t3)
-# dfSPFpq.rL <- data.frame(id, IVbtw1, IVbtw2, IVwth, DV)
-#
-# spfpq.r <- aov(DV ~ IVbtw1*IVbtw2*IVwth + Error(id/IVwth), data=dfSPFpq.rL)
-# EtaSq(spfpq.r)
-#
-# ez::ezANOVA(data=dfSPFpq.rL, wid=id, dv=DV, within=.(IVwth), between=.(IVbtw1,IVbtw2))
-
-
-# EtaSq <- function (x, type = 2, anova = FALSE) {
-#
-#   # file:    etaSquared.R
-#   # author:  Dan Navarro
-#   # contact: daniel.navarro@adelaide.edu.au
-#   # changed: 13 November 2013
-#   # modified by Daniel Wollschlaeger 17.9.2014
-#
-#
-#   # etaSquared() calculates eta-squared and partial eta-squared for linear models
-#   # (usually ANOVAs). It takes an lm object as input and computes the effect size
-#   # for all terms in the model. By default uses Type II sums of squares to calculate
-#   # the effect size, but Types I and III are also possible. By default the output
-#   # only displays the effect size, but if requested it will also print out the full
-#   # ANOVA table.
-#
-#
-#   if (!is(anova, "logical") | length(anova) != 1) {
-#     stop("\"anova\" must be a single logical value")
-#   }
-#   if (!is(x, "lm")) {
-#     stop("\"x\" must be a linear model object")
-#   }
-#   if (!is(type, "numeric") | length(type) != 1) {
-#     stop("type must be equal to 1, 2 or 3")
-#   }
-#   if (type == 1) {
-#     ss <- anova(x)[, "Sum Sq", drop = FALSE]
-#     ss.res <- ss[dim(ss)[1], ]
-#     ss.tot <- sum(ss)
-#     ss <- ss[-dim(ss)[1], , drop = FALSE]
-#     ss <- as.matrix(ss)
-#   }
-#   else {
-#     if (type == 2) {
-#       ss.tot <- sum((x$model[, 1] - mean(x$model[, 1]))^2)
-#       ss.res <- sum((x$residuals)^2)
-#       terms <- attr(x$terms, "factors")[-1, , drop = FALSE]
-#       l <- attr(x$terms, "term.labels")
-#       ss <- matrix(NA, length(l), 1)
-#       rownames(ss) <- l
-#       for (i in seq_along(ss)) {
-#         vars.this.term <- which(terms[, i] != 0)
-#         dependent.terms <- which(apply(terms[vars.this.term, , drop = FALSE], 2, prod) > 0)
-#         m0 <- lm(x$terms[-dependent.terms], x$model)
-#         if (length(dependent.terms) > 1) {
-#           m1 <- lm(x$terms[-setdiff(dependent.terms, i)], x$model)
-#           ss[i] <- anova(m0, m1)$`Sum of Sq`[2]
-#         }
-#         else {
-#           ss[i] <- anova(m0, x)$`Sum of Sq`[2]
-#         }
-#       }
-#     }
-#     else {
-#       if (type == 3) {
-#         ## check if model was fitted with sum-to-zero contrasts
-#         ## necessary for valid SS type 3 (e.g., contr.sum, contr.helmert)
-#         IVs <- names(attr(model.matrix(x), "contrasts"))
-#         ## only relevant for more than one factor
-#         ## (and for unbalanced cell sizes and interactions, not tested here)
-#         if(length(IVs) > 1) {
-#           isSumToZero <- function(IV) {
-#             ## check if factor has directly associated contrasts
-#             if(!is.null(attr(x$model[, IV], "contrasts"))) {
-#               cm <- contrasts(x$model[, IV])
-#               all(colSums(cm) == 0)
-#             } else {
-#               ## check attributes from model matrix
-#               attr(model.matrix(x), "contrasts")[[IV]] %in% c("contr.sum", "contr.helmert")
-#             }
-#           }
-#
-#           valid <- vapply(IVs, isSumToZero, logical(1))
-#
-#           if(!all(valid)) {
-#             warning(c(ifelse(sum(!valid) > 1, "Factors ", "Factor "),
-#                       paste(IVs[!valid], collapse=", "),
-#                       ifelse(sum(!valid) > 1, " are", " is"),
-#                       " not associated with sum-to-zero contrasts",
-#                       " necessary for valid SS type III",
-#                       " when cell sizes are unbalanced",
-#                       " and interactions are present.",
-#                       " Consider re-fitting the model after setting",
-#                       " options(contrasts=c(\"contr.sum\", \"contr.poly\"))"))
-#           }
-#         }
-#
-#         mod <- drop1(x, scope = x$terms)
-#         ss <- mod[-1, "Sum of Sq", drop = FALSE]
-#         ss.res <- mod[1, "RSS"]
-#         ss.tot <- sum((x$model[, 1] - mean(x$model[, 1]))^2)
-#         ss <- as.matrix(ss)
-#       }
-#       else {
-#         stop("type must be equal to 1, 2 or 3")
-#       }
-#     }
-#   }
-#   if (anova == FALSE) {
-#     eta2 <- ss/ss.tot
-#     eta2p <- ss/(ss + ss.res)
-#     E <- cbind(eta2, eta2p)
-#     rownames(E) <- rownames(ss)
-#     colnames(E) <- c("eta.sq", "eta.sq.part")
-#   }
-#   else {
-#     ss <- rbind(ss, ss.res)
-#     eta2 <- ss/ss.tot
-#     eta2p <- ss/(ss + ss.res)
-#     k <- length(ss)
-#     eta2p[k] <- NA
-#     df <- anova(x)[, "Df"]
-#     ms <- ss/df
-#     Fval <- ms/ms[k]
-#     p <- 1 - pf(Fval, df, rep.int(df[k], k))
-#     E <- cbind(eta2, eta2p, ss, df, ms, Fval, p)
-#     E[k, 6:7] <- NA
-#     colnames(E) <- c("eta.sq", "eta.sq.part", "SS", "df", "MS", "F", "p")
-#     rownames(E) <- rownames(ss)
-#     rownames(E)[k] <- "Residuals"
-#   }
-#   return(E)
-# }
-
 
 
 Eps <- function(S, p, g, n) {
@@ -4047,25 +3929,6 @@ PostHocTest.table <- function(x, method = c("none","fdr","BH","BY","bonferroni",
   PostHocTest(x, method=method, conf.level=conf.level, ...)
 }
 
-
-
-#
-# print.PostHocTest <- function(x, ...){
-#
-#   cat(gettextf("\n  Posthoc multiple comparisons of means : %s \n", attr(x, "method")))
-#
-#   cat("\nFit: ", deparse(attr(x, "orig.call"), 500L), "\n\n",
-#       sep = "")
-#
-#   for(i in seq_along(x)){
-#     cat("$",names(x)[i], "\n", sep="")
-#     pp <- format.pval(x[[i]], 2, na.form = "-")
-#     attributes(pp) <- attributes(x[[i]])
-#     print(pp, quote = FALSE, ...)
-#     cat("\n")
-#   }
-#   cat("\n")
-# }
 
 
 

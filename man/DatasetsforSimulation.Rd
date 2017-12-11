@@ -7,9 +7,9 @@
 \title{Datasets for Probabilistic Simulation
 }
 
-\description{For performing elementary probability calculations in introductory statistic courses, there might datasets of playing cards casually be wanted.
+\description{For performing elementary probability calculations in introductory statistic courses, we might want to simulate random games.
 The dataset \code{roulette} contains the standard sample space for one spin on a roulette wheel.
-\code{cards} contains the standard set of 52 playing cards in four colours. \code{tarot} does the same with a classic tarot deck.
+\code{cards} contains the standard set of 52 playing cards in four colours (without Jokers). \code{tarot} does the same with a classic tarot deck.
 }
 
 \usage{

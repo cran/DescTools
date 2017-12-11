@@ -15,7 +15,7 @@ PlotPyramid(lx, rx = NA, ylab = "", ylab.x = 0,
             xlim = NULL, gapwidth = NULL,
             xaxt = TRUE, args.grid = NULL, cex.axis = par("cex.axis"),
             cex.lab = par("cex.axis"), cex.names = par("cex.axis"),
-            adj = 0.5, ...)
+            adj = 0.5, rev = FALSE, ...)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -38,6 +38,7 @@ PlotPyramid(lx, rx = NA, ylab = "", ylab.x = 0,
   \item{cex.lab}{expansion factor for numeric variable labels.}
   \item{cex.names}{expansion factor for y labels (names).}
   \item{adj}{one or two values in [0, 1] which specify the x (and optionally y) adjustment of the labels.}
+  \item{rev}{logical, if set to \code{TRUE} the order of data series and names will be reversed.}
   \item{\dots}{the dots are passed to the \code{\link{barplot}} function.}
 }
 

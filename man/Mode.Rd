@@ -1,6 +1,6 @@
 \name{Mode}
 \alias{Mode}
-\title{Mode
+\title{Mode, Most Frequent Value(s)
 }
 \description{
 Calculates the mode, the most frequent value, of a variable x. This makes mostly sense for qualitative data.  

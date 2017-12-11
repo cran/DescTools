@@ -5,8 +5,8 @@
 %%   ~~ data name/kind ... ~~
 }
 \description{An artificial dataset inspired by a similar dataset pizza.sav in \emph{Arbeitsbuch zur deskriptiven und induktiven Statistik} by Toutenburg et.al.\cr
-The dataset contains data of a pizza delivery service in London, delivering pizzas to three areas. Every record defines one order/delivery and the according properties. A pizza is supposed to taste good, if it's temperature is high enough, say 45 Celsius. So it might be interesting for the pizza delivery service to minimize the delivery time.\cr
-The dataset is designed to be possibly evil. It contains the most used datatypes as numerics, factors, ordered factors, integers, logicals and a date. NAs are scattered everywhere, besides in the index.
+The dataset contains data of a pizza delivery service in London, delivering pizzas to three areas. Every record defines one order/delivery and the according properties. A pizza is supposed to taste good, if its temperature is high enough, say 45 Celsius. So it might be interesting for the pizza delivery service to minimize the delivery time.\cr
+The dataset is designed to be possibly evil. It contains the most used datatypes as numerics, factors, ordered factors, integers, logicals and a date. NAs are scattered everywhere partly systematically, partly randomly (except in the index).
 }
 \usage{data(d.pizza)}
 \format{
@@ -33,7 +33,7 @@ The dataset is designed to be possibly evil. It contains the most used datatypes
 \details{The dataset contains NAs randomly scattered.
 %%  ~~ If necessary, more details than the __description__ above ~~
 }
-\references{Toutenburg H, Schomaker M, Wissmann M, Heumann C (2009): \emph{Arbeitsbuch zur deskriptiven und induktiven Statistik} Springer, Berlin Heidelberg 
+\references{Toutenburg H, Schomaker M, Wissmann M, Heumann C (2009): \emph{Arbeitsbuch zur deskriptiven und induktiven Statistik} Springer, Berlin Heidelberg
 }
 \examples{
 str(d.pizza)

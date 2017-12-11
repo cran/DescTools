@@ -26,7 +26,7 @@ DigitSum(x)
 \references{
 URL: \url{http://stackoverflow.com/questions/18675285/digit-sum-function-in-r}
 }
-\author{Andri Signorell <andri@signorell.net> based on code by Julius
+\author{Andri Signorell <andri@signorell.net> based on code by Julius benchmarked by Uwe
 %%  ~~who you are~~
 }
 
@@ -35,7 +35,8 @@ URL: \url{http://stackoverflow.com/questions/18675285/digit-sum-function-in-r}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-DigitSum(124)
+DigitSum(c(124, 45, 268))
+# [1]  7  9 16
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

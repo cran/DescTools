@@ -57,6 +57,11 @@ Trim(x, trim=0.1)
 
 ## Trim fixed number, say cut the 3 extreme elements from each end
 Trim(x, trim=3)
+
+## check function
+s <- sample(10:20)
+s.tr <- Trim(s, trim = 2)
+setequal(c(s[attr(s.tr, "trim")], s.tr), s)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

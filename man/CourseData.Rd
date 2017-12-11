@@ -1,5 +1,5 @@
-\name{HWZdata}
-\alias{HWZdata}
+\name{CourseData}
+\alias{CourseData}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Get HWZ Datasets
 %%  ~~function to do ... ~~
@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-HWZdata(name, url = NULL, header = TRUE, sep = ";", ...)
+CourseData(name, url = NULL, header = TRUE, sep = ";", ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -43,7 +43,7 @@ HWZdata(name, url = NULL, header = TRUE, sep = ";", ...)
 }
 \examples{
 \dontrun{
-d.farm <- HWZdata("farmer")
+d.farm <- CourseData("farmer")
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

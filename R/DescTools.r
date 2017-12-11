@@ -234,8 +234,25 @@
 # just for check not to bark!
 utils::globalVariables(c("d.units","d.periodic","d.prefix",
                          "day.name","day.abb","wdConst",
-                         "hblue","hred","hgreen", "fmt", "pal",
+                         "fmt", "pal",
+                         "hred","hblue","horange","hyellow","hecru","hgreen",
                          "tarot","cards","roulette"))
+
+
+
+# hred    <- unname(Pal("Helsana")[1])
+# horange <- unname(Pal("Helsana")[2])
+# hyellow <- unname(Pal("Helsana")[3])
+# hecru   <- unname(Pal("Helsana")[4])
+# hblue   <- unname(Pal("Helsana")[6])
+# hgreen  <- unname(Pal("Helsana")[7])
+#
+# save(x=hred, file='C:/Users/andri/Documents/R/Projects/DescTools/data/hred.rda')
+# save(x=horange, file='C:/Users/andri/Documents/R/Projects/DescTools/data/horange.rda')
+# save(x=hyellow, file='C:/Users/andri/Documents/R/Projects/DescTools/data/hyellow.rda')
+# save(x=hecru, file='C:/Users/andri/Documents/R/Projects/DescTools/data/hecru.rda')
+# save(x=hblue, file='C:/Users/andri/Documents/R/Projects/DescTools/data/hblue.rda')
+# save(x=hgreen, file='C:/Users/andri/Documents/R/Projects/DescTools/data/hgreen.rda')
 
 
 
@@ -329,8 +346,22 @@ gold_sec_c <- (1+sqrt(5)) / 2
 # save(cards, file="cards.rda")
 # save(roulette, file="roulette.rda")
 
+
+
+
 # Define some alias(es)
 N <- as.numeric
+
+
+## This is not exported as it would mask base function and
+# but it would be very, very handy if the base function was changed accoringly
+as.Date.numeric <- function (x, origin, ...) {
+
+  if (missing(origin))
+    origin <- "1970-01-01"
+  as.Date(origin, ...) + x
+}
+
 
 
 Primes <- function (n) {
@@ -732,7 +763,8 @@ Trim <- function(x, trim = 0.1, na.rm = FALSE){
     res <- sort.int(x, index.return = TRUE)
     trimi <- res[["ix"]][c(1:(lo-1), (hi+1):length(x))]
 
-    x <- res[["x"]][res[["ix"]][lo:hi]]
+    # x <- res[["x"]][order(res[["ix"]])[lo:hi]]
+    x <- res[["x"]][lo:hi][order(res[["ix"]][lo:hi])]
     attr(x, "trim") <- trimi
 
   }
@@ -915,7 +947,7 @@ Large <- function (x, k = 5, unique = FALSE, na.last = NA) {
 #     #   http://stackoverflow.com/questions/15659783/why-does-unlist-kill-dates-in-r
 #
 #     # faster alternative (but check NA-handling first):
-#     # res <-  x[.Call("DescTools_top_index", PACKAGE = "DescTools", x, k)]
+#     # res <-  x[.Call("_DescTools_top_index", PACKAGE = "DescTools", x, k)]
 #
 #   }
 #   return(res)
@@ -1861,6 +1893,9 @@ ZeroIfNA <- function(x) {
   replace(x, is.na(x), 0)
 }
 
+NAIfZero <- function(x)
+  replace(x, IsZero(x), NA)
+
 
 Impute <- function(x, FUN = function(x) median(x, na.rm=TRUE)) {
 
@@ -1878,60 +1913,115 @@ Impute <- function(x, FUN = function(x) median(x, na.rm=TRUE)) {
 
 
 
-reorder.factor <- function(x, X, FUN, ..., order = is.ordered(x), new.order,
-                           sort = SortMixed) {
 
-  # $Id: reorder.R 988 2006-10-29 12:55:08Z ggorjan $
-  # Reorder the levels of a factor.
+reorder.factor <- function(x, X, FUN, ..., order=is.ordered(x), new.order,
+                           sort=SortMixed) {
+
+  # 25.11.2017 verbatim from gdata, Greg Warnes
 
   constructor <- if (order) ordered else factor
 
-  if (!missing(new.order))  {
+  if(!missing(X) || !missing(FUN)){
+
+    if(missing(FUN)) FUN <- 'mean'
+
+    ## I would prefer to call stats::reorder.default directly,
+    ## but it exported from stats, so the relevant code is
+    ## replicated here:
+    ## -->
+    scores <- tapply(X = X, INDEX = x, FUN = FUN, ...)
+    levels <- names(base::sort(scores, na.last = TRUE))
+    if(order)
+      ans <- ordered(x, levels=levels)
+    else
+      ans <- factor(x, levels=levels)
+    attr(ans, "scores") <- scores
+    ## <--
+    return(ans)
+
+  } else if (!missing(new.order)) {
 
     if (is.numeric(new.order))
       new.order <- levels(x)[new.order]
     else
       new.order <- new.order
 
-  } else if (!missing(FUN))
-    new.order <- names(sort(tapply(X, x, FUN, ...)))
-
-  else
+  } else
     new.order <- sort(levels(x))
 
   constructor(x, levels=new.order)
-
 }
 
 
 
-SortMixed <- function(x) x[OrderMixed(x)]
 
-OrderMixed <- function(x) {
-# $Id: SortMixed.R 1774 2014-03-01 20:02:08Z warnes $
+SortMixed <- function(x,
+                      decreasing=FALSE,
+                      na.last=TRUE,
+                      blank.last=FALSE,
+                      numeric.type=c("decimal", "roman"),
+                      roman.case=c("upper","lower","both") ) {
+
+  ord <- OrderMixed(x,
+                    decreasing=decreasing,
+                    na.last=na.last,
+                    blank.last=blank.last,
+                    numeric.type=numeric.type,
+                    roman.case=roman.case
+                    )
+  x[ord]
+}
+
+
+
+OrderMixed <- function(x,
+                       decreasing=FALSE,
+                       na.last=TRUE,
+                       blank.last=FALSE,
+                       numeric.type=c("decimal", "roman"),
+                       roman.case=c("upper","lower","both") ) {
+
+  # 25.11.2017 verbatim from gtools, Greg Warnes
+
 
   # - Split each each character string into an vector of strings and
   #   numbers
   # - Separately rank numbers and strings
   # - Combine orders so that strings follow numbers
 
+  numeric.type <- match.arg(numeric.type)
+  roman.case   <- match.arg(roman.case)
+
   if(length(x)<1)
     return(NULL)
   else if(length(x)==1)
     return(1)
 
-  if( is.numeric(x) )
-    return( order(x) )
-
+  if( !is.character(x) )
+    return( order(x, decreasing=decreasing, na.last=na.last) )
 
   delim="\\$\\@\\$"
 
-  numeric <- function(x) {
-    suppressWarnings( as.numeric(x) )
+  if(numeric.type=="decimal")
+  {
+    regex <- "((?:(?i)(?:[-+]?)(?:(?=[.]?[0123456789])(?:[0123456789]*)(?:(?:[.])(?:[0123456789]{0,}))?)(?:(?:[eE])(?:(?:[-+]?)(?:[0123456789]+))|)))"  # uses PERL syntax
+    numeric <- function(x) as.numeric(x)
   }
+  else if (numeric.type=="roman")
+  {
+    regex <- switch(roman.case,
+                    "both"  = "([IVXCLDMivxcldm]+)",
+                    "upper" = "([IVXCLDM]+)",
+                    "lower" = "([ivxcldm]+)"
+    )
+    numeric <- function(x) RomanToInt(x)
+  }
+  else
+    stop("Unknown value for numeric.type: ", numeric.type)
 
-  nonnumeric <- function(x) {
-    suppressWarnings( ifelse(is.na(as.numeric(x)), toupper(x), NA) )
+  nonnumeric <- function(x)
+  {
+    ifelse(is.na(numeric(x)), toupper(x), NA)
   }
 
   x <- as.character(x)
@@ -1939,20 +2029,16 @@ OrderMixed <- function(x) {
   which.nas <- which(is.na(x))
   which.blanks <- which(x=="")
 
-  if(length(which.blanks) >0)
-    x[ which.blanks ] <- -Inf
-
-  if(length(which.nas) >0)
-    x[ which.nas ] <- Inf
-
   ####
   # - Convert each character string into an vector containing single
   #   character and  numeric values.
   ####
 
   # find and mark numbers in the form of +1.23e+45.67
-  delimited <- gsub("([+-]{0,1}[0-9]+\\.{0,1}[0-9]*([eE][\\+\\-]{0,1}[0-9]+\\.{0,1}[0-9]*){0,1})",
-                    paste(delim,"\\1",delim,sep=""), x)
+  delimited <- gsub(regex,
+                    paste(delim,"\\1",delim,sep=""),
+                    x,
+                    perl=TRUE)
 
   # separate out numbers
   step1 <- strsplit(delimited, delim)
@@ -1961,10 +2047,10 @@ OrderMixed <- function(x) {
   step1 <- lapply( step1, function(x) x[x>""] )
 
   # create numeric version of data
-  step1.numeric <- lapply( step1, numeric )
+  suppressWarnings( step1.numeric <-  lapply( step1, numeric ) )
 
   # create non-numeric version of data
-  step1.character <- lapply( step1, nonnumeric )
+  suppressWarnings( step1.character <- lapply( step1, nonnumeric ) )
 
   # now transpose so that 1st vector contains 1st element from each
   # original string
@@ -1983,7 +2069,7 @@ OrderMixed <- function(x) {
   )
 
   # now order them
-  rank.numeric   <- sapply(step1.numeric.t,rank)
+  rank.numeric   <- sapply(step1.numeric.t, rank)
   rank.character <- sapply(step1.character.t,
                            function(x) as.numeric(factor(x)))
 
@@ -1999,12 +2085,32 @@ OrderMixed <- function(x) {
 
   order.frame <- as.data.frame(rank.overall)
   if(length(which.nas) > 0)
+    if(is.na(na.last))
+      order.frame[which.nas,] <- NA
+  else if(na.last)
     order.frame[which.nas,] <- Inf
-  retval <- do.call("order",order.frame)
+  else
+    order.frame[which.nas,] <- -Inf
+
+  if(length(which.blanks) > 0)
+    if(is.na(blank.last))
+      order.frame[which.blanks,] <- NA
+  else if(blank.last)
+    order.frame[which.blanks,] <- 1e99
+  else
+    order.frame[which.blanks,] <- -1e99
+
+  order.frame <- as.list(order.frame)
+  order.frame$decreasing <- decreasing
+  order.frame$na.last <- NA
+
+  retval <- do.call("order", order.frame)
 
   return(retval)
-
 }
+
+
+
 
 
 Lookup <- function(x, ref, val){
@@ -2912,7 +3018,7 @@ axTicks.Date <- function(side = 1, x, ...) {
 
   }
 
-  if(is.numeric(x)) {
+  if(is.numeric(x) || IsDate(x)) {
     # as.numeric still needed for casting integer to numeric!!
     res <- .Call("between_num_lr", as.numeric(x), as.numeric(rng[1]), as.numeric(rng[2]), PACKAGE="DescTools")
     res[is.na(x)] <- NA
@@ -2946,7 +3052,7 @@ axTicks.Date <- function(side = 1, x, ...) {
 
   }
 
-  if(is.numeric(x)) {
+  if(is.numeric(x) || IsDate(x)) {
     # as.numeric still needed for casting integer to numeric!!
     res <- .Call("between_num_r", as.numeric(x), as.numeric(rng[1]), as.numeric(rng[2]), PACKAGE="DescTools")
     res[is.na(x)] <- NA
@@ -2979,7 +3085,7 @@ axTicks.Date <- function(side = 1, x, ...) {
 
   }
 
-  if(is.numeric(x)) {
+  if(is.numeric(x) || IsDate(x)) {
     # as.numeric still needed for casting integer to numeric!!
     res <- .Call("between_num_l", as.numeric(x), as.numeric(rng[1]), as.numeric(rng[2]), PACKAGE="DescTools")
     res[is.na(x)] <- NA
@@ -3014,7 +3120,7 @@ axTicks.Date <- function(side = 1, x, ...) {
   }
 
 
-  if(is.numeric(x)) {
+  if(is.numeric(x) || IsDate(x)) {
     # as.numeric still needed for casting integer to numeric!!
     res <- .Call("between_num_", as.numeric(x), as.numeric(rng[1]), as.numeric(rng[2]), PACKAGE="DescTools")
     res[is.na(x)] <- NA
@@ -3322,7 +3428,7 @@ IsZero <-function(x, tol = sqrt(.Machine$double.eps), na.rm=FALSE) {
   if (na.rm)
     x <- x[!is.na(x)]
   if(is.numeric(x))
-    x < tol
+    abs(x) < tol
   else
     FALSE
 
@@ -3481,7 +3587,7 @@ Str <- function(x, ...){
     }
     res <- out
   } else {
-    res <- str(x)
+    res <- str(x, ...)
   }
   cat(res, sep="\n")
   invisible(res)
@@ -3541,6 +3647,14 @@ LsObj <- function(package){
   # example  lsf("DescTools")
   ls(pos = gettextf("package:%s", package))
 }
+
+
+What <- function(x){
+
+  list(mode=mode(x), typeof=typeof(x), storage.mode=storage.mode(x),
+       dim=dim(x), length=length(x),class=class(x))
+}
+
 
 
 PDFManual <- function(package){
@@ -4692,8 +4806,8 @@ print.fmt <- function(x, ...){
 
   CollapseList <- function(x){
     z <- x
-    opt <- options(useFancyQuotes=FALSE); on.exit(options(opt))
-    z[unlist(lapply(z, inherits, "character"))] <- dQuote(z[unlist(lapply(z, inherits, "character"))])
+    # opt <- options(useFancyQuotes=FALSE); on.exit(options(opt))
+    z[unlist(lapply(z, inherits, "character"))] <- shQuote(z[unlist(lapply(z, inherits, "character"))])
     z <- paste(names(z), "=", z, sep="", collapse = ", ")
 
     return(z)
@@ -5779,18 +5893,6 @@ ParseSASDatalines <- function(x, env = .GlobalEnv, overwrite = FALSE) {
 
 }
 
-#
-# SetRowNames <- function (object = nm, nm) {
-#   rownames(object) <- nm
-#   object
-# }
-#
-# SetColNames <- function (object = nm, nm) {
-#   colnames(object) <- nm
-#   object
-# }
-#
-
 
 
 SetNames <- function (x, ...) {
@@ -5946,6 +6048,22 @@ Label <- function(x) {
 }
 
 Unit <- function (x)  attributes(x)$unit
+
+
+
+
+#
+# To Sort(., mixed=TRUE) for vectors
+#
+#
+# SortMixed Order or Sort Strings With Embedded Numbers So That The Numbers
+# Are In The Correct Order
+# Description
+# These functions sort or order character strings containing numbers so that the numbers are numerically
+# sorted rather than sorted by character value. I.e. "Asprin 50mg" will come before "Asprin
+# 100mg". In addition
+#
+
 
 
 Sort <- function(x, ...) {
@@ -6173,7 +6291,7 @@ Untable.default <- function(x, dimnames=NULL, type = NULL, rownames = NULL, coln
 
 
 
-FixToTab <- function(txt, sep = " ", delim = "\t", trim = TRUE, header = TRUE){
+FixToTable <- function(txt, sep = " ", delim = "\t", trim = TRUE, header = TRUE){
 
   # converts a fixed text to a delim separated table
 
@@ -6205,30 +6323,8 @@ FixToTab <- function(txt, sep = " ", delim = "\t", trim = TRUE, header = TRUE){
 }
 
 
-# ClipToVect <- function(doubleQuote = TRUE){
-#
-#   # vectorizes the clipboard content
-#
-#   x <- read.table("clipboard", sep="\t")
-#
-#   if(!all(sapply(x, is.numeric))){
-#     if(doubleQuote)x <- sapply(x, dQuote)
-#     else x <- sapply(x, sQuote)
-#   }
-#
-#   res <- paste(apply(x, 2, function(x) paste("c(", paste(x, collapse=",") , ")", sep="")), collapse=",\n")
-#
-#
-#   cat(res)
-#   invisible(res)
-#
-# }
-
-###
-
 
 ## GUI-Elements: select variables by dialog, FileOpen, DescDlg, ObjectBrowse ====
-
 
 SaveAsDlg <- function(x, filename){
   if(missing(filename))
@@ -6241,15 +6337,7 @@ SaveAsDlg <- function(x, filename){
 
 
 SelectVarDlg <- function (x, ...) {
-
-  # if x is NA then let the user select a data.frame
-  # if(missing(x)){
-    # x <- select.list( ls(envir=.GlobalEnv)[ lapply( lapply(ls(envir=.GlobalEnv), function(x) gettextf("class(%s)", x)),
-       # function(x) eval(parse(text=x))) == "data.frame" ] , multiple=FALSE)
-    # SelectVarDlg.data.frame(x=x, ...)
-  # } else {
     UseMethod("SelectVarDlg")
-
 }
 
 
@@ -6283,31 +6371,33 @@ SelectVarDlg <- function (x, ...) {
 SelectVarDlg.default <- function(x, useIndex = FALSE, ...){
 
     # example: Sel(d.pizza)
-    op <- options(useFancyQuotes = FALSE)
-
     xsel <- select.list(x, multiple = TRUE, graphics = TRUE)
     if(useIndex == TRUE) {
       xsel <- which(x %in% xsel)
     } else {
-      xsel <- dQuote(xsel)
+      xsel <- shQuote(xsel)
     }
-    txt <- paste("c(", paste(xsel, collapse=","),")", sep="")
 
-    # utils::writeClipboard(txt)
+    if(!identical(xsel, "\"\""))
+      txt <- paste("c(", paste(xsel, collapse=","),")", sep="")
+    else
+      txt <- ""
+
     .ToClipboard(txt)
-    options(op)
 
     invisible(txt)
 }
 
 
 SelectVarDlg.numeric <- function(x, ...) {
+
   if(!is.null(names(x)))
      z <- names(x)
   else
      z <- as.character(x)
 
-  txt <- paste( deparse(substitute(x)), "[", SelectVarDlg.default( x = z, ...), "]", sep="", collapse="")
+  txt <- paste(deparse(substitute(x)), "[", SelectVarDlg.default( x = z, ...), "]",
+               sep="", collapse="")
   .ToClipboard(txt)
 
   invisible(txt)
@@ -6317,9 +6407,16 @@ SelectVarDlg.numeric <- function(x, ...) {
 
 SelectVarDlg.factor <- function(x, ...) { SelectVarDlg.default( x = levels(x), ...) }
 
+
 SelectVarDlg.data.frame <- function(x, ...) {
-  txt <- paste( deparse(substitute(x)), "[,", SelectVarDlg.default( x = colnames(x), ...), "]", sep="", collapse="")
-#  utils::writeClipboard(txt)
+
+  sel <- SelectVarDlg.default( x = colnames(x), ...)
+  if(sel!="")
+      txt <- paste(deparse(substitute(x)), "[,",
+               sel, "]", sep="", collapse="")
+  else
+      txt <- ""
+
   .ToClipboard(txt)
 
   invisible(txt)
@@ -6744,7 +6841,7 @@ PasswordDlg <- function() {
 
 
 
-ChooseColorDlg <- function() {
+ColorDlg <- function() {
   requireNamespace("tcltk", quietly = FALSE)
   return(as.character(tcltk::tcl("tk_chooseColor", title="Choose a color")))
 }
@@ -7501,7 +7598,7 @@ ColorLegend <- function( x, y=NULL, cols=rev(heat.colors(100)), labels=NULL
   nlbls <- length(labels)
   if(horiz) {
     rect( xleft=left, xright=left+width/ncols*seq(ncols,0,-1), ytop=top, ybottom=top-height,
-      col=cols, border=border)
+      col=rev(cols), border=border)
     if(!is.null(labels)){
       if(cntrlbl) xlbl <- left + width/(2*ncols)+(width-width/ncols)/(nlbls-1) * seq(0,nlbls-1,1)
         else xlbl <- left + width/(nlbls-1) * seq(0,nlbls-1,1)
@@ -7661,20 +7758,6 @@ Midx <- function(x, incl.zero = FALSE, cumulate = FALSE){
 
 ## graphics: colors ----
 
-#
-# `Pal<-` <- function(x, value){
-#   # set current defined palette
-#
-#   oldpal <- Pal()
-#   options("palette"=value)
-#
-#   invisible(oldpal)
-#
-# }
-#
-
-
-
 Pal <- function(pal, n=100, alpha=1) {
 
   if(missing(pal)) {
@@ -7741,6 +7824,21 @@ Pal <- function(pal, n=100, alpha=1) {
            , Noon =  res <- big[seq(3, 28, by=4)]
            , Light = res <- big[seq(4, 28, by=4)]
 
+           , GrandBudapest = res < c("#F1BB7B", "#FD6467", "#5B1A18", "#D67236")
+           , Moonrise1 = res <- c("#F3DF6C", "#CEAB07", "#D5D5D3", "#24281A")
+           , Royal1 = res <- c("#899DA4", "#C93312", "#FAEFD1", "#DC863B")
+           , Moonrise2 = res <- c("#798E87","#C27D38", "#CCC591", "#29211F")
+           , Cavalcanti = res <- c("#D8B70A", "#02401B","#A2A475", "#81A88D", "#972D15")
+           , Royal2 = res <- c("#9A8822", "#F5CDB4", "#F8AFA8", "#FDDDA0", "#74A089")
+           , GrandBudapest2 = res <- c("#E6A0C4", "#C6CDF7", "#D8A499", "#7294D4")
+           , Moonrise3 = res <- c("#85D4E3", "#F4B5BD", "#9C964A", "#CDC08C", "#FAD77B")
+           , Chevalier = res <- c("#446455", "#FDD262", "#D3DDDC", "#C7B19C")
+           , Zissou = res <- c("#3B9AB2", "#78B7C5", "#EBCC2A", "#E1AF00", "#F21A00")
+           , FantasticFox = res <- c("#DD8D29", "#E2D200", "#46ACC8", "#E58601", "#B40F20")
+           , Darjeeling = res <- c("#FF0000", "#00A08A", "#F2AD00", "#F98400", "#5BBCD6")
+           , Rushmore = res <- c("#E1BD6D", "#EABE94", "#0B775E", "#35274A", "#F2300F")
+           , BottleRocket = res <- c("#A42820", "#5F5647", "#9B110E", "#3F5151", "#4E2A1E", "#550307", "#0C1707")
+           , Darjeeling2 = res <- c("#ECCBAE", "#046C9A", "#D69C4E", "#ABDDDE",  "#000000")
     )
 
     attr(res, "name") <- pal
@@ -7755,13 +7853,6 @@ Pal <- function(pal, n=100, alpha=1) {
 
 }
 
-
-hred  <- Pal("Helsana")[1]
-horange <- Pal("Helsana")[2]
-hyellow <- Pal("Helsana")[3]
-hecru <- Pal("Helsana")[4]
-hblue <- Pal("Helsana")[6]
-hgreen <- Pal("Helsana")[7]
 
 
 print.palette <- function(x, ...){
@@ -9025,7 +9116,7 @@ PlotBubble <-function(x, ...)
   UseMethod("PlotBubble")
 
 
-PlotBubble.default <- function(x, y, area, col, cex=1, border = NA, xlim = NULL, ylim=NULL,
+PlotBubble.default <- function(x, y, area, col=NA, cex=1, border=par("fg"), xlim = NULL, ylim=NULL,
                                na.rm = FALSE, ...) {
 
   # http://blog.revolutionanalytics.com/2010/11/how-to-make-beautiful-bubble-charts-with-r.html
@@ -9561,7 +9652,7 @@ PlotMultiDens.formula <- function (formula, data, subset, na.action, ...) {
 
 
 PlotMultiDens.default <- function( x, xlim = NULL, ylim = NULL
-                                   , col = rainbow(length(x)), lty = "solid", lwd = 1
+                                   , col = Pal(), lty = "solid", lwd = 1
                                    , fill = NA
                                    , xlab = "x", ylab = "density"
                                    # , type = c("line", "stack", "cond")
@@ -10166,13 +10257,15 @@ PlotLinesA <- function(x, y, col=1:5, lty=1, lwd=1, lend = par("lend"), xlab = N
   last <- Sort(data.frame(t(tail(apply(as.matrix(x), 2, LOCF), 1))))
   last <- setNames(last[,], nm = rownames(last))
 
-  if(is.null(mar))
+  if(is.null(mar)){
     if(!identical(args.legend, NA))
       # no convincing solution before plot.new is called
       # http://stackoverflow.com/questions/16452368/calculate-strwidth-without-calling-plot-new
       Mar(right = 10)  # this would be nice, but there's no plot so far... max(strwidth(names(last))) * 1.2
-  else
+
+  } else {
     do.call(Mar, as.list(mar))
+  }
 
   matplot(x, y, type="n", las=1, xlim=xlim, ylim=ylim, xaxt="n", yaxt=yaxt, main=main, xlab=xlab, ylab=ylab, cex = cex, ...)
   if(!identical(xaxt, "n"))
@@ -10405,8 +10498,38 @@ PlotFun <- function(FUN, args=NULL, from=NULL, to=NULL, by=NULL, xlim=NULL,
 
 
 
-Shade <- function(FUN, col=par("fg"), xlim, density=10, step=0.01, ...) {
+# Shade <- function(FUN, col=par("fg"), xlim, density=10, step=0.01, ...) {
+#
+#
+#   # but works as well with function(x), but it doesn't
+#   # Shade(FUN=function(x) dt(x, df=5), xlim=c(qt(0.975, df=5), 6), col="red")
+#
+#   if(is.function(FUN)) {
+#     #  if FUN is a function, then save it under new name and
+#     # overwrite function name in FUN, which has to be character
+#     fct <- FUN
+#     FUN <- "fct"
+#     # FUN <- gettextf("%s(x)", FUN)
+#     FUN <- gettextf("function(x) %s", FUN)
+#   }
+#
+#   from <- xlim[1]
+#   to <- xlim[2] # qt(0.025, df=degf)
+#
+#   x <- seq(from, to, by = step)
+#   xval <- c(from, x, to)
+#
+#   # Calculates the function for given xval
+#   yval <- c(0, eval(parse(text = FUN)), 0)
+#
+#   polygon(xval, yval, col=col, density=density, ...)
+#
+# }
 
+
+
+
+Shade <- function(FUN, col=par("fg"), breaks, density=10, step=0.01, ...) {
 
   # but works as well with function(x), but it doesn't
   # Shade(FUN=function(x) dt(x, df=5), xlim=c(qt(0.975, df=5), 6), col="red")
@@ -10420,18 +10543,25 @@ Shade <- function(FUN, col=par("fg"), xlim, density=10, step=0.01, ...) {
     FUN <- gettextf("function(x) %s", FUN)
   }
 
-  from <- xlim[1]
-  to <- xlim[2] # qt(0.025, df=degf)
+  .Shade <- function(FUN, col, from, to, density, step, ...) {
 
-  x <- seq(from, to, by = step)
-  xval <- c(from, x, to)
+    x <- seq(from, to, by = step)
+    xval <- c(from, x, to)
 
-  # Calculates the function for given xval
-  yval <- c(0, eval(parse(text = FUN)), 0)
+    # Calculates the function for given xval
+    yval <- c(0, eval(parse(text = FUN)), 0)
 
-  polygon(xval, yval, col=col, density=density, ...)
+    polygon(xval, yval, col=col, density=density, ...)
+  }
+
+  pars <- Recycle(from=head(breaks, -1), to=tail(breaks, -1), col=col, density=density)
+
+  for(i in 1:attr(pars, "maxdim"))
+    .Shade(FUN, pars$col[i], pars$from[i], pars$to[i], density=pars$density[i], step=step, ...)
 
 }
+
+
 
 
 
@@ -10444,11 +10574,18 @@ PlotPyramid <- function(lx, rx = NA, ylab = "",
             main = "", lxlab = "", rxlab = "", xlim = NULL,
             gapwidth = NULL, xaxt = TRUE,
             args.grid = NULL,
-            cex.axis = par("cex.axis"), cex.lab = par("cex.axis"), cex.names = par("cex.axis"), adj = 0.5, ...) {
+            cex.axis = par("cex.axis"), cex.lab = par("cex.axis"), cex.names = par("cex.axis"),
+            adj = 0.5, rev = FALSE, ...) {
 
   if (missing(rx) && length(dim(lx)) > 0) {
     rx <- lx[, 2]
     lx <- lx[, 1]
+  }
+
+  if(rev==TRUE){
+    lx <- Rev(lx, margin=1)
+    rx <- Rev(rx, margin=1)
+    ylab <- Rev(ylab)
   }
 
   b <- barplot(-lx, horiz=TRUE, plot=FALSE, ...)
@@ -10501,7 +10638,7 @@ PlotPyramid <- function(lx, rx = NA, ylab = "",
   if(!is.null(DescToolsOptions("stamp")))
     Stamp()
 
-  return(b)   # return the same result as barplot
+  invisible(b)   # return the same result as barplot
 }
 
 
@@ -11976,7 +12113,7 @@ TOne <- function(x, grp = NA, add.length=TRUE,
   nfmt <- Fmt("num")
 
   if(is.null(vnames)){
-    vnames <- colnames(x)
+    vnames <- if(is.null(colnames(x))) "Var1" else colnames(x)
     default_vnames <- TRUE
   } else {
     default_vnames <- TRUE
@@ -12056,12 +12193,19 @@ TOne <- function(x, grp = NA, add.length=TRUE,
     else
       p <- NA
     m <- cbind(m, c(paste(Format(p, fmt="*", na.form = "   "), ifelse(is.na(p), "", .FootNote(3))), rep("", nlevels(x))))
+
+    if(nrow(m) <=3) {
+      m[2,1] <- gettextf("%s (= %s)", m[1, 1], row.names(tab)[1])
+      m <- m[2, , drop=FALSE]
+    }
+
+    colnames(m) <- c("var","total", head(colnames(tab), -1), "")
     m
   }
 
   dich_mat <- function(x, g, vname=deparse(substitute(x))){
 
-    tab <- Rev(table(x, g), margin=1)
+    tab <- table(x, g)
 
     if(identical(dim(tab), c(2L,2L))){
       p <- fisher.test(tab)$p.value
@@ -12084,13 +12228,20 @@ TOne <- function(x, grp = NA, add.length=TRUE,
     m <- m[, c(ncol(m), 1:(ncol(m)-1)), drop=FALSE]
 
     m <- rbind(c(vname, m[1,], paste(Format(p, fmt="*", na.form = "   "), foot)))
+    colnames(m) <- c("var","total", head(colnames(tab), -1), "")
+
     m
   }
 
 
+  if(mode(x) %in% c("logical","numeric","complex","character"))
+    x <- data.frame(x)
+
   # find description types
   ctype <- sapply(x, class)
+  # should we add "identical type": only one value??
   ctype[sapply(x, IsDichotomous, strict=TRUE, na.rm=TRUE)] <- "dich"
+
   ctype[sapply(ctype, function(x) any(x %in% c("numeric","integer")))] <- "num"
   ctype[sapply(ctype, function(x) any(x %in% c("factor","ordered","character")))] <- "cat"
 
@@ -12106,7 +12257,7 @@ TOne <- function(x, grp = NA, add.length=TRUE,
     } else if(ctype[i] == "dich") {
       if(default_vnames){
         # only declare the ref level on default_vnames
-        lst[[i]] <- dich_mat(x[,i], grp, vname=gettextf("%s (= %s)", vnames[i], tail(levels(factor(x[,i])), 1)))
+        lst[[i]] <- dich_mat(x[,i], grp, vname=gettextf("%s (= %s)", vnames[i], head(levels(factor(x[,i])), 1)))
 
       } else {
         # the user is expected to define ref level, if he wants one
@@ -12743,7 +12894,7 @@ ToWrd.data.frame <- function(x, font=NULL, main = NULL, row.names=NULL, ..., wrd
 #   if(as.is)
 #     x <- apply(x, 2, as.character)
 #   else
-#     x <- FixToTab(capture.output(x))
+#     x <- FixToTable(capture.output(x))
 #
 #   if(is.null(row.names))
 #     if(identical(row.names, seq_along(1:nrow(x))))
@@ -12779,7 +12930,7 @@ ToWrd.Freq <- function(x, font=NULL, main = NULL, ..., wrd = DescToolsOptions("l
 ToWrd.ftable <- function (x, font = NULL, main = NULL, align=NULL, method = "compact", ..., wrd = DescToolsOptions("lastWord")) {
 
   # simple version:
-  #   x <- FixToTab(capture.output(x))
+  #   x <- FixToTable(capture.output(x))
   #   ToWrd.character(x, font=font, main=main, ..., wrd=wrd)
 
   # let R do all the complicated formatting stuff
@@ -12969,9 +13120,15 @@ ToWrd.table <- function (x, font = NULL, main = NULL, align=NULL, tablestyle=NUL
   if(autofit)
     wrdTable$Columns()$AutoFit()
 
+
   # Cursor aus der Tabelle auf die letzte Postition im Dokument setzten
+  # This code will get you out of the table and put the text cursor directly behind it:
+  wrdTable$Select()
+  wrd[["Selection"]]$Collapse(wdConst$wdCollapseEnd)
+
+  # instead of goint to the end of the document ...
   # Selection.GoTo What:=wdGoToPercent, Which:=wdGoToLast
-  wrd[["Selection"]]$GoTo(What = wdConst$wdGoToPercent, Which= wdConst$wdGoToLast)
+  # wrd[["Selection"]]$GoTo(What = wdConst$wdGoToPercent, Which= wdConst$wdGoToLast)
 
   if(!is.null(main)){
     # insert caption
@@ -13588,7 +13745,7 @@ Phrase <- function(x, g, glabels=NULL, xname=NULL, unit=NULL, lang="engl") {
 # }
 #
 # WrdTable.ftable <- function(tab, main = NULL, wrd = DescToolsOptions("lastWord"), row.names = FALSE, ...) {
-#   tab <- FixToTab(capture.output(tab))
+#   tab <- FixToTable(capture.output(tab))
 #   NextMethod()
 # }
 #
@@ -13835,7 +13992,7 @@ XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "") {
   if(!missing(x)){
 
     if(class(x) == "ftable"){
-      x <- FixToTab(capture.output(x), sep = " ", header = FALSE)
+      x <- FixToTable(capture.output(x), sep = " ", header = FALSE)
       col.names <- FALSE
     }
 
@@ -13929,6 +14086,13 @@ XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame =
     names(lst)[i] <- range[i]
   }
 
+  # implement na.strings:
+  # if(!identical(na.strings, NA)){
+  #   for(s in na.strings){
+  #     lst[[i]] <- replace(lst[[i]], list = na.strings, values = NA)
+  #   }
+  # }
+
   # replace NULL values by NAs, as NULLs are evil while coercing to data.frame!
   if(as.data.frame){
     #    for(i in 1:length(lst)){    # original
@@ -13967,16 +14131,16 @@ XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame =
   # just return a single object (for instance data.frame) if only one range was supplied
   if(length(lst)==1) lst <- lst[[1]]
 
-  opt <- options(useFancyQuotes=FALSE); on.exit(options(opt))
+ # opt <- options(useFancyQuotes=FALSE); on.exit(options(opt))
   attr(lst,"call") <- gettextf("XLGetRange(file = %s, sheet = %s,
      range = c(%s),
      as.data.frame = %s, header = %s, stringsAsFactors = %s)",
      gsub("\\\\", "\\\\\\\\",
-        dQuote(paste(xl$ActiveWorkbook()$Path(),
+        shQuote(paste(xl$ActiveWorkbook()$Path(),
                      xl$ActiveWorkbook()$Name(), sep="\\"))),
-     dQuote(xl$ActiveSheet()$Name()),
+     shQuote(xl$ActiveSheet()$Name()),
 #     gettextf(paste(dQuote(names(lst)), collapse=",")),
-     gettextf(paste(dQuote(range), collapse=",")),
+     gettextf(paste(shQuote(range), collapse=",")),
      as.data.frame, header, stringsAsFactors)
 
   if(!is.null(file)) xl$Quit()  # only quit, if a new XL-instance was created before
@@ -14276,10 +14440,10 @@ PpPlot <- function( type="png", crop=c(0,0,0,0),
 
 
 
-HWZdata <- function(name, url=NULL, header=TRUE, sep=";", ...){
+CourseData <- function(name, url=NULL, header=TRUE, sep=";",  ...){
 
   if(length(grep(pattern = "\\..{3}", x = name))==0)
-    name <- paste(name, ".dat", sep="")
+    name <- paste(name, ".txt", sep="")
   if(is.null(url))
     url <- "http://www.signorell.net/hwz/datasets/"
   url <- gettextf(paste(url, "%s", sep=""), name)

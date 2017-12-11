@@ -55,9 +55,12 @@ ZTest(x, ...)
   that short period of learning when the student is learning about
   inference using z-procedures, but has not learned the t-based
   procedures yet.  Once the student has learned about the
-  t-distribution the \code{t.test} function should be used instead of this
+  t-distribution the \code{t.test()} function should be used instead of this
   one (but the syntax is very similar, so this function should be an
-  appropriate introductory step to learning \code{t.test}).
+  appropriate introductory step to learning \code{t.test()}).
+
+  The formula interface is only applicable for the 2-sample tests.
+
 }
 \value{
   A list with class "\code{htest}" containing the following components:

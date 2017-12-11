@@ -175,7 +175,12 @@ title("car data Chambers/Hastie 1992")
 PlotBag(x=1:30,y=(1:30)^2,verbose=FALSE,dkmethod=2)
 
 # one dimensional subspace
-PlotBag(x=1:100,y=1:100)
+PlotBag(x=1:50,y=1:50)
+
+# pairwise bagplots
+par(las=1)
+PlotBagPairs(swiss[, 1:2],
+             main="Swiss Fertility and Socioeconomic Indicators (1888) Data")
 }
 \keyword{ misc }
 \keyword{ hplot }

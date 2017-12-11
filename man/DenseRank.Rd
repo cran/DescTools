@@ -5,9 +5,10 @@
 \title{Dense Ranks and Percent Ranks
 %%  ~~function to do ... ~~
 }
-\description{Returns the dense ranks of the values in a vector.
-DenseRank gives the ranking within the vector x, but the ranks are consecutive. No ranks are skipped if there are ranks with multiple items. (Unlike \code{\link{rank}} gives the ranking within the vector x too, but ties are assigned the same rank, with the next ranking(s) skipped.)
+\description{Computes the rank of a vector and returns the rank.
+DenseRank calculate consecutive ranks in the case of present ties.. No ranks are skipped if there are ranks with multiple items. (Unlike \code{\link{rank}} gives the ranking within the vector x too, but ties are assigned the same rank, with the next ranking(s) skipped.)
 
+DENSE_RANK computes the rank of a row in an ordered group of rows and returns the rank as a NUMBER. The ranks are consecutive integers beginning with 1. The largest rank value is the number of unique values returned by the query. Rank values are not skipped in the event of ties. Rows with equal values for the ranking criteria receive the same rank. This function is useful for top-N and bottom-N reporting
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

@@ -14,11 +14,9 @@ globally appropriate xlim- and ylim-values. A legend can directly be included.
 \usage{
 PlotMultiDens(x, ...)
 
-\method{PlotMultiDens}{default}(x, xlim = NULL, ylim = NULL,
-              col = rainbow(length(x)), lty = "solid", lwd = 1,
-              fill = NA, xlab = "x", ylab = "density",
-              args.dens = NULL, args.legend = NULL,
-              na.rm = FALSE, flipxy = FALSE, ...)
+\method{PlotMultiDens}{default}(x, xlim = NULL, ylim = NULL, col = Pal(), lty = "solid",
+              lwd = 1, fill = NA, xlab = "x", ylab = "density", args.dens = NULL,
+              args.legend = NULL, na.rm = FALSE, flipxy = FALSE, ...)
 
 \method{PlotMultiDens}{formula}(formula, data, subset, na.action, \dots)
 
@@ -32,7 +30,7 @@ PlotMultiDens(x, ...)
   \item{xlim, ylim}{xlim, ylim of the plot.
 %%     ~~Describe \code{xlim} here~~
 }
-  \item{col}{colors of the lines, defaults to \code{rainbow(1:length(x))}.
+  \item{col}{colors of the lines, defaults to \code{Pal()}, returning the default palette.
 %%     ~~Describe \code{col} here~~
 }
   \item{lty}{line type of the lines.
@@ -71,7 +69,7 @@ PlotMultiDens(x, ...)
 }
 \details{
 All style arguments, density arguments and data list elements will be recycled if necessary.\cr
-The flipxy parameter flips x an y-values, so as to plot density curves on the x-axis.
+The argument \code{flipxy} leads to exchanged x- and y-values. This option can be used to plot density curves with a vertical orientation for displaying marginal densities.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{

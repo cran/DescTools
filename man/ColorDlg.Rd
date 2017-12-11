@@ -1,5 +1,5 @@
-\name{ChooseColorDlg}
-\alias{ChooseColorDlg}
+\name{ColorDlg}
+\alias{ColorDlg}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Display Color Dialog to Choose a Color
 %%  ~~function to do ... ~~
@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-ChooseColorDlg()
+ColorDlg()
 }
 %- maybe also 'usage' for other objects documented here.
 \value{RGB value of the selected color

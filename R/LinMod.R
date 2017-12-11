@@ -79,7 +79,7 @@ Conf.table <- function(x, pos = NULL, ...) {
       npv     = D / (C + D),                 # negative predicted value
       prev    = (A + C) / (A + B + C + D),   # prevalence
       detrate = A / (A + B + C + D),         # detection rate
-      detprev = (A + C) / (A + B + C + D),   # detection prevalence
+      detprev = (A + B) / (A + B + C + D),   # detection prevalence
       bacc    = mean(c(A / (A + C), D / (B + D)) ),  # balanced accuracy
       fval    = Hmean(c(A / (A + B), A / (A + C)), conf.level = NA) # guetemass wollschlaeger s. 150
     )
@@ -723,6 +723,8 @@ TMod <- function(..., FUN = NULL){
   lmod <- list(...)
   lst <- lapply(lmod, ModSummary)
 
+  modname[names(lst) != ""] <- names(lst)[names(lst) != ""]
+
   lcoef <- lapply(lst, "[[", "coef")
   lstatsx <- lapply(lst, "[[", "statsx")
 
@@ -731,7 +733,8 @@ TMod <- function(..., FUN = NULL){
   m <- lcoef[[1]][, c("name", "est")]
   m$est <- apply(lcoef[[1]][,-1], 1, function(x) FUN(x["est"], x["se"], x["stat"], x["p"], x["lci"], x["uci"]))
   colnames(m) <- c("name", modname[1])
-  if(length(lcoef)>1){
+
+  if(length(lcoef)>1) {
     for(i in 2L:length(lcoef)){
       m2 <- lcoef[[i]][, c("name", "est")]
       m2$est <- apply(lcoef[[i]][,-1], 1, function(x) FUN(x["est"], x["se"], x["stat"], x["p"], x["lci"], x["uci"]))
@@ -785,7 +788,7 @@ print.TMod <- function(x, ...){
 
 ToWrd.TMod <- function(x, font=NULL, para=NULL, main=NULL, align=NULL,
                        autofit=TRUE, ..., wrd=DescToolsOptions("lastWord")) {
-  m <- FixToTab(capture.output(x))
+  m <- FixToTable(capture.output(x))
   if(is.null(align))
     align <- "l"
   wt <- ToWrd.matrix(x=m, font=font, para=para, main=main, align=align, autofit=autofit, ..., wrd=wrd)

@@ -91,11 +91,11 @@ Desc(x, ..., main = NULL, plotit = NULL, wrd = NULL)
 
 \item{digits}{integer. With how many digits shoud the relative frequencies be formatted? Default can be set by \code{DescToolsOptions(digits=x)}. }
 
-\item{maxrows}{numeric value, defining the maximum number of rows of a frequency table to be reported. For factors with many levels it is often not interesting to see
-  all of them. Default is hence set to 12 most frequent ones (resp. the first ones if \code{ord} is set to \code{levels} or \code{names}). If for numeric object the value is left to its default \code{NULL}, the list of extreme values will be displayed, when x has more than 12 single values and the frequency table else.\cr
-  If maxrows is < 1 it will be interpreted as percentage. Then just as many rows, as the \code{maxrows\%} most frequent factors will be shown. Say, if maxrows is set to 0.8, then the number of rows is fixed so, that the highest cumulative relative frequency is the first one going beyond 0.8.
+\item{maxrows}{numeric; defines the maximum number of rows of a frequency table to be reported. For factors with many levels it is often not interesting to see
+  all of them. Default is hence set to 12 most frequent ones (resp. the first ones if \code{ord} is set to \code{"levels"} or \code{"names"}). If for a numeric vector the value is left to its default \code{NULL}, the list of extreme values will be displayed, in cases that x has more than 12 single values and the frequency table else.\cr
+  If \code{maxrows} is < 1 it will be interpreted as percentage. In this case just as many rows, as the \code{maxrows\%} most frequent levels will be shown. Say, if maxrows is set to \code{0.8}, then the number of rows is fixed so, that the highest cumulative relative frequency is the first one going beyond 0.8.
 
-  If the highest and the lowest values (numeric objects only) should always be reported, \code{maxrows} should be set to\code{0}.
+  Setting \code{maxrows} to \code{Inf} will unconditionally report all values.
 }
 
 
@@ -162,7 +162,7 @@ will be used for days and a monthdays distribution in a non leap year (p = c(31/
 }
   \details{
   Desc is a generic function. It dispatches to one of the methods above depending on the class of its first argument. Typing ?Desc
-  + TAB at the prompt should present a choice of links: the help pages for each of these Desc methods (at least if you're using RStudio, which anyway is recommended).
+  + TAB at the prompt should present a choice of links: the help pages for each of these \code{Desc} methods (at least if you're using RStudio, which anyway is recommended).
 You don't need to use the full name of the method although you may if you wish; i.e.,
 Desc(x) is idiomatic R but you can bypass method dispatch by going direct if you wish:
 Desc.numeric(x).

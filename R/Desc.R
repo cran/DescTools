@@ -78,6 +78,7 @@ Desc.character <- function (x, main=NULL,
 Desc.logical <- function (x, main=NULL,
                           ord=NULL, conf.level=0.95,
                           plotit=NULL, sep=NULL, digits=NULL, ...) {
+  if(is.null(ord)) ord <- "level"
   return(desc(x=x, xname= deparse(substitute(x)), main=main, digits=digits, ord=ord, conf.level=conf.level, plotit=plotit, sep=sep, ...))
 }
 
@@ -165,7 +166,7 @@ desc <- function (x, main=NULL, xname=deparse(substitute(x)), digits=NULL, maxro
       ord <- "level"
     else
       if(inherits(x, "factor"))
-        ord <- "desc"
+        ord <- if(nlevels(x)==2) "level" else "desc"
   }
   ord <- match.arg(arg = ord, choices = c("desc", "asc", "name", "level"))
 

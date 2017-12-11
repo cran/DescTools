@@ -3,8 +3,8 @@ useDynLib(DescTools, .registration=TRUE)
 
 export(
 
-"%c%","%like%","%like any%", "%nin%","%overlaps%","AddMonths","AddMonthsYM","Agree","AllDuplicated","aovlDetails","aovlErrorTerms","as.matrix.xtabs","AscToChar","Assocs","Atkinson","AUC","AxisBreak","BartelsRankTest","BinomCI","BinomDiffCI","BinomRatioCI","BinToDec","BoxCox","BoxCoxInv","BoxCoxLambda","BoxedText","BreslowDayTest","BubbleLegend","Canvas","CartToPol","CartToSph","CatTable","CCC","CharToAsc","ChooseColorDlg",
-"Clockwise","Closest","Coalesce",
+"%c%","%like%","%like any%", "%nin%","%overlaps%","AddMonths","AddMonthsYM","Agree","AllDuplicated","aovlDetails","aovlErrorTerms","as.matrix.xtabs","AscToChar","Assocs","Atkinson","AUC","AxisBreak","BartelsRankTest","BinomCI","BinomDiffCI","BinomRatioCI","BinToDec","BoxCox","BoxCoxInv","BoxCoxLambda","BoxedText","BreslowDayTest","BubbleLegend","Canvas","CartToPol","CartToSph","CatTable","CCC","CharToAsc","ColorDlg",
+"Clockwise","Closest","Coalesce","CourseData",
 "CochranArmitageTest",
 "CochranQTest",
 "CoefVar","CohenD","CohenKappa","CollapseTable","ColorLegend","ColToGray","ColToGrey","ColToHex","ColToHsv","ColToRgb","CombN","CombPairs","CombSet","ConDisPairs","Conf","ConnLines","ContCoef","Contrasts","CorCI",
@@ -13,7 +13,7 @@ export(
 "Timezone", "SetNames",
 "DescToolsOptions","DiffDays360","DivCoef","DivCoefMax","DoCall","DrawArc","DrawBand","DrawBezier","DrawCircle","DrawEllipse","DrawRegPolygon","dRevGumbel","Dummy",
 "DunnettTest","DunnTest",
-"DurbinWatsonTest","Entropy","Eps","ErrBars","EtaSq","ExpFreq","Xplore","Factorize","FctArgs","Fibonacci","FindColor","FindCorr","FisherZ","FisherZInv","FixToTab","Flags",
+"DurbinWatsonTest","Entropy","Eps","ErrBars","EtaSq","ExpFreq","Xplore","Factorize","FctArgs","Fibonacci","FindColor","FindCorr","FisherZ","FisherZInv","FixToTable","Flags",
 "Format","Frac","Freq","GCD","GetCurrPP","GetCurrWrd","GetCurrXL","GetNewPP","GetNewWrd","GetNewXL",
 "Gini","GiniSimpson","Gmean","GoodmanKruskalGamma","GoodmanKruskalTau","Gsd","GTest","Herfindahl","HexToCol","HexToDec","HexToRgb","HighLow","Hmean","HmsToSec","HodgesLehmann",
 "HotellingsT2Test","Hour","HuberM","ICC","identify.formula","IdentifyA","FileOpenCmd","ImportFileDlg","Impute","InDots","Interval","IRR","IsDate","IsDichotomous","IsEuclid","IsLeapYear","IsNumeric","IsOdd","IsPrime","IsValidWrd","IsWeekend","IsWhole","IsZero","JarqueBeraTest",
@@ -46,7 +46,7 @@ export(
 "Untable", "ToWrd",
 "VarCI","VecRot","VecShift","Vigenere","Week","Weekday","Winsorize","WoolfTest","WrdCaption","WrdGoto","WrdInsertBookmark","WrdTable","WrdKill","WrdPlot",
 "WrdUpdateBookmark","XLGetRange","XLGetWorkbook","XLKill","XLView","Year","YearDay","YearMonth",
-"YuenTTest","YuleQ","YuleY","ZeroIfNA","Zodiac",
+"YuenTTest","YuleQ","YuleY","ZeroIfNA","NAIfZero","Zodiac",
 "ZTest",
 "BinTree", "PlotECDF","Abind","TOne","MaxDigits","XLDateToPOSIXct",
 "axTicks.POSIXct", "print.PercTable", "PlotMosaic", "PDFManual", "LongToRgb", "PlotMiss","BreuschGodfreyTest",
@@ -61,7 +61,7 @@ export(
 "PlotDev","%^%", "TitleRect","BarText","as.CDateFmt", "Phrase", "N", "BootCI", "VonNeumannTest",
 "InsCol","InsRow","ConoverTest","ModelDlg",
 
-"%()%","%(]%","%)(%","%)[%","%[)%","%[]%","%](%","%][%",
+"%()%","%(]%","%)(%","%)[%","%[)%","%[]%","%](%","%][%","TTestA",
 "DecToBin", "RomanToInt", "TukeyBiweight","PtInPoly",
 "JonckheereTerpstraTest", "AndersonDarlingTest", "BarnardTest","HoeffD","Desc"
 
@@ -160,6 +160,7 @@ S3method(PostHocTest, table)
 S3method(Rev, default)
 S3method(Rev, matrix)
 S3method(Rev, table)
+S3method(Rev, data.frame)
 S3method(RunsTest, default)
 S3method(RunsTest, formula)
 S3method(ScheffeTest, aov)
@@ -298,9 +299,13 @@ S3method(ModSummary, lm)
 S3method(Mean, default)
 S3method(Mean, Freq)
 
+S3method(Var, default)
+S3method(Var, Freq)
+
 S3method(Median, Freq)
 S3method(Median, default)
 S3method(Median, factor)
+
 
 
 

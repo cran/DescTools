@@ -54,12 +54,17 @@ Mean.default <- function (x, weights = NULL, trim = 0, na.rm = FALSE, ...) {
 
 
 # from stats
-SD <- function (x, weights = NULL, na.rm = FALSE)
+SD <- function (x, weights = NULL, na.rm = FALSE, ...)
   sqrt(Var(if (is.vector(x) || is.factor(x)) x else as.double(x),
-           weights=weights, na.rm = na.rm))
+           weights=weights, na.rm = na.rm, ...))
 
 
-Var <- function (x, weights = NULL, na.rm = FALSE, use) {
+Var <- function (x, ...)
+  UseMethod("Var")
+
+
+
+Var.default <- function (x, weights = NULL, na.rm = FALSE, use, ...) {
 
   wtd.var <- function (x, weights = NULL, normwt = FALSE, na.rm = TRUE,
                        method = c("unbiased",  "ML")) {
@@ -93,6 +98,17 @@ Var <- function (x, weights = NULL, na.rm = FALSE, use) {
     wtd.var(x=x, weights=weights, na.rm=na.rm)
   }
 }
+
+
+Var.Freq <- function(x, breaks, ...)  {
+  n <- sum(x$freq)
+  mu <- sum(head(MoveAvg(breaks, order=2, align="left"), -1) * x$perc)
+  s2 <- (sum(head(MoveAvg(breaks, order=2, align="left"), -1)^2 * x$freq) - n*mu^2) / (n-1)
+
+  return(s2)
+}
+
+
 
 
 Cov <- cov
@@ -735,52 +751,50 @@ Gmean <- function (x, method = c("classic", "boot"),
 
   # see also: http://www.stata.com/manuals13/rameans.pdf
 
-  if (na.rm) x <- na.omit(x)
-  if(any(is.na(x)) || any(x < 0))
-    return(NA)
-  else{
-    if(is.na(conf.level))
-      return(exp(mean(x=log(x), na.rm=na.rm)))
-    else
-      return(exp(MeanCI(x=log(x), method = method,
-                      conf.level = conf.level, sides = sides, na.rm=na.rm, ...)))
-  }
+  if(na.rm) x <- na.omit(x)
+  is.na(x) <- x <= 0
+
+  if(is.na(conf.level))
+    exp(mean(log(x)))
+
+  else
+    exp(MeanCI(x=log(x), method = method,
+                    conf.level = conf.level, sides = sides, ...))
 }
 
 
 Gsd <- function (x, na.rm = FALSE) {
-  if (na.rm) x <- na.omit(x)
-  if(any(is.na(x)) || any(x < 0))
-    return(NA)
-  else
-    return(exp(sd(log(x))))
+
+  if(na.rm) x <- na.omit(x)
+  is.na(x) <- x <= 0
+
+  exp(sd(log(x)))
 }
 
 
 Hmean <- function(x, method = c("classic", "boot"),
                   conf.level = NA, sides = c("two.sided","left","right"),
                   na.rm = FALSE, ...) {
-  if (na.rm) x <- na.omit(x)
-  if(any(is.na(x)) || any(x <= 0))
-    return(NA)
+
+  is.na(x) <- x <= 0
+
+  if(is.na(conf.level))
+    res <- 1 / mean(1/x, na.rm = na.rm)
 
   else {
-    if(is.na(conf.level))
-      return(1 / mean(1/x, na.rm = na.rm))
+    res <- (1 / MeanCI(x = 1/x, method = method,
+                       conf.level = conf.level, sides = sides, na.rm=na.rm, ...))
 
-    else {
-
-      res <- (1 / MeanCI(x = 1/x, method = method,
-                        conf.level = conf.level, sides = sides, na.rm=na.rm, ...))
-      if(!is.na(conf.level)){
-        res[2:3] <- c(min(res[2:3]), max(res[2:3]))
-        if(res[2] < 0)
-          res[c(2,3)] <- NA
-      }
+    if(!is.na(conf.level)){
+      res[2:3] <- c(min(res[2:3]), max(res[2:3]))
+      if(res[2] < 0)
+        res[c(2,3)] <- NA
     }
-    return(res)
 
   }
+
+  return(res)
+
 }
 
 
@@ -1662,7 +1676,8 @@ BinomCI <- function(x, n, conf.level = 0.95, method = c("wilson", "wald", "agres
             }
     )
 
-    ci <- c( est=est, lwr.ci=CI.lower, upr.ci=CI.upper )
+    # dot not return ci bounds outside [0,1]
+    ci <- c( est=est, lwr.ci=max(0, CI.lower), upr.ci=min(1, CI.upper) )
     return(ci)
 
   }
@@ -1674,13 +1689,20 @@ BinomCI <- function(x, n, conf.level = 0.95, method = c("wilson", "wald", "agres
   # recycle all params to maxdim
   lgp <- lapply( lst, rep, length.out=maxdim )
 
-  res <- sapply(1:maxdim, function(i) iBinomCI(x=lgp$x[i], n=lgp$n[i], conf.level=lgp$conf.level[i], method=lgp$method[i], rand=lgp$rand[i]))
-  rownames(res)[1] <- c("est")
+  # get rownames
+  lgn <- Recycle(x=if(is.null(names(x))) paste("x", seq_along(x), sep=".") else names(x),
+                 n=if(is.null(names(n))) paste("n", seq_along(n), sep=".") else names(n),
+                 conf.level=conf.level, method=method)
+  xn <- apply(as.data.frame(lgn[sapply(lgn, function(x) length(unique(x)) != 1)]), 1, paste, collapse=":")
 
-  # colnames(res) <- names(x)
+
+  res <- t(sapply(1:maxdim, function(i) iBinomCI(x=lgp$x[i], n=lgp$n[i], conf.level=lgp$conf.level[i], method=lgp$method[i], rand=lgp$rand[i])))
+  colnames(res)[1] <- c("est")
+
+  rownames(res) <- xn
   # colnames(res) <- unlist(lapply(lgp, paste, collapse=" "))
 
-  return(t(res))
+  return(res)
 
 }
 
@@ -2876,9 +2898,9 @@ VarCI <- function (x, method = c("classic", "norm","basic","stud","perc","bca"),
     boot.fun <- boot(x, function(x, d) var(x[d], na.rm=na.rm), R=R)
     ci <- boot.ci(boot.fun, conf=conf.level, type=method)
     if(method == "norm"){
-      res <- c(mean=boot.fun$t0, lwr.ci=ci[[4]][2], upr.ci=ci[[4]][3])
+      res <- c(var=boot.fun$t0, lwr.ci=ci[[4]][2], upr.ci=ci[[4]][3])
     } else {
-      res <- c(mean=boot.fun$t0, lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])
+      res <- c(var=boot.fun$t0, lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])
     }
   }
 
@@ -4715,7 +4737,7 @@ Lambda <- function(x, y = NULL, direction = c("symmetric", "row", "column"), con
 
     pr2 <- 1 - (1 - conf.level)/2
     ci <- pmin(1, pmax(0, qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + res))
-    res <- c(lambda = res,  lwr.ci=ci[1], ups.ci=ci[2])
+    res <- c(lambda = res,  lwr.ci=ci[1], upr.ci=ci[2])
   }
 
   return(res)
@@ -4764,7 +4786,7 @@ UncertCoef <- function(x, y = NULL, direction = c("symmetric", "row", "column"),
     pr2 <- 1 - (1 - conf.level)/2
     ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + res
 
-    res <- c(uc = res,  lwr.ci=max(ci[1], -1), ups.ci=min(ci[2], 1))
+    res <- c(uc = res,  lwr.ci=max(ci[1], -1), upr.ci=min(ci[2], 1))
   }
   return(res)
 }
@@ -4996,7 +5018,7 @@ SomersDelta <- function(x,  y = NULL, direction=c("row","column"), conf.level = 
   if(is.na(conf.level)){
     result <- somers
   } else {
-    result <- c(somers = somers,  lwr.ci=max(ci[1], -1), ups.ci=min(ci[2], 1))
+    result <- c(somers = somers,  lwr.ci=max(ci[1], -1), upr.ci=min(ci[2], 1))
   }
 
   return(result)
@@ -5068,7 +5090,7 @@ GoodmanKruskalGamma <- function(x, y = NULL, conf.level = NA, ...) {
   } else {
     pr2 <- 1 - (1 - conf.level)/2
     ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + gamma
-    result <- c(gamma = gamma,  lwr.ci=max(ci[1], -1), ups.ci=min(ci[2], 1))
+    result <- c(gamma = gamma,  lwr.ci=max(ci[1], -1), upr.ci=min(ci[2], 1))
   }
 
   return(result)
@@ -5143,7 +5165,7 @@ KendallTauA <- function(x, y = NULL, direction = c("row", "column"), conf.level 
 
     pr2 <- 1 - (1 - conf.level)/2
     ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + taua
-    result <- c(tau_a = taua, lwr.ci = max(ci[1], -1), ups.ci = min(ci[2], 1))
+    result <- c(tau_a = taua, lwr.ci = max(ci[1], -1), upr.ci = min(ci[2], 1))
   }
 
   return(result)
@@ -5201,7 +5223,7 @@ KendallTauB <- function(x, y = NULL, conf.level = NA, ...){
   else {
     pr2 <- 1 - (1 - conf.level)/2
     ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + taub
-    result <- c(tau_b = taub, lwr.ci = max(ci[1], -1), ups.ci = min(ci[2], 1))
+    result <- c(tau_b = taub, lwr.ci = max(ci[1], -1), upr.ci = min(ci[2], 1))
   }
 
   #   if(test){
@@ -5280,7 +5302,7 @@ StuartTauC <- function(x, y = NULL, conf.level = NA, ...) {
   } else {
     pr2 <- 1 - (1 - conf.level)/2
     CI <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + tauc
-    result <- c(tauc = tauc,  lwr.ci=max(CI[1], -1), ups.ci=min(CI[2], 1))
+    result <- c(tauc = tauc,  lwr.ci=max(CI[1], -1), upr.ci=min(CI[2], 1))
   }
 
   return(result)
@@ -5348,7 +5370,7 @@ SpearmanRho <- function(x, y = NULL, use = c("everything", "all.obs", "complete.
     result <- rho
   } else {
     pr2 <- 1 - (1 - conf.level) / 2
-    result <- c(rho = rho, lwr.ci = max(ci[1], -1), ups.ci = min(ci[2], 1))
+    result <- c(rho = rho, lwr.ci = max(ci[1], -1), upr.ci = min(ci[2], 1))
   }
   return(result)
 
@@ -5462,9 +5484,13 @@ PlotBinTree <- function(x, main="Binary tree", horiz=FALSE, cex=1.0, col=1, ...)
     }
 
     # Rotate positions for the text
-    rotxy <- Rotate(d.frm$xpos, d.frm$ypos, theta=pi/2)
-    d.frm$xpos <- rotxy$x
-    d.frm$ypos <- rotxy$y
+    # rotxy <- Rotate(d.frm$xpos, d.frm$ypos, theta=pi/2)
+    # d.frm$xpos <- rotxy$x
+    # d.frm$ypos <- rotxy$y
+
+    m <- d.frm$xpos
+    d.frm$xpos <- -d.frm$ypos
+    d.frm$ypos <- m
 
   } else {
 

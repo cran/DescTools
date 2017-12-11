@@ -17,7 +17,7 @@ all bubbles will be fully visible.
 
 PlotBubble(x, ...)
 
-\method{PlotBubble}{default}(x, y, area, col, cex = 1, border = NA,
+\method{PlotBubble}{default}(x, y, area, col = NA, cex = 1, border = par("fg"),
            xlim = NULL, ylim = NULL, na.rm = FALSE, ...)
 
 \method{PlotBubble}{formula}(formula, data = parent.frame(), ..., subset, ylab = varnames[response])
@@ -32,13 +32,13 @@ PlotBubble(x, ...)
 %%     ~~Describe \code{area} here~~
 }
   \item{col}{colors for the bubbles, passed to \code{\link{symbol}}.
+  The default \code{NA} (or also \code{NULL}) means do not fill, i.e., draw transparent bubbles.
 %%     ~~Describe \code{col} here~~
 }
   \item{cex}{extension factor for the area.
 %%     ~~Describe \code{area} here~~
 }
-  \item{border}{the border color fot the bubbles. Set \code{NA} if there should be no border at all.
-  This is the default.
+  \item{border}{the border color fot the bubbles. The default means \code{par("fg")}. Use \code{border = NA} to omit borders.
 %%     ~~Describe \code{border} here~~
 }
   \item{xlim, ylim}{axes limits.

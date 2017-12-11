@@ -6,7 +6,7 @@
 \title{Build-in Constants Extension
 }
 
-\description{There's a small number of built-in constants in \code{R}. We have \code{\link{month.name}} and \code{\link{month.abb}} but nothing similar for days. Here it is.
+\description{There's a small number of built-in constants in \code{R}. We have \code{\link{month.name}} and \code{\link{month.abb}} but nothing similar for weekdays. Here it is.
 }
 
 \usage{

@@ -5,7 +5,7 @@
 %%  ~~function to do ... ~~
 }
 \description{
-Determines either conventional (possibly trimmed) range or a robust range of the data on the basis of the trimmed mean and variance.
+Determines the range of the data, which can possibly be trimmed before calculating the extreme values. The robust range version is calculated on the basis of the trimmed mean and variance (see Details).
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
