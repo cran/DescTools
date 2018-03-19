@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-ErrBars(from, to = NULL, pos = NULL, mid = NULL, horiz = FALSE, col = par("fg"), 
+ErrBars(from, to = NULL, pos = NULL, mid = NULL, horiz = FALSE, col = par("fg"),
         lty = par("lty"), lwd = par("lwd"), code = 3, length = 0.05,
         pch = NA, cex.pch = par("cex"), col.pch = par("fg"), bg.pch = par("bg"),
         \dots)
@@ -40,15 +40,14 @@ ErrBars(from, to = NULL, pos = NULL, mid = NULL, horiz = FALSE, col = par("fg"),
   \item{lwd}{line width.
 %%     ~~Describe \code{lwd} here~~
 }
-  \item{code}{integer code, determining kind of arrows to be drawn.
-  If code = 1 an arrowhead is drawn at (\code{x0[i]}, \code{y0[i]}) and if \code{code = 2} an arrowhead is drawn at (\code{x1[i]}, \code{y1[i]}). 
-  If \code{code = 3} (default) a head is drawn at both ends of the arrow. Unless \code{length = 0}, when no head is drawn.
+  \item{code}{integer code, determining where end lines are to be drawn. \code{code = 0} will draw no end lines, \code{code = 1} will draw an end line on the left (lower) side at (\code{x0[i]}, \code{y0[i]}), \code{code = 2} on the right (upper) side (\code{x1[i]}, \code{y1[i]}) and
+  \code{code = 3} (default) will draw end lines at both ends.
 %%     ~~Describe \code{code} here~~
 }
-  \item{length}{the length of the end lines. 
+  \item{length}{the length of the end lines.
 %%     ~~Describe \code{length} here~~
 }
-  \item{pch}{plotting character for the midpoints. The position of the points is given by \code{mid}. If \code{mid} is left to \code{NULL} the points will be plotted in the middle of \code{from} and \code{to}. No points will be plotted if this is set to NA, which is the default.
+  \item{pch}{plotting character for the midpoints. The position of the points is given by \code{mid}. If \code{mid} is left to \code{NULL} the points will be plotted in the middle of \code{from} and \code{to}. No points will be plotted if this is set to \code{NA}, which is the default.
 }
   \item{cex.pch}{the character extension for the plotting characters. Default is \code{par("cex")}.}
   \item{col.pch}{the color of the plotting characters. Default is \code{par("fg")}.
@@ -68,7 +67,7 @@ ErrBars(from, to = NULL, pos = NULL, mid = NULL, horiz = FALSE, col = par("fg"),
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{\code{\link{lines.loess}}
+\seealso{\code{\link{arrows}}, \code{\link{lines.loess}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

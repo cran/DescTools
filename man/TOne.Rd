@@ -9,7 +9,7 @@ Create a table summarizing continuous, categorical and dichotomous variables, op
 }
 \usage{
 TOne(x, grp = NA, add.length = TRUE, colnames = NULL, vnames = NULL, total = TRUE,
-     align = "\\\\l", FUN = NULL, NUMTEST = NULL, numtestlab = NULL)
+     align = "\\\\l", FUN = NULL, NUMTEST = NULL, numtestlab = NULL, intref = "high")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -30,12 +30,13 @@ TOne(x, grp = NA, add.length = TRUE, colnames = NULL, vnames = NULL, total = TRU
 }
 \item{total}{logical, \code{TRUE} if totals should be added.}
 
-  \item{align}{the character on whose position the strings will be aligned. Left alignment can be requested by setting \code{sep = "\\\\l"}, right alignment by \code{"\\\\r"} and center alignment by \code{"\\\\c"}. Mind the backslashes, as if they are omitted, strings would be aligned to the \bold{character} l, r or c respectively. Default value is "\\\\l", thus left alignment.
+  \item{align}{the character on whose position the strings will be aligned. Left alignment can be requested by setting \code{sep = "\\\\l"}, right alignment by \code{"\\\\r"} and center alignment by \code{"\\\\c"}. Mind the backslashes, as if they are omitted, strings would be aligned to the \bold{character} l, r or c respectively. Default value is \code{"\\\\l"}, thus left alignment.
 %%     ~~Describe \code{sep} here~~
 }
-\item{FUN}{the function to be used as location and dispersion measure (typically \code{mean}/\code{sd} or \code{median}/\code{IQR})}
+\item{FUN}{the function to be used as location and dispersion measure (typically \code{mean}/\code{sd} or alternatively \code{median}/\code{IQR}). See examples.}
 \item{NUMTEST}{the function to be used to compare location (default \code{kruskal.test}). Must be defined as function with arguments \code{(x, g)}, generating something similar to a p.value. (See examples.) }
 \item{numtestlab}{string, describing the test for numeric variables. Default is "Kruskal-Wallis test". Alternative could be "ANOVA".}
+\item{intref}{one out of \code{"high"} (default) or \code{"low"}, defining which value of a dichotomous numeric or logical variable should be reported. Usually this will be \code{1} or \code{TRUE}. Setting it to \code{"low"} will report the lower value \code{0} or \code{FALSE}. }
 }
 \details{There are three types of variables currently implemented: numeric, factor and variables with only two levels.
 %%  ~~ If necessary, more details than the description above ~~
@@ -83,6 +84,22 @@ TOne(x = iris[, -5], grp = iris[, 5],
             Format(summary(aov(x ~ g))[[1]][1, "Pr(>F)"], fmt="p"),
      numtestlab = "ANOVA"
 )
+
+# dichotomous integer or logical values can be reported by the high or low value
+x <- sample(x = c(0,1), size = 100, prob = c(0.3, 0.7), replace = TRUE)
+y <- sample(x = c(0,1), size = 100, prob = c(0.3, 0.7), replace = TRUE)==1
+z <- factor(sample(x = c(0,1), size = 100, prob = c(0.3, 0.7), replace = TRUE))
+g <- sample(x = letters[1:4], size = 100, replace = TRUE)
+d.set <- data.frame(x=x, y=y, z=z, g=g)
+
+TOne(d.set[1:3], d.set$g, intref = "low")
+TOne(d.set[1:3], d.set$g, intref = "high")
+
+# intref would not control factors, use relevel to change reported value
+TOne(data.frame(z=relevel(z, "1")), g)
+TOne(data.frame(z=z), g)
+
+
 
 options(opt)
 

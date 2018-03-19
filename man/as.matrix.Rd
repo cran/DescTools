@@ -19,8 +19,8 @@
 %%     ~~Describe \code{\dots} here~~
 }
 }
-\details{\code{\link{xtabs}} is indeed already a matrix, but won't be converted to a pure matrix by \code{as.matrix.default} function, as its classes definition will remain unchanged. Some functions expecting a pure matrix may fail, when fed with a \code{xtabs} object.
-\code{as.matrix.xtabs} will kill the classes and the call attribute. \cr
+\details{An \code{\link{xtabs}} object is indeed already a matrix, but won't be converted to a pure matrix by \code{as.matrix.default} function, as its class definition will remain unchanged. Some functions expecting a pure matrix may fail, when fed with a \code{xtabs} object.
+\code{as.matrix.xtabs} will drop the classes and the call attribute. \cr
 Note that \code{\link{unclass}} would as well discard the classes \code{xtabs} and \code{table}, but retain the \code{"call"} attribute.
 %%  ~~ If necessary, more details than the description above ~~
 }

@@ -15,7 +15,7 @@ PlotFun(FUN, args = NULL, from = NULL, to = NULL, by = NULL,
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{FUN}{a mathematical expression defined using the formula syntax: f(x) ~ x.
+  \item{FUN}{a mathematical expression defined using the formula syntax: \code{f(x) ~ x}. x and y can as well be functions of a parameter t: \code{y(t) ~ x(t)} (see examples).
 %%     ~~Describe \code{FUN} here~~
 }
   \item{args}{a list of additional parameters defined in the expression besides the independent variable.
@@ -27,10 +27,10 @@ PlotFun(FUN, args = NULL, from = NULL, to = NULL, by = NULL,
   \item{by}{number: increment of the sequence.
 %%     ~~Describe \code{by} here~~
 }
-  \item{xlim, ylim}{NULL or a numeric vector of length 2; if non-NULL it provides the defaults for c(from, to) and, unless add = TRUE, selects the x-limits of the plot - see \code{\link{plot.window}}.
+  \item{xlim, ylim}{\code{NULL} or a numeric vector of length 2; if non-NULL it provides the defaults for \code{c(from, to)} and, unless \code{add=TRUE}, selects the x-limits of the plot - see \code{\link{plot.window}}.
 %%     ~~Describe \code{xlim} here~~
 }
-  \item{polar}{logical. Should polar coordinates be used? Defaults to FALSE.
+  \item{polar}{logical. Should polar coordinates be used? Defaults to \code{FALSE}.
 %%     ~~Describe \code{polar} here~~
 }
   \item{type}{plot type: see \code{\link{plot.default}}
@@ -47,7 +47,7 @@ PlotFun(FUN, args = NULL, from = NULL, to = NULL, by = NULL,
 }
   \item{pch}{plotting 'character', i.e., symbol to use.
 }
-\item{mar}{A numerical vector of the form \code{c(bottom, left, top, right)} which gives the number of lines of margin to be specified on the four sides of the plot. The default is \code{c(1, 1, 1, 1)}.}
+\item{mar}{A numerical vector of the form \code{c(bottom, left, top, right)} which gives the number of lines of margin to be specified on the four sides of the plot. The default is \code{c(3,3,3,3)}.}
 
   \item{add}{logical; if \code{TRUE} add to an already existing plot; if \code{NA} start a new plot taking the defaults for the limits and log-scaling of the x-axis from the previous plot. Taken as \code{FALSE} (with a warning if a different value is supplied) if no graphics device is open.
 }
@@ -59,7 +59,7 @@ PlotFun(FUN, args = NULL, from = NULL, to = NULL, by = NULL,
 This enables as well a parametric equation to be entered straight forward. Parameters of a function can be set separatedly.
 The aspect ratio y/x will be set to 1 by default. (See \code{\link{plot.window}} for details.)
 
-If axes are not set to \code{FALSE} centered axis at a horizontal and vertical position of 0 will be drawn, containing major and minor ticks.
+If the argument \code{axes} (given in the dots) is not set to \code{FALSE} centered axis at a horizontal and vertical position of 0 will be drawn, containing major and minor ticks.
 %%     ~~Describe \code{asp} here~~
 }
 
@@ -73,6 +73,9 @@ If axes are not set to \code{FALSE} centered axis at a horizontal and vertical p
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+# simple quadratic function y = x^2
+PlotFun(x^2 ~ x)
+
 par(mfrow=c(3,4))
 
 # Cartesian leaf

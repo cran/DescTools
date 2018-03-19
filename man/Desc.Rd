@@ -95,7 +95,7 @@ Desc(x, ..., main = NULL, plotit = NULL, wrd = NULL)
   all of them. Default is hence set to 12 most frequent ones (resp. the first ones if \code{ord} is set to \code{"levels"} or \code{"names"}). If for a numeric vector the value is left to its default \code{NULL}, the list of extreme values will be displayed, in cases that x has more than 12 single values and the frequency table else.\cr
   If \code{maxrows} is < 1 it will be interpreted as percentage. In this case just as many rows, as the \code{maxrows\%} most frequent levels will be shown. Say, if maxrows is set to \code{0.8}, then the number of rows is fixed so, that the highest cumulative relative frequency is the first one going beyond 0.8.
 
-  Setting \code{maxrows} to \code{Inf} will unconditionally report all values.
+  Setting \code{maxrows} to \code{Inf} will unconditionally report all values and also produce a plot with type "h" instead of a histogram.
 }
 
 
@@ -312,7 +312,7 @@ for(i in 1:nrow(p))
 tab <- as.table(apply(HairEyeColor, c(1,2), sum))
 tab <- tab[,c("Brown","Hazel","Green","Blue")]
 
-# diplay only absolute values, row and columnwise percentages
+# display only absolute values, row and columnwise percentages
 Desc(tab, row.vars=c(3, 1), rfrq="011", plotit=FALSE)
 
 # do the plot by hand, while setting the colours for the mosaics
@@ -334,6 +334,14 @@ Desc(area ~ driver, d.pizza, plotit=FALSE)
 z <- Desc(BoxCox(d.pizza$temperature, lambda = 1.5))
 plot(z, mar=c(0, 2.1, 4.1, 2.1), args.rug=TRUE, args.hist=list(breaks=50),
      args.dens=list(from=0))
+
+# The default description for count variables can be inappropriate,
+# the density curve does not represent the variable well.
+set.seed(1972)
+x <- rpois(n = 500, lambda = 5)
+Desc(x)
+# but setting maxrows to Inf gives a better plot
+Desc(x, maxrows = Inf)
 
 
 # Output into word document (Windows-specific example) -----------------------

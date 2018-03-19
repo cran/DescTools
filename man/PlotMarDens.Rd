@@ -76,5 +76,7 @@ PlotMarDens( y=d.pizza$temperature, x=d.pizza$delivery_min, grp=d.pizza$area
   , panel.first=list( grid() )
   , main = "temperature ~ delivery_min | area"
 )
+# reset layout
+par(mfrow=c(1,1))
 }
 \keyword{ hplot }

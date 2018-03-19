@@ -56,6 +56,11 @@ extern SEXP pip(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP rkurt(SEXP, SEXP);
 extern SEXP rskew(SEXP, SEXP);
 extern SEXP tbrm(SEXP, SEXP);
+extern SEXP _DescTools_dgompertz_work(SEXP, SEXP, SEXP, SEXP);
+extern SEXP _DescTools_pgompertz_work(SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP _DescTools_check_gompertz(SEXP, SEXP);
+
+
 
 /* .Fortran calls */
 extern void F77_NAME(hoeffd)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
@@ -85,6 +90,9 @@ static const R_CallMethodDef CallEntries[] = {
   {"_DescTools_n_pow_sum",     (DL_FUNC) &_DescTools_n_pow_sum,     1},
   {"_DescTools_top_i",         (DL_FUNC) &_DescTools_top_i,         2},
   {"_DescTools_top_n",         (DL_FUNC) &_DescTools_top_n,         2},
+  {"_DescTools_pgompertz_work", (DL_FUNC) &_DescTools_pgompertz_work, 5},
+  {"_DescTools_dgompertz_work", (DL_FUNC) &_DescTools_dgompertz_work, 4},
+  {"_DescTools_check_gompertz", (DL_FUNC) &_DescTools_check_gompertz, 2},
   {"between_num_",             (DL_FUNC) &between_num_,             3},
   {"between_num_l",            (DL_FUNC) &between_num_l,            3},
   {"between_num_lm",           (DL_FUNC) &between_num_lm,           3},

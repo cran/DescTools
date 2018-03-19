@@ -38,7 +38,8 @@ Rename(x, \dots, gsub = FALSE, fixed = TRUE, warn = TRUE)
 
 \author{Martin Elff <melff@essex.ac.uk>}
 
-\seealso{\code{\link{Recode}} for recoding of a factor (renaming or combining levels)
+\seealso{
+\code{\link{SetNames}}, \code{\link{Recode}} for recoding of a factor (renaming or combining levels)
 }
 
 \examples{

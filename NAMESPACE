@@ -32,7 +32,7 @@ export(
 "Permn","Phi","plot.bagplot","plot.Conf","plot.Lc","plot.Lclist","plot.PostHocTest","PlotACF","PlotArea","PlotBag","PlotBagPairs",
 "PlotBubble","PlotCandlestick","PlotCirc","PlotCorr",
 
-"PlotDot","PlotFaces","PlotFun","PlotGACF","PlotLinesA","PlotMar","PlotMarDens","PlotMatrix","PlotMonth","PlotMultiDens","PlotPar","PlotPolar","PlotPyramid","PlotQQ","ColPicker","PlotTernary","PlotTreemap",
+"PlotDot","PlotFaces","PlotFun","PlotGACF","PlotLinesA","PlotMar","PlotMarDens","PlotMonth","PlotMultiDens","PlotPar","PlotPolar","PlotPyramid","PlotQQ","ColPicker","PlotTernary","PlotTreemap",
 "PlotVenn","PlotViolin","PlotWeb","PoissonCI","PolarGrid","PolToCart","PostHocTest","power.chisq.test","PpAddSlide","PpPlot","PpText","Prec","pRevGumbel","Primes","print.Assocs","print.Conf","print.CorPolychor","print.DunnTest","print.Freq","print.HoeffD","print.ICC","print.mtest","print.PostHocTest",
 "qBenf","qRevGumbel","qRevGumbelExp","Quarter","RadToDeg","rBenf","Recode","Recycle","RelRisk","Rename","reorder.factor",
 "Rev","RgbToCol","RgbToLong","RndPairs","RobScale","Rosenbluth","Rotate","RoundTo","rRevGumbel",
@@ -59,12 +59,17 @@ export(
 "PseudoR2", "MAE","MSE","RMSE","MAPE","NMSE","NMAE", "BrierScore", "Unwhich",
 "Fmt", "as.fmt", "ModSummary", "TMod", "VIF", "StdCoef", "PartialSD", "HosmerLemeshowTest", "Cstat", "GeomTrans",
 "PlotDev","%^%", "TitleRect","BarText","as.CDateFmt", "Phrase", "N", "BootCI", "VonNeumannTest",
-"InsCol","InsRow","ConoverTest","ModelDlg",
+"Append","ConoverTest","ModelDlg",
 
 "%()%","%(]%","%)(%","%)[%","%[)%","%[]%","%](%","%][%","TTestA",
 "DecToBin", "RomanToInt", "TukeyBiweight","PtInPoly",
-"JonckheereTerpstraTest", "AndersonDarlingTest", "BarnardTest","HoeffD","Desc"
-
+"JonckheereTerpstraTest", "AndersonDarlingTest", "BarnardTest","HoeffD","Desc",
+"CountCompCases", "SplitAt",
+"rFrechet","rGumbel","rRevWeibull","rNegWeibull","rGenExtrVal","rGenPareto","rExtrVal","rOrder",
+"dFrechet","dGumbel","dRevWeibull","dNegWeibull","dGenExtrVal","dGenPareto","dExtrVal","dOrder",
+"pFrechet","pGumbel","pRevWeibull","pNegWeibull","pGenExtrVal","pGenPareto","pExtrVal","pOrder",
+"qFrechet","qGumbel","qRevWeibull","qNegWeibull","qGenExtrVal","qGenPareto","qExtrVal",
+"dGompertz","pGompertz","qGompertz","rGompertz"
 )
 
 
@@ -83,7 +88,7 @@ importFrom("boot", "boot", "boot.ci", "corr")
 importFrom("mvtnorm", "qmvt", "pmvnorm")
 
 importFrom("stats", "median", "reorder","AIC", "BIC", "confint", "deviance", "df", "logLik","lm.wfit","profile",
-           "coef", "coefficients", "cov2cor", "df.residual","nobs", "vcov","update")
+           "coef", "coefficients", "cov2cor", "df.residual","nobs", "vcov","update","relevel","rbeta", "rexp", "qexp")
 importFrom("foreign", "read.spss", "read.dta")
 
 importFrom(Rcpp, evalCpp)
@@ -306,6 +311,12 @@ S3method(Median, Freq)
 S3method(Median, default)
 S3method(Median, factor)
 
+S3method(Append, default)
+S3method(Append, data.frame)
+S3method(Append, matrix)
+
+
+S3method(print, CountCompCases)
 
 
 

@@ -32,10 +32,10 @@ TschuprowT(x, y = NULL, \dots)
   \item{y}{NULL (default) or a vector with compatible dimensions to \code{x}. If y is provided, \code{table(x, y, ...)} is calculated.
 }
   \item{conf.level}{confidence level of the interval. This is only implemented for Cramer's V. If set to \code{NA} (which is the       default) no confidence interval will be calculated. \cr
-  See examples for how to compute bootstrap intervals.
+  See examples for calculating bootstrap intervals.
 }
 \item{method}{string defining the method to calculate confidence intervals for Cramer's V. One out of \code{"ncchisq"} (using noncentral chisquare), \code{"ncchisqadj"}, \code{"fisher"} (using fisher z transformation), \code{"fisheradj"} (using fisher z transformation and bias correction). Default is \code{"ncchisq"}.}
-  \item{correct}{logical. This argument only applies for \code{ContCoef} and indicates, whether the Sakoda's adjusted Pearson's C should be returned. Default is \code{FALSE}.
+  \item{correct}{logical. This argument only applies to \code{ContCoef} and indicates, whether the Sakoda's adjusted Pearson's C should be returned. Default is \code{FALSE}.
 }
   \item{\dots}{further arguments are passed to the function \code{\link{table}}, allowing i.e. to set \code{useNA}.
   }

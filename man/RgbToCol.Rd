@@ -5,9 +5,9 @@
 
 \title{Find the Nearest Named R-Color to a Given RGB-Color }
 
-\description{Convert a RGB-color to a named R-Color means looking for a color in the R-palette, which is nearest to the given RGB-color.
-The function uses the minimum of squared distance as proximity measure. \cr
-RgbToLong converts an RGB-color to a long integer in numeric format.
+\description{Converting a RGB-color to a named R-Color means looking for a color in the R-palette, which is nearest to the given RGB-color.
+This function uses the minimum of squared distance (\code{"euclidean"}) or the minimum absolute distance (\code{"manhattan"}) as proximity measure. \cr
+\code{RgbToLong()} converts a RGB-color to a long integer in numeric format. \code{LongToRGB()} does it the other way round.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

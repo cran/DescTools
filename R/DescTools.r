@@ -236,7 +236,7 @@ utils::globalVariables(c("d.units","d.periodic","d.prefix",
                          "day.name","day.abb","wdConst",
                          "fmt", "pal",
                          "hred","hblue","horange","hyellow","hecru","hgreen",
-                         "tarot","cards","roulette"))
+                         "tarot","cards","roulette", "ind"))
 
 
 
@@ -1578,13 +1578,13 @@ StrCountW <- function(x){
 }
 
 
-StrVal <- function(x, paste = FALSE, as.numeric = FALSE){
+StrVal <- function(x, paste = FALSE, as.numeric = FALSE, dec=getOption("OutDec")){
 
   # Problem 20.2.2015: - will not be accepted, when a space is between sign and number
   # not sure if this is really a problem: -> oberserve...
   # StrVal(x="- 2.5", paste = FALSE, as.numeric = FALSE)
 
-  pat <- "[-+.e0-9]*\\d"
+  pat <- paste("[-+", dec, "e0-9]*\\d", sep="")
   gfound <- gregexpr(pattern=pat, text=x)
   vals <- lapply(seq_along(x), function(i){
     found <- gfound[[i]]
@@ -1595,12 +1595,20 @@ StrVal <- function(x, paste = FALSE, as.numeric = FALSE){
 
   if(paste==TRUE) {
     vals <- sapply(vals, paste, collapse="")
-    if(as.numeric==TRUE)
+    if(as.numeric==TRUE){
+      # we should change a given dec to the system decimal point befor casting to numeric
+      if(dec != getOption("OutDec"))
+        vals <- sapply(vals, gsub, pattern=dec, replacement=getOption("OutDec"))
+
       vals <- as.numeric(vals)
+    }
   } else {
-    if(as.numeric==TRUE)
+    if(as.numeric==TRUE){
+      # we should change a given dec to the system decimal point befor casting to numeric
+      if(dec != getOption("OutDec"))
+        vals <- sapply(vals, gsub, pattern=dec, replacement=getOption("OutDec"))
       vals <- sapply(vals, as.numeric)
-    else
+    } else
       vals <- sapply(vals, as.character)
   }
 
@@ -1864,11 +1872,15 @@ TextToTable <- function(x, dimnames = NULL, ...){
 }
 
 
-Recode <- function(x, ..., elselevel=NA, use.empty=FALSE){
+Recode <- function(x, ..., elselevel=NA, use.empty=FALSE, num=FALSE){
 
   newlevels <- list(...)
 
   if( sum(duplicated(unlist(newlevels))) > 0) stop ("newlevels contain non unique values!")
+
+  # convert numeric values to according levels if all arguments are passed as numerics
+  if(all(is.numeric(unlist(newlevels))))
+    newlevels <- lapply(newlevels, function(i) levels(x)[i])
 
   if(is.null(elselevel)) { # leave elselevels as they are
     elselevels <- setdiff(levels(x), unlist(newlevels))
@@ -1883,6 +1895,10 @@ Recode <- function(x, ..., elselevel=NA, use.empty=FALSE){
   }
   levels(x) <- newlevels
   if(!use.empty) x <- factor(x)  # delete potentially empty levels
+
+  if(num)
+    x <- as.numeric(as.character(x))
+
   return(x)
 }
 
@@ -4549,6 +4565,9 @@ Format.default <- function(x, digits = NULL, sci = NULL
 
   } else {  # format else   ********************************************
 
+    if(fmt != "")
+      warning(gettextf("Non interpretable fmt code will be ignored.", fmt))
+
     if(all(is.na(sci))) {
       # use is.na(sci) to inhibit scientific notation
       r <- formatC(x, digits = digits, width = width, format = "f",
@@ -5200,140 +5219,6 @@ SampleTwins <- function (x, stratanames = NULL, twins,
 
 
 
-
-
-## stats: distributions  ---------------------------------
-
-dBenf <- function(x, ndigits = 1, log = FALSE) {
-  if (!IsNumeric(ndigits, length.arg = 1,
-                  positive = TRUE, integer.valued = TRUE) ||
-        ndigits > 2)
-    stop("argument 'ndigits' must be 1 or 2")
-  lowerlimit <- ifelse(ndigits == 1, 1, 10)
-  upperlimit <- ifelse(ndigits == 1, 9, 99)
-
-  if (!is.logical(log.arg <- log) || length(log) != 1)
-    stop("bad input for argument 'log'")
-  rm(log)
-
-
-  ans <- x * NA
-  indexTF <- is.finite(x) & (x >= lowerlimit)
-
-  ans[indexTF] <- log10(1 + 1/x[indexTF])
-  ans[!is.na(x) & !is.nan(x) &
-        ((x < lowerlimit) |
-           (x > upperlimit) |
-           (x != round(x)))] <- 0.0
-  if (log.arg) log(ans) else ans
-}
-
-
-rBenf <- function(n, ndigits = 1) {
-  if (!IsNumeric(ndigits, length.arg = 1,
-                  positive = TRUE, integer.valued = TRUE) ||
-        ndigits > 2)
-    stop("argument 'ndigits' must be 1 or 2")
-  lowerlimit <- ifelse(ndigits == 1, 1, 10)
-  upperlimit <- ifelse(ndigits == 1, 9, 99)
-  use.n <- if ((length.n <- length(n)) > 1) length.n else
-    if (!IsNumeric(n, integer.valued = TRUE,
-                    length.arg = 1, positive = TRUE))
-      stop("bad input for argument 'n'") else n
-  myrunif <- runif(use.n)
-
-  ans <- rep(lowerlimit, length = use.n)
-  for (ii in (lowerlimit+1):upperlimit) {
-    indexTF <- (pBenf(ii-1, ndigits = ndigits) < myrunif) &
-      (myrunif <= pBenf(ii, ndigits = ndigits))
-    ans[indexTF] <- ii
-  }
-  ans
-}
-
-
-pBenf <- function(q, ndigits = 1, log.p = FALSE) {
-  if (!IsNumeric(ndigits, length.arg = 1,
-                  positive = TRUE, integer.valued = TRUE) ||
-        ndigits > 2)
-    stop("argument 'ndigits' must be 1 or 2")
-  lowerlimit <- ifelse(ndigits == 1, 1, 10)
-  upperlimit <- ifelse(ndigits == 1, 9, 99)
-
-  ans <- q * NA
-  floorq <- floor(q)
-  indexTF <- is.finite(q) & (floorq >= lowerlimit)
-  ans[indexTF] <- log10(1 + floorq[indexTF]) -
-    ifelse(ndigits == 1, 0, 1)
-  ans[!is.na(q) & !is.nan(q) & (q >= upperlimit)] <- 1
-  ans[!is.na(q) & !is.nan(q) & (q <  lowerlimit)] <- 0
-  if (log.p) log(ans) else ans
-}
-
-
-
-
-qBenf <- function(p, ndigits = 1) {
-  if (!IsNumeric(ndigits, length.arg = 1,
-                  positive = TRUE, integer.valued = TRUE) ||
-        ndigits > 2)
-    stop("argument 'ndigits' must be 1 or 2")
-  lowerlimit <- ifelse(ndigits == 1, 1, 10)
-  upperlimit <- ifelse(ndigits == 1, 9, 99)
-  bad <- !is.na(p) & !is.nan(p) & ((p < 0) | (p > 1))
-  if (any(bad))
-    stop("bad input for argument 'p'")
-
-  ans <- rep(lowerlimit, length = length(p))
-  for (ii in (lowerlimit+1):upperlimit) {
-    indexTF <- is.finite(p) &
-      (pBenf(ii-1, ndigits = ndigits) < p) &
-      (p <= pBenf(ii, ndigits = ndigits))
-    ans[indexTF] <- ii
-  }
-
-  ans[ is.na(p) |  is.nan(p)] <- NA
-  ans[!is.na(p) & !is.nan(p) & (p == 0)] <- lowerlimit
-  ans[!is.na(p) & !is.nan(p) & (p == 1)] <- upperlimit
-  ans
-}
-
-
-
-dRevGumbel <- function (x, location = 0, scale = 1) {
-  # from VGAM  -- if (is.null(x)) FALSE else ifelse(is.na(x), FALSE, x)
-  if (!IsNumeric(scale, positive=TRUE))
-      stop("\"scale\" must be positive")
-  temp = exp((x - location)/scale)
-  temp * exp(-temp)/scale
-}
-
-pRevGumbel <- function (q, location = 0, scale = 1) {
-
-  if (!IsNumeric(scale, positive=TRUE))
-    stop("\"scale\" must be positive")
-  1-exp(-exp((q - location)/scale))
-}
-
-qRevGumbel <- function (p, location = 0, scale = 1)
-{
-  if (!IsNumeric(scale, positive=TRUE))
-    stop("\"scale\" must be positive")
-  location + scale * log(-log(p))
-}
-
-qRevGumbelExp <- function (p) exp(qRevGumbel(p))
-
-rRevGumbel <- function (n, location = 0, scale = 1)
-{
-  if (!IsNumeric(scale, positive=TRUE, integer.valued=TRUE))
-    stop("bad input for argument \"n\"")
-  if (!IsNumeric(scale, positive=TRUE))
-    stop("\"scale\" must be positive")
-  location + scale * log(-log(runif(n)))
-}
-
-
 RndPairs <- function(n, r, rdist1 = rnorm(n=n, mean = 0, sd = 1), rdist2 = rnorm(n=n, mean = 0, sd = 1)){
 
   # create correlated random pairs
@@ -5913,38 +5798,117 @@ SetNames <- function (x, ...) {
 
 
 
-InsRow <- function(m, x, i, row.names=NULL){
-
-  nr <- dim(m)[1]
-  x <- matrix(x, ncol=ncol(m))
-  if(!is.null(row.names))
-    row.names(x) <- row.names
-  if(i==1)
-    res <- rbind(x, m)
-  else if(i>nr)
-    res <- rbind(m, x)
-  else
-    res <- rbind(m[1:(i-1),], x, m[i:nr,])
-  colnames(res) <- colnames(m)
-  res
+Append <- function(x, values, after = NULL, ... ){
+  UseMethod("Append")
 }
 
 
-InsCol <- function(m, x, i, col.names=NULL){
-
-  nc <- dim(m)[2]
-  x <- matrix(x, nrow=nrow(m))
-  if(!is.null(col.names))
-    colnames(x) <- col.names
-  if(i==1)
-    res <- cbind(x, m)
-  else if(i > nc)
-    res <- cbind(m, x)
-  else
-    res <- cbind(m[,1:(i-1)], x, m[,i:nc])
-  rownames(res) <- rownames(m)
-  res
+Append.default <- function(x, values, after = NULL, ...){
+  if(is.null(after))
+    after <- length(x)
+  append(x, values, after)
 }
+
+
+Append.matrix <- function(x, values, after = NULL, rows=FALSE, names=NULL, ...){
+
+  if(rows){
+    nr <- dim(x)[1]
+    if(is.null(after)) after <- nr
+
+    values <- matrix(values, ncol=ncol(x))
+    if(!is.null(names)){
+      err <- try(row.names(x) <- names, silent = TRUE)
+      if(class(err) == "try-error")
+        warning("Could not set rownames.")
+    }
+    if(!after)
+      res <- rbind(values, x)
+    else
+    if(after >= nr)
+      res <- rbind(x, values)
+    else
+      res <- rbind(x[1L:after,, drop=FALSE], values, x[(after+1L):nr,, drop=FALSE])
+    colnames(res) <- colnames(x)
+
+  } else {
+
+    nc <- dim(x)[2]
+    if(missing(after)) after <- nc
+
+    values <- matrix(values, nrow=nrow(x))
+    if(!is.null(names))
+      colnames(values) <- names
+    if(!after)
+      res <- cbind(values, x)
+    else
+    if(after >= nc)
+      res <- cbind(x, values)
+    else
+      res <- cbind(x[, 1L:after, drop=FALSE], values, x[, (after+1L):nc, drop=FALSE])
+    rownames(res) <- rownames(x)
+
+  }
+
+  return(res)
+
+}
+
+
+Append.data.frame <- function(x, values, after = NULL, names=NULL, ...){
+  as.data.frame(append(x, SetNames(list(values), names=names), after = after))
+}
+
+
+# InsRow <- function(m, x, i, row.names=NULL){
+#
+#   nr <- dim(m)[1]
+#   if(missing(i)) i <- nr+1
+#
+#   x <- matrix(x, ncol=ncol(m))
+#   if(!is.null(row.names))
+#     row.names(x) <- row.names
+#   if(i==1)
+#     res <- rbind(x, m)
+#   else if(i>nr)
+#     res <- rbind(m, x)
+#   else
+#     res <- rbind(m[1:(i-1),, drop=FALSE], x, m[i:nr,, drop=FALSE])
+#   colnames(res) <- colnames(m)
+#   res
+# }
+#
+#
+#
+#
+# InsCol <- function(x, values, i, names=NULL, ...) {
+#   UseMethod("InsCol")
+# }
+#
+#
+# InsCol.data.frame <- function(x, values, i, names=NULL, ...) {
+#   as.data.frame(append(x, SetNames(list(values), names=names), after = i+1))
+# }
+#
+#
+# InsCol.default <- function(x, values, i, names=NULL, ...){
+#
+#   nc <- dim(x)[2]
+#   if(missing(i)) i <- nc+1
+#
+#   values <- matrix(values, nrow=nrow(x))
+#   if(!is.null(names))
+#     colnames(values) <- names
+#   if(i==1)
+#     res <- cbind(values, x)
+#   else if(i > nc)
+#     res <- cbind(x, values)
+#   else
+#     res <- cbind(x[,1:(i-1), drop=FALSE], values, x[,i:nc, drop=FALSE])
+#   rownames(res) <- rownames(x)
+#   res
+# }
+#
 
 
 
@@ -5952,9 +5916,16 @@ Rename <- function(x, ..., gsub=FALSE, fixed=TRUE, warn=TRUE){
 
   subst <- c(...)
 
-  # if ... do not have names use those from x, assigned by sequence
+  # Original, will not work if neither ... nor x has names
+  # replaced by 0.99.24
+
+  # # if ... do not have names use those from x, assigned by sequence
+  # if(is.null(names(subst)))
+  #   names(subst) <- names(x)[1:length(subst)]
+
+  # if ... do not have names use the sequence
   if(is.null(names(subst)))
-    names(subst) <- names(x)[1:length(subst)]
+    names(x)[1:length(subst)] <- subst
 
 
   if(gsub){
@@ -6405,7 +6376,19 @@ SelectVarDlg.numeric <- function(x, ...) {
 }
 
 
-SelectVarDlg.factor <- function(x, ...) { SelectVarDlg.default( x = levels(x), ...) }
+SelectVarDlg.factor <- function(x, ...) {
+
+  sel <- SelectVarDlg.default( x = levels(x), ...)
+  if(sel!="")
+    txt <- paste(deparse(substitute(x)), " %in% ",
+                 sel, sep="", collapse="")
+  else
+    txt <- ""
+
+  .ToClipboard(txt)
+
+  invisible(txt)
+}
 
 
 SelectVarDlg.data.frame <- function(x, ...) {
@@ -6847,6 +6830,46 @@ ColorDlg <- function() {
 }
 
 
+
+
+# Identify points in a plot using a formula.
+# http://www.rforge.net/NCStats/files/
+# Author: Derek Ogle <dogle@northland.edu>
+
+identify.formula <- function(formula, data, subset, na.action, ...) {
+  #   mf <- model.frame(x, data)
+  #   x <- mf[,2]
+  #   y <- mf[,1]
+  #   identify(x, y, ...)
+
+  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
+                                                                  "term.labels")) != 1L))
+    stop("'formula' missing or incorrect")
+
+  # if na.action is set to na.omit in the global options we would omit NAs
+  # when building the model.frame and thus return a wrong index on a
+  # data.frame containing NAs.
+  # Therefore we overwrite the default value to in general return
+  # plausible values for a plot environment.
+  if(missing(na.action)){
+    opt <- options(na.action="na.pass")
+    on.exit(options(opt))
+  }
+
+  m <- match.call(expand.dots = FALSE)
+  if (is.matrix(eval(m$data, parent.frame())))
+    m$data <- as.data.frame(data)
+  m[[1L]] <- quote(stats::model.frame)
+  m$... <- NULL
+  mf <- eval(m, parent.frame())
+  response <- attr(attr(mf, "terms"), "response")
+
+  identify(x=mf[[-response]], y=mf[[response]], ...)
+
+}
+
+
+
 IdentifyA <- function(x, ...){
   UseMethod("IdentifyA")
 }
@@ -6870,7 +6893,7 @@ IdentifyA.formula <- function(formula, data, subset, poly = FALSE, ...){
   y <- setNames(mf[[response]], vname[1])
 
 
-  IdentifyA(x=x, y=y, ...)
+  IdentifyA(x=x, y=y, poly=poly, ...)
 
 }
 
@@ -6933,33 +6956,6 @@ PtInPoly <- function(pnts, poly.pnts)  {
 
 
 
-# Identify points in a plot using a formula.
-# http://www.rforge.net/NCStats/files/
-# Author: Derek Ogle <dogle@northland.edu>
-
-identify.formula <- function(formula, data, subset, na.action, ...) {
-#   mf <- model.frame(x, data)
-#   x <- mf[,2]
-#   y <- mf[,1]
-#   identify(x, y, ...)
-
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-                                                                  "term.labels")) != 1L))
-    stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- quote(stats::model.frame)
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  response <- attr(attr(mf, "terms"), "response")
-
-  identify(x=mf[[-response]], y=mf[[response]], ...)
-
-}
-
-
-
 # experimental: formula interface for split
 
 split.formula <- function(x, f, drop = FALSE, data = NULL, ...) {
@@ -6969,6 +6965,20 @@ split.formula <- function(x, f, drop = FALSE, data = NULL, ...) {
   split(x, f, drop=drop, ...)
 }
 
+
+
+SplitAt <- function(x, pos) {
+  # splits a vector at given positions
+
+  # source: https://stackoverflow.com/questions/16357962/r-split-numeric-vector-at-position
+  # author: Joshua Ulrich
+  # unname(split(x, findInterval(x, pos)))
+
+  # better from flodel
+  pos <- c(1L, pos, length(x) + 1L)
+  Map(function(x, i, j) x[i:j], list(x), head(pos, -1L), tail(pos, -1L) - 1L)
+
+}
 
 
 
@@ -9528,7 +9538,18 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
 #                        xlim = args.hist1$xlim, col = getOption("col1", hblue), lwd = 2,
 #                        xlab = xlab, yaxt = "n", ylab = "", verticals = TRUE,
 #                        do.points = FALSE, cex.axis = cex.axis)
-    args.ecdf1 <- list(x = x, main = NA, breaks={if(length(x)>1000) 1000 else NULL}, ylim=c(0,1),
+
+    # 13.1.2018 Andri:
+    # if there are many datapoints (n > 1e5) well distributed over the x range, a histogram is significantly
+    # faster, than plot.ecdf, which will break down in performance
+    # however, if there are only few unique values, the histogram will not be correct and might result in
+    # gross deviations.
+    # example: PlotECDF(rep(-40, 2001), breaks = 1000)
+
+    # we provisionally use the number of classes length(x.hist$mids) as proxy for good distribution
+    # not sure, how robust this is...
+
+    args.ecdf1 <- list(x = x, main = NA, breaks={if(length(x)>1000 & length(x.hist$mids) > 10) 1000 else NULL}, ylim=c(0,1),
                        xlim = args.hist1$xlim, col = Pal()[1], lwd = 2,
                        xlab = "", yaxt = "n", ylab = "", cex.axis = cex.axis,
                        frame.plot = FALSE)
@@ -9537,14 +9558,6 @@ PlotFdist <- function (x, main = deparse(substitute(x)), xlab = ""
     }
 
     DoCall("PlotECDF", args.ecdf1)
-    #     DoCall("plot.ecdf", args.ecdf1)
-#     axis(side = 2, at = seq(0, 1, 0.25), labels = gsub(pattern = "0\\.",
-#                                                        replacement = " \\.", format(seq(0, 1, 0.25), 2)),
-#          las = 1, xaxs = "e", cex.axis = cex.axis)
-#     abline(h = c(0.25, 0.5, 0.75), col = "grey", lty = "dotted")
-#     grid(ny = NA)
-#     points(x=range(x), y=c(0,1), col=args.ecdf1$col, pch=3, cex=2)
-
 
     # plot special distribution ecdf curve
     if (add.pcurve) {
@@ -10403,7 +10416,7 @@ PlotFun <- function(FUN, args=NULL, from=NULL, to=NULL, by=NULL, xlim=NULL,
   # see also Hmisc::minor.tick
 
   if(is.null(mar))
-    Mar(1,1,1,1)
+    Mar(3,3,3,3)
   else
     par(mar=mar)
 
@@ -10529,35 +10542,82 @@ PlotFun <- function(FUN, args=NULL, from=NULL, to=NULL, by=NULL, xlim=NULL,
 
 
 
-Shade <- function(FUN, col=par("fg"), breaks, density=10, step=0.01, ...) {
+# Shade <- function(FUN, col=par("fg"), breaks, density=10, step=0.01, ...) {
+#
+#   # but works as well with function(x), but it doesn't
+#   # Shade(FUN=function(x) dt(x, df=5), xlim=c(qt(0.975, df=5), 6), col="red")
+#
+#   if(is.function(FUN)) {
+#     #  if FUN is a function, then save it under new name and
+#     # overwrite function name in FUN, which has to be character
+#     fct <- FUN
+#     FUN <- "fct"
+#     # FUN <- gettextf("%s(x)", FUN)
+#     FUN <- gettextf("function(x) %s", FUN)
+#   }
+#
+#   .Shade <- function(FUN, col, from, to, density, step, ...) {
+#
+#     x <- seq(from, to, by = step)
+#     xval <- c(from, x, to)
+#
+#     # Calculates the function for given xval
+#     yval <- c(0, eval(parse(text = FUN)), 0)
+#
+#     polygon(xval, yval, col=col, density=density, ...)
+#   }
+#
+#   pars <- Recycle(from=head(breaks, -1), to=tail(breaks, -1), col=col, density=density)
+#
+#   for(i in 1:attr(pars, "maxdim"))
+#     .Shade(FUN, pars$col[i], pars$from[i], pars$to[i], density=pars$density[i], step=step, ...)
+#
+# }
+#
 
-  # but works as well with function(x), but it doesn't
-  # Shade(FUN=function(x) dt(x, df=5), xlim=c(qt(0.975, df=5), 6), col="red")
+# New version DescTools 0.99.24
+# using the same logic for the function as curve()
 
-  if(is.function(FUN)) {
-    #  if FUN is a function, then save it under new name and
-    # overwrite function name in FUN, which has to be character
-    fct <- FUN
-    FUN <- "fct"
-    # FUN <- gettextf("%s(x)", FUN)
-    FUN <- gettextf("function(x) %s", FUN)
+Shade <- function(expr, col=par("fg"), breaks, density=10, n=101, xname = "x", ...) {
+
+  sexpr <- substitute(expr)
+
+  if (is.name(sexpr)) {
+    expr <- call(as.character(sexpr), as.name(xname))
+  } else {
+    if (!((is.call(sexpr) || is.expression(sexpr)) && xname %in%
+          all.vars(sexpr)))
+      stop(gettextf("'expr' must be a function, or a call or an expression containing '%s'",
+                    xname), domain = NA)
+    expr <- sexpr
   }
 
-  .Shade <- function(FUN, col, from, to, density, step, ...) {
 
-    x <- seq(from, to, by = step)
+  .Shade <- function (col, from = NULL, to = NULL, density, n = 101, ...) {
+
+    x <- seq(from, to, length.out=n)
     xval <- c(from, x, to)
 
+    ll <- list(x = x)
+    names(ll) <- xname
     # Calculates the function for given xval
-    yval <- c(0, eval(parse(text = FUN)), 0)
+    yval <- c(0, eval(expr, envir = ll, enclos = parent.frame()), 0)
+    if (length(yval) != length(xval))
+      stop("'expr' did not evaluate to an object of length 'n'")
 
     polygon(xval, yval, col=col, density=density, ...)
+
+    invisible(list(x = xval, y = yval))
+
   }
 
   pars <- Recycle(from=head(breaks, -1), to=tail(breaks, -1), col=col, density=density)
 
+  lst <- list()
   for(i in 1:attr(pars, "maxdim"))
-    .Shade(FUN, pars$col[i], pars$from[i], pars$to[i], density=pars$density[i], step=step, ...)
+    lst[[i]] <- .Shade(pars$col[i], pars$from[i], pars$to[i], density=pars$density[i], n=n, ...)
+
+  invisible(lst)
 
 }
 
@@ -10649,7 +10709,7 @@ PlotPyramid <- function(lx, rx = NA, ylab = "",
 PlotCorr <- function(x, cols = colorRampPalette(c(Pal()[2], "white", Pal()[1]), space = "rgb")(20)
   , breaks = seq(-1, 1, length = length(cols)+1), border="grey", lwd=1
   , args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"), cex.axis = 0.8, las = 2
-  , mar = c(3,8,8,8), mincor=0, ...){
+  , mar = c(3,8,8,8), mincor=0, main="", ...){
 
   # example:
   # m <- cor(d.pizza[,WhichNumerics(d.pizza)][,1:5], use="pairwise.complete.obs")
@@ -10693,6 +10753,8 @@ PlotCorr <- function(x, cols = colorRampPalette(c(Pal()[2], "white", Pal()[1]), 
 
   if(!is.null(DescToolsOptions("stamp")))
     Stamp()
+
+  if(main!="") title(main=main)
 
 }
 
@@ -10883,7 +10945,9 @@ PlotPolar <- function(r, theta = NULL, type="p"
   on.exit(dev.flush())
 
   # definition follows plot.default()
-  rlim <- if (is.null(rlim)) max(abs(r[is.finite(r)]))*1.12
+  if (is.null(rlim))
+    rlim <- max(abs(r[is.finite(r)]))*1.12
+
   if(!add){
     par(mar = mar, pty = "s", xpd=TRUE)
     plot(x=c(-rlim, rlim), y=c(-rlim, rlim),
@@ -11221,6 +11285,51 @@ PlotVenn <- function (x, col = "transparent", plotit = TRUE, labels = NULL) {
 #
 
 
+
+
+CountCompCases <- function(x){
+  # x is a data.frame
+
+
+  # library(microbenchmark)
+  # microbenchmark(
+  #   comp = sum(complete.cases(d.nps[,img])),
+  #   na.omit = nrow(na.omit(d.nps[,img]))
+  # )
+
+  n <- nrow(x)
+  cc <- sum(complete.cases(x))
+
+  z <- numeric(ncol(x))
+  m <- numeric(ncol(x))
+  for(i in 1:ncol(x)){
+    z[i] <- sum(complete.cases(x[,-i]))
+    m[i] <- sum(is.na(x[,i]))
+  }
+
+  res <- list(
+    n=n, cc=cc, tab=data.frame(vname=colnames(x), nas=m, nas_p=m/n, cifnot=z, cifnot_p=z/n)
+  )
+
+  class(res) <- "CountCompCases"
+  res
+
+}
+
+
+print.CountCompCases <- function(x, digits=1, ...){
+
+  cat(gettextf("\nTotal rows:      %s\nComplete Cases:  %s (%s)\n\n", x$n, x$cc,
+               Format(x$cc/x$n, fmt="%", digits=digits)))
+  x$tab$nas_p <- Format(x$tab$nas_p, fmt="%", digits=digits)
+  x$tab$cifnot_p <- Format(x$tab$cifnot_p, fmt="%", digits=digits)
+
+  print(x$tab, print.gap = 2)
+  cat("\n")
+}
+
+
+
 PlotMiss <- function(x, col = hred, bg=SetAlpha(hecru, 0.3), clust=FALSE,
                      main = NULL, ...){
 
@@ -11240,6 +11349,7 @@ PlotMiss <- function(x, col = hred, bg=SetAlpha(hecru, 0.3), clust=FALSE,
   axis(side = 1)
 
   missingIndex <- as.matrix(is.na(x))
+  miss <- apply(missingIndex, 2, sum)
 
   if(clust){
     orderIndex <- order.dendrogram(as.dendrogram(hclust(dist(missingIndex * 1), method = "mcquitty")))
@@ -11255,15 +11365,9 @@ PlotMiss <- function(x, col = hred, bg=SetAlpha(hecru, 0.3), clust=FALSE,
       rect(xleft=xl, xright=xl+1, ybottom=i-1, ytop=i, col=col, border=NA)
   })
 
-  # for(i in 1:n){
-  #   z <- x[, i]
-  #   if(sum(is.na(z)) > 0)
-  #     rect(xleft=which(is.na(z)), xright=which(is.na(z))+1, ybottom=i-1, ytop=i, col = col, border=NA)
-  # }
-
   abline(h=1:ncol(x), col="white")
   text(x = -0.03 * nrow(x), y = (1:n)-0.5, labels = colnames(x), las=1, adj = 1)
-  text(x = nrow(x) * 1.04, y = (1:n)-0.5, labels = sapply(x, function(y) sum(is.na(y))), las=1, adj=0)
+  text(x = nrow(x) * 1.04, y = (1:n)-0.5, labels = gettextf("%s (%s)", miss, Format(miss/nrow(missingIndex), fmt="%", digits=1)), las=1, adj=0)
 
   if(!is.null(DescToolsOptions("stamp")))
     Stamp()
@@ -11641,196 +11745,197 @@ PlotCandlestick <-  function(x, y, xlim = NULL, ylim = NULL, col = c("springgree
 ###
 
 ## plots: PlotMatrix ====
+# old function not worth havin here
 
-
-PlotMatrix <- function(x, y=NULL, data=NULL, panel=l.panel,
-         nrows=0, ncols=nrows, save=TRUE, robrange.=FALSE, range.=NULL,
-         pch=NULL, col=1, reference=0, ltyref=3,
-         log="", xaxs="r", yaxs="r", xaxmar=NULL, yaxmar=NULL,
-         vnames=NULL, main='', cex.points=NA, cex.lab=0.7, cex.text=1.3,
-         cex.title=1,
-         bty="o", oma=NULL, ...) {
-
-# Purpose:    pairs  with different plotting characters, marks and/or colors
-#             showing submatrices of the full scatterplot matrix
-#             possibly on several pages
-# ******************************************************************************
-# Author: Werner Stahel, Date: 23 Jul 93; minor bug-fix+comments:
-  # M.Maechler
-
-  is.formula <- function(object) length(class(object))>0 && class(object)=="formula"
-
-
-  l.panel <- function(x,y,indx,indy,pch=1,col=1,cex=cex.points,...) {
-    if (is.character(pch)) text(x,y,pch,col=col,cex=cex) else
-    points(x,y,pch=pch,col=col,cex=cex,...)
-  }
-  oldpar <- par(c("mfrow","mar","cex","oma","mgp"))
-  on.exit(par(oldpar))
-# **************** preparations **************
-# data
-  if (is.formula(x))  {
-    if (length(x)==2)
-    x <- model.frame(x,data, na.action=NULL)  else {
-      ld <- model.frame(x[c(1,3)],data, na.action=NULL)
-      ld <- cbind(ld, model.frame(x[1:2],data, na.action=NULL))
-      x <- ld
-    }
-  }
-  if (is.data.frame(x)) {
-    for (jj in 1:length(x)) x[[jj]] <- as.numeric(x[[jj]])
-    x <- as.matrix(x)
-  } else x <- cbind(x)
-#  stop("!PlotMatrix! first argument must either be a formula or a data.frame or matrix")
-  nv1 <- dim(x)[2]
-  lv1 <- lv2 <- 0
-  if (is.null(y)) {
-    ldata <- x
-    if (save) { nv1 <- nv1-1; lv2 <- 1 }
-    nv2 <- nv1
-  } else { # cbind y to data for easier preparations
-    save <- FALSE
-    if (is.formula(y))  {
-      ld <- model.frame(x[c(1,3)],data, na.action=NULL)
-    if (length(x)>2)
-      ld <- cbind(ld, model.frame(x[1:2],data, na.action=NULL))
-    x <- ld
-  }
-    if (is.formula(y)) {
-      if (length(y)==2)
-        y <- model.frame(y,data, na.action=NULL)  else {
-          ld <- model.frame(y[c(1,3)],data, na.action=NULL)
-          ld <- cbind(ld, model.frame(y[1:2],data, na.action=NULL))
-          y <- ld
-        }
-    }
-    if (is.data.frame(y)) {
-      for (jj in 1:length(y)) y[[jj]] <- as.numeric(y[[jj]])
-      y <- as.matrix(y)
-    }
-    ldata <- cbind(x, as.matrix(y))
-    nv2 <- ncol(ldata)-nv1 ; lv2 <- nv1 }
-  nvv <- ncol(ldata)
-  tnr <- nrow(ldata)
-# variable labels
-  if (missing(vnames)) vnames <- dimnames(ldata)[[2]]
-  if (is.null(vnames)) vnames <- paste("V",1:nvv)
-# plotting characters
-  if (length(pch)==0) pch <- 1
-# range
-  rg <- matrix(nrow=2,ncol=nvv,dimnames=list(c("min","max"),vnames))
-  if(is.matrix(range.)) {
-    if (is.null(colnames(range.))) {
-      if (ncol(range)==ncol(rg)) rg[,] <- range.  else
-      warning('argument  range.  not suitable. ignored')
-    } else {
-      lj <- match(colnames(range.),vnames)
-      if (any(is.na(lj))) {
-        warning('variables', colnames(range.)[is.na(lj)],'not found')
-        if (any(!is.na(lj))) rg[,lj[!is.na(lj)]] <- range.[,!is.na(lj)]
-      }
-    }
-  }
-  else
-    if (length(range.)==2&&is.numeric(range.)) rg[,] <- matrix(range.,2,nvv)
-
-  lna <- apply(is.na(rg),2, any)
-  if (any(lna))
-    rg[,lna] <- apply(ldata[,lna,drop=FALSE],2,
-      Range, robust=robrange., na.rm=TRUE, finite=TRUE)
-  colnames(rg) <- vnames
-# reference lines
-  tjref <- (length(reference)>0)&&!(is.logical(reference)&&!reference)
-  if (tjref) {
-    if(length(reference)==1) lref <- rep(reference,length=nvv) else {
-      lref <- rep(NA,nvv)
-      lref[match(names(reference),vnames)] <- reference
-    }
-    names(lref) <- vnames
-  }
-# plot
-  jmain <- !is.null(main)&&main!=""
-  lpin <- par("pin")
-  lnm <- if (lpin[1]>lpin[2]) {
-    if (nv1==6 && nv2==6) c(6,6) else c(5,6) } else c(8,5)
-  if (is.na(nrows)||nrows<1) nrows <- ceiling(nv1/((nv1-1)%/%lnm[1]+1))
-  if (is.na(ncols)||ncols<1) ncols <- ceiling(nv2/((nv2-1)%/%lnm[2]+1))
-  if (is.null(xaxmar)) xaxmar <- 1+(nv1*nv2>1)
-  if (any(is.na(xaxmar))) xaxmar <- 1+(nv1*nv2>1)
-  xaxmar <- ifelse(xaxmar>1,3,1)
-  if (is.null(yaxmar)) yaxmar <- 2+(nv1*nv2>1)
-  if (any(is.na(yaxmar))) yaxmar <- 2+(nv1*nv2>1)
-  yaxmar <- ifelse(yaxmar>2,4,2)
-  if (length(oma)!=4)
-    oma <- c(2+(xaxmar==1), 2+(yaxmar==2),
-             1.5+(xaxmar==3)+cex.title*2*jmain,
-             2+(yaxmar==4))
-#    oma <- 2 + c(0,0,!is.null(main)&&main!="",1)
-  par(mfrow=c(nrows,ncols))
-##-   if (!is.na(cex)) par(cex=cex)
-##-   cex <- par("cex")
-##-   cexl <- cex*cexlab
-##-   cext <- cex*cextext
-  par(oma=oma*cex.lab, mar=rep(0.2,4), mgp=cex.lab*c(1,0.5,0))
-  if (is.na(cex.points)) cex.points <- max(0.2,min(1,1.5-0.2*log(tnr)))
 #
-  # log
-  if (length(grep("x",log))>0) ldata[ldata[,1:nv1]<=0,1:nv1] <- NA
-  if (length(grep("y",log))>0) ldata[ldata[,lv2+1:nv2]<=0,lv2+1:nv2] <- NA
-  npgr <- ceiling(nv2/nrows)
-  npgc <- ceiling(nv1/ncols)
-# ******************** plots **********************
-  for (ipgr in 1:npgr) {
-    lr <- (ipgr-1)*nrows
-  for (ipgc in 1:npgc) {
-    lc <- (ipgc-1)*ncols
-    if (save&&((lr+nrows)<=lc)) break
-  for (jr in 1:nrows) { #-- plot row [j]
-    jd2 <- lr+jr
-    j2 <- lv2 + jd2
-    if (jd2<=nv2)  v2 <- ldata[,j2]
-    for (jc in 1:ncols) { #-- plot column  [j2-lv2] = 1:nv2
-      jd1 <- lc+jc
-      j1 <- lv1 + jd1
-    if (jd2<=nv2 & jd1<=nv1) {
-      v1 <- ldata[,j1]
-      plot(v1,v2, type="n", xlab="", ylab="", axes=FALSE,
-           xlim <- rg[,j1], ylim <- rg[,j2],
-           xaxs=xaxs, yaxs=yaxs, log=log, cex=cex.points)
-      usr <- par("usr")
-      if (jr==nrows||jd2==nv2) {
-        if (xaxmar==1) axis(1)
-        mtext(vnames[j1], side=1, line=(0.5+1.2*(xaxmar==1))*cex.lab,
-              cex=cex.lab, at=mean(usr[1:2]))
-      }
-      if (jc==1) {
-        if (yaxmar==2) axis(2)
-        mtext(vnames[j2], side=2, line=(0.5+1.2*(yaxmar==2))*cex.lab,
-              cex=cex.lab, at=mean(usr[3:4]))
-      }
-      if (jr==1&&xaxmar==3) axis(3,xpd=TRUE)
-      if (jc==ncols||jd1==nv1) if (yaxmar==4) axis(4,xpd=TRUE)
-      box(bty=bty)
-      if (any(v1!=v2,na.rm=TRUE)) { # not diagonal
-        panel(v1,v2,jd1,jd2, pch, col, ...)
-        if (tjref) abline(h=lref[j1],v=lref[j2],lty=ltyref)
-      }
-      else { uu <- par("usr") # diagonal: print variable name
-             text(mean(uu[1:2]),mean(uu[3:4]), vnames[j1], cex=cex.text) }
-    }
-      else frame()
-    }
-  }
-  if (jmain) mtext(main,3,oma[3]*0.9-2*cex.title,outer=TRUE,cex=cex.title)
-##-   stamp(sure=FALSE,line=par("mgp")[1]+0.5)
-#  stamp(sure=FALSE,line=oma[4]-1.8) ### ??? why does it need so much space?
-  }}
-  on.exit(par(oldpar))
-  "PlotMatrix: done"
-}
-
-###
-
+# PlotMatrix <- function(x, y=NULL, data=NULL, panel=l.panel,
+#          nrows=0, ncols=nrows, save=TRUE, robrange.=FALSE, range.=NULL,
+#          pch=NULL, col=1, reference=0, ltyref=3,
+#          log="", xaxs="r", yaxs="r", xaxmar=NULL, yaxmar=NULL,
+#          vnames=NULL, main='', cex.points=NA, cex.lab=0.7, cex.text=1.3,
+#          cex.title=1,
+#          bty="o", oma=NULL, ...) {
+#
+# # Purpose:    pairs  with different plotting characters, marks and/or colors
+# #             showing submatrices of the full scatterplot matrix
+# #             possibly on several pages
+# # ******************************************************************************
+# # Author: Werner Stahel, Date: 23 Jul 93; minor bug-fix+comments:
+#   # M.Maechler
+#
+#   is.formula <- function(object) length(class(object))>0 && class(object)=="formula"
+#
+#
+#   l.panel <- function(x,y,indx,indy,pch=1,col=1,cex=cex.points,...) {
+#     if (is.character(pch)) text(x,y,pch,col=col,cex=cex) else
+#     points(x,y,pch=pch,col=col,cex=cex,...)
+#   }
+#   oldpar <- par(c("mfrow","mar","cex","oma","mgp"))
+#   on.exit(par(oldpar))
+# # **************** preparations **************
+# # data
+#   if (is.formula(x))  {
+#     if (length(x)==2)
+#     x <- model.frame(x,data, na.action=NULL)  else {
+#       ld <- model.frame(x[c(1,3)],data, na.action=NULL)
+#       ld <- cbind(ld, model.frame(x[1:2],data, na.action=NULL))
+#       x <- ld
+#     }
+#   }
+#   if (is.data.frame(x)) {
+#     for (jj in 1:length(x)) x[[jj]] <- as.numeric(x[[jj]])
+#     x <- as.matrix(x)
+#   } else x <- cbind(x)
+# #  stop("!PlotMatrix! first argument must either be a formula or a data.frame or matrix")
+#   nv1 <- dim(x)[2]
+#   lv1 <- lv2 <- 0
+#   if (is.null(y)) {
+#     ldata <- x
+#     if (save) { nv1 <- nv1-1; lv2 <- 1 }
+#     nv2 <- nv1
+#   } else { # cbind y to data for easier preparations
+#     save <- FALSE
+#     if (is.formula(y))  {
+#       ld <- model.frame(x[c(1,3)],data, na.action=NULL)
+#     if (length(x)>2)
+#       ld <- cbind(ld, model.frame(x[1:2],data, na.action=NULL))
+#     x <- ld
+#   }
+#     if (is.formula(y)) {
+#       if (length(y)==2)
+#         y <- model.frame(y,data, na.action=NULL)  else {
+#           ld <- model.frame(y[c(1,3)],data, na.action=NULL)
+#           ld <- cbind(ld, model.frame(y[1:2],data, na.action=NULL))
+#           y <- ld
+#         }
+#     }
+#     if (is.data.frame(y)) {
+#       for (jj in 1:length(y)) y[[jj]] <- as.numeric(y[[jj]])
+#       y <- as.matrix(y)
+#     }
+#     ldata <- cbind(x, as.matrix(y))
+#     nv2 <- ncol(ldata)-nv1 ; lv2 <- nv1 }
+#   nvv <- ncol(ldata)
+#   tnr <- nrow(ldata)
+# # variable labels
+#   if (missing(vnames)) vnames <- dimnames(ldata)[[2]]
+#   if (is.null(vnames)) vnames <- paste("V",1:nvv)
+# # plotting characters
+#   if (length(pch)==0) pch <- 1
+# # range
+#   rg <- matrix(nrow=2,ncol=nvv,dimnames=list(c("min","max"),vnames))
+#   if(is.matrix(range.)) {
+#     if (is.null(colnames(range.))) {
+#       if (ncol(range)==ncol(rg)) rg[,] <- range.  else
+#       warning('argument  range.  not suitable. ignored')
+#     } else {
+#       lj <- match(colnames(range.),vnames)
+#       if (any(is.na(lj))) {
+#         warning('variables', colnames(range.)[is.na(lj)],'not found')
+#         if (any(!is.na(lj))) rg[,lj[!is.na(lj)]] <- range.[,!is.na(lj)]
+#       }
+#     }
+#   }
+#   else
+#     if (length(range.)==2&&is.numeric(range.)) rg[,] <- matrix(range.,2,nvv)
+#
+#   lna <- apply(is.na(rg),2, any)
+#   if (any(lna))
+#     rg[,lna] <- apply(ldata[,lna,drop=FALSE],2,
+#       Range, robust=robrange., na.rm=TRUE, finite=TRUE)
+#   colnames(rg) <- vnames
+# # reference lines
+#   tjref <- (length(reference)>0)&&!(is.logical(reference)&&!reference)
+#   if (tjref) {
+#     if(length(reference)==1) lref <- rep(reference,length=nvv) else {
+#       lref <- rep(NA,nvv)
+#       lref[match(names(reference),vnames)] <- reference
+#     }
+#     names(lref) <- vnames
+#   }
+# # plot
+#   jmain <- !is.null(main)&&main!=""
+#   lpin <- par("pin")
+#   lnm <- if (lpin[1]>lpin[2]) {
+#     if (nv1==6 && nv2==6) c(6,6) else c(5,6) } else c(8,5)
+#   if (is.na(nrows)||nrows<1) nrows <- ceiling(nv1/((nv1-1)%/%lnm[1]+1))
+#   if (is.na(ncols)||ncols<1) ncols <- ceiling(nv2/((nv2-1)%/%lnm[2]+1))
+#   if (is.null(xaxmar)) xaxmar <- 1+(nv1*nv2>1)
+#   if (any(is.na(xaxmar))) xaxmar <- 1+(nv1*nv2>1)
+#   xaxmar <- ifelse(xaxmar>1,3,1)
+#   if (is.null(yaxmar)) yaxmar <- 2+(nv1*nv2>1)
+#   if (any(is.na(yaxmar))) yaxmar <- 2+(nv1*nv2>1)
+#   yaxmar <- ifelse(yaxmar>2,4,2)
+#   if (length(oma)!=4)
+#     oma <- c(2+(xaxmar==1), 2+(yaxmar==2),
+#              1.5+(xaxmar==3)+cex.title*2*jmain,
+#              2+(yaxmar==4))
+# #    oma <- 2 + c(0,0,!is.null(main)&&main!="",1)
+#   par(mfrow=c(nrows,ncols))
+# ##-   if (!is.na(cex)) par(cex=cex)
+# ##-   cex <- par("cex")
+# ##-   cexl <- cex*cexlab
+# ##-   cext <- cex*cextext
+#   par(oma=oma*cex.lab, mar=rep(0.2,4), mgp=cex.lab*c(1,0.5,0))
+#   if (is.na(cex.points)) cex.points <- max(0.2,min(1,1.5-0.2*log(tnr)))
+# #
+#   # log
+#   if (length(grep("x",log))>0) ldata[ldata[,1:nv1]<=0,1:nv1] <- NA
+#   if (length(grep("y",log))>0) ldata[ldata[,lv2+1:nv2]<=0,lv2+1:nv2] <- NA
+#   npgr <- ceiling(nv2/nrows)
+#   npgc <- ceiling(nv1/ncols)
+# # ******************** plots **********************
+#   for (ipgr in 1:npgr) {
+#     lr <- (ipgr-1)*nrows
+#   for (ipgc in 1:npgc) {
+#     lc <- (ipgc-1)*ncols
+#     if (save&&((lr+nrows)<=lc)) break
+#   for (jr in 1:nrows) { #-- plot row [j]
+#     jd2 <- lr+jr
+#     j2 <- lv2 + jd2
+#     if (jd2<=nv2)  v2 <- ldata[,j2]
+#     for (jc in 1:ncols) { #-- plot column  [j2-lv2] = 1:nv2
+#       jd1 <- lc+jc
+#       j1 <- lv1 + jd1
+#     if (jd2<=nv2 & jd1<=nv1) {
+#       v1 <- ldata[,j1]
+#       plot(v1,v2, type="n", xlab="", ylab="", axes=FALSE,
+#            xlim <- rg[,j1], ylim <- rg[,j2],
+#            xaxs=xaxs, yaxs=yaxs, log=log, cex=cex.points)
+#       usr <- par("usr")
+#       if (jr==nrows||jd2==nv2) {
+#         if (xaxmar==1) axis(1)
+#         mtext(vnames[j1], side=1, line=(0.5+1.2*(xaxmar==1))*cex.lab,
+#               cex=cex.lab, at=mean(usr[1:2]))
+#       }
+#       if (jc==1) {
+#         if (yaxmar==2) axis(2)
+#         mtext(vnames[j2], side=2, line=(0.5+1.2*(yaxmar==2))*cex.lab,
+#               cex=cex.lab, at=mean(usr[3:4]))
+#       }
+#       if (jr==1&&xaxmar==3) axis(3,xpd=TRUE)
+#       if (jc==ncols||jd1==nv1) if (yaxmar==4) axis(4,xpd=TRUE)
+#       box(bty=bty)
+#       if (any(v1!=v2,na.rm=TRUE)) { # not diagonal
+#         panel(v1,v2,jd1,jd2, pch, col, ...)
+#         if (tjref) abline(h=lref[j1],v=lref[j2],lty=ltyref)
+#       }
+#       else { uu <- par("usr") # diagonal: print variable name
+#              text(mean(uu[1:2]),mean(uu[3:4]), vnames[j1], cex=cex.text) }
+#     }
+#       else frame()
+#     }
+#   }
+#   if (jmain) mtext(main,3,oma[3]*0.9-2*cex.title,outer=TRUE,cex=cex.title)
+# ##-   stamp(sure=FALSE,line=par("mgp")[1]+0.5)
+# #  stamp(sure=FALSE,line=oma[4]-1.8) ### ??? why does it need so much space?
+#   }}
+#   on.exit(par(oldpar))
+#   "PlotMatrix: done"
+# }
+#
+# ###
+#
 
 
 ## plots: ACF, GACF and other TimeSeries plots ----------
@@ -12105,7 +12210,7 @@ PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, add=FALSE,
 
 TOne <- function(x, grp = NA, add.length=TRUE,
                  colnames=NULL, vnames=NULL, total=TRUE,
-                 align="\\l", FUN = NULL, NUMTEST = NULL, numtestlab = NULL){
+                 align="\\l", FUN = NULL, NUMTEST = NULL, numtestlab = NULL, intref="high"){
 
 
   afmt <- Fmt("abs")
@@ -12234,6 +12339,8 @@ TOne <- function(x, grp = NA, add.length=TRUE,
   }
 
 
+  intref <- match.arg(intref, choices = c("high", "low"))
+
   if(mode(x) %in% c("logical","numeric","complex","character"))
     x <- data.frame(x)
 
@@ -12255,14 +12362,33 @@ TOne <- function(x, grp = NA, add.length=TRUE,
       lst[[i]] <- cat_mat(x[,i], grp, vname=vnames[i])
 
     } else if(ctype[i] == "dich") {
-      if(default_vnames){
-        # only declare the ref level on default_vnames
-        lst[[i]] <- dich_mat(x[,i], grp, vname=gettextf("%s (= %s)", vnames[i], head(levels(factor(x[,i])), 1)))
+
+      # refactor all types, numeric, logic but not factors and let user choose
+      # the level to be reported.
+      if(!is.factor(x[, i])) {   # should only apply to boolean, integer or numerics
+        xi <- factor(x[, i])
+        if(match.arg(intref, choices = c("high", "low")) == "high")
+          xi <- relevel(xi, tail(levels(xi), 1))
 
       } else {
-        # the user is expected to define ref level, if he wants one
-        lst[[i]] <- dich_mat(x[,i], grp, vname=gettextf("%s", vnames[i]))
+        xi <- x[, i]
       }
+
+      if (default_vnames) {
+        lst[[i]] <- dich_mat(xi, grp, vname = gettextf("%s (= %s)", vnames[i], head(levels(xi), 1)))
+      } else {
+        lst[[i]] <- dich_mat(xi, grp, vname = gettextf("%s", vnames[i]))
+      }
+
+      #
+      # if(default_vnames){
+      #   # only declare the ref level on default_vnames
+      #   lst[[i]] <- dich_mat(x[,i], grp, vname=gettextf("%s (= %s)", vnames[i], head(levels(factor(x[,i])), 1)))
+      #
+      # } else {
+      #   # the user is expected to define ref level, if he wants one
+      #   lst[[i]] <- dich_mat(x[,i], grp, vname=gettextf("%s", vnames[i]))
+      # }
 
     } else {
       lst[[i]] <- rbind(c(colnames(x)[i], rep(NA, nlevels(grp) + 2)))
@@ -12877,7 +13003,12 @@ ToWrd.PercTable <- function(x, font=NULL, main = NULL, ..., wrd = DescToolsOptio
 
 
 ToWrd.data.frame <- function(x, font=NULL, main = NULL, row.names=NULL, ..., wrd = DescToolsOptions("lastWord")){
-  x <- apply(x, 2, as.character)
+
+  # drops dimension names!! don't use here
+  # x <- apply(x, 2, as.character)
+
+  x[] <- lapply(x, as.character)
+  x <- as.matrix(x)
 
   if(is.null(row.names))
     if(identical(row.names(x), as.character(1:nrow(x))))
@@ -14019,7 +14150,8 @@ XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "") {
 
 
 XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
-                        header = FALSE, stringsAsFactors = FALSE, echo = FALSE, datecols = NA) {
+                        header = FALSE, stringsAsFactors = FALSE, echo = FALSE, datecols = NA,
+                        na.strings = NULL) {
 
   A1ToZ1S1 <- function(x){
     xlcol <- c( LETTERS
@@ -14083,15 +14215,11 @@ XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame =
     zs <- A1ToZ1S1(range[i])
     rr <- xl$Range(xl$Cells(zs[[1]][1], zs[[1]][2]), xl$Cells(zs[[2]][1], zs[[2]][2]) )
     lst[[i]] <- rr[["Value2"]]
+    # implement na.strings:
+    if(!is.null(na.strings))
+      lst[[i]] <- rapply(lst[[i]], function(x) ifelse(x %in% na.strings, NA, x), how = "replace")
     names(lst)[i] <- range[i]
   }
-
-  # implement na.strings:
-  # if(!identical(na.strings, NA)){
-  #   for(s in na.strings){
-  #     lst[[i]] <- replace(lst[[i]], list = na.strings, values = NA)
-  #   }
-  # }
 
   # replace NULL values by NAs, as NULLs are evil while coercing to data.frame!
   if(as.data.frame){
@@ -14123,9 +14251,7 @@ XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame =
         for(j in datecols)
           lst[[i]][,j] <- as.Date(XLDateToPOSIXct(lst[[i]][,j]))
       }
-
     }
-
   }
 
   # just return a single object (for instance data.frame) if only one range was supplied
@@ -14154,27 +14280,6 @@ XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame =
 
 
 
-# XLGetWorkbook <- function (file) {
-#
-#   xlLastCell <- 11
-#
-#   xl <- GetNewXL()
-#   wb <- xl[["Workbooks"]]$Open(file)
-#
-#   lst <- list()
-#   for( i in 1:wb[["Sheets"]][["Count"]]){
-#     ws <- wb[["Sheets", i]]
-#     ws[["Range", "A1"]][["Select"]]
-#     rngLast <- xl[["ActiveCell"]][["SpecialCells", xlLastCell]][["Address"]]
-#     lst[[i]] <- ws[["Range", paste("A1",rngLast, sep=":")]][["Value2"]]
-#   }
-#
-#   xl$Quit()
-#   return(lst)
-#
-# }
-
-# New in 0.99.18:
 XLGetWorkbook <- function (file, compactareas = TRUE) {
 
 
@@ -14185,7 +14290,6 @@ XLGetWorkbook <- function (file, compactareas = TRUE) {
 
   CompactArea <- function(lst)
     do.call(cbind, lapply(lst, cbind))
-
 
 
   xlCellTypeConstants <- 2
@@ -14227,9 +14331,6 @@ XLGetWorkbook <- function (file, compactareas = TRUE) {
   return(lst)
 
 }
-
-
-
 
 
 

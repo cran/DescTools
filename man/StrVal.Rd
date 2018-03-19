@@ -4,21 +4,22 @@
 \title{Extract All Numeric Values From a String
 %%  ~~function to do ... ~~
 }
-\description{Extract all numeric values from a string, using a regular expression and return a list of the values. If there are several, the values can be either be pasted and/or casted from character vectors to numeric values.
+\description{Extract all numeric values from a string using a regular expression and return a list of all found values. If there are several, the values can be either pasted and/or casted from characters to numeric values.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-StrVal(x, paste = FALSE, as.numeric = FALSE)
+StrVal(x, paste = FALSE, as.numeric = FALSE, dec = getOption("OutDec"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a character vector
 %%     ~~Describe \code{x} here~~
 }
-\item{paste}{should separatetly extracted numbers be pasted together? This can be useful to reverse a prior format action. Default is FALSE.}
-\item{as.numeric}{logical value, determining if the extracted values should be converted to a number or be returned as characters. Default is FALSE.}
+\item{paste}{should separatetly extracted numbers be pasted together? This can be useful to reverse a prior format action. Default is \code{FALSE}.}
+\item{as.numeric}{logical value, determining if the extracted values should be converted to a number or be returned as characters. Default is \code{FALSE}.}
+\item{dec}{character string containing a single character. The preferred character to be used as the decimal point. Defaults \code{getOption("OutDec")}. }
 }
-\details{If there are multiple numbers in the same string to paste and cast to numeric, pasting will be done first and after pasting the conversion will be performed. So if for example the numbers in \code{x = "34 way 066"} should be extracted \code{StrVal(x, paste = TRUE, as.numeric = TRUE)} will lead to \code{34066}. }
+\details{If there are multiple numbers in the same string to paste and cast to numeric, pasting will be done first and after pasting the conversion will be performed. So if for example the numbers in \code{x = "34 way 066"} should be extracted \code{StrVal(x, paste = TRUE, as.numeric = TRUE)} will lead to \code{34066}. This is a useful choice for converting formatted numbers having some kind of bigmark. }
 
 \value{depending on the results the function will return either a character vector, in the case every element of x contained only one number, or a list of character vectors containing the found numbers.
 }
@@ -46,6 +47,9 @@ StrVal(xf, paste = TRUE, as.numeric = TRUE)
 StrVal(xf, paste = TRUE, as.numeric = FALSE)
 StrVal(xf, paste = FALSE, as.numeric = TRUE)
 StrVal(xf, paste = FALSE, as.numeric = FALSE)
+
+# use an alternative decimal point
+StrVal("8 452,12", dec=",")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

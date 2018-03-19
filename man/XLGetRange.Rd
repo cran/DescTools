@@ -12,7 +12,8 @@ XLGetWorkbook does the same for all the sheets in an Excel workbook.
 }
 \usage{
 XLGetRange(file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
-           header = FALSE, stringsAsFactors = FALSE, echo = FALSE, datecols = NA)
+           header = FALSE, stringsAsFactors = FALSE, echo = FALSE, datecols = NA,
+           na.strings = NULL)
 
 XLGetWorkbook(file, compactareas = TRUE)
 }
@@ -39,6 +40,7 @@ as this is probably the common use of this function.}
 \item{echo}{logical. If set to \code{TRUE}, the function will print the full command used, such that it can be copied into the R-script for future use.}
 
 \item{datecols}{a character or integer vector, defining which columns in Excel are of date type and should directly be converted to Date columns in R. Ignored if \code{as.data.frame} is \code{FALSE}.}
+\item{na.strings}{a character vector of strings which are to be interpreted as \code{NA} values. Blank fields are always considered to be missing values. Default is \code{NULL}, meaning none.}
 
 \item{compactareas}{logical, defining if areas should be returned by \code{XLGetWorkbook} as list or as matrix (latter is default).}
 

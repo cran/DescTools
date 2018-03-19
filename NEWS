@@ -1,12 +1,58 @@
 
+DescTools 0.99.24 (2018-03-18)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+  * CountCompCases() returns the number of complete cases in a data frame and
+    a table with all the missing of the single variables, as well as the number
+    of complete cases we would receive, if the variable was omitted.
+  * SplitAt() splits a vector at given positions.
+  * Append() is used to append elements to a vector, rows/columns to a matrix
+    and columns to a data.frame in the in the same sense as append().
+  * Add some new univariate parametric extreme value distributions with their
+    distribution, quantile and density functions.
+
+UPDATED FUNCTIONS:
+  * Wald-Wolfowitz-test may produce inconsistent results if ties exist between
+    two samples. A warning will now be displayed for such cases.
+    (Credits to Vilmantas Gegzna)
+  * PlotCorr() gets a main argument, which places the main title in a better
+    position.
+  * Recode() will accept integer definitions for the groups of levels to collapse.
+    A new argument num will return numeric values.
+  * Shade() gets a upgrade on the expression interface again. It now uses the
+    same logic as is implemented in curve().
+  * PlotFaces() receives a face lifting.
+  * PercTable() will break long tables into multiple rows the same way
+    as table() does when it's printed.
+  * ModelDlg() will edit an already existing formula when selected.
+  * TOne() gains a new argument "intref" defining the values to be reported for
+    dichotomous numeric and boolean variables.
+  * StrVal() gets an additional argument "dec" allowing to use a userdefined
+    decimal point when parsing the text.
+  * XLGetRange() gains a "na.strings" argument for replacing NA characters by real NAs.
+
+BUGFIXES:
+  * identify.formula() would have omitted NAs while preparing the model.frame
+    and so might haven returned wrong rownumbers. It will now by default pass
+    NAs if the argument has not been set.
+  * Gmean will return 0 if any element of x is zero now.
+  * Desc.character would not have passed the plots when output to MS-Word.
+
+DEFUNCT:
+  * InsCol() and InsRow() have been condensed into Append(), which is more
+    general and more flexible.
+  * PlotMatrix() has not been used and was obsolete.
+
+
 
 DescTools 0.99.23 (2017-12-09)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
-   * TTestA will calculate a Student t-test using given sample statistics
+   * TTestA() will calculate a Student t-test using given sample statistics
      rather than actual data.
-   * NAIfZero is defined to revert to ZeroIfNA.
+   * NAIfZero is defined to revert ZeroIfNA().
 
 UPDATED FUNCTIONS:
    * FixToTab() has been renamed to FixToTable() due to naming consistency

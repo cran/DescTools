@@ -64,6 +64,10 @@ Setting the continuity correction \code{correct = TRUE} will yield the normal ap
 The c is set to \eqn{c = 0.5} if \eqn{r < \frac{2 n_0 n_1}{n_0 + n_1} + 1}
 and to \eqn{c = -0.5} if \eqn{r > \frac{2 n_0 n_1}{n_0 + n_1} + 1}.
 
+\bold{Wald-Wolfowitz with Ties.}      Ideally there should be no ties in the data used for the Wald-Wolfowitz test. In practice there is no problem with ties within a group, but if ties occur between members of the different groups then there is no unique sequence of observations. For example the data sets A: 10,14,17,19,34 and B: 12,13,17,19,22 can give four possible sequences, with two possible values for r (7 or 9). The "solution" to this is to list every possible combination, and calculate the test statistic for each one. If all test statistics are significant at the chosen level, then one can reject the null hypothesis. If only some are significant, then Siegel (1956) suggests that the average of the P-values is taken.
+Help for finding all permutations of ties can be found at:  \url{https://stackoverflow.com/questions/47565066/all-possible-permutations-in-factor-variable-when-ties-exist-in-r}
+
+However this solutions seems quite coarse and in general, the test should not be used if there are more than one or two ties. We have better tests to distinguish between two samples!
 }
 
 \value{
@@ -75,9 +79,11 @@ A list with the following components.
   \item{alternative}{a character string describing the alternative hypothesis.}
 }
 \references{
-Wackerly, D., Mendenhall, W. Scheaffer, R. L. (1986): \emph{Mathematical Statistics with Applications}, 3rd Ed., Duxbury Press, CA.
+Wackerly, D., Mendenhall, W. Scheaffer, R. L. (1986) \emph{Mathematical Statistics with Applications}, 3rd Ed., Duxbury Press, CA.
 
 Wald, A. and Wolfowitz, J. (1940): On a test whether two samples are from the same population,  \emph{Ann. Math Statist}. 11, 147-162.
+
+Siegel, S. (1956) \emph{Nonparametric Statistics for the Behavioural Sciences}, McGraw-Hill Kogakusha, Tokyo.
 
 }
 
@@ -112,8 +118,8 @@ RunsTest(x)
 
 # SPSS example
 x <- c(31,23,36,43,51,44,12,26,43,75,2,3,15,18,78,24,13,27,86,61,13,7,6,8)
-RunsTest(x)
-RunsTest(x, exact=TRUE)
+RunsTest(x, exact=TRUE)       # exact probability
+RunsTest(x, exact=FALSE)      # normal approximation
 
 # SPSS example small dataset
 x <- c(1, 1, 1, 1, 0, 0, 0, 0, 1, 1)

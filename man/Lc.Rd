@@ -17,7 +17,7 @@ Lc(x, ...)
 \method{Lc}{formula}(formula, data, subset, na.action, ...)
 
 \method{plot}{Lc}(x, general = FALSE, lwd = 2, type = "l", xlab = "p", ylab = "L(p)",
-     main = "Lorenz curve", las = 1, ...)
+     main = "Lorenz curve", las = 1, pch = NA, ...)
 
 \method{plot}{Lclist}(x, col = 1, lwd = 2, lty = 1, main = "Lorenz curve",
      xlab = "p", ylab = "L(p)", ...)
@@ -36,6 +36,7 @@ Lc(x, ...)
  \item{lty}{the linetype of the curve}
  \item{type}{type of the plot, default is line (\code{"l"}).}
  \item{xlab, ylab}{label of the x-, resp. y-axis.}
+ \item{pch}{the point character (default is \code{NA}, meaning no points will be drawn)}
  \item{main}{main title of the plot.}
  \item{las}{las of the axis.}
   \item{p}{a numeric vector with percent points, at which the Lorenz curve will be calculated.

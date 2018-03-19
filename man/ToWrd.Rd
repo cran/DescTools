@@ -124,10 +124,21 @@ LineUnitBefore, LineUnitAfter, MirrorIndents.
 \dontrun{
 # run that by copy to console
 #
+
+wrd <- GetNewWrd()
+ToWrd("This is centered Text in Arial Black\n",
+      para=list(Alignment=wdConst$wdAlignParagraphCenter,
+                SpaceBefore=3, SpaceAfter=6),
+      font=list(name="Arial Black", size=14),
+      wrd=wrd)
+
+sel <- wrd$Selection()$Borders(wdConst$wdBorderBottom)
+sel[["LineStyle"]] <- wdConst$wdLineStyleSingle
+
+
 t1 <- TOne(x = d.pizza[, c("temperature","delivery_min","driver","wine_ordered")],
            grp=d.pizza$wine_delivered)
 
-wrd <- GetNewWrd()
 ToWrd(t1, font=list(name="Algerian"), wrd=wrd)
 
 

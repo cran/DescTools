@@ -196,7 +196,13 @@ PercTable.table <- function(tab, row.vars=NULL, col.vars = NULL, justify = "righ
   tlst[["freq"]][] <- Format(tlst[["freq"]], fmt=Fmt("abs"))
   if(freq == FALSE) tlst[["freq"]] <- NULL
 
-  suppressWarnings(r.chisq <- chisq.test(tab))
+  if(any(is.na(tab))){
+    na.tab <- tab
+    na.tab[] <- NA
+    r.chisq <- list(expected=na.tab, residuals=na.tab, stdres=na.tab)
+  } else {
+    suppressWarnings(r.chisq <- chisq.test(tab))
+  }
 
   if(expected == TRUE) {
     tlst[["exp"]] <- Format(r.chisq$expected, fmt=Fmt("num"))
@@ -263,17 +269,39 @@ print.PercTable <- function(x, vsep=NULL, ...){
   vsep <- Coalesce(vsep, x[["vsep"]], (length(attr(x[["ftab"]], "row.vars")) > 1))
 
   x <- x[["ftab"]]
-  cat(paste(c(rep(" ", times=max(nchar(c(names(attr(x, "row.vars")), attr(x, "row.vars")[[1]])), na.rm=TRUE) +
-                    ifelse(length(attr(x, "row.vars")) == 2, max(nchar(attr(x, "row.vars")[[2]]), na.rm=TRUE) + 2, 0) + 1),
-              names(attr(x, "col.vars"))), collapse=""), sep="\n")
 
-  names(attr(x, "col.vars")) <- NULL
+  # cat(paste(c(rep(" ", times=max(nchar(c(names(attr(x, "row.vars")), attr(x, "row.vars")[[1]])), na.rm=TRUE) +
+  #                   ifelse(length(attr(x, "row.vars")) == 2, max(nchar(attr(x, "row.vars")[[2]]), na.rm=TRUE) + 2, 0) + 1),
+  #             names(attr(x, "col.vars"))), collapse=""), sep="\n")
+  #
+  # names(attr(x, "col.vars")) <- NULL
+  #
+  # txt <- capture.output(print(x, ...))
+  # if(vsep)
+  #   txt[StrLeft(txt,1) != " "][-1] <- paste("\n", txt[StrLeft(txt,1) != " "][-1], sep="")
+  #
+  # cat(txt, sep="\n")
 
-  txt <- capture.output(print(x, ...))
-  if(vsep)
-    txt[StrLeft(txt,1) != " "][-1] <- paste("\n", txt[StrLeft(txt,1) != " "][-1], sep="")
 
-  cat(txt, sep="\n")
+  # replaced by 0.99.24, in order to have the table "line breaked" if necessary
+
+  # get number of name cols
+  nc <- length(attr(x, "row.vars"))
+  x <- gsub("\"", "", format(x, method="col.compact"))
+  for(i in 1:nc){
+    x[, i] <- StrPad(x[, i], max(nchar(x[,i])))
+  }
+  rn <- if(nc > 1) apply(x[, 1:nc], 1, paste, collapse=" ") else x[, 1]
+  rownames(x) <- rn
+  if(vsep){
+    iempty <- which(substr(rownames(x), 1, 1) != " ")[-1]
+    x <- do.call(rbind, lapply(SplitAt(1:nrow(x), iempty), function(i) rbind(x[i,], "")))
+  }
+
+  x <- x[, -(1:nc)]
+  colnames(x) <- rep("", ncol(x))
+
+  print(x, quote=FALSE, right=TRUE, ...)
 
 }
 

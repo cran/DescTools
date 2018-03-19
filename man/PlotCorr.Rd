@@ -13,7 +13,8 @@ PlotCorr(x, cols = colorRampPalette(c(Pal()[2], "white",
          breaks = seq(-1, 1, length = length(cols) + 1),
          border = "grey", lwd = 1,
          args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"),
-         cex.axis = 0.8, las = 2, mar = c(3, 8, 8, 8), mincor = 0, ...)
+         cex.axis = 0.8, las = 2, mar = c(3, 8, 8, 8), mincor = 0,
+         main = "", ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -51,6 +52,7 @@ PlotCorr(x, cols = colorRampPalette(c(Pal()[2], "white",
 %%     ~~Describe \code{mar} here~~
 }
 \item{mincor}{numeric value between 0 and 1, defining the smallest correlation that is to be displayed. If this is >0 then all correlations with a lower value are suppressed.  }
+\item{main}{character, the main title.}
   \item{\dots}{the dots are passed to the function \code{\link{image}}, which produces the plot.
 %%     ~~Describe \code{\dots} here~~
 }
@@ -91,8 +93,26 @@ csp <- cor(data.frame(lapply(d.diamonds[,c("carat", "clarity", "cut", "polish",
 PlotCorr(csp)
 
 # some more colors
-PlotCorr(cor(mtcars), col=Pal("RedWhiteBlue1", 100), border="grey",
+m <- cor(mtcars)
+PlotCorr(m, col=Pal("RedWhiteBlue1", 100), border="grey",
          args.colorlegend=list(labels=Format(seq(-1,1,.25), digits=2), frame="grey"))
+
+# display only correlation with a value > 0.7
+PlotCorr(m, mincor = 0.7)
+x <- matrix(rep(1:ncol(m),each=ncol(m)), ncol=ncol(m))
+y <- matrix(rep(ncol(m):1,ncol(m)), ncol=ncol(m))
+txt <- Format(m, d=3, leading = "drop")
+idx <- upper.tri(matrix(x, ncol=ncol(m)), diag=FALSE)
+
+# place the text on the upper triagonal matrix
+text(x=x[idx], y=y[idx], label=txt[idx], cex=0.8, xpd=TRUE)
+
+# put similiar correlations together
+m <- cor(mtcars)
+idx <- order.dendrogram(as.dendrogram(
+          hclust(dist(cor(mtcars)), method = "mcquitty")
+       ))
+PlotCorr(m[idx, idx])
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

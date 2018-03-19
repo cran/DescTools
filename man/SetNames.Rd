@@ -15,7 +15,7 @@ SetNames(x, ...)
   \item{x}{an object for which a names attribute will be meaningful
 %%     ~~Describe \code{object} here~~
 }
-  \item{...}{the names to be assigned to the object. This should be a character vector of names named rownames, colnames or names. Setting \code{rownames=NULL} would remove existing rownames.
+  \item{...}{the names to be assigned to the object. This should be a character vector of names named \code{rownames}, \code{colnames} or \code{names}. Setting \code{rownames=NULL} would remove existing rownames. All kind of names can be changed at the same time.
 %%     ~~Describe \code{nm} here~~
 }
 }
@@ -29,7 +29,7 @@ SetNames(x, ...)
 \author{Andri Signorell <andri@signorell.net>\cr
 }
 
-\seealso{\code{\link{setNames}}
+\seealso{\code{\link{setNames}}, \code{\link{Rename}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

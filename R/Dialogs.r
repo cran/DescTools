@@ -1,5 +1,7 @@
 
 
+
+
 ModelDlg <- function(x, ...){
 
   .GetModTxt <- function()
@@ -31,7 +33,7 @@ ModelDlg <- function(x, ...){
   .BtnAddVar <- function() .AddVar(" + ")
   .BtnAddMult <- function() .AddVar(" * ")
   .BtnAddInt <- function() .AddVar(" : ")
-  .BtnAddPoly <- function() .AddVar(sep=" + ", pack="Poly(%s, 2)")
+  .BtnAddPoly <- function() .AddVar(sep=" + ", pack="poly(%s, 2)")
 
   .InsertLHS <- function() {
 
@@ -46,26 +48,42 @@ ModelDlg <- function(x, ...){
     }
   }
 
-  e1 <- environment()
-  modx <- character()
-  # old, repl. by 0.99.22: xname <- deparse(substitute(x))
-  xname <- paste(StrTrim(deparse(substitute(x))), collapse=" ")
-
-  if (!missing(x)) {
-    if(!is.data.frame(x))
-      stop("x must be a data.frame")
-
-  } else {
-    stop("Some data must be provided, example: ModelDlg(iris)")
-  }
-
-
   fam <- "comic"
   size <- 10
   myfont <- tcltk::tkfont.create(family = fam, size = size)
 
   tfmodx <- tcltk::tclVar("")
   tflhs <- tcltk::tclVar("")
+
+  mod_x <- NA_character_
+
+  e1 <- environment()
+  modx <- character()
+  # old, repl. by 0.99.22: xname <- deparse(substitute(x))
+  xname <- paste(StrTrim(deparse(substitute(x))), collapse=" ")
+
+  if (!missing(x)) {
+    if(class(x) == "formula") {
+
+      # would be nice to pick up a formula here, to be able to edit the formula
+      # https://rviews.rstudio.com/2017/02/01/the-r-formula-method-the-good-parts/
+
+      # try to extract the name of the data.frame from match.call
+      xname <- StrExtract(gsub("^.+data = ", "\\1", paste(deparse(match.call()), collapse=" ")), ".+[[:alnum:]]")
+
+      tcltk::tclvalue(tflhs) <- deparse(x[[2]])
+      mod_x <- deparse(x[[3]])
+
+      x <- eval(parse(text=xname, parent.env()))
+
+    } else if(!is.data.frame(x))
+      stop("x must be a data.frame")
+
+
+  } else {
+    stop("Some data must be provided, example: ModelDlg(iris)")
+  }
+
 
   OnOK <- function() {
     assign("modx", paste(
@@ -139,11 +157,12 @@ ModelDlg <- function(x, ...){
                               fg = "black", padx = 10, pady = 10, font = myfont)
 
   tfLHS <- tcltk::tkentry(frmModel, textvariable=tflhs, bg="white")
-  tfModx = tcltk::tktext(frmModel, bg="white", height=18, width=70, font=myfont)
+  tfModx <- tcltk::tktext(frmModel, bg="white", height=18, width=70, font=myfont)
   tcltk::tkgrid(tfLHS, column=0, row=0, pady=10, sticky="nwes")
   tcltk::tkgrid(tcltk::tklabel(frmModel, text="~"), row=1, sticky="w")
   tcltk::tkgrid(tfModx, column=0, row=2, pady=10, sticky="nws")
-
+  if(!is.na(mod_x))
+    tcltk::tkinsert(tfModx, "insert", mod_x, "notwrapped")
 
   # root
   tfButOK = tcltk::tkbutton(content, text="OK", command=OnOK, width=6)

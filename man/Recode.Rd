@@ -5,11 +5,11 @@
 %%  ~~function to do ... ~~
 }
 \description{Combining or rearranging a factor can be tedious if it has many levels. \code{Recode} supports this step by
-accepting a direct definition of newlevels by oldlevels as argument and adding an \code{"elselevel"} option.
+accepting a direct definition of new levels by enumerating old levelnames as argument and adding an \code{"elselevel"} option. If new levels are given as integer values they will be translated in the according levels.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Recode(x, ..., elselevel = NA, use.empty = FALSE)
+Recode(x, ..., elselevel = NA, use.empty = FALSE, num = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -29,6 +29,7 @@ Recode(x, ..., elselevel = NA, use.empty = FALSE)
    which drops empty levels.
 %%     ~~Describe \code{newlevels} here~~
 }
+\item{num}{logical. If set to \code{TRUE} the result will be numeric.}
 }
 \value{
 the factor having the new levels applied.
@@ -49,13 +50,11 @@ x <- factor(sample(1:15, 20, replace=TRUE))
 levels(x) <- paste("old", levels(x), sep="_")
 
 y <- Recode(x,
-            "new_1" = c("old_1","old_4","old_5"), 
-            "new_2" = c("old_6","old_10","old_11"), 
-            "new_3" = c("old_12","old_13"), 
+            "new_1" = c("old_1","old_4","old_5"),
+            "new_2" = c("old_6","old_10","old_11"),
+            "new_3" = c("old_12","old_13"),
             elselevel="other")
-
 data.frame(x=x, y=y)
-
 
 
 x <- factor(letters[1:6])
@@ -74,6 +73,14 @@ lapply(data.frame(z1, z2, z3, z4, z5), levels)
 table(z4, useNA="ifany")
 # and is dropped in z5
 table(z5, useNA="ifany")
+
+# use integers to define the groups to collapse
+set.seed(1972)
+(likert <- factor(sample(1:10, size=15, replace=TRUE),
+                 levels=1:10, labels=gettextf("(\%s)", 1:10)))
+Recode(likert, det=1:6, pas=7:8, pro=9:10)
+# or directly turned to numeric
+Recode(likert, "1"=1:6, "2"=7:8, "5"=9:10, num=TRUE)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

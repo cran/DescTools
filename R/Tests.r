@@ -953,11 +953,20 @@ RunsTest.default <- function(x, y=NULL, alternative=c("two.sided", "less", "grea
   }
 
 
+
   if(!is.null(y)) {
     dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
     # perform Wald-Wolfowitz-Test with 2 variables
     xy <- Sort(cbind(c(x,y), c(rep(0, length(x)), rep(1, length(y)))))[,2]
+
+    TIES <- length(unique(u <- c(unique(x), unique(y)))) != length(u)
+    rm(u)
+
     res <- RunsTest(x=xy, alternative=alternative, exact=exact, na.rm=na.rm)
+
+    if (TIES)
+      warning("cannot compute reliable p-values with inter-group ties between x and y")
+
     res$data.name <- dname
     res$method <- "Wald-Wolfowitz Runs Test "
     return(res)

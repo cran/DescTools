@@ -33,3 +33,15 @@ bottom_i <- function(v, n) {
     .Call(`_DescTools_bottom_i`, v, n)
 }
 
+dgompertz_work <- function(x, shape, rate, log) {
+    .Call(`_DescTools_dgompertz_work`, x, shape, rate, log)
+}
+
+pgompertz_work <- function(q, shape, rate, lower_tail, give_log) {
+    .Call(`_DescTools_pgompertz_work`, q, shape, rate, lower_tail, give_log)
+}
+
+check.gompertz <- function(shape, rate) {
+    .Call(`_DescTools_check_gompertz`, shape, rate)
+}
+

@@ -5,11 +5,10 @@
 \title{Dense Ranks and Percent Ranks
 %%  ~~function to do ... ~~
 }
-\description{Computes the rank of a vector and returns the rank.
-DenseRank calculate consecutive ranks in the case of present ties.. No ranks are skipped if there are ranks with multiple items. (Unlike \code{\link{rank}} gives the ranking within the vector x too, but ties are assigned the same rank, with the next ranking(s) skipped.)
+\description{
+\code{DenseRank()} computes the rank of a vector \code{x} and returns the rank as a number. The ranks are consecutive integers beginning with 1. No ranks are skipped if there are ranks with multiple items. So the largest rank value is the number of unique values of x. Unlike \code{\link{rank}} gives the ranking within the vector x too, but ties are assigned the same rank, with the next ranking(s) skipped.
 
-DENSE_RANK computes the rank of a row in an ordered group of rows and returns the rank as a NUMBER. The ranks are consecutive integers beginning with 1. The largest rank value is the number of unique values returned by the query. Rank values are not skipped in the event of ties. Rows with equal values for the ranking criteria receive the same rank. This function is useful for top-N and bottom-N reporting
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+\code{PercentRank()} takes a vector \code{x} and returns the percentile that elements of \code{x} correspond to.
 }
 \usage{
 DenseRank(x, na.last = TRUE)
@@ -25,7 +24,7 @@ PercentRank(x)
 %%     ~~Describe \code{na.last} here~~
 }
 }
-\value{A numeric vector of the same length as x with names copied from x (unless \code{na.last = NA}, when missing values are removed). The vector is of integer type unless x is a long vector.
+\value{A numeric vector of the same length as \code{x} with names copied from \code{x} (unless \code{na.last = NA}, when missing values are removed). The vector is of integer type unless \code{x} is a long vector.
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}

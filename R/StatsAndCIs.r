@@ -752,14 +752,25 @@ Gmean <- function (x, method = c("classic", "boot"),
   # see also: http://www.stata.com/manuals13/rameans.pdf
 
   if(na.rm) x <- na.omit(x)
-  is.na(x) <- x <= 0
+  is.na(x) <- x < 0
 
-  if(is.na(conf.level))
-    exp(mean(log(x)))
+  if(any(x==0)){
+    if(is.na(conf.level))
+      0
 
-  else
-    exp(MeanCI(x=log(x), method = method,
-                    conf.level = conf.level, sides = sides, ...))
+    else
+      c(0, NA, NA)
+
+  } else {
+
+    if(is.na(conf.level))
+      exp(mean(log(x)))
+
+    else
+      exp(MeanCI(x=log(x), method = method,
+                 conf.level = conf.level, sides = sides, ...))
+  }
+
 }
 
 
@@ -2693,7 +2704,7 @@ CohenD <- function(x, y=NULL, pooled = TRUE, correct = FALSE, conf.level = NA, n
       ci <- .nctCI(d / sqrt(nx*ny/(nx+ny)), df = DF, conf = conf.level)
       res <- c(d=d, lwr.ci=ci[1]/sqrt(nx*ny/(nx+ny)), upr.ci=ci[3]/sqrt(nx*ny/(nx+ny)))
 
-      res <- c(d=d, lwr.ci=ci[1], upr.ci=ci[2])
+      res <- c(d=d, lwr.ci=unname(ci[1]), upr.ci=unname(ci[2]))
     } else {
       res <- d
     }
@@ -2980,15 +2991,24 @@ Lc.default <- function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
   Lc
 }
 
+
 plot.Lc <- function(x, general=FALSE, lwd=2, type="l", xlab="p", ylab="L(p)",
-                    main="Lorenz curve", las=1, ...)  {
+                    main="Lorenz curve", las=1, pch=NA, ...)  {
   if(!general)
     L <- x$L
   else
     L <- x$L.general
   plot(x$p, L, type=type, main=main, lwd=lwd, xlab=xlab, ylab=ylab, xaxs="i",
        yaxs="i", las=las, ...)
-  abline(0,max(L))
+
+  abline(0, max(L))
+
+  if(!is.na(pch)){
+    opar <- par(xpd=TRUE)
+    on.exit(par(opar))
+    points(x$p, L, pch=pch, ...)
+  }
+
 }
 
 

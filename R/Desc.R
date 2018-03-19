@@ -1329,8 +1329,12 @@ plot.Desc.numeric   <- function(x, main=NULL, args.hist = NULL, ...){
   main <- Reduce(function (x, y) ifelse(!is.null(x), x, y),
                  c(main, x$main, deparse(substitute(x))))
 
-  if(is.null(args.hist))
+  if(x$maxrows == Inf) {
+    args.hist <- list(type="mass")
+
+  } else if(is.null(args.hist)){
     args.hist <- list(type=if(x$unique > 12) "hist" else "mass")
+  }
 
   PlotFdist(x=x$x, main=main, args.hist=args.hist, ...)
 
@@ -1906,17 +1910,17 @@ printWrd <- function(x, main=NULL, plotit=NULL, ..., wrd=wrd){
 
     } else {
 
-      if(any(z[[1]]$class %in% c("factor","ordered") || (z[[1]]$class=="integer" && !is.null(z[[1]]$freq)))) {
+      if(any(z[[1]]$class %in% c("factor","ordered","character") || (z[[1]]$class=="integer" && !is.null(z[[1]]$freq)))) {
         plot.Desc(z, main=NA)
         WrdPlot(width=8, height=pmin(2+3/6*nrow(z[[1]]$freq), 10), dfact=2.7, crop=c(0,0,0,0), wrd=wrd, append.cr=FALSE)
 
       } else if(any(z[[1]]$class %in% c("numeric","integer"))){
         plot.Desc(z, main=NA)
-        WrdPlot(width=8, height=5.0, dfact=2.3, crop=c(0,0,0,0), wrd=wrd, append.cr=FALSE)
+        WrdPlot(width=8, height=5.0, dfact=2.3, crop=c(-.2,0,0,0), wrd=wrd, append.cr=FALSE)
 
       } else if(any(z[[1]]$class %in% "logical")){
         plot.Desc(z, main=NA)
-        WrdPlot(width=6, height=4, dfact=2.6, crop=c(0.2,0.2,1,0), wrd=wrd, append.cr=FALSE)
+        WrdPlot(width=6, height=4, dfact=2.6, crop=c(-.2, 0.2,1,0), wrd=wrd, append.cr=FALSE)
 
       } else if(z[[1]]$class == "Date"){
         plot.Desc(z, main=NA, type=1)
@@ -2025,6 +2029,8 @@ printWrd <- function(x, main=NULL, plotit=NULL, ..., wrd=wrd){
       wrd[["Selection"]]$EndOf( wdConst$wdTable )
       # get out of tablerange
       wrd[["Selection"]]$MoveRight( wdConst$wdCharacter, 2, 0 )
+      selborder <- wrd[["Selection"]]$Borders(wdConst$wdBorderTop)
+      selborder[["LineStyle"]] <- wdConst$wdLineStyleSingle
       wrd[["Selection"]]$TypeParagraph()
 
     }
