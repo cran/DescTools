@@ -5,11 +5,10 @@
 \alias{plot.bagplot}
 
 
-\title{ PlotBag, a Bivariate Boxplot }
+\title{Bivariate Boxplot }
 \description{
-  \code{compute.PlotBag()} computes an object describing a PlotBag
-   of a bivariate data set. \code{plot.PlotBag()} plots a bagplot object.
-  \code{PlotBag()} computes and plots a bagplot.
+\code{PlotBag()} creates a twodimensional boxplot called "bagplot" based on two numerical variables x and y. \code{plot.PlotBag()} is the plotting routine for a bagplot object. \code{compute.PlotBag()} contains the computation logic the object.
+
 }
 \usage{
 PlotBag(x, y, factor = 3, na.rm = FALSE, approx.limit = 300,

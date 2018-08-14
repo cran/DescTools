@@ -53,7 +53,7 @@ ToWrd(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"))
 \item{para}{list containing paragraph format properties to be applied to the inserted text. For right align the paragraph one can set: \cr
 \code{list(alignment="r", LineBefore=0.5)}. See details for the full set of properties.}
 
-  \item{main}{a caption for a table. This will be inserted by InsertCaption in Word and can be listed afterwards in a specific index. Default is NULL, which will insert nothing. Ignored if x is not a table.
+  \item{main}{a caption for a table. This will be inserted by \code{\link{WrdCaption}} in Word and can be listed afterwards in a specific index. Default is \code{NULL}, which will insert nothing. Ignored if \code{x} is not a table.
 %%     ~~Describe \code{main} here~~
 }
   \item{align}{character vector giving the alignment of the table columns. \code{"l"} means left, \code{"r"} right and \code{"c"} center alignement. The code will be recyled to the length of thenumber of columns.
@@ -63,13 +63,13 @@ ToWrd(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"))
      (and printed if used as in \code{write.ftable()} or the \code{print}
      method).  Can be abbreviated.  Available methods are (see the examples):
      \describe{
-       \item{"non.compact"}{the default representation of an
+       \item{\code{"non.compact"}}{the default representation of an
          \code{"ftable"} object.}
-       \item{"row.compact"}{a row-compact version without empty cells
+       \item{\code{"row.compact"}}{a row-compact version without empty cells
          below the column labels.}
-       \item{"col.compact"}{a column-compact version without empty cells
+       \item{\code{"col.compact"}}{a column-compact version without empty cells
          to the right of the row labels.}
-       \item{"compact"}{a row- and column-compact version.  This may imply
+       \item{\code{"compact"}}{a row- and column-compact version.  This may imply
          a row and a column label sharing the same cell.  They are then
          separated by the string \code{lsep}.}
      }
@@ -98,7 +98,7 @@ ToWrd(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"))
 %%     ~~Describe \code{wrd} here~~
 }
 }
-\value{if x is a table a pointer to the table will be returned
+\value{if \code{x} is a table a pointer to the table will be returned
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -106,10 +106,11 @@ ToWrd(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"))
 %% ...
 }
 \details{The paragraph format can be defined by means of these properties:
-LeftIndent, RightIndent, SpaceBefore, SpaceBeforeAuto, SpaceAfter, SpaceAfterAuto, LineSpacingRule,
-Alignment, WidowControl, KeepWithNext, KeepTogether, PageBreakBefore, NoLineNumber, Hyphenation,
-FirstLineIndent, OutlineLevel, CharacterUnitLeftIndent, CharacterUnitRightIndent, CharacterUnitFirstLineIndent,
-LineUnitBefore, LineUnitAfter, MirrorIndents.
+
+\code{LeftIndent}, \code{RightIndent}, \code{SpaceBefore}, \code{SpaceBeforeAuto}, \code{SpaceAfter}, \code{SpaceAfterAuto}, \code{LineSpacingRule},
+\code{Alignment}, \code{WidowControl}, \code{KeepWithNext}, \code{KeepTogether}, \code{PageBreakBefore}, \code{NoLineNumber}, \code{Hyphenation},
+\code{FirstLineIndent}, \code{OutlineLevel}, \code{CharacterUnitLeftIndent}, \code{CharacterUnitRightIndent}, \code{CharacterUnitFirstLineIndent},
+\code{LineUnitBefore}, \code{LineUnitAfter}, \code{MirrorIndents}.
 }
 \author{Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~
@@ -122,8 +123,7 @@ LineUnitBefore, LineUnitAfter, MirrorIndents.
 }
 \examples{
 \dontrun{
-# run that by copy to console
-#
+# we can't get this through the CRAN test - run it with copy/paste to console
 
 wrd <- GetNewWrd()
 ToWrd("This is centered Text in Arial Black\n",

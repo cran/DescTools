@@ -15,7 +15,7 @@ globally appropriate xlim- and ylim-values. A legend can directly be included.
 PlotMultiDens(x, ...)
 
 \method{PlotMultiDens}{default}(x, xlim = NULL, ylim = NULL, col = Pal(), lty = "solid",
-              lwd = 1, fill = NA, xlab = "x", ylab = "density", args.dens = NULL,
+              lwd = 2, fill = NA, xlab = "x", ylab = "density", args.dens = NULL,
               args.legend = NULL, na.rm = FALSE, flipxy = FALSE, ...)
 
 \method{PlotMultiDens}{formula}(formula, data, subset, na.action, \dots)

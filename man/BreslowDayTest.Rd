@@ -37,7 +37,6 @@ likelihood ratio test using the \code{anova} function).
 }
 
 \references{
-source: Bug fixed version of \url{https://onlinecourses.science.psu.edu/stat504/sites/onlinecourses.science.psu.edu.stat504/files/lesson04/breslowday.test_.R}\cr\cr
 Breslow, N. E., N. E. Day (1980) The Analysis of Case-Control Studies \emph{Statistical Methods in Cancer Research: Vol. 1}. Lyon, France, IARC Scientific Publications.
 
 Tarone, R.E. (1985) On heterogeneity tests based on efficient scores, \emph{Biometrika}, 72, pp. 91-95.

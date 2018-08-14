@@ -1,14 +1,14 @@
 \name{VarCI}
 \alias{VarCI}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Confidence Interval for the Variance
+\title{Confidence Intervals for the Variance
 }
 \description{
-Calculates the confidence interval for the variance either the classical way or with the bootstrap approach.
+Calculates confidence intervals for the variance. Available approachs are the classical one using the ChiSquare distribution, a more robust version proposed by Bonett and the bootstrap options available in the package \code{boot}.
 
 }
 \usage{
-VarCI(x, method = c("classic", "norm", "basic", "stud", "perc", "bca"),
+VarCI(x, method = c("classic", "bonett", "norm", "basic", "stud", "perc", "bca"),
       conf.level = 0.95, sides = c("two.sided", "left", "right"),
       na.rm = FALSE, R = 999)
 
@@ -18,7 +18,7 @@ VarCI(x, method = c("classic", "norm", "basic", "stud", "perc", "bca"),
   \item{x}{a (non-empty) numeric vector of data values.
 %%     ~~Describe \code{x} here~~
 }
-  \item{method}{vector of character strings representing the type of intervals required. The value should be any subset of the values \code{"classic"}, \code{"norm"}, \code{"basic"},  \code{"stud"},  \code{"perc"},  \code{"bca"}.
+  \item{method}{vector of character strings representing the type of intervals required. The value should be any subset of the values \code{"classic"}, \code{"bonett"}, \code{"norm"}, \code{"basic"},  \code{"stud"},  \code{"perc"},  \code{"bca"}.
   See \code{\link{boot.ci}}.
 %%     ~~Describe \code{x} here~~
 }
@@ -42,12 +42,22 @@ VarCI(x, method = c("classic", "norm", "basic", "stud", "perc", "bca"),
   \item{upr.ci}{upper bound of the confidence interval}
 }
 
+\details{The confidence interval for the variance is very sensitive to non-normality in the data. Bonett (2006) has proposed an interval that is nearly exact when the data is normally distributed and provides good performance for moderately non-normal data.
+See the references for the details.}
+
+
+\references{
+Bonett (2006) Approximate Confidence Interval for Standard Deviation of Nonnormal Distributions, \emph{Computational Statistics and Data Analysis}, Vol. 50, pp. 775 - 782.
+
+\url{https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/sdconfli.htm}
+}
+
 \author{
 Andri Signorell <andri@signorell.net>
 %%  ~~who you are~~
 }
 
-\seealso{\code{\link{MeanCI}}, \code{\link{MedianCI}}
+\seealso{\code{\link{MeanCI}}, \code{\link{MedianCI}}, \code{\link{VarTest}}, \code{\link{Var}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 
@@ -61,6 +71,22 @@ VarCI(x, conf.level=0.9)
 
 # and for the standard deviation
 sqrt(VarCI(x, conf.level=0.9))
+
+
+# from Bonett's paper
+# expected results:
+# ------------------------------------
+#  conf.lvl       sd      lci      uci
+# ------------------------------------
+#      90.0   0.5168   0.3592   0.9359
+#      95.0   0.5168   0.3263   1.0841
+#      99.0   0.5168   0.2607   1.5109
+
+p <- c(15.83, 16.01, 16.24, 16.42, 15.33, 15.44, 16.88, 16.31)
+sqrt(VarCI(p, method="bonett", conf.level=0.9))
+sqrt(VarCI(p, method="bonett"))
+sqrt(VarCI(p, method="bonett", conf.level=0.99))
+
 
 # some bootstrap intervals
 VarCI(x, method="norm")

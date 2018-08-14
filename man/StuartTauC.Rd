@@ -48,6 +48,8 @@ and otherwise a numeric vector with 3 elements for the estimate, the lower and t
 Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons,
 pp. 57--59.
 
+Brown, M.B., Benedetti, J.K.(1977) Sampling Behavior of Tests for Correlation in Two-Way Contingency Tables, \emph{Journal of the American Statistical Association}, 72, 309-315.
+
 Goodman, L. A., & Kruskal, W. H. (1954) Measures of
 association for cross classifications. \emph{Journal of the
 American Statistical Association}, 49, 732-764.

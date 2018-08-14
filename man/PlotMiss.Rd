@@ -4,7 +4,7 @@
 \title{Plot Missing Data
 %%  ~~function to do ... ~~
 }
-\description{Takes a data.frame and displays the location of missing data. The missings can be clustered and be displayed together.
+\description{Takes a data frame and displays the location of missing data. The missings can be clustered and be displayed together.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -46,7 +46,7 @@ PlotMiss(x, col = hred, bg = SetAlpha(hecru, 0.3), clust = FALSE,
 %%  ~~who you are~~
 }
 
-\seealso{\code{\link{hclust}}
+\seealso{\code{\link{hclust}}, \code{\link{CountCompCases}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{

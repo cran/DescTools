@@ -3,7 +3,7 @@
 \title{Winsorize (Replace Extreme Values by Less Extreme Ones) }
 \usage{
 Winsorize(x, minval = NULL, maxval = NULL, probs = c(0.05, 0.95),
-          na.rm = FALSE)
+          na.rm = FALSE, type = 7)
 }
 \arguments{
   \item{x}{a numeric vector to be winsorized.}
@@ -18,6 +18,7 @@ Winsorize(x, minval = NULL, maxval = NULL, probs = c(0.05, 0.95),
 
   \item{na.rm}{should NAs be omitted to calculate the quantiles? \cr
   Note that NAs in x are preserved and left unchanged anyway. }
+  \item{type}{an integer between 1 and 9 selecting one of the nine quantile algorithms detailed in \code{\link{quantile}} to be used.}
 }
 
 \value{

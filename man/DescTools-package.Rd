@@ -5,14 +5,15 @@
 \title{ Tools for Descriptive Statistics and Exploratory Data Analysis
 }
 \description{
-A collection of miscellaneous basic statistic functions and convenience wrappers for efficiently describing data. The author's intention was to create a toolbox, which facilitates the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results. The package contains furthermore functions to produce documents using MS Word (or PowerPoint) and functions to import data from Excel. \cr
-Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, \code{NA} handling, recycling rules etc. are concerned. Google style guides were used as naming rules (in absence of convincing alternatives). The 'CamelStyle' was consequently applied to functions borrowed from contributed R packages as well.
+DescTools is an extensive collection of miscellaneous basic statistics functions and comfort wrappers not available in the R basic system for efficient description of data.
+The author's intention was to create a toolbox, which facilitates the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results. The package contains furthermore functions to produce documents using MS Word (or PowerPoint) and functions to import data from Excel. \cr
+A considerable part of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, \code{NA} handling, recycling rules etc. are concerned. Google style guides were used as naming rules (in absence of convincing alternatives). The 'CamelStyle' was consequently applied to functions borrowed from contributed R packages as well.
 \cr
 
 Feedback, feature requests, bugreports and other suggestions are welcome! Please report problems to Stack Overflow mentioning DescTools or directly to the maintainer.
 }
 
-\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in, ... ok, I think we're ready: spring 2018) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.
+\section{Warning}{This package is still under development. Although the code seems meanwhile quite stable, until release of version 1.0 (which is expected in, ... ok, I think we're ready: fall 2018?) you should be aware that everything in the package might be subject to change. Backward compatibility is not yet guaranteed. Functions may be deleted or renamed and new syntax may be inconsistent with earlier versions. By release of version 1.0 the "deprecated-defunct process" will be installed.
 }
 
 \details{
@@ -143,12 +144,12 @@ A grouped list of the functions:
 \cr\cr
 \bold{Colors:}\tab\cr
 \link{SetAlpha}   \tab  Add transperancy (alpha channel) to a color.     \cr
-\link{ColorDlg}  \tab   Display the system's color dialog to choose a color     \cr
-\link{ColPicker}    \tab  Display R colors in a dialog\cr
+\link{ColorDlg}  \tab   Display the system's color dialog to choose a color   \cr
+\link{ColPicker}    \tab  Display R colors in a dialog including a locator for selection \cr
 \link{ColorLegend}  \tab   Add a color legend to a plot    \cr
 \link{ColToGray}, \link{ColToGrey}  \tab  Convert colors to gcrey/grayscale     \cr
 \link{ColToHex}, \link{HexToCol}  \tab   Convert a color into hex string    \cr
-\link{HexToRgb} \tab  \cr
+\link{HexToRgb} \tab  Convert a hexnumber to an RGB-color\cr
 \link{ColToHsv}  \tab   R color to HSV conversion  \cr
 \link{ColToRgb}, \link{RgbToCol}  \tab    Color to RGB conversion and back   \cr
 \link{FindColor}  \tab   Get color on a defined color range    \cr
@@ -224,8 +225,8 @@ _Frechet       \tab      Frechet distribution (\link{dFrechet})\cr
 _GenExtrVal       \tab       Generalized Extreme Value Distribution (\link{dGenExtrVal})\cr
 _GenPareto       \tab       Generalized Pareto Distribution (\link{dGenPareto})\cr
 _Gompertz       \tab      Gompertz distribution (\link{dGompertz})\cr
-_Gumbel       \tab      Gumbel distribution (\link{dRevGumbel})\cr
-_NegWeibull   \tab      Negative Weibull distribution (\link{dRevWeibull})\cr
+_Gumbel       \tab      Gumbel distribution (\link{dGumbel})\cr
+_NegWeibull   \tab      Negative Weibull distribution (\link{dNegWeibull})\cr
 _Order       \tab      Distributions of Order Statistics (\link{dOrder})\cr
 _RevGumbel       \tab      Reverse Gumbel distribution (\link{dRevGumbel}),\cr
 _RevGumbelExp   \tab      Expontial reverse Gumbel distribution (quantile only)\cr
@@ -316,12 +317,13 @@ _RevWeibull   \tab      Reverse Weibull distribution (\link{dRevWeibull})\cr
 \link{ZTest}    \tab   Z--test for known population variance \cr
 \link{JonckheereTerpstraTest}    \tab  Jonckheere-Terpstra trend test for medians\cr
 \link{PageTest}    \tab  Page test for ordered alternatives\cr
-\link{CochranQTest}    \tab  Cochran's Q-test\cr
+\link{CochranQTest}    \tab  Cochran's Q-test to find differences in matched sets \cr
+\tab of three or more frequencies or proportions.\cr
 \link{SiegelTukeyTest}    \tab  Siegel-Tukey test for equality in variability \cr
 \link{SiegelTukeyRank}     \tab Calculate Siegel-Tukey's ranks (auxiliary function)\cr
 \link{LeveneTest}    \tab  Levene's test for homogeneity of variance\cr
 \link{MosesTest}    \tab  Moses Test of extreme reactions\cr
-\link{RunsTest}    \tab  Runs test for randomness\cr
+\link{RunsTest}    \tab  Runs test for detecting non-randomness\cr
 \link{DurbinWatsonTest}    \tab  Durbin-Watson test for autocorrelation\cr
 \link{BartelsRankTest}    \tab  Bartels rank test for randomness\cr
 \link{JarqueBeraTest}    \tab  Jarque-Bera Test for normality\cr
@@ -339,14 +341,14 @@ _RevWeibull   \tab      Reverse Weibull distribution (\link{dRevWeibull})\cr
 \link{ScheffeTest}   \tab  Multiple comparisons Scheffe test\cr
 \link{DunnTest}   \tab  Dunn's test of multiple comparisons\cr
 \link{DunnettTest}   \tab  Dunnett's test of multiple comparisons\cr
-\link{HotellingsT2Test}   \tab  Hotelling's T2 test for the one and two sample case.\cr
+\link{HotellingsT2Test}   \tab  Hotelling's T2 test for the one and two sample case\cr
 \link{YuenTTest}       \tab Yuen's robust t-Test with trimmed means and winsorized variances\cr
 \link{BarnardTest}       \tab Barnard's test for 2x2 tables\cr
 \link{BreuschGodfreyTest}       \tab      Breusch-Godfrey test for higher-order serial correlation. \cr
 \link{ConoverTest}       \tab      Conover's test of multiple comparisons (following a kruskal test)\cr
-\link{GTest}       \tab      Perform chi-squared contingency table test and goodness-of-fit test. \cr
+\link{GTest}       \tab      Chi-squared contingency table test and goodness-of-fit test \cr
 \link{HosmerLemeshowTest}       \tab      Hosmer-Lemeshow goodness of fit tests \cr
-\link{NemenyiTest}       \tab      Nemenyi's test of multiple comparisons. \cr
+\link{NemenyiTest}       \tab      Nemenyi's test of multiple comparisons \cr
 \link{TTestA}       \tab      Student's t-test based on sample statistics \cr
 \link{VarTest}       \tab      ChiSquare test for one variance and F test for two variances \cr
 \link{VonNeumannTest}       \tab      Von Neumann's successive difference test \cr
@@ -435,13 +437,24 @@ _RevWeibull   \tab      Reverse Weibull distribution (\link{dRevWeibull})\cr
 \link{SysInfo}    \tab  Get some more information about system and environment\cr
 \link{DescToolsOptions}    \tab  Get the DescTools specific options\cr
 \link{PDFManual}       \tab      Get the pdf-manual of any package on CRAN and open it\cr
-\cr
+\cr\cr
+\bold{Data:}\tab\cr
+\link{d.pizza}       \tab  Synthetic dataset created for testing the description \cr
+\link{d.whisky}      \tab  Classification of Scotch Single Malts\cr
+\link{d.units},  \link{d.prefix}    \tab  Unit Conversion\cr
+\link{d.periodic}      \tab  Periodic Table of Elements\cr
+\link{d.countries}      \tab ISO 3166-1 Country Codes \cr
+\link{roulette}, \link{cards},  \link{tarot}     \tab   Dataset for Probabilistic Simulation\cr
 }
 }
+
+
 
 \section{MS-Office}{To make use of MS-Office features you must have Office in one of its variants installed.
 All Wrd*, XL* and Pp* functions require as well the package RDCOMClient to be installed. Hence the use of these functions is restricted to Windows systems.
 RDCOMClient is available at: \cr\url{http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/3.2/} and can be installed with \cr \code{install.packages("RDCOMClient", repos="http://www.stats.ox.ac.uk/pub/RWin")}\cr
+or if not available there in \cr
+\code{install.packages("RDCOMClient", repos="http://www.omegahat.net/R")}\cr
 RDCOMClient does not exist for Mac or Linux, sorry.
 }
 
@@ -456,8 +469,8 @@ Ken Aho, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Kamil Bart
 
 Special thanks go to Beat Bruengger, Mathias Frueh, Daniel Wollschlaeger for their valuable contributions and testing.
 
-Without you I wouldn't be where I am. Thank you all!\cr
 The good things come from all these guys, any problems are likely due to my tweaking.
+Thank you all! \cr
 
 
 Maintainer: Andri Signorell <andri@signorell.net>

@@ -8,14 +8,13 @@
   for linear and generalized linear models.
 }
 \usage{
-VIF(mod, ...)
+VIF(mod)
 
 }
 
 \arguments{
   \item{mod}{an object that responds to \code{\link{coef}}, \code{\link{vcov}}, and
   \code{\link{model.matrix}}, such as an \code{lm} or \code{glm} object.}
-  \item{\dots}{not used.}
 }
 \details{
   If all terms in an unweighted linear model have 1 df, then the usual variance-inflation

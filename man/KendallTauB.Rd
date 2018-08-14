@@ -40,7 +40,9 @@ and otherwise a numeric vector with 3 elements for the estimate, the lower and t
 Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons,
 pp. 57-59.
 
-%% ~put references to the literature/web site here ~
+Kendall, M. (1955) \emph{Rank Correlation Methods}, Second Edition, London: Charles Griffin and Co.
+
+Brown, M.B.andBenedetti, J.K.(1977) Sampling Behavior of Tests for Correlation in Two-Way Contingency Tables, \emph{Journal of the American Statistical Association}, 72, 309-315.
 }
 
 \author{Andri Signorell <andri@signorell.net>

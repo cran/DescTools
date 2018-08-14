@@ -14,7 +14,7 @@ PlotCorr(x, cols = colorRampPalette(c(Pal()[2], "white",
          border = "grey", lwd = 1,
          args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"),
          cex.axis = 0.8, las = 2, mar = c(3, 8, 8, 8), mincor = 0,
-         main = "", ...)
+         main = "", clust = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -53,7 +53,10 @@ PlotCorr(x, cols = colorRampPalette(c(Pal()[2], "white",
 }
 \item{mincor}{numeric value between 0 and 1, defining the smallest correlation that is to be displayed. If this is >0 then all correlations with a lower value are suppressed.  }
 \item{main}{character, the main title.}
-  \item{\dots}{the dots are passed to the function \code{\link{image}}, which produces the plot.
+
+\item{clust}{logical. If set to \code{TRUE}, the correlations will be clustered in order to aggregate similar values.}
+
+\item{\dots}{the dots are passed to the function \code{\link{image}}, which produces the plot.
 %%     ~~Describe \code{\dots} here~~
 }
 }
@@ -68,7 +71,7 @@ PlotCorr(x, cols = colorRampPalette(c(Pal()[2], "white",
 %%  ~~who you are~~
 }
 
-\seealso{\code{\link{image}}, \code{\link{ColorLegend}}, \code{\link[corrgram]{corrgram}()}
+\seealso{\code{\link{image}}, \code{\link{ColorLegend}}, \code{\link[corrgram]{corrgram}()}, \code{\link{PlotWeb}()}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
@@ -92,7 +95,6 @@ csp <- cor(data.frame(lapply(d.diamonds[,c("carat", "clarity", "cut", "polish",
                       "symmetry", "price")], as.numeric)), method="spearman")
 PlotCorr(csp)
 
-# some more colors
 m <- cor(mtcars)
 PlotCorr(m, col=Pal("RedWhiteBlue1", 100), border="grey",
          args.colorlegend=list(labels=Format(seq(-1,1,.25), digits=2), frame="grey"))
@@ -107,10 +109,37 @@ idx <- upper.tri(matrix(x, ncol=ncol(m)), diag=FALSE)
 # place the text on the upper triagonal matrix
 text(x=x[idx], y=y[idx], label=txt[idx], cex=0.8, xpd=TRUE)
 
+# or let's get rid of all non significant correlations
+p <- PairApply(mtcars,  function(x, y) cor.test(x, y)$p.value, symmetric=TRUE)
+# or somewhat more complex with outer
+p0 <- outer(1:ncol(m),  1:ncol(m),
+           function(a, b)
+             mapply(
+               function(x, y) cor.test(mtcars[, x], mtcars[, y])$p.value,
+               a, b))
+# ok, got all the p-values, now replace > 0.05 with NAs
+m[p > 0.05] <- NA
+PlotCorr(m)
+
+# the text
+n <- ncol(m)
+text(x=rep(seq(n), times=n),
+     y=rep(rev(seq(n)), rep.int(n, n)),
+     labels=Format(m, digits=2, na.form=""),
+     cex=0.8, xpd=TRUE)
+# the text could also be set with outer, but this function returns an error,
+# based on the fact that text() does not return some kind of result
+# outer(X = 1:nrow(m),  Y = ncol(m):1,
+#  FUN = "text", labels = Format(m, digits=2, na.form = ""),
+#  cex=0.8, xpd=TRUE)
+
+
 # put similiar correlations together
-m <- cor(mtcars)
+PlotCorr(m, clust=TRUE)
+
+# same as
 idx <- order.dendrogram(as.dendrogram(
-          hclust(dist(cor(mtcars)), method = "mcquitty")
+          hclust(dist(m), method = "mcquitty")
        ))
 PlotCorr(m[idx, idx])
 }

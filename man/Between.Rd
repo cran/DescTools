@@ -14,7 +14,7 @@
 \title{Operators To Check, If a Value Lies Within Or Outside a Given Range
 }
 \description{
-The between and outside operators are used to check, whether a vector of given values x lie within a defined range (or outside respectively). The values can be numbers, text or dates. 
+The between and outside operators are used to check, whether a vector of given values x lie within a defined range (or outside respectively). The values can be numbers, text or dates.
 Ordered factors are supported.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
@@ -42,16 +42,16 @@ x \%)(\% rng
 }
 }
 \details{The between operators basically combine two conditional statements into one and simplify so the query process.\cr
-They are merely a wrapper for:   \code{x >= rng[1] & x <= rng[2]}, 
-where the round bracket  \code{(}  means "strictly greater than >" and the square bracket  \code{[}  means ">=".  Numerical values of x will be handled by C-code, which is significantly faster than two comparisons in R (especially when x is huge).  
+They are merely a wrapper for:   \code{x >= rng[1] & x <= rng[2]},
+where the round bracket  \code{(}  means "strictly greater than >" and the square bracket  \code{[}  means ">=".  Numerical values of x will be handled by C-code, which is significantly faster than two comparisons in R (especially when x is huge).
 .\cr
-\%][\% is the negation of \%()\%, meaning all values lying outside the given range. Elements on the limits will return TRUE.
+\code{\%][\%} is the negation of \code{\%()\%}, meaning all values lying outside the given range. Elements on the limits will return TRUE.
 \cr
 Both arguments will be recycled to the highest dimension, which is either the length of the vector or the number of rows of the matrix.\cr
 See also the routines used to check, whether two ranges overlap (\code{\link{Overlap}}, \code{\link{Interval}}).
 }
 \value{
-A logical vector of the same length as x. 
+A logical vector of the same length as x.
 }
 \author{
 Andri Signorell <andri@signorell.net> based on C-code by Kevin Ushey <kevinushey@gmail.com>
@@ -61,7 +61,7 @@ Andri Signorell <andri@signorell.net> based on C-code by Kevin Ushey <kevinushey
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{if}}, \code{\link{ifelse}}, \code{\link{Comparison}}, 
+\code{\link{if}}, \code{\link{ifelse}}, \code{\link{Comparison}},
 \code{\link{Overlap}}, \code{\link{Interval}}  }
 
 \examples{
@@ -97,12 +97,12 @@ x \%[]\% c("C","G")
 data(d.diamonds)
 d.diamonds[d.diamonds$price \%[]\% c(2400,2510),]
 
-# use it with an ordered factor and select all diamonds with 
+# use it with an ordered factor and select all diamonds with
 #   symmetry between G (included) and X (excluded).
 mean(d.diamonds[d.diamonds$symmetry \%[)\% c("G","X"),"price"])
 
 
-# use multiple ranges 
+# use multiple ranges
 2 \%[]\% cbind(1:4,2:5)
 
 # both arguments are recycled

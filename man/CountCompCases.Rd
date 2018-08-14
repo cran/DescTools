@@ -6,7 +6,7 @@
 \title{Count Complete Cases
 %%  ~~function to do ... ~~
 }
-\description{Return for each variable of a data frame the numer of missing values and the complete cases to be expected if this variable would be left out.
+\description{Return for each variable of a data frame the number of missing values and the complete cases to be expected if this variable would be omitted.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -21,7 +21,7 @@ CountCompCases(x)
   \item{digits}{the number of digits to be used when printing the results.}
   \item{\dots}{the dots are not further used.}
 }
-\value{A list with three elements. The first gives the numer of rows, the second the number of complete.cases for the whole data.frame.
+\value{A list with three elements. The first gives the number of rows, the second the number of complete cases for the whole data frame.
 The third element \code{tab} contains the data for the single variables.
 %%  ~Describe the value returned
 %%  If it is a LIST, use

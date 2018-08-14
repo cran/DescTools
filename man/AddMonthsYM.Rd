@@ -2,7 +2,8 @@
 \alias{AddMonthsYM}
 \title{Add a Month to a Date in YearMonth Format
 }
-\description{The format YYYYMM for dates can sometimes be convenient. Adding a number of months to such a date however is tedious, as the date structure should going to be preserved. Think of e.g. 201201 - 2 months, which would be expected to yield 201111. AddMonthsYM does this job.
+\description{
+The representation of year and month information in YYYYYMM format as an integer is sometimes a useful and efficient data structure. Adding a number of months to such a date is not quite catchy, however, since the date structure is to be retained. For example, 201201 - 2 [months] is expected to result in 201111 instead of 201199. AddMonthsYM does this job.
 }
 \usage{
 AddMonthsYM(x, n)

@@ -59,8 +59,8 @@ Hotelling's T2 test is the multivariate generlisation of the Student's t test. A
 }
 
 \references{
-Nordhausen K., Sirkia S., Oja H. and Tyler D. E. (2012) ICSNP: Tools for
-  Multivariate Nonparametrics. R package version 1.0-9.\cr
+Nordhausen K., Sirkia S., Oja H. and Tyler D. E. (2012) \emph{ICSNP: Tools for
+  Multivariate Nonparametrics}. R package version 1.0-9.\cr
   \url{https://cran.r-project.org/package=ICSNP}
 
 Anderson, T.W. (2003), \emph{An introduction to

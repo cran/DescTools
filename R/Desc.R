@@ -627,7 +627,8 @@ calcDesc.matrix    <- function(x, n, conf.level=0.95, verbose, rfrq, margins, p,
 }
 
 
-calcDesc.bivar     <- function(x, g, xname = NULL, gname = NULL, margin=FALSE, breaks=4, conf.level=0.95, smooth=TRUE, ...) {
+calcDesc.bivar     <- function(x, g, xname = NULL, gname = NULL, margin=FALSE, breaks=4, conf.level=0.95,
+                               smooth=TRUE, test=kruskal.test, ...) {
 
   ok <- complete.cases(x, g)
   nv <- sum(ok)
@@ -677,7 +678,7 @@ calcDesc.bivar     <- function(x, g, xname = NULL, gname = NULL, margin=FALSE, b
 
     }
 
-    res$kruskal.test <- tryCatch(kruskal.test(x=x, g=g, na.action="na.omit"), error=function(e) {e})
+    res$test <- tryCatch(test(x ~ g, na.action="na.omit"), error=function(e) {e})
 
   } else if(!is.numeric(x) && is.numeric(g)) {
 
@@ -705,7 +706,7 @@ calcDesc.bivar     <- function(x, g, xname = NULL, gname = NULL, margin=FALSE, b
     }
 
 
-    res$kruskal.test <- tryCatch(kruskal.test(g ~ x, na.action = "na.omit"), error=function(e) {e})
+    res$test <- tryCatch(test(g ~ x, na.action = "na.omit"), error=function(e) {e})
 
     res$atab <- table(unname(x[ok]), CutQ(g[ok], breaks = quantile(g[ok], probs = seq(0, 1, 1/breaks)), na.rm = TRUE))
     res$ptab <- prop.table(res$atab, 2)
@@ -1235,11 +1236,11 @@ print.Desc.numfact  <- function(x, digits = NULL, ...){
   z[] <- StrAlign(z, sep="\\r")
   print(z, quote=FALSE, print.gap=2, ...)
 
-  if (inherits(x$kruskal.test, "simpleError")) {
-    cat(gettextf("\nError in kruskal.test(x) : %s\n\n", x$kruskal.test$message))
+  if (inherits(x$test, "simpleError")) {
+    cat(gettextf("\nError in test(x) : %s\n\n", x$test$message))
   } else {
-    cat(gettextf("\nKruskal-Wallis rank sum test:\n  %s",
-                 .CaptOut(x$kruskal.test)[5], "\n\n", sep=""))
+    cat(gettextf("\n%s:\n  %s", x$test["method"],
+                 .CaptOut(x$test)[5], "\n\n", sep=""))
   }
 
   if((x$NAgs > 0) & (length(grep("NA", x$xname)) == 0))
@@ -1726,31 +1727,121 @@ plot.Desc.factfact  <- function(x, main=NULL, col1 = NULL, col2 = NULL, horiz = 
   plot.Desc.table(x, main=main, col1 = col1, col2 = col2, horiz=horiz)
 }
 
-plot.Desc.numfact   <- function(x, main=NULL, notch=FALSE, add_ni = TRUE, ... ){
+# plot.Desc.numfact   <- function(x, main=NULL, notch=FALSE, add_ni = TRUE, ... ){
+#
+#   # PlotMultiDens() would maybe be nice as well
+#   # or perhaps violinplot??
+#
+#   if(is.null(main))
+#     main <- x$main
+#
+#   # create a new graphics window
+#   par(mar=c(5, 4, 2*add_ni, 2) + .1, oma=c(0, 0, 4.1, 0))
+#
+#   layout(matrix(c(1,2), ncol=2, byrow=TRUE), widths=c(2,1), TRUE)
+#   boxplot(x$x ~ x$g, notch=notch, type="n", xaxt="n", yaxt="n", ... )
+#   grid(nx=NA, ny=NULL)
+#   bx <- boxplot(x$x ~ x$g, col="white", notch=notch, add=TRUE, cex.axis=0.8, ... )
+#
+#   if(add_ni)
+#     mtext(paste("n=", bx$n, sep=""), side=3, line=1, at=1:length(bx$n), cex=0.8)
+#
+#   plot.design(x$x ~ x$g, cex=0.8, xlab="", ylab="", cex.axis=0.8, main="", ... )
+#   mtext( "means", side=3, line=1, cex=0.8)
+#
+#   title(main=main, outer=TRUE)
+#
+#   if(!is.null(DescToolsOptions("stamp")))  Stamp()
+#
+#   # reset layout
+#   layout(1)
+#
+#   invisible()
+#
+# }
 
-  # PlotMultiDens() would maybe be nice as well
-  # or perhaps violinplot??
+
+
+plot.Desc.numfact <- function(x, main=NULL, add_ni = TRUE
+                              , args.boxplot= NULL
+                              , col=DescToolsOptions("col")
+                              , xlim=NULL, args.legend = NULL
+                              , type=c("design","dens"), ...) {
+
+  opt <- DescToolsOptions(stamp=NA)
+
+  type <- match.arg(type)
 
   if(is.null(main))
     main <- x$main
 
-  # create a new graphics window
-  par(mar=c(5, 4, 2*add_ni, 2) + .1, oma=c(0, 0, 4.1, 0))
+  z <- split(x$x, x$g)
 
-  layout(matrix(c(1,2), ncol=2, byrow=TRUE), widths=c(2,1), TRUE)
-  boxplot(x$x ~ x$g, notch=notch, type="n", xaxt="n", yaxt="n", ... )
-  grid(nx=NA, ny=NULL)
-  bx <- boxplot(x$x ~ x$g, col="white", notch=notch, add=TRUE, cex.axis=0.8, ... )
 
-  if(add_ni)
-    mtext(paste("n=", bx$n, sep=""), side=3, line=1, at=1:length(bx$n), cex=0.8)
+  if(type=="dens") {
 
-  plot.design(x$x ~ x$g, cex=0.8, xlab="", ylab="", cex.axis=0.8, main="", ... )
-  mtext( "means", side=3, line=1, cex=0.8)
+    # Alter-Geschlechtsplot
+    layout(matrix(c(1, 2), nrow = 2, byrow = TRUE), heights = c(2, 1.5)[1:2], TRUE)
+    par(mar = c(0, 6.1, 1.1, 2.1), oma=c(0,0,3,0))
 
-  title(main=main, outer=TRUE)
+    b <- PlotMultiDens(z, xlim=xlim, col=col
+                       , args.legend=args.legend
+                       , xaxt="n", panel.first=grid(col="darkgrey")
+                       , ylab="", main="", las=1, na.rm=TRUE, ...)
 
-  if(!is.null(DescToolsOptions("stamp")))  Stamp()
+    par(mar = c(3.1, 6.1, 1.1, 2.1))
+
+    # set defaults for the boxplot
+    args.boxplot1 <- list(x=z,
+                          frame.plot = FALSE, main = "",
+                          boxwex = 0.5, horizontal = TRUE,
+                          ylim=b$xlim, yaxt="n", xaxt = "n",
+                          outcex = 1.3, outcol = rgb(0, 0, 0, 0.5),
+                          col=SetAlpha(col, 0.6))
+    if ( !is.null(args.boxplot) )
+      args.boxplot1[names(args.boxplot)] <- args.boxplot
+    DoCall("boxplot", args.boxplot1)
+
+    axis(side=1)
+    axis(side=2, labels=names(z), at=seq(length(z)), las=1, lwd=0)
+
+  } else  {
+
+    # create a new graphics window
+    par(mar=c(5, 4, 2*add_ni, 2) + .1, oma=c(0, 0, 4.1, 0))
+
+    layout(matrix(c(1,2), ncol=2, byrow=TRUE), widths=c(2,1), TRUE)
+
+    boxplot(z, border="white", xaxt="n", yaxt="n", ... )
+    # set defaults for the boxplot
+    args.boxplot1 <- list(x=z,
+                          frame.plot = FALSE, main = "",
+                          horizontal = FALSE,
+                          col="white", add=TRUE, cex.axis=0.8,
+                          panel.first=grid(nx=NA, ny=NULL))
+    if ( !is.null(args.boxplot) )
+      args.boxplot1[names(args.boxplot)] <- args.boxplot
+
+    args.boxplot1["panel.first"]
+
+    bx <- DoCall("boxplot", args.boxplot1)
+
+    if(add_ni)
+      mtext(paste("n=", bx$n, sep=""), side=3, line=1, at=1:length(bx$n), cex=0.8)
+    d.frm <- data.frame(x$x, x$g)
+    names(d.frm) <- c(x$xname, x$gname)
+    plot.design(d.frm, cex=0.8, xlab="", ylab="", cex.axis=0.8, main="")
+
+    mtext( "means", side=3, line=1, cex=0.8)
+
+  }
+
+  title(main = main, outer = TRUE)
+
+  DescToolsOptions(opt)
+
+  if(!is.null(DescToolsOptions("stamp")))
+    Stamp()
 
   # reset layout
   layout(1)
@@ -1758,6 +1849,8 @@ plot.Desc.numfact   <- function(x, main=NULL, notch=FALSE, add_ni = TRUE, ... ){
   invisible()
 
 }
+
+
 
 
 plot.Desc.numnum    <- function(x, main = NULL, col=SetAlpha(1, 0.3),
@@ -2177,6 +2270,48 @@ print.abstract <- function (x, sep = NULL, width = NULL,
 }
 
 
+TwoGroups <- function(x, g,
+                      test=t.test, main=NULL,
+                      font.txt=NULL, font.desc=NULL, wrd=NULL, ...) {
+
+  res <- list(
+    txt = Phrase(x, g, na.rm=TRUE, ...),
+    desc = Desc(x ~ g, plotit=FALSE, test=test, digits=1)
+  )
+
+  plot(res$desc, type="dens", main="")
+
+  if(is.null(wrd)){
+    cat(res$txt, "\n")
+    print(res$desc)
+
+  } else {
+
+    WrdCaption(main, wrd = wrd)
+
+    ToWrd(res$txt, font=font.txt, wrd=wrd)
+    ToWrd("\n", wrd=wrd)
+
+    WrdTable(ncol=2, widths=c(5, 11), wrd=wrd)
+    out <- capture.output(res$desc)[-c(1:6)]
+    out <- gsub("p-val", "\n  p-val", out)
+    out <- gsub("contains", "\n  contains", out)
+    ToWrd(out, font=font.desc, wrd=wrd)
+    wrd[["Selection"]]$MoveRight(wdConst$wdCell, 1, 0)
+
+    WrdPlot(width = 10, height = 6.5, dfact = 2.1, crop = c(0, 0, 0.3, 0),
+            wrd = wrd, append.cr = TRUE)
+
+    wrd[["Selection"]]$EndOf( wdConst$wdTable )
+    # get out of tablerange
+    wrd[["Selection"]]$MoveRight( wdConst$wdCharacter, 2, 0 )
+    wrd[["Selection"]]$TypeParagraph()
+
+  }
+
+  invisible(res)
+
+}
 
 
 # Abstract <- function(x, sep=", ", zero.form=".", maxlevels=12, trunc=TRUE) {

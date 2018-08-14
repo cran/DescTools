@@ -1,6 +1,8 @@
 \name{XLGetRange}
 \alias{XLGetRange}
 \alias{XLGetWorkbook}
+\alias{XLCurrReg}
+
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Import Data Directly From Excel
 %%  ~~function to do ... ~~
@@ -16,6 +18,8 @@ XLGetRange(file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
            na.strings = NULL)
 
 XLGetWorkbook(file, compactareas = TRUE)
+
+XLCurrReg(cell)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -43,7 +47,7 @@ as this is probably the common use of this function.}
 \item{na.strings}{a character vector of strings which are to be interpreted as \code{NA} values. Blank fields are always considered to be missing values. Default is \code{NULL}, meaning none.}
 
 \item{compactareas}{logical, defining if areas should be returned by \code{XLGetWorkbook} as list or as matrix (latter is default).}
-
+\item{cell}{range of the left uppe cell, when current region should be used. }
 }
 \details{The result consists of a list of lists, if \code{as.data.frame} is set to \code{FALSE}.
 Be then prepared to encounter \code{NULL} values. Those will prevent from easily being able to coerce

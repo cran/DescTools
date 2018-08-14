@@ -1,4 +1,47 @@
 
+DescTools 0.99.25 (2018-08-13)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+  * GeomSn() calculates the elements of a geometric series.
+  * UnirootAll() is a simple extension of uniroot which extracts many
+    (presumably all) roots in an interval.
+  * A handful new financial functions have been included: PMT(), IPMT(),
+    PPMT(), RBAL() for periodic payment for an annuity, SLN(), DB(), SYD()
+    for calculating depreciation.
+  * XLCurrReg() can be used to import current regions in Excel with only
+    a left upper cell address.
+  * TwoGroups() describes a numeric variable by a factor with two levels.
+  * PlotCashFlow() creates a simple depiction for the timing of cash flows.
+  * WrdPageBreak() inserts a page break at the cursor position.
+
+UPDATED FUNCTIONS:
+  * Winsorize() gains an argument "type" to choose the quantile algorithm.
+  * NPV() has been vectorized for the argument i.
+  * IRR() allows to enter the interval for the solutions being searched in and
+    uses UnirootAll() to find all the solutions.
+  * OddRatio() gets an interface for glms to produce an odds ratio result table for
+    logistic regression objects.
+  * ModSummary() get an interface for OddsRatio produced by OddsRatio() and TMod()
+    supports the comparison of OddsRatios.
+  * PoissonCI() gets a new method "byar" for confidence intervals.
+  * VarCI() gains a new method "bonett" giving intervals with improved coverage in
+    nonnormal distributions.
+  * StrVal() gets an optimized regex (Credits to Markus Naepflin)
+  * plot.desc() for numeric ~ factor offers another plot type consisting of a density
+    plot and a boxplot.
+  * Phrase() can remove NAs now.
+  * Bivariate Desc() for numeric ~ factor allows to freely choose the test to be used.
+  * XLView() gains an argument "preserveStrings", to prevent factors or characters to be
+    converted to numeric when imported in Excel.
+  * "Additional_repositories" has been changed from http://www.stats.ox.ac.uk/pub/RWin/
+    to http://www.omegahat.net/R, as the service in Oxford is no longer provided.
+
+BUGFIXES:
+  * TOne will display the legend also when marginal results are omitted.
+
+
+
 DescTools 0.99.24 (2018-03-18)
 ------------------------------
 
@@ -63,22 +106,22 @@ UPDATED FUNCTIONS:
    * Shade loses the argument xlim for the new one named breaks and can
      now shade multiple areas.
    * A Rev interface for data.frames has been added.
-   * PlotPyramid gets a new argument rev and does return the result invisibly.
-   * SortMixed and OrderMixed have been updated with newest gtools version.
-   * TOne will consequently report the reference level for dichotomic factors.
-   * TMod will use modelnames for the table now.
-   * BinomCI will finally use rownames for a resulting matrix.
+   * PlotPyramid() gets a new argument rev and does return the result invisibly.
+   * SortMixed() and OrderMixed have been updated with newest gtools version.
+   * TOne() will consequently report the reference level for dichotomic factors.
+   * TMod() will use modelnames for the table now.
+   * BinomCI() will finally use rownames for a resulting matrix.
    * Between and Outside functions (%[]%, %)[%, ...) accept dates now.
 
 BUGFIXES:
-   * Trim mixed up the order of the response vector and did not return
+   * Trim() mixed up the order of the response vector and did not return
      correct results. (Credits to Bastien Ferland-Raymond)
-   * Conf did not return the correct detection prevalence.
-   * PlotBinTree would not have placed the text correctly in the horizontal
+   * Conf() did not return the correct detection prevalence.
+   * PlotBinTree() would not have placed the text correctly in the horizontal
      representation.
-   * Str would not have passed ... args to str, as stated in help.
-   * PlotLinesA would not have set supplied margins.
-   * IsZero would mistakenly have returned TRUE for negative values.
+   * Str() would not have passed ... args to str, as stated in help.
+   * PlotLinesA() would not have set supplied margins.
+   * IsZero() would mistakenly have returned TRUE for negative values.
    * ToWrd.table will place the title right behind the table instead at the
      end of the document.
 
@@ -88,8 +131,8 @@ DescTools 0.99.22 (2017-09-14)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
-   * Timezone will extract the timezone from a POSIXct object.
-   * SetNames() can set rownames, columnnames or names.
+   * Timezone() extracts the timezone from a POSIXct object.
+   * SetNames() can set rownames, columnnames or simply names.
    * PercentRank() calculates percent ranks.
 
 UPDATED FUNCTIONS:
@@ -99,11 +142,11 @@ UPDATED FUNCTIONS:
    * BubbleLegend() offers some more arguments.
    * LogSt() can now do what LogLin could.
    * PolarGrid() offers more control for axis labels.
-   * WrdTableBorders gets arguments for width and color of the borders.
+   * WrdTableBorders() gets arguments for width and color of the borders.
 
 BUGFIXES:
-   * ModelDlg would not have returned long data.frames correctly.
-   * Freq would not have calculated percentages, when NAs were to be included
+   * ModelDlg() would not have returned long data.frames correctly.
+   * Freq() would not have calculated percentages, when NAs were to be included
      and a userdefined order was desired.
 
 DEFUNCT:
@@ -126,10 +169,10 @@ DescTools 0.99.21 (2017-06-29)
 ------------------------------
 
 UPDATED FUNCTIONS:
-   * lines.lm would not have handled transformed predictors.
-   * XLGetRange gets an argument to determine date columns.
-   * Two new methods for MultinomCI implemented: wald, wilson.
-   * PseudoR2 will work with vglms by now.
+   * lines.lm() would not have handled transformed predictors.
+   * XLGetRange() gets an argument to determine date columns.
+   * Two new methods for MultinomCI() implemented: wald, wilson.
+   * PseudoR2() will work with vglms by now.
 
 BUGFIXES:
    * PseudoR2 for multinom models did not always return a value.

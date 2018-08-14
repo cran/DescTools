@@ -1747,6 +1747,30 @@ PlotBag <- function(x, y,
 }
 
 
+# New interface
+
+# PlotBag <- function(x, y,
+#                     outl = list(pch, cex, col, bg),
+#                     looppoints = list(pch, cex, col, bg),
+#                     bagpoints = list(pch, cex, col, bg),
+#                     loophull = list(lwd, col, border),
+#                     baghull = list(lwd, col, border),
+#                     factor=3, # expanding factor for bag to get the loop
+#                     na.rm=FALSE, # should 'NAs' values be removed or exchanged
+#                     approx.limit=300, # limit
+#                     add=FALSE, # if TRUE graphical elements are added to actual plot
+#                     dkmethod=2, # in 1:2; there are two methods for approximating the bag
+#                     precision=1, # controls precision of computation
+#                     verbose=FALSE,debug.plots="no", # tools for debugging
+#                     transparency=FALSE,
+#                     ... # to define further parameters of plot
+#                     )
+# #
+# outlty, outlwd, outpch, outcex, outcol, outbg
+#
+#
+
+
 
 
 

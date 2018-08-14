@@ -55,6 +55,14 @@ Desc(d.diamonds$colour)
 
 # The label can be deleted by setting it to NULL
 Label(d.diamonds$colour) <- NULL
+
+# Labelling the columns of a data.frame is best done with a loop
+# (all so far seen *apply aproaches lead to more complicated code...)
+lbl <-  RndWord(16, 7)
+for(i in seq_along(lbl))
+  Label(d.pizza[, i]) <- lbl[i]
+
+Str(d.pizza)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

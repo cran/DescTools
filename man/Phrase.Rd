@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Phrase(x, g, glabels = NULL, xname = NULL, unit = NULL, lang = "engl")
+Phrase(x, g, glabels = NULL, xname = NULL, unit = NULL, lang = "engl", na.rm = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -30,6 +30,10 @@ Phrase(x, g, glabels = NULL, xname = NULL, unit = NULL, lang = "engl")
   \item{lang}{the language to be used. Only english (default) and german implemented (so far).
 %%     ~~Describe \code{lang} here~~
 }
+\item{na.rm}{logical, should \code{NA}s be omitted? Defaults to \code{FALSE}.
+%%     ~~Describe \code{na.rm} here~~
+}
+
 }
 \value{a text
 %%  ~Describe the value returned

@@ -24,27 +24,26 @@ export(
 "LOCF","LOF","Logit","LogitInv","LogSt","LogStInv","LsFct","LsObj","Mar","Margins","MeanAD",
 "MeanCI","MeanDiffCI","MeanSE","MedianCI","MHChisqTest","Midx","Minute","MixColor","Mode","Month",
 "MosesTest","MoveAvg","MultinomCI","MutInf","Ndec",
-"NemenyiTest",
-"Now","NPV","NPVFixBond","YTM","OctToDec","OddsRatio","OPR","OrderMixed","Outlier","Overlap",
+"NemenyiTest","Now","OctToDec","OddsRatio","OPR","OrderMixed","Outlier","Overlap",
 "PageTest",
 "PairApply","ParseFormula","ParseSASDatalines","CorPart","PartitionBy","PasswordDlg","pBenf","PearsonTest",
 "PercTable",
 "Permn","Phi","plot.bagplot","plot.Conf","plot.Lc","plot.Lclist","plot.PostHocTest","PlotACF","PlotArea","PlotBag","PlotBagPairs",
 "PlotBubble","PlotCandlestick","PlotCirc","PlotCorr",
 
-"PlotDot","PlotFaces","PlotFun","PlotGACF","PlotLinesA","PlotMar","PlotMarDens","PlotMonth","PlotMultiDens","PlotPar","PlotPolar","PlotPyramid","PlotQQ","ColPicker","PlotTernary","PlotTreemap",
+"PlotDot","PlotFaces","PlotFun","PlotGACF","PlotCashFlow","PlotLinesA","PlotMar","PlotMarDens","PlotMonth","PlotMultiDens","PlotPar","PlotPolar","PlotPyramid","PlotQQ","ColPicker","PlotTernary","PlotTreemap",
 "PlotVenn","PlotViolin","PlotWeb","PoissonCI","PolarGrid","PolToCart","PostHocTest","power.chisq.test","PpAddSlide","PpPlot","PpText","Prec","pRevGumbel","Primes","print.Assocs","print.Conf","print.CorPolychor","print.DunnTest","print.Freq","print.HoeffD","print.ICC","print.mtest","print.PostHocTest",
 "qBenf","qRevGumbel","qRevGumbelExp","Quarter","RadToDeg","rBenf","Recode","Recycle","RelRisk","Rename","reorder.factor",
 "Rev","RgbToCol","RgbToLong","RndPairs","RobScale","Rosenbluth","Rotate","RoundTo","rRevGumbel",
 "RunsTest","SampleTwins","RndWord","SaveAsDlg","ScheffeTest","Second","SecToHms",
-"SelectVarDlg",
+"SelectVarDlg","XLCurrReg",
 "Sens","SetAlpha","ShapiroFranciaTest","SiegelTukeyRank",
 "SiegelTukeyTest","Lookup","KendallTauA","VarTest","PlotBinTree",
 "SignTest","SmoothSpline","FindRProfile",
 "Skew","Small","SomersDelta","Sort","SortMixed","SpearmanRho","Spec","SphToCart","split.formula","SplitPath","SpreadOut","Stamp","Str","StrAbbr","StrAlign","Strata","StrCap","StrChop","StrCountW","StrDist","StrIsNumeric","StrLeft","StrPad","StrPos","StrRev","StrRight","StrTrim","StrTrunc","StrVal","StuartMaxwellTest","StuartTauC","SysInfo","TextContrastColor","TextToTable","TheilU","Today","ToLong","ToWide","Trim","TschuprowT",
 "UncertCoef","UnitConv",
 "Untable", "ToWrd",
-"VarCI","VecRot","VecShift","Vigenere","Week","Weekday","Winsorize","WoolfTest","WrdCaption","WrdGoto","WrdInsertBookmark","WrdTable","WrdKill","WrdPlot",
+"VarCI","VecRot","VecShift","Vigenere","Week","Weekday","Winsorize","WoolfTest","WrdCaption","WrdGoto","WrdPageBreak","WrdInsertBookmark","WrdTable","WrdKill","WrdPlot",
 "WrdUpdateBookmark","XLGetRange","XLGetWorkbook","XLKill","XLView","Year","YearDay","YearMonth",
 "YuenTTest","YuleQ","YuleY","ZeroIfNA","NAIfZero","Zodiac",
 "ZTest",
@@ -69,7 +68,8 @@ export(
 "dFrechet","dGumbel","dRevWeibull","dNegWeibull","dGenExtrVal","dGenPareto","dExtrVal","dOrder",
 "pFrechet","pGumbel","pRevWeibull","pNegWeibull","pGenExtrVal","pGenPareto","pExtrVal","pOrder",
 "qFrechet","qGumbel","qRevWeibull","qNegWeibull","qGenExtrVal","qGenPareto","qExtrVal",
-"dGompertz","pGompertz","qGompertz","rGompertz"
+"dGompertz","pGompertz","qGompertz","rGompertz","GeomSn","UnirootAll", "TwoGroups",
+"NPV","NPVFixBond","YTM","PMT","IPMT","PPMT","SLN","DB","SYD","RBAL"
 )
 
 
@@ -82,17 +82,16 @@ importFrom("stats", ".nknots.smspl", "IQR", "acf", "addmargins", "anova", "aov",
            "uniroot", "var", "weighted.mean", "weights", "wilcox.test", "xtabs", "as.dendrogram", "dist", "hclust", "order.dendrogram", "smooth.spline","var.test"
            )
 importFrom("utils", "capture.output", "combn", "head", "help.search", "ls.str", "lsf.str", "memory.limit", "object.size", "read.table", "select.list", "sessionInfo", "stack", "str", "tail",
-           "write.table")
+           "write.table", "browseURL")
 
 importFrom("boot", "boot", "boot.ci", "corr")
 importFrom("mvtnorm", "qmvt", "pmvnorm")
 
 importFrom("stats", "median", "reorder","AIC", "BIC", "confint", "deviance", "df", "logLik","lm.wfit","profile",
-           "coef", "coefficients", "cov2cor", "df.residual","nobs", "vcov","update","relevel","rbeta", "rexp", "qexp")
+           "coef", "coefficients", "cov2cor", "df.residual","nobs", "vcov","update","relevel","rbeta", "rexp", "qexp","reshape")
 importFrom("foreign", "read.spss", "read.dta")
 
 importFrom(Rcpp, evalCpp)
-importFrom("utils", "browseURL")
 
 importFrom("manipulate", "manipulate", "picker","button","checkbox","slider")
 importFrom("MASS", "boxcox", "fractions")
@@ -300,6 +299,7 @@ S3method(IdentifyA, formula)
 
 S3method(ModSummary, glm)
 S3method(ModSummary, lm)
+S3method(ModSummary, OddsRatio)
 
 S3method(Mean, default)
 S3method(Mean, Freq)
@@ -314,6 +314,14 @@ S3method(Median, factor)
 S3method(Append, default)
 S3method(Append, data.frame)
 S3method(Append, matrix)
+
+
+S3method(OddsRatio, default)
+S3method(OddsRatio, glm)
+S3method(OddsRatio, zeroinfl)
+S3method(OddsRatio, multinom)
+
+S3method(print, OddsRatio)
 
 
 S3method(print, CountCompCases)

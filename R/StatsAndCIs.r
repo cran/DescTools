@@ -2325,10 +2325,10 @@ MultinomCI <- function(x, conf.level = 0.95,
 # Confidence Intervals for Poisson mean
 
 PoissonCI <- function(x, n = 1, conf.level = 0.95,
-                      method = c("exact","score", "wald")) {
+                      method = c("exact","score", "wald","byar")) {
 
   iPoissonCI <- function(x, n = 1, conf.level = 0.95,
-                         method = c("exact","score", "wald")) {
+                         method = c("exact","score", "wald","byar")) {
 
     # ref:  http://www.ijmo.org/papers/189-S083.pdf but wacklig!!!
     # http://www.math.montana.edu/~rjboik/classes/502/ci.pdf
@@ -2347,7 +2347,7 @@ PoissonCI <- function(x, n = 1, conf.level = 0.95,
 
     lambda <- x/n
 
-    switch( match.arg(arg=method, choices=c("exact","score", "wald"))
+    switch( match.arg(arg=method, choices=c("exact","score", "wald","byar"))
             , "exact" = {
               ci <- poisson.test(x, n, conf.level = conf.level)$conf.int
               lwr.ci <- ci[1]
@@ -2364,6 +2364,13 @@ PoissonCI <- function(x, n = 1, conf.level = 0.95,
               lwr.ci <- lambda - term2
               upr.ci <- lambda + term2
             }
+            , "byar" = {
+              xcc <- x + 0.5
+              zz  <- (z/3) * sqrt(1/xcc)
+              lwr.ci <- (xcc * (1 - 1/(9 * xcc) - zz)^3)/n
+              upr.ci <- (xcc * (1 - 1/(9 * xcc) + zz)^3)/n
+            }
+
             # agresti-coull is the same as score
             #             , "agresti-coull" = {
             #               lwr.ci <- lambda + z^2/(2*n) - z*sqrt(lambda/n + z^2/(4*n^2))
@@ -2390,7 +2397,13 @@ PoissonCI <- function(x, n = 1, conf.level = 0.95,
 
   res <- sapply(1:maxdim, function(i) iPoissonCI(x=lgp$x[i], n=lgp$n[i], conf.level=lgp$conf.level[i], method=lgp$method[i]))
   rownames(res)[1] <- c("est")
-  colnames(res) <- names(x)
+
+  lgn <- Recycle(x=if(is.null(names(x))) paste("x", seq_along(x), sep=".") else names(x),
+                 n=if(is.null(names(n))) paste("n", seq_along(n), sep=".") else names(n),
+                 conf.level=conf.level, method=method)
+  xn <- apply(as.data.frame(lgn[sapply(lgn, function(x) length(unique(x)) != 1)]), 1, paste, collapse=":")
+
+  colnames(res) <- xn
 
   return(t(res))
 
@@ -2889,11 +2902,11 @@ CoefVar.aov <- function (x, unbiased = FALSE, conf.level = NA, na.rm = FALSE, ..
 
 
 
-VarCI <- function (x, method = c("classic", "norm","basic","stud","perc","bca"),
+VarCI <- function (x, method = c("classic", "bonett", "norm", "basic","stud","perc","bca"),
                    conf.level = 0.95, sides = c("two.sided","left","right"), na.rm = FALSE, R=999) {
 
   if (na.rm) x <- na.omit(x)
-  method <- match.arg(method, c("classic", "norm","basic","stud","perc","bca"))
+  method <- match.arg(method, c("classic","bonett", "norm","basic","stud","perc","bca"))
 
   sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
   if(sides!="two.sided")
@@ -2904,6 +2917,21 @@ VarCI <- function (x, method = c("classic", "norm","basic","stud","perc","bca"),
     v <- var(x)
     res <- c (var = v, lwr.ci = df * v/qchisq((1 - conf.level)/2, df, lower.tail = FALSE)
               , upr.ci = df * v/qchisq((1 - conf.level)/2, df) )
+
+  } else if(method=="bonett") {
+
+    z <- qnorm(1-(1-conf.level)/2)
+    n <- length(x)
+    cc <- n/(n-z)
+    v <- var(x)
+    mtr <- mean(x, trim = 1/(2*(n-4)^0.5))
+    m <- mean(x)
+    gam4 <- n * sum((x-mtr)^4) / (sum((x-m)^2))^2
+    se <- cc * sqrt((gam4 - (n-3)/n)/(n-1))
+    lci <- exp(log(cc * v) - z*se)
+    uci <- exp(log(cc * v) + z*se)
+
+    res <- c(var=v, lwr.ci=lci, upr.ci=uci)
 
   } else {
     boot.fun <- boot(x, function(x, d) var(x[d], na.rm=na.rm), R=R)
@@ -4471,10 +4499,143 @@ RelRisk <- function(x, y = NULL, conf.level = NA, method = c("score", "wald", "u
 
 
 
-OddsRatio <- function(x, y = NULL, conf.level = NA, method=c("wald", "mle", "midp")
+OddsRatio <- function (x, conf.level = NULL, ...) {
+  UseMethod("OddsRatio")
+}
+
+
+
+OddsRatio.glm <- function(x, conf.level = NULL, digits=3, ...) {
+
+  if(is.null(conf.level)) conf.level <- 0.95
+
+  # Fasst die Ergebnisse eines binomialen GLMs als OR summary zusammen
+
+  d.res <- data.frame(summary(x)$coefficients)
+  names(d.res)[c(2,4)] <- c("Std. Error","Pr(>|z|)")
+
+  d.res$or <- exp(d.res$Estimate)
+  # ci or
+  d.res$"or.lci" <- exp(d.res$Estimate + qnorm(0.025)*d.res$"Std. Error" )
+  d.res$"or.uci" <- exp(d.res$Estimate + qnorm(0.975)*d.res$"Std. Error" )
+
+  d.res$sig <- Format(d.res$"Pr(>|z|)", fmt="*")
+  d.res$pval <- Format(d.res$"Pr(>|z|)", fmt="p")
+
+  # d.res["(Intercept)",c("or","or.lci","or.uci")] <- NA
+  # d.res["(Intercept)","Pr(>|z|)"] <- "NA"
+  # d.res["(Intercept)"," "] <- ""
+
+  d.print <- data.frame(lapply(d.res[, 5:7], Format, digits=digits),
+                        pval=d.res$pval, sig=d.res$sig, stringsAsFactors = FALSE)
+  rownames(d.print) <- rownames(d.res)
+  colnames(d.print)[4:5] <- c("Pr(>|z|)","")
+
+  res <- list(or=d.print, call=x$call,
+              BrierScore=BrierScore(x), PseudoR2=PseudoR2(x, which="all"), res=d.res)
+  class(res) <- "OddsRatio"
+
+  return(res)
+
+}
+
+
+OddsRatio.multinom <- function(x, conf.level=NULL, digits=3, ...) {
+
+  if(is.null(conf.level)) conf.level <- 0.95
+
+  # class(x) <- class(x)[class(x)!="regr"]
+  r.summary <- summary(x, Wald.ratios = TRUE)
+
+  coe <- t(r.summary$coefficients)
+  coe <- reshape(data.frame(coe, id=row.names(coe)), varying=1:ncol(coe), idvar="id"
+                 , times=colnames(coe), v.names="or", direction="long")
+
+  se <- t(r.summary$standard.errors)
+  se <- reshape(data.frame(se), varying=1:ncol(se),
+                times=colnames(se), v.names="se", direction="long")[, "se"]
+
+  d.res <- r.summary
+
+  d.print <- data.frame(
+    "or"= Format(exp(coe[, "or"]), digits=digits),
+    "or.lci" = Format(exp(coe[, "or"] + qnorm(0.025) * se), digits=digits),
+    "or.uci" = Format(exp(coe[, "or"] - qnorm(0.025) * se), digits=digits),
+    "pval" = Format(2*(1-pnorm(q = abs(coe[, "or"]/se), mean=0, sd=1)), fmt="p", digits=3),
+    "sig" = Format(2*(1-pnorm(q = abs(coe[, "or"]/se), mean=0, sd=1)), fmt="*"),
+    stringsAsFactors = FALSE
+  )
+
+  colnames(d.print)[4:5] <- c("Pr(>|z|)","")
+  rownames(d.print) <- paste(coe$time, coe$id, sep=":")
+
+  res <- list(or = d.print, call = x$call,
+              BrierScore = NA, # BrierScore(x),
+              PseudoR2 = PseudoR2(x, which="all"), res=d.res)
+
+  class(res) <- "OddsRatio"
+  return(res)
+
+}
+
+
+
+OddsRatio.zeroinfl <- function (x, conf.level = NULL, digits = 3, ...) {
+
+  if(is.null(conf.level)) conf.level <- 0.95
+
+  d.res <- data.frame(summary(x)$coefficients$zero)
+  names(d.res)[c(2, 4)] <- c("Std. Error", "Pr(>|z|)")
+
+  d.res$or <- exp(d.res$Estimate)
+  d.res$or.lci <- exp(d.res$Estimate + qnorm(0.025) * d.res$"Std. Error")
+  d.res$or.uci <- exp(d.res$Estimate + qnorm(0.975) * d.res$"Std. Error")
+  d.res["(Intercept)", c("or", "or.lci", "or.uci")] <- NA
+  d.res$sig <- format(as.character(cut(d.res$"Pr(>|z|)", breaks = c(0,
+                                                                    0.001, 0.01, 0.05, 0.1, 1), include.lowest = TRUE, labels = c("***",
+                                                                                                                                  "**", "*", ".", " "))), justify = "left")
+  d.res$"Pr(>|z|)" <- Format(d.res$"Pr(>|z|)", fmt="p")
+  d.res["(Intercept)", "Pr(>|z|)"] <- "NA"
+  d.res["(Intercept)", " "] <- ""
+  d.print <- data.frame(lapply(d.res[, 5:7], Format, digits=digits),
+                        p.value = d.res[,4], sig = d.res[, 8], stringsAsFactors = FALSE)
+
+  rownames(d.print) <- rownames(d.res)
+  res <- list(or = d.print, call = x$call,
+              BrierScore = BrierScore(resp=(model.response(model.frame(x)) > 0) * 1L,
+                                      pred=predict(x, type="zero")),
+              PseudoR2 = PseudoR2(x, which="all"), res=d.res)
+
+  class(res) <- "OddsRatio"
+
+  return(res)
+}
+
+
+print.OddsRatio <- function(x, ...){
+
+    cat("\nCall:\n")
+    print(x$call)
+
+    cat("\nOdds Ratios:\n")
+    print(x$or)
+    cat("---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 \n\n")
+
+    if(!is.null(x$BrierScore)){
+      cat(gettextf("Brier Score: %s     Nagelkerke R2: %s\n\n",
+                   round(x$BrierScore,3), round(x$PseudoR2["Nagelkerke"],3)))
+    }
+
+}
+
+
+
+OddsRatio.default <- function(x, conf.level = NULL, y = NULL, method=c("wald", "mle", "midp")
                       , interval = c(0, 1000), ...) {
 
   if(!is.null(y)) x <- table(x, y, ...)
+
+  if(is.null(conf.level)) conf.level <- NA
 
   p <- (d <- dim(x))[1L]
   if(!is.numeric(x) || length(d) != 2L || p != d[2L] || p != 2L)

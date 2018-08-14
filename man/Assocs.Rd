@@ -33,7 +33,7 @@ Assocs(x, conf.level = 0.95, verbose = NULL)
 }
 \details{This function wraps the association measures phi, contingency coefficient, Cramer's V, Goodman Kruskal's Gamma, Kendall's Tau-b,
 Stuart's Tau-c, Somers' Delta, Pearson and Spearman correlation, Guttman's Lambda, Theil's Uncertainty Coefficient and the mutual information.
-%%  ~~ If necessary, more details than the description above ~~
+
 }
 \value{ numeric matrix, dimension [1:17, 1:3]\cr
 the first column contains the estimate, the second the lower confidence interval, the third the upper one.

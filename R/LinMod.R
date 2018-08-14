@@ -192,6 +192,7 @@ print.Conf <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   if(nrow(x$table)!=2) cat("\nOverall Statistics\n")
 
   txt <- gettextf("
+                Total n : %s
                Accuracy : %s
                  95%s CI : (%s, %s)
     No Information Rate : %s
@@ -199,6 +200,7 @@ print.Conf <- function(x, digits = max(3, getOption("digits") - 3), ...) {
 
                   Kappa : %s
  Mcnemar's Test P-Value : %s\n\n",
+                  Format(x$n, digits=0, big.mark="'"),
                   Format(x$acc, digits=digits), "%",
                   Format(x$acc.lci, digits=digits), Format(x$acc.uci, digits=digits),
                   Format(x$nri, digits=digits), Format(x$acc.pval, fmt="p", na.form="NA"),
@@ -538,7 +540,7 @@ NMAE <- function(x, ref, train.y){
 
 
 
-VIF <- function(mod, ...) {
+VIF <- function(mod) {
 
   # original from car: Henric Nilsson and John Fox
 
@@ -609,12 +611,12 @@ ModSummary.lm <- function(x, conf.level=0.95, ...){
     sigma         = sigma,
     r.squared     = r.squared,
     adj.r.squared = adj.r.squared,
-    F             = F,
+    F             = fstatistic[[1]],
     numdf         = fstatistic[[2]],
     dendf         = fstatistic[[3]],
-    p             = pf(F, fstatistic[[2]], fstatistic[[3]], lower.tail=FALSE),
-    N             = sum(df[1:2])
+    p             = pf(fstatistic[[1]], fstatistic[[2]], fstatistic[[3]], lower.tail=FALSE)
   )),
+  N             = nobs(x),
   logLik        = logLik(x),
   deviance      = deviance(x),
   AIC           = AIC(x),
@@ -669,6 +671,7 @@ ModSummary.glm <- function(x, conf.level=0.95, ...){
     statsy <- .assocs_condis(pred, model.response(x$model))
 
     statsx <- c(statsx,
+             "N" =  nobs(x),
              "Kendall Tau-a" = unname(statsy["taua"]),
              "Somers Delta" = unname(statsy["somers_r"]),
              "Gamma" = unname(statsy["gamma"]),
@@ -681,6 +684,7 @@ ModSummary.glm <- function(x, conf.level=0.95, ...){
                                 "logLik0", "G2"))
 
     statsx <- c(statsx[],
+             "N" =  nobs(x),
              "MAE" = MAE(pred, model.response(x$model)),
              "MAPE" = MAPE(pred, model.response(x$model)),
              "MSE" = MSE(pred, model.response(x$model)),
@@ -697,6 +701,24 @@ ModSummary.glm <- function(x, conf.level=0.95, ...){
   list(coef=coefx, ncoef=length(x$coefficients), statsx=statsx, contrasts=x$contrasts, xlevels=x$xlevels, call=x$call)
 
 }
+
+
+ModSummary.OddsRatio <- function(x, conf.level=0.95, ...){
+
+  statsx <- x$PseudoR2
+  statsx <- c(N = nobs(x),
+              statsx[],
+              "BrierScore" = x$BrierScore)
+
+  coef <- data.frame(name=rownames(x$or), est=x$res$or, se=NA, stat=NA, p=x$res$`Pr(>|z|)`,
+             lci=x$res$or.lci, uci=x$res$or.uci, stringsAsFactors = FALSE)
+
+  list(coef=coef, ncoef=nrow(x$or),
+       statsx=statsx, contrasts=NULL, xlevels=NULL,
+       call=x$call)
+}
+
+
 
 
 TMod <- function(..., FUN = NULL){
@@ -774,7 +796,12 @@ TMod <- function(..., FUN = NULL){
 print.TMod <- function(x, ...){
 
   x[[1]][, -1] <- Format(x[[1]][, -1], digits=3, na.form = "-")
+
+  x2 <- x[[2]]
   x[[2]][, -1] <- Format(x[[2]][, -1], digits=3, na.form = "-")
+
+  x[[2]][x[[2]]$stat %in% c("numdf", "dendf", "N"), -1] <-
+    Format(x2[x[[2]]$stat %in% c("numdf", "dendf", "N"), -1], digits=0, na.form="-")
 
   m <- rbind(x[[1]],  setNames(c("---", rep("", ncol(x[[1]]) -1)), colnames(x[[1]])),
              setNames(x[[2]], colnames(x[[1]])))

@@ -99,6 +99,10 @@
 # plot.new has not been called yet
 
 
+# Shooting list .....
+# importFrom("manipulate", "manipulate", "picker","button","checkbox","slider")
+# importFrom("foreign", "read.spss", "read.dta") SPSS is not needed anymore, but Systat is
+
 
 # **********  Open implementations:
 
@@ -648,6 +652,11 @@ Fibonacci <- function(n) {
 }
 
 
+GeomSn <- function(a1, q, n){
+  a1 * (q^(n+1)-1)/(q-1)
+}
+
+
 ###  M^k  for a matrix  M and non-negative integer 'k'
 ## Matrixpower
 
@@ -684,8 +693,48 @@ Vigenere <- function(x, key = NULL, decrypt = FALSE) {
 
 
 
+## =============================================================================
+## uniroot.all: multiple roots of one nonlinear equation
+## =============================================================================
+
+UnirootAll <- function (f, interval, lower= min(interval),
+                         upper= max(interval), tol= .Machine$double.eps^0.2,
+                         maxiter= 1000, n = 100, ... ) {
+
+  # this is a copy of rootSolve::uniroot.all v. 1.7
+  # author: Karline Soetaert
+
+
+  ## error checking as in uniroot...
+  if (!missing(interval) && length(interval) != 2)
+    stop("'interval' must be a vector of length 2")
+  if (!is.numeric(lower) || !is.numeric(upper) || lower >=
+      upper)
+    stop("lower < upper  is not fulfilled")
+
+  ## subdivide interval in n subintervals and estimate the function values
+  xseq <- seq(lower, upper, len=n+1)
+  mod  <- f(xseq, ...)
+
+  ## some function values may already be 0
+  Equi <- xseq[which(mod==0)]
+
+  ss   <- mod[1:n] * mod[2:(n+1)]  # interval where functionvalues change sign
+  ii   <- which(ss<0)
+
+  for (i in ii)
+    Equi <- c(Equi, uniroot(f, lower=xseq[i], upper=xseq[i+1], ...)$root)
+
+  return(Equi)
+}
+
+
+
+
+
+
 Winsorize <- function(x, minval = NULL, maxval = NULL,
-                      probs=c(0.05, 0.95), na.rm = FALSE) {
+                      probs=c(0.05, 0.95), na.rm = FALSE, type=7) {
 
   # following an idea from Gabor Grothendieck
   # http://r.789695.n4.nabble.com/how-to-winsorize-data-td930227.html
@@ -700,7 +749,7 @@ Winsorize <- function(x, minval = NULL, maxval = NULL,
   # the pmax(pmin()-version is slower than the following
 
   if(is.null(minval) || is.null(maxval)){
-    xq <- quantile(x=x, probs=probs, na.rm=na.rm)
+    xq <- quantile(x=x, probs=probs, na.rm=na.rm, type=type)
     if(is.null(minval)) minval <- xq[1]
     if(is.null(maxval)) maxval <- xq[2]
   }
@@ -1584,12 +1633,16 @@ StrVal <- function(x, paste = FALSE, as.numeric = FALSE, dec=getOption("OutDec")
   # not sure if this is really a problem: -> oberserve...
   # StrVal(x="- 2.5", paste = FALSE, as.numeric = FALSE)
 
-  pat <- paste("[-+", dec, "e0-9]*\\d", sep="")
+  # pat <- paste("[-+", dec, "e0-9]*\\d", sep="")
+  # new pattern by markus
+  pat <- gettextf("([+-]\\s?)?\\d+(%s\\d+)?([eE][+-]?\\d+)?", ifelse(dec==".", "\\.", dec))
+
   gfound <- gregexpr(pattern=pat, text=x)
   vals <- lapply(seq_along(x), function(i){
     found <- gfound[[i]]
     ml <- attr(found, which="match.length")
     res <- sapply(seq_along(found), function(j) substr(x[i], start=found[j], stop=found[j]+ml[j]-1) )
+    res <- sapply(res, gsub, pattern=" ", replacement="")
     return(res)
   })
 
@@ -5239,14 +5292,15 @@ RndWord <- function(size, length, x = LETTERS, replace = TRUE, prob = NULL){
 
 NPV <- function(i, cf, t=seq(along=cf)-1) {
   # Net present value
-  sum(cf/(1+i)^t)
+  sapply(i, function(ii) sum(cf/(1 + ii)^t))
 }
 
 
-IRR <- function(cf, t=seq(along=cf)-1) {
+IRR <- function(cf, t=seq(along=cf)-1, interval=c(-1.5, 1.5), ...) {
   # internal rate of return
-  uniroot(NPV, c(0,1), cf=cf, t=t)$root
+  UnirootAll(f=function(i) NPV(i, cf=cf, t=t), interval=interval, ...)
 }
+
 
 
 OPR <- function (K, D = NULL, log = FALSE) {
@@ -5274,6 +5328,72 @@ YTM <- function(Co, PP, RV, n){
   uniroot(function(i) -PP + sum(Co / (1+i)^(1:n), RV / (1+i)^n)
           , c(0,1))$root
 }
+
+
+# Returns the periodic payment for an annuity
+# calculates the payment for a loan based on constant payments and a constant interest rate.
+# Rate    Required. The interest rate for the loan.
+# Nper    Required. The total number of payments for the loan.
+# Pv    Required. The present value, or the total amount that a series of future payments is worth now; also known as the principal.
+# Fv    Optional. The future value, or a cash balance you want to attain after the last payment is made. If fv is omitted, it is assumed to be 0 (zero), that is, the future value of a loan is 0.
+
+# match.arg( arg=ord, choices=c("hsv","default")
+
+# Berechnung einer Annuitaet
+PMT <- function(rate, nper, pv, fv=0, type=0) {
+  if(type %nin% c(0, 1))
+    stop("type must be 0 or 1")
+  -((pv * (1+rate)^nper + fv) * rate/((1+rate)^nper-1) * (1+type*rate)^-1)
+}
+
+# Zins fuer die Annuitaetentilgung
+IPMT <- function(rate, per, nper, pv, fv=0, type=0){
+  A <- -PMT(rate, nper, pv, fv, type)
+  (A - pv * rate) * (1+rate)^(per-1) - A
+}
+
+# Tilgungsanteil fuer die Annuitaetentilgung
+PPMT <- function(rate, per, nper, pv, fv=0, type=0){
+  PMT(rate, nper, pv, fv, type) - IPMT(rate, per, nper, pv, fv, type)
+}
+
+
+# Kapitalverlauf der Annuitaetentilgung
+RBAL <- function(rate, per, nper, pv, fv=0, type=0){
+  A <- -PMT(rate, nper, pv, fv, type)
+  P <- (A - pv * rate) * (1+rate)^(per-1)
+  pv - cumsum(P[1:nper])
+  res <- pv * (1+rate)^per - A * ((1+rate)^per-1) / rate
+  res
+  # diff(c(pv, res))
+}
+
+
+# Returns the sum-of-years' digits depreciation of an asset for a specified period
+# Cost    Required. The initial cost of the asset.
+# Salvage    Required. The value at the end of the depreciation (sometimes called the salvage value of the asset).
+# Life    Required. The number of periods over which the asset is depreciated (sometimes called the useful life of the asset).
+# Per    Required. The period and must use the same units as life.
+
+# digitale Abschreibungsbetraege
+# SYD(50000, Rn = 10000, 5,k = 1:5)
+# Wert
+# 50000 - cumsum(SYD(50000, Rn = 10000, 5,k = 1:5))
+# Sum of Years Digits method of depreciation
+SYD <- function(cost, salvage, life, period=1:life){
+  (cost - salvage)*(life - period+1)*2/(life*(life+1))
+}
+
+# Returns the depreciation for each accounting period by using a depreciation coefficient
+SLN <- function(cost, salvage, life){
+  (cost-salvage)/life
+}
+
+DB <- function(cost, salvage, life, period = 1:life){
+  q <- (salvage/cost)^(1/life)
+  cost * (1-q) * (q^(period-1))
+}
+
 
 
 ## utils: manipulation, utilities ====
@@ -5428,7 +5548,7 @@ DescToolsOptions <- function (..., default = NULL, reset = FALSE) {
 
   # all system defaults
   def <- list(
-    col       = c(hblue, hred,  horange),
+    col       = c(DescTools::hblue, DescTools::hred,  DescTools::horange),
     digits    = 3,
     fixedfont = structure(list(name = "Consolas", size = 7), class = "font"),
     fmt       = structure(list(
@@ -5757,9 +5877,12 @@ ParseSASDatalines <- function(x, env = .GlobalEnv, overwrite = FALSE) {
 
   datalines <- lst[grep("datalines|cards|cards4", tolower(lst))+1]
 
+  fn <- textConnection(datalines)
   res <- eval(parse(text=gettextf(
-    "data.frame(scan(file=textConnection(datalines),
+    "data.frame(scan(file=(fn),
     what=list(%s), quiet=TRUE))", vars)))
+
+  close(fn)
 
   if(length(dsname) > 0){ # check if a dataname could be found
     if( overwrite | ! exists(dsname, envir=env) ) {
@@ -5774,6 +5897,7 @@ ParseSASDatalines <- function(x, env = .GlobalEnv, overwrite = FALSE) {
       # stop(gettextf("%s already exists in %s. Use overwrite = TRUE to overwrite it.", dsname, deparse(substitute(env))))
     }
   }
+
   return(res)
 
 }
@@ -7043,7 +7167,7 @@ PlotPch <- function (col = NULL, bg = NULL, newwin = FALSE) {
   }
 
   if(is.null(col))
-    col <- hred
+    col <- DescTools::hred
   if(is.null(bg))
     bg <- hecru
 
@@ -7187,13 +7311,13 @@ PlotMar <- function(){
   plot(x=1:10, y=1:10, type="n", xlab="X", ylab="Y")	# type="n" hides the points
 
   # Place text in the plot and color everything plot-related red
-  text(5,5, "Plot", col=hred, cex=2)
-  text(5,4, "text(5,5, \"Plot\", col=\"red\", cex=2)", col=hred, cex=1)
-  box("plot", col=hred)
+  text(5,5, "Plot", col=DescTools::hred, cex=2)
+  text(5,4, "text(5,5, \"Plot\", col=\"red\", cex=2)", col=DescTools::hred, cex=1)
+  box("plot", col=DescTools::hred)
 
   # Place text in the margins and label the margins, all in green
-  mtext("Figure", side=3, line=2, cex=2, col=hgreen)
-  mtext("par(mar=c(5,4,4,2) + 0.1)", side=3, line=1, cex=1, col=hgreen)
+  mtext("Figure", side=3, line=2, cex=2, col=DescTools::hgreen)
+  mtext("par(mar=c(5,4,4,2) + 0.1)", side=3, line=1, cex=1, col=DescTools::hgreen)
   mtext("Line 0", side=3, line=0, adj=1.0, cex=1, col=hgreen)
   mtext("Line 1", side=3, line=1, adj=1.0, cex=1, col=hgreen)
   mtext("Line 2", side=3, line=2, adj=1.0, cex=1, col=hgreen)
@@ -7202,7 +7326,7 @@ PlotMar <- function(){
   mtext("Line 1", side=2, line=1, adj=1.0, cex=1, col=hgreen)
   mtext("Line 2", side=2, line=2, adj=1.0, cex=1, col=hgreen)
   mtext("Line 3", side=2, line=3, adj=1.0, cex=1, col=hgreen)
-  box("figure", col=hgreen)
+  box("figure", col=DescTools::hgreen)
 
   # Label the outer margin area and color it blue
   # Note the 'outer=TRUE' command moves us from the figure margins to the outer
@@ -7212,7 +7336,7 @@ PlotMar <- function(){
   mtext("Line 0", side=1, line=0, adj=0.0, cex=1, col=horange, outer=TRUE)
   mtext("Line 1", side=1, line=1, adj=0.0, cex=1, col=horange, outer=TRUE)
   mtext("Line 2", side=1, line=2, adj=0.0, cex=1, col=horange, outer=TRUE)
-  box("outer", col=horange)
+  box("outer", col=DescTools::horange)
 
   usr <- par("usr")
   # inner <- par("inner")
@@ -7434,6 +7558,22 @@ lines.lm <- function (x, col = Pal()[1], lwd = 2, lty = "solid",
                       type = "l", n = 100, conf.level = 0.95, args.cband = NULL,
                       pred.level = NA, args.pband = NULL, ...) {
 
+  # ** BUG ** BUG ** BUG ** BUG **BUG ** BUG **BUG ** BUG **BUG ** BUG **
+  #  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/  \__/
+  #  (oo)  (oo)  (oo)  (oo)  (oo)  (oo)  (oo)  (oo)  (oo)  (oo)  (oo)  (oo)
+  # //||\\//||\\//||\\//||\\//||\\//||\\//||\\//||\\//||\\//||\\//||\\//||\\
+  # ** BUG ** BUG ** BUG ** BUG **BUG ** BUG **BUG ** BUG **BUG ** BUG **
+
+  # # does not work with all transformations!!!!!!!!!!
+  # plot(log(Fertility) ~ log(Examination), data=swiss)
+  # r.lm <- lm(log(Fertility) ~ log(Examination), data=swiss)
+  # lines(r.lm)
+  #
+  # swiss$lEx <- log(swiss$Examination)
+  # r.lm <- lm(log(Fertility) ~ lEx, data=swiss)
+  # lines(r.lm)
+
+
   mod <- x$model
 
   # we take simply the second column of the model data.frame to identify the x variable
@@ -7448,7 +7588,7 @@ lines.lm <- function (x, col = Pal()[1], lwd = 2, lty = "solid",
   # this predict won't work.
   # always provide data:    y ~ x, data
 
-  # thiss is not a really new problem:
+  # this is not a really new problem:
   # http://faustusnotes.wordpress.com/2012/02/16/problems-with-out-of-sample-prediction-using-r/
 
   # we would only plot lines if there's only one predictor
@@ -7800,7 +7940,7 @@ Pal <- function(pal, n=100, alpha=1) {
            , RedWhiteBlue1 = res <- colorRampPalette(c("#67001F", "#B2182B", "#D6604D", "#F4A582", "#FDDBC7",
                                               "#FFFFFF", "#D1E5F0", "#92C5DE", "#4393C3", "#2166AC", "#053061"))(n)
            , RedWhiteBlue2 = res <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))(n)
-           , RedWhiteBlue3 = res <- colorRampPalette(c(hred, "white", hblue))(n)
+           , RedWhiteBlue3 = res <- colorRampPalette(c(DescTools::hred, "white", DescTools::hblue))(n)
            , Helsana       = res <- c("rot"="#9A0941", "orange"="#F08100", "gelb"="#FED037"
                                        , "ecru"="#CAB790", "hellrot"="#D35186", "hellblau"="#8296C4", "hellgruen"="#B3BA12"
                                        , "hellgrau"="#CCCCCC", "dunkelgrau"="#666666", "weiss"="#FFFFFF")
@@ -9665,7 +9805,7 @@ PlotMultiDens.formula <- function (formula, data, subset, na.action, ...) {
 
 
 PlotMultiDens.default <- function( x, xlim = NULL, ylim = NULL
-                                   , col = Pal(), lty = "solid", lwd = 1
+                                   , col = Pal(), lty = "solid", lwd = 2
                                    , fill = NA
                                    , xlab = "x", ylab = "density"
                                    # , type = c("line", "stack", "cond")
@@ -9720,8 +9860,8 @@ PlotMultiDens.default <- function( x, xlim = NULL, ylim = NULL
   l.par <- list(lty=lty, lwd=lwd, col=col, fill=fill)
   l.par <- lapply( l.par, rep, length.out = maxdim )
 
-  if( missing("xlim") ) xlim <- range(pretty( unlist(lapply(l.dens, "[", "x")) ) )
-  if( missing("ylim") ) ylim <- range(pretty( unlist(lapply(l.dens, "[", "y")) ))
+  if( is.null(xlim) ) xlim <- range(pretty( unlist(lapply(l.dens, "[", "x")) ) )
+  if( is.null(ylim) ) ylim <- range(pretty( unlist(lapply(l.dens, "[", "y")) ))
 
   dev.hold()
   on.exit(dev.flush())
@@ -9766,7 +9906,7 @@ PlotMultiDens.default <- function( x, xlim = NULL, ylim = NULL
   if(!is.null(DescToolsOptions("stamp")))
     Stamp()
 
-  invisible(res)
+  invisible(list(dens=res, xlim=xlim, ylim=ylim))
 
 }
 
@@ -10709,7 +10849,7 @@ PlotPyramid <- function(lx, rx = NA, ylab = "",
 PlotCorr <- function(x, cols = colorRampPalette(c(Pal()[2], "white", Pal()[1]), space = "rgb")(20)
   , breaks = seq(-1, 1, length = length(cols)+1), border="grey", lwd=1
   , args.colorlegend = NULL, xaxt = par("xaxt"), yaxt = par("yaxt"), cex.axis = 0.8, las = 2
-  , mar = c(3,8,8,8), mincor=0, main="", ...){
+  , mar = c(3,8,8,8), mincor=0, main="", clust=FALSE, ...){
 
   # example:
   # m <- cor(d.pizza[,WhichNumerics(d.pizza)][,1:5], use="pairwise.complete.obs")
@@ -10721,6 +10861,15 @@ PlotCorr <- function(x, cols = colorRampPalette(c(Pal()[2], "white", Pal()[1]), 
   # PlotCorr(round(CramerV(d.pizza[,c("driver","operator","city", "quality")]),3))
 
   pars <- par(mar=mar); on.exit(par(pars))
+
+  if(clust==TRUE) {
+    # cluster correlations in order to put similar values together
+    idx <- order.dendrogram(as.dendrogram(
+      hclust(dist(x), method = "mcquitty")
+    ))
+
+    x <- x[idx, idx]
+  }
 
   # if mincor is set delete all correlations with abs. val. < mincor
   if(mincor!=0)
@@ -11334,7 +11483,8 @@ PlotMiss <- function(x, col = hred, bg=SetAlpha(hecru, 0.3), clust=FALSE,
                      main = NULL, ...){
 
   x <- as.data.frame(x)
-  x <- Rev(x, 2)
+  if(ncol(x) > 1)
+    x <- Rev(x, 2)
   n <- ncol(x)
 
   inches_to_lines <- (par("mar") / par("mai") )[1]  # 5
@@ -11729,6 +11879,35 @@ PlotCandlestick <-  function(x, y, xlim = NULL, ylim = NULL, col = c("springgree
 
   if(!is.null(DescToolsOptions("stamp")))
     Stamp()
+
+}
+
+
+
+PlotCashFlow <- function(x, y, xlim=NULL, labels=y){
+
+  if(is.null(xlim))
+    xlim <- if (is.null(xlim))
+      range(x[is.finite(x)])
+
+  x0 <- do.call(seq, as.list(xlim))
+
+  yf <- max(abs(range(c(0, y[is.finite(y)]))))
+
+  Canvas(xlim=xlim, ylim=c(-1,1), xpd=TRUE, asp=NULL)
+  arrows(xlim[1], 0, xlim[2]+1, code=0)
+  DrawRegPolygon(x=xlim[2]+1, y=0, rot=2*pi/3, radius.x = .09, col=1)
+
+  segments(x0 = x0, y0 = -.1, y1=0.1)
+
+  arrows(x0=x, y0=0, y1=y/yf, angle = 20, code=0)
+  #  points(x=x, y=y/30, pch=17, cex=1.2)
+  DrawRegPolygon(x=x, y=y/yf, rot=pi/6 + (y>0) * pi, radius.x = .1, col=1)
+
+  BoxedText(x0, -.3, Format(x0, leading="00", digits=0), border = NA)
+  BoxedText(x0 + 0.5, .2, Format(seq_along(x0), leading="00", digits=0), border = NA, cex=.8)
+
+  BoxedText(x=x, y=sign(y) *(abs(y/yf)+.3), labels = labels, border = NA)
 
 }
 
@@ -12411,12 +12590,12 @@ TOne <- function(x, grp = NA, add.length=TRUE,
   if(align != "\\l")
     res[,-c(1, ncol(res))] <- StrAlign(res[,-c(1, ncol(res))], sep = align)
 
+  if(!total)
+    res <- res[, -2]
+
   attr(res, "legend") <- gettextf("%s) %s, %s) Fisher exact test, %s) Chi-Square test\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1",
                                   .FootNote(1), numtestlab, .FootNote(2), .FootNote(3))
 
-
-  if(!total)
-    res <- res[, -2]
   class(res) <- "TOne"
   return(res)
 }
@@ -13542,7 +13721,6 @@ WrdStyle <- function (wrd = DescToolsOptions("lastWord")) {
 
 
 
-
 IsValidWrd <- function(wrd = DescToolsOptions("lastWord")){
   # returns TRUE if the selection of the wrd pointer can be evaluated
   # meaning the pointer points to a running word instance and so far valid
@@ -13615,6 +13793,13 @@ WrdGoto <- function (name, what = wdConst$wdGoToBookmark, wrd = DescToolsOptions
   wrdSel$GoTo(what=what, Name=name)
   invisible()
 }
+
+
+WrdPageBreak <- function(wrd = DescToolsOptions("lastWord")) {
+  wrd[["Selection"]]$InsertBreak(wdConst$wdSectionBreakNextPage)
+  invisible()
+}
+
 
 
 WrdInsertBookmark <- function (name, wrd = DescToolsOptions("lastWord")) {
@@ -13788,13 +13973,16 @@ WrdTable <- function(nrow = 1, ncol = 1, heights = NULL, widths = NULL, main = N
 
 
 
-Phrase <- function(x, g, glabels=NULL, xname=NULL, unit=NULL, lang="engl") {
+Phrase <- function(x, g, glabels=NULL, xname=NULL, unit=NULL, lang="engl", na.rm=FALSE) {
 
   if(is.null(xname))
-    xname <- deparse(substitute(x))
+    if(is.null(names(x)))
+      xname <- deparse(substitute(x))
+    else
+      xname <- names(x)
 
   if(is.null(glabels))
-    glabels <- levels(g)
+    glabels <- levels(factor(g))
 
   if(is.null(unit))
     unit <- ""
@@ -13812,10 +14000,12 @@ Phrase <- function(x, g, glabels=NULL, xname=NULL, unit=NULL, lang="engl") {
 
 
   lst <- split(x, g)
+  if(na.rm)
+    lst <- lapply(lst, na.omit)
   names(lst) <- c("x","y")
 
-  n <- tapply(x, g, length)
-  meanage <- tapply(x, g, mean)
+  n <- sapply(lst, length)
+  meanage <- sapply(lst, mean)
 
   txt <- gettextf(txt1
                   , Format(sum(n), digits=0, big.mark="'")
@@ -14110,7 +14300,7 @@ GetCurrXL <- function() {
 
 
 
-XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "") {
+XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "", preserveStrings=FALSE) {
 
   # define some XL constants
   xlToRight <- -4161
@@ -14125,6 +14315,13 @@ XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "") {
     if(class(x) == "ftable"){
       x <- FixToTable(capture.output(x), sep = " ", header = FALSE)
       col.names <- FALSE
+    }
+
+    if(preserveStrings){
+      # embed all characters or factors in ="xyz"
+      for(z in which(sapply(x, function(y) is.character(y) | is.factor(y)))){
+        x[, z] <- gettextf('="%s', x[,z])
+      }
     }
 
     write.table(x, file = fn, sep = ";", col.names = col.names,
@@ -14148,6 +14345,11 @@ XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "") {
 }
 
 
+XLCurrReg <- function(cell){
+  structure(cell, class="XLCurrReg")
+}
+
+
 
 XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame = TRUE,
                         header = FALSE, stringsAsFactors = FALSE, echo = FALSE, datecols = NA,
@@ -14160,6 +14362,8 @@ XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame =
     )[1:16384]
 
     z1s1 <- function(x) {
+      # remove all potential $ from a range first
+      x <- gsub("\\$", "", x)
       colnr <- match( regmatches(x, regexec("^[[:alpha:]]+", x)), xlcol)
       rownr <- as.numeric(regmatches(x, regexec("[[:digit:]]+$", x)))
       return(c(rownr, colnr))
@@ -14202,8 +14406,14 @@ XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame =
     # set defaults for sheet and range here
     if(is.null(sheet))
       sheet <- 1
+
     if(is.null(range))
       range <- xl$Cells(1,1)$CurrentRegion()$Address(FALSE, FALSE)
+    else if(class(range) == "XLCurrReg"){
+      # take only the first cell of a given range
+      zs <- A1ToZ1S1(range)[[1]]
+      range <- xl$Cells(zs[1], zs[2])$CurrentRegion()$Address(FALSE, FALSE)
+    }
 
     ws <- wb$Sheets(sheet)$select()
 

@@ -12,7 +12,7 @@ Use Excel as Viewer for a Data.Frame
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-XLView(x, col.names = TRUE, row.names = FALSE, na = "")
+XLView(x, col.names = TRUE, row.names = FALSE, na = "", preserveStrings = FALSE)
 
 XLKill()
 }
@@ -28,10 +28,12 @@ XLKill()
   See the section on 'CSV files' \code{\link{write.table}} for the meaning of \code{col.names = NA}. }
 
 \item{na}{the string to use for missing values in the data.}
+\item{preserveStrings}{logical, will preserve strings from being converted to numerics when imported in Excel. See details. Default is \code{FALSE}.}
 
 }
 \details{
-The data.frame will be exported in CSV format and then imported in Excel.\cr
+The data.frame will be exported in CSV format and then imported in Excel. When importing data, Excel will potentially change characters to numeric values. If this seems undesirable (maybe we're loosing leading zeros) then you should enclose the text in quotes and preset a =.
+x <- \code{gettextf('="\%s"', x)} would do the trick.   \cr\cr
 Take care: Changes to the data made in Excel will NOT automatically be updated in the original data.frame.
 The user will have to read the csv-file into R again.
 See examples how to get this done.\cr\cr
