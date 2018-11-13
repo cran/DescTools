@@ -1,4 +1,50 @@
 
+DescTools 0.99.26 (2018-10-18)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+  * ToXL() allows to export data.frames to XL more easily and flexibly.
+  * dir.choose() does for directories what file.choose() does for files.
+  * xlConst is a list of a few useful Excel VBA constants.
+  * SMAPE() has been around for quite a while. It also is exported now.
+  * Sample() is a wrapper for sample(), adding an option to sample from data.frames.
+    SampleTwins() will be integrated in Sample() in near future.
+  * DoBy() is a more flexible replacement for PartitionBy().
+  * Dot(), Cross() and CrossN() can be used for vector geometry tasks.
+
+UPDATED FUNCTIONS:
+  * Outliers() get a new argument value allowing to return the indices of the
+    outliers.
+  * TOne() looses its NUMTEST argument and get a new TEST argument in order to
+    make the definition of tests more flexible. The p-value can now be formatted
+    with fmt.pval.
+  * TMod() and OddsRatio() get a plot function to compare coefficients and
+    confidence intervals.
+  * GetNewXL() will start with a new workbook now.
+  * Format() accepts functions as argument "fmt" from now on.
+  * Format() will recyle arguments when formatting data.frames, allowing to have
+    different formats for different columns.
+  * PlotQQ() gets an argument datax to flip the x and y axis - as qqplot() also has.
+  * OddsRatio.glm() gets an argument "use.profile" in order to skip profiling when
+    calculating confidence intervals (and can take very long time to complete).
+  * BinomDiff() gets new methods for calculating confidence intervals for a
+    difference of proportions ("mee", "mn", "ha", "scorecc"). At the same time
+    BinomCI() has been extended by the needed method "wilsoncc" (Wilson with
+    continuity correction).
+
+BUGFIXES:
+  * Desc() will not show an error for variables of class Date containing just one
+    unique value.
+  * TMod() did not parse the model labels correctly.
+  * BinomDiff() would not have returned correct results for a difference of 0.
+    (Thanks to Stephen Roberts, who with his enquiry brought about the completion
+    of the function.)
+
+DEFUNCT:
+  * PartitionBy() has been replaced by DoBy().
+
+
+
 DescTools 0.99.25 (2018-08-13)
 ------------------------------
 
@@ -22,7 +68,7 @@ UPDATED FUNCTIONS:
     uses UnirootAll() to find all the solutions.
   * OddRatio() gets an interface for glms to produce an odds ratio result table for
     logistic regression objects.
-  * ModSummary() get an interface for OddsRatio produced by OddsRatio() and TMod()
+  * ModSummary() gets an interface for OddsRatio produced by OddsRatio() and TMod()
     supports the comparison of OddsRatios.
   * PoissonCI() gets a new method "byar" for confidence intervals.
   * VarCI() gains a new method "bonett" giving intervals with improved coverage in
@@ -32,8 +78,8 @@ UPDATED FUNCTIONS:
     plot and a boxplot.
   * Phrase() can remove NAs now.
   * Bivariate Desc() for numeric ~ factor allows to freely choose the test to be used.
-  * XLView() gains an argument "preserveStrings", to prevent factors or characters to be
-    converted to numeric when imported in Excel.
+  * XLView() gains an argument "preserveStrings", to prevent factors or characters
+    to be converted to numeric when imported in Excel.
   * "Additional_repositories" has been changed from http://www.stats.ox.ac.uk/pub/RWin/
     to http://www.omegahat.net/R, as the service in Oxford is no longer provided.
 

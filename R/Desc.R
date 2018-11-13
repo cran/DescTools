@@ -181,7 +181,7 @@ desc <- function (x, main=NULL, xname=deparse(substitute(x)), digits=NULL, maxro
     z <- c(z, calcDesc(x=x, n=n, digits=digits, conf.level=conf.level, ord=ord, maxrows=maxrows,
                        verbose=verbose, rfrq=rfrq, margins=margins, ... ))
 
-    if(z$class!="numeric" && !is.null(z$unique) && !is.na(z$unique) && z$unique <= 2
+    if(z$class %nin% c("numeric", "Date") && !is.null(z$unique) && !is.na(z$unique) && z$unique <= 2
        && !(z$class %in% c("factor","ordered") && z$levels>2)) {
       # escalate to logical description if only two values
 
@@ -2157,7 +2157,7 @@ ColumnWrap <- function(x, width=NULL){
 
 
 
-Abstract <- function (x, sep = ", ", zero.form = ".", maxlevels = 5, trunc = TRUE, list.len = 99) {
+Abstract <- function (x, sep = ", ", zero.form = ".", maxlevels = 5, trunc = TRUE, list.len = 999) {
 
   res <- data.frame(
     nr = 1:ncol(x),
@@ -2228,6 +2228,10 @@ print.abstract <- function (x, sep = NULL, width = NULL,
     width <- c(width, rep((getOption("width") - (sum(width) + 6 * print.gap))/
                             (1 + lbl_fg), (1 + lbl_fg)))
   }
+
+
+  opt <- options(max.print = 1e4)
+  on.exit(options(opt))
 
   #   # define the separator, "-------..." if not given
   sep <- Coalesce(sep, x$sep, paste(rep("-", (getOption("width") - 2)), collapse = ""))

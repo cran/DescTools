@@ -184,6 +184,7 @@ PlotFaces <- function(xy = rbind(1:3,5:3,3:5,5:7), which.row, fill = FALSE, nr, 
                     invert(face$shape["hairend",,drop=FALSE])),
       shape = rbind(face$shape,invert(face$shape[shape.refl.ind,]))
     )
+    face.obj$lipsi <- rbind(face.obj$lipsi, Rev(face.obj$lipsi, margin = 1))
 
     face.list <- c(face.list, list(face.obj))
 

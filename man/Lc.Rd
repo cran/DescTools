@@ -1,5 +1,6 @@
 \name{Lc}
 \alias{Lc}
+\alias{Lorenz curve}
 \alias{Lc.default}
 \alias{Lc.formula}
 \alias{plot.Lc}

@@ -79,6 +79,24 @@ r.glm1 <- glm(Survived ~ Class, data=d.titanic, family="binomial")
 r.glm2 <- glm(Survived ~ ., data=d.titanic, family="binomial")
 
 TMod(r.glm0, r.glm1, r.glm2)
+
+# plot OddsRatios
+d.pima <- MASS::Pima.tr2
+
+r.a <- glm(type ~ npreg + bp + skin + bmi + ped + age, data=d.pima, family=binomial)
+r.b <- glm(type ~ npreg + glu + bp + skin, data=d.pima, family=binomial)
+r.c <- glm(type ~ npreg + age, data=d.pima, family=binomial)
+
+or.a <- OddsRatio(r.a)
+or.b <- OddsRatio(r.b)
+or.c <- OddsRatio(r.c)
+
+
+# create the model table
+tm <- TMod(m_A=or.a, m_B=or.b, m_C=or.c)
+# .. and plotit
+plot(tm, main="ORs for Models A, B, C",
+     pch=15, col=c(hred, hblue), xlim=c(0.5, 1.5), panel.first=abline(v=1, col="grey"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -9,7 +9,7 @@ The assumed underlying distribution can be defined as a function including all r
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL, add = FALSE,
+PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL, datax = FALSE, add = FALSE,
        args.qqline = NULL, conf.level = 0.95, args.cband = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -30,11 +30,12 @@ PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL, add = FALSE,
   \item{ylab}{the ylab for the plot
 %%     ~~Describe \code{ylab} here~~
 }
+\item{datax}{logical. Should data values be on the x-axis? Default is \code{FALSE}.}
 \item{add}{logical specifying if the points should be added to an already existing plot; defaults to \code{FALSE}.}
   \item{args.qqline}{arguments for the qqline. This will be estimated
-   as a line through the 25\% and 75\% quantiles, which is the same procedure as qqline does for normal
-   distribution (instead of set it to abline(a = 0, b = 1)). The line defaults are set to col = par("fg"), lwd = par("lwd") and lty = par("lty").
-   No line will be plotted if args.qqline is set to NA.
+   as a line through the 25\% and 75\% quantiles, which is the same procedure as \code{\link{qqline}()} does for normal
+   distribution (instead of set it to {abline(a = 0, b = 1))}. The line defaults are set to \code{col = par("fg")}, \code{lwd = par("lwd")} and \code{lty = par("lty")}.
+   No line will be plotted if \code{args.qqline} is set to \code{NA}.
 }
   \item{conf.level}{confidence level for the confidence interval. Set this to \code{NA}, if no confidence band should be plotted.
   Default is \code{0.95}.
@@ -70,7 +71,8 @@ w <- rweibull(100, shape=2)
 PlotQQ(w, qdist = function(p) qweibull(p, shape=4))
 
 z <- rchisq(100, df=5)
-PlotQQ(z, function(p) qchisq(p, df=5), args.qqline=list(col=2, probs=c(0.1,0.6)),
+PlotQQ(z, function(p) qchisq(p, df=5),
+       args.qqline=list(col=2, probs=c(0.1, 0.6)),
        main=expression("Q-Q plot for" ~~ {chi^2}[nu == 3]))
 abline(0,1)
 

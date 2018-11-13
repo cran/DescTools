@@ -17,7 +17,7 @@
 \usage{
 OddsRatio(x, conf.level = NULL, ...)
 
-\method{OddsRatio}{glm}(x, conf.level = NULL, digits = 3, ...)
+\method{OddsRatio}{glm}(x, conf.level = NULL, digits = 3, use.profile = TRUE, ...)
 
 \method{OddsRatio}{multinom}(x, conf.level = NULL, digits = 3, ...)
 
@@ -41,12 +41,13 @@ OddsRatio(x, conf.level = NULL, ...)
     "\code{wald}", "\code{mle}", "\code{midp}". Default is \code{"wald"} (not because it is the best, but
     because it is the most commonly used.)
   }
-  \item{conf.level}{confidence level. Default is \code{NA} for tables and numeric vectors, meaning no confidence intervals will be reported. 0.95 is used as default for models.}
+    \item{conf.level}{confidence level. Default is \code{NA} for tables and numeric vectors, meaning no confidence intervals will be reported. 0.95 is used as default for models.}
   \item{interval}{
     interval for the function \code{\link{uniroot}} that finds the
     odds ratio median-unbiased estimate and \code{midp} exact confidence
     interval.
   }
+\item{use.profile}{logical. Defines if profile approach should be used, which normally is a good choice. Calculating profile can however take ages for large datasets and not be necessary there. So we can fallback to normal confidence intervals. }
    \item{\dots}{further arguments are passed to the function \code{\link{table}}, allowing i.e. to set \code{useNA}. This refers only to the vector interface.
 %%     ~~Describe \code{\dots} here~~
 }
@@ -146,6 +147,10 @@ log(apply(migraine, 3, OddsRatio))
 # OddsRatio table for logistic regression models
 r.glm <- glm(type ~ ., data=MASS::Pima.tr2, family=binomial)
 OddsRatio(r.glm)
+
+plot(OddsRatio(r.glm), xlim=c(0.5, 2), main="OddsRatio - glm", pch=NA,
+     lblcolor=hred, args.errbars=list(col=horange, pch=21, col.pch=hblue,
+     bg.pch=hyellow, cex.pch=1.5))
 }
 
 \keyword{models}

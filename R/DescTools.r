@@ -237,7 +237,7 @@
 
 # just for check not to bark!
 utils::globalVariables(c("d.units","d.periodic","d.prefix",
-                         "day.name","day.abb","wdConst",
+                         "day.name","day.abb","wdConst","xlConst",
                          "fmt", "pal",
                          "hred","hblue","horange","hyellow","hecru","hgreen",
                          "tarot","cards","roulette", "ind"))
@@ -349,6 +349,18 @@ gold_sec_c <- (1+sqrt(5)) / 2
 # save(tarot, file="tarot.rda")
 # save(cards, file="cards.rda")
 # save(roulette, file="roulette.rda")
+
+# xlConst <- list(
+#   xlEdgeBottom = 9,
+#   xlContinuous = 1,
+#   xlTop = -4160,
+#   xlLeft = -4131,
+#   xlRight = -4152,
+#   xlToRight = -4161,
+#   xlCellTypeConstants = 2,
+#   xlCellTypeFormulas = -4123
+# )
+#
 
 
 
@@ -514,6 +526,26 @@ DigitSum <- function(x)
 
 
 
+
+# sample interface for data.frames
+
+Sample <-  function (x, size, replace = FALSE, prob = NULL) {
+  UseMethod("Sample")
+}
+
+Sample.data.frame <- function (x, size, replace = FALSE, prob = NULL) {
+
+  x[sample(nrow(x), size, replace = replace, prob=prob), ]
+
+}
+
+
+Sample.default <- function (x, size, replace = FALSE, prob = NULL)
+  base::sample(x, size, replace, prob)
+
+
+
+
 CombN <- function(x, m, repl=FALSE, ord=FALSE){
   # return the number for the 4 combinatoric cases
   n <- length(x)
@@ -629,6 +661,94 @@ CombPairs <- function(x, y = NULL) {
     # wenn y definiert ist, wird all.x zu all.y zurueckgegeben
     expand.grid(x, y, stringsAsFactors=F )
   }
+}
+
+
+
+###
+### DOT.R  Scalar product
+###
+
+Dot <- function(x, y) {
+  if (length(x) == 0 && length(y) == 0) return(0)
+  if (!(is.numeric(x) || is.complex(x)) ||
+      !(is.numeric(y) || is.complex(y)))
+    stop("Arguments 'x' and 'y' must be real or complex.")
+  x <- drop(x); y <- drop(y)
+  if (any(dim(x) != dim(y)))
+    stop("Matrices 'x' and 'y' must be of same size")
+
+  if (is.vector(x) && is.vector(y)) {
+    dim(x) <- c(length(x), 1)
+    dim(y) <- c(length(y), 1)
+  }
+  x.y <- apply(Conj(x) * y, 2, sum)
+  return(x.y)
+}
+
+
+CrossN <- function(A) {
+  if (!is.numeric(A))
+    stop("Argument 'A' must be numeric.")
+
+  if (is.vector(A) && length(A) == 2) {
+    crossA <- c(A[2], -A[1])
+  } else {
+    if (is.matrix(A) && nrow(A) >= 2 && ncol(A) == nrow(A) + 1) {
+      m <- ncol(A)
+      crossA <- numeric(m)
+      for (i in 1:m)
+        crossA[i] <- (-1)^(i+1) * det(A[, -i])
+    } else {
+      stop("Matrix 'A' must be of size n x (n+1) with n >= 1.")
+    }
+  }
+  return(crossA)
+}
+
+###
+### CROSS.R  Vector product
+###
+
+Cross <- function(x, y) {
+  if (!is.numeric(x) || !is.numeric(y))
+    stop("Arguments 'x' and 'y' must be numeric vectors or matrices.")
+
+  if (is.vector(x) && is.vector(y)) {
+    if (length(x) == length(y) && length(x) == 3) {
+      xxy <- c(x[2]*y[3] - x[3]*y[2],
+               x[3]*y[1] - x[1]*y[3],
+               x[1]*y[2] - x[2]*y[1])
+    } else {
+      stop("Vectors 'x' and 'y' must be both of length 3.")
+    }
+  } else {
+    if (is.matrix(x) && is.matrix(y)) {
+      if (all(dim(x) == dim(y))) {
+        if (ncol(x) == 3) {
+          xxy <- cbind(x[, 2]*y[, 3] - x[, 3]*y[, 2],
+                       x[, 3]*y[, 1] - x[, 1]*y[, 3],
+                       x[,1 ]*y[, 2] - x[, 2]*y[, 1])
+        } else {
+          if (nrow(x) == 3) {
+            xxy <- rbind(x[2, ]*y[3, ] - x[3, ]*y[2, ],
+                         x[3, ]*y[1, ] - x[1, ]*y[3, ],
+                         x[1, ]*y[2, ] - x[2, ]*y[1, ])
+          } else {
+            stop("'x', 'y' must have one dimension of length 3.")
+          }
+        }
+      } else {
+        stop("Matrices 'x' and 'y' must be of same size.")
+      }
+    } else {
+      if (is.vector(x) && is.matrix(y) ||
+          is.matrix(x) && is.vector(y)) {
+        stop("Arguments 'x', 'y' must be vectors/matrices of same size.")
+      }
+    }
+  }
+  return(xxy)
 }
 
 
@@ -3430,27 +3550,25 @@ Coalesce <- function(..., method = c("is.na", "is.finite")) {
 }
 
 
-
-
-
-PartitionBy <- function(x, by, FUN, ...){
-
-  # SQL-OLAP: sum() over (partition by g)
-  # (more than 1 grouping variables are enumerated like by=list(g1,g2,g3),
-  # as it is defined in tapply
-
-  # see also ave, which only handles arguments otherwise..
-
-  if (missing(by))
-    x[] <- FUN(x, ...)
-  else {
-    g <- interaction(by)
-    split(x, g) <- lapply(split(x, g), FUN, ...)
-  }
-  x
-
-}
-
+# defunct by 0.99.26
+# PartitionBy <- function(x, by, FUN, ...){
+#
+#   # SQL-OLAP: sum() over (partition by g)
+#   # (more than 1 grouping variables are enumerated like by=list(g1,g2,g3),
+#   # as it is defined in tapply
+#
+#   # see also ave, which only handles arguments otherwise..
+#
+#   if (missing(by))
+#     x[] <- FUN(x, ...)
+#   else {
+#     g <- interaction(by)
+#     split(x, g) <- lapply(split(x, g), FUN, ...)
+#   }
+#   x
+#
+# }
+#
 
 
 
@@ -3638,7 +3756,8 @@ RoundTo <- function(x, multiple = 1, FUN = round) {
 
 
 Str <- function(x, ...){
-  if(identical(class(x), "data.frame")) {
+
+  if(identical(class(x), "data.frame") || identical(class(x), "list") ) {
 
     args <- list(...)
     if(is.null(args["strict.width"])) args["strict.width"] <- "cut"
@@ -4282,15 +4401,43 @@ Format <- function(x, digits = NULL, sci = NULL
 }
 
 
-Format.data.frame <- function(x, digits = NULL, sci = NULL
-                          , big.mark=NULL, leading = NULL
-                          , zero.form = NULL, na.form = NULL
-                          , fmt = NULL, align = NULL, width = NULL, lang = NULL, ...){
+# replaced by 0.99.26
+# Format.data.frame <- function(x, digits = NULL, sci = NULL
+#                           , big.mark=NULL, leading = NULL
+#                           , zero.form = NULL, na.form = NULL
+#                           , fmt = NULL, align = NULL, width = NULL, lang = NULL, ...){
+#
+#   x[] <- lapply(x, Format, digits = digits,
+#                 sci = sci, big.mark = big.mark, leading = leading, zero.form = zero.form,
+#                 na.form = na.form, fmt = fmt, align = align, width = width,
+#                 lang = lang, ...)
+#
+#   class(x) <- c("Format", class(x))
+#   return(x)
+#
+# }
 
-  x[] <- lapply(x, Format, digits = digits,
-                sci = sci, big.mark = big.mark, leading = leading, zero.form = zero.form,
-                na.form = na.form, fmt = fmt, align = align, width = width,
-                lang = lang, ...)
+
+Format.data.frame <- function(x, digits = NULL, sci = NULL
+                              , big.mark=NULL, leading = NULL
+                              , zero.form = NULL, na.form = NULL
+                              , fmt = NULL, align = NULL, width = NULL, lang = NULL, ...){
+
+  # organise arguments as list ...
+  lst <- list(digits=digits, sci=sci, big.mark=big.mark, leading=leading,
+              zero.form=zero.form, na.form=na.form, fmt=fmt, align=align,
+              width=width, lang=lang)
+  # ... in order to be able to filter NULLs
+  lst <- lst[!sapply(lst, is.null)]
+  # and recyle them to the number of columns
+  arg <- do.call(Recycle, c(lst, list(rep(1, ncol(x)))))
+
+  for(i in seq(attr(arg, "maxdim")))
+    x[,i] <- Format(x[,i], digits = arg$digits[i],
+                    sci = arg$sci[i], big.mark = arg$big.mark[i], leading = arg$leading[i],
+                    zero.form = arg$zero.form[i],
+                    na.form = arg$na.form[i], fmt = arg$fmt[i], align = arg$align[i],
+                    width = arg$width[i], lang = arg$lang[i])
 
   class(x) <- c("Format", class(x))
   return(x)
@@ -4458,6 +4605,9 @@ Format.default <- function(x, digits = NULL, sci = NULL
 
   }
 
+  .format.pstars <- function(x)
+    paste(.format.pval(x), .format.stars(x))
+
   .leading.zero <- function(x, n){
     # just add a given number of leading zeros
     # split at the .
@@ -4550,14 +4700,19 @@ Format.default <- function(x, digits = NULL, sci = NULL
   # The defined decimal character:
   # getOption("OutDec")
 
-  # set the defaults, if user says nothing
+  # replaced by 0.99.26: this was not a good default, sci is easy to set
+
+  # # set the defaults, if user says nothing
+  # if(is.null(sci))
+  #   if(is.null(digits)){
+  #     # if given digits and sci NULL set sci to Inf
+  #     sci <- getOption("scipen", default = 7)
+  #   } else {
+  #     sci <- Inf
+  #   }
+
   if(is.null(sci))
-    if(is.null(digits)){
-      # if given digits and sci NULL set sci to Inf
-      sci <- getOption("scipen", default = 7)
-    } else {
-      sci <- Inf
-    }
+    sci <- getOption("scipen", default = 7)
 
   if(is.null(big.mark)) big.mark <- ""
 
@@ -4571,7 +4726,11 @@ Format.default <- function(x, digits = NULL, sci = NULL
   sci <- rep(sci, length.out=2)
 
 
-  if(all(class(x) == "Date")) {
+  if(is.function(fmt)){
+
+    r <- fmt(x)
+
+  } else if(all(class(x) == "Date")) {
 
     # the language is only needed for date formats, so avoid looking up the option
     # for other types
@@ -4594,6 +4753,10 @@ Format.default <- function(x, digits = NULL, sci = NULL
   } else if(fmt=="p"){
 
     r <- .format.pval(x)
+
+  } else if(fmt=="p*"){
+
+    r <- .format.pstars(x)
 
   } else if(fmt=="eng"){
 
@@ -5339,26 +5502,26 @@ YTM <- function(Co, PP, RV, n){
 
 # match.arg( arg=ord, choices=c("hsv","default")
 
-# Berechnung einer Annuitaet
+# Berechnung einer Annuitaet, XL: RMZ()
 PMT <- function(rate, nper, pv, fv=0, type=0) {
   if(type %nin% c(0, 1))
     stop("type must be 0 or 1")
   -((pv * (1+rate)^nper + fv) * rate/((1+rate)^nper-1) * (1+type*rate)^-1)
 }
 
-# Zins fuer die Annuitaetentilgung
+# Zins fuer die Annuitaetentilgung, XL: ZINSZ()
 IPMT <- function(rate, per, nper, pv, fv=0, type=0){
   A <- -PMT(rate, nper, pv, fv, type)
   (A - pv * rate) * (1+rate)^(per-1) - A
 }
 
-# Tilgungsanteil fuer die Annuitaetentilgung
+# Tilgungsanteil fuer die Annuitaetentilgung: XL: KAPZ()
 PPMT <- function(rate, per, nper, pv, fv=0, type=0){
   PMT(rate, nper, pv, fv, type) - IPMT(rate, per, nper, pv, fv, type)
 }
 
 
-# Kapitalverlauf der Annuitaetentilgung
+# Kapitalverlauf der Annuitaetentilgung: KUMKAPITAL()
 RBAL <- function(rate, per, nper, pv, fv=0, type=0){
   A <- -PMT(rate, nper, pv, fv, type)
   P <- (A - pv * rate) * (1+rate)^(per-1)
@@ -6947,6 +7110,11 @@ PasswordDlg <- function() {
 }
 
 
+dir.choose <- function(default = "", caption = "Select directory"){
+  requireNamespace("tcltk", quietly = FALSE)
+  tcltk::tk_choose.dir(default = default, caption = caption)
+}
+
 
 ColorDlg <- function() {
   requireNamespace("tcltk", quietly = FALSE)
@@ -7696,7 +7864,7 @@ ErrBars <- function(from, to = NULL, pos = NULL, mid = NULL, horiz = FALSE, col 
   } else {
     arrows( x0=pos, y0=from, y1=to, col=col, lty=lty, lwd=lwd, angle=90, code=code, length=length, ... )
   }
-  if(!is.na(pch)){
+  if(!is.na(pch) && !is.na(col.pch)){
     if(is.null(mid)) mid <- (from + to)/2
     # plot points
     if(horiz){
@@ -7917,12 +8085,19 @@ Pal <- function(pal, n=100, alpha=1) {
   } else {
 
     palnames <- c("RedToBlack","RedBlackGreen","SteeblueWhite","RedWhiteGreen",
-                  "RedWhiteBlue0","RedWhiteBlue1","RedWhiteBlue2","RedWhiteBlue3","Helsana","Tibco","RedGreen1",
-                  "Spring","Soap","Maiden","Dark","Accent","Pastel","Fragile","Big","Long","Night","Dawn","Noon","Light")
+                  "RedWhiteBlue0","RedWhiteBlue1","RedWhiteBlue2","RedWhiteBlue3","Helsana","Helsana1","Tibco","RedGreen1",
+                  "Spring","Soap","Maiden","Dark","Accent","Pastel","Fragile","Big","Long","Night","Dawn","Noon","Light",
+                  "GrandBudapest","Moonrise1","Royal1","Moonrise2","Cavalcanti","Royal2","GrandBudapest2","Moonrise3",
+                  "Chevalier","Zissou","FantasticFox","Darjeeling","Rushmore","BottleRocket","Darjeeling2")
+
 
     if(is.numeric(pal)){
       pal <- palnames[pal]
+    } else {
+      # allow partial matching
+      pal <- palnames[pmatch(pal, palnames)]
     }
+
     big <- c("#800000", "#C00000", "#FF0000", "#FFC0C0",
             "#008000","#00C000","#00FF00","#C0FFC0",
             "#000080","#0000C0", "#0000FF","#C0C0FF",
@@ -7944,6 +8119,9 @@ Pal <- function(pal, n=100, alpha=1) {
            , Helsana       = res <- c("rot"="#9A0941", "orange"="#F08100", "gelb"="#FED037"
                                        , "ecru"="#CAB790", "hellrot"="#D35186", "hellblau"="#8296C4", "hellgruen"="#B3BA12"
                                        , "hellgrau"="#CCCCCC", "dunkelgrau"="#666666", "weiss"="#FFFFFF")
+           , Helsana1      = res <- c("black"="#000000", "hellblau"="#8296C4", "rot"="#9A0941", "orange"="#F08100", "gelb"="#FED037"
+                                      , "ecru"="#CAB790", "hellgruen"="#B3BA12", "hellrot"="#D35186"
+                                      , "hellgrau"="#CCCCCC", "dunkelgrau"="#666666")
            , Tibco         =  res <- apply( mcol <- matrix(c(
                                        0,91,0, 0,157,69, 253,1,97, 60,120,177,
                            156,205,36, 244,198,7, 254,130,1,
@@ -10133,7 +10311,7 @@ PlotArea.formula <- function (formula, data, subset, na.action, ...) {
 
 PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("cex"),
                      pch = 21, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"),
-                     lcolor = "gray", xlim = NULL, main = NULL, xlab = NULL, ylab = NULL, xaxt=NULL, yaxt=NULL,
+                     lcolor = "gray", lblcolor = par("fg"), xlim = NULL, main = NULL, xlab = NULL, ylab = NULL, xaxt=NULL, yaxt=NULL,
                      add = FALSE, args.errbars = NULL, ...) {
 
   ErrBarArgs <- function(from, to = NULL, pos = NULL, mid = NULL,
@@ -10178,6 +10356,7 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
   # gdata <- rev(gdata)
   # gcolor <- Rev(gcolor)
   lcolor <- Rev(lcolor)
+  lblcolor <- Rev(lblcolor)
   color <- Rev(color)
   pch <- Rev(pch)
   bg <- Rev(bg)
@@ -10263,7 +10442,7 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
     labs <- labels[o]
     if (!identical(yaxt, "n"))
       mtext(labs, side = 2, line = loffset, at = y, adj = 0,
-          col = color, las = 2, cex = cex[2], ...)
+          col = lblcolor, las = 2, cex = cex[2], ...)
   }
   if (!add)
     abline(h = y, lty = "dotted", col = lcolor)
@@ -12292,7 +12471,7 @@ PlotMonth <- function(x, type = "l", labels, xlab = "", ylab = deparse(substitut
 
 
 
-PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, add=FALSE,
+PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, datax=FALSE, add=FALSE,
                    args.qqline=NULL, conf.level=0.95, args.cband = NULL, ...) {
 
   # qqplot for an optional distribution
@@ -12304,6 +12483,13 @@ PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, add=FALSE,
   y <- sort(x)
   p <- ppoints(y)
   x <- qdist(p)
+
+  if(datax){
+    xy <- x
+    x <- y
+    y <- xy
+    rm(xy)
+  }
 
   if(is.null(main)) main <- gettextf("Q-Q-Plot", qdist)
   if(is.null(xlab)) xlab <- "Theoretical Quantiles"
@@ -12389,7 +12575,8 @@ PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, add=FALSE,
 
 TOne <- function(x, grp = NA, add.length=TRUE,
                  colnames=NULL, vnames=NULL, total=TRUE,
-                 align="\\l", FUN = NULL, NUMTEST = NULL, numtestlab = NULL, intref="high"){
+                 align="\\l", FUN = NULL, TEST = NULL, intref="high",
+                 fmt.pval= as.fmt(fmt="*", na.form="   ")){
 
 
   afmt <- Fmt("abs")
@@ -12415,17 +12602,27 @@ TOne <- function(x, grp = NA, add.length=TRUE,
     num_fun <- FUN
   }
 
-  # define test for numeric values
-  if(is.null(NUMTEST)){
-    num_test <- function(x, g){
-      # how should the test be calculated and represented
-      Format(kruskal.test(x = x, g = g)$p.value, fmt="*", na.form = "   ")
-    }
-    numtestlab <- "Kruskal-Wallis test"
-  } else {
-    num_test <- NUMTEST
-    if(is.null(numtestlab)) numtestlab <- "numeric test"
-  }
+  TEST.def <- list(num=list(fun=function(x, g){kruskal.test(x, g)$p.val},
+                     lbl="Kruskal-Wallis test"),
+            cat=list(fun=function(x, g){chisq.test(table(x, g))$p.val},
+                     lbl="Chi-Square test"),
+            dich=list(fun=function(x, g){fisher.test(table(x, g))$p.val},
+                      lbl="Fisher exact test"))
+
+  if(is.null(TEST))  # the defaults
+     TEST <- TEST.def
+
+  # define test for the singlest tests
+  if(is.null(TEST[["num"]]))
+    TEST[["num"]] <- TEST.def[["num"]]
+  if(is.null(TEST[["cat"]]))
+    TEST[["cat"]] <- TEST.def[["cat"]]
+  if(is.null(TEST[["dich"]]))
+    TEST[["dich"]] <- TEST.def[["dich"]]
+
+  num_test <- TEST[["num"]]$fun
+  cat_test <- TEST[["cat"]]$fun
+  dich_test <- TEST[["dich"]]$fun
 
   # replaced for flexible test in 0.99.19
   # num_row <- function(x, g, total=TRUE, test="kruskal.test", vname = deparse(substitute(x))){
@@ -12439,7 +12636,7 @@ TOne <- function(x, grp = NA, add.length=TRUE,
 
   num_row <- function(x, g, total=TRUE, vname = deparse(substitute(x))){
     if(!identical(g, NA)) {
-      res <- num_test(x, g)
+      res <- Format(num_test(x, g), fmt=fmt.pval)
       num_test_label <- names(res)
     } else {
       res <- ""
@@ -12473,10 +12670,11 @@ TOne <- function(x, grp = NA, add.length=TRUE,
                 rbind("", m))
     # add test
     if(nrow(tab)>1)
-      p <- chisq.test(tab)$p.value
+      # p <- chisq.test(tab)$p.value
+      p <- cat_test(x, g)
     else
       p <- NA
-    m <- cbind(m, c(paste(Format(p, fmt="*", na.form = "   "), ifelse(is.na(p), "", .FootNote(3))), rep("", nlevels(x))))
+    m <- cbind(m, c(paste(Format(p, fmt=fmt.pval), ifelse(is.na(p), "", .FootNote(3))), rep("", nlevels(x))))
 
     if(nrow(m) <=3) {
       m[2,1] <- gettextf("%s (= %s)", m[1, 1], row.names(tab)[1])
@@ -12492,10 +12690,12 @@ TOne <- function(x, grp = NA, add.length=TRUE,
     tab <- table(x, g)
 
     if(identical(dim(tab), c(2L,2L))){
-      p <- fisher.test(tab)$p.value
+#      p <- fisher.test(tab)$p.value
+      p <- dich_test(x, g)
       foot <- .FootNote(2)
     } else {
-      p <- chisq.test(tab)$p.value
+#      p <- chisq.test(tab)$p.value
+      p <- cat_test(x, g)
       foot <- .FootNote(3)
     }
 
@@ -12511,7 +12711,7 @@ TOne <- function(x, grp = NA, add.length=TRUE,
     # totals to the left
     m <- m[, c(ncol(m), 1:(ncol(m)-1)), drop=FALSE]
 
-    m <- rbind(c(vname, m[1,], paste(Format(p, fmt="*", na.form = "   "), foot)))
+    m <- rbind(c(vname, m[1,], paste(Format(p, fmt=fmt.pval), foot)))
     colnames(m) <- c("var","total", head(colnames(tab), -1), "")
 
     m
@@ -12531,6 +12731,16 @@ TOne <- function(x, grp = NA, add.length=TRUE,
   ctype[sapply(ctype, function(x) any(x %in% c("numeric","integer")))] <- "num"
   ctype[sapply(ctype, function(x) any(x %in% c("factor","ordered","character")))] <- "cat"
 
+  if(identical(grp, NA)){
+    # no grouping factor, let's define something appropriate
+    grp <- rep(1, nrow(x))
+    num_test <- function(x, g) 1
+    cat_test <- function(x, g) 1
+    dich_test <- function(x, g) 1
+    TEST[["num"]]$lbl <- "None"
+    TEST[["cat"]]$lbl <- "None"
+    TEST[["dich"]]$lbl <- "None"
+  }
 
   lst <- list()
   for(i in 1:ncol(x)){
@@ -12590,11 +12800,17 @@ TOne <- function(x, grp = NA, add.length=TRUE,
   if(align != "\\l")
     res[,-c(1, ncol(res))] <- StrAlign(res[,-c(1, ncol(res))], sep = align)
 
+  if(all(grp==1)){
+    res <- res[, -3]
+    total <- TRUE
+  }
+
   if(!total)
     res <- res[, -2]
 
-  attr(res, "legend") <- gettextf("%s) %s, %s) Fisher exact test, %s) Chi-Square test\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1",
-                                  .FootNote(1), numtestlab, .FootNote(2), .FootNote(3))
+
+  attr(res, "legend") <- gettextf("%s) %s, %s) %s, %s) %s\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1",
+                                  .FootNote(1), TEST[["num"]]$lbl, .FootNote(2), TEST[["dich"]]$lbl, .FootNote(3), TEST[["cat"]]$lbl)
 
   class(res) <- "TOne"
   return(res)
@@ -12914,7 +13130,7 @@ GetCurrWrd <- function() {
   } else {
 
     if(Sys.info()["sysname"] == "Windows")
-      warning("RDCOMClient is not available. To install it use: install.packages('RDCOMClient', repos = 'http://www.stats.ox.ac.uk/pub/RWin/')")
+      warning("RDCOMClient is not available. To install it use: install.packages('RDCOMClient', repos = 'http://www.omegahat.net/R/')")
     else
       warning(gettextf("RDCOMClient is unfortunately not available for %s systems (Windows-only).", Sys.info()["sysname"]))
 
@@ -12954,7 +13170,7 @@ GetNewWrd <- function(visible = TRUE, template = "Normal", header=FALSE
   } else {
 
     if(Sys.info()["sysname"] == "Windows")
-      warning("RDCOMClient is not available. To install it use: install.packages('RDCOMClient', repos = 'http://www.stats.ox.ac.uk/pub/RWin/')")
+      warning("RDCOMClient is not available. To install it use: install.packages('RDCOMClient', repos = 'http://www.omegahat.net/R/')")
     else
       warning(gettextf("RDCOMClient is unfortunately not available for %s systems (Windows-only).", Sys.info()["sysname"]))
 
@@ -13169,9 +13385,15 @@ ToWrd.character <- function (x, font = NULL, para = NULL, style = NULL, ..., wrd
 
 
 WrdCaption <- function(x, index = 1, wrd = DescToolsOptions("lastWord")){
-  ToWrd.character(paste(x, "\n", sep=""),
-                  style=eval(parse(text=gettextf("wdConst$wdStyleHeading%s", index))))
+
+  lst <- Recycle(x=x, index=index)
+  x <-
+    index <- lst[["index"]]
+  for(i in seq_along(lst))
+    ToWrd.character(paste(lst[["x"]][i], "\n", sep = ""),
+                    style = eval(parse(text = gettextf("wdConst$wdStyleHeading%s", lst[["index"]][i]))))
   invisible()
+
 }
 
 
@@ -14249,15 +14471,19 @@ GetNewXL <- function( visible = TRUE ) {
 
       # Starts the Excel with xl as handle
     hwnd <- RDCOMClient::COMCreate("Excel.Application")
+    DescToolsOptions(lastXL = hwnd)
+
     if( visible == TRUE ) hwnd[["Visible"]] <- TRUE
 
     # Create a new workbook
-    newwb <- hwnd[["Workbooks"]]$Add
+    # react the same as GetNewWrd(), Word is also starting with a new document
+    # XL would not
+    hwnd[["Workbooks"]]$Add()
 
   } else {
 
     if(Sys.info()["sysname"] == "Windows")
-      warning("RDCOMClient is not available. To install it use: install.packages('RDCOMClient', repos = 'http://www.stats.ox.ac.uk/pub/RWin/')")
+      warning("RDCOMClient is not available. To install it use: install.packages('RDCOMClient', repos = 'http://www.omegahat.net/R/')")
     else
       warning(gettextf("RDCOMClient is unfortunately not available for %s systems (Windows-only).", Sys.info()["sysname"]))
 
@@ -14287,7 +14513,7 @@ GetCurrXL <- function() {
   } else {
 
     if(Sys.info()["sysname"] == "Windows")
-      warning("RDCOMClient is not available. To install it use: install.packages('RDCOMClient', repos = 'http://www.stats.ox.ac.uk/pub/RWin/')")
+      warning("RDCOMClient is not available. To install it use: install.packages('RDCOMClient', repos = 'http://www.omegahat.net/R/')")
     else
       warning(gettextf("RDCOMClient is unfortunately not available for %s systems (Windows-only).", Sys.info()["sysname"]))
 
@@ -14302,8 +14528,8 @@ GetCurrXL <- function() {
 
 XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "", preserveStrings=FALSE) {
 
-  # define some XL constants
-  xlToRight <- -4161
+  # # define some XL constants
+  # xlToRight <- -4161
 
   fn <- paste(tempfile(pattern = "file", tmpdir = tempdir()),
               ".csv", sep = "")
@@ -14329,7 +14555,7 @@ XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "", preserveStr
     ob <- owb$Open(fn)
     # if row.names are saved there's the first cell in the first line missing
     # I don't actually see, how to correct this besides inserting a cell in XL
-    if(row.names) xl$Cells(1, 1)$Insert(Shift=xlToRight)
+    if(row.names) xl$Cells(1, 1)$Insert(Shift=xlConst$xlToRight)
     xl[["Cells"]][["EntireColumn"]]$AutoFit()
 
   } else {
@@ -14345,8 +14571,202 @@ XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "", preserveStr
 }
 
 
+ToXL <- function (x, at, ..., xl=DescToolsOptions("lastXL")) {
+  UseMethod("ToXL")
+}
+
+
+# will be integrated into DescTools soon *******************
+
+ToXL.data.frame <- function(x, at, ..., xl=DescToolsOptions("lastXL"))
+  ## export the data.frame "x" into the location "at" (top,left cell)
+  ## output the occupying range.
+  ## TODO: row.names, more error checking
+{
+  if(is.character(at)){
+    # address of the left upper cell
+    at <- do.call(xl$Cells, as.list(A1ToZ1S1(at)[[1]]))
+
+  } else if(is.vector(at)) {
+    # get a handle of the cell range
+    at <- do.call(xl$Cells, as.list(at))
+  }
+
+  nc <- dim(x)[2]
+  if(nc < 1) stop("data.frame must have at least one column")
+  r1 <- at$Row()                   ## 1st row in range
+  c1 <- at$Column()                ## 1st col in range
+  c2 <- c1 + nc - 1                ## last col (*not* num of col)
+  ws <- at[["Worksheet"]]
+
+  ## headers
+  if(!is.null(names(x))) {
+    hdrRng <- ws$Range(ws$Cells(r1, c1), ws$Cells(r1, c2))
+    hdrRng[["Value"]] <- names(x)
+    rng <- ws$Cells(r1 + 1, c1)
+  } else {
+    rng <- ws$Cells(r1, c1)
+  }
+
+  ## data
+  for(j in seq(from = 1, to = nc)){
+    # debug only:
+    # cat("Column", j, "\n")
+    ToXL(x[, j], at = rng, xl=xl)   ## no byrow for data.frames!
+    rng <- rng$Next()            ## next cell to the right
+  }
+  invisible(ws$Range(ws$Cells(r1, c1), ws$Cells(r1 + nrow(x), c2)))
+}
+
+
+
+ToXL.matrix <- function(x, at, ..., xl=DescToolsOptions("lastXL"))
+  ## export the matrix "x" into the location "at" (top,left cell)
+  ## output the occupying range. Exactly the same as ToXL.data.frame
+  ## TODO: row.names, more error checking
+  ##
+{
+  if(is.character(at)){
+    # address of the left upper cell
+    at <- do.call(xl$Cells, as.list(A1ToZ1S1(at)[[1]]))
+
+  } else if(is.vector(at)) {
+    # get a handle of the cell range
+    at <- do.call(xl$Cells, as.list(at))
+  }
+
+
+  nc <- dim(x)[2]
+  if(nc < 1) stop("matrix must have at least one column")
+  r1 <- at$Row()                   ## 1st row in range
+  c1 <- at$Column()                ## 1st col in range
+  c2 <- c1 + nc - 1                ## last col (*not* num of col)
+  ws <- at[["Worksheet"]]
+
+  ## headers
+  if(!is.null(names(x))) {
+    hdrRng <- ws$Range(ws$Cells(r1, c1), ws$Cells(r1, c2))
+    hdrRng[["Value"]] <- names(x)
+    rng <- ws$Cells(r1 + 1, c1)
+  } else {
+    rng <- ws$Cells(r1, c1)
+  }
+
+  ## data
+  for(j in seq(from = 1, to = nc)){
+    # debug only:
+    # cat("Column", j, "\n")
+    ToXL(x[, j], at = rng)       ## no byrow for matrices!
+    rng <- rng$Next()            ## next cell to the right
+  }
+  invisible(ws$Range(ws$Cells(r1, c1), ws$Cells(r1 + nrow(x), c2)))
+}
+
+
+
+ToXL.default <- function(x, at, byrow = FALSE, ..., xl=DescToolsOptions("lastXL")) {
+
+  #  function(x, at = NULL, byrow = FALSE, ...)
+  ## coerce x to a simple (no attributes) vector and export to
+  ## the range specified at "at" (can refer to a single starting cell);
+  ## byrow = TRUE puts x in one row, otherwise in one column.
+  ## How should we deal with unequal of ranges and vectors?  Currently
+  ## we stop, modulo the special case when at refers to the starting cell.
+  ## TODO: converters (currency, dates, etc.)
+
+  if(is.character(at)){
+    # address of the left upper cell
+    at <- do.call(xl$Cells, as.list(A1ToZ1S1(at)[[1]]))
+
+  } else if(is.vector(at)) {
+    # get a handle of the cell range
+    at <- do.call(xl$Cells, as.list(at))
+  }
+
+  n <- length(x)
+  if(n < 1) return(at)
+  d <- c(at$Rows()$Count(), at$Columns()$Count())
+  N <- prod(d)
+
+  xl <- at$Application()
+
+  if(N == 1 && n > 1){     ## at refers to the starting cell
+    r1c1 <- c(at$Row(), at$Column())
+    r2c2 <- r1c1 + if(byrow) c(0, n-1) else c(n-1, 0)
+    ws <- at[["Worksheet"]]
+    at <- ws$Range(ws$Cells(r1c1[1], r1c1[2]),
+                   ws$Cells(r2c2[1], r2c2[2]))
+  } else if(n != N)
+    stop("range and length(x) differ")
+
+  ## currently we can only export primitives...
+
+  if(class(x) %in% c("logical", "integer", "numeric", "character"))
+    x <- as.vector(x)     ## clobber attributes
+
+  else
+    x <- as.character(x)  ## give up -- coerce to chars
+
+  ## here we create a C-level COM safearray
+  d <- if(byrow) c(1, n) else c(n, 1)
+  # is this an alternative??
+  # RDCOMClient::asCOMArray(matrix(x, nrow=d[1], ncol=d[2]))
+#  xref <- .Call("R_create2DArray", PACKAGE="RDCOMClient", matrix(x, nrow=d[1], ncol=d[2]))
+  xref <- RDCOMClient::asCOMArray(matrix(x, nrow=d[1], ncol=d[2]))
+  at[["Value"]] <- xref
+
+  # workaround for missing values, simply delete the transferred bullshit
+  na <- which(is.na(x))
+  if(length(na) > 0) {
+    if(byrow){
+      arow <- gsub("[A-Z]","", at$cells(1,1)$address(rowabsolute=FALSE, columnabsolute=FALSE))
+
+      xlcol <- c( LETTERS
+                  , sort(c(outer(LETTERS, LETTERS, paste, sep="" )))
+                  , sort(c(outer(LETTERS, c(outer(LETTERS, LETTERS, paste, sep="" )), paste, sep="")))
+      )[1:16384]
+
+      rngA1 <- paste(xlcol[na], arow, sep="", collapse = ";")
+      rng <- xl$range(rngA1)$offset(ColumnOffset=xl$Range(at$Address())$Column()-1)
+
+    } else {
+      # find the column
+      acol <- gsub("[0-9]","", at$cells(1,1)$address(rowabsolute=FALSE, columnabsolute=FALSE))
+      # build range adress for the NAs
+      rngA1 <- paste(acol, na, sep="", collapse = ";")
+      # offset, if there's a name
+      rng <- xl$range(rngA1)$offset(xl$Range(at$Address())$Row()-1)
+    }
+    rng[["FormulaR1C1"]] <- ""
+  }
+
+  invisible(at)
+}
+
+
+
+
 XLCurrReg <- function(cell){
   structure(cell, class="XLCurrReg")
+}
+
+
+
+A1ToZ1S1 <- function(x){
+  xlcol <- c( LETTERS
+              , sort(c(outer(LETTERS, LETTERS, paste, sep="" )))
+              , sort(c(outer(LETTERS, c(outer(LETTERS, LETTERS, paste, sep="" )), paste, sep="")))
+  )[1:16384]
+
+  z1s1 <- function(x) {
+    # remove all potential $ from a range first
+    x <- gsub("\\$", "", x)
+    colnr <- match( regmatches(x, regexec("^[[:alpha:]]+", x)), xlcol)
+    rownr <- as.numeric(regmatches(x, regexec("[[:digit:]]+$", x)))
+    return(c(rownr, colnr))
+  }
+
+  lapply(unlist(strsplit(toupper(x),":")), z1s1)
 }
 
 
@@ -14355,22 +14775,6 @@ XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame =
                         header = FALSE, stringsAsFactors = FALSE, echo = FALSE, datecols = NA,
                         na.strings = NULL) {
 
-  A1ToZ1S1 <- function(x){
-    xlcol <- c( LETTERS
-                , sort(c(outer(LETTERS, LETTERS, paste, sep="" )))
-                , sort(c(outer(LETTERS, c(outer(LETTERS, LETTERS, paste, sep="" )), paste, sep="")))
-    )[1:16384]
-
-    z1s1 <- function(x) {
-      # remove all potential $ from a range first
-      x <- gsub("\\$", "", x)
-      colnr <- match( regmatches(x, regexec("^[[:alpha:]]+", x)), xlcol)
-      rownr <- as.numeric(regmatches(x, regexec("[[:digit:]]+$", x)))
-      return(c(rownr, colnr))
-    }
-
-    lapply(unlist(strsplit(toupper(x),":")), z1s1)
-  }
 
 
   # main function  *******************************
@@ -14502,8 +14906,8 @@ XLGetWorkbook <- function (file, compactareas = TRUE) {
     do.call(cbind, lapply(lst, cbind))
 
 
-  xlCellTypeConstants <- 2
-  xlCellTypeFormulas <- -4123
+  # xlCellTypeConstants <- 2
+  # xlCellTypeFormulas <- -4123
 
   xl <- GetNewXL()
   wb <- xl[["Workbooks"]]$Open(file)
@@ -14517,10 +14921,10 @@ XLGetWorkbook <- function (file, compactareas = TRUE) {
       # and NULL else, thus: !identical(FALSE) for having some or all
       if(!identical(xl$Sheets(i)$UsedRange()$HasFormula(), FALSE))
         areas <- xl$union(
-          xl$Sheets(i)$UsedRange()$SpecialCells(xlCellTypeConstants),
-          xl$Sheets(i)$UsedRange()$SpecialCells(xlCellTypeFormulas))$areas()
+          xl$Sheets(i)$UsedRange()$SpecialCells(xlConst$xlCellTypeConstants),
+          xl$Sheets(i)$UsedRange()$SpecialCells(xlConst$xlCellTypeFormulas))$areas()
       else
-        areas <- xl$Sheets(i)$UsedRange()$SpecialCells(xlCellTypeConstants)$areas()
+        areas <- xl$Sheets(i)$UsedRange()$SpecialCells(xlConst$xlCellTypeConstants)$areas()
 
       alst <- list()
       for ( j in 1:areas$count())

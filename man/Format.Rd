@@ -131,6 +131,7 @@ Code \tab  \tab  \cr
 \tab \tab (0.05, 0.1] = \code{.}  \cr
 \tab \tab (0.1,1] = \code{ }\cr
 
+\code{p*}\tab p-value stars\tab will produce p-value and significance stars
 
 }
 
@@ -140,6 +141,8 @@ This allows to store the full format in a variable or as an option and use it as
 \code{Format(4231.2, fmt=fmt.count)} \cr \cr
 where the latter returns the same result as if the arguments would have been supplied directly: \cr
 \code{Format(4231.2, digits=0, big.mark="'")}.
+
+Finally \code{fmt} can also be a function in x, which makes formatting very flexible.
 
 The formats can as well be organized as options. \code{DescToolsOptions("fmt")} would display the currently defined formats. The function \code{Fmt()} can be used to get, modify and store new formats in dependency of the arguments given. See examples.
 

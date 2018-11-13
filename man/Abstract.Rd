@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Abstract(x, sep = ", ", zero.form = ".", maxlevels = 5, trunc = TRUE, list.len = 99)
+Abstract(x, sep = ", ", zero.form = ".", maxlevels = 5, trunc = TRUE, list.len = 999)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

@@ -8,7 +8,7 @@ Compute confidence intervals for binomial proportions following the most popular
 \usage{
 BinomCI(x, n, conf.level = 0.95,
         method = c("wilson", "wald", "agresti-coull", "jeffreys",
-                   "modified wilson", "modified jeffreys",
+                   "modified wilson", "wilsoncc","modified jeffreys",
                    "clopper-pearson", "arcsine", "logit", "witting", "pratt"),
         rand = 123)
 }
@@ -17,7 +17,7 @@ BinomCI(x, n, conf.level = 0.95,
   \item{n}{ number of trials. }
   \item{conf.level}{ confidence level, defaults to 0.95. }
   \item{method}{ character string specifing which method to use; this can be one out of:
-  \code{"wald"}, \code{"wilson"}, \code{"agresti-coull"}, \code{"jeffreys"},
+  \code{"wald"}, \code{"wilson"}, \code{"wilsoncc"}, \code{"agresti-coull"}, \code{"jeffreys"},
   \code{"modified wilson"}, \code{"modified jeffreys"}, \code{"clopper-pearson"},
   \code{"arcsine"}, \code{"logit"}, \code{"witting"} or \code{"pratt"}. Defaults to \code{"wilson"}.
   Abbreviation of method are accepted. See details. }
@@ -44,6 +44,8 @@ BinomCI(x, n, conf.level = 0.95,
   The \bold{modified Wilson} interval is a modification of the Wilson interval for x close to 0
   or n as proposed by Brown et al (2001).
 
+  The \bold{Wilson cc} interval is a modification of the Wilson interval adding a continuity correction term.
+
   The \bold{modified Jeffreys} interval is a modification of the Jeffreys interval for
   \code{x == 0 | x == 1} and \code{x == n-1 | x == n} as proposed by
   Brown et al (2001).
@@ -62,6 +64,8 @@ BinomCI(x, n, conf.level = 0.95,
 
   For more details we refer to Brown et al (2001) as well as Witting (1985).
 
+  The \bold{Pratt} interval is obtained by extremely accurate normal approximation. (Pratt 1968)
+
 Some approaches for the confidence intervals can potentially yield negative results or values beyond 1. These would be reset such as not to exceed the range of [0, 1].
 
   And now, which interval should we use? The Wald interval often has inadequate coverage, particularly for small n and values of p close to 0 or 1. Conversely, the Clopper-Pearson Exact method is very conservative and tends to produce wider intervals than necessary. Brown et al. recommends the Wilson or Jeffreys methods for small n and Agresti-Coull, Wilson, or Jeffreys, for larger n as providing more reliable coverage than the alternatives. Also note that the point estimate for the Agresti-Coull method is slightly larger than for other methods because of the way this interval is calculated.
@@ -71,7 +75,7 @@ Some approaches for the confidence intervals can potentially yield negative resu
   A vector with 3 elements for estimate, lower confidence intervall and upper for the upper one.
  }
 
-\note{ This function was previously published as \code{binomCI()} in the  \pkg{SLmisc} package and has been integrated here with some adaptations concerning the interface, but without any change in the computation logic.
+\note{ The base of this function was \code{binomCI()} in the  \pkg{SLmisc} package. In the meantime the code has been updated on several occasions  and has undergone some additions and bugfixes.
 }
 
 
@@ -96,7 +100,7 @@ Wilcox, R. R. (2005) \emph{Introduction to robust estimation and hypothesis test
 Rand R. Wilcox (Pratt's method),
 Andri Signorell <andri@signorell.net> (interface issues) }
 
-\seealso{\code{\link[stats]{binom.test}}, \code{\link[Hmisc]{binconf}}, \code{\link{MultinomCI}} }
+\seealso{\code{\link[stats]{binom.test}}, \code{\link[Hmisc]{binconf}}, \code{\link{MultinomCI}}, \code{\link{BinomDiffCI}}, \code{\link{BinomRatioCI}} }
 \examples{
 BinomCI(x=37, n=43, method=c("wald", "wilson", "agresti-coull", "jeffreys",
   "modified wilson", "modified jeffreys", "clopper-pearson", "arcsine", "logit",

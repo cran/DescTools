@@ -9,7 +9,8 @@ Create a table summarizing continuous, categorical and dichotomous variables, op
 }
 \usage{
 TOne(x, grp = NA, add.length = TRUE, colnames = NULL, vnames = NULL, total = TRUE,
-     align = "\\\\l", FUN = NULL, NUMTEST = NULL, numtestlab = NULL, intref = "high")
+     align = "\\\\l", FUN = NULL, TEST = NULL, intref = "high",
+     fmt.pval = as.fmt(fmt = "*", na.form = "   "))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -34,9 +35,9 @@ TOne(x, grp = NA, add.length = TRUE, colnames = NULL, vnames = NULL, total = TRU
 %%     ~~Describe \code{sep} here~~
 }
 \item{FUN}{the function to be used as location and dispersion measure (typically \code{mean}/\code{sd} or alternatively \code{median}/\code{IQR}). See examples.}
-\item{NUMTEST}{the function to be used to compare location (default \code{kruskal.test}). Must be defined as function with arguments \code{(x, g)}, generating something similar to a p.value. (See examples.) }
-\item{numtestlab}{string, describing the test for numeric variables. Default is "Kruskal-Wallis test". Alternative could be "ANOVA".}
+\item{TEST}{a list of functions to be used to test the variables. Must be named as "num", "cat" and "dich" and be defined as function with arguments \code{(x, g)}, generating something similar to a p.value. (See examples.) }
 \item{intref}{one out of \code{"high"} (default) or \code{"low"}, defining which value of a dichotomous numeric or logical variable should be reported. Usually this will be \code{1} or \code{TRUE}. Setting it to \code{"low"} will report the lower value \code{0} or \code{FALSE}. }
+\item{fmt.pval}{format code or function for the p-values of the tests, default is \code{as.fmt(fmt="p", na.form="   ")}}
 }
 \details{There are three types of variables currently implemented: numeric, factor and variables with only two levels.
 %%  ~~ If necessary, more details than the description above ~~
@@ -76,13 +77,19 @@ TOne(iris[, -5], iris[, 5],
 )
 
 # replace kruskal.test by ANOVA and report the p.value
+# Change tests for all the types
 TOne(x = iris[, -5], grp = iris[, 5],
      FUN = function(x) gettextf("\%s / \%s",
             Format(mean(x, na.rm=TRUE), digits=1),
             Format(sd(x, na.rm=TRUE), digits=3)),
-     NUMTEST = function(x, g)
-            Format(summary(aov(x ~ g))[[1]][1, "Pr(>F)"], fmt="p"),
-     numtestlab = "ANOVA"
+
+     TEST=list(num=list(fun=function(x, g){summary(aov(x ~ g))[[1]][1, "Pr(>F)"]},
+                        lbl="ANOVA"),
+               cat=list(fun=function(x, g){chisq.test(table(x, g))$p.val},
+                        lbl="Chi-Square test"),
+               dich=list(fun=function(x, g){fisher.test(table(x, g))$p.val},
+                         lbl="Fisher exact test")),
+     fmt.pval = as.fmt(fmt="p", na.form="   ")
 )
 
 # dichotomous integer or logical values can be reported by the high or low value
@@ -98,7 +105,6 @@ TOne(d.set[1:3], d.set$g, intref = "high")
 # intref would not control factors, use relevel to change reported value
 TOne(data.frame(z=relevel(z, "1")), g)
 TOne(data.frame(z=z), g)
-
 
 
 options(opt)

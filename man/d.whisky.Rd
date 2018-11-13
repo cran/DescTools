@@ -12,7 +12,9 @@ By computing the Pearson correlation coefficient and specifying a threshold valu
 \format{
   A data frame with 86 observations on the following 16 variables.
   \describe{
-    \item{\code{distillery}}{a factor with levels \code{Aberfeldy}, \code{Aberlour}, \code{AnCnoc}, \code{Ardbeg}, ... }
+    \item{\code{distillery}}{a character \code{Aberfeldy}, \code{Aberlour}, \code{AnCnoc}, \code{Ardbeg}, ... }
+    \item{\code{brand}}{a grouping factor to separate the better known distilleries (\code{A}) from the lesser known ones (\code{B}). }
+    \item{\code{region}}{a factor with levels \code{campbeltown}, \code{highland}, \code{islands}, \code{islay}, \code{lowland}, \code{speyside}.}
     \item{\code{body}}{a numeric vector}
     \item{\code{sweetness}}{a numeric vector}
     \item{\code{smoky}}{a numeric vector}
@@ -25,7 +27,7 @@ By computing the Pearson correlation coefficient and specifying a threshold valu
     \item{\code{malty}}{a numeric vector}
     \item{\code{fruity}}{a numeric vector}
     \item{\code{floral}}{a numeric vector}
-    \item{\code{postcode}}{a factor with levels \code{ AB30 1YE}, \code{ AB35 5TB}, ... }
+    \item{\code{postcode}}{a character \code{ AB30 1YE}, \code{ AB35 5TB}, ... }
     \item{\code{latitude}}{a numeric vector, coordinate pairs of distilleries.}
     \item{\code{longitude}}{a numeric vector, coordinate pairs of distilleries.}
   }
@@ -42,19 +44,19 @@ head(d.whisky)
 
 opar <- par(mfrow=c(3,3), cex.main=1.8)
 for(i in 1:9)
-  PlotPolar(d.whisky[i, 2:13], rlim=4, type="l", col=hecru, lwd=2, fill=SetAlpha(hecru, 0.4),
+  PlotPolar(d.whisky[i, 4:15], rlim=4, type="l", col=hecru, lwd=2, fill=SetAlpha(hecru, 0.4),
             panel.first=PolarGrid(
               ntheta=ncol(d.whisky[i, 2:13]), nr = NA, col="grey",
-              lty="dotted", las=1, cex=1.4, alabels=StrCap(colnames(d.whisky[i, 2:13])),
+              lty="dotted", las=1, cex=1.4, alabels=StrCap(colnames(d.whisky[i, 3:14])),
               lblradians=TRUE),
             main=d.whisky[i, "distillery"])
 
 
 par(mfrow=c(3,3), cex.main=1.8, xpd=NA)
 id <- d.whisky$distillery \%in\% c("Ardbeg","Caol Ila","Cragganmore","Lagavulin","Laphroig",
-                                "Macallan","Mortlach","Talisker","Tobermory")
-PlotFaces(d.whisky[id, 2:13], nr = 3, nc=3, col=hecru, scale=TRUE, labels =
-            d.whisky$distillery[id])
+                                   "Macallan","Mortlach","Talisker","Tobermory")
+PlotFaces(d.whisky[id, 4:15], nr=3, nc=3, col=hecru, scale=TRUE, fill=TRUE,
+          labels=d.whisky$distillery[id])
 
 par(opar)
 }

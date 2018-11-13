@@ -633,6 +633,40 @@ ModSummary.lm <- function(x, conf.level=0.95, ...){
 
 
 
+ModSummary.lmrob <- function (x, conf.level = 0.95, ...) {
+
+  smrx <- summary(x)
+  coefx <- data.frame(rownames(smrx$coefficients), smrx$coefficients,
+                      confint(x, level = conf.level), stringsAsFactors = FALSE)
+  colnames(coefx) <- c("name", "est", "se", "stat", "p", "lci",
+                       "uci")
+  fit <- x$fitted.values
+  y <- model.response(x$model)
+  statsx <- c(with(smrx, c(sigma = sigma, r.squared = r.squared,
+                           adj.r.squared = adj.r.squared, F = df[[1]], numdf = df[[3]],
+                           dendf = df[[2]], p = pf(df[[1]], df[[2]],
+                                                   df[[3]], lower.tail = FALSE))), N = nobs(x),
+              #           logLik = logLik(x), deviance = deviance(x), AIC = AIC(x),
+              logLik = NA, deviance = NA, AIC = NA,
+              BIC = NA, MAE = MAE(x = fit, ref = y), MAPE = MAPE(x = fit, ref = y),
+              MSE = MSE(x = fit, ref = y), RMSE = RMSE(x = fit, ref = y))
+
+  list(coef = coefx, ncoef = length(x$coefficients), statsx = statsx,
+       contrasts = x$contrasts, xlevels = x$xlevels, call = x$call)
+
+  # https://stat.ethz.ch/pipermail/r-help/2005-April/070611.html
+  # More fundamentally, `AIC' is about maximum-likelihood fitting of true
+  # models.  Now rlm does usually correspond to ML fitting of a non-normal
+  # linear model, so it would be possible to compute a likelihood and hence
+  # AIC.  The point however is that the model is assumed to be false.  There
+  # are AIC-like criteria for that situation, but they are essentially
+  # impossible to compute accurately as they depend on fine details of the
+  # unknown true error distribution (and still assume a linear model).
+  # Ripley
+
+
+}
+
 
 ModSummary.glm <- function(x, conf.level=0.95, ...){
 
@@ -706,7 +740,7 @@ ModSummary.glm <- function(x, conf.level=0.95, ...){
 ModSummary.OddsRatio <- function(x, conf.level=0.95, ...){
 
   statsx <- x$PseudoR2
-  statsx <- c(N = nobs(x),
+  statsx <- c(N = x$nobs,
               statsx[],
               "BrierScore" = x$BrierScore)
 
@@ -717,7 +751,6 @@ ModSummary.OddsRatio <- function(x, conf.level=0.95, ...){
        statsx=statsx, contrasts=NULL, xlevels=NULL,
        call=x$call)
 }
-
 
 
 
@@ -739,8 +772,9 @@ TMod <- function(..., FUN = NULL){
     res
   }
 
-
-  modname <- unlist(lapply(match.call(expand.dots=FALSE)$..., as.character))
+# conver language to string either with: toString or deparse, but not as.character!!!
+#  modname <- unlist(lapply(match.call(expand.dots=FALSE)$..., as.character))
+  modname <- unlist(lapply(match.call(expand.dots=FALSE)$..., toString))
 
   lmod <- list(...)
   lst <- lapply(lmod, ModSummary)
@@ -787,7 +821,30 @@ TMod <- function(..., FUN = NULL){
 
   row.names(mm) <- NULL
 
-  return(structure(list(m, mm), class="TMod"))
+
+
+  # compose est-lci-uci table
+  merge_mod <- function(z){
+    lst <- lapply(lcoef, function(x) cbind(SetNames(x[[z]], names=x[["name"]])))
+    mcoef <- lst[[1]]
+    for(i in 2:length(lst)){
+      mcoef <- merge(mcoef, lst[[i]], by = "row.names", all.x=TRUE, all.y=TRUE)
+      rownames(mcoef) <- mcoef$Row.names
+      mcoef$Row.names <- NULL
+      colnames(mcoef) <- NULL
+      }
+
+    mcoef
+  }
+
+  mall <- Abind(merge_mod("est"),
+                merge_mod("lci"),
+                merge_mod("uci"), along=3)
+
+  dimnames(mall) <- list(m$coef, modname, c("est","lci","uci"))
+
+
+  return(structure(list(m, mm, lcoef, mall=mall), class="TMod"))
 
 
 }
@@ -811,6 +868,15 @@ print.TMod <- function(x, ...){
   print(m, ...)
 
 }
+
+
+
+plot.TMod <- function(x, ...){
+  x <- aperm(x$mall, perm = c(2, 1, 3))
+  PlotDot(x[,,1],
+          args.errbars = list(from=x[,,2], to=x[,,3], mid=x[,,1]), ...)
+}
+
 
 
 ToWrd.TMod <- function(x, font=NULL, para=NULL, main=NULL, align=NULL,
