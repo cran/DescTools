@@ -82,6 +82,9 @@ shoes <- list(
 
 PlotLinesA(do.call(rbind, shoes), xlim=c(0.75,2.25), col=1, main="shoes",
            pch=21, pch.bg="white", pch.col=1, pch.cex=1.5)
+
+# let's define some arbitrary x-coordinates
+PlotLinesA(x=c(1,2,6,8,15), y=VADeaths)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

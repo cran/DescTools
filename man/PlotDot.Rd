@@ -7,7 +7,7 @@
 }
 \usage{
 PlotDot(x, labels = NULL, groups = NULL, gdata = NULL,
-        cex = par("cex"), pch = 21, gpch = 21, bg = par("bg"),
+        cex = par("cex"), pch = NULL, gpch = 21, bg = par("bg"),
         color = par("fg"), gcolor = par("fg"), lcolor = "gray", lblcolor = par("fg"),
         xlim = NULL, main = NULL, xlab = NULL, ylab = NULL,
         xaxt=NULL, yaxt=NULL, add = FALSE, args.errbars = NULL, \dots)
@@ -33,7 +33,7 @@ PlotDot(x, labels = NULL, groups = NULL, gdata = NULL,
     to a value smaller than one can be a useful way of avoiding label
     overlap.  Unlike many other graphics functions, this sets the actual
     size, not a multiple of \code{par("cex")}.}
-  \item{pch}{the plotting character or symbol to be used.}
+  \item{pch}{the plotting character or symbol to be used. Default is 21.}
   \item{gpch}{the plotting character or symbol to be used for group
     values.}
   \item{bg}{the background color of plotting characters or symbols to be
@@ -76,26 +76,25 @@ PlotDot(x, labels = NULL, groups = NULL, gdata = NULL,
 \author{R-Core with some extensions by Andri Signorell <andri@signorell.net>}
 \examples{
 PlotDot(VADeaths, main = "Death Rates in Virginia - 1940")
-op <- par(xaxs = "i")  # 0 -- 100\%
+op <- par(xaxs = "i")  # 0 -- 100%
 PlotDot(t(VADeaths), xlim = c(0,100),
-         main = "Death Rates in Virginia - 1940")
+        main = "Death Rates in Virginia - 1940")
 par(op)
 
 # add some error bars
-PlotDot(VADeaths, main="Death Rates in Virginia - 1940", col="red", pch=NA,
+PlotDot(VADeaths, main="Death Rates in Virginia - 1940", col="red", pch=21,
         args.errbars = list(from=VADeaths-2, to=VADeaths+2, mid=VADeaths,
-        pch=21, cex=1.4))
+                            cex=1.4))
 
 # add some other values
 PlotDot(VADeaths+3, pch=15, col="blue", add=TRUE, labels=NA)
 
 # same as PlotDotCI
 xci <- do.call(rbind, tapply( d.pizza$delivery_min, d.pizza$driver,
-               MeanCI, conf.level=0.99, na.rm=TRUE))
+                              MeanCI, conf.level=0.99, na.rm=TRUE))
 
-PlotDot(xci[,1], main="delivery_min ~ driver",
-        args.errbars = list(from=xci[,2], to=xci[,3], mid=xci[,1],
-        lwd=2, pch=21, col="grey40", bg.pch="grey50", col.pch="black"),
+PlotDot(xci[,1], main="delivery_min ~ driver", pch=21, bg="grey80", col="black",
+        args.errbars = list(from=xci[,2], to=xci[,3], mid=xci[,1], lwd=2, col="grey40", cex=1.5),
         xlim=c(15,35), panel.before=grid())
 
 # with group data
@@ -107,9 +106,9 @@ PlotDot(x, gdata = tapply(d.pizza$temperature, d.pizza$driver, mean, na.rm=TRUE)
 # special format
 par(lend=1)
 
-PlotDot(VADeaths, main="Death Rates in Virginia - 1940", pch=NA, lcolor = hecru,
+PlotDot(VADeaths, main="Death Rates in Virginia - 1940", pch="|", lcolor = hecru, col=hred,
         args.errbars = list(from=VADeaths-2, to=VADeaths+2, mid=VADeaths,
-                            pch="|", col.pch=hred, cex=1.3, lwd=8, code=0, col=hgreen))
+                            cex=1.3, lwd=8, code=0, col=hgreen))
 
 # Error bars for binomial confidence intervals
 tab <- table(d.pizza$driver, d.pizza$wine_delivered)
@@ -120,10 +119,10 @@ PlotDot(xci[,1], main="wine delivered ~ driver ", xlim=c(0,1),
 
 # Error bars for confidence intervals for means
 xci <- do.call(rbind, tapply(d.pizza$delivery_min, d.pizza$driver,
-  MeanCI, conf.level=0.99, na.rm=TRUE))
+                             MeanCI, conf.level=0.99, na.rm=TRUE))
 
-PlotDot(xci[,1], main="delivery_min ~ driver",
-  args.errbars=list(from=xci[,-1]))
+PlotDot(xci[, 1], main="delivery_min ~ driver", args.errbars=list(from=xci))
+
 
 # Setting the colours
 # define some error bars first
@@ -131,11 +130,11 @@ lci <- sweep(x = VADeaths, MARGIN = 2, FUN = "-", 1:4)
 uci <- sweep(x = VADeaths, MARGIN = 1, FUN = "+", 1:5)
 
 PlotDot(VADeaths, main="This should only show how to set the colours, not be pretty",
-        col=c("red", "blue"), pch=NA,
+        pch=21, col=c("blue","grey"), bg=c("red", "yellow"),
         gcolor = c("green", "blue", "orange", "magenta"), gdata=c(10,20,30,40),
         gpch = c(15:18), lcolor = "orange",
-        args.errbars = list(from=lci, to=uci, mid=VADeaths,
-                            pch=21, cex=1.4, col="blue", col.pch="green", bg.pch="red"))
+        args.errbars = list(from=lci, to=uci, mid=VADeaths, cex=1.4))
+
 }
 
 \keyword{hplot}

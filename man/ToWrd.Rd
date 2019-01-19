@@ -36,8 +36,8 @@ ToWrd(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"))
 
 \method{ToWrd}{lm}(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"))
 
-\method{ToWrd}{character}(x, font = NULL, para = NULL, style = NULL, ...,
-      wrd = DescToolsOptions("lastWord"))
+\method{ToWrd}{character}(x, font = NULL, para = NULL, style = NULL, bullet = FALSE,
+      ..., wrd = DescToolsOptions("lastWord"))
 
 \method{ToWrd}{default}(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"))
 
@@ -92,6 +92,7 @@ ToWrd(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"))
   \item{\dots}{further arguments to be passed to or from methods.
 %%     ~~Describe \code{\dots} here~~
 }
+\item{bullet}{logical, defines if the text should be formatted as bullet points.}
   \item{wrd}{the pointer to a word instance. Can be a new one, created by \code{GetNewWrd()}
   or an existing one, created by \code{GetCurrWrd()}.
   Default is the last created pointer stored in \code{DescToolsOptions("lastWord")}.
@@ -166,4 +167,5 @@ WrdFont(wrd = wrd) <- list(name="Algerian", size=14, bold=TRUE)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ print }% use one of  RShowDoc("KEYWORDS")
+\keyword{ print }
+% use one of  RShowDoc("KEYWORDS")

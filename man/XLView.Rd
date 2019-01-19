@@ -102,8 +102,8 @@ obj <- xl$Cells()$CurrentRegion()
 obj[["VerticalAlignment"]] <- xlConst$xlTop
 
 row <- xl$Cells()$CurrentRegion()$rows(1)
-# geht nicht:   row$font()[["bold"]] <- TRUE
-# geht:
+# does not work:   row$font()[["bold"]] <- TRUE
+# works:
 obj <- row$font()
 obj[["bold"]] <- TRUE
 

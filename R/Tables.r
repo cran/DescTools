@@ -337,11 +337,67 @@ ExpFreq <- function(x, freq = c("abs", "rel")) {
 }
 
 
+# CollapseTable <- function (x, ...) {
+#
+#   nargs <- length(args <- list(...))
+#   if (!nargs)
+#     return(x)
+#
+#   if (inherits(x, "ftable"))
+#     x <- as.table(x)
+#
+#   if (inherits(x, "table")) {
+#     tvars <- names(dimnames(x))
+#     x <- as.data.frame.table(x)
+#     freq <- x[, "Freq"]
+#   } else {
+#     stop("Argument must be a table or ftable object")
+#   }
+#
+#   names <- names(args)
+#
+#   for (i in 1:nargs) {
+#     vals <- args[[i]]
+#     nm <- names[[i]]
+#     if (any(nm == tvars))
+#       levels(x[[nm]]) <- vals
+#     else warning(nm, " is not among the x variables.")
+#   }
+#
+#   res <- xtabs(as.formula(paste("freq ~", paste(tvars, collapse = "+"))),
+#                data = x)
+#   # do not return xtabs class, when supplied with table
+#   class(res) <- class(res)[class(res) != "xtabs"]
+#   attr(res, "call") <- NULL
+#
+#   return(res)
+#
+# }
+
+
+
 CollapseTable <- function (x, ...) {
 
+  # allow unnamed arguments, changed by 0.99.27
   nargs <- length(args <- list(...))
+
   if (!nargs)
     return(x)
+
+  # provide variable names for the table, maximum possible names = max_dim(x))
+  iArgs <- seq_len(length(dimnames(x)))
+  nmc <- paste0("Var", iArgs)
+
+  nm <- names(dimnames(x))
+  if (any(ng0 <- !nzchar(nm)))
+    names(dimnames(x))[ng0] <- nmc[seq(sum(ng0))]
+
+  # provide variable names for unnamed arguments
+  nm <- names(args)
+  if (is.null(nm))
+    names(args) <- names(dimnames(x))[seq(nargs)]
+  else if (any(ng0 <- !nzchar(nm)))
+    names(args)[ng0] <- names(dimnames(x))[names(dimnames(x)) %nin% nm[nzchar(nm)]][seq(sum(ng0))]
 
   if (inherits(x, "ftable"))
     x <- as.table(x)
@@ -350,22 +406,30 @@ CollapseTable <- function (x, ...) {
     tvars <- names(dimnames(x))
     x <- as.data.frame.table(x)
     freq <- x[, "Freq"]
+
   } else {
     stop("Argument must be a table or ftable object")
   }
 
   names <- names(args)
-
   for (i in 1:nargs) {
     vals <- args[[i]]
     nm <- names[[i]]
     if (any(nm == tvars))
       levels(x[[nm]]) <- vals
-    else warning(nm, " is not among the x variables.")
+    else
+      warning(nm, " is not among the x variables.")
   }
 
-  xtabs(as.formula(paste("freq ~", paste(tvars, collapse = "+"))),
-        data = x)
+  res <- xtabs(as.formula(paste("freq ~", paste(tvars, collapse = "+"))),
+               data = x)
+
+  class(res) <- class(res)[class(res) != "xtabs"]
+  attr(res, "call") <- NULL
+
+  names(dimnames(res))[names(dimnames(res)) %in% nmc] <- ""
+
+  return(res)
 
 }
 

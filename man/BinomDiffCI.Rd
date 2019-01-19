@@ -8,9 +8,9 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-BinomDiffCI(x1, n1, x2, n2, conf.level = 0.95,
+BinomDiffCI(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided","left","right"),
             method = c("wald", "waldcc", "ac", "score", "scorecc", "mn",
-                       "mee", "blj", "ha"))
+                       "mee", "blj", "ha", "beal"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,7 +19,12 @@ BinomDiffCI(x1, n1, x2, n2, conf.level = 0.95,
   \item{x2}{ number of successes for the second group. }
   \item{n2}{ number of trials for the second group. }
   \item{conf.level}{ confidence level, defaults to 0.95. }
-  \item{method}{ one of \code{"wald"}, \code{"waldcc"}, \code{"ac"}, \code{"score"}, \code{"scorecc"}, \code{"mn"}, \code{"mee"}, \code{"blj"}, \code{"ha"}.
+  \item{sides}{a character string specifying the side of the confidence interval, must be one of \code{"two.sided"} (default),
+\code{"left"} or \code{"right"}. You can specify just the initial letter. \code{"left"} would be analogue to a hypothesis of
+\code{"greater"} in a \code{t.test}.}
+
+
+  \item{method}{ one of \code{"wald"}, \code{"waldcc"}, \code{"ac"}, \code{"score"}, \code{"scorecc"}, \code{"mn"}, \code{"mee"}, \code{"blj"}, \code{"ha"}, \code{"beal"}.
 %%     ~~Describe \code{method} here~~
 }
 }
@@ -49,6 +54,8 @@ The \bold{Brown, Li's Jeffreys} (code \code{"blj"}) interval was proposed by Bro
 
 The \bold{Hauck-Anderson} (code \code{"ha"}) interval was proposed by Hauck-Anderson (1986).
 
+The \bold{Beal} (code \code{"beal"}) interval is described in Beal (1987).
+
 
 Some approaches for the confidence intervals can potentially yield negative results or values beyond [-1, 1]. These would be reset such as not to exceed the range of [-1, 1].
 
@@ -63,7 +70,7 @@ Which of the methods to use is currently still the subject of lively discussion 
 \references{
 Agresti, A, Caffo, B (2000) Simple and effective confidence intervals for proportions and difference of proportions result from adding two successes and two failures. \emph{The American Statistician} 54 (4), 280-288.
 
-Newcombe, R.G. (1998). Interval Estimation for the Difference Between Independent Proportions: Comparison of Eleven Methods. \emph{Statistics in Medicine}, 17, 873--890.
+Beal, S L (1987) Asymptotic Confidence Intervals for the Difference Between Two Binomial Parameters for Use with Small Samples;  \emph{Biometrics}, 43, 941-950.
 
 Brown L, Li X (2005) Confidence intervals for two sample binomial distribution, \emph{Journal of Statistical Planning and Inference}, 130(1), 359-375.
 
@@ -73,9 +80,11 @@ Farrington, C. P. and Manning, G. (1990) Test Statistics and Sample Size Formula
 
 Mee RW (1984) Confidence bounds for the difference between two probabilities, \emph{Biometrics} 40:1175-1176 .
 
-Fagerland M W, Lydersen S and Laake P (2011) Recommended confidence intervals for two independent binomial proportions, \emph{Statistical Methods in Medical Research} 0(0) 1-31
-
 Miettinen OS, Nurminen M. (1985) Comparative analysis of two rates. \emph{Statistics in Medicine} 4, 213-226.
+
+Newcombe, R G (1998). Interval Estimation for the Difference Between Independent Proportions: Comparison of Eleven Methods. \emph{Statistics in Medicine}, 17, 873--890.
+
+Fagerland M W, Lydersen S and Laake P (2011) Recommended confidence intervals for two independent binomial proportions, \emph{Statistical Methods in Medical Research} 0(0) 1-31
 
 }
 \author{Andri Signorell <andri@signorell.net>

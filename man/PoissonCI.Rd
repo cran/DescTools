@@ -7,7 +7,7 @@
 \description{Computes the confidence intervals of a poisson distributed variable's lambda. Several methods are implemented, see details.
 }
 \usage{
-PoissonCI(x, n = 1, conf.level = 0.95,
+PoissonCI(x, n = 1, conf.level = 0.95, sides = c("two.sided","left","right"),
           method = c("exact", "score", "wald", "byar"))
 }
 %- maybe also 'usage' for other objects documented here.
@@ -15,6 +15,10 @@ PoissonCI(x, n = 1, conf.level = 0.95,
   \item{x}{number of events. }
   \item{n}{time base for event count.}
  \item{conf.level}{confidence level, defaults to 0.95.}
+ \item{sides}{a character string specifying the side of the confidence interval, must be one of \code{"two.sided"} (default),
+\code{"left"} or \code{"right"}. You can specify just the initial letter. \code{"left"} would be analogue to a hypothesis of
+\code{"greater"} in a \code{t.test}.}
+
  \item{method}{ character string specifing which method to use; can be one out of
   \code{"wald"}, \code{"score"},  \code{"exact"} or  \code{"byar"}.
   Method can be abbreviated. See details. Defaults to \code{"score"}. }

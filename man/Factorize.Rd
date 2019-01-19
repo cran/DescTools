@@ -35,10 +35,10 @@ Factorize(n)
 Martin Maechler, Jan. 1996.
 }
 \seealso{
-  \code{\link{Primes}}.
+  \code{\link{GCD}},  \code{\link{LCM}}, \code{\link{Primes}},   \code{\link{IsPrime}},   \code{\link{Divisors}}
 
   For factorization of moderately or really large numbers, see the \pkg{gmp}
-  package, and its \code{\link[gmp]{factorize}()}.
+  package, and its \code{\link[gmp]{factorize}()} (which is ~20x faster!).
 }
 \examples{
  Factorize(47)

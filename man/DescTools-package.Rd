@@ -28,14 +28,15 @@ A grouped list of the functions:
 \link{\%nin\%}    \tab     "not in" operator \cr
 \link{\%overlaps\%}    \tab     Do two collections have common elements? \cr
 \link{\%like\%}, \link{\%like any\%}    \tab     Simple operator to search for a specified pattern \cr
-\link{\%^\%}    \tab     Calculate powers of matrices \cr
-\link{Interval}       \tab    Calculate the number of days of the overlapping part \cr
+\link{\%^\%}    \tab     Powers of matrices \cr
+\link{Interval}       \tab    The number of days of the overlapping part \cr
              \tab of two date periods \cr
-\link{AUC}        \tab      Calculate area under the curve \cr
+\link{AUC}        \tab      Area under the curve \cr
 \link{Primes}     \tab      Find all primes less than n \cr
 \link{Factorize}  \tab      Prime factorization of integers \cr
-\link{GCD}      \tab    Calculate the greatest common divisor\cr
-\link{LCM}      \tab    Calculate the least common multiple\cr
+\link{Divisors}  \tab      All divisors of an integer\cr
+\link{GCD}      \tab    Greatest common divisor\cr
+\link{LCM}      \tab    Least common multiple\cr
 \link{Permn}      \tab      Determine all possible permutations of a set \cr
 \link{Fibonacci}  \tab      Generates single Fibonacci numbers or a Fibonacci sequence\cr
 \link{DigitSum}  \tab      Digit sum of a number\cr
@@ -66,7 +67,6 @@ A grouped list of the functions:
 \link{Dummy}      \tab      Generate dummy codes for a factor \cr
 \link{FisherZ}, \link{FisherZInv}      \tab      Fisher's z-transformation and its inverse \cr
 \link{Midx}       \tab Calculate sequentially the midpoints of the elements of a vector\cr
-\link{UnitConv}       \tab      Return the most common unit conversions \cr
 \link{Unwhich}       \tab   Inverse function to \code{\link{which}}, create a logical vector/matrix from indices \cr
 \link{Vigenere}       \tab      Implements a Vigenere cypher, both encryption and decryption  \cr
 \link{BinTree}, \link{PlotBinTree}       \tab      Create and plot a binary tree structure with a given length \cr
@@ -101,7 +101,6 @@ A grouped list of the functions:
 \link{Clockwise}       \tab      Transform angles from counter clock into clockwise mode \cr
 \link{split.formula}       \tab      A formula interface for the base function split \cr
 \link{reorder.factor}       \tab      Reorder the levels of a factor \cr
-\link{Lookup}       \tab      Simple lookup if merge seems cumbersome \cr
 \link{ToLong}, \link{ToWide}     \tab Simple reshaping of a vector \cr
 \link{SetNames}       \tab      Set the names, rownames or columnnames in an object and return it\cr
 \link{Some}       \tab      Return some randomly chosen elements of an object \cr
@@ -140,6 +139,7 @@ A grouped list of the functions:
 \link{RomanToInt}    \tab    Convert roman numerals to integers\cr
 \link{RgbToLong}, \link{LongToRgb}       \tab Convert a rgb color to a long number and vice versa\cr
 \link{ColToGray}, \link{ColToGrey}       \tab      Convert colors to grey/grayscale \cr
+\link{ConvUnit}       \tab      Return the most common unit conversions \cr
 
 \cr\cr
 \bold{Colors:}\tab\cr
@@ -416,6 +416,7 @@ _RevWeibull   \tab      Reverse Weibull distribution (\link{dRevWeibull})\cr
 \link{WrdInsertBookmark}    \tab Insert a new bookmark in a Word document \cr
 \link{WrdGoto}    \tab Place cursor to a specific bookmark, or another text position. \cr
 \link{WrdUpdateBookmark}    \tab Update the text of a bookmark's range\cr
+\link{WrdSaveAs}     \tab      Saves documents in Word \cr
 \link{WrdStyle}     \tab      Get and set the style of a paragraph in Word \cr
 \link{XLDateToPOSIXct}       \tab      Convert XL-Date format to POSIXct format \cr
 \link{XLGetRange}    \tab  Get the values of one or several cell range(s) in Excel \cr
@@ -440,11 +441,13 @@ _RevWeibull   \tab      Reverse Weibull distribution (\link{dRevWeibull})\cr
 \cr\cr
 \bold{Data:}\tab\cr
 \link{d.pizza}       \tab  Synthetic dataset created for testing the description \cr
-\link{d.whisky}      \tab  Classification of Scotch Single Malts\cr
-\link{d.units},  \link{d.prefix}    \tab  Unit Conversion\cr
-\link{d.periodic}      \tab  Periodic Table of Elements\cr
-\link{d.countries}      \tab ISO 3166-1 Country Codes \cr
-\link{roulette}, \link{cards},  \link{tarot}     \tab   Dataset for Probabilistic Simulation\cr
+\link{d.whisky}      \tab   of Scotch Single Malts\cr
+\cr\cr
+\bold{Reference Data:}\tab\cr
+\link{d.units},  \link{d.prefix}    \tab  Unit conversion factors and metric prefixes\cr
+\link{d.periodic}      \tab  Periodic table of elements\cr
+\link{d.countries}      \tab ISO 3166-1 country codes \cr
+\link{roulette}, \link{cards},  \link{tarot}     \tab   Datasets for probabilistic simulation\cr
 }
 }
 

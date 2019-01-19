@@ -8,7 +8,7 @@ export(
 "CochranArmitageTest",
 "CochranQTest",
 "CoefVar","CohenD","CohenKappa","CollapseTable","ColorLegend","ColToGray","ColToGrey","ColToHex","ColToHsv","ColToRgb","CombN","CombPairs","CombSet","ConDisPairs","Conf","ConnLines","ContCoef","Contrasts","CorCI",
-"CorPolychor","CramerV","CramerVonMisesTest","createCOMReference","CronbachAlpha","CutQ","Day","Day<-","dBenf",
+"CorPolychor","CramerV","CramerVonMisesTest","CronbachAlpha","CutQ","Day","Day<-","dBenf",
 "DecToHex","DecToOct","DegToRad","DenseRank","PercentRank",
 "Timezone", "SetNames",
 "DescToolsOptions","DiffDays360","DivCoef","DivCoefMax","DoCall","DrawArc","DrawBand","DrawBezier","DrawCircle","DrawEllipse","DrawRegPolygon","dRevGumbel","Dummy",
@@ -38,13 +38,14 @@ export(
 "RunsTest","SampleTwins","RndWord","SaveAsDlg","ScheffeTest","Second","SecToHms",
 "SelectVarDlg","XLCurrReg",
 "Sens","SetAlpha","ShapiroFranciaTest","SiegelTukeyRank",
-"SiegelTukeyTest","Lookup","KendallTauA","VarTest","PlotBinTree",
+"SiegelTukeyTest","KendallTauA","VarTest","PlotBinTree",
 "SignTest","SmoothSpline","FindRProfile",
 "Skew","Small","SomersDelta","Sort","SortMixed","SpearmanRho","Spec","SphToCart","split.formula","SplitPath","SpreadOut","Stamp","Str","StrAbbr","StrAlign","Strata","StrCap","StrChop","StrCountW","StrDist","StrIsNumeric","StrLeft","StrPad","StrPos","StrRev","StrRight","StrTrim","StrTrunc","StrVal","StuartMaxwellTest","StuartTauC","SysInfo","TextContrastColor","TextToTable","TheilU","Today","ToLong","ToWide","Trim","TschuprowT",
-"UncertCoef","UnitConv",
+"UncertCoef","ConvUnit",
 "Untable", "ToWrd",
-"VarCI","VecRot","VecShift","Vigenere","Week","Weekday","Winsorize","WoolfTest","WrdCaption","WrdGoto","WrdPageBreak","WrdInsertBookmark","WrdTable","WrdKill","WrdPlot",
-"WrdUpdateBookmark","XLGetRange","XLGetWorkbook","XLKill","XLView","ToXL","Year","YearDay","YearMonth",
+"VarCI","VecRot","VecShift","Vigenere","Week","Weekday","Winsorize","WoolfTest","WrdCaption","WrdGoto","WrdPageBreak","WrdInsertBookmark","WrdTable","WrdKill","WrdPlot","WrdSaveAs",
+"WrdUpdateBookmark",
+"XLGetRange","XLGetWorkbook","XLKill","XLView","ToXL","Year","YearDay","YearMonth",
 "YuenTTest","YuleQ","YuleY","ZeroIfNA","NAIfZero","Zodiac",
 "ZTest",
 "BinTree", "PlotECDF","Abind","TOne","MaxDigits","XLDateToPOSIXct",
@@ -70,7 +71,7 @@ export(
 "qFrechet","qGumbel","qRevWeibull","qNegWeibull","qGenExtrVal","qGenPareto","qExtrVal",
 "dGompertz","pGompertz","qGompertz","rGompertz","GeomSn","UnirootAll", "TwoGroups",
 "NPV","NPVFixBond","YTM","PMT","IPMT","PPMT","SLN","DB","SYD","RBAL","dir.choose","Sample","DoBy",
-"Dot","Cross","CrossN"
+"Dot","Cross","CrossN", "Divisors", "createCOMReference"
 )
 
 

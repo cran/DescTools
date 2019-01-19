@@ -31,7 +31,7 @@ Primes(n)
   working with logicals and integers.
 }
 \seealso{
- \code{\link{Factorize}}
+ \code{\link{Factorize}},  \code{\link{GCD}},  \code{\link{LCM}}, \code{\link{IsPrime}}
 }
 \examples{
 (p1 <- Primes(100))

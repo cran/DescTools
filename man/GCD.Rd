@@ -34,7 +34,8 @@ LCM(..., na.rm = FALSE)
 
 
 \seealso{
-\code{\link{Factorize}}, \code{\link{Primes}}
+\code{\link{Factorize}}, \code{\link{Primes}}, \code{\link{IsPrime}}
+
 }
 \examples{
 GCD(12, 10)

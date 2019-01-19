@@ -38,6 +38,17 @@ int compute_LCM(int a, int b){
 }
 
 
+//[[Rcpp::export]]
+IntegerVector divs( int x ){
+  IntegerVector d = seq_len( x / 2 );
+  IntegerVector out(0);
+  for( int i = 0 ; i < d.size(); i++){
+    if( x % d[i] == 0 )
+      out.push_back( d[i] );
+  }
+  return out;
+}
+
 
 // // [[Rcpp::export]]
 // List n_pow_sum(NumericVector x, double meanx) {

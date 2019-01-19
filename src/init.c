@@ -35,6 +35,7 @@ extern void wgt_himed(void *, void *, void *, void *);
 extern void wgt_himed_i(void *, void *, void *, void *);
 
 /* .Call calls */
+extern SEXP _DescTools_divs(SEXP);
 extern SEXP _DescTools_bottom_i(SEXP, SEXP);
 extern SEXP _DescTools_bottom_n(SEXP, SEXP);
 extern SEXP _DescTools_compute_GCD(SEXP, SEXP);
@@ -82,6 +83,7 @@ static const R_CMethodDef CEntries[] = {
 };
 
 static const R_CallMethodDef CallEntries[] = {
+  {"_DescTools_divs",          (DL_FUNC) &_DescTools_divs,          1},
   {"_DescTools_bottom_i",      (DL_FUNC) &_DescTools_bottom_i,      2},
   {"_DescTools_bottom_n",      (DL_FUNC) &_DescTools_bottom_n,      2},
   {"_DescTools_compute_GCD",   (DL_FUNC) &_DescTools_compute_GCD,   2},

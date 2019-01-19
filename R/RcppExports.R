@@ -9,6 +9,10 @@ compute_LCM <- function(a, b) {
     .Call(`_DescTools_compute_LCM`, a, b)
 }
 
+divs <- function(x) {
+    .Call(`_DescTools_divs`, x)
+}
+
 n_pow_sum <- function(x) {
     .Call(`_DescTools_n_pow_sum`, x)
 }

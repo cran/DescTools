@@ -341,7 +341,7 @@ PseudoR2 <- function(x, which = NULL) {
 
 
     # McKelveyZavoina
-    y.hat <- predict(x)
+    y.hat <- predict(x, type="link")
     sse <- sum((y.hat - mean(y.hat))^2)
     res["McKelveyZavoina"] <- sse/(n * s2 + sse)
 
@@ -445,14 +445,20 @@ Cstat.glm <- function(x, ...) {
 
 Cstat.default <- function(x, resp, ...) {
 
+  # this is algorithmically clumsy and O(n^2)
   # the response ("class")
-  y <- as.numeric(factor(resp))
+  # y <- as.numeric(factor(resp))
+  #
+  # prob <- x # predicted probs
+  # d.comb <- expand.grid(pos = prob[y == 2L],
+  #                       neg = prob[y == 1L])
+  #
+  # mean(d.comb$pos > d.comb$neg)
 
-  prob <- x # predicted probs
-  d.comb <- expand.grid(pos = prob[y == 2L],
-                        neg = prob[y == 1L])
-
-  mean(d.comb$pos > d.comb$neg)
+  # ... instead of elegant O(n log(n))
+  # changed by 0.99.27
+  z <- .DoCount(x, as.numeric(factor(resp)))
+  return(z$C/(z$D+z$C))
 
 }
 
@@ -772,8 +778,8 @@ TMod <- function(..., FUN = NULL){
     res
   }
 
-# conver language to string either with: toString or deparse, but not as.character!!!
-#  modname <- unlist(lapply(match.call(expand.dots=FALSE)$..., as.character))
+# convert language to string either with: toString or deparse, but not as.character!!!
+# modname <- unlist(lapply(match.call(expand.dots=FALSE)$..., as.character))
   modname <- unlist(lapply(match.call(expand.dots=FALSE)$..., toString))
 
   lmod <- list(...)
@@ -794,7 +800,8 @@ TMod <- function(..., FUN = NULL){
     for(i in 2L:length(lcoef)){
       m2 <- lcoef[[i]][, c("name", "est")]
       m2$est <- apply(lcoef[[i]][,-1], 1, function(x) FUN(x["est"], x["se"], x["stat"], x["p"], x["lci"], x["uci"]))
-      m <- merge(x=m, y=m2, by.x="name", by.y="name", all.x=TRUE, all.y=TRUE)
+      m <- merge(x=m, y=m2, by.x="name", by.y="name",
+                 all.x=TRUE, all.y=TRUE, sort=FALSE)
       colnames(m)[i+1] <- modname[i]
     }
   }
@@ -805,7 +812,8 @@ TMod <- function(..., FUN = NULL){
   colnames(mm) <- c("name", modname[1])
   if(length(lstatsx) > 1){
     for(i in 2L:length(lstatsx)){
-      mm <- merge(x=mm, y=to.frame(lstatsx[[i]]), by.x="name", by.y="name", all.x=TRUE, all.y=TRUE)
+      mm <- merge(x=mm, y=to.frame(lstatsx[[i]]), by.x="name", by.y="name",
+                  all.x=TRUE, all.y=TRUE, sort=FALSE)
       colnames(mm)[i+1] <- modname[i]
     }
   }
@@ -828,7 +836,8 @@ TMod <- function(..., FUN = NULL){
     lst <- lapply(lcoef, function(x) cbind(SetNames(x[[z]], names=x[["name"]])))
     mcoef <- lst[[1]]
     for(i in 2:length(lst)){
-      mcoef <- merge(mcoef, lst[[i]], by = "row.names", all.x=TRUE, all.y=TRUE)
+      mcoef <- merge(mcoef, lst[[i]], by = "row.names",
+                     all.x=TRUE, all.y=TRUE, sort=FALSE)
       rownames(mcoef) <- mcoef$Row.names
       mcoef$Row.names <- NULL
       colnames(mcoef) <- NULL
@@ -872,10 +881,19 @@ print.TMod <- function(x, ...){
 
 
 plot.TMod <- function(x, ...){
+
   x <- aperm(x$mall, perm = c(2, 1, 3))
-  PlotDot(x[,,1],
-          args.errbars = list(from=x[,,2], to=x[,,3], mid=x[,,1]), ...)
+  args.plotdot1 <- list(x=x[,,1], pch=21, bg="white",
+                        args.errbars = list(from=x[,,2], to=x[,,3], mid=x[,,1]))
+  dots <- list(...)
+
+  if (!is.null(dots)) {
+    args.plotdot1[names(dots)] <- dots
+  }
+  do.call("PlotDot", args.plotdot1)
+
 }
+
 
 
 

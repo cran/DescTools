@@ -14,14 +14,18 @@ Andri Signorell <andri@signorell.net>
 (Goodman, Wald, Wilson)
 }
 \usage{
-MultinomCI(x, conf.level = 0.95, method = c("sisonglaz", "cplus1",
-           "goodman", "wald", "waldcc", "wilson"))
+MultinomCI(x, conf.level = 0.95, sides = c("two.sided", "left", "right"),
+           method = c("sisonglaz", "cplus1", "goodman", "wald", "waldcc", "wilson"))
 }
 \arguments{
 \item{x}{
 A vector of positive integers representing the number of occurrences of each class. The total number of samples equals the sum of such elements.
 }
   \item{conf.level}{ confidence level, defaults to 0.95. }
+
+\item{sides}{a character string specifying the side of the confidence interval, must be one of \code{"two.sided"} (default),
+\code{"left"} or \code{"right"}. You can specify just the initial letter. \code{"left"} would be analogue to a hypothesis of
+\code{"greater"} in a \code{t.test}.}
 
   \item{method}{ character string specifing which method to use; can be one out of
   \code{"sisonglaz"}, \code{"cplus1"}, \code{"goodman"},  \code{"wald"},  \code{"waldcc"}, \code{"wilson"}.

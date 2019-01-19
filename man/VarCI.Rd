@@ -47,9 +47,8 @@ See the references for the details.}
 
 
 \references{
-Bonett (2006) Approximate Confidence Interval for Standard Deviation of Nonnormal Distributions, \emph{Computational Statistics and Data Analysis}, Vol. 50, pp. 775 - 782.
-
-\url{https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/sdconfli.htm}
+Bonett (2006) Approximate Confidence Interval for Standard Deviation of Nonnormal Distributions, \emph{Computational Statistics and Data Analysis}, Vol. 50, pp. 775 - 782.\cr
+https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/sdconfli.htm (might be outdated)
 }
 
 \author{
@@ -86,7 +85,6 @@ p <- c(15.83, 16.01, 16.24, 16.42, 15.33, 15.44, 16.88, 16.31)
 sqrt(VarCI(p, method="bonett", conf.level=0.9))
 sqrt(VarCI(p, method="bonett"))
 sqrt(VarCI(p, method="bonett", conf.level=0.99))
-
 
 # some bootstrap intervals
 VarCI(x, method="norm")

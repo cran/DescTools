@@ -793,20 +793,39 @@ Hmean <- function(x, method = c("classic", "boot"),
     res <- 1 / mean(1/x, na.rm = na.rm)
 
   else {
-    res <- (1 / MeanCI(x = 1/x, method = method,
-                       conf.level = conf.level, sides = sides, na.rm=na.rm, ...))
+  #   res <- (1 / MeanCI(x = 1/x, method = method,
+  #                      conf.level = conf.level, sides = sides, na.rm=na.rm, ...))
+  #
+  #   if(!is.na(conf.level)){
+  #     res[2:3] <- c(min(res[2:3]), max(res[2:3]))
+  #     if(res[2] < 0)
+  #       res[c(2,3)] <- NA
+  #   }
+  #
 
-    if(!is.na(conf.level)){
-      res[2:3] <- c(min(res[2:3]), max(res[2:3]))
-      if(res[2] < 0)
-        res[c(2,3)] <- NA
-    }
+    sides <- match.arg(sides, choices = c("two.sided", "left",
+                                          "right"), several.ok = FALSE)
+    if (sides != "two.sided")
+      conf.level <- 1 - 2 * (1 - conf.level)
+
+    res <- (1/MeanCI(x = 1/x, method = method, conf.level = conf.level,
+                     sides = "two.sided", na.rm = na.rm, ...))[c(1, 3, 2)]
+
+    names(res) <- names(res)[c(1,3,2)]
+
+    if (sides == "left")
+      res[3] <- Inf
+    else if (sides == "right")
+      # it's not clear, if we should not set this to 0
+      res[2] <- NA
 
   }
 
   return(res)
 
 }
+
+
 
 
 # Average absolute deviation from the median
@@ -1533,18 +1552,25 @@ BootCI <- function(x, y=NULL, FUN, ..., bci.method = c("norm", "basic", "stud", 
 
 
 # Confidence Intervals for Binomial Proportions
-BinomCI <- function(x, n, conf.level = 0.95, method = c("wilson", "wald", "agresti-coull", "jeffreys", "modified wilson", "wilsoncc",
-                                                        "modified jeffreys", "clopper-pearson", "arcsine", "logit", "witting", "pratt"), rand = 123) {
+BinomCI <- function(x, n, conf.level = 0.95, sides = c("two.sided","left","right"),
+                    method = c("wilson", "wald", "agresti-coull", "jeffreys", "modified wilson", "wilsoncc",
+                                "modified jeffreys", "clopper-pearson", "arcsine", "logit", "witting", "pratt"), rand = 123) {
 
   if(missing(method)) method <- "wilson"
+  if(missing(sides)) sides <- "two.sided"
 
-  iBinomCI <- function(x, n, conf.level = 0.95, method = c("wilson", "wilsoncc", "wald", "agresti-coull", "jeffreys", "modified wilson",
-                                                           "modified jeffreys", "clopper-pearson", "arcsine", "logit", "witting", "pratt"), rand = 123) {
+  iBinomCI <- function(x, n, conf.level = 0.95, sides = c("two.sided","left","right"),
+                       method = c("wilson", "wilsoncc", "wald", "agresti-coull", "jeffreys", "modified wilson",
+                       "modified jeffreys", "clopper-pearson", "arcsine", "logit", "witting", "pratt"), rand = 123) {
 
     if(length(x) != 1) stop("'x' has to be of length 1 (number of successes)")
     if(length(n) != 1) stop("'n' has to be of length 1 (number of trials)")
     if(length(conf.level) != 1)  stop("'conf.level' has to be of length 1 (confidence level)")
     if(conf.level < 0.5 | conf.level > 1)  stop("'conf.level' has to be in [0.5, 1]")
+
+    sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
+    if(sides!="two.sided")
+      conf.level <- 1 - 2*(1-conf.level)
 
     alpha <- 1 - conf.level
     kappa <- qnorm(1-alpha/2)
@@ -1712,25 +1738,40 @@ BinomCI <- function(x, n, conf.level = 0.95, method = c("wilson", "wald", "agres
 
     # dot not return ci bounds outside [0,1]
     ci <- c( est=est, lwr.ci=max(0, CI.lower), upr.ci=min(1, CI.upper) )
+
+    if(sides=="left")
+      ci[3] <- 1
+    else if(sides=="right")
+      ci[2] <- 0
+
     return(ci)
 
   }
 
+
   # handle vectors
   # which parameter has the highest dimension
-  lst <- list(x=x, n=n, conf.level=conf.level, method=method, rand=rand)
+  lst <- list(x=x, n=n, conf.level=conf.level, sides=sides, method=method, rand=rand)
   maxdim <- max(unlist(lapply(lst, length)))
   # recycle all params to maxdim
   lgp <- lapply( lst, rep, length.out=maxdim )
+  # # increase conf.level for one sided intervals
+  # lgp$conf.level[lgp.sides!="two.sided"] <- 1 - 2*(1-lgp$conf.level[lgp.sides!="two.sided"])
 
   # get rownames
   lgn <- Recycle(x=if(is.null(names(x))) paste("x", seq_along(x), sep=".") else names(x),
                  n=if(is.null(names(n))) paste("n", seq_along(n), sep=".") else names(n),
-                 conf.level=conf.level, method=method)
+                 conf.level=conf.level, sides=sides, method=method)
+
+
+
   xn <- apply(as.data.frame(lgn[sapply(lgn, function(x) length(unique(x)) != 1)]), 1, paste, collapse=":")
 
 
-  res <- t(sapply(1:maxdim, function(i) iBinomCI(x=lgp$x[i], n=lgp$n[i], conf.level=lgp$conf.level[i], method=lgp$method[i], rand=lgp$rand[i])))
+  res <- t(sapply(1:maxdim, function(i) iBinomCI(x=lgp$x[i], n=lgp$n[i],
+                                                 conf.level=lgp$conf.level[i],
+                                                 sides=lgp$sides[i],
+                                                 method=lgp$method[i], rand=lgp$rand[i])))
   colnames(res)[1] <- c("est")
 
   rownames(res) <- xn
@@ -1743,13 +1784,19 @@ BinomCI <- function(x, n, conf.level = 0.95, method = c("wilson", "wald", "agres
 
 
 
-BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95,
+BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided","left","right"),
                         method=c("wald", "waldcc", "ac", "score", "scorecc", "mn",
-                                 "mee", "blj", "ha")) {
+                                 "mee", "blj", "ha","beal")) {
 
-  iBinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95,
+
+  if(missing(method)) method <- "ac"
+  if(missing(sides)) sides <- "two.sided"
+
+
+
+  iBinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided","left","right"),
                         method=c("wald", "waldcc", "ac", "score", "scorecc", "mn",
-                                 "mee", "blj", "ha")) {
+                                 "mee", "blj", "ha", "beal")) {
     #   .Wald #1
     #   .Wald (Corrected) #2
     #   .Exact
@@ -1764,6 +1811,10 @@ BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95,
     method <- match.arg(arg = method,
                         choices = c("wald", "waldcc", "ac", "score", "scorecc", "mn",
                                     "mee", "blj", "ha"))
+
+    sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
+    if(sides!="two.sided")
+      conf.level <- 1 - 2*(1-conf.level)
 
     alpha <- 1 - conf.level
     kappa <- qnorm(1 - alpha/2)
@@ -1953,29 +2004,54 @@ BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95,
              CI.lower <- max(-1, .conf(x1, n1, x2, n2, z, TRUE))
              CI.upper <- min(1, .conf(x1, n1, x2, n2, z, FALSE))
 
-           }
+           },
+           "beal" = {
+             # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.633.9380&rep=rep1&type=pdf
 
+             a <- p1.hat + p2.hat
+             b <- p1.hat - p2.hat
+             u <- ((1/n1) + (1/n2)) / 4
+             v <- ((1/n1) - (1/n2)) / 4
+             V <- u*((2-a)*a - b^2) + 2*v*(1-a)*b
+             z <- qchisq(p=1-alpha/2, df = 1)
+             A <- sqrt(z*(V + z*u^2*(2-a)*a + z*v^2*(1-a)^2))
+             B <- (b + z*v*(1-a)) / (1+z*u)
+
+             CI.lower <- max(-1, B - A / (1 + z*u))
+             CI.upper <- min(1, B + A / (1 + z*u))
+
+           }
 
     )
 
     ci <- c(est = est, lwr.ci = min(CI.lower, CI.upper), upr.ci = max(CI.lower, CI.upper))
+
+    if(sides=="left")
+      ci[3] <- 1
+    else if(sides=="right")
+      ci[2] <- -1
+
     return(ci)
 
   }
 
+
+
   # Recylce arguments
-  lst <- Recycle(x1=x1, n1=n1, x2=x2, n2=n2, conf.level=conf.level, method=method)
+  lst <- Recycle(x1=x1, n1=n1, x2=x2, n2=n2, conf.level=conf.level, sides=sides, method=method)
 
   res <- t(sapply(1:attr(lst, "maxdim"),
                   function(i) iBinomDiffCI(x1=lst$x1[i], n1=lst$n1[i], x2=lst$x2[i], n2=lst$n2[i],
-                                           conf.level=lst$conf.level[i], method=lst$method[i])))
+                                           conf.level=lst$conf.level[i],
+                                           sides=lst$sides[i],
+                                           method=lst$method[i])))
 
   # get rownames
   lgn <- Recycle(x1=if(is.null(names(x1))) paste("x1", seq_along(x1), sep=".") else names(x1),
                  n1=if(is.null(names(n1))) paste("n1", seq_along(n1), sep=".") else names(n1),
                  x2=if(is.null(names(x2))) paste("x2", seq_along(x2), sep=".") else names(x2),
                  n2=if(is.null(names(n2))) paste("n2", seq_along(n2), sep=".") else names(n2),
-                 conf.level=conf.level, method=method)
+                 conf.level=conf.level, sides=sides, method=method)
   xn <- apply(as.data.frame(lgn[sapply(lgn, function(x) length(unique(x)) != 1)]), 1, paste, collapse=":")
 
   rownames(res) <- xn
@@ -2370,7 +2446,7 @@ BinomRatioCI <- function(x1, n1, x2, n2, conf.level = 0.95, method = "katz.log",
 
 
 
-MultinomCI <- function(x, conf.level = 0.95,
+MultinomCI <- function(x, conf.level = 0.95, sides = c("two.sided","left","right"),
                        method = c("sisonglaz", "cplus1", "goodman", "wald", "waldcc", "wilson")) {
 
   # Code mainly by:
@@ -2446,6 +2522,12 @@ MultinomCI <- function(x, conf.level = 0.95,
   p <- x/n
 
   if (missing(method)) method <- "sisonglaz"
+  if(missing(sides)) sides <- "two.sided"
+
+  sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
+  if(sides!="two.sided")
+    conf.level <- 1 - 2*(1-conf.level)
+
 
   method <- match.arg(arg = method, choices = c("sisonglaz", "cplus1", "goodman", "wald", "waldcc", "wilson"))
   if(method == "goodman") {
@@ -2505,6 +2587,11 @@ MultinomCI <- function(x, conf.level = 0.95,
     }
   }
 
+  if(sides=="left")
+    res[3] <- 1
+  else if(sides=="right")
+    res[2] <- 0
+
   return(res)
 }
 
@@ -2512,10 +2599,14 @@ MultinomCI <- function(x, conf.level = 0.95,
 
 # Confidence Intervals for Poisson mean
 
-PoissonCI <- function(x, n = 1, conf.level = 0.95,
+PoissonCI <- function(x, n = 1, conf.level = 0.95, sides = c("two.sided","left","right"),
                       method = c("exact","score", "wald","byar")) {
 
-  iPoissonCI <- function(x, n = 1, conf.level = 0.95,
+  if(missing(method)) method <- "exact"
+  if(missing(sides)) sides <- "two.sided"
+
+
+  iPoissonCI <- function(x, n = 1, conf.level = 0.95, sides = c("two.sided","left","right"),
                          method = c("exact","score", "wald","byar")) {
 
     # ref:  http://www.ijmo.org/papers/189-S083.pdf but wacklig!!!
@@ -2524,6 +2615,11 @@ PoissonCI <- function(x, n = 1, conf.level = 0.95,
     # http://www.pvamu.edu/include/Math/AAM/AAM%20Vol%206,%20Issue%201%20(June%202011)/06_%20Kibria_AAM_R308_BK_090110_Vol_6_Issue_1.pdf
 
     # see also:   pois.conf.int {epitools}
+
+    sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
+    if(sides!="two.sided")
+      conf.level <- 1 - 2*(1-conf.level)
+
 
     if(missing(method)) method <- "score"
 
@@ -2573,22 +2669,31 @@ PoissonCI <- function(x, n = 1, conf.level = 0.95,
     )
 
     ci <- c( est=lambda, lwr.ci=lwr.ci, upr.ci=upr.ci )
+
+    if(sides=="left")
+      ci[3] <- Inf
+    else if(sides=="right")
+      ci[2] <- -Inf
+
     return(ci)
   }
 
   # handle vectors
   # which parameter has the highest dimension
-  lst <- list(x=x, n=n, conf.level=conf.level, method=method)
+  lst <- list(x=x, n=n, conf.level=conf.level, sides=sides, method=method)
   maxdim <- max(unlist(lapply(lst, length)))
   # recycle all params to maxdim
   lgp <- lapply( lst, rep, length.out=maxdim )
 
-  res <- sapply(1:maxdim, function(i) iPoissonCI(x=lgp$x[i], n=lgp$n[i], conf.level=lgp$conf.level[i], method=lgp$method[i]))
+  res <- sapply(1:maxdim, function(i) iPoissonCI(x=lgp$x[i], n=lgp$n[i],
+                                                 conf.level=lgp$conf.level[i],
+                                                 sides=lgp$sides[i],
+                                                 method=lgp$method[i]))
   rownames(res)[1] <- c("est")
 
   lgn <- Recycle(x=if(is.null(names(x))) paste("x", seq_along(x), sep=".") else names(x),
                  n=if(is.null(names(n))) paste("n", seq_along(n), sep=".") else names(n),
-                 conf.level=conf.level, method=method)
+                 conf.level=conf.level, sides=sides, method=method)
   xn <- apply(as.data.frame(lgn[sapply(lgn, function(x) length(unique(x)) != 1)]), 1, paste, collapse=":")
 
   colnames(res) <- xn
@@ -2795,12 +2900,17 @@ MeanDiffCI.formula <- function (formula, data, subset, na.action, ...) {
 
 
 MeanDiffCI.default <- function (x, y, method = c("classic", "norm","basic","stud","perc","bca"),
-                                conf.level = 0.95, na.rm = FALSE, R=999, ...) {
+                                conf.level = 0.95, sides = c("two.sided","left","right"), na.rm = FALSE, R=999, ...) {
 
   if (na.rm) {
     x <- na.omit(x)
     y <- na.omit(y)
   }
+
+  sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
+  if(sides!="two.sided")
+    conf.level <- 1 - 2*(1-conf.level)
+
   method <- match.arg(method, c("classic", "norm","basic","stud","perc","bca"))
   if(method == "classic"){
     a <- t.test(x, y, conf.level = conf.level)
@@ -2826,6 +2936,11 @@ MeanDiffCI.default <- function (x, y, method = c("classic", "norm","basic","stud
       res <- c(meandiff=boot.fun$t0, lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])
     }
   }
+
+  if(sides=="left")
+    res[3] <- Inf
+  else if(sides=="right")
+    res[2] <- -Inf
 
   return(res)
 }

@@ -5,17 +5,19 @@
 %%  ~~function to do ... ~~
 }
 \description{Start a new instance of Excel and return its handle.
-This is needed to address XL afterwards.
+This is needed to address the Excel application and objects afterwards.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-GetNewXL(visible = TRUE)
+GetNewXL(visible = TRUE, newdoc = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{visible}{logical, should Excel made visible? Defaults to TRUE.
+  \item{visible}{logical, should Excel made visible? Defaults to \code{TRUE}.
 %%     ~~Describe \code{visible} here~~
 }
+  \item{newdoc}{logical, determining if a new workbook should be created. Defaults to \code{TRUE}.
+  }
 }
 
 \details{

@@ -50,8 +50,8 @@ Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons
 
 Goodman, L. A., Kruskal W. H. (1979) Measures of Association for Cross Classifications. New
 York: Springer-Verlag (contains articles appearing in \emph{J. Amer. Statist. Assoc.} in 1954,
-1959, 1963, 1972).
-\url{http://www.nssl.noaa.gov/users/brooks/public_html/feda/papers/goodmankruskal1.pdf}
+1959, 1963, 1972).\cr
+http://www.nssl.noaa.gov/users/brooks/public_html/feda/papers/goodmankruskal1.pdf (might be outdated)
 
 Liebetrau, A. M. (1983) \emph{Measures of Association}, Sage University Papers Series on Quantitative Applications in the Social Sciences, 07-004. Newbury Park, CA: Sage, pp. 17--24
 %% ~put references to the literature/web site here ~

@@ -454,21 +454,21 @@ calcDesc.numeric   <- function(x, n, maxrows = NULL, ...) {
 
 calcDesc.logical   <- function(x, n, ord="level", conf.level=0.95, ...) {
 
-  f <- table(x)
+  ff <- table(x)
 
   # how should the table be sorted, by name, level or frq? (NULL means "desc")
   switch(match.arg(ord, c("level", "desc", "asc", "name")),
          level  = {  }
-         , name   = { f <- f[names(f)] }
-         , asc    = { f <- sort(f) }
-         , desc   = { f <- -sort(-f) }
+         , name   = { ff <- ff[names(ff)] }
+         , asc    = { ff <- sort(ff) }
+         , desc   = { ff <- -sort(-ff) }
   )
 
-  bf <- BinomCI(f, n, conf.level = conf.level)
-  rownames(bf) <- names(f)
+  bf <- BinomCI(ff, n, conf.level = conf.level)
+  rownames(bf) <- names(ff)
 
-  res <- list(unique=length(f),
-              afrq=f, rfrq = bf, conf.level=conf.level
+  res <- list(unique=length(ff),
+              afrq=ff, rfrq = bf, conf.level=conf.level
   )
 
   return(res)

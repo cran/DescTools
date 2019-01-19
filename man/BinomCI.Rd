@@ -6,7 +6,7 @@ Compute confidence intervals for binomial proportions following the most popular
 (Wald, Wilson, Agresti-Coull, Jeffreys, Clopper-Pearson etc.)
 }
 \usage{
-BinomCI(x, n, conf.level = 0.95,
+BinomCI(x, n, conf.level = 0.95, sides = c("two.sided", "left", "right"),
         method = c("wilson", "wald", "agresti-coull", "jeffreys",
                    "modified wilson", "wilsoncc","modified jeffreys",
                    "clopper-pearson", "arcsine", "logit", "witting", "pratt"),
@@ -16,6 +16,10 @@ BinomCI(x, n, conf.level = 0.95,
   \item{x}{ number of successes. }
   \item{n}{ number of trials. }
   \item{conf.level}{ confidence level, defaults to 0.95. }
+  \item{sides}{a character string specifying the side of the confidence interval, must be one of \code{"two.sided"} (default),
+\code{"left"} or \code{"right"}. You can specify just the initial letter. \code{"left"} would be analogue to a hypothesis of
+\code{"greater"} in a \code{t.test}.}
+
   \item{method}{ character string specifing which method to use; this can be one out of:
   \code{"wald"}, \code{"wilson"}, \code{"wilsoncc"}, \code{"agresti-coull"}, \code{"jeffreys"},
   \code{"modified wilson"}, \code{"modified jeffreys"}, \code{"clopper-pearson"},

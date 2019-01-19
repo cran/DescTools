@@ -1,5 +1,38 @@
 
-DescTools 0.99.26 (2018-10-18)
+
+DescTools 0.99.27 (2019-01-17)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+  * Divisors() returns the divisors of an integer.
+  * ConvUnit() converts non-SI units and SI units supporting prefixes.
+  * WrdSaveAs() is a wrapper for saving documents in MS-Word.
+
+UPDATED FUNCTIONS:
+  * MeanDiffCI() gets a new argument sides for one sided confidence intervals.
+    And so do BinomCI(), BinomDiffCI(), MultinomCI(), PoissonCI().
+  * PlotDot will use slightly different defaults.
+  * The legend in PlotLinesA can have a title now.
+  * ToWrd() gets an argument "bullet" in order to insert a bullet list.
+  * CollapseTable() will accept missing names now.
+  * HexToRgb() will accept RRGGBBAA (containing an alpha channel) definitions now.
+
+BUGFIXES:
+  * ZeroIfNa() will not coerce an integer to numeric anymore.
+  * WrdCaption() will not insert superfluous NAs anymore.
+  * Hmean()'s one sided confidence intervals are no longer reversed.
+  * PlotLinesA() will respect x and y arguments now.
+  * PlotMiss() had a suboptimal handling of marginal texts.
+  * McKelveyZavoina's pseudo R2 would not have been correctly calculated when
+    using a factor as reponse variable.
+
+DEFUNCT:
+  * UnitConv() has been replaced by ConvUnit().
+  * Lookup() failed the functionality test. Nothing more than match().
+
+
+
+DescTools 0.99.26 (2018-11-13)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
@@ -13,9 +46,9 @@ NEW FUNCTIONS ADDED:
   * Dot(), Cross() and CrossN() can be used for vector geometry tasks.
 
 UPDATED FUNCTIONS:
-  * Outliers() get a new argument value allowing to return the indices of the
+  * Outliers() gets a new argument value allowing to return the indices of the
     outliers.
-  * TOne() looses its NUMTEST argument and get a new TEST argument in order to
+  * TOne() looses its NUMTEST argument and gets a new TEST argument in order to
     make the definition of tests more flexible. The p-value can now be formatted
     with fmt.pval.
   * TMod() and OddsRatio() get a plot function to compare coefficients and
@@ -26,8 +59,8 @@ UPDATED FUNCTIONS:
     different formats for different columns.
   * PlotQQ() gets an argument datax to flip the x and y axis - as qqplot() also has.
   * OddsRatio.glm() gets an argument "use.profile" in order to skip profiling when
-    calculating confidence intervals (and can take very long time to complete).
-  * BinomDiff() gets new methods for calculating confidence intervals for a
+    calculating confidence intervals (which can take very long time to complete).
+  * BinomDiffCI() gets new methods for calculating confidence intervals for a
     difference of proportions ("mee", "mn", "ha", "scorecc"). At the same time
     BinomCI() has been extended by the needed method "wilsoncc" (Wilson with
     continuity correction).
@@ -36,7 +69,7 @@ BUGFIXES:
   * Desc() will not show an error for variables of class Date containing just one
     unique value.
   * TMod() did not parse the model labels correctly.
-  * BinomDiff() would not have returned correct results for a difference of 0.
+  * BinomDiffCI() would not have returned correct results for a difference of 0.
     (Thanks to Stephen Roberts, who with his enquiry brought about the completion
     of the function.)
 
@@ -84,7 +117,7 @@ UPDATED FUNCTIONS:
     to http://www.omegahat.net/R, as the service in Oxford is no longer provided.
 
 BUGFIXES:
-  * TOne will display the legend also when marginal results are omitted.
+  * TOne() will display the legend also when marginal results are omitted.
 
 
 
@@ -123,7 +156,7 @@ UPDATED FUNCTIONS:
 
 BUGFIXES:
   * identify.formula() would have omitted NAs while preparing the model.frame
-    and so might haven returned wrong rownumbers. It will now by default pass
+    and so might have returned wrong rownumbers. It will now by default pass
     NAs if the argument has not been set.
   * Gmean will return 0 if any element of x is zero now.
   * Desc.character would not have passed the plots when output to MS-Word.

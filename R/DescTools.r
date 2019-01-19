@@ -350,18 +350,6 @@ gold_sec_c <- (1+sqrt(5)) / 2
 # save(cards, file="cards.rda")
 # save(roulette, file="roulette.rda")
 
-# xlConst <- list(
-#   xlEdgeBottom = 9,
-#   xlContinuous = 1,
-#   xlTop = -4160,
-#   xlLeft = -4131,
-#   xlRight = -4152,
-#   xlToRight = -4161,
-#   xlCellTypeConstants = 2,
-#   xlCellTypeFormulas = -4123
-# )
-#
-
 
 
 
@@ -451,7 +439,7 @@ GCD <- function(..., na.rm = FALSE) {
 
 
   stopifnot(is.numeric(x))
-  if (floor(x) != ceiling(x) || length(x) < 2)
+  if (any(floor(x) != ceiling(x)) || length(x) < 2)
     stop("Argument 'x' must be an integer vector of length >= 2.")
 
   x <- x[x != 0]
@@ -494,7 +482,7 @@ LCM <- function(..., na.rm = FALSE) {
 
 
   stopifnot(is.numeric(x))
-  if (floor(x) != ceiling(x) || length(x) < 2)
+  if (any(floor(x) != ceiling(x)) || length(x) < 2)
     stop("Argument 'x' must be an integer vector of length >= 2.")
 
   x <- x[x != 0]
@@ -524,6 +512,22 @@ DigitSum <- function(x)
   sapply(x, function(z)
     sum(floor(z / 10^(0:(nchar(z) - 1))) %% 10))
 
+
+
+Divisors <- function(x) {
+
+  res <- lapply(
+    Factorize(x),
+    function(prim) {
+      prim <- lapply(seq_len(nrow(prim)), function(i) prim[i,])
+      powers <- lapply(prim, function(row) row[1] ^ seq.int(0L, row[2]))
+      power_grid <- do.call(expand.grid, powers)
+      head(sort(unique(apply(power_grid, 1L, prod))), -1)
+    })
+
+#  res <- .Call("_DescTools_divs", PACKAGE = "DescTools", x)
+  return(res)
+}
 
 
 
@@ -755,8 +759,9 @@ Cross <- function(x, y) {
 
 Fibonacci <- function(n) {
 
-  if (!is.numeric(n) || !IsWhole(n) || n < 0)
-    stop("Argument 'n' must be integer >= 0.")
+  # if (!is.numeric(n) || !IsWhole(n) || n < 0)
+  if(any(sapply(n, function(i) !is.numeric(i) || !IsWhole(i) || i < 0)))
+    stop("Argument 'n' must be an integer >= 0.")
 
   maxn <- max(n)
   if (maxn == 0) return(0)
@@ -1956,19 +1961,112 @@ RadToDeg <- function(rad) rad * 180 / pi
 
 
 
-UnitConv <- function(x, from_unit, to_unit){
+ConvUnit <- function(x, from, to){
 
-  if(from_unit == "C") {
-    if(to_unit=="F") return(x *1.8+32)
+  splitunit <- function(x){
+    # # split the prefix from the unit for SI units and prefixes
+    # # prefix pattern, note that da is the only prefix with two characters
+    # prefpat <- "^([YZEPTGMkhcmunpfazy]|(da|d))"
+    # # check prefix in combination with SI-unit first
+    # prefix <- StrExtract(x, pattern=paste0(prefpat, "(m|g|s|A|K|mol|cd|Hz|rad|sr|N|Pa|J|W|C|V|F|Ohm|S|Wb|T|H|lm|lx|Bq|Gy|Sv|kat|l)$"))
+    # # ... and the extract it from the found valid combination
+    # prefix <- ifelse(is.na(prefix), NA, StrExtract(prefix, pattern=prefpat))
+    # fact <- ifelse(is.na(prefix), 1, d.prefix$mult[match(prefix, d.prefix$abbr)])
+    # unit <- ifelse(is.na(prefix), x, gsub(pattern = gettextf("^%s", prefix), "", x))
+    #
+    # list(prefix=prefix, fact=fact, unit=unit)
+
+    m <- regexpr(pattern="^([YZEPTGMkhcmunpfazy]|(da|d))", x)
+
+    prefix <- ifelse(m == -1, NA, StrLeft(x, attr(m, "match.length")))
+    fact <- ifelse(is.na(prefix), 1, d.prefix$mult[match(prefix, d.prefix$abbr)])
+    unit <- ifelse(is.na(prefix), x, StrRight(x, -attr(m, "match.length")))
+
+    if(length(grep("^(m|g|s|A|K|mol|cd|Hz|rad|sr|N|Pa|J|W|C|V|F|Ohm|S|Wb|T|H|lm|lx|Bq|Gy|Sv|kat|l)$", unit))==0){
+      prefix <- NA
+      fact <- 1
+      unit <- x
+    }
+
+    list(prefix=prefix, fact=fact, unit=unit)
+
   }
-  if(from_unit == "F") {
-    if(to_unit=="C") return((x -32) *5/9)
+
+
+  # split prefix and unit
+  u_from <- splitunit(from)
+  u_to <- splitunit(to)
+
+  convertible <- u_from$unit == u_to$unit
+
+  # Check for plausible temperatures first
+  # Note: C stands for Celsius and Coulomb, F for Fahrenheit and Farad
+  # Prefixes are only allowed for Kelvin (although, not sure...)
+  # if(to == "\u00B0C")
+
+  if(from == "C") {
+    if(to == "F")
+      return(x * 1.8 + 32)
+    else if(u_to$unit == "K")
+      return(u_to$fact * x + 273.15)
+  }
+  if(from == "F") {
+    if(to == "C")
+      return((x - 32) * 5/9)
+    else if(u_to$unit == "K")
+      return(u_to$fact * x - 273.15)
+  }
+  if(u_from$unit == "K") {
+    x <- u_from$fact * x
+    if(to == "C")
+      return(x + 273.15)
+    else if(to == "F")
+      return((x + 273.15) * 1.8 + 32)
   }
 
-  fact <- d.units[d.units$from == from_unit & d.units$to==to_unit, "fact"]
-  if(length(fact)==0) fact <- NA
 
-  return(x * fact)
+  # then others
+  # create units as JOIN
+  # d.u <- merge(d.units[, 1:3], d.units[, 1:3], by.x="to", by.y="to")
+  # d.u <- d.u[d.u$from.x!=d.u$from.y,]
+  # d.u <- rbind(d.units[, 1:3],
+  #              data.frame(from=d.u$from.x, to=d.u$from.y, fact=d.u$fact.x/d.u$fact.y))
+  # d.u$pair <- paste(d.u$from, d.u$to, sep="-")
+
+
+  if(u_from$unit != u_to$unit) {
+    # lookup conversion factor between units
+    z <- match(paste(u_from$unit, u_to$unit, sep="-"), d.units$uid)
+    # units are not convertible if they're not found
+    if(is.na(z)) {
+      # no match from-to, look for match to-from
+      z <- match(paste(u_to$unit, u_from$unit, sep="-"), d.units$uid)
+      # get the factor if it has been found or set 1 else
+      if(is.na(z)) {
+        u_fact <- 1
+        convertible <- FALSE
+      } else {
+        u_fact <- 1/d.units$fact[z]
+        convertible <- TRUE
+      }
+
+    } else {
+      # match from-to has been found, get the according factor
+      u_fact <- d.units$fact[z]
+      convertible <- TRUE
+    }
+  } else {
+    # same units, set factor 1
+    u_fact <- 1
+  }
+
+  if(!convertible)
+    res <- NA
+  else
+    res <- x * u_from$fact/u_to$fact * u_fact
+
+  #   return(list(u_from, u_to, res, u_fact ))
+  return(res)
 
 }
 
@@ -2079,7 +2177,7 @@ Recode <- function(x, ..., elselevel=NA, use.empty=FALSE, num=FALSE){
 
 ZeroIfNA <- function(x) {
 #  same as zeroifnull in SQL
-  replace(x, is.na(x), 0)
+  replace(x, is.na(x), 0L)
 }
 
 NAIfZero <- function(x)
@@ -2300,11 +2398,11 @@ OrderMixed <- function(x,
 
 
 
-
-
-Lookup <- function(x, ref, val){
-  val[match(x, ref)]
-}
+#
+#
+# Lookup <- function(x, ref, val){
+#   val[match(x, ref)]
+# }
 
 
 
@@ -4651,7 +4749,7 @@ Format.default <- function(x, digits = NULL, sci = NULL
                , c("-","+")[(pwr >= 0) + 1]
                , Format(abs((pwr - (pwr %% 3))), leading = "00", digits=0)
                , sep="")
-    am <- Lookup(as.numeric(a), d.prefix$mult, d.prefix$abbr)
+    am <- d.prefix$abbr[match(as.numeric(a), d.prefix$mult)]
 
     a[!is.na(am)] <- am[!is.na(am)]
     a[a == "1e+00"] <- ""
@@ -9189,13 +9287,36 @@ ColToHex <- function(col, alpha=1) {
 HexToRgb <- function(hex) {
   # converts a hexstring color to matrix with 3 red/green/blue rows
   # example: HexToRgb(c("#A52A2A","#A52A3B"))
-  c2 <- do.call("cbind", lapply(hex, function(x) c(strtoi(substr(x,2,3), 16L), strtoi(substr(x,4,5), 16L), strtoi(substr(x,6,7), 16L))))
-  return(c2)
+
+  # replaced by 0.99.27
+  # c2 <- do.call("cbind", lapply(hex, function(x) c(strtoi(substr(x,1,2), 16L),
+  #                                                  strtoi(substr(x,3,4), 16L),
+  #                                                  strtoi(substr(x,5,6), 16L)
+  # )))
+
+  hex <- gsub("^#", "", hex)
+  # if there are any RRGGBBAA values mixed with RRGGBB then pad FF (for opaque) on RGBs
+  if(any(nchar(hex)==8)){
+    hex <- DescTools::StrPad(x = hex, width = 8, pad = "FF")
+    i <- 4
+  } else {
+    i <- 3
+  }
+  c2 <- sapply(hex, function(x) c(strtoi(substr(x,1,2), 16L),
+                                  strtoi(substr(x,3,4), 16L),
+                                  strtoi(substr(x,5,6), 16L),
+                                  strtoi(substr(x,7,8), 16L))
+               )
+
+  return(c2[1:i,])
+
 }
+
 
 
 HexToCol <- function(hexstr, method="rgb", metric="euclidean")
   RgbToCol(hexstr, method=method, metric=metric)
+
 
 
 RgbToCol <- function(col, method="rgb", metric="euclidean") {
@@ -10310,7 +10431,7 @@ PlotArea.formula <- function (formula, data, subset, na.action, ...) {
 ## plots: PlotDotCI ====
 
 PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("cex"),
-                     pch = 21, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"),
+                     pch = NULL, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"),
                      lcolor = "gray", lblcolor = par("fg"), xlim = NULL, main = NULL, xlab = NULL, ylab = NULL, xaxt=NULL, yaxt=NULL,
                      add = FALSE, args.errbars = NULL, ...) {
 
@@ -10347,6 +10468,16 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
                 col.axis = 1, lty = lty, lwd = lwd, angle = 90, code = code,
                 length = length, pch = pch, cex.pch = cex.pch, col.pch = col.pch,
                 bg.pch = bg.pch))
+  }
+
+  if(!is.null(args.errbars)){
+    # switch pch and col to errorbars
+    if(!is.null(pch)){
+      args.errbars$pch <- pch
+      args.errbars$col.pch <- color
+      args.errbars$bg.pch <- bg
+      bg <- color <- pch <- NA
+    }
   }
 
   x <- Rev(x, 1)
@@ -10565,12 +10696,13 @@ PlotLinesA <- function(x, y, col=1:5, lty=1, lwd=1, lend = par("lend"), xlab = N
   # PlotLinesA(m, col=rev(c(PalHelsana(), "grey")), main="Dosw ~ age", lwd=3, ylim=c(1,10))
 
 
-  .legend <- function(line, y, width, labels, lty, lwd, col, cex){
+  .legend <- function(line, y, width, labels, lty, lwd, col, cex, main=NULL){
 
     line <- rep(line, length.out=2)
 
+    txtline <- line[1] + ZeroIfNA(width + (!is.na(width)) * line[2])
     mtext(side = 4, las=1, cex=cex, text = labels,
-          line = line[1] + ZeroIfNA(width + (!is.na(width)) * line[2]),
+          line = txtline,
           at = y
           )
 
@@ -10580,13 +10712,20 @@ PlotLinesA <- function(x, y, col=1:5, lty=1, lwd=1, lend = par("lend"), xlab = N
                lwd = lwd, lty=lty, lend = 1, col = col)
     }
 
+    if(!is.null(main))
+      mtext(side=4, text = main, las=1, line=line[1], at=par("usr")[4], padj=c(0))
   }
+
+  if(missing(y))
+    z <- x
+  else
+    z <- y
 
 
   add.legend <- !identical(args.legend, NA)
 
 
-  last <- Sort(data.frame(t(tail(apply(as.matrix(x), 2, LOCF), 1))))
+  last <- Sort(data.frame(t(tail(apply(as.matrix(z), 2, LOCF), 1))))
   last <- setNames(last[,], nm = rownames(last))
 
   if(is.null(mar)){
@@ -10600,26 +10739,33 @@ PlotLinesA <- function(x, y, col=1:5, lty=1, lwd=1, lend = par("lend"), xlab = N
   }
 
   matplot(x, y, type="n", las=1, xlim=xlim, ylim=ylim, xaxt="n", yaxt=yaxt, main=main, xlab=xlab, ylab=ylab, cex = cex, ...)
+
+  # not clear what for, replaced by 0.99.27
+  # matplot(x, y, type="n", las=1, xlim=xlim, ylim=ylim, xaxt="n", yaxt=yaxt, main=main, xlab=xlab, ylab=ylab, cex = cex, ...)
   if(!identical(xaxt, "n"))
-    axis(side = 1, at=c(1:nrow(x)), rownames(x))
+    # use rownames for x-axis if available, but only if either x or y is missing
+    if(!is.null(rownames(z)) && (missing(x) || missing(y)))
+      axis(side = 1, at=c(1:nrow(z)), rownames(z))
+    else
+      axis(side=1)
 
   if(grid) grid()
-  matplot(x, type="l", lty=lty, col=col, lwd=lwd, lend=lend, xaxt="n", add=TRUE)
+  matplot(x, y, type="l", lty=lty, col=col, lwd=lwd, lend=lend, xaxt="n", yaxt="n", add=TRUE)
 
   if(!is.na(pch))
-    matplot(x, type="p", pch=pch, col=pch.col, bg=pch.bg, cex=pch.cex, xaxt="n", add=TRUE)
+    matplot(x, y, type="p", pch=pch, col=pch.col, bg=pch.bg, cex=pch.cex, xaxt="n", yaxt="n", add=TRUE)
 
   oldpar <- par(xpd=TRUE); on.exit(par(oldpar))
 
   if (add.legend) {
 
-    if(is.null(colnames(x)))
-      colnames(x) <- 1:ncol(x)
+    if(is.null(colnames(z)))
+      colnames(z) <- 1:ncol(z)
 
-    ord <- match(names(last), colnames(x))
-    lwd <- rep(lwd, length.out=ncol(x))
-    lty <- rep(lty, length.out=ncol(x))
-    col <- rep(col, length.out=ncol(x))
+    ord <- match(names(last), colnames(z))
+    lwd <- rep(lwd, length.out=ncol(z))
+    lty <- rep(lty, length.out=ncol(z))
+    col <- rep(col, length.out=ncol(z))
 
 
     # default legend values
@@ -11670,7 +11816,7 @@ PlotMiss <- function(x, col = hred, bg=SetAlpha(hecru, 0.3), clust=FALSE,
   lab.width <- max(strwidth(colnames(x), units="inches")) * inches_to_lines
   ymar <- lab.width + 3
 
-  Canvas(xlim=c(1, nrow(x)+1), ylim=c(0, n), asp=NA, xpd=TRUE, mar = c(5.1, ymar, 5.1, 5.1)
+  Canvas(xlim=c(0, nrow(x)+1), ylim=c(0, n), asp=NA, xpd=TRUE, mar = c(5.1, ymar, 5.1, 5.1)
          , main=main, ...)
 
   usr <- par("usr") # set background color lightgrey
@@ -11695,8 +11841,12 @@ PlotMiss <- function(x, col = hred, bg=SetAlpha(hecru, 0.3), clust=FALSE,
   })
 
   abline(h=1:ncol(x), col="white")
-  text(x = -0.03 * nrow(x), y = (1:n)-0.5, labels = colnames(x), las=1, adj = 1)
-  text(x = nrow(x) * 1.04, y = (1:n)-0.5, labels = gettextf("%s (%s)", miss, Format(miss/nrow(missingIndex), fmt="%", digits=1)), las=1, adj=0)
+  mtext(side = 2, text = colnames(x), at = (1:n)-0.5, las=1, adj = 1)
+  mtext(side = 4, text = gettextf("%s (%s)", miss, Format(miss/nrow(missingIndex), fmt="%", digits=1)),
+        at = (1:n)-0.5, las=1, adj = 0)
+
+  # text(x = -0.03 * nrow(x), y = (1:n)-0.5, labels = colnames(x), las=1, adj = 1)
+  # text(x = nrow(x) * 1.04, y = (1:n)-0.5, labels = gettextf("%s (%s)", miss, Format(miss/nrow(missingIndex), fmt="%", digits=1)), las=1, adj=0)
 
   if(!is.null(DescToolsOptions("stamp")))
     Stamp()
@@ -12517,7 +12667,7 @@ PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, datax=FALSE, add=F
 
   points(x=x, y=y, ...)
 
-# John Fox implements a envelope option in car::qqplot, in the sense of:
+# John Fox implements an envelope option in car::qqplot, in the sense of:
 #   (unfortunately using ddist...)
 #
 #   # add qqline if desired
@@ -13350,11 +13500,11 @@ ToWrd.lm <- function(x, font=NULL, ..., wrd=DescToolsOptions("lastWord")){
 
 
 
-ToWrd.character <- function (x, font = NULL, para = NULL, style = NULL, ..., wrd = DescToolsOptions("lastWord")) {
+ToWrd.character <- function (x, font = NULL, para = NULL, style = NULL, bullet=FALSE,  ..., wrd = DescToolsOptions("lastWord")) {
 
   # we will convert UTF-8 strings to Latin-1, if the local info is Latin-1
-  if(any(l10n_info()[["Latin-1"]] & Encoding(x)=="UTF-8"))
-    x <- iconv(x, from="UTF-8", to="latin1")
+  if (any(l10n_info()[["Latin-1"]] & Encoding(x) == "UTF-8"))
+    x[Encoding(x) == "UTF-8"] <- iconv(x[Encoding(x) == "UTF-8"], from = "UTF-8", to = "latin1")
 
   wrd[["Selection"]]$InsertAfter(paste(x, collapse = "\n"))
 
@@ -13377,6 +13527,9 @@ ToWrd.character <- function (x, font = NULL, para = NULL, style = NULL, ..., wrd
       on.exit(WrdFont(wrd) <- currfont)
     }
 
+  if(bullet)
+    wrd[["Selection"]]$Range()$ListFormat()$ApplyBulletDefault()
+
   wrd[["Selection"]]$Collapse(Direction=wdConst$wdCollapseEnd)
 
   invisible()
@@ -13389,7 +13542,7 @@ WrdCaption <- function(x, index = 1, wrd = DescToolsOptions("lastWord")){
   lst <- Recycle(x=x, index=index)
   x <-
     index <- lst[["index"]]
-  for(i in seq_along(lst))
+  for(i in seq(attr(lst, "maxdim")))
     ToWrd.character(paste(lst[["x"]][i], "\n", sep = ""),
                     style = eval(parse(text = gettextf("wdConst$wdStyleHeading%s", lst[["index"]][i]))))
   invisible()
@@ -13564,6 +13717,8 @@ ToWrd.table <- function (x, font = NULL, main = NULL, align=NULL, tablestyle=NUL
 
 
   x[] <- as.character(x)
+  if (any(l10n_info()[["Latin-1"]] & Encoding(x) == "UTF-8"))
+    x[Encoding(x) == "UTF-8"] <- iconv(x[Encoding(x) == "UTF-8"], from = "UTF-8", to = "latin1")
 
   # add column names to character table
   if(col.names)
@@ -13760,10 +13915,9 @@ WrdFormatCells <- function(wtab, rstart, rend, col=NULL, bg=NULL, font=NULL,
 
   if (!is.null(align)) {
     align <- match.arg(align, choices = c("l", "c", "r"))
-    align <- Lookup(align, ref = c("l", "c", "r"),
-                    val = unlist(wdConst[c("wdAlignParagraphLeft",
-                                           "wdAlignParagraphCenter",
-                                           "wdAlignParagraphRight")]))
+    align <- unlist(wdConst[c("wdAlignParagraphLeft",
+                              "wdAlignParagraphCenter",
+                              "wdAlignParagraphRight")])[match(x=align, table= c("l", "c", "r"))]
 
     rng[["ParagraphFormat"]][["Alignment"]] <- align
   }
@@ -13952,64 +14106,6 @@ IsValidWrd <- function(wrd = DescToolsOptions("lastWord")){
 }
 
 
-# This has been replaced by ToWrd.character in 0.99.18
-
-# WrdText <- function(txt, fixedfont=TRUE, fontname=NULL,
-#                     fontsize=NULL, bold=FALSE, italic=FALSE, col=NULL,
-#                     alignment = c("left","right","center"), spaceBefore=0, spaceAfter=0,
-#                     lineSpacingRule = wdConst$wdLineSpaceSingle,
-#                     appendCR=TRUE, wrd=DescToolsOptions("lastWord") ){
-#
-#   if(fixedfont){
-#     fontname <- Coalesce(fontname, getOption("fixedfont", "Consolas"))
-#     fontsize <- Coalesce(fontsize, getOption("fixedfontsize", 7))
-#   }
-#
-#   if (!inherits(txt, "character"))  txt <- .CaptOut(txt)
-#
-#   wrdSel <- wrd[["Selection"]]
-#   wrdFont <- wrdSel[["Font"]]
-#
-#   currfont <- list(
-#     name = wrdFont[["Name"]] ,
-#     size = wrdFont[["Size"]] ,
-#     bold = wrdFont[["Bold"]] ,
-#     italic = wrdFont[["Italic"]],
-#     color = wrdFont[["Color"]]
-#   )
-#
-#   if(!is.null(fontname)) wrdFont[["Name"]] <- fontname
-#   if(!is.null(fontsize)) wrdFont[["Size"]] <- fontsize
-#   wrdFont[["Bold"]] <- bold
-#   wrdFont[["Italic"]] <- italic
-#   wrdFont[["Color"]] <- Coalesce(col, wdConst$wdColorBlack)
-#
-#   alignment <- switch(match.arg(alignment),
-#                       "left"= wdConst$wdAlignParagraphLeft,
-#                       "right"= wdConst$wdAlignParagraphRight,
-#                       "center"= wdConst$wdAlignParagraphCenter
-#   )
-#
-#   wrdSel[["ParagraphFormat"]][["Alignment"]] <- alignment
-#   wrdSel[["ParagraphFormat"]][["SpaceBefore"]]  <- spaceBefore
-#   wrdSel[["ParagraphFormat"]][["SpaceAfter"]]  <- spaceAfter
-#   wrdSel[["ParagraphFormat"]][["LineSpacingRule"]] <- lineSpacingRule
-#
-#   wrdSel$TypeText( paste(txt,collapse="\n") )
-#   if(appendCR) wrdSel$TypeParagraph()
-#
-#   # Restore old font
-#   wrdFont[["Name"]] <- currfont[["name"]]
-#   wrdFont[["Size"]] <- currfont[["size"]]
-#   wrdFont[["Bold"]] <- currfont[["bold"]]
-#   wrdFont[["Italic"]] <- currfont[["italic"]]
-#   wrdFont[["Color"]] <- currfont[["color"]]
-#
-#   invisible(currfont)
-#
-# }
-
-
 WrdGoto <- function (name, what = wdConst$wdGoToBookmark, wrd = DescToolsOptions("lastWord")) {
   wrdSel <- wrd[["Selection"]]
   wrdSel$GoTo(what=what, Name=name)
@@ -14057,21 +14153,37 @@ WrdUpdateBookmark <- function (name, text, what = wdConst$wdGoToBookmark, wrd = 
 
 
 
+WrdSaveAs <- function(fn, fileformat="docx", wrd = DescToolsOptions("lastWord")) {
 
-# This has been made defunct in 0.99.18
+  wdConst$wdExportFormatPDF <- 17
 
-#
-# WrdR <- function(x,  wrd = DescToolsOptions("lastWord") ){
-#
-#   WrdText(paste("> ", x, sep=""), wrd=wrd, fontname="Courier New", fontsize=10, bold=TRUE, italic=TRUE)
-#   txt <- .CaptOut(eval(parse(text=x)))
-#   if(sum(nchar(txt))>0) WrdText(txt, wrd=wrd, fontname="Courier New", fontsize=10, bold=TRUE)
-#
-#   invisible()
-#
-# }
+  if(fileformat %in% c("doc","docx"))
+    wrd$ActiveDocument()$SaveAs(FileName=fn, FileFormat=wdConst$wdFormatDocument)
+  else if(fileformat %in% c("htm", "html"))
+    wrd$ActiveDocument()$SaveAs2(FileName=fn, FileFormat=wdConst$wdFormatHTML)
+  else if(fileformat == "pdf")
+    wrd$ActiveDocument()$ExportAsFixedFormat(OutputFileName="Einkommen2.pdf",
+                             ExportFormat=wdConst$wdExportFormatPDF)
 
+  # ChangeFileOpenDirectory "C:\Users\HK1S0\Desktop\"
+  # ActiveDocument.SaveAs2 FileName:="Einkommen.htm", FileFormat:=wdFormatHTML _
+  #     , LockComments:=False, Password:="", AddToRecentFiles:=True, _
+  #     WritePassword:="", ReadOnlyRecommended:=False, EmbedTrueTypeFonts:=False, _
+  #      SaveNativePictureFormat:=False, SaveFormsData:=False, SaveAsAOCELetter:= _
+  #     False, CompatibilityMode:=0
+  # ActiveWindow.View.Type = wdWebView
+  #
+  # ActiveDocument.ExportAsFixedFormat OutputFileName:= _
+  #     "C:\Users\HK1S0\Desktop\Einkommen.pdf", ExportFormat:=wdExportFormatPDF, _
+  #     OpenAfterExport:=True, OptimizeFor:=wdExportOptimizeForPrint, Range:= _
+  #     wdExportAllDocument, From:=1, To:=1, Item:=wdExportDocumentContent, _
+  #     IncludeDocProps:=True, KeepIRM:=True, CreateBookmarks:= _
+  #     wdExportCreateNoBookmarks, DocStructureTags:=True, BitmapMissingFonts:= _
+  #     True, UseISO19005_1:=False
 
+  invisible()
+
+}
 
 
 # Example: WrdPlot(picscale=30)
@@ -14465,7 +14577,7 @@ Phrase <- function(x, g, glabels=NULL, xname=NULL, unit=NULL, lang="engl", na.rm
 ## Excel functions   ====
 
 
-GetNewXL <- function( visible = TRUE ) {
+GetNewXL <- function(visible = TRUE, newdoc = TRUE ) {
 
   if (requireNamespace("RDCOMClient", quietly = FALSE)) {
 
@@ -14473,12 +14585,13 @@ GetNewXL <- function( visible = TRUE ) {
     hwnd <- RDCOMClient::COMCreate("Excel.Application")
     DescToolsOptions(lastXL = hwnd)
 
-    if( visible == TRUE ) hwnd[["Visible"]] <- TRUE
+    if(visible == TRUE) hwnd[["Visible"]] <- TRUE
 
     # Create a new workbook
     # react the same as GetNewWrd(), Word is also starting with a new document
     # XL would not
-    hwnd[["Workbooks"]]$Add()
+    if(newdoc)
+      hwnd[["Workbooks"]]$Add()
 
   } else {
 
@@ -14533,7 +14646,7 @@ XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "", preserveStr
 
   fn <- paste(tempfile(pattern = "file", tmpdir = tempdir()),
               ".csv", sep = "")
-  xl <- GetNewXL()
+  xl <- GetNewXL(newdoc=FALSE)
   owb <- xl[["Workbooks"]]
 
   if(!missing(x)){
@@ -14701,7 +14814,7 @@ ToXL.default <- function(x, at, byrow = FALSE, ..., xl=DescToolsOptions("lastXL"
 
   ## currently we can only export primitives...
 
-  if(class(x) %in% c("logical", "integer", "numeric", "character"))
+  if(any(class(x) %in% c("logical", "integer", "numeric", "character")))
     x <- as.vector(x)     ## clobber attributes
 
   else
@@ -14953,7 +15066,7 @@ XLKill <- function(){
   # http://stackoverflow.com/questions/15697282/excel-application-not-quitting-after-calling-quit
 
   # We experience, that it would not even then quit, when there's no workbook loaded at all.
-  # maybe gc() would help
+  # maybe gc() would help ??
   # so killing the task is "ultima ratio"...
 
   shell('taskkill /F /IM EXCEL.EXE')

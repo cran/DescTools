@@ -12,9 +12,10 @@
 \usage{
 MeanDiffCI(x, ...)
 
-\method{MeanDiffCI}{default}(x, y, method = c("classic", "norm", "basic", "stud", "perc", "bca"), 
-           conf.level = 0.95, na.rm = FALSE, R = 999, ...)
-           
+\method{MeanDiffCI}{default}(x, y, method = c("classic", "norm", "basic", "stud", "perc", "bca"),
+           conf.level = 0.95, sides = c("two.sided", "left", "right"),
+           na.rm = FALSE, R = 999, ...)
+
 \method{MeanDiffCI}{formula}(formula, data, subset, na.action, ...)
 
 }
@@ -26,7 +27,7 @@ MeanDiffCI(x, ...)
   \item{y}{a (non-empty) numeric vector of data values.
 %%     ~~Describe \code{y} here~~
 }
-  \item{method}{a vector of character strings representing the type of intervals required. The value should be any subset of the values 
+  \item{method}{a vector of character strings representing the type of intervals required. The value should be any subset of the values
   \code{"classic"}, \code{"norm"}, \code{"basic"}, \code{"stud"}, \code{"perc"}, \code{"bca"}.
   See \code{\link{boot.ci}}.
 %%     ~~Describe \code{x} here~~
@@ -34,6 +35,8 @@ MeanDiffCI(x, ...)
   \item{conf.level}{confidence level of the interval.
 %%     ~~Describe \code{conf.level} here~~
 }
+\item{sides}{a character string specifying the side of the confidence interval, must be one of \code{"two.sided"} (default), \code{"left"} or \code{"right"}. You can specify just the initial letter. \code{"left"} would be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
+
   \item{na.rm}{logical. Should missing values be removed? Defaults to FALSE.
 %%     ~~Describe \code{na.rm} here~~
 }
@@ -41,11 +44,11 @@ MeanDiffCI(x, ...)
   See \code{\link{boot}}.
 %%     ~~Describe \code{x} here~~
 }
-  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} is a numeric variable giving the data values and \code{rhs} a factor with two levels giving the corresponding groups.}  
-  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}. 
-    By default the variables are taken from \code{environment(formula)}.}  
-  \item{subset}{an optional vector specifying a subset of observations to be used.}  
-  \item{na.action}{a function which indicates what should happen when the data contain \code{NAs}. Defaults to \code{getOption("na.action")}.}  
+  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} is a numeric variable giving the data values and \code{rhs} a factor with two levels giving the corresponding groups.}
+  \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}.
+    By default the variables are taken from \code{environment(formula)}.}
+  \item{subset}{an optional vector specifying a subset of observations to be used.}
+  \item{na.action}{a function which indicates what should happen when the data contain \code{NAs}. Defaults to \code{getOption("na.action")}.}
   \item{\dots}{further argument to be passed to or from methods.}
 }
 \details{This function collects code from two sources. The classical confidence interval is calculated by means of \code{\link{t.test}}.
@@ -59,7 +62,7 @@ The bootstrap intervals are strongly based on the example in \code{\link{boot}}.
 }
 \author{Andri Signorell <andri@signorell.net>}
 
-\seealso{ 
+\seealso{
 \code{\link{MeanCI}}, \code{\link{VarCI}}, \code{\link{MedianCI}}, \code{\link{boot.ci}}
 }
 
