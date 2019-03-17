@@ -5,7 +5,7 @@
 \title{Variance Inflation Factors}
 \description{
   Calculates variance-inflation and generalized variance-inflation factors
-  for linear and generalized linear models.
+  for linear and generalized linear models. It's a measure describing how much the variance of an estimated coefficient is increased because of collinearity.
 }
 \usage{
 VIF(mod)

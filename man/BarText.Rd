@@ -47,6 +47,12 @@ Notice that when the labels are placed on top of the bars, they may be clipped. 
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+# simple vector
+x <- c(453, 44, 56, 34)
+b <- barplot(x)
+BarText(x, b, x)
+
+# more complicated
 b <- barplot(VADeaths, horiz = FALSE, col=hblue, beside = TRUE)
 BarText(VADeaths, b=b, horiz = FALSE, beside = TRUE, cex=0.8)
 BarText(VADeaths, b=b, horiz = FALSE, beside = TRUE, cex=0.8, top=FALSE)

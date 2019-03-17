@@ -1372,10 +1372,10 @@ StrLeft <- function(x, n) {
 
 
 
-StrExtract <- function(x, pattern){
+StrExtract <- function(x, pattern, ...){
   # example regmatches
   ## Match data from regexpr()
-  m <- regexpr(pattern, x)
+  m <- regexpr(pattern, x, ...)
   regmatches(x, m)
 
   res <- rep(NA_character_, length(m))
@@ -1833,8 +1833,14 @@ SplitPath <- function(path, last.is.file=NULL) {
   lst$dirname <- paste(lst$dirname, "/", sep="")
   lst$fullfilename <- basename(path)
 
-  lst$filename <- strsplit(lst$fullfilename, "\\.")[[1]][1]
-  lst$extension <- strsplit(lst$fullfilename, "\\.")[[1]][2]
+  # lst$filename <- strsplit(lst$fullfilename, "\\.")[[1]][1]
+  # lst$extension <- strsplit(lst$fullfilename, "\\.")[[1]][2]
+
+  lst$filename <- gsub(pattern="(.*)\\.(.*)$", "\\1",lst$fullfilename)
+  # use the positive lookbehind here
+  lst$extension <- StrExtract(pattern = "(?<=\\.)[^\\.]+$", lst$fullfilename, perl=TRUE)
+  # see also tools::file_path_sans_ext() and tools::file_ext()
+  # but has a less general regex
 
   if(!last.is.file){
     lst$dirname <- paste(lst$dirname, lst$fullfilename, "/",
@@ -2182,6 +2188,16 @@ ZeroIfNA <- function(x) {
 
 NAIfZero <- function(x)
   replace(x, IsZero(x), NA)
+
+BlankIfNA <- function(x) {
+  #  same as zeroifnull but with characters
+  replace(x, is.na(x), "")
+}
+
+NAIfBlank <- function(x)
+  replace(x, x=="", NA)
+
+
 
 
 Impute <- function(x, FUN = function(x) median(x, na.rm=TRUE)) {
@@ -6848,8 +6864,20 @@ FileOpenCmd <- function(fmt=NULL) {
 
   top <- tcltk::tktoplevel()
 
-  if(is.null(x)) x <- as.integer(tcltk::tkwinfo("screenwidth", top))/2 - 50
-  if(is.null(y)) y <- as.integer(tcltk::tkwinfo("screenheight", top))/2 - 25
+  # Alternative for Windows:
+  # if(Sys.info()["sysname"]=="Windows") {
+  #   res <- system("wmic path Win32_VideoController get CurrentVerticalResolution,CurrentHorizontalResolution /format:value", intern = TRUE)
+  #   res <- as.integer(StrExtract(grep("Cur", res, val=TRUE), "[0-9]+"))
+  #   if(is.null(x)) x <- round(res[1]/2 - 50)
+  #   if(is.null(y)) y <- round(res[2]/2 - 25)
+  # }
+
+  # if(is.null(x)) x <- as.integer(tcltk::tkwinfo("screenwidth", top))/2 - 50
+  # if(is.null(y)) y <- as.integer(tcltk::tkwinfo("screenheight", top))/2 - 25
+
+  if(is.null(x)) x <- round((as.integer(tcltk::tkwinfo("screenwidth", top)) - width)/2)
+  if(is.null(y)) y <- round((as.integer(tcltk::tkwinfo("screenheight", top)) - height)/2)
+
   geom <- gettextf("%sx%s+%s+%s", width, height, x, y)
   tcltk::tkwm.geometry(top, geom)
   tcltk::tkwm.title(top, main)
@@ -8997,6 +9025,11 @@ SpreadOut <- function(x, mindist = NULL, cex = 1.0) {
 BarText <- function(height, b, labels=height, beside = FALSE, horiz = FALSE,
                     cex=par("cex"), adj=NULL, top=TRUE, ...) {
 
+  if (is.vector(height) || (is.array(height) && (length(dim(height)) == 1))) {
+    height <- cbind(height)
+    beside <- TRUE
+  }
+
   if(beside){
     if(horiz){
       if(is.null(adj)) adj <- 0
@@ -10772,12 +10805,15 @@ PlotLinesA <- function(x, y, col=1:5, lty=1, lwd=1, lend = par("lend"), xlab = N
     args.legend1 <- list(
       line = c(1, 1) ,   # par("usr")[2] + diff(par("usr")[1:2]) * 0.02,
       width = 1,         # (par("usr")[2] + diff(par("usr")[1:2]) * 0.02 * 2) - (par("usr")[2] + diff(par("usr")[1:2]) * 0.02),
-      y = SpreadOut(unlist(last), mindist = 1.2 * strheight("M")),
+      y = SpreadOut(unlist(last), mindist = 1.2 * strheight("M") * par("cex")),
       labels=names(last), cex=par("cex"),
       col = col[ord], lwd = lwd[ord], lty = lty[ord])
 
     if (!is.null(args.legend)) {
       args.legend1[names(args.legend)] <- args.legend
+      # default distance y is dependent from cex setting ...
+      if(any(names(args.legend)=="cex") & !any(names(args.legend)=="y"))
+        args.legend1["y"] <- SpreadOut(unlist(last), mindist = 1.2 * strheight("M") * args.legend1[["cex"]])
     }
 
     DoCall(".legend", args.legend1)
@@ -12621,7 +12657,7 @@ PlotMonth <- function(x, type = "l", labels, xlab = "", ylab = deparse(substitut
 
 
 
-PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, datax=FALSE, add=FALSE,
+PlotQQ <- function(x, qdist=qnorm, main=NULL, xlab=NULL, ylab=NULL, datax=FALSE, add=FALSE,
                    args.qqline=NULL, conf.level=0.95, args.cband = NULL, ...) {
 
   # qqplot for an optional distribution
@@ -12651,18 +12687,29 @@ PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, datax=FALSE, add=F
   # add confidence band if desired
   if (!(is.na(conf.level) || identical(args.cband, NA)) ) {
 
-    cix <- qdist(ppoints(x))
-    ciy <- replicate(1000, sort(qdist(runif(length(x)))))
+    # cix <- qdist(ppoints(x))
+    # ciy <- replicate(1000, sort(qdist(runif(length(x)))))
+    # ci <- apply(ciy, 1, quantile, c(-1, 1) * conf.level/2 + 0.5)
 
     args.cband1 <- list(col = SetAlpha(Pal()[1], 0.25), border = NA)
     if (!is.null(args.cband))
       args.cband1[names(args.cband)] <- args.cband
 
-    ci <- apply(ciy, 1, quantile, c(-1, 1) * conf.level/2 + 0.5)
+    # (x, distribution = qnorm,
+    #  conf = 0.95, conf.method = "both",
+    #  reference.line.method = "quartiles") {
+
+    # ci <- DescTools:::create.qqplot.fit.confidence.interval(
+    #   x, distribution =  function(p) qexp(p, rate=1/10));
+
+    ci <- create.qqplot.fit.confidence.interval(y,
+              distribution = qdist, conf=conf.level, conf.method = "pointwise");
+
     do.call("DrawBand", c(args.cband1,
-                          list(x = c(cix, rev(cix))),
-                          list(y = c(ci[1,], rev(ci[2,])) )
+                          list(x = c(ci$z, rev(ci$z))),
+                          list(y = c(ci$upper.pw, rev(ci$lower.pw)) )
                           ))
+
   }
 
   points(x=x, y=y, ...)
@@ -12683,6 +12730,18 @@ PlotQQ <- function(x, qdist, main=NULL, xlab=NULL, ylab=NULL, datax=FALSE, add=F
 #     lines(z, upper, lty = 2, lwd = lwd, col = col.lines)
 #     lines(z, lower, lty = 2, lwd = lwd, col = col.lines)
 #   }
+
+  # example in qqplot
+  #
+  # ## "QQ-Chisquare" : --------------------------
+  # y <- rchisq(500, df = 3)
+  # ## Q-Q plot for Chi^2 data against true theoretical distribution:
+  # qqplot(qchisq(ppoints(500), df = 3), y,
+  #        main = expression("Q-Q plot for" ~~ {chi^2}[nu == 3]))
+  # qqline(y, distribution = function(p) qchisq(p, df = 3),
+  #        prob = c(0.1, 0.6), col = 2)
+  # mtext("qqline(*, dist = qchisq(., df=3), prob = c(0.1, 0.6))")
+
 
   # add qqline if desired
   if(!identical(args.qqline, NA)) {

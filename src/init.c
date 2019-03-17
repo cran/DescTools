@@ -60,6 +60,7 @@ extern SEXP tbrm(SEXP, SEXP);
 extern SEXP _DescTools_dgompertz_work(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _DescTools_pgompertz_work(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _DescTools_check_gompertz(SEXP, SEXP);
+extern SEXP pKolmogorov2x(SEXP, SEXP);
 
 
 
@@ -108,6 +109,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"rkurt",                    (DL_FUNC) &rkurt,                    2},
   {"rskew",                    (DL_FUNC) &rskew,                    2},
   {"tbrm",                     (DL_FUNC) &tbrm,                     2},
+  {"pKolmogorov2x",            (DL_FUNC) &pKolmogorov2x,            2},
   {NULL, NULL, 0}
 };
 

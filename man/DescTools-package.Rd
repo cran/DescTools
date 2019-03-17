@@ -138,7 +138,11 @@ A grouped list of the functions:
 \link{CartToSph}, \link{SphToCart}     \tab            Transform cartesian to spherical coordinates and vice versa \cr
 \link{RomanToInt}    \tab    Convert roman numerals to integers\cr
 \link{RgbToLong}, \link{LongToRgb}       \tab Convert a rgb color to a long number and vice versa\cr
-\link{ColToGray}, \link{ColToGrey}       \tab      Convert colors to grey/grayscale \cr
+\link{ColToGray}, \link{ColToGrey}  \tab  Convert colors to gcrey/grayscale     \cr
+\link{ColToHex}, \link{HexToCol}  \tab   Convert a color into hex string    \cr
+\link{HexToRgb} \tab  Convert a hexnumber to an RGB-color\cr
+\link{ColToHsv}  \tab   R color to HSV conversion  \cr
+\link{ColToRgb}, \link{RgbToCol}  \tab    Color to RGB conversion and back   \cr
 \link{ConvUnit}       \tab      Return the most common unit conversions \cr
 
 \cr\cr
@@ -147,17 +151,12 @@ A grouped list of the functions:
 \link{ColorDlg}  \tab   Display the system's color dialog to choose a color   \cr
 \link{ColPicker}    \tab  Display R colors in a dialog including a locator for selection \cr
 \link{ColorLegend}  \tab   Add a color legend to a plot    \cr
-\link{ColToGray}, \link{ColToGrey}  \tab  Convert colors to gcrey/grayscale     \cr
-\link{ColToHex}, \link{HexToCol}  \tab   Convert a color into hex string    \cr
-\link{HexToRgb} \tab  Convert a hexnumber to an RGB-color\cr
-\link{ColToHsv}  \tab   R color to HSV conversion  \cr
-\link{ColToRgb}, \link{RgbToCol}  \tab    Color to RGB conversion and back   \cr
 \link{FindColor}  \tab   Get color on a defined color range    \cr
 \link{MixColor}  \tab   Get the mix of two colors  \cr
 \link{TextContrastColor} \tab   Choose textcolor depending on background color    \cr
 \link{Pal} \tab   Some custom color palettes    \cr
 \cr\cr
-\bold{Plots:}\tab\cr
+\bold{Plots (low level):}\tab\cr
 \link{Canvas}  \tab    Canvas for geometric plotting   \cr
 \link{Mar}  \tab    Set margins more comfortably.  \cr
 \link{Asp}       \tab      Return aspect ratio of the current plot \cr
@@ -183,6 +182,10 @@ A grouped list of the functions:
 \link{PtInPoly}  \tab  Identify all the points within a polygon. \cr
 \link{ConnLines}       \tab   Calculate and insert connecting lines in a barplot \cr
 \link{AxisBreak}       \tab      Place a break mark on an axis \cr
+\link{Shade}       \tab      Produce a shaded curve \cr
+\link{Stamp}       \tab      Stamp the current plot with Date/Time/Directory or any other expression \cr
+\cr\cr
+\bold{Plots (high level):}\tab\cr
 \link{PlotACF}, \link{PlotGACF} \tab  Create a combined plot of a time series including its \cr
 \tab autocorrelation and partial autocorrelation\cr
 \link{PlotMonth} \tab     Plot seasonal effects of a univariate time series\cr
@@ -215,8 +218,6 @@ A grouped list of the functions:
 \link{PlotLinesA}       \tab      Plot the columns of one matrix against the columns of another \cr
 \link{PlotLog}       \tab     Create a plot with logarithmic axis and log grid  \cr
 \link{PlotMosaic}       \tab    Plots a mosaic describing a  contingency table in array form \cr
-\link{Shade}       \tab      Produce a shaded curve \cr
-\link{Stamp}       \tab      Stamp the current plot with Date/Time/Directory or any other expression \cr
 \cr\cr
 \bold{Distributions:}\tab\cr
 _Benf   \tab      Benford distribution, including \link{qBenf}, \link{dBenf}, \link{rBenf}\cr
@@ -300,7 +301,8 @@ _RevWeibull   \tab      Reverse Weibull distribution (\link{dRevWeibull})\cr
 \link{BrierScore}       \tab       Brier score, assessing the quality of predictions of binary events \cr
 \link{Cstat}       \tab       C statistic, equivalent to the area under the ROC curve) \cr
 \link{CCC}       \tab      Lin's concordance correlation coef for agreement on a continuous measure \cr
-\link{MAE}, \link{MAPE}       \tab      Mean absolute error and ean absolute percentage error  \cr
+\link{MAE}       \tab      Mean absolute error  \cr
+\link{MAPE}, \link{SMAPE}       \tab      Mean absolute and symmetric mean absolute percentage error  \cr
 \link{MSE}, \link{RMSE}       \tab       Mean squared error and root mean squared error\cr
 \link{NMAE}, \link{NMSE}     \tab      Normalized mean absolute and mean squared error \cr
 \link{Conf}       \tab      Confusion matrix, a cross-tabulation of observed and predicted classes\cr
@@ -310,15 +312,17 @@ _RevWeibull   \tab      Reverse Weibull distribution (\link{dRevWeibull})\cr
 \tab Nagelkerke, CoxSnell, Effron, McKelvey-Zavoina, Tjur \cr
 \link{Mean}, \link{SD}, \link{Var}  \tab      Variants of base statistics, allowing to define weights: Mean, \cr
 \link{Quantile}, \link{MAD}, \link{Cor}    \tab standard deviation, variance, quantile, mad, correlation \cr
-\link{VIF}, \link{StdCoef}       \tab      Variance inflationary factors and standardised coefficents for linear models \cr
+\link{VIF}, \link{StdCoef}       \tab      Variance inflation factors and standardised coefficents for linear models \cr
 \cr\cr
 \bold{Tests:}\tab\cr
 \link{SignTest}    \tab  Signtest to test whether two groups are equally sized\cr
 \link{ZTest}    \tab   Z--test for known population variance \cr
+\link{TTestA}       \tab      Student's t-test based on sample statistics \cr
 \link{JonckheereTerpstraTest}    \tab  Jonckheere-Terpstra trend test for medians\cr
 \link{PageTest}    \tab  Page test for ordered alternatives\cr
 \link{CochranQTest}    \tab  Cochran's Q-test to find differences in matched sets \cr
 \tab of three or more frequencies or proportions.\cr
+\link{VarTest}       \tab      ChiSquare test for one variance and F test for two variances \cr
 \link{SiegelTukeyTest}    \tab  Siegel-Tukey test for equality in variability \cr
 \link{SiegelTukeyRank}     \tab Calculate Siegel-Tukey's ranks (auxiliary function)\cr
 \link{LeveneTest}    \tab  Levene's test for homogeneity of variance\cr
@@ -341,16 +345,14 @@ _RevWeibull   \tab      Reverse Weibull distribution (\link{dRevWeibull})\cr
 \link{ScheffeTest}   \tab  Multiple comparisons Scheffe test\cr
 \link{DunnTest}   \tab  Dunn's test of multiple comparisons\cr
 \link{DunnettTest}   \tab  Dunnett's test of multiple comparisons\cr
+\link{ConoverTest}       \tab      Conover's test of multiple comparisons (following a kruskal test)\cr
+\link{NemenyiTest}       \tab      Nemenyi's test of multiple comparisons \cr
 \link{HotellingsT2Test}   \tab  Hotelling's T2 test for the one and two sample case\cr
 \link{YuenTTest}       \tab Yuen's robust t-Test with trimmed means and winsorized variances\cr
 \link{BarnardTest}       \tab Barnard's test for 2x2 tables\cr
 \link{BreuschGodfreyTest}       \tab      Breusch-Godfrey test for higher-order serial correlation. \cr
-\link{ConoverTest}       \tab      Conover's test of multiple comparisons (following a kruskal test)\cr
 \link{GTest}       \tab      Chi-squared contingency table test and goodness-of-fit test \cr
 \link{HosmerLemeshowTest}       \tab      Hosmer-Lemeshow goodness of fit tests \cr
-\link{NemenyiTest}       \tab      Nemenyi's test of multiple comparisons \cr
-\link{TTestA}       \tab      Student's t-test based on sample statistics \cr
-\link{VarTest}       \tab      ChiSquare test for one variance and F test for two variances \cr
 \link{VonNeumannTest}       \tab      Von Neumann's successive difference test \cr
 \cr\cr
 \bold{Date functions:}\tab\cr
@@ -379,6 +381,7 @@ _RevWeibull   \tab      Reverse Weibull distribution (\link{dRevWeibull})\cr
 \link{NPVFixBond}       \tab      Net present value for fix bonds\cr
 \link{IRR} \tab  Internal rate of return\cr
 \link{YTM}       \tab     Return yield to maturity for a bond \cr
+\link{SLN}, \link{DB}, \link{SYD}       \tab     Several methods of depreciation of an asset \cr
 \cr\cr
 \bold{GUI-Helpers:}\tab\cr
 %% \link{DescDlg}    \tab  Display a Dialog Containing Univariate Descriptive Statistis and a Plot \cr

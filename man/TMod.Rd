@@ -8,7 +8,7 @@
 \title{Comparison Table For Linear Models
 %%  ~~function to do ... ~~
 }
-\description{Collect the coefficients and some qualifying statistics of given linear models and organize it in a table for comparison and reporting.
+\description{Collect the coefficients and some qualifying statistics of linear models and organize it in a table for comparison and reporting. The function supports linear and general linear models.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -24,10 +24,11 @@ ModSummary(x, ...)
 \item{x}{a (general) linear model object.}
 \item{\dots}{a list of (general) linear models.}
 \item{conf.level}{the level for the confidence intervals.}
-\item{FUN}{function with arguments \code{est}, \code{se}, \code{tval}, \code{pval}, \code{lci}, \code{uci} to display the coefficients.}
+\item{FUN}{function with arguments \code{est}, \code{se}, \code{tval}, \code{pval}, \code{lci}, \code{uci} to display the coefficients. The default function will display the coefficient and significance stars for the p-values.}
 }
-\details{TMod constructs a comparing table of estimates for regression models.
-%%  ~~ If necessary, more details than the description above ~~
+\details{In order to compare the coefficients of linear models, the user is left to his own devices. R offers no support in this respect. TMod jumps into the breach and displays the coefficients of several models in tabular form. For this purpose, different quality indicators for the models are displayed, so that a comprehensive comparison of the models is possible. In particular, it is easy to see the effect that adding or omitting variables has on forecast quality.
+
+A plot function for a TMod object will produce a dotchart with the coefficients and their confidence intervals.
 }
 \value{character table
 %%  ~Describe the value returned

@@ -13,7 +13,7 @@
 MeanDiffCI(x, ...)
 
 \method{MeanDiffCI}{default}(x, y, method = c("classic", "norm", "basic", "stud", "perc", "bca"),
-           conf.level = 0.95, sides = c("two.sided", "left", "right"),
+           conf.level = 0.95, sides = c("two.sided", "left", "right"), paired = FALSE,
            na.rm = FALSE, R = 999, ...)
 
 \method{MeanDiffCI}{formula}(formula, data, subset, na.action, ...)
@@ -37,7 +37,9 @@ MeanDiffCI(x, ...)
 }
 \item{sides}{a character string specifying the side of the confidence interval, must be one of \code{"two.sided"} (default), \code{"left"} or \code{"right"}. You can specify just the initial letter. \code{"left"} would be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
 
-  \item{na.rm}{logical. Should missing values be removed? Defaults to FALSE.
+\item{paired}{a logical indicating whether you want confidence intervals for a paired design. Defaults to \code{FALSE}.}
+
+  \item{na.rm}{logical. Should missing values be removed? Defaults to \code{FALSE}.
 %%     ~~Describe \code{na.rm} here~~
 }
   \item{R}{the number of bootstrap replicates. Usually this will be a single positive integer. For importance resampling, some resamples may use one set of weights and others use a different set of weights. In this case R would be a vector of integers where each component gives the number of resamples from each of the rows of weights.

@@ -91,8 +91,9 @@ Desc(x, ..., main = NULL, plotit = NULL, wrd = NULL)
 
 \item{digits}{integer. With how many digits shoud the relative frequencies be formatted? Default can be set by \code{DescToolsOptions(digits=x)}. }
 
-\item{maxrows}{numeric; defines the maximum number of rows of a frequency table to be reported. For factors with many levels it is often not interesting to see
-  all of them. Default is hence set to 12 most frequent ones (resp. the first ones if \code{ord} is set to \code{"levels"} or \code{"names"}). If for a numeric vector the value is left to its default \code{NULL}, the list of extreme values will be displayed, in cases that x has more than 12 single values and the frequency table else.\cr
+\item{maxrows}{numeric; defines the maximum number of rows in a frequency table to be reported. For factors with many levels it is often not interesting to see
+  all of them. Default is set to 12 most frequent ones (resp. the first ones if \code{ord} is set to \code{"levels"} or \code{"names"}).\cr
+  For a numeric argument x \code{maxrows} is the minimum number of unique values needed for a numeric variable to be treated as continous. If left to its default \code{NULL}, x will be regarded as continuos if it has more than 12 single values. In this case the list of extreme values will be displayed and the frequency table else.\cr
   If \code{maxrows} is < 1 it will be interpreted as percentage. In this case just as many rows, as the \code{maxrows\%} most frequent levels will be shown. Say, if maxrows is set to \code{0.8}, then the number of rows is fixed so, that the highest cumulative relative frequency is the first one going beyond 0.8.
 
   Setting \code{maxrows} to \code{Inf} will unconditionally report all values and also produce a plot with type "h" instead of a histogram.

@@ -5,11 +5,11 @@
 %%  ~~function to do ... ~~
 }
 \description{Create a QQ-plot for a variable of any distribution.
-The assumed underlying distribution can be defined as a function including all required parameters.
+The assumed underlying distribution can be defined as a function of f(p), including all required parameters. Confidence bands are provided by default.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL, datax = FALSE, add = FALSE,
+PlotQQ(x, qdist=qnorm, main = NULL, xlab = NULL, ylab = NULL, datax = FALSE, add = FALSE,
        args.qqline = NULL, conf.level = 0.95, args.cband = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -17,7 +17,7 @@ PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL, datax = FALSE, add = FAL
   \item{x}{the data sample
 %%     ~~Describe \code{x} here~~
 }
-  \item{qdist}{the quantile function of the assumed distribution. Can either be given as simple function name or defined as own function using the required arguments. See examples.
+  \item{qdist}{the quantile function of the assumed distribution. Can either be given as simple function name or defined as own function using the required arguments. Default is \code{qnorm()}. See examples.
 
 %%     ~~Describe \code{qdist} here~~
 }
@@ -33,12 +33,12 @@ PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL, datax = FALSE, add = FAL
 \item{datax}{logical. Should data values be on the x-axis? Default is \code{FALSE}.}
 \item{add}{logical specifying if the points should be added to an already existing plot; defaults to \code{FALSE}.}
   \item{args.qqline}{arguments for the qqline. This will be estimated
-   as a line through the 25\% and 75\% quantiles, which is the same procedure as \code{\link{qqline}()} does for normal
-   distribution (instead of set it to {abline(a = 0, b = 1))}. The line defaults are set to \code{col = par("fg")}, \code{lwd = par("lwd")} and \code{lty = par("lty")}.
+   as a line through the 25\% and 75\% quantiles by default, which is the same procedure as \code{\link{qqline}()} does for normal
+   distribution (instead of set it to {abline(a = 0, b = 1))}. The quantiles can however be overwritten by setting the argument \code{probs} to some user defined values. Also the method for calculating the quantiles can be defined (default is 7, see \code{\link{quantile}}). The line defaults are set to \code{col = par("fg")}, \code{lwd = par("lwd")} and \code{lty = par("lty")}.
    No line will be plotted if \code{args.qqline} is set to \code{NA}.
 }
   \item{conf.level}{confidence level for the confidence interval. Set this to \code{NA}, if no confidence band should be plotted.
-  Default is \code{0.95}.
+  Default is \code{0.95}. The confidence intervals are calculated pointwise method based on a Kolmogorov-Smirnov distribution.
 %%     ~~Describe \code{type} here~~
 }
   \item{args.cband}{list of arguments for the confidence band, such as color or border (see \code{\link{DrawBand}}).
@@ -53,10 +53,10 @@ PlotQQ(x, qdist, main = NULL, xlab = NULL, ylab = NULL, datax = FALSE, add = FAL
 into quantiles by means of the defined assumed distribution.
 %%  ~~ If necessary, more details than the description above ~~
 }
-\note{ The code is inspired by the tip 10.22 "Creating other Quantile-Quantile plots" from R Cookbook and based on R-Core code from the function \code{qqline}.}
+\note{ The code is inspired by the tip 10.22 "Creating other Quantile-Quantile plots" from R Cookbook and based on R-Core code from the function \code{qqline}. The calculation of confidence bands are rewritten based on an algorithm published in the package \code{BoutrosLab.plotting.general}.}
 \references{Teetor, P. (2011) \emph{R Cookbook}. O'Reilly, pp. 254-255.}
 
-\author{Andri Signorell <andri@signorell.net>
+\author{Andri Signorell <andri@signorell.net>, Ying Wu <Ying.Wu@stevens.edu>
 %%  ~~who you are~~
 }
 

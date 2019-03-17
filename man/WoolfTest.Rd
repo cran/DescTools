@@ -10,7 +10,7 @@
 WoolfTest(x)
 }
 \arguments{
-  \item{x}{a \eqn{2 \times 2 \times k}{2 x 2 x k} table.}
+  \item{x}{a \eqn{2 \times 2 \times k}{2 x 2 x k} table, where the last dimension refers to the strata. }
 }
 \value{
   A list of class \code{"htest"} containing the following

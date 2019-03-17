@@ -606,8 +606,13 @@ ModSummary.lm <- function(x, conf.level=0.95, ...){
   smrx <- summary(x)
 
   #coefx <- cbind(smrx$coefficients, confint(x, level=conf.level), stbeta=c(NA, StdCoeff(x)))
-  coefx <- data.frame(rownames(smrx$coefficients), smrx$coefficients, confint(x, level=conf.level),
-                      stringsAsFactors = FALSE)
+  # coefx <- data.frame(rownames(smrx$coefficients), smrx$coefficients, confint(x, level=conf.level),
+  #                     stringsAsFactors = FALSE)
+
+  coefx <- merge(smrx$coefficients, confint(x, level = conf.level), by="row.names", sort=FALSE, all=TRUE)
+  # order might have been changed by merging procedure
+  coefx[order(match(coefx$Row.names, row.names(smrx$coefficients))),]
+
   colnames(coefx) <- c("name","est","se","stat","p","lci","uci")
 
   fit <- x$fitted.values
@@ -766,9 +771,10 @@ TMod <- function(..., FUN = NULL){
   # prepare function to put together coefficients and stats
   if(is.null(FUN))
     FUN <- function(est, se, tval, pval, lci, uci){
-      gettextf("%s %s",
+      res <- gettextf("%s %s",
                Format(est, fmt=Fmt("num")),
                Format(pval, fmt="*"))
+      replace(res, is.na(est), NA)
     }
 
 
@@ -798,11 +804,20 @@ TMod <- function(..., FUN = NULL){
 
   if(length(lcoef)>1) {
     for(i in 2L:length(lcoef)){
+      ordm <- m$name
       m2 <- lcoef[[i]][, c("name", "est")]
       m2$est <- apply(lcoef[[i]][,-1], 1, function(x) FUN(x["est"], x["se"], x["stat"], x["p"], x["lci"], x["uci"]))
       m <- merge(x=m, y=m2, by.x="name", by.y="name",
                  all.x=TRUE, all.y=TRUE, sort=FALSE)
       colnames(m)[i+1] <- modname[i]
+
+      # keeping the order of m, then m2
+      # ord <- c("red","green","blue")
+      # x[order(match(x, ord))]
+
+      ord <- c(ordm, m2$name[m2$name %nin% ordm])
+      m <- m[order(match(m$name, ord)), ]
+
     }
   }
   colnames(m)[1] <- "coef"
@@ -832,7 +847,7 @@ TMod <- function(..., FUN = NULL){
 
 
   # compose est-lci-uci table
-  merge_mod <- function(z){
+  merge_mod <- function(z, ord){
     lst <- lapply(lcoef, function(x) cbind(SetNames(x[[z]], names=x[["name"]])))
     mcoef <- lst[[1]]
     for(i in 2:length(lst)){
@@ -843,12 +858,31 @@ TMod <- function(..., FUN = NULL){
       colnames(mcoef) <- NULL
       }
 
-    mcoef
+    mcoef[order(match(rownames(mcoef), ord)),]
+
   }
 
-  mall <- Abind(merge_mod("est"),
-                merge_mod("lci"),
-                merge_mod("uci"), along=3)
+  # define a better order than merge is returning, coefficients from left to right
+  seq_ord <- function(lst){
+    jj <- character(0)
+    for(i in seq_along(lst)){
+      jj <- c(jj, setdiff(lst[[i]], jj))
+    }
+    return(jj)
+  }
+
+  # the coefficients should be ordered such, that the coeffs of the first model
+  # come first, then the coeffs from the second model which were not included
+  # in the model one, then the coeffs from mod3 not present in mod1 and mod2
+  # and so forth...
+  coef_order <- seq_ord(lapply(lcoef, rownames))
+
+  # set coefficient order to all result object
+  m <- m[order(match(m$coef, coef_order)),]
+
+  mall <- Abind(merge_mod("est", coef_order),
+                merge_mod("lci", coef_order),
+                merge_mod("uci", coef_order), along=3)
 
   dimnames(mall) <- list(m$coef, modname, c("est","lci","uci"))
 
@@ -861,6 +895,7 @@ TMod <- function(..., FUN = NULL){
 
 print.TMod <- function(x, ...){
 
+  colnames(x[[1]])[-1] <- paste0(colnames(x[[1]])[-1], strrep(" ", times=4))
   x[[1]][, -1] <- Format(x[[1]][, -1], digits=3, na.form = "-")
 
   x2 <- x[[2]]

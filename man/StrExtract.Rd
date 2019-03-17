@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-StrExtract(x, pattern)
+StrExtract(x, pattern, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,6 +18,7 @@ StrExtract(x, pattern)
   \item{pattern}{character string containing a regular expression (or character string for \code{fixed = TRUE}) to be matched in the given character vector. Coerced by \code{\link{as.character}} to a character string if possible. If a character vector of length 2 or more is supplied, the first element is used with a warning. Missing values are not allowed.
 %%     ~~Describe \code{pattern} here~~
 }
+\item{\dots}{the dots are passed to the the internally used function \code{\link{regexpr}()}, which allows to use e.g. Perl-like regular expressions.}
 }
 \details{The function wraps \code{\link{regexpr}} and \code{\link{regmatches}}.
 %%  ~~ If necessary, more details than the description above ~~

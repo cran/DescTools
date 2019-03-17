@@ -6,6 +6,7 @@
 \alias{plot.Lc}
 \alias{plot.Lclist}
 \alias{lines.Lc}
+\alias{predict.Lc}
 \title{Lorenz Curve}
 \description{
 Lc computes the (empirical) ordinary and generalized Lorenz curve of a vector x. Desc calculates some key figures for a Lorenz curve and produces a quick description.}
@@ -25,6 +26,7 @@ Lc(x, ...)
 
 \method{lines}{Lc}(x, general = FALSE, lwd = 2, conf.level = NA, args.cband = NULL, ...)
 
+\method{predict}{Lc}(object, newdata, conf.level=NA, general=FALSE, n=1000, ...)
 
 }
 \arguments{
@@ -40,9 +42,9 @@ Lc(x, ...)
  \item{pch}{the point character (default is \code{NA}, meaning no points will be drawn)}
  \item{main}{main title of the plot.}
  \item{las}{las of the axis.}
-  \item{p}{a numeric vector with percent points, at which the Lorenz curve will be calculated.
+%%  \item{p}{a numeric vector with percent points, at which the Lorenz curve will be calculated.
 %%     ~~Describe \code{p} here~~
-}
+%% }
   \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} gives the data values and rhs the corresponding groups.}
   \item{data}{an optional matrix or data frame (or similar: see \code{\link{model.frame}}) containing the variables in the formula \code{formula}.
     By default the variables are taken from \code{environment(formula)}.}
@@ -56,6 +58,8 @@ Lc(x, ...)
   \item{args.cband}{list of arguments for the confidence band, such as color or border (see \code{\link{DrawBand}}).
 %%     ~~Describe \code{type} here~~
 }
+ \item{object}{object of class inheriting from "Lc"}
+ \item{newdata}{an optional vector of percentages p for which to predict. If omitted, the original values of the object are used.}
 
  \item{\dots}{further argument to be passed to methods.}
 
@@ -143,16 +147,16 @@ lines(Lc(fl, n), conf.level=0.95,
 
 Gini(fl, n)
 
-# find specific function values using appprox
+# find specific function values using predict
 x <- c(1,1,4)
 lx <- Lc(x)
 plot(lx)
 
-# get interpolated function value at p = 0.55
-y0 <- approx(x=lx$p, y=lx$L, xout=0.55)
-abline(v=0.55, h=y0$y, lty="dotted")
+# get interpolated function value at p=0.55
+y0 <- predict(lx, newdata=0.55)
+abline(v=0.55, h=y0$L, lty="dotted")
 
-# and for the inverse question
+# and for the inverse question use approx
 y0 <- approx(x=lx$L, y=lx$p, xout=0.6)
 abline(h=0.6, v=y0$y, col="red")
 

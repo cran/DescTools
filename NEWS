@@ -1,5 +1,30 @@
 
 
+DescTools 0.99.28 (2019-03-17)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+  * Freq2D() calculates a frequency distribution for two continuous variables.
+  * BlankIfNA() and NAIfBlank() do for characters what ZeroIfNA() does for
+    numeric values.
+
+UPDATED FUNCTIONS:
+  * TMod() uses a new order for the coefficients. They are returned in
+    sequence of their first appearance in the provided models.
+  * ModelDlg() supports sorting and filtering of the variables now.
+  * Lc() gains a predict() interface to estimate Lorenz curves for new percentages.
+  * PlotQQ() gets a better algorithm for calculating confidence interval bands.
+  * SplitPath gets a more general regex pattern to separate the extension from
+    the filename.
+  * StrExtract allows for Perl-like regex patterns now.
+
+BUGFIXES:
+  * BarText() will handle vectors and 1d arrays correctly now.
+  * ModSummary() for lms did not handle NAs in coefficient list correctly.
+
+
+
+
 DescTools 0.99.27 (2019-01-17)
 ------------------------------
 

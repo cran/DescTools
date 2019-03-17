@@ -60,7 +60,7 @@ Produce a stacked area plot, or add polygons to an existing plot.
   an optional vector specifying a subset of observations
     to be used.
 }
-  \item{na.action}{a function which indicates what should happen when the data contain \code{NA} values. Defaults to \code{getOption("na.action")}.}  
+  \item{na.action}{a function which indicates what should happen when the data contain \code{NA} values. Defaults to \code{getOption("na.action")}.}
 
   \item{\dots}{further arguments are passed to \code{matplot} and
     \code{polygon}.
@@ -89,16 +89,16 @@ Arni Magnusson <arnima@hafro.is>
 }
 \examples{
 # PlotArea with stapled areas
-tab <- table( d.pizza$date, d.pizza$driver )  
-PlotArea(x=as.Date(rownames(tab)), y=tab, xaxt="n", xlab="Date", ylab="Pizzas delivered" )  
+tab <- table( d.pizza$date, d.pizza$driver )
+PlotArea(x=as.Date(rownames(tab)), y=tab, xaxt="n", xlab="Date", ylab="Pizzas delivered" )
 
 # add x-axis and some text labels
 xrng <- pretty(range(as.Date(rownames(tab))))
 axis(side=1, at=xrng, labels=xrng)
-text( x=min(d.pizza$date + .5, na.rm=TRUE), y=cumsum(tab[2,])-2.5, label=levels(d.pizza$driver), 
+text( x=min(d.pizza$date + .5, na.rm=TRUE), y=cumsum(tab[2,])-2.5, label=levels(d.pizza$driver),
   adj=c(0,0.5), col=TextContrastColor(gray.colors(7)))
 
-  
+
 # formula
 PlotArea(Armed.Forces~Year, data=longley)
 PlotArea(cbind(Armed.Forces,Unemployed)~Year, data=longley)

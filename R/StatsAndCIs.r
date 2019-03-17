@@ -2900,7 +2900,8 @@ MeanDiffCI.formula <- function (formula, data, subset, na.action, ...) {
 
 
 MeanDiffCI.default <- function (x, y, method = c("classic", "norm","basic","stud","perc","bca"),
-                                conf.level = 0.95, sides = c("two.sided","left","right"), na.rm = FALSE, R=999, ...) {
+                                conf.level = 0.95, sides = c("two.sided","left","right"),
+                                paired = FALSE, na.rm = FALSE, R=999, ...) {
 
   if (na.rm) {
     x <- na.omit(x)
@@ -2913,22 +2914,29 @@ MeanDiffCI.default <- function (x, y, method = c("classic", "norm","basic","stud
 
   method <- match.arg(method, c("classic", "norm","basic","stud","perc","bca"))
   if(method == "classic"){
-    a <- t.test(x, y, conf.level = conf.level)
-    res <- c(meandiff = mean(x) - mean(y), lwr.ci = a$conf.int[1], upr.ci = a$conf.int[2])
+    a <- t.test(x, y, conf.level = conf.level, paired = paired)
+    if(paired)
+      res <- c(meandiff = mean(x) - mean(y), lwr.ci = a$conf.int[1], upr.ci = a$conf.int[2])
+    else
+      res <- c(meandiff = mean(x - y), lwr.ci = a$conf.int[1], upr.ci = a$conf.int[2])
 
   } else {
 
-    diff.means <- function(d, f)
-    {    n <- nrow(d)
-    gp1 <- 1:table(as.numeric(d[,2]))[1]
-    m1 <- sum(d[gp1,1] * f[gp1])/sum(f[gp1])
-    m2 <- sum(d[-gp1,1] * f[-gp1])/sum(f[-gp1])
-    m1 - m2
+    diff.means <- function(d, f){
+      n <- nrow(d)
+      gp1 <- 1:table(as.numeric(d[,2]))[1]
+      m1 <- sum(d[gp1,1] * f[gp1])/sum(f[gp1])
+      m2 <- sum(d[-gp1,1] * f[-gp1])/sum(f[-gp1])
+      m1 - m2
     }
 
     m <- cbind(c(x,y), c(rep(1,length(x)), rep(2,length(y))))
 
-    boot.fun <- boot(m, diff.means, R=R, stype="f", strata = m[,2])
+    if(paired)
+      boot.fun <- boot(x-y, function(d, i) mean(d[i]), R=R, stype="i")
+    else
+      boot.fun <- boot(m, diff.means, R=R, stype="f", strata = m[,2])
+
     ci <- boot.ci(boot.fun, conf=conf.level, type=method)
     if(method == "norm"){
       res <- c(meandiff=boot.fun$t0, lwr.ci=ci[[4]][2], upr.ci=ci[[4]][3])
@@ -3345,19 +3353,19 @@ plot.Lc <- function(x, general=FALSE, lwd=2, type="l", xlab="p", ylab="L(p)",
 
 lines.Lc <- function(x, general=FALSE, lwd=2, conf.level = NA, args.cband = NULL, ...) {
 
-  Lc.boot.ci <- function(x, conf.level=0.95, n=1000){
-
-    x <- rep(x$x, times=x$n)
-    m <- matrix(sapply(1:n, function(i) sample(x, replace = TRUE)), nrow=length(x))
-
-    lst <- apply(m, 2, Lc)
-    list(x=c(lst[[1]]$p, rev(lst[[1]]$p)),
-         y=c(apply(do.call(rbind, lapply(lst, "[[", "L")), 2, quantile, probs=(1-conf.level)/2),
-             rev(apply(do.call(rbind, lapply(lst, "[[", "L")), 2, quantile, probs=1-(1-conf.level)/2)))
-         )
-  }
-
-
+  # Lc.boot.ci <- function(x, conf.level=0.95, n=1000){
+  #
+  #   x <- rep(x$x, times=x$n)
+  #   m <- matrix(sapply(1:n, function(i) sample(x, replace = TRUE)), nrow=length(x))
+  #
+  #   lst <- apply(m, 2, Lc)
+  #   list(x=c(lst[[1]]$p, rev(lst[[1]]$p)),
+  #        y=c(apply(do.call(rbind, lapply(lst, "[[", "L")), 2, quantile, probs=(1-conf.level)/2),
+  #            rev(apply(do.call(rbind, lapply(lst, "[[", "L")), 2, quantile, probs=1-(1-conf.level)/2)))
+  #        )
+  # }
+  #
+  #
   if(!general)
     L <- x$L
   else
@@ -3365,12 +3373,16 @@ lines.Lc <- function(x, general=FALSE, lwd=2, conf.level = NA, args.cband = NULL
 
 
   if (!(is.na(conf.level) || identical(args.cband, NA)) ) {
+
+
     args.cband1 <- list(col = SetAlpha(DescToolsOptions("col")[1], 0.12), border = NA)
     if (!is.null(args.cband))
       args.cband1[names(args.cband)] <- args.cband
 
-    ci <- Lc.boot.ci(x, conf.level=conf.level) # Vertrauensband
-    do.call("DrawBand", c(args.cband1, list(x = ci$x), list(y = ci$y)))
+#    ci <- Lc.boot.ci(x, conf.level=conf.level) # Vertrauensband
+    ci <- predict(object=x, conf.level=conf.level, general=general)
+    do.call("DrawBand", c(args.cband1, list(x=c(ci$p, rev(ci$p))),
+                                       list(y=c(ci$lci, rev(ci$uci)))))
   }
 
 
@@ -3392,6 +3404,49 @@ plot.Lclist <- function(x, col=1, lwd=2, lty=1, main = "Lorenz curve",
 }
 
 
+predict.Lc <- function(object, newdata, conf.level=NA, general=FALSE, n=1000, ...){
+
+  confint.Lc <- function(object, conf.level = 0.95, general=FALSE, n=1000, ...){
+
+    x <- rep(object$x, times=object$n)
+    m <- replicate(n = n, sample(x, replace = TRUE))
+
+    lst <- apply(m, 2, Lc)
+
+    list(x=lst[[1]]$p,
+         lci=apply(do.call(rbind, lapply(lst, "[[", ifelse(general, "L.general", "L"))), 2, quantile, probs=(1-conf.level)/2),
+         uci=apply(do.call(rbind, lapply(lst, "[[", ifelse(general, "L.general", "L"))), 2, quantile, probs=1-(1-conf.level)/2)
+    )
+  }
+
+  if(!general)
+    L <- object$L
+  else
+    L <- object$L.general
+
+
+  if(missing(newdata)){
+    newdata <- object$p
+    res <- data.frame(p=object$p, L=L)
+  } else {
+    res <- do.call(data.frame, approx(x=object$p, y=L, xout=newdata))
+    colnames(res) <- c("p", "L")
+  }
+
+  if(!identical(conf.level, NA)){
+
+    ci <- confint.Lc(object, conf.level=conf.level, general=general, n=n)
+
+    lci <- approx(x=ci$x, y=ci$lci, xout=newdata)
+    uci <- approx(x=ci$x, y=ci$uci, xout=newdata)
+
+    res <- data.frame(res, lci=lci$y, uci=uci$y)
+
+  }
+
+  res
+
+}
 
 # Original Zeileis:
 # Gini <- function(x)

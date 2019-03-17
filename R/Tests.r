@@ -4255,7 +4255,7 @@ ConoverTest.default <- function (x, g,
     out[[1]] <- out[[1]][-1, -ncol(out[[1]])]
   }
 
-  class(out) <- c("DunnTest")
+  class(out) <- c("ConoverTest", "DunnTest")
   attr(out, "main") <- gettextf("Conover's test of multiple comparisons : %s ",
                                 method.str)
   attr(out, "method") <- method.str

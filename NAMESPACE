@@ -14,7 +14,7 @@ export(
 "DescToolsOptions","DiffDays360","DivCoef","DivCoefMax","DoCall","DrawArc","DrawBand","DrawBezier","DrawCircle","DrawEllipse","DrawRegPolygon","dRevGumbel","Dummy",
 "DunnettTest","DunnTest",
 "DurbinWatsonTest","Entropy","Eps","ErrBars","EtaSq","ExpFreq","Xplore","Factorize","FctArgs","Fibonacci","FindColor","FindCorr","FisherZ","FisherZInv","FixToTable","Flags",
-"Format","Frac","Freq","GCD","GetCurrPP","GetCurrWrd","GetCurrXL","GetNewPP","GetNewWrd","GetNewXL",
+"Format","Frac","Freq", "Freq2D", "GCD","GetCurrPP","GetCurrWrd","GetCurrXL","GetNewPP","GetNewWrd","GetNewXL",
 "Gini","GiniSimpson","Gmean","GoodmanKruskalGamma","GoodmanKruskalTau","Gsd","GTest","Herfindahl","HexToCol","HexToDec","HexToRgb","HighLow","Hmean","HmsToSec","HodgesLehmann",
 "HotellingsT2Test","Hour","HuberM","ICC","identify.formula","IdentifyA","FileOpenCmd","ImportFileDlg","Impute","InDots","Interval","IRR","IsDate","IsDichotomous","IsEuclid","IsLeapYear","IsNumeric","IsOdd","IsPrime","IsValidWrd","IsWeekend","IsWhole","IsZero","JarqueBeraTest",
 "KappaM","KendallTauB","KendallW","Keywords","KrippAlpha","Kurt",
@@ -46,7 +46,7 @@ export(
 "VarCI","VecRot","VecShift","Vigenere","Week","Weekday","Winsorize","WoolfTest","WrdCaption","WrdGoto","WrdPageBreak","WrdInsertBookmark","WrdTable","WrdKill","WrdPlot","WrdSaveAs",
 "WrdUpdateBookmark",
 "XLGetRange","XLGetWorkbook","XLKill","XLView","ToXL","Year","YearDay","YearMonth",
-"YuenTTest","YuleQ","YuleY","ZeroIfNA","NAIfZero","Zodiac",
+"YuenTTest","YuleQ","YuleY","ZeroIfNA","NAIfZero","BlankIfNA","NAIfBlank","Zodiac",
 "ZTest",
 "BinTree", "PlotECDF","Abind","TOne","MaxDigits","XLDateToPOSIXct",
 "axTicks.POSIXct", "print.PercTable", "PlotMosaic", "PDFManual", "LongToRgb", "PlotMiss","BreuschGodfreyTest",
@@ -75,24 +75,23 @@ export(
 )
 
 
+importFrom("stats", ".nknots.smspl", "IQR", "acf", "addmargins", "anova", "aov", "approx", "as.dist", "as.formula", "binom.test", "chisq.test", "complete.cases", "contr.helmert", "contr.poly", "contr.sum", "contr.treatment", "contrasts", "convolve", "cor", "cov", "cycle", "dbinom", "density", "drop1", "end", "filter", "fisher.test", "formula", "frequency", "friedman.test", "ftable", "integrate", "is.ts", "kruskal.test", "lm", "lm.fit", "loess", "mad", "mantelhaen.test", "mcnemar.test", "model.extract", "model.frame", "model.matrix", "model.response", "model.tables", "na.omit", "na.pass", "optim", "optimise", "optimize", "p.adjust", "pbeta", "pbinom", "pchisq", "pf", "plot.ts", "pnorm", "poisson.test", "ppoints", "ppois", "prcomp", "predict", "pt", "ptukey", "qbeta", "qbinom", "qchisq", "qf", "qnorm", "qt", "qtukey", "quantile", "rnorm", "runif", "sd", "setNames", "smooth", "splinefun", "start", "symnum", "t.test", "terms", "time", "ts",
+           "uniroot", "var", "weighted.mean", "weights", "wilcox.test", "xtabs", "as.dendrogram", "dist", "hclust", "order.dendrogram", "smooth.spline","var.test",
+           "median", "reorder","AIC", "BIC", "confint", "deviance", "df", "logLik","lm.wfit","profile",
+           "coef", "coefficients", "cov2cor", "df.residual","nobs", "vcov","update","relevel","rbeta", "rexp", "qexp","reshape",
+           "confint.default", "ecdf")
+
 importFrom("graphics", "abline", "arrows", "axTicks", "axis", "barplot", "box", "boxplot", "clip", "close.screen", "dotchart", "frame", "grid", "hist", "identify", "image", "layout", "legend", "lines", "locator", "matlines", "matplot", "mosaicplot", "mtext", "pairs", "par",
            "plot", "plot.design", "plot.new", "plot.window", "points", "polygon", "rect", "screen", "segments", "split.screen", "strheight", "strwidth", "symbols", "text", "title",
            "grconvertX", "grconvertY")
 importFrom("grDevices", "chull", "col2rgb", "colorRampPalette", "colors", "dev.new", "dev.copy", "dev.cur", "dev.flush", "dev.hold", "dev.list", "dev.off", "dev.set", "gray.colors", "heat.colors", "rainbow", "rgb", "rgb2hsv", "xy.coords", "bitmap", "jpeg", "pdf", "png", "postscript", "tiff")
 importFrom("methods", "is")
-importFrom("stats", ".nknots.smspl", "IQR", "acf", "addmargins", "anova", "aov", "approx", "as.dist", "as.formula", "binom.test", "chisq.test", "complete.cases", "contr.helmert", "contr.poly", "contr.sum", "contr.treatment", "contrasts", "convolve", "cor", "cov", "cycle", "dbinom", "density", "drop1", "end", "filter", "fisher.test", "formula", "frequency", "friedman.test", "ftable", "integrate", "is.ts", "kruskal.test", "lm", "lm.fit", "loess", "mad", "mantelhaen.test", "mcnemar.test", "model.extract", "model.frame", "model.matrix", "model.response", "model.tables", "na.omit", "na.pass", "optim", "optimise", "optimize", "p.adjust", "pbeta", "pbinom", "pchisq", "pf", "plot.ts", "pnorm", "poisson.test", "ppoints", "ppois", "prcomp", "predict", "pt", "ptukey", "qbeta", "qbinom", "qchisq", "qf", "qnorm", "qt", "qtukey", "quantile", "rnorm", "runif", "sd", "setNames", "smooth", "splinefun", "start", "symnum", "t.test", "terms", "time", "ts",
-           "uniroot", "var", "weighted.mean", "weights", "wilcox.test", "xtabs", "as.dendrogram", "dist", "hclust", "order.dendrogram", "smooth.spline","var.test"
-           )
 importFrom("utils", "capture.output", "combn", "head", "help.search", "ls.str", "lsf.str", "memory.limit", "object.size", "read.table", "select.list", "sessionInfo", "stack", "str", "tail",
            "write.table", "browseURL")
-
+importFrom("foreign", "read.spss", "read.dta")
 importFrom("boot", "boot", "boot.ci", "corr")
 importFrom("mvtnorm", "qmvt", "pmvnorm")
 
-importFrom("stats", "median", "reorder","AIC", "BIC", "confint", "deviance", "df", "logLik","lm.wfit","profile",
-           "coef", "coefficients", "cov2cor", "df.residual","nobs", "vcov","update","relevel","rbeta", "rexp", "qexp","reshape",
-           "confint.default")
-importFrom("foreign", "read.spss", "read.dta")
 
 importFrom(Rcpp, evalCpp)
 
@@ -139,6 +138,7 @@ S3method(LOCF, matrix)
 
 S3method(Lc, default)
 S3method(Lc, formula)
+S3method(predict, Lc)
 S3method(LeveneTest, default)
 S3method(LeveneTest, formula)
 S3method(LeveneTest, lm)
@@ -342,4 +342,6 @@ S3method(print, CountCompCases)
 S3method(Sample, default)
 S3method(Sample, data.frame)
 
+S3method(Freq2D, default)
+S3method(Freq2D, formula)
 
