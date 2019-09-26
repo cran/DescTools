@@ -78,6 +78,9 @@ Freq(d.pizza$driver, ord="desc")
 
 # sorted by name, including NAs
 Freq(d.pizza$driver, ord="name", useNA="ifany")
+
+# percentages and cumulative frequencies for a vector of count data
+Freq(as.table(c(2,4,12,8)))
 }
 \keyword{ univar }
 

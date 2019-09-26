@@ -45,12 +45,12 @@ LogitInv(x, min = 0, max = 1)
 \seealso{ \code{\link[car]{logit}}}
 \examples{
 
-  x <- seq(0,10, by=0.25)
-  xt <- Logit(x, min=0, max=10)
-  cbind(x,xt)
+x <- seq(0,10, by=0.25)
+xt <- Logit(x, min=0, max=10)
+cbind(x,xt)
 
-  y <- LogitInv(xt, min=0, max=10)
-  cbind(x, xt, y)
+y <- LogitInv(xt, min=0, max=10)
+cbind(x, xt, y)
 
 }
 \keyword{math}

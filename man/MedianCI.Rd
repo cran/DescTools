@@ -28,7 +28,7 @@ MedianCI(x, conf.level = 0.95, sides = c("two.sided", "left", "right"),
 
 }
 \details{
-The exact method is the way SAS is said to calculate the confidence interval. This is implemented in \code{\link{SignTest}} and is extracted from there.
+The "exact" method is the way SAS is said to calculate the confidence interval. This is implemented in \code{\link{SignTest}} and is extracted therefrom.
 The boot confidence interval type is calculated by means of \code{\link{boot.ci}} with default type \code{"basic"}.\cr
 Use \code{\link{sapply}}, resp.\code{\link{apply}}, to get the confidence intervals from a data.frame or from a matrix.
 }

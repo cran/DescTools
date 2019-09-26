@@ -54,6 +54,7 @@ extern SEXP between_num_r(SEXP, SEXP, SEXP);
 extern SEXP between_num_rm(SEXP, SEXP, SEXP);
 extern SEXP conc(SEXP, SEXP, SEXP, SEXP);
 extern SEXP pip(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP isnil(SEXP);
 extern SEXP rkurt(SEXP, SEXP);
 extern SEXP rskew(SEXP, SEXP);
 extern SEXP tbrm(SEXP, SEXP);
@@ -106,6 +107,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"between_num_rm",           (DL_FUNC) &between_num_rm,           3},
   {"conc",                     (DL_FUNC) &conc,                     4},
   {"pip",                      (DL_FUNC) &pip,                      6},
+  {"isnil",                    (DL_FUNC) &isnil,                    1},
   {"rkurt",                    (DL_FUNC) &rkurt,                    2},
   {"rskew",                    (DL_FUNC) &rskew,                    2},
   {"tbrm",                     (DL_FUNC) &tbrm,                     2},

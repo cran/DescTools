@@ -148,8 +148,6 @@ A grouped list of the functions:
 \cr\cr
 \bold{Colors:}\tab\cr
 \link{SetAlpha}   \tab  Add transperancy (alpha channel) to a color.     \cr
-\link{ColorDlg}  \tab   Display the system's color dialog to choose a color   \cr
-\link{ColPicker}    \tab  Display R colors in a dialog including a locator for selection \cr
 \link{ColorLegend}  \tab   Add a color legend to a plot    \cr
 \link{FindColor}  \tab   Get color on a defined color range    \cr
 \link{MixColor}  \tab   Get the mix of two colors  \cr
@@ -384,16 +382,7 @@ _RevWeibull   \tab      Reverse Weibull distribution (\link{dRevWeibull})\cr
 \link{SLN}, \link{DB}, \link{SYD}       \tab     Several methods of depreciation of an asset \cr
 \cr\cr
 \bold{GUI-Helpers:}\tab\cr
-%% \link{DescDlg}    \tab  Display a Dialog Containing Univariate Descriptive Statistis and a Plot \cr
-\link{FileOpenCmd}    \tab  Get path of a data file to be opened \cr
-\link{ImportFileDlg}       \tab   Dialog for importing SPSS, Stata, SAS, Minitab or Systat files \cr
-\link{SaveAsDlg}    \tab  Save a data object by dialog \cr
-\link{ModelDlg}    \tab  Helps to compose a model formula in a dialog \cr
-\link{SelectVarDlg}    \tab  Select elements of a set by click \cr
 \link{PasswordDlg}    \tab  Display a dialog containing an edit field, showing only ***. \cr
-\link{PlotPar}   \tab   Display the R plot parameters in a dialog    \cr
-\link{PlotPch}       \tab      Plot point characters for information \cr
-\link{Xplore}   \tab   A breeze of interactive plotting \cr
 \cr\cr
 \bold{Reporting, InOut:}\tab\cr
 \link{CatTable}  \tab  Print a table with the option to have controlled linebreaks \cr
@@ -405,7 +394,7 @@ _RevWeibull   \tab      Reverse Weibull distribution (\link{dRevWeibull})\cr
 \link{GetNewWrd}, \link{GetNewXL}, \link{GetNewPP}     \tab   Create a new Word, Excel or PowerPoint Instance  \cr
 \link{GetCurrWrd}, \link{GetCurrXL}, \link{GetCurrPP}    \tab  Get a handle to a running Word, Excel or PowerPoint instance \cr
 \link{WrdKill}, \link{XLKill}       \tab      Ends a (possibly hidden) Word/Excel process \cr
-\link{IsValidWrd}       \tab  Check if the handle to a Word instance is valid or outdated \cr
+\link{IsValidHwnd}       \tab  Check if the handle to a MS Office application is valid or outdated \cr
 \link{WrdCaption}    \tab Insert a title in Word   \cr
 \link{WrdFont}   \tab  Get and set the font for the current selection in Word \cr
 \link{WrdParagraphFormat}    \tab Get and set the paragraph format \cr
@@ -457,10 +446,14 @@ _RevWeibull   \tab      Reverse Weibull distribution (\link{dRevWeibull})\cr
 
 
 \section{MS-Office}{To make use of MS-Office features you must have Office in one of its variants installed.
-All Wrd*, XL* and Pp* functions require as well the package RDCOMClient to be installed. Hence the use of these functions is restricted to Windows systems.
-RDCOMClient can be installed with: \cr
-\code{install.packages("RDCOMClient", repos="http://www.omegahat.net/R")}\cr
-RDCOMClient does not exist for Mac or Linux, sorry.
+All \code{Wrd*}, \code{XL*} and \code{Pp*} functions require as well the package \bold{RDCOMClient} to be installed. Hence the use of these functions is restricted to Windows systems.
+\bold{RDCOMClient} can be installed with: \cr
+\preformatted{install.packages("RDCOMClient", repos="http://www.omegahat.net/R")}
+The omegahat repository does not benefit from the same update service as CRAN. So you may be forced to install a package compiled with an earlier version, which usually is not a problem. Use e.g. for R 3.6x\cr
+\preformatted{
+url <- "http://www.omegahat.net/R/bin/windows/contrib/3.5.1/RDCOMClient_0.93-0.zip"
+install.packages(url, repos=NULL, type="binary")}
+\bold{RDCOMClient} does not exist for Mac or Linux, sorry.
 }
 
 
@@ -471,7 +464,7 @@ HWZ University of Applied Sciences in Business Administration Zurich.\cr
 
 R is a community project. This can be seen from the fact that this package includes R source code and/or documentation previously published by (in alphabetical order): \cr
 
-Ken Aho, Andreas Alfons, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Kamil Barton, Ben Bolker, Hans W. Borchers, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Clint Cummins, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Dirk Eddelbuettel, Jeff Enos, Claus Ekstrom, Martin Elff, Kamil Erguler, Richard W. Farebrother, John Fox, Romain Francois, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Richard Heiberger, Michael Hoehle, Christian W. Hoffmann, Soeren Hojsgaard, Torsten Hothorn, Markus Huerzeler, Wallace W. Hui, Pete Hurd, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Christopher Jackson, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Duncan Temple Lang, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Giovanni Millo, Yongyi Min, David Mitchell, Markus Naepflin, Daniel Navarro, Henric Nilsson, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Tony Plate, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Nathan Russell, Nick Sabbe, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Karline Soetaert, Werner A. Stahel, Alec Stephenson, Mark Stevenson, Matthias Templ, Terry Therneau, Yves Tille, Adrian Trapletti, Joshua Ulrich, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Hadley Wickham, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis
+Ken Aho, Andreas Alfons, Nanina Anderegg, Tomas Aragon, Antti Arppe, Adrian Baddeley, Kamil Barton, Ben Bolker, Hans W. Borchers, Frederico Caeiro, Stephane Champely, Daniel Chessel, Leanne Chhay, Clint Cummins, Michael Dewey, Harold C. Doran, Stephane Dray, Charles Dupont, Dirk Eddelbuettel, Jeff Enos, Claus Ekstrom, Martin Elff, Kamil Erguler, Richard W. Farebrother, John Fox, Romain Francois, Michael Friendly, Tal Galili, Matthias Gamer, Joseph L. Gastwirth, Yulia R. Gel, Juergen Gross, Gabor Grothendieck, Frank E. Harrell Jr, Richard Heiberger, Michael Hoehle, Christian W. Hoffmann, Soeren Hojsgaard, Torsten Hothorn, Markus Huerzeler, Wallace W. Hui, Pete Hurd, Rob J. Hyndman, Pablo J. Villacorta Iglesias, Christopher Jackson, Matthias Kohl, Mikko Korpela, Max Kuhn, Detlew Labes, Duncan Temple Lang, Friederich Leisch, Jim Lemon, Dong Li, Martin Maechler, Arni Magnusson, Daniel Malter, George Marsaglia, John Marsaglia, Alina Matei, David Meyer, Weiwen Miao, Giovanni Millo, Yongyi Min, David Mitchell, Franziska Mueller, Markus Naepflin, Daniel Navarro, Henric Nilsson, Klaus Nordhausen, Derek Ogle, Hong Ooi, Nick Parsons, Sandrine Pavoine, Tony Plate, Roland Rapold, William Revelle, Tyler Rinker, Brian D. Ripley, Caroline Rodriguez, Nathan Russell, Nick Sabbe, Venkatraman E. Seshan, Greg Snow, Michael Smithson, Karline Soetaert, Werner A. Stahel, Alec Stephenson, Mark Stevenson, Matthias Templ, Terry Therneau, Yves Tille, Adrian Trapletti, Joshua Ulrich, Kevin Ushey, Jeremy VanDerWal, Bill Venables, John Verzani, Gregory R. Warnes, Stefan Wellek, Hadley Wickham, Rand R. Wilcox, Peter Wolf, Daniel Wollschlaeger, Thomas Yee, Achim Zeileis
 
 Special thanks go to Beat Bruengger, Mathias Frueh, Daniel Wollschlaeger for their valuable contributions and testing.
 

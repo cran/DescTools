@@ -50,8 +50,9 @@ r.nox <- lm(Fertility ~ . -Examination - Catholic, swiss)
 r.grp <- lm(Fertility ~ . -Education - Catholic + CutQ(Catholic), swiss)
 r.gam <- glm(Fertility ~ . , swiss, family=Gamma(link="identity"))
 r.gama <- glm(Fertility ~ .- Agriculture , swiss, family=Gamma(link="identity"))
+r.gaml <- glm(Fertility ~ . , swiss, family=Gamma(link="log"))
 
-TMod(r.full, r.nox, r.grp, r.gam, r.gama)
+TMod(r.full, r.nox, r.grp, r.gam, r.gama, r.gaml)
 
 # display confidence intervals
 TMod(r.full, r.nox, r.gam, FUN = function(est, se, tval, pval, lci, uci){

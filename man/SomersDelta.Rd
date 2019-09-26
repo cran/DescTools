@@ -5,8 +5,7 @@
 %%  ~~function to do ... ~~
 }
 \description{Calculate Somers' Delta statistic, a measure of
-association for ordinal factors in a two-way table.\cr
-The function has interfaces for a table (matrix) and for single vectors.
+association for ordinal factors in a two-way table. The function has interfaces for a table (matrix) and for single vectors.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -32,15 +31,14 @@ SomersDelta(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
 }
 }
 \details{
-Somers' D(C | R) and Somers' D(R | C) are asymmetric modifications of \eqn{\tau_b}. C | R indicates that
+Somers' D(C|R) and Somers' D(R|C) are asymmetric modifications of \eqn{\tau_b} and Goodman-Kruskal's Gamma. C|R indicates that
 the row variable x is regarded as the independent variable and the column variable y is regarded
-as dependent. Similarly, R | C indicates that the column variable y is regarded as the independent
-variable and the row variable x is regarded as dependent. \cr
-Somers' D differs from tau-b in that it uses a correction only for pairs that are tied on the independent variable. Somers' D is appropriate only when both variables lie on an ordinal scale.\cr
+as dependent. Similarly, R|C indicates that the column variable y is regarded as the independent
+variable and the row variable x is regarded as dependent. It is logically very similar to Gamma, but differs in that it uses a correction only for pairs that are tied on the dependent variable. As Gamma and the Taus, D is appropriate only when both variables lie on an ordinal scale.\cr
 Somers' D is computed as\cr
 \deqn{ D(C | R) = \frac{P-Q}{n^2 - \sum(n_i.^2)}}
 %% D(C | R) = (P-Q)/(n^2 - sum(rowSums(tab)^2))
-where P equals twice the number of concordances and Q twice the number of discordances and \eqn{n_i.} rowSums(tab). Its range lies [-1, 1].
+where P equals twice the number of concordances and Q twice the number of discordances and \eqn{n_i.} rowSums(tab). Its range lies [-1, 1]. The interpretation of d is analogous to Gamma.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{

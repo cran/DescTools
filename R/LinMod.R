@@ -269,13 +269,21 @@ PseudoR2 <- function(x, which = NULL) {
     stop("can NOT get Loglik when 'summ' argument is not zero")
 
   L.full <- logLik(x)
-  D.full <- -2 * L.full # deviance(x)
+  D.full <- -2 * L.full          # deviance(x)
 
   if(inherits(x, what="multinom"))
     L.base <- logLik(update(x, ~1, trace=FALSE))
-  else
-    L.base <- logLik(update(x, ~1))
+  else if(inherits(x, what="glm"))
+    # replaced 2019-08-19, based on mail by inferrator:
+    #
+    #   L.base <- logLik(update(x, ~1))
 
+    L.base <- logLik(glm(formula = reformulate('1', gsub(" .*$", "", deparse(x$formula))),
+                         data = x$data, family = x$family))
+  else 
+    L.base <- logLik(update(x, ~1))
+  
+  
   D.base <- -2 * L.base # deviance(update(x, ~1))
   G2 <- -2 * (L.base - L.full)
 
@@ -307,7 +315,7 @@ PseudoR2 <- function(x, which = NULL) {
   res <- c(McFadden=McFadden, McFaddenAdj=McFaddenAdj,
            CoxSnell=CoxSnell, Nagelkerke=Nagelkerke, AldrichNelson=NA,
            VeallZimmermann=NA,
-           Effron=NA, McKelveyZavoina=NA, Tjur=NA,
+           Efron=NA, McKelveyZavoina=NA, Tjur=NA,
            AIC=AIC(x), BIC=BIC(x), logLik=L.full, logLik0=L.base, G2=G2)
 
 
@@ -333,21 +341,26 @@ PseudoR2 <- function(x, which = NULL) {
 
     s2 <- switch(link, probit = 1, logit = pi^2/3, NA)
 
+    # corrected based on mail by Chiroc Han, 2019-08-01 ******
     # Aldrich/Nelson
-    res["AldrichNelson"] <- G2 / (G2 + n * s2)
-
+    # from: 
+    # res["AldrichNelson"] <- G2 / (G2 + n * s2)
+    # to:
+    res["AldrichNelson"] <- G2 / (G2 + n)
+    
     # Veall/Zimmermann
-    res["VeallZimmermann"] <- res["AldrichNelson"] * (2*L.base - n * s2)/(2*L.base)
-
+    # res["VeallZimmermann"] <- res["AldrichNelson"] * (2*L.base - n * s2)/(2*L.base)
+    res["VeallZimmermann"] <- res["AldrichNelson"] * (2*L.base - n)/(2*L.base)
+    
 
     # McKelveyZavoina
     y.hat <- predict(x, type="link")
     sse <- sum((y.hat - mean(y.hat))^2)
     res["McKelveyZavoina"] <- sse/(n * s2 + sse)
 
-    # EffronR2
+    # EfronR2
     y.hat.resp <- predict(x, type="response")
-    res["Effron"] <- (1 - (sum((y - y.hat.resp)^2)) /
+    res["Efron"] <- (1 - (sum((y - y.hat.resp)^2)) /
                         (sum((y - mean(y))^2)))
 
     # Tjur's D
@@ -362,7 +375,7 @@ PseudoR2 <- function(x, which = NULL) {
     which <- "McFadden"
   else
     which <- match.arg(which, c("McFadden","AldrichNelson","VeallZimmermann","McFaddenAdj", "CoxSnell", "Nagelkerke",
-                                "Effron", "McKelveyZavoina", "Tjur","AIC", "BIC", "logLik", "logLik0","G2","all"),
+                                "Efron", "McKelveyZavoina", "Tjur","AIC", "BIC", "logLik", "logLik0","G2","all"),
                        several.ok = TRUE)
 
   if(any(which=="all"))
@@ -468,7 +481,7 @@ MAE <- function(x, ...) UseMethod("MAE")
 
 MAE.lm <- function(x, ...)
   # regr will escalate to lm, so no need for another interface here
-  MAE(predict(x), model.response(x$model), na.rm=FALSE)
+  MAE(predict(x, type="response"), model.response(x$model), na.rm=FALSE)
 
 MAE.default <- function (x, ref, na.rm=FALSE, ...) {
   # mean will bark, if there are NAs, so no need to do here anyhing further
@@ -480,7 +493,7 @@ MSE <- function(x, ...) UseMethod("MSE")
 
 MSE.lm <- function(x, ...)
   # regr will escalate to lm, so no need for another interface here
-  MSE(predict(x), model.response(x$model), na.rm=FALSE)
+  MSE(predict(x, type="response"), model.response(x$model), na.rm=FALSE)
 
 MSE.default <- function (x, ref, na.rm=FALSE, ...) {
   mean((ref-x)^2, na.rm=na.rm)
@@ -490,7 +503,7 @@ RMSE <- function(x, ...) UseMethod("RMSE")
 
 RMSE.lm <- function(x, ...)
   # regr will escalate to lm, so no need for another interface here
-  RMSE(predict(x), model.response(x$model), na.rm=FALSE)
+  RMSE(predict(x, type="response"), model.response(x$model), na.rm=FALSE)
 
 
 RMSE.default <- function (x, ref, na.rm=FALSE, ...) {
@@ -502,7 +515,7 @@ MAPE <- function(x, ...) UseMethod("MAPE")
 
 MAPE.lm <- function(x, ...)
   # regr will escalate to lm, so no need for another interface here
-  MAPE(predict(x), model.response(x$model), na.rm=FALSE)
+  MAPE(predict(x, type="response"), model.response(x$model), na.rm=FALSE)
 
 MAPE.default <- function (x, ref, na.rm=FALSE, ...) {
   # mean will bark, if there are NAs, so no need to do here anyhing further
@@ -515,7 +528,7 @@ SMAPE <- function(x, ...) UseMethod("SMAPE")
 
 SMAPE.lm <- function(x, ...)
   # regr will escalate to lm, so no need for another interface here
-  SMAPE(predict(x), model.response(x$model), na.rm=FALSE)
+  SMAPE(predict(x, type="response"), model.response(x$model), na.rm=FALSE)
 
 SMAPE.default <- function (x, ref, na.rm=FALSE, ...) {
 

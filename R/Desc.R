@@ -7,7 +7,7 @@ Desc <- function (x, ..., main=NULL, plotit=NULL, wrd = NULL) {
     UseMethod("Desc")
 
   else {
-    if(!IsValidWrd(wrd))
+    if(!IsValidHwnd(wrd))
       warning("wrd is not a valid handle to a running Word instance.")
 
     else {
@@ -1144,7 +1144,7 @@ print.Desc.table    <- function(x, digits = NULL, ...) {
 }
 
 print.Desc.xtabs   <- function(x, digits = NULL, ...) {
-  print.Desc.table(x, digits = NULL, ...)
+  print.Desc.table(x, digits, ...)
 }
 
 print.Desc.Date     <- function(x, digits = NULL, ... ) {
@@ -1295,7 +1295,7 @@ plot.Desc <- function(x, main = NULL, ...){
   plot.Desc.z <- function(z, main=main, ...){
 
     if(any(z$class %in% c("numeric","integer","character","factor","ordered","logical","Date",
-                          "table","matrix",
+                          "table","matrix","xtabs",
                           "factfact", "numnum", "factnum", "numfact")))
       eval(parse(text=gettextf("plot.Desc.%s(z, main=main, ...)", z$class)))
 
@@ -1640,6 +1640,13 @@ plot.Desc.Date      <- function(x, main=NULL, breaks=NULL, type=c(1,2,3), ...) {
   }
 
 }
+
+
+plot.Desc.xtabs <- function(x, main=NULL, col1 = NULL, col2 = NULL, horiz = TRUE, ...){
+  plot.Desc.table(x, main, col1, col2, horiz, ...)
+}
+
+
 
 plot.Desc.table     <- function(x, main=NULL, col1 = NULL, col2 = NULL, horiz = TRUE, ...){
 
@@ -2202,6 +2209,7 @@ Abstract <- function (x, sep = ", ", zero.form = ".", maxlevels = 5, trunc = TRU
   attr(res, "main") <- gsub(" +", " ", paste(deparse(substitute(x)), collapse=" "))
   attr(res, "nrow") <- dim(x)[1]
   attr(res, "ncol") <- dim(x)[2]
+  attr(res, "complete") <- sum(complete.cases(x))
   attr(res, "trunc") <- trunc
 
   if (!is.null(attr(x, "label")))
@@ -2245,8 +2253,8 @@ print.abstract <- function (x, sep = NULL, width = NULL,
     cat(" :", strwrap(label, indent = 2, exdent = 2), sep = "\n")
   else cat("\n")
 
-  cat(gettextf("\ndata.frame:\t%s obs. of  %s variables\n\n",
-               attr(x, "nrow"), attr(x, "ncol")))
+  cat(gettextf("\ndata frame:\t%s obs. of  %s variables\n\t\t%s complete cases (%s)\n\n",
+               attr(x, "nrow"), attr(x, "ncol"), attr(x, "complete"), Format(attr(x, "complete")/attr(x, "nrow"), fmt="%", digits=1)))
 
   class(x) <- "data.frame"
 
@@ -2290,6 +2298,9 @@ TwoGroups <- function(x, g,
     print(res$desc)
 
   } else {
+
+    if(is.null(main))
+      main <- gettextf("%s ~ %s", deparse(substitute(x)), deparse(substitute(g)))
 
     WrdCaption(main, wrd = wrd)
 

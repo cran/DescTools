@@ -34,7 +34,8 @@ Median(x, \dots)
 
 }
 \description{
-  Compute the sample median.
+  Compute the sample median. The function basically wraps the base R function \code{\link{median}()} and adds the option to define weights.\cr
+  For grouped data the median can be estimated by linear interpolation within the class containing the median, which is implemented in the interface for \code{Freq}-objects.
 }
 \details{
   This is a generic function for which methods can be written.  However,
@@ -82,6 +83,23 @@ Median(
 
 # compared to
 Median(d.pizza$temperature)
+
+# starting from a classified table
+# from     to  income
+#    0   4000      20
+# 4000   6000      42
+# 6000   8000      31
+# 8000  10000      12
+
+# Freq(as.table(c(20,42,31,12)))
+#    level  freq   perc  cumfreq  cumperc
+# 1      A    20  19.0\%       20    19.0\%
+# 2      B    42  40.0\%       62    59.0\%
+# 3      C    31  29.5\%       93    88.6\%
+# 4      D    12  11.4\%      105   100.0\%
+
+Median(Freq(as.table(c(20,42,31,12))), breaks=c(0,4000,6000,8000,10000))
+
 }
 \keyword{univar}
 \keyword{robust}

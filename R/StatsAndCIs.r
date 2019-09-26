@@ -53,6 +53,26 @@ Mean.default <- function (x, weights = NULL, trim = 0, na.rm = FALSE, ...) {
 }
 
 
+
+# Average absolute deviation from the median
+MeanAD <- function(x, FUN = mean, na.rm = FALSE) {
+  
+  if (na.rm) x <- na.omit(x)
+  
+  if(is.function(FUN)) {
+    #  if FUN is a function, then save it under new name and
+    # overwrite function name in FUN, which has to be character
+    fct <- FUN
+    FUN <- "fct"
+    FUN <- gettextf("%s(x)", FUN)
+  }
+  # Calculates the mean absolute deviation from the sample mean.
+  return(eval(parse(text = gettextf("mean(abs(x - %s))", FUN))))
+}
+
+
+
+
 # from stats
 SD <- function (x, weights = NULL, na.rm = FALSE, ...)
   sqrt(Var(if (is.vector(x) || is.factor(x)) x else as.double(x),
@@ -703,7 +723,9 @@ FindCorr <- function(x, cutoff = .90, verbose = FALSE) {
 # }
 
 
-AUC <- function(x, y, method=c("trapezoid", "step", "spline"), na.rm = FALSE) {
+AUC <- function(x, y, from=min(x, na.rm=TRUE), to = max(x, na.rm=TRUE), 
+                method=c("trapezoid", "step", "spline", "linear"), 
+                absolutearea = FALSE, subdivisions = 100, na.rm = FALSE, ...) {
 
   # calculates Area unter the curve
   # example:
@@ -723,13 +745,69 @@ AUC <- function(x, y, method=c("trapezoid", "step", "spline"), na.rm = FALSE) {
   x <- x[idx]
   y <- y[idx]
 
-  switch( match.arg( arg=method, choices=c("trapezoid","step","spline") )
+  switch( match.arg( arg=method, choices=c("trapezoid","step","spline","linear") )
           , "trapezoid" = { a <- sum((apply( cbind(y[-length(y)], y[-1]), 1, mean))*(x[-1] - x[-length(x)])) }
           , "step" = { a <- sum( y[-length(y)] * (x[-1] - x[-length(x)])) }
-          , "spline" = { a <- integrate(splinefun(x, y, method="natural"), lower=min(x), upper=max(x))$value }
+          , "linear" = {
+                a <- MESS_auc(x, y, from = from , to = to, type="linear", 
+                                   absolutearea=absolutearea, subdivisions=subdivisions, ...)
+                       }
+          , "spline" = { 
+                a <- MESS_auc(x, y, from = from , to = to, type="spline", 
+                     absolutearea=absolutearea, subdivisions=subdivisions, ...)
+            # a <- integrate(splinefun(x, y, method="natural"), lower=min(x), upper=max(x))$value 
+              }
   )
   return(a)
 }
+
+
+
+MESS_auc <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE), type=c("linear", "spline"), 
+                absolutearea=FALSE, subdivisions =100, ...) {
+  
+  type <- match.arg(type)
+  
+  # Sanity checks
+  stopifnot(length(x) == length(y))
+  stopifnot(!is.na(from))
+  
+  if (length(unique(x)) < 2)
+    return(NA)
+  
+  if (type=="linear") {
+    ## Default option
+    if (absolutearea==FALSE) {
+      values <- approx(x, y, xout = sort(unique(c(from, to, x[x > from & x < to]))), ...)
+      res <- 0.5 * sum(diff(values$x) * (values$y[-1] + values$y[-length(values$y)]))
+    } else { ## Absolute areas
+      ## This is done by adding artificial dummy points on the x axis
+      o <- order(x)
+      ox <- x[o]
+      oy <- y[o]
+      
+      idx <- which(diff(oy >= 0)!=0)
+      newx <- c(x, x[idx] - oy[idx]*(x[idx+1]-x[idx]) / (y[idx+1]-y[idx]))
+      newy <- c(y, rep(0, length(idx)))
+      values <- approx(newx, newy, xout = sort(unique(c(from, to, newx[newx > from & newx < to]))), ...)
+      res <- 0.5 * sum(diff(values$x) * (abs(values$y[-1]) + abs(values$y[-length(values$y)])))
+    }
+    
+  } else { ## If it is not a linear approximation
+    if (absolutearea)
+      myfunction <- function(z) { abs(splinefun(x, y, method="natural")(z)) }
+    
+    else
+      myfunction <- splinefun(x, y, method="natural")
+    
+    res <- integrate(myfunction, lower=from, upper=to, subdivisions=subdivisions)$value
+    
+  }
+  
+  res
+  
+}
+
 
 
 
@@ -824,26 +902,6 @@ Hmean <- function(x, method = c("classic", "boot"),
   return(res)
 
 }
-
-
-
-
-# Average absolute deviation from the median
-MeanAD <- function(x, FUN = mean, na.rm = FALSE) {
-
-  if (na.rm) x <- na.omit(x)
-
-  if(is.function(FUN)) {
-    #  if FUN is a function, then save it under new name and
-    # overwrite function name in FUN, which has to be character
-    fct <- FUN
-    FUN <- "fct"
-    FUN <- gettextf("%s(x)", FUN)
-  }
-  # Calculates the mean absolute deviation from the sample mean.
-  return(eval(parse(text = gettextf("mean(abs(x - %s))", FUN))))
-}
-
 
 
 
@@ -4879,10 +4937,13 @@ OddsRatio.glm <- function(x, conf.level = NULL, digits=3, use.profile=TRUE, ...)
 
 
   if(use.profile)
-    d.res[, c("or.lci","or.uci")] <- exp(confint(x, level = conf.level))
+    ci <- exp(confint(x, level = conf.level))
   else
-    d.res[, c("or.lci","or.uci")] <- exp(confint.default(x, level = conf.level))
+    ci <- exp(confint.default(x, level = conf.level))
 
+  # exclude na coefficients here, as summary does not yield those
+  d.res[, c("or.lci","or.uci")] <- ci[!is.na(coefficients(x)), ]
+  
   d.res$sig <- Format(d.res$"Pr(>|z|)", fmt="*")
   d.res$pval <- Format(d.res$"Pr(>|z|)", fmt="p")
 

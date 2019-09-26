@@ -49,3 +49,4 @@ WrdSaveAs(fn="report", fileformat="htm")
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{print}% __ONLY ONE__ keyword per line
+\keyword{MS-Office}
