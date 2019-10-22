@@ -1,5 +1,31 @@
 
-DescTools 0.99.29 (2019-05-17)
+DescTools 0.99.30 (2019-10-21)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+  * CompleteColumns() will return the names of complete columns of a data frame.
+  * ToWrdB() sends the output of a code chunk to Word and tags it with
+    a bookmark.
+  * ToWrdPlot() does the same with a code chunk producing a plot. It plots to
+    a tiff device and imports the graphic in MS-Word. These two functions allow
+    to dynamically update word documents with new R-results.
+  * WrdOpenFile() is used to open Word documents.
+  * CmToPts() and PtsToCm() convert between centimeters and points.
+
+UPDATED FUNCTIONS:
+  * Mode() gets a real fast Rcpp implementation. (Credits to Ralf Stubner)
+  * Desc.numeric() will notify when the mode has higher frequency than 5%
+    (which is likely to be remarkable within a numeric variable).
+
+BUGFIXES:
+  * PseudoR2() will work with negative binomial models again.
+  * Untable would not have returned the expected results in some combinations 
+    of column names. (Credits to Vilmantas Gegzna for detecting this issue)
+  * Desc() would not have handled unnamed lists. (Again Vilmantas noticed this)       
+
+
+
+DescTools 0.99.29 (2019-09-26)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
@@ -24,9 +50,10 @@ UPDATED FUNCTIONS:
   * Several corrections in help texts.
   * roulette, cards, tarot have been extended
   * Format() will ignore scipen=0 by default, use scipen=1 in future.
-  * Format() will pass through the digits argument for formatting p-values (fmt="p").
-  * SetNames() will use "names" for unnamed arguments as default instead of returning the 
-    unchanged input vector.
+  * Format() will pass through the digits argument for formatting p-values 
+    (fmt="p").
+  * SetNames() will use "names" for unnamed arguments as default instead of 
+    returning the unchanged input vector.
   * BlankIfNA() gets a new argument for defining what is meant with "blank".  
   * PseudoR2() is using reformulate() instead of update() in order to improve
     interoperability within the tidyverse, especially support tibbles created 
@@ -39,13 +66,14 @@ BUGFIXES:
   * plot(Desc()) for xtabs will work now.
   * OddsRatio for glms would have misplaced confidence intervals, if 
     a coefficient in the model could not be estimated and was set to NA.
-  * Calculation of AldrichNelson Pseudo R2 has been corrected (credits to Chirok Han).
+  * Calculation of AldrichNelson Pseudo R2 has been corrected 
+    (credits to Chirok Han).
 
 DEPRECATED:
   * FileOpenCmd(), SaveAsDlg(), ModelDlg(), ColPicker(), ColorDlg(),
     ImportFileDlg(), PlotPar(), PlotMar(), PlotPch(), SelectVarDlg(), Xplore()
     have been transferred to the package DescToolsAddIns, as these functions
-    only make sense in a GUI context.
+    presumably only make sense in a GUI context.
   * IsValidWrd() has been replaced by IsValidHwnd(), which can be used to 
     generally check Windows handles (at least for Office applications).
 
@@ -76,7 +104,7 @@ BUGFIXES:
 
 
 
-DescTools 0.99.27 (2019-01-17)
+DescTools 0.99.27 (2019-01-19)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
@@ -154,7 +182,7 @@ DEFUNCT:
 
 
 
-DescTools 0.99.25 (2018-08-13)
+DescTools 0.99.25 (2018-08-14)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
@@ -197,7 +225,7 @@ BUGFIXES:
 
 
 
-DescTools 0.99.24 (2018-03-18)
+DescTools 0.99.24 (2018-03-19)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
@@ -244,7 +272,7 @@ DEFUNCT:
 
 
 
-DescTools 0.99.23 (2017-12-09)
+DescTools 0.99.23 (2017-12-11)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
@@ -282,7 +310,7 @@ BUGFIXES:
 
 
 
-DescTools 0.99.22 (2017-09-14)
+DescTools 0.99.22 (2017-09-13)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
@@ -320,7 +348,7 @@ DEFUNCT:
 
 
 
-DescTools 0.99.21 (2017-06-29)
+DescTools 0.99.21 (2017-06-30)
 ------------------------------
 
 UPDATED FUNCTIONS:
@@ -344,7 +372,7 @@ DEFUNCT:
 
 
 
-DescTools 0.99.20 (2017-04-16)
+DescTools 0.99.20 (2017-04-19)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
@@ -374,7 +402,7 @@ DEFUNCT:
 
 
 
-DescTools 0.99.19 (2017-02-09)
+DescTools 0.99.19 (2017-02-11)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
@@ -996,14 +1024,16 @@ UPDATED FUNCTIONS:
 
 BUGFIXES:
    * Bug corrected for Cramer's V confidence intervals.
-     Credits to Steven J. Pierce for spotting the problem and to Michael Smithson for fixing it.
-   * The icon file for the PasswordDlg could not be found resulting in the dialog not being displayed.
+     Credits to Steven J. Pierce for spotting the problem and to Michael Smithson for 
+     fixing it.
+   * The icon file for the PasswordDlg could not be found resulting in the dialog not 
+     being displayed.
    * PlotFdist did not handle args.boxplot = NA correctly, meaning no boxplot being displayed.
    * Hmean will now report NA if any x < 0.
    * LsFct did not only list the functions but all objects of a package.
    * StrChop did not chop the last part of the string correctly.
-   * DescWrd would not have run on Word versions other than German because of a local template name.
-     This should be fixed for all language versions now.
+   * DescWrd would not have run on Word versions other than German because of a local 
+     template name. This should be fixed for all language versions now.
 
 
 
@@ -1034,14 +1064,15 @@ UPDATED FUNCTIONS:
      ts-objects as x-axis.
    * Desc.integer looses its maxlevels argument and gains "maxrows" and "freq". See help.
    * TukeyBiweight gains a na.rm argument and has been changed to use .Call
-     instead of old .C function.
+     instead of old fashioned .C function.
    * MeanDiffCI gains a formula interface.
    * HighLow uses a more efficient algorithm, based on the function Large/Small.
    * PlotWeb gains a couple of new arguments, making it more flexible.
    * AreaIdent gains a new argument poly. With poly=TRUE a polygon instead of a
      rectangle can be used to select the interesting points.
    * PlotCorr gains a border and lwd argument, allowing a grid being added.
-   * ZTest has been extended with the option to handle 2 sample tests in the same manner as t.test.
+   * ZTest has been extended with the option to handle 2 sample tests in the same manner 
+     as the function t.test().
      Moreover a formula interface has been added.
    * PpAddSlide will now set a newly inserted slide as active slide.
    * The artificial data.frame d.pizza has been given more structure between the variables.

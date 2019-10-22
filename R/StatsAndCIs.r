@@ -811,14 +811,35 @@ MESS_auc <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE), t
 
 
 
+# library(microbenchmark)
+# 
+# baseMode <- function(x, narm = FALSE) {
+#   if (narm) x <- x[!is.na(x)]
+#   ux <- unique(x)
+#   ux[which.max(table(match(x, ux)))]
+# }
+# x <- round(rnorm(1e7) *100, 4)
+# microbenchmark(Mode(x), baseMode(x), DescTools:::fastMode(x), times = 15, unit = "relative")
+# 
+
+
 # mode value, the most frequent element
 Mode <- function(x, na.rm=FALSE) {
+  
+  # // Source
+  # // https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type
+  # // Author: Ralf Stubner
+  
   if(!is.atomic(x) | is.matrix(x)) stop("Mode supports only atomic vectors. Use sapply(*, Mode) instead.")
   if(na.rm) x <- na.omit(x)
-  tab <- table(x)
-  res <- names( which(tab==max(tab)) )    # handle ties...
-  if( !inherits(x,"factor")) class(res) <- class(x)
-  return(as.vector(res))
+  
+  # tab <- table(x)
+  # res <- names( which(tab==max(tab)) )    # handle ties...
+  # if( !inherits(x,"factor")) class(res) <- class(x)
+  # return(as.vector(res))
+  
+  fastMode(x, na.rm)  
+  
 }
 
 

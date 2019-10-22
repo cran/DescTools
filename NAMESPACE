@@ -72,7 +72,8 @@ export(
 "dGompertz","pGompertz","qGompertz","rGompertz","GeomSn","UnirootAll", "TwoGroups",
 "NPV","NPVFixBond","YTM","PMT","IPMT","PPMT","SLN","DB","SYD","RBAL","Sample","DoBy",
 "Dot","Cross","CrossN", "Divisors", "createCOMReference","StrSpell", "WithOptions", "SaveAs", "XLSaveAs","Quot", "CompleteColumns",
-"SendOutlookMail", "MultMerge"
+"SendOutlookMail", "MultMerge", "ToWrdB", "ToWrdPlot", "WrdBookmark","WrdOpenFile",
+"CmToPts", "PtsToCm"
 )
 
 
@@ -258,7 +259,7 @@ S3method(ToWrd, matrix)
 S3method(ToWrd, data.frame)
 S3method(ToWrd, abstract)
 S3method(ToWrd, TMod)
-
+S3method(ToWrd, Desc)
 
 S3method(print, abstract)
 

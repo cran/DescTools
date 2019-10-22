@@ -4574,6 +4574,48 @@ CatTable <- function( tab, wcol, nrepchars, width=getOption("width") ) {
 
 
 
+# Maybe an alternative later down the road...
+
+# https://www.r-bloggers.com/performance-captureoutput-is-much-faster-than-capture-output/
+# R.Utils::captureOutput() is much faster than utils::capture.output()
+# 
+# function (expr, file = NULL, append = FALSE, collapse = NULL, 
+#           envir = parent.frame()) 
+# {
+#   if (is.null(file)) 
+#     file <- raw(0L)
+#   if (identical(file, character(0L))) 
+#     file <- NULL
+#   if (is.raw(file)) {
+#     res <- eval({
+#       file <- rawConnection(raw(0L), open = "w")
+#       on.exit({
+#         if (!is.null(file)) close(file)
+#       })
+#       capture.output(expr, file = file)
+#       res <- rawConnectionValue(file)
+#       close(file)
+#       file <- NULL
+#       res <- rawToChar(res)
+#       res
+#     }, envir = envir, enclos = envir)
+#   }
+#   else {
+#     res <- eval({
+#       capture.output(expr, file = file, append = append)
+#     }, envir = envir, enclos = envir)
+#     return(invisible(res))
+#   }
+#   res <- unlist(strsplit(res, split = "\n", fixed = TRUE), 
+#                 use.names = FALSE)
+#   if (!is.null(collapse)) 
+#     res <- paste(res, collapse = collapse)
+#   res
+# }
+
+
+
+
 Ndec <- function(x) {
   # liefert die Anzahl der Nachkommastellen einer Zahl x
   # Alternative auch format.info [1]... Breite, [2]...Anzahl Nachkommastellen, [3]...Exponential ja/nein
@@ -6740,7 +6782,7 @@ Untable.data.frame <- function(x, freq = "Freq", rownames = NULL, ...){
   if(all(is.na(match(freq, names(x)))))
     stop(gettextf("Frequency column %s does not exist!", freq))
 
-  res <- x[Untable(x[,freq], type="as.numeric")[,], -grep(freq, names(x))]
+  res <- x[Untable(x[,freq], type="as.numeric")[,], -match(freq, names(x)), drop=FALSE]
   rownames(res) <- rownames
 
   return(res)
@@ -10961,9 +11003,9 @@ PlotVenn <- function (x, col = "transparent", plotit = TRUE, labels = NULL) {
 
 CompleteColumns <- function(x, which=TRUE){
   if(which)
-    names(Filter(Negate(IsZero), sapply(x, function(z) sum(is.na(z)))))
+    names(Filter(IsZero, sapply(x, function(z) sum(is.na(z)))))
   else 
-    sapply(x, function(z) sum(is.na(z)))==TRUE
+    sapply(x, function(z) sum(is.na(z)))==FALSE
 }
 
 
@@ -12592,12 +12634,148 @@ ToWrd <- function(x, font=NULL, ..., wrd=DescToolsOptions("lastWord")){
 }
 
 
+# ToWrdB <- function(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"), 
+#                     bookmark=gettextf("b%s", sample(1e9, 1))){
+#   
+#   bm <- WrdInsertBookmark(name = bookmark, wrd=wrd)
+#   ToWrd(x, font=font, ..., wrd=wrd)
+#   
+#   d <- wrd$Selection()$range()$start() - bm$range()$start()
+#   wrd$Selection()$MoveLeft(Unit=wdConst$wdCharacter, Count=d, Extend=wdConst$wdExtend)
+#   
+#   bm <- WrdInsertBookmark(name = bookmark, wrd=wrd)
+#   
+#   wrd[["Selection"]]$Collapse(Direction=wdConst$wdCollapseEnd)
+#   
+#   invisible(bm)
+#   
+# }
+
+
+# function to generate random bookmark names 
+# (ensure we'll always get 9 digits with min=0.1)
+randbm <- function() paste("bm", round(runif(1, min=0.1)*1e9), sep="")
+
+
+
+ToWrdB <- function(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"), 
+                   bookmark=gettextf("bmt%s", round(runif(1, min=0.1)*1e9))){
+  
+  # Sends the output of an object x to word and places a bookmark bm on it
+  
+  # place the temporary bookmark on cursor
+  bm_start <- WrdInsertBookmark(randbm())
+  
+  # send stuff to Word (it's generic ...)
+  ToWrd(x, font=font, ..., wrd=wrd)
+  
+  # place end bookmark
+  bm_end <- WrdInsertBookmark(randbm())
+  
+  # select all the inserted text between the two bookmarks
+  wrd[["ActiveDocument"]]$Range(bm_start$range()$start(), bm_end$range()$end())$select()
+  
+  # place the required bookmark over the whole inserted story
+  res <- WrdInsertBookmark(bookmark)
+  
+  # collapse selection to the end position
+  wrd$selection()$collapse(wdConst$wdCollapseEnd)
+  
+  # delete the two temporary bookmarks start/end
+  bm_start$delete()
+  bm_end$delete()
+  
+  # return the bookmark with inserted story
+  invisible(res)
+  
+}
+
+
+ToWrdPlot <- function(plotcode,  
+                      width=NULL, height=NULL, scale=100, res=300, crop=c(0,0,0,0),
+                      wrd = DescToolsOptions("lastWord"), 
+                      bookmark=gettextf("bmp%s", round(runif(1, min=0.1)*1e9))
+                      ){
+  
+  if(is.null(width)) width <- 15
+  if(is.null(height)) height <- width / gold_sec_c 
+  
+  if(is.null(bookmark)) bookmark <- randbm()
+  
+  
+  # open device
+  tiff(filename = (fn <- paste(tempfile(), ".tif", sep = "")), 
+       width = width, height = height, units = "cm", 
+       res = res, compression = "lzw")
+  
+  # do plot
+  eval(parse(text = plotcode))
+  
+  # close device
+  dev.off()
+  
+  
+  # import in word ***********
+  # place the temporary bookmark on cursor
+  bm_start <- WrdInsertBookmark(randbm(), wrd=wrd)
+  
+  # send stuff to Word (it's generic ...)
+  hwnd <- wrd$selection()$InlineShapes()$AddPicture(FileName=fn, LinkToFile=FALSE, SaveWithDocument=TRUE)
+  hwnd[["LockAspectRatio"]] <- 1
+  hwnd[["ScaleWidth"]] <- hwnd[["ScaleHeight"]] <- scale
+  pic <- hwnd$PictureFormat()
+  pic[["CropBottom"]] <- CmToPts(crop[1])
+  pic[["CropLeft"]] <- CmToPts(crop[2])
+  pic[["CropTop"]] <- CmToPts(crop[3])
+  pic[["CropRight"]] <- CmToPts(crop[4])
+
+  
+  ToWrd(x="\n", wrd=wrd)
+  
+  # place end bookmark
+  bm_end <- WrdInsertBookmark(randbm(), wrd=wrd)
+  
+  # select all the inserted text between the two bookmarks
+  wrd[["ActiveDocument"]]$Range(bm_start$range()$start(), bm_end$range()$end())$select()
+  
+  # place the required bookmark over the whole inserted story
+  res <- WrdInsertBookmark(bookmark, wrd=wrd)
+  
+  # collapse selection to the end position
+  wrd$selection()$collapse(wdConst$wdCollapseEnd)
+  
+  # delete the two temporary bookmarks start/end
+  bm_start$delete()
+  bm_end$delete()
+  
+  # return the bookmark with inserted story
+  invisible(list(plot_hwnd=hwnd, bookmark=res))
+  
+}
+
+
+
+
+
+
+
 ToWrd.default <- function(x, font=NULL, ..., wrd=DescToolsOptions("lastWord")){
 
-  ToWrd.character(x=.CaptOut(x), font=font, ..., wrd=wrd)
+  ToWrd.character(x=.CaptOut(cat(x, sep = "\n")), font=font, ..., wrd=wrd)
   invisible()
 
 }
+
+
+
+ToWrd.Desc <- function(x, font=NULL, ..., wrd=DescToolsOptions("lastWord")){
+  
+  printWrd(x, ..., wrd=wrd)
+  invisible()
+  
+}
+
+
 
 
 ToWrd.TOne <- function(x, font=NULL, para=NULL, main=NULL, align=NULL,
@@ -13286,6 +13464,34 @@ WrdPageBreak <- function(wrd = DescToolsOptions("lastWord")) {
 
 
 
+WrdBookmark <- function(bookmark, wrd = DescToolsOptions("lastWord")){
+  
+  wbms <- wrd[["ActiveDocument"]][["Bookmarks"]]
+  
+  if(wbms$count()>0){
+    # get bookmark names
+    bmnames <- sapply(seq(wbms$count()), function(i) wbms[[i]]$name())
+    
+    id <- which(bookmark == bmnames)
+    
+    if(length(id)==0)   # name found?
+      res <- NULL 
+    
+    else
+      res <- wbms[[id]]
+    # no attributes for S4 objects... :-(
+    #  res@idx <- which(name == bmnames)
+    
+  } else {
+    # warning(gettextf("bookmark %s not found", bookmark))
+    res <- NULL
+  }
+  
+  return(res)  
+  
+}
+
+
 WrdInsertBookmark <- function (name, wrd = DescToolsOptions("lastWord")) {
 
   #   With ActiveDocument.Bookmarks
@@ -13295,8 +13501,8 @@ WrdInsertBookmark <- function (name, wrd = DescToolsOptions("lastWord")) {
   #   End With
 
   wrdBookmarks <- wrd[["ActiveDocument"]][["Bookmarks"]]
-  wrdBookmarks$Add(name)
-  invisible()
+  bookmark <- wrdBookmarks$Add(name)
+  invisible(bookmark)
 }
 
 
@@ -13315,6 +13521,25 @@ WrdUpdateBookmark <- function (name, text, what = wdConst$wdGoToBookmark, wrd = 
   wrdBookmarks <- wrd[["ActiveDocument"]][["Bookmarks"]]
   wrdBookmarks$Add(name)
   invisible()
+}
+
+
+WrdOpenFile <- function(fn, wrd = DescToolsOptions("lastWord")){
+  
+  if(!IsValidHwnd(wrd))
+    wrd <- GetNewWrd()
+  
+  # ChangeFileOpenDirectory "C:\Users\HK1S0\Desktop\"
+  # 
+  # Documents.Open FileName:="DynWord.docx", ConfirmConversions:=False, _
+  #         ReadOnly:=False, AddToRecentFiles:=False, PasswordDocument:="", _
+  #         PasswordTemplate:="", Revert:=False, WritePasswordDocument:="", _
+  #         WritePasswordTemplate:="", Format:=wdOpenFormatAuto, XMLTransform:=""
+  
+  res <- wrd[["Documents"]]$Open(FileName=fn)
+  
+  # return document
+  invisible(res)
 }
 
 
@@ -13355,16 +13580,16 @@ WrdSaveAs <- function(fn, fileformat="docx", wrd = DescToolsOptions("lastWord"))
 # Example: WrdPlot(picscale=30)
 #          WrdPlot(width=8)
 
-.CentimetersToPoints <- function(x) x * 28.35
-.PointsToCentimeters <- function(x) x / 28.35
-# http://msdn.microsoft.com/en-us/library/bb214076(v=office.12).aspx
 
+CmToPts <- function(x) x * 28.35
+PtsToCm <- function(x) x / 28.35
+# http://msdn.microsoft.com/en-us/library/bb214076(v=office.12).aspx
 
 
 WrdPlot <- function( type="png", append.cr=TRUE, crop=c(0,0,0,0), main = NULL,
                      picscale=100, height=NA, width=NA, res=300, dfact=1.6, wrd = DescToolsOptions("lastWord") ){
 
-  # png is considered a good choice for export to word (Smith)
+  # png is considered a good default choice for export to word (Smith)
   # http://blog.revolutionanalytics.com/2009/01/10-tips-for-making-your-r-graphics-look-their-best.html
 
   # height, width in cm!
@@ -13402,10 +13627,10 @@ WrdPlot <- function( type="png", append.cr=TRUE, crop=c(0,0,0,0), main = NULL,
 
   pic[["LockAspectRatio"]] <- -1  # = msoTrue
   picfrmt <- pic[["PictureFormat"]]
-  picfrmt[["CropBottom"]] <- .CentimetersToPoints(crop[1])
-  picfrmt[["CropLeft"]] <- .CentimetersToPoints(crop[2])
-  picfrmt[["CropTop"]] <- .CentimetersToPoints(crop[3])
-  picfrmt[["CropRight"]] <- .CentimetersToPoints(crop[4])
+  picfrmt[["CropBottom"]] <- CmToPts(crop[1])
+  picfrmt[["CropLeft"]] <- CmToPts(crop[2])
+  picfrmt[["CropTop"]] <- CmToPts(crop[3])
+  picfrmt[["CropRight"]] <- CmToPts(crop[4])
 
   if( is.na(height) & is.na(width) ){
     # or use the ScaleHeight/ScaleWidth attributes:
@@ -13413,10 +13638,10 @@ WrdPlot <- function( type="png", append.cr=TRUE, crop=c(0,0,0,0), main = NULL,
     pic[["ScaleWidth"]] <- picscale
   } else {
     # Set new height:
-    if( is.na(width) ) width <- height / .PointsToCentimeters( pic[["Height"]] ) * .PointsToCentimeters( pic[["Width"]] )
-    if( is.na(height) ) height <- width / .PointsToCentimeters( pic[["Width"]] ) * .PointsToCentimeters( pic[["Height"]] )
-    pic[["Height"]] <- .CentimetersToPoints(height)
-    pic[["Width"]] <- .CentimetersToPoints(width)
+    if( is.na(width) ) width <- height / PtsToCm( pic[["Height"]] ) * PtsToCm( pic[["Width"]] )
+    if( is.na(height) ) height <- width / PtsToCm( pic[["Width"]] ) * PtsToCm( pic[["Height"]] )
+    pic[["Height"]] <- CmToPts(height)
+    pic[["Width"]] <- CmToPts(width)
   }
 
   if( append.cr == TRUE ) { wrd[["Selection"]]$TypeText("\n")
@@ -13448,7 +13673,7 @@ WrdTable <- function(nrow = 1, ncol = 1, heights = NULL, widths = NULL, main = N
     for(i in 1:ncol){
       # set column-widths
       tcol <- res$Columns(i)
-      tcol[["Width"]] <- .CentimetersToPoints(widths[i])
+      tcol[["Width"]] <- CmToPts(widths[i])
     }
   }
   if(!is.null(heights)) {
@@ -13456,7 +13681,7 @@ WrdTable <- function(nrow = 1, ncol = 1, heights = NULL, widths = NULL, main = N
     for(i in 1:nrow){
       # set row heights
       tcol <- res$Rows(i)
-      tcol[["Height"]] <- .CentimetersToPoints(heights[i])
+      tcol[["Height"]] <- CmToPts(heights[i])
     }
   }
 
@@ -14284,8 +14509,8 @@ PpPlot <- function( type="png", crop=c(0,0,0,0),
   # Example: PpPlot(picscale=30)
   #          PpPlot(width=8)
 
-  .CentimetersToPoints <- function(x) x * 28.35
-  .PointsToCentimeters <- function(x) x / 28.35
+  CmToPts <- function(x) x * 28.35
+  PtsToCm <- function(x) x / 28.35
   # http://msdn.microsoft.com/en-us/library/bb214076(v=office.12).aspx
 
   # handle missing height or width values
@@ -14317,10 +14542,10 @@ PpPlot <- function( type="png", crop=c(0,0,0,0),
   pic <- slide[["Shapes"]]$AddPicture(fn, FALSE, TRUE, x, y)
 
   picfrmt <- pic[["PictureFormat"]]
-  picfrmt[["CropBottom"]] <- .CentimetersToPoints(crop[1])
-  picfrmt[["CropLeft"]] <- .CentimetersToPoints(crop[2])
-  picfrmt[["CropTop"]] <- .CentimetersToPoints(crop[3])
-  picfrmt[["CropRight"]] <- .CentimetersToPoints(crop[4])
+  picfrmt[["CropBottom"]] <- CmToPts(crop[1])
+  picfrmt[["CropLeft"]] <- CmToPts(crop[2])
+  picfrmt[["CropTop"]] <- CmToPts(crop[3])
+  picfrmt[["CropRight"]] <- CmToPts(crop[4])
 
   if( is.na(height) & is.na(width) ){
     # or use the ScaleHeight/ScaleWidth attributes:
@@ -14331,10 +14556,10 @@ PpPlot <- function( type="png", crop=c(0,0,0,0),
 
   } else {
     # Set new height:
-    if( is.na(width) ) width <- height / .PointsToCentimeters( pic[["Height"]] ) * .PointsToCentimeters( pic[["Width"]] )
-    if( is.na(height) ) height <- width / .PointsToCentimeters( pic[["Width"]] ) * .PointsToCentimeters( pic[["Height"]] )
-    pic[["Height"]] <- .CentimetersToPoints(height)
-    pic[["Width"]] <- .CentimetersToPoints(width)
+    if( is.na(width) ) width <- height / PtsToCm( pic[["Height"]] ) * PtsToCm( pic[["Width"]] )
+    if( is.na(height) ) height <- width / PtsToCm( pic[["Width"]] ) * PtsToCm( pic[["Height"]] )
+    pic[["Height"]] <- CmToPts(height)
+    pic[["Width"]] <- CmToPts(width)
   }
 
   if( file.exists(fn) ) { file.remove(fn) }

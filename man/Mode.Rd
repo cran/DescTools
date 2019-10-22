@@ -16,8 +16,11 @@ Mode(x, na.rm = FALSE)
 }
 \value{Returns the most frequent value. If there are more than one, all of them are returned in a vector. 
 }
+\references{https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type/
+https://stackoverflow.com/a/55213471/8416610
+}
 \author{
-Andri Signorell <andri@signorell.net>
+Andri Signorell <andri@signorell.net>, great Rcpp part by Joseph Wood and Ralf Stubner
 }
 
 \note{Consider using \kbd{density(x)$x[which.max(density(x)$y)]} for quantitative data or alternatively use \kbd{hist()}.\cr
