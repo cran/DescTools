@@ -386,6 +386,11 @@ Quantile <- function(x, weights = NULL, probs = seq(0, 1, 0.25),
 }
 
 
+IQRw <- function (x, weights = NULL, na.rm = FALSE, type = 7) {
+  
+  diff(Quantile(x, weights=weights, probs=c(0.25, 0.75), na.rm=na.rm, names=names, type=type))
+  
+}
 
 
 
@@ -828,18 +833,32 @@ Mode <- function(x, na.rm=FALSE) {
   
   # // Source
   # // https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type
-  # // Author: Ralf Stubner
+  # // Author: Ralf Stubner, Joseph Wood
   
   if(!is.atomic(x) | is.matrix(x)) stop("Mode supports only atomic vectors. Use sapply(*, Mode) instead.")
-  if(na.rm) x <- na.omit(x)
   
-  # tab <- table(x)
-  # res <- names( which(tab==max(tab)) )    # handle ties...
-  # if( !inherits(x,"factor")) class(res) <- class(x)
-  # return(as.vector(res))
+  if (na.rm) 
+    x <- x[!is.na(x)]
   
-  fastMode(x, na.rm)  
+  if (anyNA(x)) 
+    # there are NAs, so no mode exist nor frequency
+    return(structure(NA_real_, freq = NA_integer_))
   
+  if(length(x) == 1L)
+    # only one value in x, x is the mode
+    return(structure(x, freq = 1L)) 
+  
+  # we don't have NAs so far, either there were then we've already stopped
+  # or they've been stripped above
+  res <- fastModeX(x, narm=FALSE)
+  
+  if(length(res)== 0L & attr(res, "freq")==1L)
+    return(structure(NA_real_, freq = 1L))
+  
+  else
+    # order results kills the attribute
+    return(structure(res[order(res)], freq = attr(res, "freq")))
+
 }
 
 
@@ -2789,6 +2808,35 @@ PoissonCI <- function(x, n = 1, conf.level = 0.95, sides = c("two.sided","left",
 MedianCI <- function(x, conf.level=0.95, sides = c("two.sided","left","right"), na.rm=FALSE, method=c("exact","boot"), R=999) {
   if(na.rm) x <- na.omit(x)
 
+  MedianCI_Binom <- function( x, conf.level = 0.95,
+                              sides = c("two.sided", "left", "right"), na.rm = FALSE ){
+    
+    # http://www.stat.umn.edu/geyer/old03/5102/notes/rank.pdf
+    # http://de.scribd.com/doc/75941305/Confidence-Interval-for-Median-Based-on-Sign-Test
+    if(na.rm) x <- na.omit(x)
+    n <- length(x)
+    switch( match.arg(sides)
+            , "two.sided" = {
+              k <- qbinom(p = (1 - conf.level) / 2, size=n, prob=0.5, lower.tail=TRUE)
+              ci <- sort(x)[c(k, n - k + 1)]
+              attr(ci, "conf.level") <- 1 - 2 * pbinom(k-1, size=n, prob=0.5)
+            }
+            , "left" = {
+              k <- qbinom(p = (1 - conf.level), size=n, prob=0.5, lower.tail=TRUE)
+              ci <- c(sort(x)[k], Inf)
+              attr(ci, "conf.level") <- 1 - pbinom(k-1, size=n, prob=0.5)
+            }
+            , "right" = {
+              k <- qbinom(p = conf.level, size=n, prob=0.5, lower.tail=TRUE)
+              ci <- c(-Inf, sort(x)[k])
+              attr(ci, "conf.level") <- pbinom(k, size=n, prob=0.5)
+            }
+    )
+    return(ci)
+  }
+  
+  
+  
   sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
   if(sides!="two.sided")
     conf.level <- 1 - 2*(1-conf.level)
@@ -2801,10 +2849,12 @@ MedianCI <- function(x, conf.level=0.95, sides = c("two.sided","left","right"), 
   # x[ qbinom(1-alpha/2,length(x),0.5) ] ### upper limit
   # ) )
 
-  switch( match.arg(arg=method, choices=c("exact","boot"))
+  method <- match.arg(arg=method, choices=c("exact","boot"))
+  
+  switch( method
           , "exact" = { # this is the SAS-way to do it
             # https://stat.ethz.ch/pipermail/r-help/2003-September/039636.html
-            r <- SignTest(x)$conf.int
+            r <- MedianCI_Binom(x, conf.level = conf.level, sides=sides)
           }
           , "boot" = {
             boot.med <- boot(x, function(x, d) median(x[d], na.rm=na.rm), R=R)
@@ -2813,18 +2863,20 @@ MedianCI <- function(x, conf.level=0.95, sides = c("two.sided","left","right"), 
 
   med <- median(x, na.rm=na.rm)
   if(is.na(med)) {   # do not report a CI if the median is not defined...
-    r <- rep(NA, 3)
+    res <- rep(NA, 3)
   } else {
-    r <- c(median=med, r)
+    res <- c(median=med, r)
+    # report the conf.level which can deviate from the required one
+    if(method=="exact")  attr(res, "conf.level") <-  attr(r, "conf.level")
   }
-  names(r) <- c("median","lwr.ci","upr.ci")
+  names(res) <- c("median","lwr.ci","upr.ci")
 
   if(sides=="left")
-    r[3] <- Inf
+    res[3] <- Inf
   else if(sides=="right")
-    r[2] <- -Inf
+    res[2] <- -Inf
 
-  return( r )
+  return( res )
 
 }
 
@@ -3764,7 +3816,8 @@ ContCoef <- function(x, y = NULL, correct = FALSE, ...) {
 
 
 CramerV <- function(x, y = NULL, conf.level = NA,
-                    method = c("ncchisq", "ncchisqadj", "fisher", "fisheradj"), ...){
+                    method = c("ncchisq", "ncchisqadj", "fisher", "fisheradj"), 
+                    correct=FALSE, ...){
 
   if(!is.null(y)) x <- table(x, y, ...)
 
@@ -3828,13 +3881,27 @@ CramerV <- function(x, y = NULL, conf.level = NA,
   #
   # ... which would run ~ 25% faster and be more exact
 
+  
+  
   # what can go wrong while calculating chisq.stat?
   # we don't need test results here, so we suppress those warnings
   chisq.hat <- suppressWarnings(chisq.test(x, correct = FALSE)$statistic)
   df <- prod(dim(x)-1)
   n <- sum(x)
-  v <- as.numeric(sqrt(chisq.hat/(n * (min(dim(x)) - 1))))
-
+  
+  if(correct){
+  
+    # Bergsma, W, A bias-correction for Cramér's V and Tschuprow's T
+    # September 2013Journal of the Korean Statistical Society 42(3)
+    # DOI: 10.1016/j.jkss.2012.10.002
+    v <- sqrt(max(0, chisq.hat - df/(n-1)) / 
+                 (n * min(sapply(dim(x), function(i) i - 1 / (n-1) * (i-1)^2) - 1 )))
+  
+  } else {
+    v <- as.numeric(sqrt(chisq.hat/(n * (min(dim(x)) - 1))))
+  }
+  
+  
   if (is.na(conf.level)) {
     res <- v
 
@@ -3911,7 +3978,7 @@ YuleY <- function(x, y = NULL, ...){
 }
 
 
-TschuprowT <- function(x, y = NULL, ...){
+TschuprowT <- function(x, y = NULL, correct = FALSE, ...){
 
   if(!is.null(y)) x <- table(x, y, ...)
 
@@ -3921,8 +3988,17 @@ TschuprowT <- function(x, y = NULL, ...){
 
   # what can go wrong while calculating chisq.stat?
   # we don't need test results here, so we suppress those warnings
-  as.numeric( sqrt(suppressWarnings(chisq.test(x, correct = FALSE)$statistic)/
-                     (sum(x) * sqrt(prod(dim(x)-1)) )))
+  chisq.hat <- suppressWarnings(chisq.test(x, correct = FALSE)$statistic)
+  n <- sum(x)
+  df <- prod(dim(x)-1)
+  
+  if(correct) {
+    as.numeric( sqrt(max(0, chisq.hat - df/(n-1)) / 
+                (n * min(sapply(dim(x), function(i) i - 1 / (n-1) * (i-1)^2) - 1 ))))
+    
+  } else {
+    as.numeric( sqrt(chisq.hat/(n * sqrt(df))))
+  }
 
 }
 
@@ -4034,6 +4110,10 @@ KappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) 
   #
   # ttab <- matrix(ttab, nrow=ns)
 
+  # we have not factors for matrices, but we need factors below...
+  if(is.matrix(x))
+    x <- as.data.frame(x)
+  
   x <- na.omit(x)
   ns <- nrow(x)
   nr <- ncol(x)

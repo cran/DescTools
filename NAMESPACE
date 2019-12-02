@@ -21,7 +21,7 @@ export(
 "Label","Label<-","Unit","Unit<-","Lambda","Large","LastDayOfMonth","Lc","LCM","LehmacherTest",
 "LeveneTest",
 "LillieTest","lines.Lc","lines.lm","lines.loess","lines.smooth.spline","lines.SmoothSpline","LinScale",
-"LOCF","LOF","Logit","LogitInv","LogSt","LogStInv","LsFct","LsObj","Mar","Margins","MeanAD",
+"LOCF","LOF","Logit","LogitInv","LogSt","LogStInv","LsFct","LsObj","Mar","Mgp","Margins","MeanAD",
 "MeanCI","MeanDiffCI","MeanSE","MedianCI","MHChisqTest","Midx","Minute","MixColor","Mode","Month",
 "MosesTest","MoveAvg","MultinomCI","MutInf","Ndec",
 "NemenyiTest","Now","OctToDec","OddsRatio","OPR","OrderMixed","Outlier","Overlap",
@@ -58,7 +58,7 @@ export(
 "Pal", "Shade", "StrExtract", "Arrow", "Asp", "PlotLog", "axTicks.Date", "LineToUser",
 "PseudoR2", "MAE","MSE","RMSE","MAPE","SMAPE","NMSE","NMAE", "BrierScore", "Unwhich",
 "Fmt", "as.fmt", "ModSummary", "TMod", "VIF", "StdCoef", "PartialSD", "HosmerLemeshowTest", "Cstat", "GeomTrans",
-"PlotDev","%^%", "TitleRect","BarText","as.CDateFmt", "Phrase", "N", "BootCI", "VonNeumannTest",
+"%^%", "TitleRect","BarText","as.CDateFmt", "Phrase", "N", "BootCI", "VonNeumannTest",
 "Append","ConoverTest",
 
 "%()%","%(]%","%)(%","%)[%","%[)%","%[]%","%](%","%][%","TTestA",
@@ -73,7 +73,7 @@ export(
 "NPV","NPVFixBond","YTM","PMT","IPMT","PPMT","SLN","DB","SYD","RBAL","Sample","DoBy",
 "Dot","Cross","CrossN", "Divisors", "createCOMReference","StrSpell", "WithOptions", "SaveAs", "XLSaveAs","Quot", "CompleteColumns",
 "SendOutlookMail", "MultMerge", "ToWrdB", "ToWrdPlot", "WrdBookmark","WrdOpenFile",
-"CmToPts", "PtsToCm"
+"CmToPts", "PtsToCm","PlotPairs", "IQRw"
 )
 
 
@@ -326,6 +326,8 @@ S3method(OddsRatio, glm)
 S3method(OddsRatio, zeroinfl)
 S3method(OddsRatio, multinom)
 
+S3method(ToXL, table)
+S3method(ToXL, array)
 S3method(ToXL, matrix)
 S3method(ToXL, data.frame)
 S3method(ToXL, default)

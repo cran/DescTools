@@ -1,4 +1,49 @@
 
+DescTools 0.99.31 (2019-12-21)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+  * WrdUpdateFields() can be used to update fields in a Word document.
+  * Mgp() does the same for axis title, labels and line as Mar() does
+    for the margins.
+  * PlotPairs() is a more specific pairs() variant. 
+  * IQRw() supports weights for calculating the interquartile range.
+
+UPDATED FUNCTIONS:
+  * ToXL() uses a faster create function for XL column names. 
+  * ToXL() will use a more elaborated export for tables, matrices and arrays.
+  * GetNewWrd() will insert a title at the bookmark "Main" in the document.
+  * CramerV() and TschuprowT() get a bias correction option.
+  * Recycle uses an optimised "getmaxdim" logic (thanks to moodymudskipper 
+    for the suggestion).
+  * Mode() gets a more elaborated interface and returns all modes if there
+    are several.
+  * SetNames() will recycle provided names and supports abbreviations.    
+
+BUGFIXES:
+  * ToWrd() for characters works again after an error crept into v. 0.99.30
+    (due to insufficient testing).
+  * TTestA() did not exclude the paired option, which should have been the case.
+    (Credits to Vilmantas Gegzna)
+  * Dummy() will always return a matrix instead of dropping dimensions which 
+    have only one level. (Credits to Daniel Wollschlaeger)
+  * XLGetrange() will not refuse to import areas with XLErrors now, cell formatted
+    as dates will be recognised and empty areas will not cause an error 
+    anymore.
+  * MedianCI will now correctly use conf.level for method="exact" and also
+    return the realised conf.level. 
+  * Corrected predict call for vglm in PseudoR2. (Thnks to Danie Wollschlaeger)    
+ 
+
+DEPRECATED:
+  * PlotDev() X was both a desperate and unsuccessful attempt to rid the analysis
+    code of superfluous technical reporting code. The new approach uses meta-code
+    together with ToWrdWithBookmark(), which does not require any changes to 
+    the original code. As a result, PlotDev() has been removed.
+  
+  
+  
+
 DescTools 0.99.30 (2019-10-21)
 ------------------------------
 
@@ -13,7 +58,8 @@ NEW FUNCTIONS ADDED:
   * CmToPts() and PtsToCm() convert between centimeters and points.
 
 UPDATED FUNCTIONS:
-  * Mode() gets a real fast Rcpp implementation. (Credits to Ralf Stubner)
+  * Mode() gets a real fast Rcpp implementation. (Credits to Ralf Stubner 
+    and Joseph Wood)
   * Desc.numeric() will notify when the mode has higher frequency than 5%
     (which is likely to be remarkable within a numeric variable).
 

@@ -41,6 +41,10 @@ fastMode <- function(x, narm = FALSE) {
     .Call(`_DescTools_fastMode`, x, narm)
 }
 
+fastModeX <- function(x, narm = FALSE) {
+    .Call(`_DescTools_fastModeX`, x, narm)
+}
+
 dgompertz_work <- function(x, shape, rate, log) {
     .Call(`_DescTools_dgompertz_work`, x, shape, rate, log)
 }
