@@ -1,8 +1,8 @@
 Package: DescTools
 Type: Package
 Title: Tools for Descriptive Statistics
-Version: 0.99.31
-Date: 2019-12-01
+Version: 0.99.32
+Date: 2020-01-17
 Authors@R: c(
   person("Andri", "Signorell", email = "andri@signorell.net", role = c("aut", "cre")),
   person("Ken"           , "Aho",                 role = c("ctb")),
@@ -98,6 +98,7 @@ Authors@R: c(
   person("Matthias"      , "Templ",               role = c("ctb")),
   person("Terry"         , "Therneau",            role = c("ctb")),
   person("Yves"          , "Tille",               role = c("ctb")),
+  person("Luis"          , "Torgo",               role = c("ctb")),
   person("Adrian"        , "Trapletti",           role = c("ctb")),
   person("Joshua"        , "Ulrich",              role = c("ctb")),
   person("Kevin"         , "Ushey",               role = c("ctb")),
@@ -117,7 +118,7 @@ Authors@R: c(
  )
 Description: A collection of miscellaneous basic statistic functions and convenience wrappers for efficiently describing data. The author's intention was to create a toolbox, which facilitates the (notoriously time consuming) first descriptive tasks in data analysis, consisting of calculating descriptive statistics, drawing graphical summaries and reporting the results. The package contains furthermore functions to produce documents using MS Word (or PowerPoint) and functions to import data from Excel. Many of the included functions can be found scattered in other packages and other sources written partly by Titans of R. The reason for collecting them here, was primarily to have them consolidated in ONE instead of dozens of packages (which themselves might depend on other packages which are not needed at all), and to provide a common and consistent interface as far as function and arguments naming, NA handling, recycling rules etc. are concerned. Google style guides were used as naming rules (in absence of convincing alternatives). The 'camel style' was consequently applied to functions borrowed from contributed R packages as well.
 Suggests: RDCOMClient, tcltk, VGAM
-Depends: base, stats, R (>= 3.5.0)
+Depends: base, stats, R (>= 3.6.0)
 Imports: graphics, grDevices, methods, MASS, utils, boot, mvtnorm,
         expm, Rcpp (>= 0.12.10)
 LinkingTo: Rcpp, BH
@@ -131,7 +132,7 @@ SystemRequirements: C++11
 RoxygenNote: 6.1.1
 Encoding: UTF-8
 NeedsCompilation: yes
-Packaged: 2019-12-01 22:53:54 UTC; andri
+Packaged: 2020-01-17 07:12:20 UTC; andri
 Author: Andri Signorell [aut, cre],
   Ken Aho [ctb],
   Andreas Alfons [ctb],
@@ -226,6 +227,7 @@ Author: Andri Signorell [aut, cre],
   Matthias Templ [ctb],
   Terry Therneau [ctb],
   Yves Tille [ctb],
+  Luis Torgo [ctb],
   Adrian Trapletti [ctb],
   Joshua Ulrich [ctb],
   Kevin Ushey [ctb],
@@ -244,4 +246,4 @@ Author: Andri Signorell [aut, cre],
   Achim Zeileis [ctb]
 Maintainer: Andri Signorell <andri@signorell.net>
 Repository: CRAN
-Date/Publication: 2019-12-02 09:20:09 UTC
+Date/Publication: 2020-01-17 12:00:10 UTC

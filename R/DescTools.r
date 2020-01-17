@@ -1938,8 +1938,12 @@ AscToChar <- function(i) {
 
 }
 
-HexToDec <- function(x) strtoi(x, 16L)
-# example: strtoi(c("9A", "3B"), 16L)
+
+HexToDec <- function(x) 
+  # strip potential # from a string x
+  strtoi(gsub("^#", "", x), 16L)
+  # example: strtoi(c("9A", "3B"), 16L)
+
 DecToHex <- function(x) as.hexmode(as.numeric(x))
 
 OctToDec <- function(x) strtoi(x, 8L)
@@ -2180,6 +2184,9 @@ DoCall <- function (what, args, quote = FALSE, envir = parent.frame())  {
 MultMerge <- function(..., all.x=TRUE, all.y=TRUE) {
   
   lst <- list(...)
+  
+  # if just one object, there's nothing to merge
+  if(length(lst)==1)  return(lst[[1]])
   
   # the columnnames must be unique within the resulting data.frame
   unames <- SplitAt(make.unique(unlist(lapply(lst, colnames)), sep = "."), 
@@ -4872,7 +4879,7 @@ Format.default <- function(x, digits = NULL, sci = NULL
       fixp <- (expo >= -3)
       
       if (any(fixp))
-        rr[fixp] <- format(x[fixp], digits=Coalesce(digits[1], 4))
+        rr[fixp] <- Format(x[fixp], digits=Coalesce(digits[1], 4))
       
       if (any(!fixp))
         rr[!fixp] <- format(x[!fixp], digits=Coalesce(digits[2], 3), scientific=TRUE)
@@ -4899,7 +4906,7 @@ Format.default <- function(x, digits = NULL, sci = NULL
 
   }
 
-  .format.pstars <- function(x)
+  .format.pstars <- function(x, eps, digits)
     paste(.format.pval(x, eps, digits), .format.stars(x))
 
   .leading.zero <- function(x, n){
@@ -5051,7 +5058,7 @@ Format.default <- function(x, digits = NULL, sci = NULL
     r <- .format.pval(x, eps, digits)
 
   } else if(fmt=="p*"){
-    r <- .format.pstars(x)
+    r <- .format.pstars(x, eps, digits)
 
   } else if(fmt=="eng"){
     r <- .format.eng(x, digits=digits, leading=leading, zero.form=zero.form, na.form=na.form)
@@ -6414,13 +6421,16 @@ Append.matrix <- function(x, values, after = NULL, rows=FALSE, names=NULL, ...){
       if(class(err) == "try-error")
         warning("Could not set rownames.")
     }
+    
     if(!after)
       res <- rbind(values, x)
-    else
-    if(after >= nr)
+    
+    else if(after >= nr)
       res <- rbind(x, values)
+    
     else
       res <- rbind(x[1L:after,, drop=FALSE], values, x[(after+1L):nr,, drop=FALSE])
+    
     colnames(res) <- colnames(x)
 
   } else {
@@ -6429,15 +6439,19 @@ Append.matrix <- function(x, values, after = NULL, rows=FALSE, names=NULL, ...){
     if(missing(after)) after <- nc
 
     values <- matrix(values, nrow=nrow(x))
+    
     if(!is.null(names))
       colnames(values) <- names
+    
     if(!after)
       res <- cbind(values, x)
-    else
-    if(after >= nc)
+    
+    else if(after >= nc)
       res <- cbind(x, values)
+    
     else
       res <- cbind(x[, 1L:after, drop=FALSE], values, x[, (after+1L):nc, drop=FALSE])
+    
     rownames(res) <- rownames(x)
 
   }
@@ -6798,9 +6812,13 @@ Untable.data.frame <- function(x, freq = "Freq", rownames = NULL, ...){
 Untable.default <- function(x, dimnames=NULL, type = NULL, rownames = NULL, colnames = NULL, ...) {
 
   # recreates the data.frame out of a contingency table
-
+  # check fo NAs
+  if(anyNA(x))
+    warning("Provided object to untable contains NAs.")
+  
   # coerce to table, such as also be able to handle vectors
-  x <- as.table(x)
+  x <- as.table(ZeroIfNA(x))
+  
   if(!is.null(dimnames)) dimnames(x) <- dimnames
   if(is.null(dimnames) && identical(type, "as.numeric")) dimnames(x) <- list(seq_along(x))
   # set a title for the table if it does not have one
@@ -6835,6 +6853,7 @@ Untable.default <- function(x, dimnames=NULL, type = NULL, rownames = NULL, coln
   if(!is.null(colnames)) colnames(res) <- colnames
 
   return(res)
+  
 }
 
 
@@ -8553,6 +8572,9 @@ HexToRgb <- function(hex) {
   # )))
 
   hex <- gsub("^#", "", hex)
+  if(all(is.na(hex)))
+    return(matrix(NA, nrow=3, ncol=length(hex)))
+  
   # if there are any RRGGBBAA values mixed with RRGGBB then pad FF (for opaque) on RGBs
   if(any(nchar(hex)==8)){
     hex <- DescTools::StrPad(x = hex, width = 8, pad = "FF")
@@ -8560,15 +8582,65 @@ HexToRgb <- function(hex) {
   } else {
     i <- 3
   }
-  c2 <- sapply(hex, function(x) c(strtoi(substr(x,1,2), 16L),
-                                  strtoi(substr(x,3,4), 16L),
-                                  strtoi(substr(x,5,6), 16L),
-                                  strtoi(substr(x,7,8), 16L))
+  c2 <- sapply(hex, function(x) c(red=   strtoi(substr(x,1,2), 16L),
+                                  green= strtoi(substr(x,3,4), 16L),
+                                  blue=  strtoi(substr(x,5,6), 16L),
+                                  alpha= strtoi(substr(x,7,8), 16L))
                )
-
-  return(c2[1:i,])
+  
+  res <- cbind(c2[1:i,])
+  if(dim(res)[2]==1)
+    colnames(res) <- hex
+  
+  return(res)
 
 }
+
+
+RgbToHex <- function(col){
+  paste0("#", paste0(DecToHex(round(col)), collapse=""))
+}
+
+
+ColToOpaque <- function(col, alpha=NULL, bg=NULL){
+  
+  # col is Hex color, alpha is numeric from 0..1
+  
+  # https://graphicdesign.stackexchange.com/questions/113007/how-to-determine-the-equivalent-opaque-rgb-color-for-a-given-partially-transpare
+  # round(255 - alpha * (255-ColToRgb(col)))
+  if(is.null(bg))
+    bg <- ColToRgb("white")
+  
+  if(is.null(alpha)){
+    # try to get the alpha channel from the color
+    # this generates an incomprehensible error message, if there's no 4th dim:
+    # Error in sapply(col, HexToRgb)[4, ] : subscript out of bounds
+    alpha <- sapply(col, HexToRgb)[4,] / 255
+    
+  } else {
+    alpha[na <- alpha %][% c(0, 1)] <- NA
+  }
+  
+  # recycle col and alpha
+  lst <- Recycle(rgb=lapply(col, HexToRgb), alpha=alpha)
+  
+  
+  # algorithm:    res <- round(bg - alpha * (bg - col))
+  
+  res <- SetNames(
+    sapply(1:attr(lst, "maxdim"), function(i)
+      # discard any alpha channel by only using rows 1:3
+      round(bg - lst[["alpha"]][[i]] * (bg - lst[["rgb"]][[i]][1:3, ]))),
+    colnames = paste0(lapply(lst[["rgb"]], function(z) RgbToHex(z[1:3, ])), 
+                      DecToHex(round(lst[["alpha"]] * 255))) 
+  )
+  
+  res <- apply(res, 2, RgbToHex)
+  
+  return(res)
+  
+}
+
 
 
 
@@ -8634,7 +8706,7 @@ RgbToLong <- function(col) (c(1, 256, 256^2) %*% col)[1,]
 # example:  RgbToLong(ColToRgb(c("green", "limegreen")))
 
 LongToRgb <- function(col)
-  sapply(col, function(x) c(x %% 256, (x %/% 256) %% 256, (x %/% 256^2) %% 256))
+  sapply(col, function(x) c(red=x %% 256, green=(x %/% 256) %% 256, blue=(x %/% 256^2) %% 256))
 
 
 # if ever needed...
@@ -8741,8 +8813,10 @@ FindColor <- function(x, cols=rev(heat.colors(100)), min.x=NULL, max.x=NULL,
 SetAlpha <- function(col, alpha=0.5) {
 
   if (length(alpha) < length(col)) alpha <- rep(alpha, length.out = length(col))
+  alpha[na <- alpha %][% c(0, 1)] <- NA
   if (length(col) < length(alpha)) col <- rep(col, length.out = length(alpha))
-
+  col[na] <- NA
+  
   acol <- substr(ColToHex(col), 1, 7)
   acol[!is.na(alpha)] <- paste(acol[!is.na(alpha)], DecToHex(round(alpha[!is.na(alpha)]*255,0)), sep="")
   acol[is.na(col)] <- NA
@@ -10534,6 +10608,8 @@ PlotViolin.default <- function (x, ..., horizontal = FALSE, bw = "SJ", na.rm = F
   oldpar <- par(pars); on.exit(par(oldpar))
 
   args <- list(x, ...)
+ #  args <- list(x, m$`...`)
+  
   namedargs <- if (!is.null(attributes(args)$names))
                  attributes(args)$names != ""
                else
@@ -12026,7 +12102,8 @@ PlotQQ <- function(x, qdist=qnorm, main=NULL, xlab=NULL, ylab=NULL, datax=FALSE,
 
 
 
-PlotPairs <- function(x, g=NULL, col=1, pch=19, col.smooth=1, main="", ...){
+PlotPairs <- function(x, g=NULL, col=1, pch=19, col.smooth=1, main="", 
+                      upper=FALSE, ...){
   
 
   # PlotPairs(x=ModTools::d.pima2[, -9], g=ModTools::d.pima2$diabetes, col=DescTools::SetAlpha(c(hred, hblue), 0.5), 
@@ -12071,12 +12148,23 @@ PlotPairs <- function(x, g=NULL, col=1, pch=19, col.smooth=1, main="", ...){
   }
   
   
-  pairs(x, upper.panel=panel.cor,
-        main=main, 
-        pch=pch, col=col[g], cex=0.9, 
-        diag.panel=panel.hist,
-        panel = function(...) 
-          panel.smooth(col.smooth=col.smooth, g=g, lwd=2, ...) )
+  if(upper){
+    
+    pairs(x, upper.panel=panel.cor,
+          main=main, 
+          pch=pch, col=col[g], cex=0.9, 
+          diag.panel=panel.hist,
+          panel = function(...) 
+            panel.smooth(col.smooth=col.smooth, g=g, lwd=2, ...) )
+  } else {
+    pairs(x, lower.panel=panel.cor,
+          main=main, 
+          pch=pch, col=col[g], cex=0.9, 
+          diag.panel=panel.hist,
+          panel = function(...) 
+            panel.smooth(col.smooth=col.smooth, g=g, lwd=2, ...) )
+    
+  }
   
 
 }
@@ -12172,7 +12260,7 @@ TOne <- function(x, grp = NA, add.length=TRUE,
 
   cat_mat <- function(x, g, vname=deparse(substitute(x))){
 
-    if(class(x)=="character")
+    if(inherits(x, "character"))
       x <- factor(x)
 
     tab <- table(x, g)
@@ -13198,13 +13286,13 @@ ToWrd.table <- function (x, font = NULL, main = NULL, align=NULL, tablestyle=NUL
   # http://www.thedoctools.com/downloads/DocTools_List_Of_Built-in_Style_English_Danish_German_French.pdf
   if(is.null(tablestyle)){
     WrdTableBorders(wrdTable, from=c(1,1), to=c(1, nc),
-                    border = wdConst$wdBorderTop, wrd=wrd)
+                    border = wdConst$wdBorderTop)
     if(col.names)
       WrdTableBorders(wrdTable, from=c(1,1), to=c(1, nc),
-                    border = wdConst$wdBorderBottom, wrd=wrd)
+                    border = wdConst$wdBorderBottom)
 
     WrdTableBorders(wrdTable, from=c(nr, 1), to=c(nr, nc),
-                    border = wdConst$wdBorderBottom, wrd=wrd)
+                    border = wdConst$wdBorderBottom)
 
     space <- RoundTo((if(is.null(font$size)) WrdFont(wrd)$size else font$size) * .2, multiple = .5)
     wrdTable$Rows(1)$Select()
@@ -13277,7 +13365,7 @@ ToWrd.table <- function (x, font = NULL, main = NULL, align=NULL, tablestyle=NUL
 
 WrdTableBorders <- function (wtab, from = NULL, to = NULL, border = NULL,
                               lty = wdConst$wdLineStyleSingle, col=wdConst$wdColorBlack,
-                              lwd = wdConst$wdLineWidth050pt, wrd) {
+                              lwd = wdConst$wdLineWidth050pt) {
   # paint borders of a table
 
   if(is.null(from))
@@ -13286,6 +13374,7 @@ WrdTableBorders <- function (wtab, from = NULL, to = NULL, border = NULL,
   if(is.null(to))
     to <- c(wtab[["Rows"]]$Count(), wtab[["Columns"]]$Count())
 
+  wrd <- wtab[["Application"]]
   rng <- wrd[["ActiveDocument"]]$Range(start=wtab$Cell(from[1], from[2])[["Range"]][["Start"]],
                                        end=wtab$Cell(to[1], to[2])[["Range"]][["End"]])
 
@@ -13311,11 +13400,11 @@ WrdTableBorders <- function (wtab, from = NULL, to = NULL, border = NULL,
 
 
 
-WrdCellRange <- function(wtab, rstart, rend) {
+WrdCellRange <- function(wtab, from, to) {
   # returns a handle for the table range
   wtrange <- wtab[["Parent"]]$Range(
-    wtab$Cell(rstart[1], rstart[2])[["Range"]][["Start"]],
-    wtab$Cell(rend[1], rend[2])[["Range"]][["End"]]
+    wtab$Cell(from[1], from[2])[["Range"]][["Start"]],
+    wtab$Cell(to[1], to[2])[["Range"]][["End"]]
   )
 
   return(wtrange)
@@ -14118,7 +14207,7 @@ XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "", preserveStr
 
   if(!missing(x)){
 
-    if(class(x) == "ftable"){
+    if(inherits(x, what = "ftable")){
       x <- FixToTable(capture.output(x), sep = " ", header = FALSE)
       col.names <- FALSE
     }

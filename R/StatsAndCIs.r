@@ -3834,20 +3834,20 @@ CramerV <- function(x, y = NULL, conf.level = NA,
   lochi <- function(chival, df, conf) {
     ulim <- 1 - (1-conf)/2
     #  This first part finds a lower value from which to start.
-    lc <- c(.001,chival/2,chival)
-    while(pchisq(chival,df,lc[1])<ulim) {
-      if(pchisq(chival,df)<ulim)
-        return(c(0,pchisq(chival,df)))
-      lc <- c(lc[1]/4,lc[1],lc[3])
+    lc <- c(.001, chival/2, chival)
+    while(pchisq(chival, df, lc[1]) < ulim) {
+      if(pchisq(chival, df) < ulim)
+        return(c(0, pchisq(chival, df)))
+      lc <- c(lc[1]/4, lc[1], lc[3])
     }
     #	This next part finds the lower limit for the ncp.
     diff <- 1
     while(diff > .00001) {
       if(pchisq(chival, df, lc[2]) < ulim)
-        lc <- c(lc[1],(lc[1]+lc[2])/2,lc[2])
-      else lc <- c(lc[2],(lc[2]+lc[3])/2,lc[3])
-      diff <- abs(pchisq(chival,df,lc[2]) - ulim)
-      ucdf <- pchisq(chival,df,lc[2])
+        lc <- c(lc[1],(lc[1]+lc[2])/2, lc[2])
+      else lc <- c(lc[2], (lc[2]+lc[3])/2, lc[3])
+      diff <- abs(pchisq(chival, df, lc[2]) - ulim)
+      ucdf <- pchisq(chival, df, lc[2])
     }
     c(lc[2], ucdf)
   }
@@ -3865,11 +3865,11 @@ CramerV <- function(x, y = NULL, conf.level = NA,
     #	This next part finds the upper limit for the ncp.
     diff <- 1
     while(diff > .00001) {
-      if(pchisq(chival,df,uc[2]) < llim)
-        uc <- c(uc[1],(uc[1]+uc[2])/2,uc[2])
-      else uc <- c(uc[2],(uc[2]+uc[3])/2,uc[3])
-      diff <- abs(pchisq(chival,df,uc[2]) - llim)
-      lcdf <- pchisq(chival,df,uc[2])
+      if(pchisq(chival, df, uc[2]) < llim)
+        uc <- c(uc[1], (uc[1] + uc[2]) / 2, uc[2])
+      else uc <- c(uc[2], (uc[2] + uc[3]) / 2, uc[3])
+      diff <- abs(pchisq(chival, df, uc[2]) - llim)
+      lcdf <- pchisq(chival, df, uc[2])
     }
     c(uc[2], lcdf)
   }
@@ -3891,12 +3891,13 @@ CramerV <- function(x, y = NULL, conf.level = NA,
   
   if(correct){
   
-    # Bergsma, W, A bias-correction for Cramér's V and Tschuprow's T
+    # Bergsma, W, A bias-correction for Cramer's V and Tschuprow's T
     # September 2013Journal of the Korean Statistical Society 42(3)
     # DOI: 10.1016/j.jkss.2012.10.002
-    v <- sqrt(max(0, chisq.hat - df/(n-1)) / 
-                 (n * min(sapply(dim(x), function(i) i - 1 / (n-1) * (i-1)^2) - 1 )))
-  
+    phi.hat <- chisq.hat / n
+    v <- as.numeric(sqrt(max(0, phi.hat - df/(n-1)) / 
+           (min(sapply(dim(x), function(i) i - 1 / (n-1) * (i-1)^2) - 1))))
+
   } else {
     v <- as.numeric(sqrt(chisq.hat/(n * (min(dim(x)) - 1))))
   }
@@ -3993,8 +3994,14 @@ TschuprowT <- function(x, y = NULL, correct = FALSE, ...){
   df <- prod(dim(x)-1)
   
   if(correct) {
-    as.numeric( sqrt(max(0, chisq.hat - df/(n-1)) / 
-                (n * min(sapply(dim(x), function(i) i - 1 / (n-1) * (i-1)^2) - 1 ))))
+    # Bergsma, W, A bias-correction for Cramer's V and Tschuprow's T
+    # September 2013Journal of the Korean Statistical Society 42(3)
+    # DOI: 10.1016/j.jkss.2012.10.002
+    # see also CramerV
+    
+    phi.hat <- chisq.hat / n
+    as.numeric(sqrt(max(0, phi.hat - df/(n-1)) / 
+                     (sqrt(prod(sapply(dim(x), function(i) i - 1 / (n-1) * (i-1)^2) - 1)))))
     
   } else {
     as.numeric( sqrt(chisq.hat/(n * sqrt(df))))
@@ -5057,9 +5064,18 @@ OddsRatio.glm <- function(x, conf.level = NULL, digits=3, use.profile=TRUE, ...)
   rownames(d.print) <- rownames(d.res)
   colnames(d.print)[4:5] <- c("Pr(>|z|)","")
 
+  
+  mterms <- {
+    res <- lapply(labels(terms(x)), function(y) 
+      colnames(model.matrix(formula(gettextf("~ 0 + %s", y)), data=model.frame(x))))
+    names(res) <- labels(terms(x))
+    res
+  } 
+  
+  
   res <- list(or=d.print, call=x$call,
               BrierScore=BrierScore(x), PseudoR2=PseudoR2(x, which="all"), res=d.res,
-              nobs=nobs(x))
+              nobs=nobs(x), terms=mterms)
 
   class(res) <- "OddsRatio"
 
@@ -5083,8 +5099,15 @@ OddsRatio.multinom <- function(x, conf.level=NULL, digits=3, ...) {
   se <- reshape(data.frame(se), varying=1:ncol(se),
                 times=colnames(se), v.names="se", direction="long")[, "se"]
 
-  d.res <- r.summary
-
+  # d.res <- r.summary
+  d.res <- data.frame(
+    "or"= exp(coe[, "or"]),
+    "or.lci" = exp(coe[, "or"] + qnorm(0.025) * se),
+    "or.uci" = exp(coe[, "or"] - qnorm(0.025) * se),
+    "pval" = 2*(1-pnorm(q = abs(coe[, "or"]/se), mean=0, sd=1)),
+    "sig" = 2*(1-pnorm(q = abs(coe[, "or"]/se), mean=0, sd=1))
+  )
+  
   d.print <- data.frame(
     "or"= Format(exp(coe[, "or"]), digits=digits),
     "or.lci" = Format(exp(coe[, "or"] + qnorm(0.025) * se), digits=digits),
@@ -5096,6 +5119,8 @@ OddsRatio.multinom <- function(x, conf.level=NULL, digits=3, ...) {
 
   colnames(d.print)[4:5] <- c("Pr(>|z|)","")
   rownames(d.print) <- paste(coe$time, coe$id, sep=":")
+  
+  rownames(d.res) <- rownames(d.print)
 
   res <- list(or = d.print, call = x$call,
               BrierScore = NA, # BrierScore(x),
@@ -5158,11 +5183,12 @@ print.OddsRatio <- function(x, ...){
 
 
 
-plot.OddsRatio <- function(x, intercept=FALSE, ...){
+plot.OddsRatio <- function(x, intercept=FALSE, group=NULL, subset = NULL, ...){
 
   if(!intercept)
-    x$res <- x$res[rownames(x$res)!="(Intercept)", ]
-
+    # x$res <- x$res[rownames(x$res)!="(Intercept)", ]
+    x$res <- x$res[!grepl("(Intercept)", rownames(x$res)), ]
+  
   args <- list(...)
 
   # here the defaults
