@@ -3095,6 +3095,42 @@ Weekday <- function (x, fmt = c("d", "dd", "ddd"), lang = DescToolsOptions("lang
 }
 
 
+
+CountWorkDays <- function(from, to, 
+                     holiday=NULL, nonworkdays=c("Sat","Sun")) {
+  
+  
+  .workDays <- function(from, to, 
+                        holiday=NULL, nonworkdays=c("Sat","Sun")) {
+    d <- as.integer(to - from)
+    w <- (d %/% 7)
+    
+    res <- w * (7-length(nonworkdays)) + 
+      sum(Weekday(seq(from + w*7,  to, 1), fmt="dd", lang="engl") %nin% nonworkdays)
+    
+    if(!is.null(holiday)){
+      # count holidays in period
+      h <- holiday[holiday %[]% c(from, to)]
+      res <- res - sum(Weekday(h, fmt="dd", lang="engl") %nin% nonworkdays)
+    }
+    
+    return(res)
+    
+  }
+  
+  
+  ll <- Recycle(from=from, to=to)  
+  
+  res <- integer(attr(ll, "maxdim"))
+  for(i in 1:attr(ll, "maxdim"))
+    res[i] <- .workDays(ll$from[i], ll$to[i], holiday=holiday, nonworkdays=nonworkdays) 
+  
+  return(res)
+  
+}
+
+
+
 Quarter <- function (x) {
   # Berechnet das Quartal eines Datums
   # y <- as.numeric( format( x, "%Y") )
@@ -3712,6 +3748,13 @@ Overlap <- function(x, y){
 
   unname(d)
 
+}
+
+
+AllIdentical <- function(...){
+  lst <- list(...)
+  all(sapply(lst[-1], identical, lst[[1]]))
+  # identical ought to be transitive, so if A is identical to C and to D, then C should be identical to D
 }
 
 
@@ -4859,15 +4902,15 @@ as.CDateFmt <- function(fmt) {
 
 
 Format.default <- function(x, digits = NULL, sci = NULL
-                   , big.mark = NULL, leading = NULL
-                   , zero.form = NULL, na.form = NULL
-                   , fmt = NULL, align = NULL, width = NULL, lang = NULL,  eps = .Machine$double.eps, ...){
-
-
+                           , big.mark = NULL, leading = NULL
+                           , zero.form = NULL, na.form = NULL
+                           , fmt = NULL, align = NULL, width = NULL, lang = NULL,  eps = .Machine$double.eps, ...){
+  
+  
   .format.pval <- function(x, eps, digits=NULL){
     # format p-values  *********************************************************
     # this is based on original code from format.pval
-
+    
     if(is.null(digits))
       digits <- NA
     digits <- rep(digits, length.out=3)
@@ -4889,26 +4932,26 @@ Format.default <- function(x, digits = NULL, sci = NULL
     if (any(is0)) {
       r[is0] <- gettextf("< %s", format(eps, digits = Coalesce(digits[3], 2)))
     }
-
+    
     return(r)
-
+    
   }
-
+  
   .format.stars <- function(x){
     # format significance stars  ***************************************************
     # example: Format(c(0.3, 0.08, 0.042, 0.001), fmt="*")
-
+    
     breaks <- c(0,0.001,0.01,0.05,0.1,1)
     labels <- c("***","** ","*  ",".  ","   ")
     res <- as.character(sapply(x, cut, breaks=breaks, labels=labels, include.lowest=TRUE))
-
+    
     return(res)
-
+    
   }
-
+  
   .format.pstars <- function(x, eps, digits)
     paste(.format.pval(x, eps, digits), .format.stars(x))
-
+  
   .leading.zero <- function(x, n){
     # just add a given number of leading zeros
     # split at the .
@@ -4919,18 +4962,18 @@ Format.default <- function(x, digits = NULL, sci = NULL
     # right side
     zr <- sapply(z, "[", 2)
     zr <- ifelse(is.na(zr), "", paste(".", zr, sep=""))
-
+    
     paste(zl, zr, sep="")
-
+    
   }
-
+  
   .format.eng <- function(x, digits = NULL, leading = NULL
                           , zero.form = NULL, na.form = NULL){
-
+    
     s <- lapply(strsplit(format(x, scientific=TRUE), "e"), as.numeric)
     y <- unlist(lapply(s, "[[", 1))
     pwr <- unlist(lapply(s, "[", 2))
-
+    
     return(paste(Format(y * 10^(pwr %% 3), digits=digits, leading=leading,
                         zero.form = zero.form, na.form=na.form)
                  , "e"
@@ -4938,53 +4981,53 @@ Format.default <- function(x, digits = NULL, sci = NULL
                  , Format(abs((pwr - (pwr %% 3))), leading = "00", digits=0)
                  , sep="")
     )
-
+    
   }
-
+  
   .format.engabb <- function(x, digits = NULL, leading = NULL
-                          , zero.form = NULL, na.form = NULL){
-
+                             , zero.form = NULL, na.form = NULL){
+    
     s <- lapply(strsplit(format(x, scientific=TRUE), "e"), as.numeric)
     y <- unlist(lapply(s, "[[", 1))
     pwr <- unlist(lapply(s, "[", 2))
-
+    
     a <- paste("1e"
                , c("-","+")[(pwr >= 0) + 1]
                , Format(abs((pwr - (pwr %% 3))), leading = "00", digits=0)
                , sep="")
     am <- d.prefix$abbr[match(as.numeric(a), d.prefix$mult)]
-
+    
     a[!is.na(am)] <- am[!is.na(am)]
     a[a == "1e+00"] <- ""
-
+    
     return(paste(Format(y * 10^(pwr %% 3), digits=digits, leading=leading,
                         zero.form = zero.form, na.form=na.form)
                  , " " , a
                  , sep="")
     )
-
+    
   }
-
-#   We accept here a fmt class to be used as user templates
-#   example:
-#
-#   fmt.int <- structure(list(
-#     digits = 5, sci = getOption("scipen"), big.mark = "",
-#     leading = NULL, zero.form = NULL, na.form = NULL,
-#     align = "left", width = NULL, txt="(%s), %s - CHF"), class="fmt"
-#   )
-#
-#   Format(7845, fmt=fmt.int)
-
-
-
+  
+  #   We accept here a fmt class to be used as user templates
+  #   example:
+  #
+  #   fmt.int <- structure(list(
+  #     digits = 5, sci = getOption("scipen"), big.mark = "",
+  #     leading = NULL, zero.form = NULL, na.form = NULL,
+  #     align = "left", width = NULL, txt="(%s), %s - CHF"), class="fmt"
+  #   )
+  #
+  #   Format(7845, fmt=fmt.int)
+  
+  
+  
   if(is.null(fmt)) fmt <- ""
   if(class(fmt) == "fmt") {
-
+    
     # we want to offer the user the option to overrun format definitions
     # consequence is, that all defaults of the function must be set to NULL
     # as we cannot distinguish between defaults and user sets else
-
+    
     if(!is.null(digits))    fmt$digits <- digits
     if(!is.null(sci))       fmt$sci <- sci
     if(!is.null(big.mark))  fmt$big.mark <- big.mark
@@ -4995,15 +5038,15 @@ Format.default <- function(x, digits = NULL, sci = NULL
     if(!is.null(width))     fmt$sci <- width
     if(!is.null(lang))      fmt$lang <- lang
     fmt$eps <- eps
-
+    
     return(do.call(Format, c(fmt, x=list(x))))
   }
-
+  
   # The defined decimal character:
   # getOption("OutDec")
-
+  
   # replaced by 0.99.26: this was not a good default, sci is easy to set
-
+  
   # # set the defaults, if user says nothing
   # if(is.null(sci))
   #   if(is.null(digits)){
@@ -5012,148 +5055,148 @@ Format.default <- function(x, digits = NULL, sci = NULL
   #   } else {
   #     sci <- Inf
   #   }
-
+  
   # if sci is not set at all, the default will be 0, which leads to all numbers being
   # presented as scientific - this is definitely nonsense...
   if(is.null(sci))
     sci <- Coalesce(NAIfZero(getOption("scipen")), 7) # default
   
   sci <- rep(sci, length.out=2)
-
+  
   if(is.null(big.mark)) big.mark <- ""
-
-
+  
+  
   if(is.null(na.form)) na.form <- NA_real_
-
+  
   # store index of missing values in ina
   if ((has.na <- any(ina <- is.na(x))))
     x <- x[!ina]
-
-
+  
+  
   if(is.function(fmt)){
-
+    
     r <- fmt(x)
-
+    
   } else if(all(class(x) == "Date")) {
-
+    
     # the language is only needed for date formats, so avoid looking up the option
     # for other types
     if(is.null(lang)) lang <- DescToolsOptions("lang")
-
+    
     if(lang=="engl"){
       loc <- Sys.getlocale("LC_TIME")
       Sys.setlocale("LC_TIME", "C")
       on.exit(Sys.setlocale("LC_TIME", loc))
     }
-
+    
     r <- format(x, as.CDateFmt(fmt=fmt))
-
+    
   } else if(all(class(x) %in% c("character","factor","ordered"))) {
     r <- format(x)
-
+    
   } else if(fmt=="*"){
     r <- .format.stars(x)
-
+    
   } else if(fmt=="p"){
     r <- .format.pval(x, eps, digits)
-
+    
   } else if(fmt=="p*"){
     r <- .format.pstars(x, eps, digits)
-
+    
   } else if(fmt=="eng"){
     r <- .format.eng(x, digits=digits, leading=leading, zero.form=zero.form, na.form=na.form)
-
+    
   } else if(fmt=="engabb"){
     r <- .format.engabb(x, digits=digits, leading=leading, zero.form=zero.form, na.form=na.form)
-
+    
   } else if(fmt=="e"){
     r <- formatC(x, digits = digits, width = width, format = "e",
                  big.mark=big.mark, zero.print = zero.form)
-
+    
   } else if(fmt=="%"){
-      # we use 1 digit as default here
-      r <- paste(suppressWarnings(formatC(x * 100,
-                                          digits = ifelse(is.null(digits), 1, digits),
-                                          width = width, format = "f",
-                                          big.mark=big.mark, drop0trailing = FALSE)),
-                 "%", sep="")
-
+    # we use 1 digit as default here
+    r <- paste(suppressWarnings(formatC(x * 100,
+                                        digits = ifelse(is.null(digits), 1, digits),
+                                        width = width, format = "f",
+                                        big.mark=big.mark, drop0trailing = FALSE)),
+               "%", sep="")
+    
   } else if(fmt=="frac"){
-
+    
     r <- as.character(MASS::fractions(x))
-
+    
   } else {  # format else   ********************************************
-
+    
     if(fmt != "")
       warning(gettextf("Non interpretable fmt code will be ignored.", fmt))
-
+    
     if(all(is.na(sci))) {
       # use is.na(sci) to inhibit scientific notation
       r <- formatC(x, digits = digits, width = width, format = "f",
-                     big.mark=big.mark)
+                   big.mark=big.mark)
     } else {
       idx <- (((abs(x) > .Machine$double.eps) & (abs(x) <= 10^-sci[2])) | (abs(x) >= 10^sci[1]))
       r <- as.character(rep(NA, length(x)))
-
+      
       # use which here instead of res[idx], because of NAs
       #   formatC is barking, classes are of no interess here, so suppress warning...
       #   what's that exactly??
       r[which(idx)] <- suppressWarnings(formatC(x[which(idx)], digits = digits, width = width, format = "e",
-                                 big.mark=big.mark, drop0trailing = FALSE))
-
-#     Warning messages:
-#     1: In formatC(x[which(!idx)], digits = digits, width = width, format = "f",  :
-#                       class of 'x' was discarded
-#     formatC is barking, classes are of no interess here, so suppress warning...
+                                                big.mark=big.mark, drop0trailing = FALSE))
+      
+      #     Warning messages:
+      #     1: In formatC(x[which(!idx)], digits = digits, width = width, format = "f",  :
+      #                       class of 'x' was discarded
+      #     formatC is barking, classes are of no interess here, so suppress warning...
       r[which(!idx)] <- suppressWarnings(formatC(x[which(!idx)], digits = digits, width = width, format = "f",
-                                  big.mark=big.mark, drop0trailing = FALSE))
+                                                 big.mark=big.mark, drop0trailing = FALSE))
     }
-
+    
     if(!is.null(leading)){
       # handle leading zeros ------------------------------
       if(leading %in% c("","drop")) {
         # drop leading zeros
         r <- gsub("(?<![0-9])0+\\.", "\\.", r, perl = TRUE)
-
+        
         # alternative:
         # res <- gsub("(-?)[^[:digit:]]0+\\.", "\\.", res)
-
+        
         # old: mind the minus
         # res <- gsub("[^[:digit:]]0+\\.","\\.", res)
-
+        
       } else if(grepl("^[0]*$", leading)){
         # leading contains only zeros, so let's use them as leading zeros
-#         old:
-#         n <- nchar(leading) - unlist(lapply(lapply(strsplit(res, "\\."), "[", 1), nchar))
-
+        #         old:
+        #         n <- nchar(leading) - unlist(lapply(lapply(strsplit(res, "\\."), "[", 1), nchar))
+        
         # old: did not handle - correctly
         # res <- StrPad(res, pad = "0", width=nchar(res) + pmax(n, 0), adj="right")
         r <- .leading.zero(r, nchar(leading))
       }
     }
-
+    
   }
-
+  
   if(!is.null(zero.form))
     r[abs(x) < eps] <- zero.form
-
-
+  
+  
   if (has.na) {
     rok <- r
     r <- character(length(ina))
     r[!ina] <- rok
     r[ina] <- na.form
   }
-
-
+  
+  
   if(!is.null(align)){
     r <- StrAlign(r, sep = align)
   }
-
-
+  
+  
   class(r) <- c("Format", class(r))
   return(r)
-
+  
 }
 
 
@@ -5395,7 +5438,11 @@ Recycle <- function(...){
   # optimization suggestion by moodymudskipper 20.11.2019  
   maxdim <- max(lengths(lst)) # instead of max(unlist(lapply(lst, length)))
   # recycle all params to maxdim
-  res <- lapply(lst, rep_len, length.out=maxdim)
+  # res <- lapply(lst, rep_len, length.out=maxdim)
+  
+  # rep_len would not work for Dates
+  res <- lapply(lst, rep, length.out=maxdim)
+  
   attr(res, "maxdim") <- maxdim
 
   return(res)
@@ -6355,13 +6402,23 @@ ParseSASDatalines <- function(x, env = .GlobalEnv, overwrite = FALSE) {
   if(length(dsname) > 0){ # check if a dataname could be found
     if( overwrite | ! exists(dsname, envir=env) ) {
       assign(dsname, res, envir=env)
+      
+      note <- gettextf("\033[36m\nThe object %s has been added to %s.\n\033[39m" 
+                       , dsname, deparse(substitute(env))) 
+      cat(note)
+      
     } else {
-      cat(gettextf("The file %s already exists in %s. Should it be overwritten? (y/n)\n"
+      cat(gettextf("The object %s already exists in %s. Should it be overwritten? (y/n)\n"
                    , dsname, deparse(substitute(env))))
       ans <- readline()
-      if(ans == "y")
+      if(ans == "y"){
         assign(dsname, res, envir = env)
-
+        
+        note <- gettextf("\033[36m\nThe object %s has been overwritten in %s.\n\033[39m" 
+                         , dsname, deparse(substitute(env))) 
+        cat(note)
+      }
+      
       # stop(gettextf("%s already exists in %s. Use overwrite = TRUE to overwrite it.", dsname, deparse(substitute(env))))
     }
   }
@@ -6372,28 +6429,44 @@ ParseSASDatalines <- function(x, env = .GlobalEnv, overwrite = FALSE) {
 
 
 
-SetNames <- function (x, ...) {
 
+SetNames <- function (x, ...) {
+  
   # see also setNames()
   # args <- match.call(expand.dots = FALSE)$...
   args <- list(...)
   
   # the default when no information is provided
-  if(is.null(names(args)))
+  if (is.null(names(args)))
     names(args) <- "names"
   
   names(args) <- lapply(names(args), match.arg, c("names", "rownames", "colnames"))
   
-  if("colnames" %in% names(args))
-    colnames(x) <- rep_len(args[["colnames"]], dim(x)[2])
-  if("rownames" %in% names(args))
-    rownames(x) <- rep_len(args[["rownames"]], dim(x)[1])
-  if("names" %in% names(args))
-    names(x) <- rep_len(args[["names"]], length(x))
-
+  if ("colnames" %in% names(args)) {
+    if(is.null(args[["colnames"]]))
+      colnames(x) <- NULL
+    else
+      colnames(x) <- rep_len(args[["colnames"]], dim(x)[2])
+  }
+  
+  if ("rownames" %in% names(args)) {
+    if(is.null(args[["rownames"]]))
+      rownames(x) <- NULL
+    else
+      rownames(x) <- rep_len(args[["rownames"]], dim(x)[1])
+  }
+  
+  if ("names" %in% names(args)) {
+    if(is.null(args[["names"]]))
+      names(x) <-NULL
+    else
+      names(x) <- rep_len(args[["names"]], length(x))
+  }
+  
   x
-
 }
+
+
 
 
 
@@ -7084,38 +7157,66 @@ SplitAt <- function(x, pos) {
 
 ###
 
-Mar <- function(bottom=NULL, left=NULL, top=NULL, right=NULL, outer=FALSE){
+Mar <- function(bottom=NULL, left=NULL, top=NULL, right=NULL, outer=FALSE, reset=FALSE){
 
-  if(outer){
-    if(is.null(bottom)) bottom <- par("oma")[1]
-    if(is.null(left)) left <- par("oma")[2]
-    if(is.null(top)) top <- par("oma")[3]
-    if(is.null(right)) right <- par("oma")[4]
-    res <- par(oma=c(bottom, left, top, right))
-
+  if(reset){
+    if(outer){
+        par("oma" = .pardefault$oma)
+      
+    } else {
+        par("mar" = .pardefault$mar)
+    }
   } else {
-    if(is.null(bottom)) bottom <- par("mar")[1]
-    if(is.null(left)) left <- par("mar")[2]
-    if(is.null(top)) top <- par("mar")[3]
-    if(is.null(right)) right <- par("mar")[4]
-    res <- par(mar=c(bottom, left, top, right))
-
+    
+    if(is.null(c(bottom, left, top, right)))
+      if(outer)
+        return(par("oma"))
+      else 
+        return(par("mar"))
+    
+    if(outer){
+      if(is.null(bottom)) bottom <- par("oma")[1]
+      if(is.null(left)) left <- par("oma")[2]
+      if(is.null(top)) top <- par("oma")[3]
+      if(is.null(right)) right <- par("oma")[4]
+      res <- par(oma=c(bottom, left, top, right))
+  
+    } else {
+      if(is.null(bottom)) bottom <- par("mar")[1]
+      if(is.null(left)) left <- par("mar")[2]
+      if(is.null(top)) top <- par("mar")[3]
+      if(is.null(right)) right <- par("mar")[4]
+      res <- par(mar=c(bottom, left, top, right))
+  
+    }
+    
+    invisible(res)
+    
   }
-  invisible(res)
+  
 }
 
 
-Mgp <- function (title = NULL, labels = NULL, line = NULL) {
+Mgp <- function (title = NULL, labels = NULL, line = NULL, reset=FALSE) {
   
-  if (is.null(title)) 
-    title <- par("mgp")[1]
-  if (is.null(labels)) 
-    labels <- par("mgp")[2]
-  if (is.null(line)) 
-    line <- par("mgp")[3]
-  res <- par(mgp = c(title, labels, line))
-  
-  invisible(res)
+  if(reset){
+      par("mgp" = .pardefault$mgp)
+    
+  } else {
+    
+    if(is.null(c(title, labels, line)))
+      return(par("mgp"))
+    
+    if (is.null(title)) 
+      title <- par("mgp")[1]
+    if (is.null(labels)) 
+      labels <- par("mgp")[2]
+    if (is.null(line)) 
+      line <- par("mgp")[3]
+    res <- par(mgp = c(title, labels, line))
+    
+    invisible(res)
+  }
 }
 
 
@@ -7560,7 +7661,7 @@ Pal <- function(pal, n=100, alpha=1) {
                   "RedWhiteBlue0","RedWhiteBlue1","RedWhiteBlue2","RedWhiteBlue3","Helsana","Helsana1","Tibco","RedGreen1",
                   "Spring","Soap","Maiden","Dark","Accent","Pastel","Fragile","Big","Long","Night","Dawn","Noon","Light",
                   "GrandBudapest","Moonrise1","Royal1","Moonrise2","Cavalcanti","Royal2","GrandBudapest2","Moonrise3",
-                  "Chevalier","Zissou","FantasticFox","Darjeeling","Rushmore","BottleRocket","Darjeeling2")
+                  "Chevalier","Zissou","FantasticFox","Darjeeling","Rushmore","BottleRocket","Darjeeling2","Helsana2")
 
 
     if(is.numeric(pal)){
@@ -7594,7 +7695,8 @@ Pal <- function(pal, n=100, alpha=1) {
            , Helsana1      = res <- c("black"="#000000", "hellblau"="#8296C4", "rot"="#9A0941", "orange"="#F08100", "gelb"="#FED037"
                                       , "ecru"="#CAB790", "hellgruen"="#B3BA12", "hellrot"="#D35186"
                                       , "hellgrau"="#CCCCCC", "dunkelgrau"="#666666")
-           , Tibco         =  res <- apply( mcol <- matrix(c(
+           , Helsana2      = res <- c("#9a0941","#62aedf","#9181c6", "#e55086","#f2f2f2","#b6ca2f","#fec600","#bea786")
+           , Tibco         = res <- apply( mcol <- matrix(c(
                                        0,91,0, 0,157,69, 253,1,97, 60,120,177,
                            156,205,36, 244,198,7, 254,130,1,
                            96,138,138, 178,113,60
