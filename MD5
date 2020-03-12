@@ -1,9 +1,9 @@
-6924d48c8174d48cd935404b227053b6 *DESCRIPTION
+747e7b237bb7108d52430c10abe88502 *DESCRIPTION
 41f32f0fb12bf5b8448d4c5ea41341bf *NAMESPACE
-839aee51f1c8aca36f13ae75e6bb18a3 *NEWS
+ab6935ca07809d087a5146299c24b5de *NEWS
 5a03ca23f8659d980b8d0b59e2d80059 *R/Const.R
 28952ae0aa05af3cd9ceef6c0ddcd3dc *R/Desc.R
-74d642930244e60c27940fc28ce6a676 *R/DescTools.r
+ebdd6d249c0bc0e80022e760fbf24e52 *R/DescTools.r
 face28b5cd7f2fd543ee7763d6ad1e59 *R/Dialogs.r
 a002600980f534c19325bdb6731444b9 *R/Distributions.R
 ba0c145dc3726157984e8bd74a445abc *R/DoBy.r
@@ -15,7 +15,7 @@ e6d352b11b4cbcc3df8883af8ea21e31 *R/PageDF.r
 a7c1ac494369d7ea52109271ea2e41d3 *R/SpecialPlots.r
 9319c8cb193739393cf89c2efa3a2f6e *R/StatsAndCIs.r
 3bee079c5b8e0f3693a946b67ab44490 *R/Tables.r
-6cdade26c7a57637c61f948c92f4ac9c *R/Tests.r
+07de88ef6c57d84bbb8edf0ac9863336 *R/Tests.r
 a155bf8e85450ac40f3701e5c3c21477 *R/Utils.R
 c3d7fa46547af71129eba1df8d3cd9ca *R/zzz.r
 eb68fc72d7699fe674d7ea58a7075270 *README.md
@@ -45,11 +45,11 @@ df9f5d3d7d5bbc4ddec58a9776df8545 *data/xlConst.rda
 92ca424fa0c19d100ac435fd3d3460cf *demo/plots.R
 2623a2aaea4de3d4b289c422879b7ccd *inst/CITATION
 9562addc5cae80c4feae2818f7f336ee *inst/doc/Combinatorics.Rnw
-b7b763c70b7c1ea52be98b625454237a *inst/doc/Combinatorics.pdf
+795af897910f9f0786ef48c3d0c523d4 *inst/doc/Combinatorics.pdf
 4637b0b84e90bda183b77979d2a6c603 *inst/doc/DescToolsCompanion.Rnw
-e6e3d66dfc5fc9808feedbf6fa2fe28e *inst/doc/DescToolsCompanion.pdf
+7099640934954f373a60afab14717089 *inst/doc/DescToolsCompanion.pdf
 72bcea09f8081a26fdc226337d04733b *inst/doc/TablesInR.Rnw
-d7418978379938bb098fe313edec53e6 *inst/doc/TablesInR.pdf
+9e4383d3dabbe9cd714f6dd0221824e5 *inst/doc/TablesInR.pdf
 2299f3e1e4246a12fee6d1e0838d52ff *inst/extdata/R.ico
 54a8efa1a5d048c9cd6061b5d5e0cea5 *inst/extdata/key.ico
 2836b17ac4b06c0bb068ee2ab5466f57 *man/AUC.Rd
@@ -242,7 +242,7 @@ e0b60b31ce392441b8b0726e56612082 *man/MeanDiffCI.Rd
 62daf08757ca50c0fc1eb04338e99609 *man/MedianCI.Rd
 edc8f7efaa2459b5897b7f08f50e831e *man/Midx.Rd
 6d126c2b08e052e128624cefef15c02a *man/MixColor.Rd
-687351028eecaf74f331c4f294004382 *man/Mode.Rd
+54422529f4d926250564d035c1f2baf4 *man/Mode.Rd
 2363b5f9be998266bdcb1463d820209c *man/MosesTest.Rd
 f346e2a8695b5694d0cabf8afe8b045f *man/MoveAvg.Rd
 8e6fc047d064037e1385d26dc87d4dbf *man/MultMerge.Rd
@@ -370,7 +370,7 @@ f60cf2b619d4615c1d6fdb55376f3b76 *man/StuartTauC.Rd
 e418d8de3fcd60f1191edf1d3b5e91d2 *man/TMod.Rd
 f9854d72aca62787d90f9e9f5d7f5b37 *man/TOne.Rd
 33c68d398737b1bad222c84ea8134a06 *man/TTestA.Rd
-afbab7dee0080816cc9f4e336ace26e2 *man/TextContrastColor.Rd
+a0fa921933c2b0e7cd8cb34a7f9cec1e *man/TextContrastColor.Rd
 bf92a309eca18ea564e5693a6645ad2f *man/TextToTable.Rd
 82e1272088368889a5f85cdbf3657f50 *man/TheilU.Rd
 3f971c5a9f76207b885dd49389c118e9 *man/TitleRect.Rd

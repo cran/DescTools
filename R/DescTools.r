@@ -8840,7 +8840,7 @@ ColToGray <- function(col){
 # paste("#00FF00", round(0.3 * 255,0), sep="" )
 
 
-TextContrastColor <- function(col, method=c("glynn","sonego")) {
+TextContrastColor <- function(col, white="white", black="black", method=c("glynn","sonego")) {
 
   switch( match.arg( arg=method, choices=c("glynn","sonego") )
           , "glynn" = {
@@ -8860,14 +8860,14 @@ TextContrastColor <- function(col, method=c("glynn","sonego")) {
             #     [1] "white"
             #     > GetTextContrastcol("yellow")
             #     [1] "black"
-            vx <- rep("white", length(col))
-            vx[ apply(col2rgb(col), 2, mean) > 127 ] <- "black"
+            vx <- rep(white, length(col))
+            vx[ apply(col2rgb(col), 2, mean) > 127 ] <- black
 
           }
           , "sonego" = {
             # another idea from Paolo Sonego in OneRTipaDay:
             L <- c(0.2, 0.6, 0) %*% col2rgb(col) / 255
-            vx <- ifelse(L >= 0.2, "#000060", "#FFFFA0")
+            vx <- ifelse(L >= 0.2, black, white)
           }
   )
 
@@ -9825,7 +9825,10 @@ PlotArea.default <- function(x, y=NULL, prop=FALSE, add=FALSE, xlab=NULL, ylab=N
 
   for(i in 1:(ncol(y)-1)) {
     yy <- c(y[,i+1], rev(y[,i]))
-    suppressWarnings(polygon(xx, yy, col=col[i], ...))
+    # suppressWarnings(polygon(xx, yy, col=col[i], ...))
+    # think we don't need dots here, but can allow warnings, why not??
+    # me: 2020-03-11
+    polygon(xx, yy, col=col[i])
   }
 
   if(!is.null(DescToolsOptions("stamp")))

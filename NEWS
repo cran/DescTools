@@ -1,4 +1,20 @@
 
+DescTools 0.99.34 (2020-03-12)
+------------------------------
+
+UPDATED FUNCTIONS:
+  * TextContrastColor() gets new options to choose white/black color.
+  * Some updates to helpfiles.
+
+BUGFIXES:
+  * PlotArea() does no longer use dots arguments for the polygon function.
+    But they are still passed on to matplot().
+  * Corrected deparse1 bug causing a build error for all current versions 
+    on CRAN.
+
+
+
+
 DescTools 0.99.33 (2020-03-08)
 ------------------------------
 

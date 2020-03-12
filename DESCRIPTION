@@ -1,8 +1,8 @@
 Package: DescTools
 Type: Package
 Title: Tools for Descriptive Statistics
-Version: 0.99.33
-Date: 2020-03-08
+Version: 0.99.34
+Date: 2020-03-12
 Authors@R: c(
   person("Andri", "Signorell", email = "andri@signorell.net", role = c("aut", "cre")),
   person("Ken"           , "Aho",                 role = c("ctb")),
@@ -132,7 +132,7 @@ SystemRequirements: C++11
 RoxygenNote: 6.1.1
 Encoding: UTF-8
 NeedsCompilation: yes
-Packaged: 2020-03-10 06:37:07 UTC; andri
+Packaged: 2020-03-12 07:00:59 UTC; andri
 Author: Andri Signorell [aut, cre],
   Ken Aho [ctb],
   Andreas Alfons [ctb],
@@ -246,4 +246,4 @@ Author: Andri Signorell [aut, cre],
   Achim Zeileis [ctb]
 Maintainer: Andri Signorell <andri@signorell.net>
 Repository: CRAN
-Date/Publication: 2020-03-10 09:40:02 UTC
+Date/Publication: 2020-03-12 10:50:07 UTC
