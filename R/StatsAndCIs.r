@@ -1530,7 +1530,7 @@ Outlier <- function(x, method=c("boxplot"), value=TRUE, na.rm=FALSE){
 
              qq <- quantile(as.numeric(x), c(0.25, 0.75), na.rm = na.rm, names = FALSE)
              iqr <- diff(qq)
-             id <- x < (qq[1] - 1.5 * iqr) | x > (qq[3] + 1.5 * iqr)
+             id <- x < (qq[1] - 1.5 * iqr) | x > (qq[2] + 1.5 * iqr)
 
              if(value)
                res <- x[id]
@@ -2944,6 +2944,11 @@ MedianCI <- function(x, conf.level=0.95, sides = c("two.sided","left","right"), 
               attr(ci, "conf.level") <- pbinom(k, size=n, prob=0.5)
             }
     )
+    # confints for small samples can be outside the observed range e.g. n < 6
+    if(identical(StripAttr(ci), NA_real_)) {
+      ci <- c(-Inf, Inf)
+      attr(ci, "conf.level") <- 1
+    }  
     return(ci)
   }
   
@@ -3767,12 +3772,38 @@ GiniSimpson <- function(x, na.rm = FALSE) {
   # rownames(x) <- c("A","B","AB","0")
   # GiniSimpson(x)
 
+  if(!is.factor(x)){
+    warning("x is not a factor!")
+    return(NA)
+  }
+  
   if(na.rm) x <- na.omit(x)
 
-  x <- as.table(x)
-  ptab <- prop.table(x)
+  ptab <- prop.table(table(x))
   return(sum(ptab*(1-ptab)))
+  
 }
+
+
+
+
+HunterGaston <- function(x, na.rm = FALSE){
+
+  # we must restrict to x as factors here to ensure we have all the levels
+  # these are used in length(p)
+    
+  if(!is.factor(x)){
+    warning("x is not a factor!")
+    return(NA)
+  }
+  if(na.rm) x <- na.omit(x)
+  
+  p <- prop.table(table(x))
+  sum(p*(1-p)) * length(p)/(length(p)-1)
+  
+}
+
+
 
 
 
@@ -6437,7 +6468,7 @@ PlotBinTree <- function(x, main="Binary tree", horiz=FALSE, cex=1.0, col=1, ...)
   res <- .Call("conc", PACKAGE="DescTools", y[ord,], as.double(wts[ord]),
                as.integer(idx), as.integer(n2))
 
-  return(list(pi.c = NA, pi.d = NA, C = res[2], D = res[1]))
+  return(list(pi.c = NA, pi.d = NA, C = res[2], D = res[1], T=res[3], N=res[4]))
 
 }
 
