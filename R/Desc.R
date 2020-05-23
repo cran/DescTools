@@ -18,7 +18,8 @@ Desc <- function (x, ..., main=NULL, plotit=NULL, wrd = NULL) {
 
       # only if header exists (it does not for single variables!!)
       if(!is.null(z[["_objheader"]]))
-        z[["_objheader"]]["main"] <- gettextf("Describe %s (%s):", deparse(substitute(x)), class(x))
+        z[["_objheader"]]["main"] <- gettextf("Describe %s (%s):", paste(deparse(substitute(x)), collapse=" "), 
+                                              paste(class(x), collapse=" ,"))
 
       printWrd(x=z, main=main, plotit=plotit, ..., wrd=wrd)
 
@@ -364,10 +365,14 @@ Desc.formula <- function(formula, data = parent.frame(), subset, main=NULL, plot
         lst[[paste(resp, pred, sep=" ~ ")]][["digits"]] <- digits     # would not accept vectors when ["digits"] used. Why??
         
         lst[[paste(resp, pred, sep=" ~ ")]]["main"] <- if(is.null(main))
-            gettextf("%s ~ %s (%s)",
+            gettextf("%s ~ %s%s",
                 lst[[paste(resp, pred, sep=" ~ ")]]["xname"], 
                 lst[[paste(resp, pred, sep=" ~ ")]]["gname"], 
-                deparse(substitute(data)))
+                # don't display parent.frame() for simple formulas in main titles
+                if((ctxt <- deparse(substitute(data))) == "parent.frame()") 
+                  "" 
+                else 
+                  paste0(" (", ctxt,")"))
       }
     }
   
@@ -455,7 +460,7 @@ calcDesc.numeric   <- function(x, n, maxrows = NULL, conf.level=0.95, ...) {
     # check for remarkably frequent values in a numeric variable
     # say the most frequent value has significantly more than 5% from the total sample
     modefreq_crit <- binom.test(attr(modex, "freq"), n = n, p = 0.05, alternative = "greater")
-    if(modefreq_crit$p.value < 0.05)
+    if(modefreq_crit$p.value < 0.05 & psum$unique > 12)
       modefreq_crit <- gettextf("heap(?): remarkable frequency (%s) for the mode(s) (= %s)", 
                                 Format(modefreq_crit$estimate, fmt="%", digits=1), paste(modex, collapse=", "))
     else
@@ -616,18 +621,18 @@ calcDesc.ts <- function(x, ...){
 
 calcDesc.table <- function(x, n, conf.level=0.95, verbose, rfrq, margins, p, digits, ...) {
 
-  loglik.chisq <- function(r.chisq) {
-    # Log-likelihood chi-squared (G2) test of independence (homogeneity)
-
-    lhrat <- 2 * sum(r.chisq$observed * log(r.chisq$observed/r.chisq$expected), na.rm=TRUE)
-
-    structure(list(
-      statistic = structure(lhrat, .Names = "X-squared"),
-      parameter = structure(r.chisq$parameter, .Names = "df"),
-      p.value   = structure(pchisq(lhrat, df=r.chisq$parameter, lower.tail = FALSE), .Names = "X-squared"),
-      method    = "Likelihood Ratio:",
-      data.name = r.chisq$data.name), .Names = c("statistic", "parameter", "p.value", "method", "data.name"), class = "htest")
-  }
+  # loglik.chisq <- function(r.chisq) {
+  #   # Log-likelihood chi-squared (G2) test of independence (homogeneity)
+  # 
+  #   lhrat <- 2 * sum(r.chisq$observed * log(r.chisq$observed/r.chisq$expected), na.rm=TRUE)
+  # 
+  #   structure(list(
+  #     statistic = structure(lhrat, .Names = "X-squared"),
+  #     parameter = structure(r.chisq$parameter, .Names = "df"),
+  #     p.value   = structure(pchisq(lhrat, df=r.chisq$parameter, lower.tail = FALSE), .Names = "X-squared"),
+  #     method    = "Likelihood Ratio:",
+  #     data.name = r.chisq$data.name), .Names = c("statistic", "parameter", "p.value", "method", "data.name"), class = "htest")
+  # }
 
   n.chisq.test <- function(tab) {
 
@@ -661,13 +666,15 @@ calcDesc.table <- function(x, n, conf.level=0.95, verbose, rfrq, margins, p, dig
     conf.level        = conf.level,
     chisq.test        = r.chisq,   # if(ttype=="tndim") n.chisq.test(x) else r.chisq,
     chisq.test.cont   = if(ttype %in% c("t2x2", "trxc")) suppressWarnings(chisq.test(x, correct = TRUE)) else NULL,
-    loglik.chisq.test = if(ttype!="tndim") loglik.chisq(r.chisq) else NULL,
+    loglik.chisq.test = if(ttype!="tndim") suppressWarnings(GTest(x)) else NULL,
     mh.test           = if(ttype %in% c("t2x2","trxc")) MHChisqTest(x) else NULL,
     fisher.test       = if(ttype=="t2x2") fisher.test(x) else NULL,
     mcnemar.test      = if(ttype=="t2x2") mcnemar.test(x),
     or                = if(ttype=="t2x2") OddsRatio(x, conf.level = conf.level),
     relrisk1          = if(ttype=="t2x2") RelRisk(x, conf.level = conf.level, method="wald", delta=0),
-    relrisk2          = if(ttype=="t2x2") RelRisk(x[,c(2,1)], conf.level = conf.level, method="wald", delta=0),
+    relrisk2          = if(ttype=="t2x2") RelRisk(Rev(x, margin=2), conf.level = conf.level, method="wald", delta=0),
+    relrisk1r         = if(ttype=="t2x2") RelRisk(t(x), conf.level = conf.level, method="wald", delta=0),
+    relrisk2r         = if(ttype=="t2x2") RelRisk(t(Rev(x, margin=1)), conf.level = conf.level, method="wald", delta=0),
     assocs            = if(ttype %in% c("t2x2","trxc")) Assocs(x, conf.level=conf.level, verbose=verbose) else NULL,
     tab               = x,
     pfreq             = prop.table(x),
@@ -1207,12 +1214,20 @@ print.Desc.table    <- function(x, digits = NULL, ...) {
 
         if(x$verbose %in% c("2","3")){ # print only with verbosity > 1
           cat("\n")
-          m <- ftable(format(rbind(
-            "odds ratio    "       = x$or
-            , "rel. risk (col1)  " = x$relrisk1
-            , "rel. risk (col2)  " = x$relrisk2
-          ), digits=3, nsmall=3))
-
+          if(x$verbose == "2")
+            m <- ftable(format(rbind(
+              "odds ratio    "       = x$or
+              , "rel. risk (col1)  " = x$relrisk1
+              , "rel. risk (col2)  " = x$relrisk2
+            ), digits=3, nsmall=3))
+          else
+            m <- ftable(format(rbind(
+              "odds ratio    "       = x$or
+              , "rel. risk (col1)  " = x$relrisk1
+              , "rel. risk (col2)  " = x$relrisk2
+              , "rel. risk (row1)  " = x$relrisk1r
+              , "rel. risk (row2)  " = x$relrisk2r
+            ), digits=3, nsmall=3))
           attr(m, "col.vars")[[1]][1] <- "estimate"
           txt <- capture.output(print(m))
           txt[1] <- paste(txt[1], DescToolsOptions("footnote")[1], sep="")
@@ -1232,7 +1247,7 @@ print.Desc.table    <- function(x, digits = NULL, ...) {
         if(x$verbose > 1){ # print only with verbosity > 1
 
           # Log-likelihood chi-squared (G2) test of independence (homogeneity)
-          cat("Likelihood Ratio:\n  ", .CaptOut(x$loglik.chisq.test)[5], "\n", sep="")
+          cat("Log likelihood ratio (G-test) test of independence:\n  ", .CaptOut(x$loglik.chisq.test)[5], "\n", sep="")
           # Mantel-Haenszel ChiSquared (linear hypothesis)
           cat("Mantel-Haenszel Chi-squared:\n  ", .CaptOut(x$mh.test)[5], "\n", sep="")
 
@@ -1887,7 +1902,7 @@ plot.Desc.table     <- function(x, main=NULL, col1 = NULL, col2 = NULL, horiz = 
     if(is.null(col1))
       col1 <- colorRampPalette(c(Pal()[1], "white", Pal()[2]), space = "rgb")(ncol(x$tab))
     if(is.null(col2))
-      col2 <- colorRampPalette(c(Pal()[1], "white", Pal()[2]), space = "rgb")(nrow(x$tab))
+      col2 <- colorRampPalette(c(Pal()[2], "white", Pal()[1]), space = "rgb")(nrow(x$tab))
 
     if(horiz){
       # width <- 16
@@ -1905,8 +1920,8 @@ plot.Desc.table     <- function(x, main=NULL, col1 = NULL, col2 = NULL, horiz = 
     PlotMosaic(x$tab, main=NA, xlab=NA, ylab=NA, horiz=TRUE, cols = col1)
     PlotMosaic(x$tab, main=NA, xlab=NA, ylab=NA, horiz=FALSE, cols = col2)
 
-    title(xlab=Coalesce(names(dimnames(x$tab))[2], "x"), outer=TRUE, line=-1)
-    title(ylab=Coalesce(names(dimnames(x$tab))[1], "y"), outer=TRUE, line=0)
+    title(xlab=Coalesce(names(dimnames(x$tab))[2], "x"), outer=TRUE, line=-1, font=2)
+    title(ylab=Coalesce(names(dimnames(x$tab))[1], "y"), outer=TRUE, line=0, font=2)
 
   }
 
@@ -2040,7 +2055,7 @@ plot.Desc.numfact <- function(x, main=NULL, add_ni = TRUE
 
     if(add_ni)
       mtext(paste("n=", bx$n, sep=""), side=3, line=1, at=1:length(bx$n), cex=0.8)
-    d.frm <- data.frame(x$x, x$g)
+    d.frm <- data.frame(x$x, factor(x$g))
     names(d.frm) <- c(x$xname, x$gname)
     plot.design(d.frm, cex=0.8, xlab="", ylab="", cex.axis=0.8, main="")
 
@@ -2067,7 +2082,8 @@ plot.Desc.numfact <- function(x, main=NULL, add_ni = TRUE
 
 plot.Desc.numnum    <- function(x, main = NULL, col=SetAlpha(1, 0.3),
                                 pch = NULL, cex = par("cex"), bg = par("bg"),
-                                xlab= NULL, ylab= NULL, smooth = NULL, smooth.front = TRUE, ...) {
+                                xlab= NULL, ylab= NULL, smooth = NULL, smooth.front = TRUE, 
+                                conf.level=0.95, ...) {
 
   if(is.null(main))
     main <- x$main
@@ -2077,6 +2093,8 @@ plot.Desc.numnum    <- function(x, main = NULL, col=SetAlpha(1, 0.3),
   if(smooth.front)   # smoother should be in front of the points, this is ok, if x is long
     points(x=x$g, y=x$x, col=col, pch=pch, cex=cex, bg=bg)
 
+  smoot <- match.arg(smooth, choices = c("none", "loess", "lm", "spline", "exp"))
+  
   if(is.null(smooth)) {
     if(x$nvalid < 500)
       smooth <- "loess"
@@ -2084,14 +2102,24 @@ plot.Desc.numnum    <- function(x, main = NULL, col=SetAlpha(1, 0.3),
       smooth <- "spline"
   }
 
-  if(smooth=="loess"){
+  if(identical(smooth, NA) || smooth=="none"){
+    # do nothing
+    
+  } else if(smooth=="loess"){
     # lines(loess(x=x$g, y=x$x, na.action = na.omit))
-    lines(loess(x$x ~ x$g, na.action = na.omit))
+    lines(loess(x$x ~ x$g, na.action = na.omit), conf.level=conf.level)
 
   } else if(smooth=="spline"){
     with(na.omit(data.frame(y=x$x, x=x$g)),
-       lines(smooth.spline(x=x, y=y)))
-  }
+       lines(smooth.spline(x=x, y=y)), conf.level=conf.level)
+    
+  } else if(smooth=="lm"){
+#    lines(lm(x$x ~ x$g, na.action = na.omit))  
+    lines(lm(y~x, data=data.frame(y=x$x, x=x$g)), conf.level=conf.level)
+    
+  } else if(smooth=="exp"){
+    lines.lmlog(lm(log(y)~x, data=data.frame(y=x$x, x=x$g)), conf.level=conf.level)  
+  } 
 
   if(!smooth.front)
     points(x=x$g, y=x$x, col=col, pch=pch, cex=cex, bg=bg)

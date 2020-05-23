@@ -109,7 +109,8 @@ Conf.default <-  function(x, ref, pos = NULL, na.rm = TRUE, ...) {
   }
   clvl <- CombLevels(x, ref)
 
-  Conf.table(table(pred=factor(x, levels=clvl), obs=factor(ref, levels=clvl)), pos = pos, ...)
+  Conf.table(table(Prediction=factor(x, levels=clvl), 
+                   Reference=factor(ref, levels=clvl)), pos = pos, ...)
 }
 
 Conf.matrix <- function(x, pos = NULL, ...) {
@@ -190,7 +191,8 @@ plot.Conf <- function(x, main="Confusion Matrix", ...){
 print.Conf <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\nConfusion Matrix and Statistics\n\n")
 
-  names(attr(x$table, "dimnames")) <- c("Prediction","Reference")
+  if(all(names(attr(x$table, "dimnames")) == ""))
+    names(attr(x$table, "dimnames")) <- c("Prediction","Reference")
   print(x$table, ...)
 
   if(nrow(x$table)!=2) cat("\nOverall Statistics\n")
@@ -502,6 +504,16 @@ Cstat.default <- function(x, resp, ...) {
 
 }
 
+# test:
+    # resp <- c(1,1,0,0)
+    # pred <- c(1,1,1,0)
+    # model <- glm(resp~pred, family = binomial())
+    # 
+    # Cstat(model)
+    # Cstat(pred, resp = resp)
+    # ROC(FitMod(resp~pred, fitfn="logit"))$auc
+
+
 # alternative
 # library(rms)
 # rcorr.cens(pred, resp)
@@ -706,6 +718,9 @@ ModSummary.lm <- function(x, conf.level=0.95, ...){
     sigma         = sigma,
     r.squared     = r.squared,
     adj.r.squared = adj.r.squared,
+    "n vars" = length(attr(x$terms, "term.labels")),
+    "n coef" = nrow(smrx$coefficients), 
+    
     F             = fstatistic[[1]],
     numdf         = fstatistic[[2]],
     dendf         = fstatistic[[3]],
@@ -743,6 +758,8 @@ ModSummary.lmrob <- function (x, conf.level = 0.95, ...) {
                                                    df[[3]], lower.tail = FALSE))), N = nobs(x),
               #           logLik = logLik(x), deviance = deviance(x), AIC = AIC(x),
               logLik = NA, deviance = NA, AIC = NA,
+              "n vars" = length(attr(x$terms, "term.labels")),
+              "n coef" = nrow(smrx$coefficients), 
               BIC = NA, MAE = MAE(x = fit, ref = y), MAPE = MAPE(x = fit, ref = y),
               MSE = MSE(x = fit, ref = y), RMSE = RMSE(x = fit, ref = y))
 
@@ -801,6 +818,9 @@ ModSummary.glm <- function(x, conf.level=0.95, ...){
 
     statsx <- c(statsx,
              "N" =  nobs(x),
+             "n vars" = length(attr(x$terms, "term.labels")),
+             "n coef" = nrow(x$coefficients),
+             "numdf" = attr(logLik(x), "df"),
              "Kendall Tau-a" = unname(statsy["taua"]),
              "Somers Delta" = unname(statsy["somers_r"]),
              "Gamma" = unname(statsy["gamma"]),
@@ -814,6 +834,9 @@ ModSummary.glm <- function(x, conf.level=0.95, ...){
 
     statsx <- c(statsx[],
              "N" =  nobs(x),
+             "n vars" = length(attr(x$terms, "term.labels")),
+             "n coef" = length(x$coefficients),
+             "numdf" = attr(logLik(x), "df"),
              "MAE" = MAE(pred, model.response(x$model)),
              "MAPE" = MAPE(pred, model.response(x$model)),
              "MSE" = MSE(pred, model.response(x$model)),
@@ -836,6 +859,8 @@ ModSummary.OddsRatio <- function(x, conf.level=0.95, ...){
 
   statsx <- x$PseudoR2
   statsx <- c(N = x$nobs,
+              "n vars" = length(x$terms),
+              "n coef" = nrow(x$res), 
               statsx[],
               "BrierScore" = x$BrierScore)
 
@@ -920,7 +945,7 @@ TMod <- function(..., FUN = NULL){
 
   row.names(mm) <- mm$stat
   mm <- mm[match(c("r.squared", "adj.r.squared","sigma","logLik","logLik0","G2","deviance",
-             "AIC","BIC","numdf","dendf","N","F","p","MAE","MAPE","MSE","RMSE","McFadden",
+             "AIC","BIC","numdf","dendf","N","n vars","n coef","F","p","MAE","MAPE","MSE","RMSE","McFadden",
              "McFaddenAdj","Nagelkerke","CoxSnell","Kendall Tau-a","Somers Delta","Gamma","Brier","C"),
              rownames(mm))
            , ]
@@ -1012,8 +1037,8 @@ print.TMod <- function(x, digits=3, na.form = "-", ...){
   x2 <- x[[2]]
   x[[2]][, -1] <- Format(x[[2]][, -1], digits=digits, na.form = na.form)
 
-  x[[2]][x[[2]]$stat %in% c("numdf", "dendf", "N"), -1] <-
-    Format(x2[x[[2]]$stat %in% c("numdf", "dendf", "N"), -1], digits=0, na.form=na.form)
+  x[[2]][x[[2]]$stat %in% c("numdf", "dendf", "N", "n vars", "n coef"), -1] <-
+    Format(x2[x[[2]]$stat %in% c("numdf", "dendf", "N", "n vars", "n coef"), -1], digits=0, na.form=na.form)
 
   m <- rbind(x[[1]],  setNames(c("---", rep("", ncol(x[[1]]) -1)), colnames(x[[1]])),
              setNames(x[[2]], colnames(x[[1]])))
