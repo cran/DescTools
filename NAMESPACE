@@ -46,8 +46,9 @@ export(
 "Skew","Small","SomersDelta","Sort","SortMixed","SpearmanRho","Spec","SphToCart","split.formula","SplitPath","SpreadOut","Stamp","Str","StrAbbr","StrAlign","Strata","StrCap","StrChop","StrCountW","StrDist","StrIsNumeric","StrLeft","StrPad","StrPos","StrRev","StrRight","StrTrim","StrTrunc","StrVal","StuartMaxwellTest","StuartTauC","SysInfo","TextContrastColor","TextToTable","TheilU","Today","ToLong","ToWide","Trim","TschuprowT",
 "UncertCoef","ConvUnit",
 "Untable", "ToWrd",
-"VarCI","VecRot","VecShift","Vigenere","Week","Weekday","Winsorize","WoolfTest","WrdCaption","WrdGoto","WrdPageBreak","WrdInsertBookmark","WrdTable","WrdKill","WrdPlot","WrdSaveAs",
-"WrdUpdateBookmark",
+"VarCI","VecRot","VecShift","Vigenere","Week","Weekday","Winsorize","WoolfTest","WrdCaption","WrdGoto","WrdPageBreak",
+"WrdInsertBookmark","WrdTable","WrdKill","WrdPlot","WrdSaveAs",
+"WrdUpdateBookmark","WrdDeleteBookmark",
 "XLGetRange","XLGetWorkbook","XLKill","XLView","ToXL","Year","YearDay","YearMonth",
 "YuenTTest","YuleQ","YuleY","ZeroIfNA","NAIfZero","BlankIfNA","NAIfBlank","Zodiac",
 "ZTest",
@@ -76,8 +77,9 @@ export(
 "NPV","NPVFixBond","YTM","PMT","IPMT","PPMT","SLN","DB","SYD","RBAL","Sample","DoBy",
 "Dot","Cross","CrossN", "Divisors", "createCOMReference","StrSpell", "WithOptions", "SaveAs", "XLSaveAs","Quot", "CompleteColumns",
 "SendOutlookMail", "MultMerge", "ToWrdB", "ToWrdPlot", "WrdBookmark","WrdOpenFile",
-"CmToPts", "PtsToCm","PlotPairs", "IQRw", "ImputeKnn", "CentralValue","AllIdentical","CountWorkDays",
-"VanWaerdenTest", "RSessionAlive", "RTempdirAlive", "StripAttr"
+"CmToPts", "PtsToCm","PlotPairs", "IQRw", "ImputeKnn", "AllIdentical","CountWorkDays",
+"VanWaerdenTest", "RSessionAlive", "RTempdirAlive", "StripAttr", "PlotConDens", "StrSplit", "SplitToCol",
+"CmykToCmy", "CmyToCmyk", "RgbToCmy", "CmykToRgb"
 )
 
 
@@ -92,7 +94,7 @@ importFrom("graphics", "abline", "arrows", "axTicks", "axis", "barplot", "box", 
            "plot", "plot.design", "plot.new", "plot.window", "points", "polygon", "rect", "screen", "segments", "split.screen", "strheight", "strwidth", "symbols", "text", "title",
            "grconvertX", "grconvertY")
 importFrom("grDevices", "chull", "col2rgb", "colorRampPalette", "colors", "dev.new", "dev.copy", "dev.cur", "dev.flush", "dev.hold", "dev.list", "dev.off", "dev.set", "gray.colors", "heat.colors", "rainbow", "rgb", "rgb2hsv", "xy.coords", "bitmap", "jpeg", "pdf", "png", "postscript", "tiff")
-importFrom("methods", "is")
+importFrom("methods", "is", "slot", "slotNames")
 importFrom("utils", "capture.output", "combn", "head", "help.search", "ls.str", "lsf.str", "memory.limit", "object.size", "read.table", "select.list", "sessionInfo", "stack", "str", "tail",
            "write.table", "browseURL")
 importFrom("boot", "boot", "boot.ci", "corr")
@@ -103,6 +105,8 @@ importFrom(Rcpp, evalCpp)
 
 importFrom("MASS", "boxcox", "fractions")
 importFrom("expm", "%^%")
+
+importFrom("Exact","exact.test")
 
 
 
