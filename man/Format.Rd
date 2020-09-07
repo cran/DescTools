@@ -19,22 +19,22 @@ There's also an easygoing interface for format templates, defined as a list cons
 }
 \usage{
 Format(x, digits = NULL, sci = NULL, big.mark = NULL,
-       leading = NULL, zero.form = NULL, na.form = NULL,
+       ldigits = NULL, zero.form = NULL, na.form = NULL,
        fmt = NULL, align = NULL, width = NULL, lang = NULL, 
        eps = NULL, ...)
 
 \method{Format}{table}(x, digits = NULL, sci = NULL, big.mark = NULL,
-       leading = NULL, zero.form = NULL, na.form = NULL,
+       ldigits = NULL, zero.form = NULL, na.form = NULL,
        fmt = NULL, align = NULL, width = NULL, lang = NULL, 
        eps = NULL, ...)
 
 \method{Format}{matrix}(x, digits = NULL, sci = NULL, big.mark = NULL,
-       leading = NULL, zero.form = NULL, na.form = NULL,
+       ldigits = NULL, zero.form = NULL, na.form = NULL,
        fmt = NULL, align = NULL, width = NULL, lang = NULL, 
        eps = NULL, ...)
 
 \method{Format}{default}(x, digits = NULL, sci = NULL, big.mark = NULL,
-       leading = NULL, zero.form = NULL, na.form = NULL,
+       ldigits = NULL, zero.form = NULL, na.form = NULL,
        fmt = NULL, align = NULL, width = NULL, lang = NULL, 
        eps = NULL, ...)
 
@@ -59,7 +59,7 @@ as.CDateFmt(fmt)
   \item{big.mark}{character; if not empty used as mark between every 3 decimals before the decimal point. Default is "" (none).
 %%     ~~Describe \code{big.mark} here~~  big.interval is not implemented, would anyone need that??
 }
-  \item{leading}{character string that can be used for setting leading zeros. "000" would make sure that at least 3 digits on the left side will be printed. Setting leading to "drop" will yield results like ".452" for 0.452. The default \code{NULL} will leave the numbers as they are.
+  \item{ldigits}{number of leading zeros. \code{ldigits=3} would make sure that at least 3 digits on the left side will be printed, say \code{3.4} will be printed as \code{003.4}. Setting \code{ldigits} to \code{0} will yield results like \code{.452} for \code{0.452}. The default \code{NULL} will leave the numbers as they are (meaning at least one 0 digit).
 %%     ~~Describe \code{drop0leading} here~~
 }
   \item{zero.form}{character, string specifying how zeros should be specially formatted. Useful for pretty printing 'sparse' objects.
@@ -127,7 +127,7 @@ Even more variability is needed to display numeric values. For the most frequent
 \tab\cr
 \code{p} \tab p-value \tab will wrap the function \code{\link{format.pval}} and return a p-value format. Use \code{eps} to define the threshold to switch to a \code{ < 000 } representation.\cr
 \tab\cr
-\code{frac} \tab fractions \tab will try to convert numbers to fractions. See \code{\link[MASS]{fractions}()}.\cr
+\code{frac} \tab fractions \tab will (try to) convert numbers to fractions. So 0.1 will be displayed as 1/10. See \code{\link[MASS]{fractions}()}.\cr
 \tab\cr
 
 \code{*} \tab significance \tab will produce a significance representation of a p-value consisting of *  and .,  \cr
@@ -154,10 +154,10 @@ Format(12222.89345, fmt=myNumFmt) = 12,222.89}
 The latter returns the same result as if the arguments would have been supplied directly: 
 \code{Format(12222.89345, digits=2, big.mark=",")}.
 
-\bold{DescTools} defines three default formats for counts (named \code{"abs"}), numeric values (\code{"num"}) and percentages (\code{"per"}). These formats can also be set by the user as options (see \code{\link{DescToolsOptions}()}. The standard formats are referred to in other functions (e.g. \code{\link{TOne}()}. In addition, any number of any named formats can be defined. 
+Many report functions (e.g. \code{\link{TOne}()}) in \bold{DescTools} use three default formats for counts (named \code{"abs"}), numeric values (\code{"num"}) and percentages (\code{"per"}). These formats can be set by the user as options (see \code{\link{DescToolsOptions}()}. For other purposes any number of any named formats can be defined. 
 
-\code{Fmt()} is used to access the existing Formats. It also can directly adapt defined properties. \code{Fmt("num", digits=1, sci=10)} will use the currently defined version of the numeric format and change the digits to 1 and the threshold to switch to scientifc presentation to numbers >1e10 and <1e-10.
-Alread existing format templates can be altered with \code{Fmt(abs=Fmt("abs", big.mark=" "))}. So the format template will be overwritten with the new values and stored in in the options.
+\code{Fmt()} is used to access and edit already defined Formats. It can directly adapt defined properties and returns the format template. \code{Fmt("num", digits=1, sci=10)} will use the current version of the numeric format and change the digits to 1 and the threshold to switch to scientifc presentation to numbers >1e10 and <1e-10.
+Format templates can be altered using their names. With \code{Fmt(abs=Fmt("abs", big.mark=" "))} the format template for count values \code{"abs"} will be overwritten with the new values and stored as option for the current session.
 
 The formats can as well be organized as options. \code{DescToolsOptions("fmt")} would display the currently defined formats. This mechanic works analogously to the \code{options()} procedure of base R. So to store the current settings we can use 
 \preformatted{opt <- DescToolsOptions("fmt")
@@ -194,7 +194,7 @@ Format(as.Date(c("2014-11-28", "2014-1-2")), fmt="ddd, d mmmm yyyy", lang="engl"
 x <- pi * 10^(-10:10)
 
 Format(x, digits=3, fmt="\%", sci=NA)
-Format(x, digits=4, sci=c(4, 6), leading = "drop", width=9, align=".")
+Format(x, digits=4, sci=c(4, 6), ldigits=0, width=9, align=".")
 
 
 # format a matrix
@@ -205,9 +205,9 @@ Format(m, digits=1)
 
 # engineering format
 Format(x, fmt="eng",  digits=2)
-Format(x, fmt="engabb", leading="00", digits=2)
+Format(x, fmt="engabb", ldigits=2, digits=2)
 # combine with grams [g]
-paste(Format(x, fmt="engabb", leading="00", digits=2), "g", sep="")
+paste(Format(x, fmt="engabb", ldigits=2, digits=2), "g", sep="")
 
 # example form symnum
 pval <- rev(sort(c(outer(1:6, 10^-(1:3)))))

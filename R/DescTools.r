@@ -1929,6 +1929,8 @@ StrSplit <- function (x, split="", fixed = FALSE, perl = FALSE, useBytes = FALSE
   res <- strsplit(x=x, split=split, fixed=fixed, perl=perl, useBytes=useBytes)
   if(length(res)==1)
     res <-  res[[1]]
+  
+  return(res)
 }
 
 
@@ -2356,6 +2358,18 @@ Recode <- function(x, ..., elselevel=NA, use.empty=FALSE, num=FALSE){
 
   return(x)
 }
+
+
+RevCode <- function(x, lbound=min(x, na.rm=TRUE), ubound=max(x, na.rm=TRUE)) {
+  
+  x <- as.numeric(x)
+  
+  x[x %)(% c(lbound, ubound)] <- NA
+  
+  return(lbound + ubound - x)
+  
+}
+
 
 
 
@@ -4837,7 +4851,7 @@ Prec <- function (x) {
 # http://www.originlab.com/doc/Origin-Help/Options-Dialog-NumFormat-Tab
 
 Format <- function(x, digits = NULL, sci = NULL
-                   , big.mark=NULL, leading = NULL
+                   , big.mark=NULL, ldigits = NULL
                    , zero.form = NULL, na.form = NULL
                    , fmt = NULL, align = NULL, width = NULL
                    , lang = NULL,  eps = NULL, ...){
@@ -4863,12 +4877,12 @@ Format <- function(x, digits = NULL, sci = NULL
 
 
 Format.data.frame <- function(x, digits = NULL, sci = NULL
-                              , big.mark=NULL, leading = NULL
+                              , big.mark=NULL, ldigits = NULL
                               , zero.form = NULL, na.form = NULL
                               , fmt = NULL, align = NULL, width = NULL, lang = NULL, eps = NULL, ...){
 
   # organise arguments as list ...
-  lst <- list(digits=digits, sci=sci, big.mark=big.mark, leading=leading,
+  lst <- list(digits=digits, sci=sci, big.mark=big.mark, ldigits=ldigits,
               zero.form=zero.form, na.form=na.form, fmt=fmt, align=align,
               width=width, lang=lang, eps=eps)
   # ... in order to be able to filter NULLs
@@ -4878,7 +4892,7 @@ Format.data.frame <- function(x, digits = NULL, sci = NULL
 
   for(i in seq(attr(arg, "maxdim")))
     x[,i] <- Format(x[,i], digits = arg$digits[i],
-                    sci = arg$sci[i], big.mark = arg$big.mark[i], leading = arg$leading[i],
+                    sci = arg$sci[i], big.mark = arg$big.mark[i], ldigits = arg$ldigits[i],
                     zero.form = arg$zero.form[i],
                     na.form = arg$na.form[i], fmt = arg$fmt[i], align = arg$align[i],
                     width = arg$width[i], lang = arg$lang[i], eps= arg$eps[i])
@@ -4890,12 +4904,12 @@ Format.data.frame <- function(x, digits = NULL, sci = NULL
 
 
 Format.matrix <- function(x, digits = NULL, sci = NULL
-                           , big.mark=NULL, leading = NULL
+                           , big.mark=NULL, ldigits = NULL
                            , zero.form = NULL, na.form = NULL
                            , fmt = NULL, align = NULL, width = NULL, lang = NULL,  eps = NULL, ...){
 
   x[,] <- Format.default(x=x, digits=digits, sci=sci, big.mark=big.mark,
-                         leading=leading, zero.form=zero.form, na.form=na.form,
+                         ldigits=ldigits, zero.form=zero.form, na.form=na.form,
                          fmt=fmt, align=align, width=width, lang=lang, eps=eps,...)
 
   class(x) <- c("Format", class(x))
@@ -4904,11 +4918,11 @@ Format.matrix <- function(x, digits = NULL, sci = NULL
 
 
 Format.table <- function(x, digits = NULL, sci = NULL
-                          , big.mark = NULL, leading = NULL
+                          , big.mark = NULL, ldigits = NULL
                           , zero.form = NULL, na.form = NULL
                           , fmt = NULL, align = NULL, width = NULL, lang = NULL,  eps = NULL, ...){
   x[] <- Format.default(x=x, digits=digits, sci=sci, big.mark=big.mark,
-                         leading=leading, zero.form=zero.form, na.form=na.form,
+                        ldigits=ldigits, zero.form=zero.form, na.form=na.form,
                          fmt=fmt, align=align, width=width, lang=lang, eps=eps, ...)
 
   class(x) <- c("Format", class(x))
@@ -5010,7 +5024,7 @@ as.CDateFmt <- function(fmt) {
 
 
 Format.default <- function(x, digits = NULL, sci = NULL
-                           , big.mark = NULL, leading = NULL
+                           , big.mark = NULL, ldigits = NULL
                            , zero.form = NULL, na.form = NULL
                            , fmt = NULL, align = NULL, width = NULL
                            , lang = NULL
@@ -5062,39 +5076,70 @@ Format.default <- function(x, digits = NULL, sci = NULL
   .format.pstars <- function(x, eps, digits)
     paste(.format.pval(x, eps, digits), .format.stars(x))
   
-  .leading.zero <- function(x, n){
+  # .leading.zero <- function(x, n, big.mark=NULL){
+  #   # just add a given number of leading zeros
+  #   # split at the decimal separator
+  #   outdec <- getOption("OutDec")
+  #   z <- strsplit(as.character(x), split=outdec, fixed = TRUE)
+  #   # left side
+  #   zl <- lapply(z, "[", 1)
+  #   zl <- sapply(zl, function(x) sprintf(paste0("%0", n + (x<0)*1, "i"), as.numeric(x)))
+  #   # right side
+  #   zr <- sapply(z, "[", 2)
+  #   zr <- ifelse(is.na(zr), "", paste(outdec, zr, sep=""))
+  #   
+  #   paste(zl, zr, sep="")
+  #   
+  # }
+  
+  .leading.zero <- function(x, n, big.mark=NULL){
     # just add a given number of leading zeros
-    # split at the .
-    z <- strsplit(as.character(x), split=".", fixed = TRUE)
+    # split at the decimal separator
+    outdec <- getOption("OutDec")
+    z <- strsplit(as.character(x), split=outdec, fixed = TRUE)
     # left side
     zl <- lapply(z, "[", 1)
-    zl <- sapply(zl, function(x) sprintf(paste0("%0", n + (x<0)*1, "i"), as.numeric(x)))
+    zl <- sapply(zl, 
+                 function(x) {
+                   # remove big.marks
+                   if(!is.null(big.mark))
+                     x <- gsub(big.mark, "", x)
+                   # append leading 0s
+                   res <- sprintf(paste0("%0", n + (x<0)*1, "i"), 
+                                  as.numeric(x))
+                   if(!is.null(big.mark))
+                     # restore big.marks
+                     res <- StrRev(paste(StrChop(StrRev(res), 
+                                                 len = rep(3, times=nchar(res) %/% 3 + ((nchar(res) %% 3)!=0)*1L)), collapse=big.mark))
+                   return(res)
+                 })
     # right side
     zr <- sapply(z, "[", 2)
-    zr <- ifelse(is.na(zr), "", paste(".", zr, sep=""))
+    zr <- ifelse(is.na(zr), "", paste(outdec, zr, sep=""))
     
     paste(zl, zr, sep="")
     
   }
   
-  .format.eng <- function(x, digits = NULL, leading = NULL
+  
+  .format.eng <- function(x, digits = NULL, ldigits = 1
                           , zero.form = NULL, na.form = NULL){
     
     s <- lapply(strsplit(format(x, scientific=TRUE), "e"), as.numeric)
     y <- unlist(lapply(s, "[[", 1))
     pwr <- unlist(lapply(s, "[", 2))
     
-    return(paste(Format(y * 10^(pwr %% 3), digits=digits, leading=leading,
+    return(paste(Format(y * 10^(pwr %% 3), digits=digits, ldigits=ldigits,
                         zero.form = zero.form, na.form=na.form)
                  , "e"
                  , c("-","+")[(pwr >= 0) + 1]
-                 , Format(abs((pwr - (pwr %% 3))), leading = "00", digits=0)
+                 , Format(abs((pwr - (pwr %% 3))), ldigits = 2, digits=0)
                  , sep="")
     )
     
   }
   
-  .format.engabb <- function(x, digits = NULL, leading = NULL
+  .format.engabb <- function(x, digits = NULL, ldigits = 1
                              , zero.form = NULL, na.form = NULL){
     
     s <- lapply(strsplit(format(x, scientific=TRUE), "e"), as.numeric)
@@ -5103,14 +5148,14 @@ Format.default <- function(x, digits = NULL, sci = NULL
     
     a <- paste("1e"
                , c("-","+")[(pwr >= 0) + 1]
-               , Format(abs((pwr - (pwr %% 3))), leading = "00", digits=0)
+               , Format(abs((pwr - (pwr %% 3))), ldigits=2, digits=0)
                , sep="")
     am <- d.prefix$abbr[match(as.numeric(a), d.prefix$mult)]
     
     a[!is.na(am)] <- am[!is.na(am)]
     a[a == "1e+00"] <- ""
     
-    return(paste(Format(y * 10^(pwr %% 3), digits=digits, leading=leading,
+    return(paste(Format(y * 10^(pwr %% 3), digits=digits, ldigits=ldigits,
                         zero.form = zero.form, na.form=na.form)
                  , " " , a
                  , sep="")
@@ -5129,7 +5174,8 @@ Format.default <- function(x, digits = NULL, sci = NULL
   #
   #   Format(7845, fmt=fmt.int)
   
-  
+  if(!is.null(InDots(..., arg = "leading", default=NULL)))
+    warning("Argument 'leading' is not supported anymore, use 'ldigits' (see help)!")
   
   if(is.null(fmt)) fmt <- ""
   
@@ -5147,7 +5193,7 @@ Format.default <- function(x, digits = NULL, sci = NULL
     if(!is.null(digits))    fmt$digits <- digits
     if(!is.null(sci))       fmt$sci <- sci
     if(!is.null(big.mark))  fmt$big.mark <- big.mark
-    if(!is.null(leading))   fmt$leading <- leading
+    if(!is.null(ldigits))   fmt$ldigits <- ldigits
     if(!is.null(zero.form)) fmt$zero.form <- zero.form
     if(!is.null(na.form))   fmt$na.form <- na.form
     if(!is.null(align))     fmt$align <- align
@@ -5223,10 +5269,10 @@ Format.default <- function(x, digits = NULL, sci = NULL
     r <- .format.pstars(x, eps, digits)
     
   } else if(fmt=="eng"){
-    r <- .format.eng(x, digits=digits, leading=leading, zero.form=zero.form, na.form=na.form)
+    r <- .format.eng(x, digits=digits, ldigits=ldigits, zero.form=zero.form, na.form=na.form)
     
   } else if(fmt=="engabb"){
-    r <- .format.engabb(x, digits=digits, leading=leading, zero.form=zero.form, na.form=na.form)
+    r <- .format.engabb(x, digits=digits, ldigits=ldigits, zero.form=zero.form, na.form=na.form)
     
   } else if(fmt=="e"){
     r <- formatC(x, digits = digits, width = width, format = "e",
@@ -5278,9 +5324,9 @@ Format.default <- function(x, digits = NULL, sci = NULL
                                                  big.mark=big.mark, drop0trailing = FALSE))
     }
     
-    if(!is.null(leading)){
+    if(!is.null(ldigits)){
       # handle leading zeros ------------------------------
-      if(leading %in% c("","drop")) {
+      if(ldigits == 0) {
         # drop leading zeros
         r <- gsub("(?<![0-9])0+\\.", "\\.", r, perl = TRUE)
         
@@ -5290,14 +5336,8 @@ Format.default <- function(x, digits = NULL, sci = NULL
         # old: mind the minus
         # res <- gsub("[^[:digit:]]0+\\.","\\.", res)
         
-      } else if(grepl("^[0]*$", leading)){
-        # leading contains only zeros, so let's use them as leading zeros
-        #         old:
-        #         n <- nchar(leading) - unlist(lapply(lapply(strsplit(res, "\\."), "[", 1), nchar))
-        
-        # old: did not handle - correctly
-        # res <- StrPad(res, pad = "0", width=nchar(res) + pmax(n, 0), adj="right")
-        r <- .leading.zero(r, nchar(leading))
+      } else {
+        r <- .leading.zero(r, ldigits, big.mark = big.mark)
       }
     }
     
@@ -5327,10 +5367,11 @@ Format.default <- function(x, digits = NULL, sci = NULL
 
 
 
-print.Format <- function (x, ...) {
+print.Format <- function (x, quote=FALSE, ...) {
 
   class(x) <- class(x)[class(x)!="Format"]
-  NextMethod("print", quote = FALSE, right=TRUE, ...)
+  # print(x, quote=FALSE, right=TRUE, ...)
+  NextMethod("print", quote = quote, right=TRUE, ...)
 }
 
 
@@ -5452,6 +5493,14 @@ Fmt <- function(...){
 
 }
 
+
+# this does not work...
+
+# `Fmt<-` <- function (name, value){
+#   opt <- options("DescTools")
+#   opt$fmt[[name]] <- value
+#   DescToolsOptions(opt)
+# }
 
 
 
@@ -7731,75 +7780,88 @@ ErrBars <- function(from, to = NULL, pos = NULL, mid = NULL, horiz = FALSE, col 
 
 
 ColorLegend <- function( x, y=NULL, cols=rev(heat.colors(100)), labels=NULL
-  , width=NULL, height=NULL, horiz=FALSE
-  , xjust=0, yjust=1, inset=0, border=NA, frame=NA
-  , cntrlbl = FALSE
-  , adj=ifelse(horiz,c(0.5,1), c(1,0.5)), cex=1.0, ...){
-
+                          , width=NULL, height=NULL, horiz=FALSE
+                          , xjust=0, yjust=1, inset=0, border=NA, frame=NA
+                          , cntrlbl = FALSE
+                          , adj=ifelse(horiz,c(0.5,1), c(1,0.5)), cex=1.0
+                          , title = NULL, title.adj=0.5, ...) {
+  
   # positionierungscode aus legend
   auto <- if (is.character(x))
     match.arg(x, c("bottomright", "bottom", "bottomleft",
-        "left", "topleft", "top", "topright", "right", "center"))
+                   "left", "topleft", "top", "topright", "right", "center"))
   else NA
-
+  
   usr <- par("usr")
   if( is.null(width) ) width <- strwidth("mn") # (usr[2L] - usr[1L]) * ifelse(horiz, 0.92, 0.08)
   if( is.null(height) ) height <- (usr[4L] - usr[3L]) * ifelse(horiz, 0.08, 0.92)
-
+  
   if (is.na(auto)) {
     left <- x - xjust * width
     top <- y + (1 - yjust) * height
-
+    
   } else {
     inset <- rep(inset, length.out = 2)
     insetx <- inset[1L] * (usr[2L] - usr[1L])
     left <- switch(auto, bottomright = , topright = ,
-        right = usr[2L] - width - insetx, bottomleft = ,
-        left = , topleft = usr[1L] + insetx, bottom = ,
-        top = , center = (usr[1L] + usr[2L] - width)/2)
+                   right = usr[2L] - width - insetx, bottomleft = ,
+                   left = , topleft = usr[1L] + insetx, bottom = ,
+                   top = , center = (usr[1L] + usr[2L] - width)/2)
     insety <- inset[2L] * (usr[4L] - usr[3L])
     top <- switch(auto, bottomright = , bottom = , bottomleft = usr[3L] +
-        height + insety, topleft = , top = , topright = usr[4L] -
-        insety, left = , right = , center = (usr[3L] +
-        usr[4L] + height)/2)
+                    height + insety, topleft = , top = , topright = usr[4L] -
+                    insety, left = , right = , center = (usr[3L] +
+                                                           usr[4L] + height)/2)
   }
-
+  
   xpd <- par(xpd=TRUE); on.exit(par(xpd))
-
+  
   ncols <- length(cols)
   nlbls <- length(labels)
   if(horiz) {
     rect( xleft=left, xright=left+width/ncols*seq(ncols,0,-1), ytop=top, ybottom=top-height,
-      col=rev(cols), border=border)
+          col=rev(cols), border=border)
     if(!is.null(labels)){
       if(cntrlbl) xlbl <- left + width/(2*ncols)+(width-width/ncols)/(nlbls-1) * seq(0,nlbls-1,1)
-        else xlbl <- left + width/(nlbls-1) * seq(0,nlbls-1,1)
-      text(y=top - (height + max(strheight(labels, cex=cex)) * 1.2)
-        # Gleiche Korrektur wie im vertikalen Fall
-        # , x=x+width/(2*ncols)+(width-width/ncols)/(nlbls-1) * seq(0,nlbls-1,1)
-        , x=xlbl, labels=labels, adj=adj, cex=cex, ...)
-     }
+      else xlbl <- left + width/(nlbls-1) * seq(0,nlbls-1,1)
+      ylbl <- top - (height + max(strheight(labels, cex=cex)) * 1.2) 
+      text(y=ylbl
+           # Gleiche Korrektur wie im vertikalen Fall
+           # , x=x+width/(2*ncols)+(width-width/ncols)/(nlbls-1) * seq(0,nlbls-1,1)
+           , x=xlbl, labels=labels, adj=adj, cex=cex, ...)
+    }
   } else {
     rect( xleft=left, ybottom=top-height, xright=left+width, ytop=top-height/ncols*seq(0,ncols,1),
-      col=rev(cols), border=border)
+          col=rev(cols), border=border)
     if(!is.null(labels)){
-        # Korrektur am 13.6:
-        # die groesste und kleinste Beschriftung sollen nicht in der Mitte der Randfarbkaestchen liegen,
-        # sondern wirklich am Rand des strips
-        # alt: , y=y-height/(2*ncols)- (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)
-        #, y=y-height/(2*ncols)- (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)
-
+      # Korrektur am 13.6:
+      # die groesste und kleinste Beschriftung sollen nicht in der Mitte der Randfarbkaestchen liegen,
+      # sondern wirklich am Rand des strips
+      # alt: , y=y-height/(2*ncols)- (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)
+      #, y=y-height/(2*ncols)- (height- height/ncols)/(nlbls-1)  * seq(0,nlbls-1,1)
+      
       # 18.4.2015: reverse labels, as the logic below would misplace...
       labels <- rev(labels)
-
+      
       if(cntrlbl) ylbl <- top - height/(2*ncols) - (height- height/ncols)/(nlbls-1)  * seq(0, nlbls-1,1)
-        else ylbl <- top - height/(nlbls-1) * seq(0, nlbls-1, 1)
-      text(x=left + width + strwidth("0", cex=cex) + max(strwidth(labels, cex=cex)) * adj[1]
-        , y=ylbl, labels=labels, adj=adj, cex=cex, ... )
+      else ylbl <- top - height/(nlbls-1) * seq(0, nlbls-1, 1)
+      xlbl <- left + width + strwidth("0", cex=cex) + max(strwidth(labels, cex=cex)) * adj[1]
+      text(x=xlbl
+           , y=ylbl, labels=labels, adj=adj, cex=cex, ... )
     }
   }
   if(!is.na(frame)) rect( xleft=left, xright=left+width, ytop=top, ybottom=top-height, border=frame)
+  
+  if (!is.null(title)) 
+    text(left + width * title.adj, top + strheight("M")*1.4, labels = title, 
+         adj = c(title.adj, 0), cex=cex)
+  
+  invisible(list(rect=list(w=width, h=height, left=left, top=top), 
+                 text=list(x=if(is.null(labels)) NULL else xlbl, 
+                           y=if(is.null(labels)) NULL else ylbl)))
+  
 }
+
 
 
 
@@ -9342,15 +9404,24 @@ FindColor <- function(x, cols=rev(heat.colors(100)), min.x=NULL, max.x=NULL,
 
 SetAlpha <- function(col, alpha=0.5) {
 
-  if (length(alpha) < length(col)) alpha <- rep(alpha, length.out = length(col))
-  alpha[na <- alpha %)(% c(0, 1)] <- NA
-  if (length(col) < length(alpha)) col <- rep(col, length.out = length(alpha))
-  col[na] <- NA
+  # by 0.99.37.001
+  # this is redundant (since when actually??), as adjustcolor() does the same job
+  # ???
+  # should we deprecate?
   
-  acol <- substr(ColToHex(col), 1, 7)
-  acol[!is.na(alpha)] <- paste(acol[!is.na(alpha)], DecToHex(round(alpha[!is.na(alpha)]*255,0)), sep="")
-  acol[is.na(col)] <- NA
-  return(acol)
+  # if (length(alpha) < length(col)) alpha <- rep(alpha, length.out = length(col))
+  # alpha[na <- alpha %)(% c(0, 1)] <- NA
+  # if (length(col) < length(alpha)) col <- rep(col, length.out = length(alpha))
+  # col[na] <- NA
+  # 
+  # acol <- substr(ColToHex(col), 1, 7)
+  # acol[!is.na(alpha)] <- paste(acol[!is.na(alpha)], DecToHex(round(alpha[!is.na(alpha)]*255,0)), sep="")
+  # acol[is.na(col)] <- NA
+  # return(acol)
+  
+  
+  Vectorize(adjustcolor)(col= col, alpha.f = alpha)
+  
 }
 
 
@@ -9987,7 +10058,7 @@ PlotECDF <- function(x, breaks=NULL, col=Pal()[1],
 
   # the defaults
   axargs1 <- list(side = 2, at = seq(0, 1, 0.25),
-                  labels = Format(seq(0, 1, 0.25), leading = "", digits=2),
+                  labels = Format(seq(0, 1, 0.25), ldigits = 0, digits=2),
                   las = 1, xaxs = "e", lwd.axis=1) 
   
   axargs1 <- ClearArgs(provided = c(as.list(environment()), list(...)),  # all provided arguments and their values 
@@ -12107,7 +12178,7 @@ PlotWeb <- function(m, col=c(hred, hblue), lty=NULL, lwd = NULL, args.legend=NUL
   i <- c(which.min(d.m$d), which.max(ifelse(d.m$d<=0, d.m$d, NA)), which.min(ifelse(d.m$d>0, d.m$d, NA)), which.max(d.m$d))
 
   args.legend1 <- list( x="bottomright",
-                        legend=Format(d.m$d[i], digits=3, leading="drop"), lwd = d.m$d.sc[i],
+                        legend=Format(d.m$d[i], digits=3, ldigits=0), lwd = d.m$d.sc[i],
                         col=rep(col, each=2), bg="white", cex=0.8)
   if ( !is.null(args.legend) ) { args.legend1[names(args.legend)] <- args.legend }
   add.legend <- TRUE
@@ -12204,9 +12275,9 @@ PlotCashFlow <- function(x, y, xlim=NULL, labels=y, mar=NULL, cex.per=par("cex")
   DrawRegPolygon(x=x, y=y/yf, rot=pi/6 + (y>0) * pi, radius.x = .1, col=1)
 
   # periods
-  BoxedText(x0, -.3, Format(x0, leading="00", digits=0), border = NA, cex=cex.per)
+  BoxedText(x0, -.3, Format(x0, ldigits=2, digits=0), border = NA, cex=cex.per)
   # ticks
-  BoxedText(x0 + 0.5, .2, Format(seq_along(x0), leading="00", digits=0), 
+  BoxedText(x0 + 0.5, .2, Format(seq_along(x0), ldigits=2, digits=0), 
             border = NA, cex=cex.tck)
   # cashflows
   BoxedText(x=x, y=sign(y) *(abs(y/yf)+.3), labels = labels, border = NA, cex=cex.cash)
@@ -14230,6 +14301,7 @@ WrdFont <- function(wrd = DescToolsOptions("lastWord") ) {
 }
 
 
+
 # Get and set ParagraphFormat
 
 WrdParagraphFormat <- function(wrd = DescToolsOptions("lastWord") ) {
@@ -14713,7 +14785,7 @@ Phrase <- function(x, g, glabels=NULL, xname=NULL, unit=NULL, lang="engl", na.rm
   names(lst) <- c("x","y")
 
   n <- sapply(lst, length)
-  meanage <- format(sapply(lst, mean), digits=3)
+  mx <- format(sapply(lst, mean), digits=3)
 
   txt <- gettextf(txt1
                   , Format(sum(n), digits=0, big.mark="'")
@@ -14721,22 +14793,21 @@ Phrase <- function(x, g, glabels=NULL, xname=NULL, unit=NULL, lang="engl", na.rm
                   , glabels[1]
                   , Format(n[1]/sum(n), digits=1, fmt="%")
                   , xname
-                  , meanage[1]
+                  , mx[1]
                   , unit
                   , Format(n[2], digits=0, big.mark="'")
                   , glabels[2]
                   , Format(n[2]/sum(n), digits=1, fmt="%")
                   , xname
-                  , meanage[2]
+                  , mx[2]
                   , unit
   )
-
 
   r.t <- t.test(lst$x, lst$y)
 
   if(r.t$p.value < 0.05){
     md <- format(MeanDiffCI(lst$x, lst$y), digits=3)
-    txt <- paste(txt, gettextf(txt2, format.pval(r.t$p.value), md[1], unit, md[2], md[3], "%"), sep="" )
+    txt <- paste(txt, gettextf(txt2, Format(r.t$p.value, fmt="p"), md[1], unit, md[2], md[3], "%"), sep="" )
   } else {
     txt <- paste(txt, txt3, sep="")
   }
@@ -14952,7 +15023,7 @@ Phrase <- function(x, g, glabels=NULL, xname=NULL, unit=NULL, lang="engl", na.rm
 
 
 
-XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "", preserveStrings=FALSE) {
+XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "", preserveStrings=FALSE, sep=";") {
 
   # # define some XL constants
   # xlToRight <- -4161
@@ -14976,7 +15047,7 @@ XLView <- function (x, col.names = TRUE, row.names = FALSE, na = "", preserveStr
       }
     }
 
-    write.table(x, file = fn, sep = ";", col.names = col.names,
+    write.table(x, file = fn, sep = sep, col.names = col.names,
                 qmethod = "double", row.names = row.names, na=na)
     ob <- owb$Open(fn)
     # if row.names are saved there's the first cell in the first line missing

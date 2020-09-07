@@ -171,6 +171,75 @@ MAD <- function(x, weights = NULL, center = Median, constant = 1.4826, na.rm = F
 
 
 
+MADCI <- function(x, y = NULL, two.samp.diff = TRUE, gld.est = "TM", 
+                  conf.level = 0.95, sides = c("two.sided","left","right"), 
+                  na.rm = FALSE, ...) {
+
+  if (na.rm) x <- na.omit(x)
+  
+  sides <- match.arg(sides, choices = c("two.sided","left","right"), 
+                     several.ok = FALSE)
+  
+  if(sides!="two.sided")
+    conf.level <- 1 - 2*(1-conf.level)
+
+  asv.mad <- function(x, method = "TM"){
+    lambda <- fit.fkml(x, method = method)$lambda
+    m  <- median(x)
+    mad.x <- mad(x)
+    fFinv <- dgl(c(m - mad.x, m + mad.x, m), lambda1 = lambda)
+    FFinv <- pgl(c(m - mad.x, m + mad.x), lambda1 = lambda)
+    A <- fFinv[1] + fFinv[2]
+    C <- fFinv[1] - fFinv[2]
+    B <- C^2 + 4*C*fFinv[3]*(1 - FFinv[2] - FFinv[1])
+    
+    (1/(4 * A^2))*(1 + B/fFinv[3]^2)
+    
+  } 
+  
+  alpha <- 1 - conf.level
+  z <- qnorm(1 - alpha/2)
+  
+  est <- mad.x <- mad(x)
+  
+  n.x <- length(x)
+  asv.x <- asv.mad(x, method = gld.est)
+  
+  if(is.null(y)){
+    ci <- mad.x + c(-z, z) * sqrt(asv.x / n.x)
+    
+  } else{
+    y <- y[!is.na(y)]
+    mad.y <- mad(y)
+    n.y <- length(y)
+    
+    asv.y <- asv.mad(y, method = gld.est)
+    
+    if(two.samp.diff){
+      est <- mad.x - mad.y
+      ci <- est + c(-z, z)*sqrt(asv.x/n.x + asv.y/n.y)
+    } else{
+      est <- (mad.x/mad.y)^2
+      log.est <- log(est)
+      var.est <- 4 * est * ((1/mad.y^2)*asv.x/n.x + (est/mad.y^2)*asv.y/n.y)
+      Var.log.est <- (1 / est^2) * var.est
+      
+      ci <- exp(log.est + c(-z, z) * sqrt(Var.log.est))
+    }
+  }
+  
+  res <- c(est, ci)
+  
+  names(res) <- c("mad","lwr.ci","upr.ci")
+  
+  if(sides=="left")
+    res[3] <- Inf
+  else if(sides=="right")
+    res[2] <- -Inf
+  
+  return( res )
+  
+}
 
 
 
@@ -476,6 +545,9 @@ Quantile <- function(x, weights = NULL, probs = seq(0, 1, 0.25),
   return(unname(q))
   
 }
+
+
+
 
 
 IQRw <- function (x, weights = NULL, na.rm = FALSE, type = 7) {
@@ -2000,11 +2072,17 @@ BinomCI <- function(x, n, conf.level = 0.95, sides = c("two.sided","left","right
 }
 
 
+BinomCIn <- function(p=0.5, width, interval=c(1, 1e5), conf.level=0.95, sides="two.sided", method="wilson") {
+  uniroot(f = function(n) diff(BinomCI(x=p*n, n=n, conf.level=conf.level, 
+                                       sides=sides, method=method)[, -1]) - width, 
+          interval = interval)$root
+}
+
 
 
 BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided","left","right"),
                         method=c("wald", "waldcc", "ac", "score", "scorecc", "mn",
-                                 "mee", "blj", "ha","beal")) {
+                                 "mee", "blj", "ha", "hal", "jp")) {
 
 
   if(missing(method)) method <- "ac"
@@ -2014,7 +2092,7 @@ BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
 
   iBinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided","left","right"),
                         method=c("wald", "waldcc", "ac", "score", "scorecc", "mn",
-                                 "mee", "blj", "ha", "beal")) {
+                                 "mee", "blj", "ha", "hal", "jp")) {
     #   .Wald #1
     #   .Wald (Corrected) #2
     #   .Exact
@@ -2026,9 +2104,15 @@ BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
     # http://www.jiangtanghu.com/blog/2012/09/23/statistical-notes-5-confidence-intervals-for-difference-between-independent-binomial-proportions-using-sas/
     #  Interval estimation for the difference between independent proportions: comparison of eleven methods.
 
+    # https://www.lexjansen.com/wuss/2016/127_Final_Paper_PDF.pdf
+    # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.633.9380&rep=rep1&type=pdf
+    
+    # Newcombe (1998) (free):
+    # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.408.7354&rep=rep1&type=pdf
+    
     method <- match.arg(arg = method,
                         choices = c("wald", "waldcc", "ac", "score", "scorecc", "mn",
-                                    "mee", "blj", "ha"))
+                                    "mee", "blj", "ha", "hal", "jp"))
 
     sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
     if(sides!="two.sided")
@@ -2091,8 +2175,8 @@ BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
              l2 <- w2[2]
              u2 <- w2[3]
 
-             CI.lower <- max(-1, est + kappa * sqrt(l1*(1-l1)/n1 + u2*(1-u2)/n2))
-             CI.upper <- min( 1, est - kappa * sqrt(u1*(1-u1)/n1 + l2*(1-l2)/n2))
+             CI.lower <- est - kappa * sqrt(l1*(1-l1)/n1 + u2*(1-u2)/n2)
+             CI.upper <- est + kappa * sqrt(u1*(1-u1)/n1 + l2*(1-l2)/n2)
            },
            "scorecc" = {   # Newcombe
 
@@ -2103,25 +2187,33 @@ BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
              l2 <- w2[2]
              u2 <- w2[3]
 
-             CI.lower <- max(-1, est + sqrt((p1.hat - l1)^2 + (u2-p2.hat)^2) )
-             CI.upper <- min( 1, est - sqrt((u1-p1.hat)^2 + (p2.hat-l2)^2) )
+             CI.lower <- max(-1, est - sqrt((p1.hat - l1)^2 + (u2-p2.hat)^2) )
+             CI.upper <- min( 1, est + sqrt((u1-p1.hat)^2 + (p2.hat-l2)^2) )
 
            },
            "mee" = {   # Mee, also called Farrington-Mannig
 
              .score <- function (p1, n1, p2, n2, dif) {
 
+               if(dif > 1) dif <- 1
+               if(dif < -1) dif <- -1
+               
                diff <- p1 - p2 - dif
+               
                if (abs(diff) == 0) {
                  res <- 0
-               }
-               else {
+                 
+               } else {
                  t <- n2/n1
                  a <- 1 + t
                  b <- -(1 + t + p1 + t * p2 + dif * (t + 2))
                  c <- dif * dif + dif * (2 * p1 + t + 1) + p1 + t * p2
                  d <- -p1 * dif * (1 + dif)
                  v <- (b/a/3)^3 - b * c/(6 * a * a) + d/a/2
+                 # v might be very small, resulting in a value v/u^3 > |1| 
+                 # causing a numeric error for acos(v/u^3)
+                 # see:  x1=10, n1=10, x2=0, n1=10
+                 if(abs(v) < .Machine$double.eps) v <- 0
                  s <- sqrt((b/a/3)^2 - c/a/3)
                  u <- ifelse(v>0, 1,-1) * s
                  w <- (3.141592654 + acos(v/u^3))/3
@@ -2129,7 +2221,10 @@ BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
                  p2d <- p1d - dif
                  n <- n1 + n2
                  res <- (p1d * (1 - p1d)/n1 + p2d * (1 - p2d)/n2)
+                 # res <- max(0, res)   # might result in a value slightly negative
+                    
                }
+               
                return(sqrt(res))
              }
 
@@ -2138,13 +2233,15 @@ BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
                2 * min(pnorm(z), 1-pnorm(z))
              }
 
-             CI.lower <- uniroot(
-               function(delta) pval(delta) - alpha, interval = c(-1+1e-6, est-1e-6)
-             )$root
+             CI.lower <- max(-1, uniroot(
+               function(delta) pval(delta) - alpha, 
+               interval = c(-1+1e-6, est-1e-6)
+             )$root)
 
-             CI.upper <- uniroot(
-               function(delta) pval(delta) - alpha, interval = c(est+1e-6, 1-1e-6)
-             )$root
+             CI.upper <- min(1, uniroot(
+               function(delta) pval(delta) - alpha, 
+               interval = c(est + 1e-6, 1-1e-6)
+             )$root)
 
            },
 
@@ -2224,6 +2321,8 @@ BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
 
            },
            "beal" = {
+             
+             # experimental code only...
              # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.633.9380&rep=rep1&type=pdf
 
              a <- p1.hat + p2.hat
@@ -2238,8 +2337,44 @@ BinomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
              CI.lower <- max(-1, B - A / (1 + z*u))
              CI.upper <- min(1, B + A / (1 + z*u))
 
-           }
-
+           },
+           "hal" = {  # haldane 
+             
+             psi <- (p1.hat + p2.hat) / 2
+             u <- (1/n1 + 1/n2) / 4
+             v <- (1/n1 - 1/n2) / 4
+             
+             z <- kappa
+             
+             theta <- ((p1.hat - p2.hat) + z^2 * v* (1-2*psi)) / (1+z^2*u)
+             w <- z / (1+z^2*u) * sqrt(u * (4*psi*(1-psi) - (p1.hat - p2.hat)^2) + 
+                                         2*v*(1-2*psi) *(p1.hat - p2.hat) + 
+                                         4*z^2*u^2*(1-psi)*psi + z^2*v^2*(1-2*psi)^2)
+             c(theta + w, theta - w)
+             CI.lower <- max(-1, theta - w)
+             CI.upper <- min(1, theta + w)
+             
+           },
+           "jp" = {   # jeffery perks
+             
+             # same as haldane but with other psi
+             psi <- 0.5 * ((x1 + 0.5) / (n1 + 1) + (x2 + 0.5) / (n2 + 1) )
+             
+             u <- (1/n1 + 1/n2) / 4
+             v <- (1/n1 - 1/n2) / 4
+             
+             z <- kappa
+             
+             theta <- ((p1.hat - p2.hat) + z^2 * v* (1-2*psi)) / (1+z^2*u)
+             w <- z / (1+z^2*u) * sqrt(u * (4*psi*(1-psi) - (p1.hat - p2.hat)^2) + 
+                                         2*v*(1-2*psi) *(p1.hat - p2.hat) + 
+                                         4*z^2*u^2*(1-psi)*psi + z^2*v^2*(1-2*psi)^2)
+             c(theta + w, theta - w)
+             CI.lower <- max(-1, theta - w)
+             CI.upper <- min(1, theta + w)
+             
+           },
+           
     )
 
     ci <- c(est = est, lwr.ci = min(CI.lower, CI.upper), upr.ci = max(CI.lower, CI.upper))
@@ -3007,6 +3142,103 @@ MedianCI <- function(x, conf.level=0.95, sides = c("two.sided","left","right"), 
 
 
 
+
+
+QuantileCI <- function(x, probs=seq(0, 1, .25), conf.level = 0.95, sides = c("two.sided", "left", "right"),
+           na.rm = FALSE, method = c("exact", "boot"), R = 999) {
+  
+  .QuantileCI <- function(x, probs, conf.level = 0.95, sides = c("two.sided", "left", "right")) {
+    # Near-symmetric distribution-free confidence interval for a quantile `q`.
+  
+    # https://stats.stackexchange.com/questions/99829/how-to-obtain-a-confidence-interval-for-a-percentile
+    #
+    # Search over a small range of upper and lower order statistics for the 
+    # closest coverage to 1-alpha (but not less than it, if possible).
+    
+    alpha <- 1- conf.level
+    
+    n <- length(x)
+    
+    u <- qbinom(1-alpha/2, n, probs) + (-2:2) + 1
+    l <- qbinom(alpha/2, n, probs) + (-2:2)
+    u[u > n] <- Inf
+    l[l < 0] <- -Inf
+    coverage <- outer(l, u, function(a, b) pbinom(b-1, n, probs) - pbinom(a-1, n, probs))
+    if (max(coverage) < 1-alpha) i <- which(coverage==max(coverage)) else
+      i <- which(coverage == min(coverage[coverage >= 1-alpha]))
+    # minimal difference
+    i <- i[1]
+    
+    # order statistics and the actual coverage
+    u <- rep(u, each=5)[i]
+    l <- rep(l, 5)[i]
+    
+    # get the values  
+    if(probs %nin% c(0,1))
+      s <- sort(x, partial=c(u, l))
+    else
+      s <- sort(x)
+    
+    res <- c(lwr.ci=s[l], upr.ci=s[u])
+    attr(res, "conf.level") <- coverage[i]
+    
+    if(sides=="left")
+      res[3] <- Inf
+    else if(sides=="right")
+      res[2] <- -Inf
+    
+    return(res)
+    
+  }
+  
+  
+  if (na.rm) x <- na.omit(x)
+  if(anyNA(x))
+    stop("missing values and NaN's not allowed if 'na.rm' is FALSE")
+  
+  sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
+  if(sides!="two.sided")
+    conf.level <- 1 - 2*(1-conf.level)
+
+  method <- match.arg(arg=method, choices=c("exact","boot"))
+  
+  switch( method
+          , "exact" = { # this is the SAS-way to do it
+            r <- lapply(probs, function(p) .QuantileCI(x, probs=p, conf.level = conf.level, sides=sides))
+            coverage <- sapply(r, function(z) attr(z, "conf.level"))
+            r <- do.call(rbind, r)
+            attr(r, "conf.level") <- coverage
+          }
+          , "boot" = {
+            boot.med <- boot(x, function(x, d) quantile(x[d], probs=probs, na.rm=na.rm), R=R)
+            r <- boot.ci(boot.med, conf=conf.level, type="basic")[[4]][4:5]
+          } )
+  
+  qq <- quantile(x, probs=probs, na.rm=na.rm)
+  
+  if(length(probs)==1){
+    res <- c(qq, r)
+    names(res) <- c("est","lwr.ci","upr.ci")
+    # report the conf.level which can deviate from the required one
+    if(method=="exact")  attr(res, "conf.level") <-  attr(r, "conf.level")
+    
+  } else {
+    res <- cbind(qq, r)
+    colnames(res) <- c("est","lwr.ci","upr.ci")
+    # report the conf.level which can deviate from the required one
+    if(method=="exact")  
+      # report coverages for all probs
+      attr(res, "conf.level") <-  attr(r, "conf.level")
+    
+  }
+  
+  return( res )
+  
+}
+
+
+
+
 # standard error of mean
 MeanSE <- function(x, sd = NULL, na.rm = FALSE) {
   if(na.rm) x <- na.omit(x)
@@ -3172,9 +3404,9 @@ MeanDiffCI.default <- function (x, y, method = c("classic", "norm","basic","stud
   if(method == "classic"){
     a <- t.test(x, y, conf.level = conf.level, paired = paired)
     if(paired)
-      res <- c(meandiff = mean(x) - mean(y), lwr.ci = a$conf.int[1], upr.ci = a$conf.int[2])
-    else
       res <- c(meandiff = mean(x - y), lwr.ci = a$conf.int[1], upr.ci = a$conf.int[2])
+    else
+      res <- c(meandiff = mean(x) - mean(y), lwr.ci = a$conf.int[1], upr.ci = a$conf.int[2])
 
   } else {
 
@@ -3867,7 +4099,8 @@ Rosenbluth <- function(x, n = rep(1, length(x)), na.rm = FALSE) {
 ## stats: assocs etc. ====
 
 
-CutQ <- function(x, breaks=quantile(x, seq(0, 1, by=0.25), na.rm=TRUE), labels=NULL, na.rm = FALSE, ...){
+CutQ <- function(x, breaks=quantile(x, seq(0, 1, by=0.25), na.rm=TRUE), 
+                 labels=NULL, na.rm = FALSE, ...){
 
   # old version:
   #  cut(x, breaks=probsile(x, breaks=probs, na.rm = na.rm), include.lowest=TRUE, labels=labels)
@@ -3877,6 +4110,9 @@ CutQ <- function(x, breaks=quantile(x, seq(0, 1, by=0.25), na.rm=TRUE), labels=N
 
   if(na.rm) x <- na.omit(x)
 
+  if(length(breaks)==1 && IsWhole(breaks))
+    breaks <- quantile(x, seq(0, 1, by = 1/breaks), na.rm = TRUE)
+  
   if(is.null(labels)) labels <- gettextf("Q%s", 1:(length(breaks)-1))
 
   # probs <- quantile(x, probs)
@@ -3899,7 +4135,7 @@ CutQ <- function(x, breaks=quantile(x, seq(0, 1, by=0.25), na.rm=TRUE), labels=N
     newprobs <- sapply(uniqs, reposition)
     retval[!flag] <- as.character(cut(x[!flag], breaks=newprobs, include.lowest=TRUE,...))
 
-    levs <- unique(retval[order(x)]) # ensure factor levels are
+    levs <- unique(retval[order(x)])        # ensure factor levels are
     # properly ordered
     retval <- factor(retval, levels=levs)
 
@@ -3912,15 +4148,15 @@ CutQ <- function(x, breaks=quantile(x, seq(0, 1, by=0.25), na.rm=TRUE), labels=N
     rownames(pairs) <- c("lower.bound","upper.bound")
     colnames(pairs) <- levs
 
-    closed.lower <- rep(F,ncol(pairs)) # default lower is open
-    closed.upper <- rep(T,ncol(pairs)) # default upper is closed
-    closed.lower[1] <- TRUE             # lowest interval is always closed
+    closed.lower <- rep(FALSE, ncol(pairs)) # default lower is open
+    closed.upper <- rep(TRUE, ncol(pairs))  # default upper is closed
+    closed.lower[1] <- TRUE                 # lowest interval is always closed
 
-    for(i in 2:ncol(pairs))            # open lower interval if above singlet
+    for(i in 2:ncol(pairs))                 # open lower interval if above singlet
       if(pairs[1,i]==pairs[1,i-1] && pairs[1,i]==pairs[2,i-1])
         closed.lower[i] <- FALSE
 
-    for(i in 1:(ncol(pairs)-1))        # open upper interval if below singlet
+    for(i in 1:(ncol(pairs)-1))             # open upper interval if below singlet
       if(pairs[2,i]==pairs[1,i+1] && pairs[2,i]==pairs[2,i+1])
         closed.upper[i] <- FALSE
 
@@ -5256,7 +5492,7 @@ OddsRatio.glm <- function(x, conf.level = NULL, digits=3, use.profile=TRUE, ...)
   
   res <- list(or=d.print, call=x$call,
               BrierScore=BrierScore(x), PseudoR2=PseudoR2(x, which="all"), res=d.res,
-              nobs=nobs(x), terms=mterms)
+              nobs=nobs(x), terms=mterms, model=x$model)
 
   class(res) <- "OddsRatio"
 
@@ -5475,22 +5711,74 @@ OddsRatio.default <- function(x, conf.level = NULL, y = NULL, method=c("wald", "
 
 
 ## odds ratio (OR) to relative risk (RR)
-ORToRelRisk <- function(or, p0){
 
+
+ORToRelRisk <- function(...) {
+  UseMethod("ORToRelRisk")
+}
+  
+
+ORToRelRisk.default <- function(or, p0, ...) {
+  
   if(any(or <= 0))
     stop("'or' has to be positive")
-
-  if(p0 <= 0 | p0 >= 1)
+  
+  if(!all(ZeroIfNA(p0) %[]% c(0,1)))
     stop("'p0' has to be in (0,1)")
-
-  if(length(p0) != 1)
-    stop("'p0' has to be of length 1")
-
-  names(or) <- NULL
-
+  
   or / (1 - p0 + p0*or)
-
+  
 }
+
+
+
+ORToRelRisk.OddsRatio <- function(x, ...){
+  
+  .PredPrevalence <- function(model) {
+    
+    isNumericPredictor <- function(model, term){
+      unname(attr(attr(model, "terms"), "dataClasses")[term] == "numeric")
+    }
+    
+    # mean of response ist used for all numeric predictors
+    meanresp <- mean(as.numeric(model.response(model)) - 1)
+    # this is ok, as the second level is the one we predict in glm
+    # https://stackoverflow.com/questions/23282048/logistic-regression-defining-reference-level-in-r
+    
+    preds <- attr(terms(model), "term.labels")
+
+    # first the intercept
+    res <- NA_real_
+    
+    for(i in seq_along(preds))
+      if(isNumericPredictor(model=model, term=preds[i]))
+        res <- c(res, meanresp)
+      else {
+        # get the proportions of the levels of the factor with the response ...
+        fprev <- prop.table(table(model.frame(model)[, preds[i]], 
+                                  model.response(model)), 1)
+        # .. and use the proportion of positive response of the reference level
+        res <- c(res, rep(fprev[1, 2], times=nrow(fprev)-1))
+    }
+ 
+    return(res)
+  }
+ 
+  
+  or <- x$res[, c("or", "or.lci", "or.uci")]
+  pprev <-  .PredPrevalence(x$model)
+  
+  res <- sapply(or, function(x) ORToRelRisk(x, pprev))
+  rownames(res) <- rownames(or)
+  colnames(res) <- c("rr", "rr.lci", "rr.uci")
+  
+  return(res)  
+  
+} 
+
+
+
+
 
 
 # Cohen, Jacob. 1988. Statistical power analysis for the behavioral
@@ -5530,7 +5818,7 @@ ORToRelRisk <- function(or, p0){
 
 # N.B. One should use the values for the significance of the
 # Goodman-Kruskal lambda and Theil's UC with reservation, as these
-# have been modeled to mimic the the behavior of the same statistics
+# have been modeled to mimic the behavior of the same statistics
 # in SPSS.
 
 
