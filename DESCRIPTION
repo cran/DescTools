@@ -1,8 +1,8 @@
 Package: DescTools
 Type: Package
 Title: Tools for Descriptive Statistics
-Version: 0.99.38
-Date: 2020-09-06
+Version: 0.99.39
+Date: 2020-12-06
 Authors@R: c(
   person("Andri", "Signorell", email = "andri@signorell.net", role = c("aut", "cre")),
   person("Ken"           , "Aho",                 role = c("ctb")),
@@ -19,6 +19,7 @@ Authors@R: c(
   person("Stephane"      , "Champely",            role = c("ctb")),
   person("Daniel"        , "Chessel",             role = c("ctb")),
   person("Leanne"        , "Chhay",               role = c("ctb")),
+  person("Nicholas"      , "Cooper",              role = c("ctb")),
   person("Clint"         , "Cummins",             role = c("ctb")),
   person("Michael"       , "Dewey",               role = c("ctb")),
   person("Harold C."     , "Doran",               role = c("ctb")),
@@ -37,6 +38,7 @@ Authors@R: c(
   person("Joseph L."     , "Gastwirth",           role = c("ctb")),
   person("Vilmantas"     , "Gegzna",              role = c("ctb")),
   person("Yulia R."      , "Gel",                 role = c("ctb")),
+  person("Sereina"       , "Graber",              role = c("ctb")),
   person("Juergen"       , "Gross",               role = c("ctb")),
   person("Gabor"         , "Grothendieck",        role = c("ctb")),
   person("Frank E."      , "Harrell Jr",          role = c("ctb")),
@@ -136,7 +138,7 @@ RoxygenNote: 6.1.1
 Encoding: UTF-8
 NeedsCompilation: yes
 VignetteBuilder: R.rsp
-Packaged: 2020-09-07 16:02:56 UTC; andri
+Packaged: 2020-12-06 14:31:08 UTC; andri
 Author: Andri Signorell [aut, cre],
   Ken Aho [ctb],
   Andreas Alfons [ctb],
@@ -152,6 +154,7 @@ Author: Andri Signorell [aut, cre],
   Stephane Champely [ctb],
   Daniel Chessel [ctb],
   Leanne Chhay [ctb],
+  Nicholas Cooper [ctb],
   Clint Cummins [ctb],
   Michael Dewey [ctb],
   Harold C. Doran [ctb],
@@ -170,6 +173,7 @@ Author: Andri Signorell [aut, cre],
   Joseph L. Gastwirth [ctb],
   Vilmantas Gegzna [ctb],
   Yulia R. Gel [ctb],
+  Sereina Graber [ctb],
   Juergen Gross [ctb],
   Gabor Grothendieck [ctb],
   Frank E. Harrell Jr [ctb],
@@ -252,4 +256,4 @@ Author: Andri Signorell [aut, cre],
   Achim Zeileis [ctb]
 Maintainer: Andri Signorell <andri@signorell.net>
 Repository: CRAN
-Date/Publication: 2020-09-07 17:10:03 UTC
+Date/Publication: 2020-12-07 06:00:10 UTC

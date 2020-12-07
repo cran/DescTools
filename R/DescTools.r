@@ -2245,12 +2245,21 @@ DoCall <- function (what, args, quote = FALSE, envir = parent.frame())  {
 }
 
 
-MultMerge <- function(..., all.x=TRUE, all.y=TRUE) {
+MultMerge <- function(..., all.x=TRUE, all.y=TRUE, by=NULL) {
   
   lst <- list(...)
   
   # if just one object, there's nothing to merge
   if(length(lst)==1)  return(lst[[1]])
+  
+  if(!is.null(by)){
+    # merge column is given and must exist in all the data.frames
+    # we overwrite the row.names and remove the merge column
+    for(i in seq_along(lst)){
+      rownames(lst[[i]]) <- lst[[i]][[by]]
+      lst[[i]][by] <- NULL
+    }
+  }  
   
   # the columnnames must be unique within the resulting data.frame
   unames <- SplitAt(make.unique(unlist(lapply(lst, colnames)), sep = "."), 
@@ -2294,6 +2303,14 @@ MultMerge <- function(..., all.x=TRUE, all.y=TRUE) {
   
   res[ord, ]
   
+  if(!is.null(by)){
+    # restore key and remove rownames if there was one
+    res <- data.frame(row.names(res), res)
+    colnames(res)[1] <- by
+    rownames(res) <- c()
+  }
+  
+  return(res)
   
   
 }
@@ -2318,9 +2335,9 @@ as.matrix.xtabs <- function(x, ...){
 }
 
 
-TextToTable <- function(x, dimnames = NULL, ...){
+TextToTable <- function(x, dimnames = NULL, check.names=FALSE, ...){
 
-  d.frm <- read.table(text=x, ...)
+  d.frm <- read.table(text=x, check.names=check.names, ...)
   tab <- as.table(as.matrix(d.frm))
   if(!is.null(dimnames)) names(dimnames(tab)) <- dimnames
 
@@ -3374,8 +3391,12 @@ Zodiac <- function(x, lang = c("engl","deu"), stringsAsFactors = TRUE) {
     , deu =  {z <- c("Steinbock","Wassermann","Fische","Widder","Stier","Zwillinge","Krebs","Loewe","Jungfrau","Waage","Skorpion","Schuetze","Steinbock") }
   )
 
-  i <- cut(DescTools::Month(x)*100 + DescTools::Day(x),
-           breaks=c(0,120,218,320,420,520,621,722,822,923,1023,1122,1221,1231))
+  # i <- cut(DescTools::Month(x)*100 + DescTools::Day(x),
+  #          breaks=c(0,120,218,320,420,520,621,722,822,923,1023,1122,1221,1231))
+  i <- cut(DescTools::Month(x) * 100 + DescTools::Day(x), 
+           breaks = c(0,120,218,320,420,520,621,722,823,922,1023,1122,1222,1231), 
+           right=FALSE, include.lowest = TRUE)
+  
   if(stringsAsFactors){
     res <- i
     levels(res) <- z
@@ -4219,7 +4240,7 @@ Some.matrix <- function (x, n = 6L, addrownums = TRUE, ...) {
   n <- if (n < 0L)
     max(nrx + n, 0L)
   else min(n, nrx)
-  sel <- sort(sample(nrow(x)))
+  sel <- sort(sample(nrow(x), n))
   ans <- x[sel, , drop = FALSE]
   if (addrownums && is.null(rownames(x)))
     rownames(ans) <- format(sprintf("[%d,]", sel), justify = "right")
@@ -4251,6 +4272,26 @@ LsObj <- function(package){
   # example  lsf("DescTools")
   ls(pos = gettextf("package:%s", package))
 }
+
+
+GetCalls <- function (fun, alphabetic = TRUE, package=NULL) {
+  
+  tmp <- utils::getParseData(parse(text = getAnywhere(fun), keep.source = TRUE))
+  nms <- tmp$text[which(tmp$token == "SYMBOL_FUNCTION_CALL")]
+  funs <- unique(if (alphabetic) {
+    sort(nms)
+  } else {
+    nms
+  })
+  
+  src <- paste(as.vector(sapply(funs, find)))
+  outlist <- tapply(funs, factor(src), c)
+  
+  if(!is.null(package))
+    outlist <- outlist[grep(package, names(outlist))]
+  return(outlist)
+}
+
 
 
 What <- function(x){
@@ -5180,7 +5221,7 @@ Format.default <- function(x, digits = NULL, sci = NULL
   if(is.null(fmt)) fmt <- ""
   
   if (length(fmt) == 1) 
-    if(is.character(fmt) & (fmt %in% names(DescToolsOptions("fmt")))) {
+    if(is.character(fmt) && (fmt %in% names(DescToolsOptions("fmt")))) {
       fmt <- Fmt(fmt)
     }  
   
@@ -5569,8 +5610,8 @@ print.fmt <- function(x, ...){
     return(z)
   }
 
-  cat(gettextf("Format name:    %s%s\n", attr(x, "fmt_name"), # deparse(substitute(x)),
-               ifelse(identical(attr(x, "default"), TRUE), " (default)", "")),  # deparse(substitute(x))),
+  cat(gettextf("Format name:    %s%s\n", attr(x, "fmt_name"), 
+               ifelse(identical(attr(x, "default"), TRUE), " (default)", "")),  
       gettextf("Description:   %s\n", Label(x)),
       gettextf("Definition:    %s\n", CollapseList(x)),
       gettextf("Example:       %s\n", Format(pi * 1e5, fmt=x))
@@ -12951,8 +12992,9 @@ TOne <- function(x, grp = NA, add.length=TRUE,
   # and the standards come into effect if there are no user specifications
   fmt <- fmt[!duplicated(fmt)]
   # we could restrict the names here to c("abs","num","per","pval")
-  
-  
+
+
+  # set the variablenames per row
   if(is.null(vnames)){
     vnames <- if(is.null(colnames(x))) "Var1" else colnames(x)
     default_vnames <- TRUE
@@ -12971,29 +13013,52 @@ TOne <- function(x, grp = NA, add.length=TRUE,
   } else {
     num_fun <- FUN
   }
+
   
-  # the default tests for quantitative and categorical data
-  TEST.def <- list(num=list(fun=function(x, g){kruskal.test(x, g)$p.val},
-                            lbl="Kruskal-Wallis test"),
-                   cat=list(fun=function(x, g){chisq.test(table(x, g))$p.val},
-                            lbl="Chi-Square test"),
-                   dich=list(fun=function(x, g){fisher.test(table(x, g))$p.val},
-                             lbl="Fisher exact test"))
+  if(identical(grp, NA)){
+    # no grouping factor, let's define something appropriate
+    grp <- rep(1, nrow(x))
+    TEST <- NA
+  }
   
-  if(is.null(TEST))  # the defaults
-    TEST <- TEST.def
   
-  # define test for the singlest tests
-  if(is.null(TEST[["num"]]))
-    TEST[["num"]] <- TEST.def[["num"]]
-  if(is.null(TEST[["cat"]]))
-    TEST[["cat"]] <- TEST.def[["cat"]]
-  if(is.null(TEST[["dich"]]))
-    TEST[["dich"]] <- TEST.def[["dich"]]
+  if(identical(TEST, NA)){
+    
+    TEST <- list(num=list(fun=function(x, g) 1, lbl="None"),
+                 cat=list(fun=function(x, g) 1, lbl="None"),
+                 dich=list(fun=function(x, g) 1, lbl="None"))
+    notest <- TRUE
+
+  } else {
+
+    # the default tests for quantitative and categorical data
+    TEST.def <- list(num=list(fun=function(x, g){kruskal.test(x, g)$p.val},
+                              lbl="Kruskal-Wallis test"),
+                     cat=list(fun=function(x, g){chisq.test(table(x, g))$p.val},
+                              lbl="Chi-Square test"),
+                     dich=list(fun=function(x, g){fisher.test(table(x, g))$p.val},
+                               lbl="Fisher exact test"))
+    
+    if(is.null(TEST))  # the defaults
+      TEST <- TEST.def
+    
+    # define test for the single tests
+    if(is.null(TEST[["num"]]))
+      TEST[["num"]] <- TEST.def[["num"]]
+    if(is.null(TEST[["cat"]]))
+      TEST[["cat"]] <- TEST.def[["cat"]]
+    if(is.null(TEST[["dich"]]))
+      TEST[["dich"]] <- TEST.def[["dich"]]
+    
+    notest <- FALSE
+    
+  }
   
   num_test <- TEST[["num"]]$fun
   cat_test <- TEST[["cat"]]$fun
   dich_test <- TEST[["dich"]]$fun
+  
+  
   
   # replaced for flexible test in 0.99.19
   # num_row <- function(x, g, total=TRUE, test="kruskal.test", vname = deparse(substitute(x))){
@@ -13102,17 +13167,6 @@ TOne <- function(x, grp = NA, add.length=TRUE,
   ctype[sapply(ctype, function(x) any(x %in% c("numeric","integer")))] <- "num"
   ctype[sapply(ctype, function(x) any(x %in% c("factor","ordered","character")))] <- "cat"
   
-  if(identical(grp, NA)){
-    # no grouping factor, let's define something appropriate
-    grp <- rep(1, nrow(x))
-    num_test <- function(x, g) 1
-    cat_test <- function(x, g) 1
-    dich_test <- function(x, g) 1
-    TEST[["num"]]$lbl <- "None"
-    TEST[["cat"]]$lbl <- "None"
-    TEST[["dich"]]$lbl <- "None"
-  }
-  
   lst <- list()
   for(i in 1:ncol(x)){
     if(ctype[i] == "num"){
@@ -13164,9 +13218,6 @@ TOne <- function(x, grp = NA, add.length=TRUE,
                                 Format(prop.table(table(grp)), fmt=fmt$per), ")", sep=""), ""))
                  , res)
   
-  if(!is.null(colnames))
-    colnames(res) <- colnames
-  
   # align the table
   if(align != "\\l")
     res[,-c(1, ncol(res))] <- StrAlign(res[,-c(1, ncol(res))], sep = align)
@@ -13178,15 +13229,22 @@ TOne <- function(x, grp = NA, add.length=TRUE,
   
   if(!total)
     res <- res[, -2]
+
+  if(!is.null(colnames))
+    colnames(res) <- rep(colnames, length.out=ncol(res))
   
   
-  attr(res, "legend") <- gettextf("%s) %s, %s) %s, %s) %s\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1",
-                                  .FootNote(1), TEST[["num"]]$lbl, .FootNote(2), TEST[["dich"]]$lbl, .FootNote(3), TEST[["cat"]]$lbl)
+  if(!notest)
+    attr(res, "legend") <- gettextf("%s) %s, %s) %s, %s) %s\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1",
+                                    .FootNote(1), TEST[["num"]]$lbl, .FootNote(2), TEST[["dich"]]$lbl, .FootNote(3), TEST[["cat"]]$lbl)
+  else {
+    attr(res, "legend") <- ""
+    res <- res[, -ncol(res)]
+  }
   
   class(res) <- "TOne"
   return(res)
 }
-
 
 
 
@@ -13204,12 +13262,18 @@ TOne <- function(x, grp = NA, add.length=TRUE,
 
 
 print.TOne <- function(x, ...){
-
+  
+  cat("\n")
+  
   write.table(format(rbind(colnames(x), x), justify="left"),
               row.names=FALSE, col.names=FALSE, quote=FALSE)
 
-  cat("---\n")
-  cat(attr(x, "legend"), "\n\n")
+  if(!is.null(attr(x, "legend"))){
+    cat("---\n")
+    cat(attr(x, "legend"), "\n")
+  }
+  cat("\n")
+  
 }
 
 
@@ -14106,18 +14170,17 @@ ToWrd.table <- function (x, font = NULL, main = NULL, align=NULL, tablestyle=NUL
     wrdTable$Columns()$AutoFit()
 
 
-  # Cursor aus der Tabelle auf die letzte Postition im Dokument setzten
-  # This code will get you out of the table and put the text cursor directly behind it:
+  # this will get us out of the table and put the text cursor directly behind it
   wrdTable$Select()
   wrd[["Selection"]]$Collapse(wdConst$wdCollapseEnd)
 
-  # instead of goint to the end of the document ...
+  # instead of coarsely moving to the end of the document ...
   # Selection.GoTo What:=wdGoToPercent, Which:=wdGoToLast
   # wrd[["Selection"]]$GoTo(What = wdConst$wdGoToPercent, Which= wdConst$wdGoToLast)
 
   if(!is.null(main)){
     # insert caption
-    sel <- wrd$Selection()  # "Abbildung"
+    sel <- wrd$Selection()  
     sel$InsertCaption(Label=wdConst$wdCaptionTable, Title=paste(" - ", main, sep=""))
     sel$TypeParagraph()
 
@@ -15914,6 +15977,16 @@ CourseData <- function(name, url=NULL, header=TRUE, sep=";",  ...){
   url <- gettextf(paste(url, "%s", sep=""), name)
   read.table(file = url, header = header, sep = sep, ...)
 }
+
+
+
+as.statafactor <- function(x){
+  res <- factor(x, levels=attr(x, "labels"), labels=names(attr(x, "labels")))
+  attr(res, "label") <- attr(x, "label")
+  res
+}
+
+
 
 
 

@@ -1449,7 +1449,7 @@ print.Desc.numfact  <- function(x, digits = NULL, ...){
     cat(gettextf("\nError in test(x) : %s\n\n", x$test$message))
   } else {
     cat(gettextf("\n%s:\n  %s", x$test["method"],
-                 .CaptOut(x$test)[5], "\n\n", sep=""))
+                 .CaptOut(x$test)[5]), "\n\n", sep="")
   }
 
   if((x$NAgs > 0) & (length(grep("NA", x$xname)) == 0))
@@ -2087,10 +2087,11 @@ plot.Desc.numnum    <- function(x, main = NULL, col=SetAlpha(1, 0.3),
                                 xlab= NULL, ylab= NULL, smooth = NULL, smooth.front = TRUE, 
                                 conf.level=0.95, ...) {
 
-  if(is.null(main))
-    main <- x$main
-
-  plot(x=x$g, y=x$x, type="n", main=main, xlab=x$gname, ylab=x$xname, ...)
+  if(is.null(main)) main <- x$main
+  if(is.null(xlab)) xlab <- x$gname
+  if(is.null(ylab)) ylab <- x$xname
+  
+  plot(x=x$g, y=x$x, type="n", main=main, xlab=xlab, ylab=ylab, ...)
   grid()
   if(smooth.front)   # smoother should be in front of the points, this is ok, if x is long
     points(x=x$g, y=x$x, col=col, pch=pch, cex=cex, bg=bg)
