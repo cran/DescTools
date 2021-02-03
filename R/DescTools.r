@@ -550,9 +550,9 @@ Sample.default <- function (x, size, replace = FALSE, prob = NULL)
 
 
 
-CombN <- function(x, m, repl=FALSE, ord=FALSE){
+CombN <- function(n, m, repl=FALSE, ord=FALSE){
   # return the number for the 4 combinatoric cases
-  n <- length(x)
+  # n <- length(x)
   if(repl){
     res <- n^m
     if(!ord){
@@ -667,6 +667,14 @@ CombPairs <- function(x, y = NULL) {
     # if y is defined, all.x to all.y will be returned  
     expand.grid(x, y, stringsAsFactors=FALSE )
   }
+}
+
+
+
+GenRandGroups <- function(x, grp_n){
+  (grp <- sample(rep(j <- seq_along(grp_n), grp_n)))
+  idx <- sapply(j, function(x) which(grp==x))
+  lapply(idx, function(ii) x[ii])
 }
 
 
@@ -1409,6 +1417,19 @@ StrExtract <- function(x, pattern, ...){
   res[ZeroIfNA(m)>0] <- regmatches(x, m)
   res
 
+}
+
+
+StrExtractBetween <- function(x, left, right) {
+  
+  res <- rep(NA_character_, length(x))
+  # check that left and right exist, take care for NAs
+  valid <- sapply(StrPos(x, left) < StrPos(x, right), isTRUE)
+  
+  res[valid] <- gsub(gettextf(".*%s(.*?)%s.*", left, right), "\\1", x[valid])
+  
+  return(res)
+  
 }
 
 
@@ -3728,6 +3749,18 @@ axTicks.Date <- function(side = 1, x, ...) {
 
 
 
+`%:%` <- function(x, rng){
+  i <- match(x, rng, nomatch = 0)
+  from <- ifelse(length(from <- which(i==1))==0, 1, from)[1]
+  to <- ifelse(length(to <- which(i==2))==0, length(x), to)[1]
+  if(from==1 & to==length(x))
+    NA
+  else
+    x[from:to]
+}
+
+
+
 # Not %in% operator
 `%nin%` <- function(x, table) match(x, table, nomatch = 0) == 0
 
@@ -3850,8 +3883,30 @@ Overlap <- function(x, y){
 
 AllIdentical <- function(...){
   lst <- list(...)
-  all(sapply(lst[-1], identical, lst[[1]]))
   # identical ought to be transitive, so if A is identical to C and to D, then C should be identical to D
+  
+  # all(sapply(lst[-1], identical, lst[[1]]))
+  
+  # we might not need to compare all elements
+  for(i in seq_along(lst)[-1]){
+    
+    if(!identical(lst[[i]], lst[[1]])){
+      # we can stop after the first inequality
+      return(FALSE)
+    }
+  }
+  return(TRUE)
+  
+  # 3 times faster than original
+  
+  # library(microbenchmark)
+  # microbenchmark(
+  #   orig = AllIdentical(A, B, C, D, E),
+  #   A = AllIdenticalA(A, B, C, D, E), 
+  #   times  = 2000L
+  # )
+  
+  
 }
 
 
@@ -10585,7 +10640,8 @@ PlotArea.formula <- function (formula, data, subset, na.action, ...) {
 PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("cex"),
                      pch = 21, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"),
                      lcolor = "gray", lblcolor = par("fg"), xlim = NULL, main = NULL, xlab = NULL, ylab = NULL, xaxt=NULL, yaxt=NULL,
-                     add = FALSE, args.errbars = NULL, cex.axis=par("cex.axis"), cex.pch=1.2, ...) {
+                     add = FALSE, args.errbars = NULL, cex.axis=par("cex.axis"), cex.pch=1.2, 
+                     cex.gpch=1.2, ...) {
 
   ErrBarArgs <- function(from, to = NULL, pos = NULL, mid = NULL,
                          horiz = FALSE, col = par("fg"), lty = par("lty"), lwd = par("lwd"),
@@ -10661,6 +10717,8 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
   opar <- par("mai", "mar", "cex", "cex.axis", "yaxs")
   on.exit(par(opar))
   par(cex = cex, cex.axis=cex.axis[1], yaxs = "i")
+
+  lheight <- strheight("M", units="inches", cex=max(cex.axis[c(2, 3)])*cex)
   
   if (!is.numeric(x))
     stop("'x' must be a numeric vector or matrix")
@@ -10688,20 +10746,23 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
   
   if (!add)
     plot.new()
+  # we must use cex*cex.axis here
   linch <- if (!is.null(labels))
-             max(strwidth(labels, "inch", cex=max(cex.axis[2:3])), na.rm = TRUE)
+             max(strwidth(labels, "inch", cex=max(cex.axis[2])* cex), na.rm = TRUE)
            else 0
   
   if (is.null(glabels)) {
     goffset <- ginch <- 0
     
   } else {
-    ginch <- max(strwidth(glabels, "inch"), na.rm = TRUE)
-    goffset <- 0.4
+    ginch <- max(strwidth(glabels, "inch", cex=max(cex.axis[3]) * cex), na.rm = TRUE)
+    goffset <- lheight  
   }
   if (!(is.null(labels) && is.null(glabels) || identical(yaxt, "n"))) {
     nmai <- par("mai")
-    nmai[2L] <- nmai[4L] + max(linch + goffset, ginch) + 0.1
+    # nmai[2L] <- nmai[4L] + max(linch + goffset, ginch) + lheight
+    # warum sollte der linke Rand so sein wie der rechte??
+    nmai[2L] <- lheight + max(linch + goffset, ginch) + 5*lheight
     par(mai = nmai)
   }
   if (is.null(groups)) {
@@ -10723,14 +10784,15 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
   if (!add)
     plot.window(xlim = xlim, ylim = ylim, log = "")
   
-  lheight <- par("csi")
+  # lheight <- par("csi")
+  # much more precise:
   if (!is.null(labels)) {
-    linch <- max(strwidth(labels, "inch", cex = cex.axis[2]), na.rm = TRUE)
+    linch <- max(strwidth(labels, "inch", cex = cex.axis[2])*cex, na.rm = TRUE)
     loffset <- (linch + 0.1)/lheight
     labs <- labels[o]
     if (!identical(yaxt, "n"))
       mtext(labs, side = 2, line = loffset, at = y, adj = 0,
-          col = lblcolor, las = 2, cex = cex.axis[2], ...)
+          col = lblcolor, las = 2, cex = cex.axis[2]*cex, ...)
   }
   
   if (!add)
@@ -10749,14 +10811,18 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
   if (!is.null(groups)) {
     gpos <- rev(cumsum(rev(tapply(groups, groups, length)) +
                          2) - 1)
-    ginch <- max(strwidth(glabels, "inch", cex=cex.axis[3]), na.rm = TRUE)
-    goffset <- (max(linch + 0.2, ginch, na.rm = TRUE) + 0.1)/lheight
+    
+    # ginch <- max(strwidth(glabels, "inch", cex=cex.axis[3]*cex), na.rm = TRUE)
+    # goffset <- (max(linch + 0.2, ginch, na.rm = TRUE) + 0.1)/lheight
+    
+    lgoffset <- (max(linch + goffset, ginch) + lheight)/lheight
+    
     if (!identical(yaxt, "n"))
-      mtext(glabels, side = 2, line = goffset, at = gpos, adj = 0,
-            col = gcolor, las = 2, cex = cex.axis[3], ...)
+      mtext(glabels, side = 2, line = lgoffset, at = gpos, adj = 0,
+            col = gcolor, las = 2, cex = cex.axis[3]*cex, ...)
     if (!is.null(gdata)) {
       abline(h = gpos, lty = "dotted")
-      points(gdata, gpos, pch = gpch, col = gcolor, bg = bg, ...)
+      points(gdata, gpos, pch = gpch, cex=cex*cex.gpch, col = gcolor, bg = bg, ...)
     }
   }
   if (!(add || identical(xaxt, "n") ))

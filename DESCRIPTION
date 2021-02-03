@@ -1,8 +1,8 @@
 Package: DescTools
 Type: Package
 Title: Tools for Descriptive Statistics
-Version: 0.99.39
-Date: 2020-12-06
+Version: 0.99.40
+Date: 2021-02-06
 Authors@R: c(
   person("Andri", "Signorell", email = "andri@signorell.net", role = c("aut", "cre")),
   person("Ken"           , "Aho",                 role = c("ctb")),
@@ -89,6 +89,7 @@ Authors@R: c(
   person("Caroline"      , "Rodriguez",           role = c("ctb")),
   person("Nathan"        , "Russell",             role = c("ctb")),
   person("Nick"          , "Sabbe",               role = c("ctb")),
+  person("Ralph"         , "Scherer",             role = c("ctb")),
   person("Venkatraman E.", "Seshan",              role = c("ctb")),
   person("Michael"       , "Smithson",            role = c("ctb")),
   person("Greg"          , "Snow",                role = c("ctb")),
@@ -138,7 +139,7 @@ RoxygenNote: 6.1.1
 Encoding: UTF-8
 NeedsCompilation: yes
 VignetteBuilder: R.rsp
-Packaged: 2020-12-06 14:31:08 UTC; andri
+Packaged: 2021-02-03 06:41:25 UTC; andri
 Author: Andri Signorell [aut, cre],
   Ken Aho [ctb],
   Andreas Alfons [ctb],
@@ -224,6 +225,7 @@ Author: Andri Signorell [aut, cre],
   Caroline Rodriguez [ctb],
   Nathan Russell [ctb],
   Nick Sabbe [ctb],
+  Ralph Scherer [ctb],
   Venkatraman E. Seshan [ctb],
   Michael Smithson [ctb],
   Greg Snow [ctb],
@@ -256,4 +258,4 @@ Author: Andri Signorell [aut, cre],
   Achim Zeileis [ctb]
 Maintainer: Andri Signorell <andri@signorell.net>
 Repository: CRAN
-Date/Publication: 2020-12-07 06:00:10 UTC
+Date/Publication: 2021-02-03 09:40:02 UTC
