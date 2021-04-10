@@ -494,7 +494,9 @@ Quantile <- function(x, weights = NULL, probs = seq(0, 1, 0.25),
 
   # initializations
   if (!is.numeric(x)) stop("'x' must be a numeric vector")
+  
   n <- length(x)
+  
   if (n == 0 || (!isTRUE(na.rm) && any(is.na(x)))) {
     # zero length or missing values
     return(rep.int(NA, length(probs)))
@@ -522,6 +524,7 @@ Quantile <- function(x, weights = NULL, probs = seq(0, 1, 0.25),
   if(isTRUE(na.rm)){
     indices <- !is.na(x)
     x <- x[indices]
+    n <- length(x)
     if(!is.null(weights)) weights <- weights[indices]
   }
   # sort values and weights (if requested)
@@ -905,8 +908,8 @@ FindCorr <- function(x, cutoff = .90, verbose = FALSE) {
 # }
 
 
-AUC <- function(x, y, from=min(x, na.rm=TRUE), to = max(x, na.rm=TRUE), 
-                method=c("trapezoid", "step", "spline", "linear"), 
+AUC <- function(x, y, from=min(x, na.rm=TRUE), to = max(x, na.rm=TRUE),
+                method=c("trapezoid", "step", "spline", "linear"),
                 absolutearea = FALSE, subdivisions = 100, na.rm = FALSE, ...) {
 
   # calculates Area unter the curve
@@ -931,13 +934,13 @@ AUC <- function(x, y, from=min(x, na.rm=TRUE), to = max(x, na.rm=TRUE),
           , "trapezoid" = { a <- sum((apply( cbind(y[-length(y)], y[-1]), 1, mean))*(x[-1] - x[-length(x)])) }
           , "step" = { a <- sum( y[-length(y)] * (x[-1] - x[-length(x)])) }
           , "linear" = {
-                a <- MESS_auc(x, y, from = from , to = to, type="linear", 
+                a <- MESS_auc(x, y, from = from , to = to, type="linear",
                                    absolutearea=absolutearea, subdivisions=subdivisions, ...)
                        }
-          , "spline" = { 
-                a <- MESS_auc(x, y, from = from , to = to, type="spline", 
+          , "spline" = {
+                a <- MESS_auc(x, y, from = from , to = to, type="spline",
                      absolutearea=absolutearea, subdivisions=subdivisions, ...)
-            # a <- integrate(splinefun(x, y, method="natural"), lower=min(x), upper=max(x))$value 
+            # a <- integrate(splinefun(x, y, method="natural"), lower=min(x), upper=max(x))$value
               }
   )
   return(a)
@@ -945,18 +948,18 @@ AUC <- function(x, y, from=min(x, na.rm=TRUE), to = max(x, na.rm=TRUE),
 
 
 
-MESS_auc <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE), type=c("linear", "spline"), 
+MESS_auc <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE), type=c("linear", "spline"),
                 absolutearea=FALSE, subdivisions =100, ...) {
-  
+
   type <- match.arg(type)
-  
+
   # Sanity checks
   stopifnot(length(x) == length(y))
   stopifnot(!is.na(from))
-  
+
   if (length(unique(x)) < 2)
     return(NA)
-  
+
   if (type=="linear") {
     ## Default option
     if (absolutearea==FALSE) {
@@ -967,28 +970,124 @@ MESS_auc <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE), t
       o <- order(x)
       ox <- x[o]
       oy <- y[o]
-      
+
       idx <- which(diff(oy >= 0)!=0)
       newx <- c(x, x[idx] - oy[idx]*(x[idx+1]-x[idx]) / (y[idx+1]-y[idx]))
       newy <- c(y, rep(0, length(idx)))
       values <- approx(newx, newy, xout = sort(unique(c(from, to, newx[newx > from & newx < to]))), ...)
       res <- 0.5 * sum(diff(values$x) * (abs(values$y[-1]) + abs(values$y[-length(values$y)])))
     }
-    
+
   } else { ## If it is not a linear approximation
     if (absolutearea)
       myfunction <- function(z) { abs(splinefun(x, y, method="natural")(z)) }
-    
+
     else
       myfunction <- splinefun(x, y, method="natural")
-    
+
     res <- integrate(myfunction, lower=from, upper=to, subdivisions=subdivisions)$value
-    
+
   }
-  
+
   res
-  
+
 }
+
+
+
+
+# New version, publish as soon as package sobir is updated
+
+# AUC <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE), 
+#                 method=c("trapezoid", "step", "spline"), absolutearea = FALSE, 
+#                 subdivisions = 100,  na.rm = FALSE, ...)  {
+#   
+#   
+#   # calculates Area unter the curve
+#   # example:
+#   #   AUC( x=c(1,2,3,5), y=c(0,1,1,2))
+#   #   AUC( x=c(2,3,4,5), y=c(0,1,1,2))
+#   
+#   if(na.rm) {
+#     idx <- na.omit(cbind(x,y))
+#     x <- x[idx]
+#     y <- y[idx]
+#   }
+#   
+#   if (length(x) != length(y))
+#     stop("length x must equal length y")
+#   
+#   if (length(x) < 2)
+#     return(NA)
+#   
+#   o <- order(x)
+#   x <- x[o]
+#   y <- y[o]
+# 
+#   ox <- x[o]
+#   oy <- y[o]
+#   
+#   method <- match.arg(method)
+#   
+#   if (method=="trapezoid") {
+#     
+#     # easy and short
+#     # , "trapezoid" = { a <- sum((apply( cbind(y[-length(y)], y[-1]), 1, mean))*(x[-1] - x[-length(x)])) }
+#     
+#     ## Default option
+#     if (!absolutearea) {
+#       values <- approx(x, y, xout = sort(unique(c(from, to, x[x > from & x < to]))), ...)
+#       res <- 0.5 * sum(diff(values$x) * (values$y[-1] + values$y[-length(values$y)]))
+#       
+#     } else { ## Absolute areas
+#       
+#       idx <- which(diff(oy >= 0)!=0)
+#       newx <- c(x, x[idx] - oy[idx]*(x[idx+1]-x[idx]) / (y[idx+1]-y[idx]))
+#       newy <- c(y, rep(0, length(idx)))
+#       values <- approx(newx, newy, xout = sort(unique(c(from, to, newx[newx > from & newx < to]))), ...)
+#       
+#       res <- 0.5 * sum(diff(values$x) * (abs(values$y[-1]) + abs(values$y[-length(values$y)])))
+#       
+#     }
+#     
+#   } else if (method=="step") {
+#     
+#     # easy and short
+#     # , "step" = { a <- sum( y[-length(y)] * (x[-1] - x[-length(x)])) }
+#     
+#     ## Default option
+#     if (!absolutearea) {
+#       values <- approx(x, y, xout = sort(unique(c(from, to, x[x > from & x < to]))), ...)
+#       
+#       res <- sum(diff(values$x) * values$y[-length(values$y)])
+#       # res <- sum( y[-length(y)] * (x[-1] - x[-length(x)])) 
+#       
+#     } else { ## Absolute areas
+#       
+#       idx <- which(diff(oy >= 0)!=0)
+#       newx <- c(x, x[idx] - oy[idx]*(x[idx+1]-x[idx]) / (y[idx+1]-y[idx]))
+#       newy <- c(y, rep(0, length(idx)))
+#       values <- approx(newx, newy, xout = sort(unique(c(from, to, newx[newx > from & newx < to]))), ...)
+#       
+#       res <- sum(diff(values$x) * abs(values$y[-length(values$y)]))
+#       
+#     }
+#     
+#   } else if (method=="spline") { 
+#     
+#     if (absolutearea)
+#       myfunction <- function(z) { abs(splinefun(x, y, method="natural")(z)) }
+#     else
+#       myfunction <- splinefun(x, y, method="natural")
+#     
+#     res <- integrate(myfunction, lower=from, upper=to, subdivisions=subdivisions)$value
+#     
+#   }
+#   
+#   return(res)
+#   
+# }
+# 
 
 
 
@@ -1078,10 +1177,14 @@ Gsd <- function (x, na.rm = FALSE) {
 }
 
 
+
 Hmean <- function(x, method = c("classic", "boot"),
                   conf.level = NA, sides = c("two.sided","left","right"),
                   na.rm = FALSE, ...) {
 
+  # see also for alternative ci
+  # https://www.unistat.com/guide/confidence-intervals/
+  
   is.na(x) <- x <= 0
 
   if(is.na(conf.level))
@@ -1103,9 +1206,13 @@ Hmean <- function(x, method = c("classic", "boot"),
     if (sides != "two.sided")
       conf.level <- 1 - 2 * (1 - conf.level)
 
-    res <- (1/MeanCI(x = 1/x, method = method, conf.level = conf.level,
-                     sides = "two.sided", na.rm = na.rm, ...))[c(1, 3, 2)]
-
+    res <- (1/(mci <- MeanCI(x = 1/x, method = method, conf.level = conf.level,
+                     sides = "two.sided", na.rm = na.rm, ...)))[c(1, 3, 2)]
+    
+    # check if lower ci < 0, if so return NA, as CI not defined see Stata definition
+    if( mci[2] <= 0) 
+      res[2:3] <- NA
+    
     names(res) <- names(res)[c(1,3,2)]
 
     if (sides == "left")
@@ -1880,16 +1987,17 @@ BinomCI <- function(x, n, conf.level = 0.95, sides = c("two.sided","left","right
     p.hat <- x/n
     q.hat <- 1 - p.hat
 
+    # this is the default estimator used by the most (but not all) methods
+    est <- p.hat
+    
     switch( match.arg(arg=method, choices=c("wilson", "wald", "waldcc", "wilsoncc","agresti-coull", "jeffreys", "modified wilson",
                                             "modified jeffreys", "clopper-pearson", "arcsine", "logit", "witting","pratt", "midp", "lik", "blaker"))
             , "wald" = {
-              est <- p.hat
               term2 <- kappa*sqrt(p.hat*q.hat)/sqrt(n)
               CI.lower <- max(0, p.hat - term2)
               CI.upper <- min(1, p.hat + term2)
             }
             , "waldcc" = {
-              est <- p.hat
               term2 <- kappa*sqrt(p.hat*q.hat)/sqrt(n)
               # continuity correction
               term2 <- term2 + 1/(2*n)
@@ -1897,14 +2005,12 @@ BinomCI <- function(x, n, conf.level = 0.95, sides = c("two.sided","left","right
               CI.upper <- min(1, p.hat + term2)
             }
             , "wilson" = {
-              est <- p.hat
               term1 <- (x + kappa^2/2)/(n + kappa^2)
               term2 <- kappa*sqrt(n)/(n + kappa^2)*sqrt(p.hat*q.hat + kappa^2/(4*n))
               CI.lower <-  max(0, term1 - term2)
               CI.upper <- min(1, term1 + term2)
             }
             , "wilsoncc" = {
-              est <- p.hat
               lci <- ( 2*x+kappa**2 -1 - kappa*sqrt(kappa**2 -
                             2- 1/n + 4*p.hat*(n*q.hat+1))) / (2*(n+kappa**2))
               uci <- ( 2*x+kappa**2 +1 + kappa*sqrt(kappa**2 +
@@ -1919,13 +2025,13 @@ BinomCI <- function(x, n, conf.level = 0.95, sides = c("two.sided","left","right
               n.tilde <- n + kappa^2
               p.tilde <- x.tilde/n.tilde
               q.tilde <- 1 - p.tilde
+              # non standard estimator!!
               est <- p.tilde
               term2 <- kappa*sqrt(p.tilde*q.tilde)/sqrt(n.tilde)
               CI.lower <- max(0, p.tilde - term2)
               CI.upper <- min(1, p.tilde + term2)
             }
             , "jeffreys" = {
-              est <- p.hat
               if(x == 0)
                 CI.lower <- 0
               else
@@ -1936,7 +2042,6 @@ BinomCI <- function(x, n, conf.level = 0.95, sides = c("two.sided","left","right
                 CI.upper <- qbeta(1-alpha/2, x+0.5, n-x+0.5)
             }
             , "modified wilson" = {
-              est <- p.hat
               term1 <- (x + kappa^2/2)/(n + kappa^2)
               term2 <- kappa*sqrt(n)/(n + kappa^2)*sqrt(p.hat*q.hat + kappa^2/(4*n))
               ## comment by Andre Gillibert, 19.6.2017:
@@ -1955,7 +2060,6 @@ BinomCI <- function(x, n, conf.level = 0.95, sides = c("two.sided","left","right
                 CI.upper <- min(1, term1 + term2)
             }
             , "modified jeffreys" = {
-              est <- p.hat
               if(x == n)
                 CI.lower <- (alpha/2)^(1/n)
               else {
@@ -1974,18 +2078,17 @@ BinomCI <- function(x, n, conf.level = 0.95, sides = c("two.sided","left","right
               }
             }
             , "clopper-pearson" = {
-              est <- p.hat
               CI.lower <- qbeta(alpha/2, x, n-x+1)
               CI.upper <- qbeta(1-alpha/2, x+1, n-x)
             }
             , "arcsine" = {
               p.tilde <- (x + 0.375)/(n + 0.75)
+              # non standard estimator
               est <- p.tilde
               CI.lower <- sin(asin(sqrt(p.tilde)) - 0.5*kappa/sqrt(n))^2
               CI.upper <- sin(asin(sqrt(p.tilde)) + 0.5*kappa/sqrt(n))^2
             }
             , "logit" = {
-              est <- p.hat
               lambda.hat <- log(x/(n-x))
               V.hat <- n/(x*(n-x))
               lambda.lower <- lambda.hat - kappa*sqrt(V.hat)
@@ -2008,14 +2111,11 @@ BinomCI <- function(x, n, conf.level = 0.95, sides = c("two.sided","left","right
                 }
                 uniroot(fun, interval = c(0, 1), size = size, x = x, p = p)$root
               }
-              est <- p.hat
               CI.lower <- qbinom.abscont(1-alpha, size = n, x = x.tilde)
               CI.upper <- qbinom.abscont(alpha, size = n, x = x.tilde)
             }
 
             , "pratt" = {
-
-              est <- p.hat
 
               if(x==0) {
                 CI.lower <- 0
@@ -2049,8 +2149,6 @@ BinomCI <- function(x, n, conf.level = 0.95, sides = c("two.sided","left","right
             }
             , "midp" = {
               
-                est <- p.hat
-              
                 #Functions to find root of for the lower and higher bounds of the CI
                 #These are helper functions.
                 f.low <- function(pi, x, n) {
@@ -2078,7 +2176,6 @@ BinomCI <- function(x, n, conf.level = 0.95, sides = c("two.sided","left","right
             }
             , "lik" = {
               
-              est <- p.hat
               CI.lower <- 0
               CI.upper <- 1
               z <- qnorm(1 - alpha * 0.5)
@@ -3625,8 +3722,9 @@ MedianCI <- function(x, conf.level=0.95, sides = c("two.sided","left","right"), 
   
   
   sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
-  if(sides!="two.sided")
-    conf.level <- 1 - 2*(1-conf.level)
+  
+  # if(sides!="two.sided")
+  #   conf.level <- 1 - 2*(1-conf.level)
 
   # alte Version, ziemlich grosse Unterschiede zu wilcox.test:
   # Bosch: Formelsammlung Statistik (bei Markus Naepflin), S. 95
@@ -3644,13 +3742,17 @@ MedianCI <- function(x, conf.level=0.95, sides = c("two.sided","left","right"), 
             r <- MedianCI_Binom(x, conf.level = conf.level, sides=sides)
           }
           , "boot" = {
-            boot.med <- boot(x, function(x, d) median(x[d], na.rm=na.rm), R=R)
-            r <- boot.ci(boot.med, conf=conf.level, type="basic")[[4]][4:5]
+            if(sides!="two.sided")
+               conf.level <- 1 - 2*(1-conf.level)
+              
+              boot.med <- boot(x, function(x, d) median(x[d], na.rm=na.rm), R=R)
+              r <- boot.ci(boot.med, conf=conf.level, type="basic")[[4]][4:5]
           } )
 
   med <- median(x, na.rm=na.rm)
   if(is.na(med)) {   # do not report a CI if the median is not defined...
     res <- rep(NA, 3)
+    
   } else {
     res <- c(median=med, r)
     # report the conf.level which can deviate from the required one
@@ -3674,45 +3776,69 @@ MedianCI <- function(x, conf.level=0.95, sides = c("two.sided","left","right"), 
 QuantileCI <- function(x, probs=seq(0, 1, .25), conf.level = 0.95, sides = c("two.sided", "left", "right"),
            na.rm = FALSE, method = c("exact", "boot"), R = 999) {
   
-  .QuantileCI <- function(x, probs, conf.level = 0.95, sides = c("two.sided", "left", "right")) {
+  .QuantileCI <- function(x, prob, conf.level = 0.95, sides = c("two.sided", "left", "right")) {
     # Near-symmetric distribution-free confidence interval for a quantile `q`.
   
     # https://stats.stackexchange.com/questions/99829/how-to-obtain-a-confidence-interval-for-a-percentile
-    #
+
     # Search over a small range of upper and lower order statistics for the 
     # closest coverage to 1-alpha (but not less than it, if possible).
     
+    n <- length(x)
     alpha <- 1- conf.level
     
-    n <- length(x)
     
-    u <- qbinom(1-alpha/2, n, probs) + (-2:2) + 1
-    l <- qbinom(alpha/2, n, probs) + (-2:2)
-    u[u > n] <- Inf
-    l[l < 0] <- -Inf
-    coverage <- outer(l, u, function(a, b) pbinom(b-1, n, probs) - pbinom(a-1, n, probs))
-    if (max(coverage) < 1-alpha) i <- which(coverage==max(coverage)) else
-      i <- which(coverage == min(coverage[coverage >= 1-alpha]))
-    # minimal difference
-    i <- i[1]
-    
-    # order statistics and the actual coverage
-    u <- rep(u, each=5)[i]
-    l <- rep(l, 5)[i]
-    
+    if(sides == "two.sided"){
+
+      u <- qbinom(p = 1-alpha/2, size = n, prob = prob) + (-2:2) + 1
+      l <- qbinom(p = alpha/2, size = n, prob = prob) + (-2:2)
+      
+      u[u > n] <- Inf
+      l[l < 0] <- -Inf
+      
+      coverage <- outer(l, u, function(a,b) pbinom(b-1, n, prob = prob) - pbinom(a-1, n, prob=prob))
+      
+      if (max(coverage) < 1-alpha) i <- which(coverage==max(coverage)) else
+        i <- which(coverage == min(coverage[coverage >= 1-alpha]))
+      
+      # minimal difference
+      i <- i[1]
+      
+      # order statistics and the actual coverage.
+      u <- rep(u, each=5)[i]
+      l <- rep(l, 5)[i]
+      
+      coverage <- coverage[i]
+
+    } else if(sides == "left"){
+      
+      l <- qbinom(p = alpha, size = n, prob = prob)
+      u <- Inf
+      
+      coverage <- 1 - pbinom(q = l-1, size = n, prob = prob)
+
+    } else if(sides == "right"){
+      
+      l <- -Inf
+      u <- qbinom(p = 1-alpha, size = n, prob = prob)
+      
+      coverage <- pbinom(q = u, size = n, prob = prob)
+
+    } 
+
     # get the values  
-    if(probs %nin% c(0,1))
-      s <- sort(x, partial=c(u, l))
+    if(prob %nin% c(0,1))
+      s <- sort(x, partial= c(u, l)[is.finite(c(u, l))])
     else
       s <- sort(x)
     
     res <- c(lwr.ci=s[l], upr.ci=s[u])
-    attr(res, "conf.level") <- coverage[i]
+    attr(res, "conf.level") <- coverage
     
     if(sides=="left")
-      res[3] <- Inf
+      res[2] <- Inf
     else if(sides=="right")
-      res[2] <- -Inf
+      res[1] <- -Inf
     
     return(res)
     
@@ -3724,21 +3850,26 @@ QuantileCI <- function(x, probs=seq(0, 1, .25), conf.level = 0.95, sides = c("tw
     stop("missing values and NaN's not allowed if 'na.rm' is FALSE")
   
   sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
-  if(sides!="two.sided")
-    conf.level <- 1 - 2*(1-conf.level)
 
   method <- match.arg(arg=method, choices=c("exact","boot"))
   
   switch( method
           , "exact" = { # this is the SAS-way to do it
-            r <- lapply(probs, function(p) .QuantileCI(x, probs=p, conf.level = conf.level, sides=sides))
+            r <- lapply(probs, function(p) .QuantileCI(x, prob=p, conf.level = conf.level, sides=sides))
             coverage <- sapply(r, function(z) attr(z, "conf.level"))
             r <- do.call(rbind, r)
             attr(r, "conf.level") <- coverage
           }
           , "boot" = {
-            boot.med <- boot(x, function(x, d) quantile(x[d], probs=probs, na.rm=na.rm), R=R)
-            r <- boot.ci(boot.med, conf=conf.level, type="basic")[[4]][4:5]
+            
+            if(sides!="two.sided")
+              conf.level <- 1 - 2*(1-conf.level)
+            
+            r <- t(sapply(probs, 
+                     function(p) {
+                       boot.med <- boot(x, function(x, d) quantile(x[d], probs=p, na.rm=na.rm), R=R)
+                       boot.ci(boot.med, conf=conf.level, type="basic")[[4]][4:5]
+                     }))
           } )
   
   qq <- quantile(x, probs=probs, na.rm=na.rm)
@@ -3874,6 +4005,22 @@ MeanCI <- function (x, sd = NULL, trim = 0, method = c("classic", "boot"),
     res[2] <- -Inf
 
   return(res)
+}
+
+
+
+MeanCIn <- function(ci, sd, interval=c(2, 1e5), conf.level=0.95, norm=FALSE, 
+                    tol = .Machine$double.eps^0.5) {
+  
+  width <- diff(ci)/2
+  alpha <- (1-conf.level)/2
+  
+  if(norm)
+    uniroot(f = function(n) sd/sqrt(n) * qnorm(p = 1-alpha) - width, 
+            interval = interval, tol = tol)$root
+  else
+    uniroot(f = function(n) (qt(1-alpha, df=n-1) * sd / sqrt(n)) - width, 
+            interval = interval, tol = tol)$root
 }
 
 

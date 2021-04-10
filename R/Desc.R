@@ -208,7 +208,7 @@ desc <- function (x, main=NULL, xname=deparse(substitute(x)), digits=NULL, maxro
       }
 
       z$rfrq <- BinomCI(z$afrq, n, conf.level = conf.level)
-      z$conf.level=conf.level
+      z$conf.level <- conf.level
       z$class <- "logical"
 
 
@@ -2041,7 +2041,7 @@ plot.Desc.numfact <- function(x, main=NULL, add_ni = TRUE
 
     layout(matrix(c(1,2), ncol=2, byrow=TRUE), widths=c(2,1), TRUE)
 
-    boxplot(z, border="white", xaxt="n", yaxt="n", ... )
+    boxplot(z, col=par("bg"), border=par("bg"), xaxt="n", yaxt="n", ... )
     # set defaults for the boxplot
     args.boxplot1 <- list(x=z,
                           frame.plot = FALSE, main = "",

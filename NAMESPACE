@@ -11,7 +11,7 @@ export(
 "ColToGray","ColToGrey","ColToHex","ColToHsv","ColToRgb","ColToOpaque","RgbToHex", 
 "CombN","CombPairs","CombSet","ConDisPairs","Conf","ConnLines","ContCoef","Contrasts","CorCI",
 "CorPolychor","CramerV","CramerVonMisesTest","CronbachAlpha","CutQ","Day","Day<-","dBenf",
-"DecToHex","DecToOct","DegToRad","DenseRank","PercentRank",
+"DecToHex","DecToOct","DegToRad","PercentRank",
 "Timezone", "SetNames",
 "DescToolsOptions","DiffDays360","DivCoef","DivCoefMax","DoCall","DrawArc","DrawBand","DrawBezier","DrawCircle","DrawEllipse","DrawRegPolygon","dRevGumbel","Dummy",
 "DunnettTest","DunnTest",
@@ -25,7 +25,7 @@ export(
 "LillieTest","lines.Lc","lines.lm","lines.loess","lines.smooth.spline","lines.SmoothSpline","LinScale",
 "LOCF","LOF","Logit","LogitInv","LogSt","LogStInv","LsFct","LsObj",
 "Mar", "Mgp", "Margins","MeanAD",
-"MeanCI","MeanDiffCI","MeanSE","MedianCI","MHChisqTest","Midx","Minute","MixColor","Mode","Month",
+"MeanCI","MeanCIn","MeanDiffCI","MeanSE","MedianCI","MHChisqTest","Midx","Minute","MixColor","Mode","Month",
 "MosesTest","MoveAvg","MultinomCI","MutInf","Ndec",
 "NemenyiTest","Now","OctToDec","OddsRatio","OPR","OrderMixed","Outlier","Overlap",
 "PageTest",
@@ -49,8 +49,8 @@ export(
 "VarCI","VecRot","VecShift","Vigenere","Week","Weekday","Winsorize","WoolfTest","WrdCaption","WrdGoto","WrdPageBreak",
 "WrdInsertBookmark","WrdTable","WrdKill","WrdPlot","WrdSaveAs",
 "WrdUpdateBookmark","WrdDeleteBookmark",
-"XLGetRange","XLGetWorkbook","XLKill","XLView","ToXL","Year","YearDay","YearMonth",
-"YuenTTest","YuleQ","YuleY","ZeroIfNA","NAIfZero","BlankIfNA","NAIfBlank","Zodiac",
+"XLGetRange","XLGetWorkbook","XLKill","XLView","ToXL","Year","YearDay","YearMonth","YearDays","MonthDays",
+"YuenTTest","YuleQ","YuleY","ZeroIfNA","NAIfZero","BlankIfNA","NAIfBlank","NAIf","Zodiac",
 "ZTest",
 "BinTree", "PlotECDF","Abind","TOne","MaxDigits","XLDateToPOSIXct",
 "axTicks.POSIXct", "print.PercTable", "PlotMosaic", "PDFManual", "LongToRgb", "PlotMiss","BreuschGodfreyTest",
@@ -65,7 +65,7 @@ export(
 "%^%", "TitleRect","BarText","as.CDateFmt", "Phrase", "N", "BootCI", "VonNeumannTest",
 "Append","ConoverTest",
 
-"%()%","%(]%","%)(%","%)[%","%[)%","%[]%","%](%","%][%","%:%","TTestA",
+"%()%","%(]%","%)(%","%)[%","%[)%","%[]%","%](%","%][%","%:%","%::%","TTestA",
 "DecToBin", "RomanToInt", "TukeyBiweight","PtInPoly",
 "JonckheereTerpstraTest", "AndersonDarlingTest", "BarnardTest","HoeffD","Desc",
 "CountCompCases", "SplitAt",
@@ -80,7 +80,7 @@ export(
 "CmToPts", "PtsToCm","PlotPairs", "IQRw", "ImputeKnn", "AllIdentical","CountWorkDays",
 "VanWaerdenTest", "RSessionAlive", "RTempdirAlive", "StripAttr", "PlotConDens", "StrSplit", "SplitToCol",
 "CmykToCmy", "CmyToCmyk", "RgbToCmy", "CmykToRgb", "RevCode", "MADCI","QuantileCI", "BinomCIn",
-"GetCalls", "BhapkarTest", "StrExtractBetween", "GenRandGroups"
+"GetCalls", "BhapkarTest", "StrExtractBetween", "GenRandGroups", "Rank"
 )
 
 
@@ -90,6 +90,7 @@ importFrom("stats", ".nknots.smspl", "IQR", "acf", "addmargins", "anova", "aov",
            "coef", "coefficients", "cov2cor", "df.residual","nobs", "vcov","update","relevel","rbeta", "rexp", "qexp","reshape",
            "confint.default", "ecdf", "glm", "reformulate", "aggregate")
 
+importFrom("data.table", "frankv", "frank")
 
 importFrom("graphics", "abline", "arrows", "axTicks", "axis", "barplot", "box", "boxplot", "clip", "close.screen", "dotchart", "frame", "grid", "hist", "identify", "image", "layout", "legend", "lines", "locator", "matlines", "matplot", "mosaicplot", "mtext", "pairs", "par",
            "plot", "plot.design", "plot.new", "plot.window", "points", "polygon", "rect", "screen", "segments", "split.screen", "strheight", "strwidth", "symbols", "text", "title",

@@ -1,8 +1,8 @@
 Package: DescTools
 Type: Package
 Title: Tools for Descriptive Statistics
-Version: 0.99.40
-Date: 2021-02-06
+Version: 0.99.41
+Date: 2021-04-09
 Authors@R: c(
   person("Andri", "Signorell", email = "andri@signorell.net", role = c("aut", "cre")),
   person("Ken"           , "Aho",                 role = c("ctb")),
@@ -125,7 +125,7 @@ Description: A collection of miscellaneous basic statistic functions and conveni
 Suggests: RDCOMClient, tcltk, VGAM, R.rsp
 Depends: base, stats, R (>= 3.6.0)
 Imports: graphics, grDevices, methods, MASS, utils, boot, mvtnorm,
-        expm, Rcpp (>= 0.12.10), rstudioapi, Exact, gld
+        expm, Rcpp (>= 0.12.10), rstudioapi, Exact, gld, data.table
 LinkingTo: Rcpp, BH
 License: GPL (>= 2)
 LazyLoad: yes
@@ -139,7 +139,7 @@ RoxygenNote: 6.1.1
 Encoding: UTF-8
 NeedsCompilation: yes
 VignetteBuilder: R.rsp
-Packaged: 2021-02-03 06:41:25 UTC; andri
+Packaged: 2021-04-09 18:47:58 UTC; andri
 Author: Andri Signorell [aut, cre],
   Ken Aho [ctb],
   Andreas Alfons [ctb],
@@ -258,4 +258,4 @@ Author: Andri Signorell [aut, cre],
   Achim Zeileis [ctb]
 Maintainer: Andri Signorell <andri@signorell.net>
 Repository: CRAN
-Date/Publication: 2021-02-03 09:40:02 UTC
+Date/Publication: 2021-04-10 04:30:09 UTC
