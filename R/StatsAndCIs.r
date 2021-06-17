@@ -997,95 +997,95 @@ MESS_auc <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE), t
 
 
 # New version, publish as soon as package sobir is updated
-
-# AUC <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE), 
-#                 method=c("trapezoid", "step", "spline"), absolutearea = FALSE, 
+# 
+# AUC <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE),
+#                 method=c("trapezoid", "step", "spline"), absolutearea = FALSE,
 #                 subdivisions = 100,  na.rm = FALSE, ...)  {
-#   
-#   
+# 
+# 
 #   # calculates Area unter the curve
 #   # example:
 #   #   AUC( x=c(1,2,3,5), y=c(0,1,1,2))
 #   #   AUC( x=c(2,3,4,5), y=c(0,1,1,2))
-#   
+# 
 #   if(na.rm) {
 #     idx <- na.omit(cbind(x,y))
 #     x <- x[idx]
 #     y <- y[idx]
 #   }
-#   
+# 
 #   if (length(x) != length(y))
 #     stop("length x must equal length y")
-#   
+# 
 #   if (length(x) < 2)
 #     return(NA)
-#   
+# 
 #   o <- order(x)
 #   x <- x[o]
 #   y <- y[o]
 # 
 #   ox <- x[o]
 #   oy <- y[o]
-#   
+# 
 #   method <- match.arg(method)
-#   
+# 
 #   if (method=="trapezoid") {
-#     
+# 
 #     # easy and short
 #     # , "trapezoid" = { a <- sum((apply( cbind(y[-length(y)], y[-1]), 1, mean))*(x[-1] - x[-length(x)])) }
-#     
+# 
 #     ## Default option
 #     if (!absolutearea) {
 #       values <- approx(x, y, xout = sort(unique(c(from, to, x[x > from & x < to]))), ...)
 #       res <- 0.5 * sum(diff(values$x) * (values$y[-1] + values$y[-length(values$y)]))
-#       
+# 
 #     } else { ## Absolute areas
-#       
+# 
 #       idx <- which(diff(oy >= 0)!=0)
 #       newx <- c(x, x[idx] - oy[idx]*(x[idx+1]-x[idx]) / (y[idx+1]-y[idx]))
 #       newy <- c(y, rep(0, length(idx)))
 #       values <- approx(newx, newy, xout = sort(unique(c(from, to, newx[newx > from & newx < to]))), ...)
-#       
+# 
 #       res <- 0.5 * sum(diff(values$x) * (abs(values$y[-1]) + abs(values$y[-length(values$y)])))
-#       
+# 
 #     }
-#     
+# 
 #   } else if (method=="step") {
-#     
+# 
 #     # easy and short
 #     # , "step" = { a <- sum( y[-length(y)] * (x[-1] - x[-length(x)])) }
-#     
+# 
 #     ## Default option
 #     if (!absolutearea) {
 #       values <- approx(x, y, xout = sort(unique(c(from, to, x[x > from & x < to]))), ...)
-#       
+# 
 #       res <- sum(diff(values$x) * values$y[-length(values$y)])
-#       # res <- sum( y[-length(y)] * (x[-1] - x[-length(x)])) 
-#       
+#       # res <- sum( y[-length(y)] * (x[-1] - x[-length(x)]))
+# 
 #     } else { ## Absolute areas
-#       
+# 
 #       idx <- which(diff(oy >= 0)!=0)
 #       newx <- c(x, x[idx] - oy[idx]*(x[idx+1]-x[idx]) / (y[idx+1]-y[idx]))
 #       newy <- c(y, rep(0, length(idx)))
 #       values <- approx(newx, newy, xout = sort(unique(c(from, to, newx[newx > from & newx < to]))), ...)
-#       
+# 
 #       res <- sum(diff(values$x) * abs(values$y[-length(values$y)]))
-#       
+# 
 #     }
-#     
-#   } else if (method=="spline") { 
-#     
+# 
+#   } else if (method=="spline") {
+# 
 #     if (absolutearea)
 #       myfunction <- function(z) { abs(splinefun(x, y, method="natural")(z)) }
 #     else
 #       myfunction <- splinefun(x, y, method="natural")
-#     
+# 
 #     res <- integrate(myfunction, lower=from, upper=to, subdivisions=subdivisions)$value
-#     
+# 
 #   }
-#   
+# 
 #   return(res)
-#   
+# 
 # }
 # 
 

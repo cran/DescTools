@@ -11,7 +11,7 @@ In addition to \code{\link{abline}} the function will also display polynomial mo
 \usage{
 \method{lines}{lm}(x, col = Pal()[1], lwd = 2, lty = "solid",
       type = "l", n = 100, conf.level = 0.95, args.cband = NULL,
-      pred.level = NA, args.pband = NULL, ...)
+      pred.level = NA, args.pband = NULL, xpred = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -46,7 +46,7 @@ In addition to \code{\link{abline}} the function will also display polynomial mo
   \item{args.pband}{list of arguments for the prediction band, such as color or border (see \code{\link{DrawBand}}).
 %%     ~~Describe \code{type} here~~
 }
-
+\item{xpred}{a numeric vector \code{c(from, to)},  if the x limits can't be defined based on available data, xpred can be used to provide the range where the line and especially the confidence intervals should be plotted.}
   \item{\dots}{further arguments are not used specifically.
 %%     ~~Describe \code{\dots} here~~
 }
@@ -72,7 +72,7 @@ Andri Signorell <andri@signorell.net>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-par(mfrow=c(1,2))
+opar <- par(mfrow=c(1,2))
 
 plot(hp ~ wt, mtcars)
 lines(lm(hp ~ wt, mtcars), col="steelblue")
@@ -83,8 +83,17 @@ r.lm <- lm(hp ~ wt, mtcars)
 lines(r.lm, col="red", pred.level=0.95, args.pband=list(col=SetAlpha("grey",0.3)) )
 
 # works with transformations too
+plot(dist ~ sqrt(speed), cars)
+lines(lm(dist ~ sqrt(speed), cars), col=hred)
+
+plot(dist ~ log(speed), cars)
+lines(lm(dist ~ log(speed), cars), col=hred)
+
+# and with more specific variables based on only one predictor
 plot(dist ~ speed, cars)
 lines(lm(dist ~ poly(speed, degree=2), cars), col=hred)
+
+par(opar)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

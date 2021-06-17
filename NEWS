@@ -1,6 +1,32 @@
 
 
 
+DescTools 0.99.42 (2021-06-16)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+  * PlotDotCI() is a convenience interface for PlotDot() to plot group-wise 
+    confidence intervals.
+  * Bg() paints the background of a base R plot.
+  * ABCCoords() returns the coordinates for literal positions as "bottomright",
+    "topleft", etc..
+
+UPDATED FUNCTIONS:
+  * (Pending!!: AUC() has been gently revised.  (...but can't be published before 
+    package sobir is updated....)
+  * Freq will report the median class as attribute.  
+  * Desc.numeric() and Desc.Date() get a new attribute include_x to prevent the
+    function to return the provided argument x.
+  
+BUGFIXES:
+  * PlotDot() did not calculate correctly the left margin. In this connection
+    two more arguments have been introduced: automar and gshift.
+  * StrExtractBetween() did not use the first match for the left boundary.  
+
+
+
+
+
 DescTools 0.99.41 (2021-04-09)
 ------------------------------
 
@@ -19,8 +45,6 @@ UPDATED FUNCTIONS:
   * RevCode() has been extended to process factors and logicals too. 
   * BarText() will support offset by now. It also gets a new argument pos, 
     which replaces the old one.
-  * [AUC() has been gently revised.  (...but can't be published before package 
-    sobir is updated.]
   
 BUGFIXES:
   * TMod() will not insert empty columns, when results are output to Word.

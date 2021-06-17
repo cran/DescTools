@@ -1,17 +1,29 @@
 
 \name{PlotDot}
 \alias{PlotDot}
+\alias{PlotDotCI}
+
 \title{Cleveland's Dot Plots}
 \description{
-  Draw a Cleveland dot plot. This is an extended version of \code{\link{dotchart}} with an added option for error bars and an \code{add} argument.
+  Draw a Cleveland dot plot. This is an extended version of \code{\link{dotchart}} with an added option for error bars, an \code{add} argument and several more options. \code{PlotCI()} is a small helpfunction to facilitate ci-plots of several models.
 }
 \usage{
 PlotDot(x, labels = NULL, groups = NULL, gdata = NULL,
         cex = par("cex"), pch = 21, gpch = 21, bg = par("bg"),
         color = par("fg"), gcolor = par("fg"), lcolor = "gray", lblcolor = par("fg"),
         xlim = NULL, main = NULL, xlab = NULL, ylab = NULL,
-        xaxt=NULL, yaxt=NULL, add = FALSE, args.errbars = NULL, 
-        cex.axis = par("cex.axis"), cex.pch = 1.2, cex.gpch=1.2, \dots)
+        xaxt = NULL, yaxt = NULL, add = FALSE, args.errbars = NULL, 
+        cex.axis = par("cex.axis"), cex.pch = 1.2, cex.gpch = 1.2, 
+        gshift = 2, automar = TRUE, \dots)
+        
+        
+PlotDotCI(..., grp = 1, cex = par("cex"),
+         pch = 21, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"),
+         lcolor = "gray", lblcolor = par("fg"), xlim = NULL, main = NULL, 
+         xlab = NULL, ylab = NULL, xaxt = NULL, yaxt = NULL,
+         cex.axis = par("cex.axis"), cex.pch = 1.2, cex.gpch = 1.2, 
+         gshift = 2, automar = TRUE)
+        
 }
 \arguments{
   \item{x}{either a vector or matrix of numeric values (\code{NA}s are
@@ -56,16 +68,20 @@ PlotDot(x, labels = NULL, groups = NULL, gdata = NULL,
   \item{cex.axis}{The magnification to be used for axis annotation relative to the current setting of cex.}
   \item{cex.pch}{The magnification to be used for plot symbols relative to the current setting of cex.}
   \item{cex.gpch}{The magnification to be used for group symbols relative to the current setting of cex.}
+  \item{gshift}{the number of characters, for which the grouplabels should be shift to the left compared to the sublabels.}
+  \item{automar}{logical (default \code{TRUE}), defining if the left margin should be set according to the width of the given labels, resp. grouplabels. If set to \code{FALSE} the margins are taken from \code{par("mar")}.  }
   \item{\dots}{\link{graphical parameters} can also be specified as arguments.}
+  \item{grp}{an integer, defining if the the coefficients should be grouped along the first
+   or the second dimension (default is 1).}
 }
 \details{
-  This function is invoked for its side effect, which is to produce two
-  variants of dotplots as described in Cleveland (1985).
+Dot plots are a reasonable substitute for bar plots. This function is invoked to produce dotplots as described in Cleveland (1985).
 
-  Dot plots are a reasonable substitute for bar plots.
+For \code{PlotDotCI()} the dots are a list of matrices with 3 columns, whereas the first is the coefficent, the second the lower and the third the upper end of the confidence interval.
 }
 \value{Return the y-values used for plotting.
 }
+\seealso{\code{\link{dotchart}}, \code{\link{PlotDotCI}}}
 \references{
   Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
   \emph{The New S Language}.
@@ -91,7 +107,7 @@ PlotDot(VADeaths, main="Death Rates in Virginia - 1940", col="red", pch=21,
                             cex=1.4))
 
 # add some other values
-PlotDot(VADeaths+3, pch=15, col="blue", add=TRUE, labels=NA)
+PlotDot(VADeaths+3, pch=15, col="blue", add=TRUE)
 
 # same as PlotDotCI
 xci <- do.call(rbind, tapply( d.pizza$delivery_min, d.pizza$driver,

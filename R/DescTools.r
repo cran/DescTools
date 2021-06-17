@@ -1450,9 +1450,9 @@ StrExtractBetween <- function(x, left, right, greedy=FALSE) {
   valid <- !sapply(StrPos(StrRight(x, -ZeroIfNA(StrPos(x, left))), right), is.na)
   
   if(greedy)
-    res[valid] <- gsub(gettextf(".*%s(.*)%s.*", left, right), "\\1", x[valid])
+    res[valid] <- gsub(gettextf("[^%s]*%s(.*)%s.*", left, left, right), "\\1", x[valid])
   else
-    res[valid] <- gsub(gettextf(".*%s(.*?)%s.*", left, right), "\\1", x[valid])
+    res[valid] <- gsub(gettextf("[^%s]*%s(.*?)%s.*", left, left, right), "\\1", x[valid])
   
   return(res)
   
@@ -7799,12 +7799,13 @@ lines.smooth.spline <- function (x, col = Pal()[1], lwd = 2, lty = "solid",
 
 
 
-.CalcTrendline <- function (x, n = 100, conf.level = 0.95, pred.level = 0.95, ...) {
+.CalcTrendline <- function (x, n = 100, conf.level = 0.95, pred.level = 0.95, xpred=NULL, ...) {
  
   # this takes the model x and calculates a set of n points
   # including the function, confidence band for E[X] and for the prediction
    
   mod <- x$model
+  
   # all.vars returns all used variables in the model, even when poly models are used
   # the result will be the name of the predictor
   pred <- all.vars(formula(x)[[3]])
@@ -7815,21 +7816,44 @@ lines.smooth.spline <- function (x, col = Pal()[1], lwd = 2, lty = "solid",
   # xpred <- model.frame(x)[, pred]
   # we cannot simply take the model frame here as we would miss poly(..) models
   # which could well be plotted as well   
-  xpred <- eval(x$call$data, parent.frame(n=2))[, pred]
   
-  newx <- data.frame(seq(from = min(xpred, na.rm = TRUE), 
+  # we can't access the raw data for the plot from the model frame, so
+  # we try to reevaluate in parent.frame
+  # this will fail if we are called from a function, where the parent.frame
+  # does not contain the data
+  if(is.null(xpred))
+    xpred <- eval(x$call$data, parent.frame(n=2))[, pred]
+  
+  if(!is.numeric(xpred)){
+    # predictor might be a factor
+    xpred <- as.numeric(xpred)
+    warning("Nonnumerc predictor has been casted as numeric.")
+  }
+    
+  
+  if(is.null(xpred))
+    stop("Data can't be accessed in parent.frame. Provide x-range for prediction (xpred=c(from, to)).")
+
+  rawx <- data.frame(seq(from = min(xpred, na.rm = TRUE), 
                          to = max(xpred, na.rm = TRUE), length = n))
-  colnames(newx) <- pred
+  colnames(rawx) <- pred
   
-  fit <- predict(x, newdata = newx)
+  fit <- predict(x, newdata = rawx)
+  
+  # check if polynomial model, for then we need the rawx to calculate xy.coord
+  isPolyMod <- grepl("poly,", toString(formula(x)[[3]]))
+  if(isPolyMod)
+    newx <- rawx
+  else 
+    newx <- eval(formula(x)[[3]], rawx)
   
   if (!(is.na(conf.level))) {
-    ci <- predict(x, interval = "confidence", newdata = newx, 
+    ci <- predict(x, interval = "confidence", newdata = rawx, 
                    level = conf.level)[, -1]
   } else ci <- NULL
   
   if (!(is.na(pred.level))) {
-    pci <- predict(x, interval = "prediction", newdata = newx, 
+    pci <- predict(x, interval = "prediction", newdata = rawx, 
                    level = pred.level)[, -1]
   } else pci <- NULL
   
@@ -7868,9 +7892,9 @@ lines.smooth.spline <- function (x, col = Pal()[1], lwd = 2, lty = "solid",
 
 lines.lm <- function (x, col = Pal()[1], lwd = 2, lty = "solid",
                       type = "l", n = 100, conf.level = 0.95, args.cband = NULL,
-                      pred.level = NA, args.pband = NULL, ...) {
+                      pred.level = NA, args.pband = NULL, xpred=NULL, ...) {
   
-  z <- .CalcTrendline(x, n=n, conf.level=conf.level, pred.level=pred.level)  
+  z <- .CalcTrendline(x, n=n, conf.level=conf.level, pred.level=pred.level, xpred=xpred)  
   .DrawTrendLine(z, col=col, lwd=lwd, lty=lty, args.cband=args.cband, args.pband=args.pband)
 
 }
@@ -9253,6 +9277,125 @@ AxisBreak <- function (axis = 1, breakpos = NULL, pos = NA, bgcol = "white",
   segments(xbegin, ybegin, xend, yend, col = breakcol, lty = 1)
   par(xpd = FALSE)
 }
+
+
+
+
+
+ABCCoords <- function(x="topleft", region="figure", 
+                      cex=NULL, linset=0, ...) {
+  
+  region <- match.arg(region, c("figure", "plot", "device"))
+  
+  auto <- match.arg(x, c("bottomright", "bottom", "bottomleft",
+                         "left", "topleft", "top", "topright", "right", "center"))
+  
+  
+  # positioning code from legend()
+  
+  if(region %in% c("figure", "device")) {
+    
+    ds <- dev.size("in")
+    # xy coordinates of device corners in user coordinates
+    x <- grconvertX(c(0, ds[1]), from="in", to="user")
+    y <- grconvertY(c(0, ds[2]), from="in", to="user")
+    # fragment of the device we use to plot
+    
+    if(region == "figure") {
+      fig <- par("fig")
+      dx <- (x[2] - x[1])
+      dy <- (y[2] - y[1])
+      x <- x[1] + dx * fig[1:2]
+      y <- y[1] + dy * fig[3:4]
+    } 
+  } else if(region == "plot"){
+    
+    usr <- par("usr")
+    x <- usr[1:2]
+    y <- usr[3:4]
+    
+  }
+  
+  
+  linset <- rep(linset, length.out = 2)
+  linsetx <- linset[1L] * strwidth("M", cex=1, units = "user", ...)
+  x1 <- switch(auto, 
+               bottomright = x[2] - linsetx, 
+               topright = x[2] - linsetx,
+               right = x[2] - linsetx, 
+               bottomleft = x[1] + linsetx,
+               left = x[1] + linsetx, 
+               topleft = x[1] + linsetx, 
+               bottom = (x[1] + x[2])/2,
+               top = (x[1] + x[2])/2, 
+               center = (x[1] + x[2])/2)
+  
+  linsety <- linset[2L] * strheight("M", cex=1, units = "user", ...)
+  y1 <- switch(auto, 
+               bottomright = y[1] + linsety, 
+               bottom = y[1] + linsety, 
+               bottomleft = y[1] + linsety, 
+               topleft = y[2] - linsety, 
+               top = y[2] - linsety, 
+               topright = y[2] - linsety, 
+               left = (y[1] + y[2])/2, 
+               right = (y[1] + y[2])/2, 
+               center = (y[1] + y[2])/2)
+  
+  adj <- switch(auto,
+                topleft     =c(0,1),
+                top         =c(0.5, 1),
+                topright    =c(1,1),
+                left        =c(0, 0.5),
+                center      =c(0.5,0.5),
+                right       =c(1, 0.5),
+                bottomleft  =c(0,0),
+                bottom      =c(0.5,0),
+                bottomright =c(1,0))
+  
+  
+  return(list(xy=xy.coords(x1, y1), adj=adj))
+  
+}
+
+
+
+Bg <- function(col="grey", region=c("plot", "figure"), border=NA) {
+  
+  .Bg <- function(col="grey", region="plot", border=NA) {
+    
+    if(region=="plot")
+      rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], 
+           col = col, border=border)
+    
+    else if(region == "figure"){
+      ds <- dev.size("in")
+      # xy coordinates of device corners in user coordinates
+      x <- grconvertX(c(0, ds[1]), from="in", to="user")
+      y <- grconvertY(c(0, ds[2]), from="in", to="user")
+      
+      rect(x[1], y[2], x[2], y[1], 
+           col = col, border=border, xpd=NA)
+    }
+  }
+  
+  if(length(col)==1){
+    region <- match.arg(region)
+    .Bg(col=col, region=region, border=border)
+    
+  } else {
+    arg <- Recycle(col=col, region=region, border=border)
+    for(i in attr(arg, "maxdim"):1){
+      .Bg(col=arg$col[i], region=arg$region[i], border=arg$border[i])
+    }
+    
+  }
+  
+  
+}
+
+
+
 
 
 
@@ -10784,7 +10927,7 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
                      pch = 21, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"),
                      lcolor = "gray", lblcolor = par("fg"), xlim = NULL, main = NULL, xlab = NULL, ylab = NULL, xaxt=NULL, yaxt=NULL,
                      add = FALSE, args.errbars = NULL, cex.axis=par("cex.axis"), cex.pch=1.2, 
-                     cex.gpch=1.2, ...) {
+                     cex.gpch=1.2, gshift=2, automar=TRUE, ...) {
 
   ErrBarArgs <- function(from, to = NULL, pos = NULL, mid = NULL,
                          horiz = FALSE, col = par("fg"), lty = par("lty"), lwd = par("lwd"),
@@ -10901,11 +11044,11 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
     ginch <- max(strwidth(glabels, "inch", cex=max(cex.axis[3]) * cex), na.rm = TRUE)
     goffset <- lheight  
   }
-  if (!(is.null(labels) && is.null(glabels) || identical(yaxt, "n"))) {
+  if (!(is.null(labels) && is.null(glabels) || identical(yaxt, "n") || !automar)) {
     nmai <- par("mai")
     # nmai[2L] <- nmai[4L] + max(linch + goffset, ginch) + lheight
     # warum sollte der linke Rand so sein wie der rechte??
-    nmai[2L] <- lheight + max(linch + goffset, ginch) + 5*lheight
+    nmai[2L] <- lheight + max(linch + goffset, ginch) + gshift * lheight
     par(mai = nmai)
   }
   if (is.null(groups)) {
@@ -10931,9 +11074,10 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
   # much more precise:
   if (!is.null(labels)) {
     linch <- max(strwidth(labels, "inch", cex = cex.axis[2])*cex, na.rm = TRUE)
-    loffset <- (linch + 0.1)/lheight
+#    loffset <- (linch + 0.1)/lheight
+    loffset <- grconvertX(linch + 0.1, from="inch", to="lines")
     labs <- labels[o]
-    if (!identical(yaxt, "n"))
+    if (!identical(yaxt, "n") && !add)
       mtext(labs, side = 2, line = loffset, at = y, adj = 0,
           col = lblcolor, las = 2, cex = cex.axis[2]*cex, ...)
   }
@@ -10958,9 +11102,11 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
     # ginch <- max(strwidth(glabels, "inch", cex=cex.axis[3]*cex), na.rm = TRUE)
     # goffset <- (max(linch + 0.2, ginch, na.rm = TRUE) + 0.1)/lheight
     
-    lgoffset <- (max(linch + goffset, ginch) + lheight)/lheight
+#    lgoffset <- (max(linch + goffset, ginch) + lheight)/lheight
+    lgoffset <- grconvertX(max(linch + goffset, ginch) + gshift * lheight, 
+                           from="inch", to="lines")
     
-    if (!identical(yaxt, "n"))
+    if (!identical(yaxt, "n") && !add)
       mtext(glabels, side = 2, line = lgoffset, at = gpos, adj = 0,
             col = gcolor, las = 2, cex = cex.axis[3]*cex, ...)
     if (!is.null(gdata)) {
@@ -10978,7 +11124,7 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
     title(main = main, xlab = xlab, ylab = ylab, ...)
 
 
-  if (!is.null(DescToolsOptions("stamp")))
+  if (!is.null(DescToolsOptions("stamp")) && !add)
     Stamp()
 
   # invisible(y[order(o, decreasing = TRUE)])
@@ -10986,6 +11132,36 @@ PlotDot <- function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("c
   invisible(y[order(y, decreasing = TRUE)])
 
 }
+
+
+
+
+PlotDotCI <- function(..., grp=1, cex = par("cex"),
+                      pch = 21, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"),
+                      lcolor = "gray", lblcolor = par("fg"), xlim = NULL, main = NULL, xlab = NULL, ylab = NULL, xaxt=NULL, yaxt=NULL,
+                      cex.axis=par("cex.axis"), cex.pch=1.2,
+                      cex.gpch=1.2, gshift=2, automar=TRUE){
+  
+  lst <- list(...)
+  
+  if(grp==1)
+    z <- aperm(do.call(Abind, list(lst, along = 3)), c(1,3,2))
+  else
+    z <- aperm(do.call(Abind, list(lst, along = 3)), c(3,1,2))
+  
+  # ... are matrices with n rows and 3 columns, est, lci, uci
+  PlotDot(z[,,1],
+          args.errbars = list(from=z[,,2], to=z[,,3]),
+          cex = cex,
+          pch = pch, gpch = gpch, bg = bg, color = color, gcolor = gcolor,
+          lcolor = lcolor, lblcolor = lblcolor, xlim = xlim, main = main,
+          xlab = xlab, ylab = ylab, xaxt=xaxt, yaxt=yaxt,
+          cex.axis=cex.axis, cex.pch=cex.pch,
+          cex.gpch=cex.gpch, gshift=gshift, automar=automar)
+  
+  
+}
+
 
 
 TitleRect <- function(label, bg = "grey", border=1, col="black", xjust=0.5, line=2, ...){
