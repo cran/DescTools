@@ -2807,7 +2807,10 @@ StuartMaxwellTest <- function (x, y = NULL) {
   # get the marginals
   rowsums <- rowSums(x)
   colsums <- colSums(x)
-  equalsums <- rowsums == colsums
+  # equalsums <- rowsums == colsums
+  # Yusef Al-Naher commented correctly 20-08-2021:
+  # If you have perfect agreement then you want something along the lines of:
+  equalsums <- diag(x)==rowsums & diag(x)==colsums
 
   if(any(equalsums)) {
     # dump any categories with perfect agreement
@@ -3310,7 +3313,7 @@ CochranArmitageTest <- function(x, alternative = c("two.sided","increasing","dec
 BarnardTest <- function (x, y = NULL, alternative = c("two.sided", "less", "greater"), 
                           method = c("csm", "csm approximate", "z-pooled", "z-unpooled", "boschloo", 
                                      "santner and snell"), 
-                          fixed = 1, ...) {
+                          fixed = 1, useStoredCSM=FALSE, ...) {
   
   if (is.matrix(x)) {
     r <- nrow(x)
@@ -3339,7 +3342,7 @@ BarnardTest <- function (x, y = NULL, alternative = c("two.sided", "less", "grea
   lst <- list(data=x, 
               alternative=match.arg(alternative), 
               method=match.arg(method), 
-              to.plot = FALSE, ...)
+              to.plot = FALSE, useStoredCSM = useStoredCSM, ...)
   
   if(identical(fixed, 1)) {
     lst[["model"]] <- c(lst, model="binomial")[["model"]]

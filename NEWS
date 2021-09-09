@@ -1,6 +1,21 @@
 
 
 
+DescTools 0.99.43 (2021-09-08)  
+------------------------------
+
+UPDATED FUNCTIONS:
+  * An adaptation to a change in the function exact.test, used in 
+    BarnardTest(). (Credits to Peter Calhoun)
+  
+BUGFIXES:
+  * Main title in PlotQQ was not updated correctly.
+  * Stuart-Maxwell test would not have stated the perfect agreement correctly.
+    (Credits to Yusef Al-Naher)
+
+
+
+
 DescTools 0.99.42 (2021-06-16)
 ------------------------------
 
