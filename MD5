@@ -1,9 +1,9 @@
-a0013fec7bb9adecc03d3fcc83857382 *DESCRIPTION
-bebedfbcd564b6fde81783f047df0756 *NAMESPACE
-8becbfb640711884a57bc1cc5efe628f *NEWS
+1e62c6c231222503d843ee66f6d1d600 *DESCRIPTION
+4edd9416c11fdf603cf6bcaf1f4a8f16 *NAMESPACE
+e72c9d3e145809812a174bc7a255c3ca *NEWS
 5a03ca23f8659d980b8d0b59e2d80059 *R/Const.R
 4224d11852b5f7a4f03497cca70c4a28 *R/Desc.R
-6ec0ebaa8efe892a41413d9e673c135a *R/DescTools.r
+751bb27fc62d683d2333f3f021abd164 *R/DescTools.r
 eb6e9f7b12bffa110d3aabf59c59c6fd *R/Dialogs.r
 a002600980f534c19325bdb6731444b9 *R/Distributions.R
 ba0c145dc3726157984e8bd74a445abc *R/DoBy.r
@@ -13,13 +13,13 @@ e6d352b11b4cbcc3df8883af8ea21e31 *R/PageDF.r
 803ab390d78374dafd9cf6d83e2ef000 *R/PlotQQ.R
 33f65c94f9264128919d56f7a58f371c *R/RcppExports.R
 a7c1ac494369d7ea52109271ea2e41d3 *R/SpecialPlots.r
-d375434f494b26efa8ca9719ac6c8cb4 *R/StatsAndCIs.r
+acedb27d59011b58c91a3edb4576beac *R/StatsAndCIs.r
 00f5daa5ca5b50ad33f5d86cdefe1a4e *R/Tables.r
 df0221f39a539dbec59fb6a419e4abf6 *R/Tests.r
 4065085f36204c54dccc84b9a6e25485 *R/Utils.R
 e662ac2a30620cf4b8996dbaa1f4cffc *R/zzz.r
 03192e3646f063d1f215032b53d03249 *README.md
-312c63b1b4d00bf254996f6e3def9b75 *build/vignette.rds
+6afbebec20c85a44ebf0b53f54c83dba *build/vignette.rds
 d4559219fae4f8d733c3cd5a7d24c7d5 *data/cards.rda
 be3c30ea5cb863f1873935783b093144 *data/d.countries.rda
 de50a7e0ed8364331d5bdc2d2156f5d6 *data/d.diamonds.rda
@@ -70,7 +70,7 @@ da44736223720796476e775f7ed93341 *man/Asp.Rd
 c512525b730c431c9c3aaad18a12df3c *man/Assocs.Rd
 c0d839480efc772bc3e7e5b0acb53643 *man/Atkinson.Rd
 f24031c686f122c25ec4615897ffc505 *man/AxisBreak.Rd
-18bdd2b18556def0fb71b667a455c054 *man/BarText.Rd
+7c07df0c263d5811110e4c5bb2525ee3 *man/BarText.Rd
 9bdc8b11f6eed59b9c5e2a1c81c5c070 *man/BarnardTest.Rd
 5f1fb6fa5b18658f33878ac16d17bccf *man/BartelsRankTest.Rd
 5451138b27b1be8858303a90ded02153 *man/BaseConversions.Rd
@@ -102,7 +102,7 @@ cdafc050b29dcecb6009f04f3fcefa19 *man/CochranArmitageTest.Rd
 19d3e99ba949b405945980a7905eb27a *man/CochranQTest.Rd
 3d073cbc73bfe85c1312e4dd6339f2f3 *man/CoefVar.Rd
 7eb24d1cb4b4a57a7495473716166b9b *man/CohenD.Rd
-ccb0f38bb5ce52db94d6f8aea3debb6e *man/CohenKappa.Rd
+ad0bd8237724553a05f61927db6b91a4 *man/CohenKappa.Rd
 cf1d317d96f564917507897a8eb8b2d6 *man/ColToGrey.Rd
 6c7c7f04689671680c2a1065316f6ed4 *man/ColToHex.Rd
 0e5bd3996de815365015317129968af2 *man/ColToHsv.Rd
@@ -219,7 +219,7 @@ e126294efa504be3ecd8bf7c45386ccb *man/KendallTauB.Rd
 101c902cbaa4bbd6ebf197708e6a082a *man/KendallW.Rd
 c41567ca32067bc88f98ec7e6dc7fa9b *man/Keywords.Rd
 386252d4b50d5e74af2d95ea36e1f22f *man/KnnImputation.Rd
-e990790380c1286d5ffa7698d32e00f6 *man/KrippAlpha.Rd
+0f9a7a01aae2b063b46e3e22c54ea088 *man/KrippAlpha.Rd
 f38a75593b02a5e5c0005cc1dace712b *man/LOCF.Rd
 b4f8f78b76d7346cba4236a3a1421fcf *man/LOF.Rd
 d0ed558aa23481a37d9f2cd79bc6b8d1 *man/Label.Rd
@@ -252,7 +252,7 @@ edc8f7efaa2459b5897b7f08f50e831e *man/Midx.Rd
 f6a0a0ab1e5a55912bbc02f580947574 *man/Mode.Rd
 2363b5f9be998266bdcb1463d820209c *man/MosesTest.Rd
 f346e2a8695b5694d0cabf8afe8b045f *man/MoveAvg.Rd
-001b8127a775d01eb392de39180f0f7e *man/MultMerge.Rd
+895efb02505516c6efa539da7dde4fca *man/MultMerge.Rd
 9bc0f1049329eb0b1a462bcbb766700f *man/MultinomCI.Rd
 3b21c0d4d99ecd441e9d2a6443bef7c0 *man/NPV.Rd
 26292fae0c8d4ce3601c05b5b993a8d8 *man/NemenyiTest.Rd
@@ -296,6 +296,7 @@ e02476408965ca9098ea253e8fbcbab7 *man/PlotMonth.Rd
 d894bee0b69f4537fd162300f00f9abf *man/PlotMultiDens.Rd
 72ce6050b9385af626eae025281f3365 *man/PlotPairs.Rd
 54be2459099c2ecd3948acbe95e9b346 *man/PlotPolar.Rd
+90cbf701a622558c07350667219fa043 *man/PlotProbDist.Rd
 ead1bf3d0e3e4bd56831d5d7a7bb622c *man/PlotPyramid.Rd
 d2c444477d14d8a1e85caf2ae22b25c9 *man/PlotQQ.Rd
 c37d9f8936f168218b5cd3387709f618 *man/PlotTernary.Rd
@@ -316,7 +317,7 @@ c25c84d69260179095cdefe8ae861945 *man/Quot.Rd
 9e98b032325c7a5b4e58676845f7a366 *man/RSessionAlive.Rd
 5e2c81e27d276e633e7f127b3cc8ceaf *man/Range.Rd
 b60bf53481bdca10e4320dcbbafec0a2 *man/Rank.Rd
-c51a0c65e6294c51fa42e517340e6667 *man/Recode.Rd
+e0bd347187346d743e3b871355e71b25 *man/Recode.Rd
 5106337214bc8975865aa2cdcd5f39a2 *man/Recycle.Rd
 eb870f0dd8fa5649c2f00956e94d5ab6 *man/RelRisk.Rd
 e88424c73d7bc858345a97792312fb84 *man/Rename.Rd
@@ -453,6 +454,7 @@ c46ad1e2120cdab75606d5c7b2aec5ee *man/nin.Rd
 535f803e3bbdbef3ad2d455eb43f545c *man/overlaps.Rd
 e12dc77d55b61660111c2259d8be7094 *man/paste.Rd
 059f277af8096baf68c8a0d1b6d2b0dc *man/power.chisq.test.Rd
+ab4f7f0209879f7c714dee9f8fccbbf0 *man/rSum21.Rd
 33ab91eee585e206651e6a076e4cdd31 *man/split.formula.Rd
 e37d32b1426e98c746671547ac476516 *man/wdConst.Rd
 ca3270c176ce09cd15243bf4df918aa9 *src/ADinf.c
