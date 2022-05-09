@@ -19,7 +19,7 @@
 #  The bootstrap percentile t method is used.
 #
 #  The default amount of trimming is tr=.2
-#  side=T indicates two-sided method using absolute value of the
+#  side=TRUE indicates two-sided method using absolute value of the
 #  test statistics within the bootstrap; otherwise the equal-tailed method
 #  is used.
 #
@@ -36,7 +36,7 @@
 # xcen<-x-mean(x,tr)
 # ycen<-y-mean(y,tr)
 # if(!side){
-#   if(pr)print("NOTE: p-value computed only when side=T")
+#   if(pr)print("NOTE: p-value computed only when side=TRUE")
 # }
 # test<-(mean(x,tr)-mean(y,tr))/sqrt(trimse(x,tr=tr)^2+trimse(y,tr=tr)^2)
 # datax<-matrix(sample(xcen,size=length(x)*nboot,replace=TRUE),nrow=nboot)
@@ -1624,53 +1624,70 @@ SiegelTukeyTest.default <- function(x, y, adjust.median = FALSE,
 
 JonckheereTerpstraTest <- function (x, ...)  UseMethod("JonckheereTerpstraTest")
 
+
 JonckheereTerpstraTest.formula <- function (formula, data, subset, na.action, ...) {
 
-  if (missing(formula) || (length(formula) != 3L))
+  if (missing(formula) || (length(formula) != 3L)) 
     stop("'formula' missing or incorrect")
   m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
+  if (is.matrix(eval(m$data, parent.frame()))) 
     m$data <- as.data.frame(data)
-  m[[1L]] <- as.name("model.frame")
+  m[[1L]] <- quote(stats::model.frame)
+  m$... <- NULL
   mf <- eval(m, parent.frame())
+  if (length(mf) > 2L) 
+    stop("'formula' should be of the form response ~ group")
   DNAME <- paste(names(mf), collapse = " by ")
   names(mf) <- NULL
-  y <- DoCall("JonckheereTerpstraTest", as.list(mf))
+  y <- DoCall("JonckheereTerpstraTest", c(as.list(mf), list(...)))
   y$data.name <- DNAME
   y
+
 }
 
-JonckheereTerpstraTest.default <- function (x, g, alternative = c("two.sided", "increasing", "decreasing"), nperm=NULL, ...) {
+
+
+
+
+JonckheereTerpstraTest.default <- function (x, g, 
+                                            alternative = c("two.sided", "increasing", "decreasing"), 
+                                            nperm=NULL, exact=NULL,...) {
+  
 
   if (is.list(x)) {
-    if (length(x) < 2L)
+    if (length(x) < 2L) 
       stop("'x' must be a list with at least 2 elements")
-    DNAME <- deparse(substitute(x))
+    if (!missing(g)) 
+      warning("'x' is a list, so ignoring argument 'g'")
+    DNAME <- deparse1(substitute(x))
     x <- lapply(x, function(u) u <- u[complete.cases(u)])
+    if (!all(sapply(x, is.numeric))) 
+      warning("some elements of 'x' are not numeric and will be coerced to numeric")
     k <- length(x)
-    l <- sapply(x, "length")
-    if (any(l == 0))
+    l <- lengths(x)
+    if (any(l == 0L)) 
       stop("all groups must contain data")
-    g <- factor(rep(1:k, l))
+    g <- ordered(rep.int(seq_len(k), l))
     x <- unlist(x)
-  }
-  else {
-    if (length(x) != length(g))
+    
+  } else {
+    
+    if (length(x) != length(g)) 
       stop("'x' and 'g' must have the same length")
-    DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(g)))
+    DNAME <- paste(deparse1(substitute(x)), "by", 
+                   deparse1(substitute(g)))
     OK <- complete.cases(x, g)
     x <- x[OK]
     g <- g[OK]
-    if (!all(is.finite(g)))
-      stop("all group levels must be finite")
-    g <- factor(g)
+    g <- ordered(g)
     k <- nlevels(g)
-    if (k < 2)
+    if (k < 2L) 
       stop("all observations are in the same group")
   }
   n <- length(x)
-  if (n < 2)
+  if (n < 2L) 
     stop("not enough observations")
+
 
   # start calculating
 
@@ -1688,6 +1705,11 @@ JonckheereTerpstraTest.default <- function (x, g, alternative = c("two.sided", "
     zz$pdf
   }
 
+  if(!is.numeric(g) & !is.ordered(g)) stop("group should be numeric or ordered factor")
+  
+  alternative <- match.arg(alternative)
+  
+  
   jtperm.p <- function(x, ng, gsize, cgsize, alternative, nperm) {
     # this function computes the pdf using the convolution by Mark van de Wiel
 
@@ -1752,9 +1774,6 @@ JonckheereTerpstraTest.default <- function (x, g, alternative = c("two.sided", "
   #   pJCK(piece, grp)
 
 
-  if(!is.numeric(x)) stop("data values should be numeric")
-  if(!is.numeric(g) & !is.ordered(g)) stop("group should be numeric or ordered factor")
-  alternative <- match.arg(alternative)
   METHOD <- "Jonckheere-Terpstra test"
   PERM <- !missing(nperm)
   n <- length(x)
@@ -1777,24 +1796,38 @@ JonckheereTerpstraTest.default <- function (x, g, alternative = c("two.sided", "
   jtrsum <- 2*jtmean - jtrsum
   STATISTIC <- jtrsum
   names(STATISTIC) <- "JT"
+  
+  if(is.null(exact)) {
+    exact <- !(n > 100 | TIES)
+    if(!exact)
+      warning("Sample size > 100 or data with ties \n p-value based on normal approximation. Specify nperm for permutation p-value")
+  }
+  
+  if(exact & TIES){
+    warning("Sample data with ties \n p-value based on normal approximation. Specify nperm for permutation p-value.")
+    exact <- FALSE
+  }
+  
   if (PERM) {
     PVAL <- jtperm.p(x, ng, gsize, cgsize, alternative, nperm)
-  } else {
-    if (n > 100 | TIES) {
-      warning("Sample size > 100 or data with ties \n p-value based on normal approximation. Specify nperm for permutation p-value")
-      zstat <- (STATISTIC-jtmean)/sqrt(jtvar)
+  
+    } else {
+    if(!exact){
+      zstat <- (STATISTIC - jtmean) / sqrt(jtvar)
       PVAL <- pnorm(zstat)
       PVAL <- switch(alternative,
-                     "two.sided" = 2*min(PVAL, 1-PVAL, 1),
+                     "two.sided" = 2 * min(PVAL, 1-PVAL, 1),
                      "increasing" = 1-PVAL,
                      "decreasing" = PVAL)
+      
     } else {
       dPVAL <- sum(jtpdf(gsize)[1:(jtrsum+1)])
       iPVAL <- 1-sum(jtpdf(gsize)[1:(jtrsum)])
       PVAL <- switch(alternative,
-                     "two.sided" = 2*min(iPVAL, dPVAL, 1),
+                     "two.sided" = 2 * min(iPVAL, dPVAL, 1),
                      "increasing" = iPVAL,
                      "decreasing" = dPVAL)
+      
     }
   }
 
@@ -3152,10 +3185,87 @@ print.mtest <- function (x, digits = 4L, ...) {
 
 
 
-CochranArmitageTest <- function(x, alternative = c("two.sided","increasing","decreasing")) {
+# scores <- function(x, MARGIN=1, method="table") {
+#   # MARGIN
+#   #	1 - row
+#   # 2 - columns
+#   
+#   # Methods for ranks are
+#   #
+#   # x - default
+#   # rank
+#   # ridit
+#   # modridit
+#   
+#   if(method=="table") {
+#     if (is.null(dimnames(x))) return(1:(dim(x)[MARGIN]))
+#     else {
+#       options(warn=-1)
+#       if
+#       (sum(is.na(as.numeric(dimnames(x)[[MARGIN]])))>0)
+#       {
+#         out=(1:(dim(x)[MARGIN]))
+#       }
+#       else
+#       {
+#         out=(as.numeric(dimnames(x)[[MARGIN]]))
+#       }
+#       options(warn=0)
+#     }
+#   }
+#   else	{
+#     ### method is a rank one
+#     Ndim=dim(x)[MARGIN]
+#     OTHERMARGIN=3-MARGIN
+#     
+#     ranks=c(0,(cumsum(apply(x,MARGIN,sum))))[1:Ndim]+(apply(x,MARGIN,sum)+1)
+#     /2
+#     if (method=="ranks") out=ranks
+#     if (method=="ridit") out=ranks/(sum(x))
+#     if (method=="modridit") out=ranks/(sum(x)+1)
+#   }
+#   
+#   return(out)
+# }
+# 
+
+
+scores <- function(x, MARGIN=1, method="table") { 
+
+  # original by Eric Lecoutre
+  # https://stat.ethz.ch/pipermail/r-help/2005-July/076371.html
+  
+  if (method == "table"){
+    
+    if (is.null(dimnames(x)) || any(is.na(suppressWarnings(N(dimnames(x)[[MARGIN]]))))) {
+      res <- 1:dim(x)[MARGIN]
+    } else {
+      res <- (N(dimnames(x)[[MARGIN]]))
+    }
+    
+  } else	{
+    ### method is a rank one
+    Ndim <- dim(x)[MARGIN]
+    OTHERMARGIN <- 3 - MARGIN
+    
+    ranks <- c(0, (cumsum(apply(x, MARGIN, sum))))[1:Ndim] + (apply(x, MARGIN, sum)+1) /2 
+    
+    if (method == "ranks") res <- ranks
+    if (method == "ridit") res <- ranks/(sum(x))
+    if (method == "modridit") res <- ranks/(sum(x)+1)
+  }
+  
+  return(res)
+  
+}
+
+
+
+
+CochranArmitageTest <- function(x, alternative = c("two.sided","one.sided")) {
 
   # based on:
-  # http://tolstoy.newcastle.edu.au/R/help/05/07/9442.html
+  # https://stat.ethz.ch/pipermail/r-help/2005-July/076371.html
   DNAME <- deparse(substitute(x))
 
   if (!(any(dim(x)==2)))
@@ -3166,8 +3276,8 @@ CochranArmitageTest <- function(x, alternative = c("two.sided","increasing","dec
   nidot <- apply(x, 1, sum)
   n <- sum(nidot)
 
-  # Ri <- scores(x, 1, "table")
-  Ri <- 1:dim(x)[1]
+  Ri <- scores(x, 1, "table")
+
   Rbar <- sum(nidot*Ri)/n
 
   s2 <- sum(nidot*(Ri-Rbar)^2)
@@ -3179,8 +3289,8 @@ CochranArmitageTest <- function(x, alternative = c("two.sided","increasing","dec
 
   PVAL <- switch(alternative,
                  two.sided = 2*pnorm(abs(z), lower.tail=FALSE),
-                 increasing = pnorm(z),
-                 decreasing = pnorm(z, lower.tail=FALSE) )
+                 one.sided = 1- pnorm(abs(z))
+                 )
 
   PARAMETER <- dim(x)[1]
   names(STATISTIC) <- "Z"
@@ -3814,28 +3924,31 @@ ScheffeTest.default <- function (x, g = NULL, which = NULL, contrasts = NULL, co
 }
 
 
+# ScheffeTest.formula <- function (formula, data, subset, na.action, ...) {
+#   
+#   if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
+#                                                                   "term.labels")) != 1L))
+#     stop("'formula' missing or incorrect")
+#   m <- match.call(expand.dots = FALSE)
+#   if (is.matrix(eval(m$data, parent.frame())))
+#     m$data <- as.data.frame(data)
+#   m[[1L]] <- quote(stats::model.frame)
+#   m$... <- NULL
+#   mf <- eval(m, parent.frame())
+#   if (length(mf) > 2L)
+#     stop("'formula' should be of the form response ~ group")
+#   DNAME <- paste(names(mf), collapse = " by ")
+#   names(mf) <- NULL
+#   response <- attr(attr(mf, "terms"), "response")
+#   y <- DoCall("ScheffeTest", c(as.list(mf), list(...)))
+#   y$data.name <- DNAME
+#   y
+# }
+
+
 ScheffeTest.formula <- function (formula, data, subset, na.action, ...) {
-  
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-                                                                  "term.labels")) != 1L))
-    stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- quote(stats::model.frame)
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  if (length(mf) > 2L)
-    stop("'formula' should be of the form response ~ group")
-  DNAME <- paste(names(mf), collapse = " by ")
-  names(mf) <- NULL
-  response <- attr(attr(mf, "terms"), "response")
-  y <- DoCall("ScheffeTest", c(as.list(mf), list(...)))
-  y$data.name <- DNAME
-  y
-}
-
-
+  ScheffeTest(aov(formula, data, subset, na.action, ...))
+}  
 
 
 
@@ -4804,7 +4917,7 @@ DunnettTest.default <- function (x, g, control = NULL
     R <- outer(Rij, Rij, "*")
     diag(R) <- 1
 
-    set.seed(5)  # for getting consistent results every run
+    # set.seed(5)  # for getting consistent results every run
     qvt <- mvtnorm::qmvt((1 - (1 - conf.level)/2), df = N - k, sigma = R, tail = "lower.tail")$quantile
 
     lower <- meandiffs - s * sqrt((1/fittedn) + (1/controln)) * qvt

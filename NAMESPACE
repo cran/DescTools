@@ -17,7 +17,8 @@ export(
 "DunnettTest","DunnTest",
 "DurbinWatsonTest","Entropy","Eps","ErrBars","EtaSq","ExpFreq","Factorize","FctArgs","Fibonacci","FindColor","FindCorr","FisherZ","FisherZInv","FixToTable","Flags",
 "Format","Frac","Freq", "Freq2D", "GCD","GetCurrPP","GetCurrWrd","GetCurrXL","GetNewPP","GetNewWrd","GetNewXL",
-"Gini","GiniSimpson","HunterGaston","Gmean","GoodmanKruskalGamma","GoodmanKruskalTau","Gsd","GTest","Herfindahl","HexToCol","HexToDec","HexToRgb","HighLow","Hmean","HmsToSec","HodgesLehmann",
+"Gini","GiniSimpson","HunterGaston","Gmean","GoodmanKruskalGamma","GoodmanKruskalTau","Gsd","GTest","Herfindahl","HexToCol","HexToDec","HexToRgb","HighLow","Hmean",
+"HmsToSec","HmsToMinute","HodgesLehmann",
 "HotellingsT2Test","Hour","HuberM","ICC","identify.formula","IdentifyA","Impute","InDots","Interval","IRR","IsDate","IsDichotomous","IsEuclid","IsLeapYear","IsNumeric","IsOdd","IsPrime","IsValidHwnd","IsWeekend","IsWhole","IsZero","JarqueBeraTest",
 "KappaM","KendallTauB","KendallW","Keywords","KrippAlpha","Kurt",
 "Label","Label<-","Unit","Unit<-","Lambda","Large","LastDayOfMonth","Lc","LCM","LehmacherTest",
@@ -49,7 +50,7 @@ export(
 "VarCI","VecRot","VecShift","Vigenere","Week","Weekday","Winsorize","WoolfTest","WrdCaption","WrdGoto","WrdPageBreak",
 "WrdInsertBookmark","WrdTable","WrdKill","WrdPlot","WrdSaveAs",
 "WrdUpdateBookmark","WrdDeleteBookmark",
-"XLGetRange","XLGetWorkbook","XLKill","XLView","ToXL","Year","YearDay","YearMonth","YearDays","MonthDays",
+"XLGetRange","XLGetWorkbook","XLKill","XLView","ToXL","Year","YearDay","YearMonth","YearDays","MonthDays","HmsToMinute",
 "YuenTTest","YuleQ","YuleY","ZeroIfNA","NAIfZero","BlankIfNA","NAIfBlank","NAIf","Zodiac",
 "ZTest",
 "BinTree", "PlotECDF","Abind","TOne","MaxDigits","XLDateToPOSIXct",
@@ -78,7 +79,7 @@ export(
 "Dot","Cross","CrossN", "Divisors", "createCOMReference","StrSpell", "WithOptions", "SaveAs", "XLSaveAs","Quot", "CompleteColumns",
 "SendOutlookMail", "MultMerge", "ToWrdB", "ToWrdPlot", "WrdBookmark","WrdOpenFile",
 "CmToPts", "PtsToCm","PlotPairs", "IQRw", "ImputeKnn", "AllIdentical","CountWorkDays",
-"VanWaerdenTest", "RSessionAlive", "RTempdirAlive", "StripAttr", "SetAttr","PlotConDens", "StrSplit", "SplitToCol",
+"VanWaerdenTest", "RSessionAlive", "RTempdirAlive", "StripAttr", "SetAttr","PlotConDens", "StrSplit", "SplitToCol","SplitToDummy",
 "CmykToCmy", "CmyToCmyk", "RgbToCmy", "CmykToRgb", "RevCode", "MADCI","QuantileCI", "BinomCIn",
 "GetCalls", "BhapkarTest", "StrExtractBetween", "GenRandGroups", "Rank", "rSum21"
 )
@@ -109,6 +110,9 @@ importFrom("MASS", "boxcox", "fractions")
 importFrom("expm", "%^%")
 
 importFrom("Exact","exact.test")
+
+importFrom("readxl","read_excel")
+importFrom("httr","GET","write_disk", "http_status")
 
 
 
@@ -348,6 +352,8 @@ S3method(ToXL, matrix)
 S3method(ToXL, data.frame)
 S3method(ToXL, default)
 
+S3method(as.matrix, xlrange)
+
 S3method(print, OddsRatio)
 S3method(plot, OddsRatio)
 
@@ -361,4 +367,8 @@ S3method(Sample, data.frame)
 
 S3method(Freq2D, default)
 S3method(Freq2D, formula)
+
+S3method(BoxedText, default)
+S3method(BoxedText, formula)
+
 

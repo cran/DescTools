@@ -510,13 +510,15 @@ LCM <- function(..., na.rm = FALSE) {
 
 rSum21 <- function(size, digits=NULL){
   
-  rnd <- (p <- runif(5))/sum(p)
+  rnd <- (p <- runif(n = size))/sum(p)
+  
   if(!is.null(digits)){
-    rnd <- round(rnd, 2)
+    rnd <- round(rnd, digits = digits)
     rnd[1] <- rnd[1] + (1-sum(rnd))
   }
   
   rnd
+  
 }
 
 
@@ -2028,6 +2030,18 @@ SplitToCol <- function(x, split=" ", fixed = TRUE, na.form="", colnames=NULL){
 }
 
 
+SplitToDummy <- function(x, split=",", ...){
+  
+  # found values
+  lvl <- sort(unique(unlist(strsplit(x = x, split=split, ...))))
+  
+  d.frm <- data.frame(x,
+                      sapply(lvl, function(y) grepl(y, x) * 1))
+  
+  return(d.frm)
+  
+}
+
 
 
 
@@ -2279,7 +2293,7 @@ DoCall <- function (what, args, quote = FALSE, envir = parent.frame())  {
     args <- args[names(args) != ""]
   }
 
-  if (class(what) == "character"){
+  if (inherits(x = what, what = "character")){
     if(is.character(what)){
       fn <- strsplit(what, "[:]{2,3}")[[1]]
       what <- if(length(fn)==1) {
@@ -2289,11 +2303,11 @@ DoCall <- function (what, args, quote = FALSE, envir = parent.frame())  {
       }
     }
     call <- as.call(c(list(what), argn))
-  }else if (class(what) == "function"){
+  }else if (inherits(x = what, "function")){
     f_name <- deparse(substitute(what))
     call <- as.call(c(list(as.name(f_name)), argn))
     args[[f_name]] <- what
-  }else if (class(what) == "name"){
+  }else if (inherits(x = what, what="name")){
     call <- as.call(c(list(what, argn)))
   }
 
@@ -2458,14 +2472,14 @@ Recode <- function(x, ..., elselevel=NA, use.empty=FALSE, num=FALSE){
 
 
 
-RevCode <- function (x) {
+RevCode <- function (x, ...) {
   
   if(is.factor(x)) {
     levels(x) <- rev(levels(x))
     res <- factor(x, levels=rev(levels(x)))
     
   } else if(is.numeric(x)){
-    res <- (min(x) + max(x) - x)
+    res <- (min(x, ...) + max(x, ...) - x)
     
   } else if(is.logical(x)) {
     res <- as.logical(1 - x)
@@ -3079,6 +3093,11 @@ PairApply <- function(x, FUN = NULL, ..., symmetric = FALSE){
 #   .POSIXct(if (is.character(x)) .Call("parse_ts", x, required.components) else .Call("parse_ts", as.character(x), required.components), tz)
 
 
+HmsToMinute <- function(x){
+  Hour(x)*60 + Minute(x) + Second(x)/60
+}
+
+
 HmsToSec <- function(x) {
 
   hms <- as.character(x)
@@ -3364,6 +3383,7 @@ Second <- function(x) {
 #  strptime(x, "%S")
   as.POSIXlt(x)$sec
 }
+
 
 Timezone <- function(x) {
   as.POSIXlt(x)$zone
@@ -3699,7 +3719,7 @@ axTicks.Date <- function(side = 1, x, ...) {
                  as.numeric(match(rng[1L], levels(x))), 
                  as.numeric(match(rng[2L], levels(x))), PACKAGE="DescTools")
     res[is.na(x)] <- NA
-  }  else if(class(x) == "character")  {
+  }  else if(inherits(x = x, what = "character"))  {
     res <- ifelse ( x >= rng[1L] & x <= rng[2L], TRUE, FALSE )
   } else {
     res <- rep(NA, length(x))
@@ -3736,7 +3756,7 @@ axTicks.Date <- function(side = 1, x, ...) {
                  as.numeric(match(rng[1L], levels(x))), 
                  as.numeric(match(rng[2L], levels(x))), PACKAGE="DescTools")
     res[is.na(x)] <- NA
-  }  else if(class(x) == "character")  {
+  }  else if(inherits(x=x, what="character"))  {
     res <- ifelse ( x > rng[1L] & x <= rng[2L], TRUE, FALSE )
   } else {
     res <- rep(NA, length(x))
@@ -3773,7 +3793,7 @@ axTicks.Date <- function(side = 1, x, ...) {
                  as.numeric(match(rng[1L], levels(x))), 
                  as.numeric(match(rng[2L], levels(x))), PACKAGE="DescTools")
     res[is.na(x)] <- NA
-  }  else if(class(x) == "character")  {
+  }  else if(inherits(x=x, what="character"))  {
     res <- ifelse ( x >= rng[1L] & x < rng[2L], TRUE, FALSE )
   } else {
     res <- rep(NA, length(x))
@@ -3812,7 +3832,7 @@ axTicks.Date <- function(side = 1, x, ...) {
                  as.numeric(match(rng[1L], levels(x))), 
                  as.numeric(match(rng[2L], levels(x))), PACKAGE="DescTools")
     res[is.na(x)] <- NA
-  }  else if(class(x) == "character")  {
+  }  else if(inherits(x=x, what="character"))  {
     res <- ifelse ( x > rng[1L] & x < rng[2L], TRUE, FALSE )
   } else {
     res <- rep(NA, length(x))
@@ -5396,7 +5416,7 @@ Format.default <- function(x, digits = NULL, sci = NULL
       fmt <- Fmt(fmt)
     }  
   
-  if(class(fmt) == "fmt") {
+  if(inherits(x=fmt, what="fmt")) {
     
     # we want to offer the user the option to overrun format definitions
     # consequence is, that all defaults of the function must be set to NULL
@@ -5454,7 +5474,7 @@ Format.default <- function(x, digits = NULL, sci = NULL
     
     r <- fmt(x)
     
-  } else if(all(class(x) == "Date")) {
+  } else if(all(inherits(x=x, what="Date"))) {
     
     # the language is only needed for date formats, so avoid looking up the option
     # for other types
@@ -6909,7 +6929,7 @@ Append.matrix <- function(x, values, after = NULL, rows=FALSE, names=NULL, ...){
     values <- matrix(values, ncol=ncol(x))
     if(!is.null(names)){
       err <- try(row.names(x) <- names, silent = TRUE)
-      if(class(err) == "try-error")
+      if(inherits(err, "try-error"))
         warning("Could not set rownames.")
     }
     
@@ -8529,7 +8549,12 @@ Stamp <- function(txt=NULL, las=par("las"), cex=0.6) {
 
 
 
-BoxedText <- function(x, y = NULL, labels = seq_along(x), adj = NULL,
+BoxedText <- function(x, ...) 
+  UseMethod("BoxedText")
+
+
+  
+BoxedText.default <- function(x, y = NULL, labels = seq_along(x), adj = NULL,
      pos = NULL, offset = 0.5, vfont = NULL,
      cex = 1, txt.col = NULL, font = NULL, srt = 0, xpad = 0.2, ypad=0.2,
      density = NULL, angle = 45,
@@ -8593,6 +8618,56 @@ BoxedText <- function(x, y = NULL, labels = seq_along(x), adj = NULL,
       , angle=lgp$angle[i], col=lgp$col[i], border=lgp$border[i], lty=lgp$lty[i], lwd=lgp$lwd[i] )
   }
 }
+
+
+BoxedText.formula <- function (formula, data = parent.frame(), ..., subset) {
+  
+  m <- match.call(expand.dots = FALSE)
+  eframe <- parent.frame()
+  md <- eval(m$data, eframe)
+  if (is.matrix(md)) 
+    m$data <- md <- as.data.frame(data)
+  dots <- lapply(m$..., eval, md, eframe)
+  m$... <- NULL
+  m <- as.list(m)
+  m[[1L]] <- stats::model.frame.default
+  m <- as.call(c(m, list(na.action = NULL)))
+  mf <- eval(m, eframe)
+  
+  if (!missing(subset)) {
+    s <- eval(m$subset, data, eframe)
+    if (!missing(data)) {
+      l <- nrow(data)
+    } else {
+      mtmp <- m
+      mtmp$subset <- NULL
+      l <- nrow(eval(mtmp, eframe))
+    }
+    
+    dosub <- function(x) if (length(x) == l) 
+      x[s]
+    else x
+    
+    dots <- lapply(dots, dosub)
+  }
+  
+  response <- attr(attr(mf, "terms"), "response")
+  
+  if (response) {
+    varnames <- names(mf)
+    y <- mf[[response]]
+    if (length(varnames) > 2L) 
+      stop("cannot handle more than one 'x' coordinate")
+    xn <- varnames[-response]
+    if (length(xn) == 0L) 
+      do.call("BoxedText", c(list(y), dots))
+    else do.call("BoxedText", c(list(mf[[xn]], y), dots))
+    
+  } else stop("must have a response variable")
+  
+}
+
+
 
 
 
@@ -11834,9 +11909,9 @@ PlotPyramid <- function(lx, rx = NA, ylab = "",
   lborder <- rep(border[seq_along(border) %% 2 == 1], times=length(lx))
   rborder <- rep(border[seq_along(border) %% 2 == 0], times=length(rx))
 
-  barplot(-lx, horiz=TRUE, col=lcol, add=T, axes=FALSE, names.arg="",
+  barplot(-lx, horiz=TRUE, col=lcol, add=TRUE, axes=FALSE, names.arg="",
           offset=-gapwidth/2, border=lborder, ...)
-  barplot(rx, horiz=TRUE, col=rcol, add=T, axes=FALSE, names.arg="",
+  barplot(rx, horiz=TRUE, col=rcol, add=TRUE, axes=FALSE, names.arg="",
           offset=gapwidth/2, border=rborder, ...)
 
   oldpar <- par(xpd=TRUE); on.exit(par(oldpar))
@@ -11878,7 +11953,10 @@ PlotCorr <- function(x, cols = colorRampPalette(c(Pal()[2], "white", Pal()[1]), 
   # PlotCorr(round(CramerV(d.pizza[,c("driver","operator","city", "quality")]),3))
 
   pars <- par(mar=mar); on.exit(par(pars))
-
+  
+  # matrix should be transposed to allow upper.tri with the corresponding representation
+  x <- t(x)
+  
   if(clust==TRUE) {
     # cluster correlations in order to put similar values together
     idx <- order.dendrogram(as.dendrogram(
@@ -11899,7 +11977,12 @@ PlotCorr <- function(x, cols = colorRampPalette(c(Pal()[2], "white", Pal()[1]), 
   if(yaxt!="n") axis(side=2, at=1:ncol(x), labels=colnames(x), cex.axis=cex.axis, las=las, lwd=-1)
 
   if((is.list(args.colorlegend) || is.null(args.colorlegend))){
-    args.colorlegend1 <- list( labels=sprintf("%.1f", seq(-1,1, length=length(cols)/2+1))
+
+    # bugfix dmurdoch 7.2.2022
+    digits <- round(1 - log10(diff(range(breaks))))
+    args.colorlegend1 <- list( labels=sprintf("%.*f", digits,
+                                              breaks[seq(1,length(breaks), by = 2)])
+    # args.colorlegend1 <- list( labels=sprintf("%.1f", seq(-1,1, length=length(cols)/2+1))
       , x=nrow(x)+0.5 + nrow(x)/20, y=ncol(x)+0.5
       , width=nrow(x)/20, height=ncol(x), cols=cols, cex=0.8 )
     if ( !is.null(args.colorlegend) ) { args.colorlegend1[names(args.colorlegend)] <- args.colorlegend }
@@ -12828,56 +12911,101 @@ PlotWeb <- function(m, col=c(hred, hblue), lty=NULL, lwd = NULL, args.legend=NUL
 
 ## plots: PlotCandlestick ====
 
-PlotCandlestick <-  function(x, y, xlim = NULL, ylim = NULL, col = c("springgreen4","firebrick"), border=NA, args.grid = NULL, ...) {
-
-
-  xlim <- if (is.null(xlim))
+PlotCandlestick <- function (x, y, vol=NA, xlim = NULL, ylim = NULL, 
+                             col = c("springgreen4", "firebrick"), 
+                             border = NA, 
+                             args.bar=NULL, args.grid = NULL, ...) {
+  
+  
+  pp <- par(no.readonly = TRUE)
+  on.exit(par(pp))
+  
+  add.bar <- !(identical(args.bar, NA) | identical(vol, NA))
+  
+  if (add.bar) {
+    layout(matrix(c(1, 2), nrow = 2, byrow = TRUE), 
+           heights = c(1.5, 1), TRUE)
+    Mar(bottom=0, right=5)
+    
+  }
+  
+  xlim <- if (is.null(xlim)) 
     range(x[is.finite(x)])
-  else xlim
-  ylim <- if (is.null(ylim))
+  else 
+    xlim
+  
+  ylim <- if (is.null(ylim)) 
     range(y[is.finite(y)])
-  else ylim
-
-  plot(x = 1, y = 1, xlim = xlim,
-    ylim = ylim, type = "n", xaxt = "n", xlab = "", ...)
-
+  else 
+    ylim
+  
+  plot(x = 1, y = 1, xlim = xlim, ylim = ylim, type = "n", 
+       xaxt = "n", xlab = "", ...)
+  
   add.grid <- TRUE
-  if(!is.null(args.grid)) if(all(is.na(args.grid))) {add.grid <- FALSE}
-
+  if (!is.null(args.grid)) 
+    if (all(is.na(args.grid))) {
+      add.grid <- FALSE
+    }
+  
   if (add.grid) {
-    args.grid1 <- list(lty="solid", col="grey83")
+    args.grid1 <- list(nx=NA, ny=NULL, lty = "solid", col = "grey83")
     if (!is.null(args.grid)) {
       args.grid1[names(args.grid)] <- args.grid
     }
     do.call("grid", args.grid1)
   }
-
+  
+  
   # open low high close
-  segments(x0 = x, y0 = y[,2], y1 = y[,3], col = col[(y[,1] > y[,4]) * 1 + 1])
-  rect(xleft = x - 0.3, ybottom = y[,1], xright = x + 0.3, ytop = y[, 4],
-    col = col[(y[,1] > y[,4]) * 1 + 1], border = border)
-
-  if(is.null(list(...)[["xaxt"]])){
-    if(IsDate(x)){
+  segments(x0 = x, y0 = y[, 2], y1 = y[, 3], col = col[(y[, 1] > y[, 4]) * 1 + 1])
+  
+  rect(xleft = x - 0.3, ybottom = y[, 1], xright = x + 0.3, 
+       ytop = y[, 4], col = col[(y[, 1] > y[, 4]) * 1 + 1], 
+       border = border)
+  
+  if(add.bar){
+    
+    Mar(top=0, bottom=pp$mar[1])
+    
+    args.bar1 <- list(col = col[(y[, 1] > y[, 4]) * 1 + 1], 
+                      x=1, y=1, ylab="", border=border,
+                      xlim = xlim, type="n", xaxt="n", yaxt="n", xlab="",
+                      ylim = range(0, vol[is.finite(vol)] ))
+    if (!is.null(args.bar)) {
+      args.bar1[names(args.bar)] <- args.bar
+    }
+    
+    DoCall("plot", args.bar1[names(args.bar1) %nin% c("border")])
+    
+    axis(4, las=1)
+    rect(xleft = x - 0.3, ybottom = 0, xright = x + 0.3, 
+         ytop = vol, col = args.bar1$col, 
+         border = args.bar1$border)
+    
+  }
+  
+  if (is.null(list(...)[["xaxt"]])) {
+    if (IsDate(x)) {
       j <- Year(x)
       j[!c(1, diff(j))] <- NA
-      mtext(side = 1, at = x, text= j, cex=1, line=1)
-
+      mtext(side = 1, at = x, text = j, cex = par("cex.axis"), line = 1)
       j <- Month(x)
       j[!c(1, diff(j))] <- NA
-      mtext(side = 1, at = x, text= month.name[j], cex=1, line=2)
-
-      mtext(side = 1, at = x, text= Day(x), cex=1, line=3)
-    } else {
+      mtext(side = 1, at = x, text = month.name[j], cex = par("cex.axis"), 
+            line = 2)
+      mtext(side = 1, at = x, text = Day(x), cex = par("cex.axis"), line = 3)
+    }
+    else {
       axis(side = 1, at = x, labels = x)
     }
   }
-
-
-  if(!is.null(DescToolsOptions("stamp")))
+  
+  
+  if (!is.null(DescToolsOptions("stamp"))) 
     Stamp()
-
 }
+
 
 
 
@@ -13159,7 +13287,7 @@ SaveAs <- function(x, objectname, file, ...){
 #   on.exit(par(old.par))
 # 
 #   split.screen(figs=matrix(c(0,1,0.33,1, 0,0.5,0,0.33, 0.5,1,0,0.33),
-#                            ncol=4, byrow=T), erase=TRUE)
+#                            ncol=4, byrow=TRUE), erase=TRUE)
 # 
 #   ## screen(1)
 #   plot.ts(series, cex=0.7, ylab=deparse(substitute(series)), ...)
@@ -13215,7 +13343,7 @@ PlotACF <- function (series, lag.max = 10 * log10(length(series)), main=NULL,
   on.exit(par(old.par))
   
   split.screen(figs = matrix(c(0, 1, 0.33, 1, 0, 0.5, 0, 0.33, 
-                               0.5, 1, 0, 0.33), ncol = 4, byrow = T), erase = TRUE)
+                               0.5, 1, 0, 0.33), ncol = 4, byrow = TRUE), erase = TRUE)
   
   plot.ts(series, cex = cex, ylab="", xlab="", main=main, ...)
   
@@ -13315,8 +13443,8 @@ PlotMonth <- function(x, type = "l", labels, xlab = "", ylab = deparse(substitut
   m <- tapply(x, cx, mean)
   if(cx[1] != 1 || cx[length(x)] != f) {
     x <- ts(c(rep(NA, cx[1] - 1), x, rep(NA, f - cx[length(x)])),
-            start = start(x, format = T)[1], end = c(end(x, format
-                                                         = T)[1], f), frequency = f)
+            start = start(x, format = TRUE)[1], end = c(end(x, format
+                                                         = TRUE)[1], f), frequency = f)
     cx <- cycle(x)
   }
   i <- order(cx)
@@ -13339,7 +13467,7 @@ PlotMonth <- function(x, type = "l", labels, xlab = "", ylab = deparse(substitut
   ddttl <- match(c("main", "sub", "axes", "ylim"), names(dotdot), nomatch
                  = 0)
   ddttl <- ddttl[ddttl != 0]
-  add.axes <- T
+  add.axes <- TRUE
   if(length(ddttl)) {
     if(any(names(dotdot) == "axes"))
       add.axes <- dotdot$axes
@@ -15664,7 +15792,7 @@ Phrase <- function(x, g, glabels=NULL, xname=NULL, unit=NULL, lang="engl", na.rm
 # txt <- Desc( temperature ~ driver, data=d.pizza )
 # WrdInsTable( txt, wrd=wrd )
 
-# WrdPlot(PlotDescNumFact( temperature ~ driver, data=d.pizza, newwin=T )
+# WrdPlot(PlotDescNumFact( temperature ~ driver, data=d.pizza, newwin=TRUE )
 # , wrd=wrd, width=17, crop=c(0,0,60,0))
 
 
@@ -16023,11 +16151,11 @@ XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame =
     ws <- wb$Sheets(sheet)$select()
   }
   
-  if(class(range) == "XLCurrReg"){
+  if(inherits(x=range, what="XLCurrReg")){
     # take only the first cell of a given range
     zs <- A1ToZ1S1(range)[[1]]
     range <- xl$Cells(zs[1], zs[2])$CurrentRegion()$Address(FALSE, FALSE)
-  } else if(class(range) == "XLNamedReg"){
+  } else if(inherits(x=range, what="XLNamedReg")){
     # get the address of the named region
     sel <- xl$ActiveWorkbook()$Names(as.character(range))$RefersToRange()
     range <- sapply(1:sel$Areas()$Count(), function(i) sel$Areas()[[i]]$Address(FALSE, FALSE) )
@@ -16072,11 +16200,11 @@ XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame =
     lst[[i]] <- rapply(lst[[i]],
                        function(x) {
                          
-                         if(class(x) == "VARIANT"){
+                         if(inherits(x=x, what="VARIANT")){
                            # if there are errors replace them by NA
                            NA
                            
-                         } else if(class(x) == "COMDate") {
+                         } else if(inherits(x=x, what="COMDate")) {
                            # if there are XL dates, replace them by their date value
                            if(IsWhole(x))
                              as.Date(XLDateToPOSIXct(x))
@@ -16138,9 +16266,16 @@ XLGetRange <- function (file = NULL, sheet = NULL, range = NULL, as.data.frame =
   
   if (echo) 
     cat(attr(lst, "call"))
-  
+
+  class(lst) <- c("xlrange", class(lst))
   return(lst)
   
+}
+
+
+
+as.matrix.xlrange <- function(x, ...){
+  SetNames(as.matrix(x[[1]]), rownames=x[[2]][,1], colnames=x[[3]][1,])
 }
 
 
@@ -16247,7 +16382,7 @@ PpText <- function (txt, x=1, y=1, height=50, width=100, fontname = "Calibri", f
 
   msoShapeRectangle <- 1
 
-  if (class(txt) != "character")
+  if (!inherits(x=txt, what="character"))
     txt <- .CaptOut(txt)
 #  slide <- pp[["ActivePresentation"]][["Slides"]]$Item(1)
   slide <- pp$ActiveWindow()$View()$Slide()
@@ -16557,15 +16692,76 @@ WrdKill <- function(){
 
 
 
-CourseData <- function(name, url=NULL, header=TRUE, sep=";",  ...){
+CourseData <- function(name, url=NULL, header=TRUE, sep=";", ...){
 
-  if(length(grep(pattern = "\\..{3}", x = name))==0)
-    name <- paste(name, ".txt", sep="")
+  if(grepl("xls", tools::file_ext(name))) {
+    res <- OpenDataObject(name=name, url=url)
+    
+  } else {
+  
+    if(length(grep(pattern = "\\..{3}", x = name))==0)
+      name <- paste(name, ".txt", sep="")
+    if(is.null(url))
+      url <- "http://www.signorell.net/hwz/datasets/"
+    url <- gettextf(paste(url, "%s", sep=""), name)
+    res <- read.table(file = url, header = header, sep = sep, ...)
+  }
+  
+  return(res)
+     
+}
+
+
+
+
+OpenDataObject <- function(name, url=NULL, 
+                           doc=list(Description=c("Variable", "Beschreibung", "Codes", "Skala")), 
+                           ...){
+
+
   if(is.null(url))
     url <- "http://www.signorell.net/hwz/datasets/"
   url <- gettextf(paste(url, "%s", sep=""), name)
-  read.table(file = url, header = header, sep = sep, ...)
+  
+  resp <- httr::GET(url = url, httr::write_disk(tf <- tempfile()))
+  if(http_status(resp)$category != "Success") 
+    stop(resp)
+  
+  z <- as.data.frame(read_excel(tf))
+  
+  if(!is.na(doc)) {
+
+    # the documentation sheet must contain the following columns
+    doc_sheet <- names(doc)    # default is Description
+    col_var <- doc[[1]][1]
+    col_lbl <- doc[[1]][2]
+    col_code <- doc[[1]][3]
+    col_scale <- doc[[1]][4]
+    
+    code <- as.data.frame(read_excel(tf, sheet = doc_sheet))
+    
+    # Define factors
+    id <- which(code[[col_scale]] %in% c("nominal", "ordinal"))
+    codes <- lapply(strsplit(code[[col_code]][id], "\\r\\n"), strsplit, split="=")
+    names(codes) <- code[[col_var]][id]
+    
+    for(x in code[[col_var]][id]){
+      z[, x] <- factor(z[, x], 
+                       ordered = (code[[col_scale]][code[[col_var]] == x]) == "ordinal")
+      levels(z[, x]) <- StrTrim(sapply(codes[[x]], "[", 2))[
+                    match(levels(z[, x]), StrTrim(sapply(codes[[x]], "[", 1)))]
+    }
+  
+    # Labels:
+    for(x in code[[col_var]])
+      Label(z[, x]) <- code[[col_lbl]][code[[col_var]] == x]
+    
+  }
+  
+  return(z)
+  
 }
+
 
 
 
@@ -16644,7 +16840,7 @@ as.statafactor <- function(x){
 # wrdInsertText( "Mittelwerte zusammengefasst\n\n" )
 # wrdInsertSummary(
 # signif( cbind(
-# t(as.data.frame( lapply( d.frm, tapply, grp, "mean", na.rm=T )))
-# , tot=mean(d.frm, na.rm=T)
+# t(as.data.frame( lapply( d.frm, tapply, grp, "mean", na.rm=TRUE )))
+# , tot=mean(d.frm, na.rm=TRUE)
 # ), 3)
 

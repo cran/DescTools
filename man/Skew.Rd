@@ -72,7 +72,7 @@ and the ones for the kurtosis:\cr
   \code{method = 2:  G_2 = ((n+1) g_2 + 6) * (n-1) / ((n-2)(n-3)) }  \cr
   \code{method = 3:  b_2 = m_4 / s^4 - 3 = (g_2 + 3) (1 - 1/n)^2 - 3 } \cr
 
-  method = 1 is the typical definition used in many older textbooks.   \cr
+  method = 1 is the typical definition used in Stata and in many older textbooks.   \cr
   method = 2 is used in SAS and SPSS.  \cr
   method = 3 is used in MINITAB and BMDP. \cr
 
@@ -87,7 +87,7 @@ This implementation of the two functions is comparably fast, as the expensive su
 
 \value{
 If \code{conf.level} is set to \code{NA} then the result will be  
-\item{}{a single numeric value} and 
+\item{a}{ single numeric value} and 
 if a \code{conf.level} is provided, a named numeric vector with 3 elements:
   \item{skew, kurt}{the specific estimate, either skewness or kurtosis}
   \item{lwr.ci}{lower bound of the confidence interval}
@@ -99,7 +99,7 @@ if a \code{conf.level} is provided, a named numeric vector with 3 elements:
 \references{
 Cramer, D. (1997): \emph{Basic Statistics for Social Research} Routledge.
 
-Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and Kurt. \emph{The Statistician}, 47, 183-189.
+Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and kurtosis. \emph{The Statistician}, 47, 183-189.
 }
 
 \seealso{

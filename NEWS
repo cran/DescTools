@@ -1,12 +1,54 @@
 
 
+DescTools 0.99.45 (2022-01-22)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+  * SplitToDummy() for splitting a string vector and create a dummy code matrix.
+
+UPDATED FUNCTIONS:
+  * CochranArmitageTest has been updated to use scores instead of ordinal values only.
+    Further the alternatives have been reduced to c("two.sided", "one.sided") 
+    instead of c("two.sided", "increasing", "decreasing"), which were poorly defined.
+  * BoxedText gains a formula interface.  
+  * RevCode takes dots now, for reverse numeric codes.
+  * Gmean will now report NA whenever there is a negative value in vector x, 
+    despite if x also contains zero (like SAS, unlike SPSS).
+  * Quantile() now uses the argument "names", which so far had no 
+    meaning within the function body. 
+  * PlotCorr() now displays the matrix in the same form, as it is defined.
+    x is internally transposed.
+  * In Desc.table() the Phi coefficient has been replaced by Kendall Tau-B. 
+    It is only sensible in the case of two dichotomous variables, and then 
+    CramerV, which is also reported by default, has the same value.
+  * CourseData() will open xl-datafiles containing a description tab and 
+    define factors based on this information, as well as set labels.
+  * DunnetTest will no longer set.seed() within the function, which was used
+    to generate comparable results, but was a drawback for simulations.
+    (Credits to marcoegv on github)
+  
+BUGFIXES:
+  * JonckheereTest's formula interface will now also support additional 
+    arguments.
+  * Bug in Cohen Kappa SE calculation fixed.  
+  * Quantile's default type has been changed from type 5 to type 7, 
+    which was documented, but not implemented.
+  * PlotCorr() mislabeled the legend when breaks were specified (Credits for the
+    fix to Duncan Murdoch).  
+  * Several replacements of T with TRUE, which have apparently always 
+    slipped through until now. (Again, the credit goes to Duncan Murdoch.)
+  
+
+
+
+
 DescTools 0.99.44 (2021-11-22)  
 ------------------------------
 
 NEW FUNCTIONS ADDED:
   * PlotProbDist() is a convenience interface for plotting probability 
     distributions with shaded areas.
-  * rSum21() returns random numbers which sum to 1, allowing to define digits  
+  * rSum21() returns random numbers which sum to 1, allowing to define digits.  
 
 UPDATED FUNCTIONS:
   * Recode() will accept characters and in this case also return a character vector.
@@ -44,8 +86,6 @@ NEW FUNCTIONS ADDED:
     "topleft", etc..
 
 UPDATED FUNCTIONS:
-  * (Pending!!: AUC() has been gently revised.  (...but can't be published before 
-    package sobir is updated....)
   * Freq will report the median class as attribute.  
   * Desc.numeric() and Desc.Date() get a new attribute include_x to prevent the
     function to return the provided argument x.
