@@ -1,6 +1,26 @@
 
 
-DescTools 0.99.45 (2022-01-22)
+
+DescTools 0.99.46 (2022-08-30)
+------------------------------
+
+UPDATED FUNCTIONS:
+  * Append() gains a TOne interface, to be able to add rows to a Table 1 (TOne) object.
+  * BarText() internally uses the more flexible BoxedText() instead of text().
+  * DunnTest, ConoverTest, VanWaerdenTest, NemenyiTest, DunnettTest get new organising
+    code analogue to kruskal.test in order to handle characters as factors correctly.
+  * DunnTest() returns the matrix of p-Values in addition.  
+  * Format() gains a new interface for ftables.
+  
+BUGFIXES:
+  * IdentifyA() now reverses the coordinates in the attribute.
+  * Two changes in the helpfiles of BinomRatCI() ans StdCoef() which popped up 
+    with R 4.2.
+
+
+
+
+DescTools 0.99.45 (2022-05-09)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
@@ -13,13 +33,14 @@ UPDATED FUNCTIONS:
   * BoxedText gains a formula interface.  
   * RevCode takes dots now, for reverse numeric codes.
   * Gmean will now report NA whenever there is a negative value in vector x, 
-    despite if x also contains zero (like SAS, unlike SPSS).
+    despite if x also contains zero (like SAS, unlike SPSS). 
+    (Credits to Imanol Zubizarreta)
   * Quantile() now uses the argument "names", which so far had no 
     meaning within the function body. 
   * PlotCorr() now displays the matrix in the same form, as it is defined.
     x is internally transposed.
   * In Desc.table() the Phi coefficient has been replaced by Kendall Tau-B. 
-    It is only sensible in the case of two dichotomous variables, and then 
+    Phi is only sensible in the case of two dichotomous variables, and then 
     CramerV, which is also reported by default, has the same value.
   * CourseData() will open xl-datafiles containing a description tab and 
     define factors based on this information, as well as set labels.
