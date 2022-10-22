@@ -3580,7 +3580,7 @@ EtaSq.lm <- function (x, type = 2, anova = FALSE) {
 
   # file:    etaSquared.R
   # author:  Dan Navarro
-  # contact: daniel.navarro@adelaide.edu.au
+  # contact: djnavarro@protonmail.com
   # changed: 13 November 2013
   # modified by Daniel Wollschlaeger 17.9.2014
 
@@ -4934,9 +4934,14 @@ DunnettTest.default <- function (x, g, control = NULL
     R <- outer(Rij, Rij, "*")
     diag(R) <- 1
 
-    # set.seed(5)  # for getting consistent results every run
+    # store the given seed
+    old.seed <- .Random.seed
+    set.seed(5)  # for getting consistent results every run
     qvt <- mvtnorm::qmvt((1 - (1 - conf.level)/2), df = N - k, sigma = R, tail = "lower.tail")$quantile
-
+    
+    # reset seed
+    .Random.seed <<- old.seed
+    
     lower <- meandiffs - s * sqrt((1/fittedn) + (1/controln)) * qvt
     upper <- meandiffs + s * sqrt((1/fittedn) + (1/controln)) * qvt
 

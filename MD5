@@ -1,9 +1,9 @@
-a86fa2d64f1c4906383cb29b293e6b77 *DESCRIPTION
+55df6d0cf51db15f66700e16ca25f22f *DESCRIPTION
 3064e293bc34901a6c326cdee9ea0710 *NAMESPACE
-9ff7f9c00caf6091b455a782d046fbea *NEWS
+3bda3669ecc9feb22d13525f7b932751 *NEWS
 5a03ca23f8659d980b8d0b59e2d80059 *R/Const.R
-709baf43cd26311d4d7af6e23b7ab46d *R/Desc.R
-a39d50a4991bf22ae44a5633863d8020 *R/DescTools.r
+fe4ca49c89eff8c4279fc4540675ca57 *R/Desc.R
+1167e5301a74c29f32e20a25d9d7035f *R/DescTools.r
 eb6e9f7b12bffa110d3aabf59c59c6fd *R/Dialogs.r
 a002600980f534c19325bdb6731444b9 *R/Distributions.R
 ba0c145dc3726157984e8bd74a445abc *R/DoBy.r
@@ -13,9 +13,9 @@ e6d352b11b4cbcc3df8883af8ea21e31 *R/PageDF.r
 803ab390d78374dafd9cf6d83e2ef000 *R/PlotQQ.R
 33f65c94f9264128919d56f7a58f371c *R/RcppExports.R
 a7c1ac494369d7ea52109271ea2e41d3 *R/SpecialPlots.r
-4249a88475ed8179c009289fe0befc9e *R/StatsAndCIs.r
+7610fb6d82cf82de7284c19c8cd055c1 *R/StatsAndCIs.r
 51870de66223f2b1811eccac199a6f40 *R/Tables.r
-983d21df9de00b75196656093a986b34 *R/Tests.r
+fbe1be2d3f79cf1917a70d87ca03bd49 *R/Tests.r
 4065085f36204c54dccc84b9a6e25485 *R/Utils.R
 e662ac2a30620cf4b8996dbaa1f4cffc *R/zzz.r
 03192e3646f063d1f215032b53d03249 *README.md
@@ -70,7 +70,7 @@ da44736223720796476e775f7ed93341 *man/Asp.Rd
 c512525b730c431c9c3aaad18a12df3c *man/Assocs.Rd
 03da32dda04b06638824a49383a2aee0 *man/Atkinson.Rd
 f24031c686f122c25ec4615897ffc505 *man/AxisBreak.Rd
-7c07df0c263d5811110e4c5bb2525ee3 *man/BarText.Rd
+ba53d189c72ed6cdd51fff893fe09505 *man/BarText.Rd
 9bdc8b11f6eed59b9c5e2a1c81c5c070 *man/BarnardTest.Rd
 5f1fb6fa5b18658f33878ac16d17bccf *man/BartelsRankTest.Rd
 5451138b27b1be8858303a90ded02153 *man/BaseConversions.Rd
@@ -86,7 +86,7 @@ b782b0d1fe2d0e13e768d87412577a99 *man/BinomDiffCI.Rd
 10c1ec9696d5bb39a50cd45338758e95 *man/BootCI.Rd
 3ec9baf98ea3d60d15a25f4bbffa0c23 *man/BoxCox.Rd
 8ccc247ec9c54277d2e9d849f87f27fd *man/BoxCoxLambda.Rd
-c4a5cb8fc9d0b3354a407458f45f1757 *man/BoxedText.Rd
+1488310f5bbfbf941e638e064da3232d *man/BoxedText.Rd
 f4fdde5975fdb2963dc1cba33414ec4c *man/BreslowDayTest.Rd
 e01b65ffd7426031be6593f5435d1bd8 *man/BreuschGodfreyTest.Rd
 f2f01adcd1bde4956aa2a71fb3b32109 *man/BrierScore.Rd
@@ -135,7 +135,7 @@ e1c6d94e67b88db02e1231d7c056cabd *man/DatasetsforSimulation.Rd
 29b69ef71ee20bac54dbe14259ad2595 *man/DateFunctions.Rd
 c8256af86d11bc16e5e627b1ece2ade8 *man/DegToRad.Rd
 959409ee5768ff4b179cb9b0de6e1aad *man/Desc.Rd
-184a99deae889154ba55ddc2819fa7a1 *man/DescTools-package.Rd
+bcf55efc3d65020fe245a7455e40a69e *man/DescTools-package.Rd
 60718ca9eafa19d96193ff7f71b5a2a4 *man/DescToolsOptions.Rd
 f82e3aa0a0fffc91ee559f9dc5da1f7b *man/DigitSum.Rd
 64a84a162fe75e5821084396a87853de *man/DivCoef.Rd
@@ -157,7 +157,7 @@ b6cb54b46dc91da2c7338c6e79390148 *man/DunnTest.Rd
 322b030d017a93fd1066e9b6f6a331f4 *man/Entropy.Rd
 f26ba6123984aae51a586ca2cd26853b *man/Eps.Rd
 178f07c270b9a9d18dfc5cb4ba64a990 *man/ErrBars.Rd
-e5f3c44d3d44e43531b793366304566f *man/EtaSq.Rd
+138cc69c0fffb0b7f85d5e5e713af791 *man/EtaSq.Rd
 ba95befa3448b3593599a2d4824995a3 *man/ExpFreq.Rd
 962c09b2f70eab7dd4989f9cece0a756 *man/ExtrVal.Rd
 2d83fa8cb1d67bc3ec3607268b343b2c *man/Factorize.Rd
@@ -183,7 +183,7 @@ b6aee08431f04c0e18c1e47b2c3a0a98 *man/GetCalls.Rd
 adfc4ab4c66e49252c65a12b4ada9a35 *man/GetCurrWrd.Rd
 6542ae0b4311844b0460d412e8cea2fc *man/GetNewWrd.Rd
 07d51244354cdd0b3667a26d9b89ea71 *man/GetNewXL.Rd
-551259a166ad88bbb96ffbdbfb277e9a *man/Gini.Rd
+269cea879cc3318a781a42466fb7ea5f *man/Gini.Rd
 74c77d2de591ce7e29a077151cc3f68e *man/GiniSimpson.Rd
 1d68bf60b33050d527a2404582529a83 *man/Gmean.Rd
 f0cb0401cf138900b6949dacce3ac07a *man/Gompertz.Rd
@@ -240,7 +240,7 @@ b6ed97cd83fb363f5a6922b247781e01 *man/MAE.Rd
 f6db86dbe4fe8f9c9dcb53e0691735c2 *man/MHChisqTest.Rd
 31567e4e4c5c9ae7f05c27ce9a962fa9 *man/Mar.Rd
 b7a5bc63c7cf599cb5c6c95dce2550f8 *man/Mean.Rd
-a03612007910f3924d7e9fc723d921fc *man/MeanAD.Rd
+f00232a3069f04cadca68f8512706d02 *man/MeanAD.Rd
 41c0dc0bde2c5c8196f7aa70bcf957c8 *man/MeanCI.Rd
 00449d7c730c9c39b924f4e020c7488d *man/MeanCIn.Rd
 e0b60b31ce392441b8b0726e56612082 *man/MeanDiffCI.Rd
@@ -296,7 +296,7 @@ e02476408965ca9098ea253e8fbcbab7 *man/PlotMonth.Rd
 d894bee0b69f4537fd162300f00f9abf *man/PlotMultiDens.Rd
 72ce6050b9385af626eae025281f3365 *man/PlotPairs.Rd
 54be2459099c2ecd3948acbe95e9b346 *man/PlotPolar.Rd
-90cbf701a622558c07350667219fa043 *man/PlotProbDist.Rd
+4c9163a3d7afaac07cf22748ef552f5b *man/PlotProbDist.Rd
 ead1bf3d0e3e4bd56831d5d7a7bb622c *man/PlotPyramid.Rd
 d2c444477d14d8a1e85caf2ae22b25c9 *man/PlotQQ.Rd
 c37d9f8936f168218b5cd3387709f618 *man/PlotTernary.Rd
@@ -481,7 +481,6 @@ bb3f8202be0512891798ad3851fa37c6 *src/gompertz.cpp
 0d9f763218494ff8d8cc688f8eecdaf2 *src/moments.c
 c0afcd42011a236739133c8b67651902 *src/pan.f
 a1156b84c75e65b51d9078ff9ce7bd3d *src/pointinpolygon.c
-7289fcdb8889508d66564cbc1cc8bf50 *src/ranksort.c
 faacf375d683e4bb6cc25e0193b2888d *src/rep_len.h
 17128edaf8fe086585d5be13932c8397 *src/robustbase.h
 2259f590d645406bc7104ea2eb4aea90 *src/roman2int.c

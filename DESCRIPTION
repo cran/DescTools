@@ -1,8 +1,8 @@
 Package: DescTools
 Type: Package
 Title: Tools for Descriptive Statistics
-Version: 0.99.46
-Date: 2022-08-30
+Version: 0.99.47
+Date: 2022-10-22
 Authors@R: c(
   person("Andri", "Signorell", email = "andri@signorell.net", role = c("aut", "cre")),
   person("Ken"           , "Aho",                 role = c("ctb")),
@@ -73,7 +73,7 @@ Authors@R: c(
   person("David"         , "Mitchell",            role = c("ctb")),
   person("Franziska"     , "Mueller",             role = c("ctb")),
   person("Markus"        , "Naepflin",            role = c("ctb")),
-  person("Daniel"        , "Navarro",             role = c("ctb")),
+  person("Danielle"      , "Navarro",             role = c("ctb")),
   person("Henric"        , "Nilsson",             role = c("ctb")),
   person("Klaus"         , "Nordhausen",          role = c("ctb")),
   person("Derek"         , "Ogle",                role = c("ctb")),
@@ -140,7 +140,7 @@ RoxygenNote: 6.1.1
 Encoding: UTF-8
 NeedsCompilation: yes
 VignetteBuilder: R.rsp
-Packaged: 2022-08-30 16:43:41 UTC; andri
+Packaged: 2022-10-22 20:59:44 UTC; andri
 Author: Andri Signorell [aut, cre],
   Ken Aho [ctb],
   Andreas Alfons [ctb],
@@ -210,7 +210,7 @@ Author: Andri Signorell [aut, cre],
   David Mitchell [ctb],
   Franziska Mueller [ctb],
   Markus Naepflin [ctb],
-  Daniel Navarro [ctb],
+  Danielle Navarro [ctb],
   Henric Nilsson [ctb],
   Klaus Nordhausen [ctb],
   Derek Ogle [ctb],
@@ -259,4 +259,4 @@ Author: Andri Signorell [aut, cre],
   Achim Zeileis [ctb]
 Maintainer: Andri Signorell <andri@signorell.net>
 Repository: CRAN
-Date/Publication: 2022-09-01 12:00:02 UTC
+Date/Publication: 2022-10-22 22:27:49 UTC
