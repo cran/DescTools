@@ -11,7 +11,7 @@ BinomCI(x, n, conf.level = 0.95, sides = c("two.sided", "left", "right"),
                    "modified wilson", "wilsoncc","modified jeffreys",
                    "clopper-pearson", "arcsine", "logit", "witting", "pratt", 
                    "midp", "lik", "blaker"),
-        rand = 123, tol = 1e-05)
+        rand = 123, tol = 1e-05, std_est = TRUE)
 }
 \arguments{
   \item{x}{ number of successes. }
@@ -30,6 +30,7 @@ BinomCI(x, n, conf.level = 0.95, sides = c("two.sided", "left", "right"),
   \item{rand}{ seed for random number generator; see details. }
   \item{tol}{tolerance for method \code{"blaker"}.}
 
+  \item{std_est}{logical, specifying if the standard point estimator for the proportion value \code{x/n} should be returned (\code{TRUE}, default) or the method-specific internally used alternative point estimate (\code{FALSE}).}
 }
 \details{
   All arguments are being recycled.
@@ -46,7 +47,7 @@ BinomCI(x, n, conf.level = 0.95, sides = c("two.sided", "left", "right"),
 
   The \bold{Agresti-Coull} interval was proposed by Agresti and Coull (1998) and is a slight
   modification of the Wilson interval. The Agresti-Coull intervals are never shorter
-  than the Wilson intervals; cf. Brown et al (2001).
+  than the Wilson intervals; cf. Brown et al (2001). The internally used point estimator p-tilde is returned as attribute.
 
   The \bold{Jeffreys} interval is an implementation of the equal-tailed Jeffreys prior interval
   as given in Brown et al (2001).
@@ -98,11 +99,15 @@ For more details we refer to Brown et al (2001) as well as Witting (1985).
 
 Some approaches for the confidence intervals are capable of violating the [0, 1] boundaries and potentially yield negative results or values beyond 1. These would be truncated such as not to exceed the valid range of [0, 1].
 
-And now, which interval should we use? The Wald interval often has inadequate coverage, particularly for small n and values of p close to 0 or 1. Conversely, the Clopper-Pearson Exact method is very conservative and tends to produce wider intervals than necessary. Brown et al. recommends the Wilson or Jeffreys methods for small n and Agresti-Coull, Wilson, or Jeffreys, for larger n as providing more reliable coverage than the alternatives. Also note that the point estimate for the Agresti-Coull method is slightly larger than for other methods because of the way this interval is calculated.
+And now, which interval should we use? The Wald interval often has inadequate coverage, particularly for small n and values of p close to 0 or 1. Conversely, the Clopper-Pearson Exact method is very conservative and tends to produce wider intervals than necessary. Brown et al. recommends the Wilson or Jeffreys methods for small n and Agresti-Coull, Wilson, or Jeffreys, for larger n as providing more reliable coverage than the alternatives. 
+
+For the methods \code{"wilson"}, \code{"wilsoncc"}, \code{"modified wilson"}, \code{"agresti-coull"} and \code{"arcsine"} the internally used alternative point estimator for the proportion value can be returned (by setting \code{std_est = FALSE}). The point estimate typically is slightly shifted towards 0.5 compared to the standard estimator. See the literature for the more details.
 
 }
 \value{
   A vector with 3 elements for estimate, lower confidence intervall and upper for the upper one.
+  
+  For more than one argument each, a 3-column matrix is returned.
  }
 
 \note{ The base of this function once was \code{binomCI()} from the \pkg{SLmisc} package. In the meantime, the code has been updated on several occasions and it has undergone numerous extensions and bug fixes.
@@ -159,5 +164,8 @@ do.call(cbind, lapply(1:4,
                               "clopper-pearson", "midp", "lik"))[, -1], 
            digits=4)
 }))
+
+# returning p.tilde for agresti-coull ci
+BinomCI(x=81, n=263, meth="agresti-coull", std_est = c(TRUE, FALSE))
 }
 \keyword{univar}

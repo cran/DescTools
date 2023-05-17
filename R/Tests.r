@@ -723,6 +723,56 @@ VarTest <- function(x, ...) UseMethod("VarTest")
 VarTest.default <- function (x, y = NULL, alternative = c("two.sided", "less", "greater"), ratio = 1,
                              sigma.squared = 1, conf.level = 0.95, ...) {
 
+  
+  TwoSided_pval <- function(x, DF){
+    
+    # https://stats.stackexchange.com/questions/195469/calculating-p-values-for-two-tail-test-for-population-variance
+    
+    # What you are dealing with in this question is a two-sided 
+    # variance test, which is a specific case of a two-sided test 
+    # with an asymmetric null distribution. The p-value is the total 
+    # area under the null density for all values in the lower and 
+    # upper tails of that density that are at least as "extreme" 
+    # (i.e., at least as conducive to the alternative hypothesis) 
+    # as the observed test statistic. Because this test has an 
+    # asymmetric null distribution, we need to specify exactly 
+    # what we mean by "extreme".
+    # 
+    # Lowest-density p-value calculation: The most sensible thing 
+    # method of two-sided hypothesis testing is to interpret 
+    # "more extreme" as meaning a lower value of the null density. 
+    # This is the interpretation used in a standard likelihood-ratio 
+    # (LR) test. Under this method , the p-value is the probability of 
+    # falling in the "lowest density region", where the density 
+    # cut-off is the density at the observed test statistic. With 
+    # an asymmetric null distribution, this leads you to a p-value 
+    # calculated with unequal tails.
+    
+    # example:
+    #   TwoSided_pval(15.35667, DF=17)
+    #   TwoSided_pval(14.6489, DF=17)
+    
+    
+    InvDChisq <- function(x2, DF){
+      
+      fun <- function(x) dchisq(x, df=DF) - dchisq(x2, df=DF)
+      # the mode of chisq distribution
+      mod_x2 <- DF-2
+      
+      if(x2 < mod_x2){
+        UnirootAll(fun, interval = c(mod_x2, mod_x2 + 2*(mod_x2 - x2)))
+      } else {
+        UnirootAll(fun, interval = c(0, mod_x2))
+      }
+    }
+    
+    
+    pchisq(x, df = DF, lower.tail = x < DF-2) + 
+      pchisq(InvDChisq(x, DF), df = DF, lower.tail=!x < DF-2)
+    
+  }
+  
+  
   if(is.null(y)){
     # perform a one sample variance test
 
@@ -755,11 +805,14 @@ VarTest.default <- function (x, y = NULL, alternative = c("two.sided", "less", "
     } else if (alternative == "greater") {
       pval <- pchisq(xstat, df, lower.tail = FALSE)
       cint <- c(df * vx/qchisq((1 - conf.level), df, lower.tail = FALSE), Inf)
+      
     } else {
-      pval <- 2 * min(pchisq(xstat, df), pchisq(xstat, df, lower.tail = FALSE))
+      # this is a "quick-and-nasty" approximation, let's use a better one..
+      # pval <- 2 * min(pchisq(xstat, df), 
+      #                 pchisq(xstat, df, lower.tail = FALSE))
+      pval <- TwoSided_pval(xstat, df)
+      
       alpha <- 1 - conf.level
-      cint <- qt(1 - alpha/2, df)
-      cint <- xstat + c(-cint, cint)
       cint <- df * vx / c(qchisq((1 - conf.level)/2, df, lower.tail = FALSE),
                           qchisq((1 - conf.level)/2, df))
     }
@@ -4011,8 +4064,7 @@ ScheffeTest.aov <- function(x, which=NULL, contrasts = NULL, conf.level=0.95, ..
 
     psi <- apply(contrasts * means, 2, sum)
     sscoeff <- apply(contrasts * contrasts / n, 2, sum)
-    mspsi <- (psi * psi) / sscoeff
-
+    
     # Korrektur von Daniel Wollschlaeger 9.9.2014:
     #     psi <- contrasts %*% means
     #     sscoeff <- contrasts * contrasts %*% (1/n)
@@ -4948,19 +5000,25 @@ DunnettTest.default <- function (x, g, control = NULL
     R <- outer(Rij, Rij, "*")
     diag(R) <- 1
 
-    # store the given seed
-    if(exists(".Random.seed")){
-      # .Random.seed might not exist when launched as background job
-      # so only store and reset if it exists 
-      old.seed <- .Random.seed
-    }
-    set.seed(5)  # for getting consistent results every run
-    qvt <- mvtnorm::qmvt((1 - (1 - conf.level)/2), df = N - k, sigma = R, tail = "lower.tail")$quantile
+    # Michael Chirico suggests in https://github.com/AndriSignorell/DescTools/pull/102
+    withr::with_seed(5, {
+      qvt <- mvtnorm::qmvt((1 - (1 - conf.level)/2), df = N - k, sigma = R, tail = "lower.tail")$quantile
+    })
     
-    # reset seed
-    if(exists("old.seed")){
-      .Random.seed <<- old.seed
-    }
+    # replaced by Michael Chirico's elegant solution
+    # # store the given seed
+    # if(exists(".Random.seed")){
+    #   # .Random.seed might not exist when launched as background job
+    #   # so only store and reset if it exists 
+    #   old.seed <- .Random.seed
+    # }
+    # set.seed(5)  # for getting consistent results every run
+    # qvt <- mvtnorm::qmvt((1 - (1 - conf.level)/2), df = N - k, sigma = R, tail = "lower.tail")$quantile
+    # 
+    # # reset seed
+    # if(exists("old.seed")){
+    #   .Random.seed <<- old.seed
+    # }
     
     lower <- meandiffs - s * sqrt((1/fittedn) + (1/controln)) * qvt
     upper <- meandiffs + s * sqrt((1/fittedn) + (1/controln)) * qvt

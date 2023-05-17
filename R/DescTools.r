@@ -2842,13 +2842,12 @@ LogStInv <- function (x, base=NULL, threshold = NULL) {
   if(is.null(base)) base <- attr(x, "base")
 
   res <- rep(NA, length(x))
-  idx <- (x < log10(threshold))
+  idx <- (x < (lgth <- log(threshold, base)))
   idx.na <- is.na(idx)
-  res[idx & !idx.na] <- threshold - threshold * log(base) *( log(x = threshold, base=base) - x[idx & !idx.na])
+  res[ idx & !idx.na] <- threshold - (threshold * log(base)) * (lgth - x[idx & !idx.na]) 
   res[!idx & !idx.na] <- base^(x[!idx & !idx.na])
 
   return(res)
-
 }
 
 
@@ -8662,6 +8661,8 @@ BoxedText.default <- function(x, y = NULL, labels = seq_along(x), adj = NULL,
     text(x=x, y=y, labels=labels, adj=adj, pos=pos, offset=offset, vfont=vfont, cex=cex, col=col, font=font, srt=srt)
   }
 
+  x <- xy.coords(x, y, recycle = TRUE, setLab = FALSE)
+  
   if(is.null(adj))
     adj <- c(0.5, 0.5)
   else
@@ -8676,7 +8677,7 @@ BoxedText.default <- function(x, y = NULL, labels = seq_along(x), adj = NULL,
   #   which parameter has the highest dimension
   # attention: we cannot repeat NULLs but we can repeat NAs, so we swap NULLs to NAs and
   #            reset them to NULL above
-  lst <- list(x=x, y=y, labels=labels, pos=pos, offset=offset, vfont=vfont,
+  lst <- list(x=x$x, y=x$y, labels=labels, pos=pos, offset=offset, vfont=vfont,
      cex=cex, col=col, font=font, srt=srt, xpad=xpad, ypad=ypad,
      density=density, angle=angle, bg=bg, border=border, lty=lty, lwd=lwd)
   maxdim <- max(unlist(lapply(lst, length)))
