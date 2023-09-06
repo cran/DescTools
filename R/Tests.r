@@ -760,7 +760,10 @@ VarTest.default <- function (x, y = NULL, alternative = c("two.sided", "less", "
       mod_x2 <- DF-2
       
       if(x2 < mod_x2){
-        UnirootAll(fun, interval = c(mod_x2, mod_x2 + 2*(mod_x2 - x2)))
+        # don't know how to set the right boundary in a sensible way
+        # the treshold 1e12 is selected randomly
+        # benchmark show no difference in performance between 1e6 and 1e12
+        UnirootAll(fun, interval = c(mod_x2, 1e12))
       } else {
         UnirootAll(fun, interval = c(0, mod_x2))
       }

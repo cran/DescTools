@@ -7,7 +7,7 @@ export(
 "Clockwise","Closest","Coalesce","CourseData",
 "CochranArmitageTest",
 "CochranQTest",
-"CoefVar","CohenD","CohenKappa","CollapseTable","ColorLegend",
+"CoefVar","CoefVarCI","CohenD","CohenKappa","CollapseTable","ColorLegend",
 "ColToGray","ColToGrey","ColToHex","ColToHsv","ColToRgb","ColToOpaque","RgbToHex", 
 "CombN","CombPairs","CombSet","ConDisPairs","Conf","ConnLines","ContCoef","Contrasts","CorCI",
 "CorPolychor","CramerV","CramerVonMisesTest","CronbachAlpha","CutQ","Day","Day<-","dBenf",

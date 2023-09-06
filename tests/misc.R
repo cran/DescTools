@@ -17,7 +17,7 @@ set.seed(45)
 (z <- as.numeric(names(w <- table(x <- sample(-10:20, size=50, r=TRUE)))))
 
 stopifnot(all(
-  identical(Mode(5), structure(5, freq = 1L))
+    identical(Mode(5), structure(NA_real_, freq = NA_integer_)) 
   , identical(Mode(NA), structure(NA_real_, freq = NA_integer_)) 
   , identical(Mode(c(NA, NA)), structure(NA_real_, freq = NA_integer_)) 
   , identical(Mode(c(NA, 0:5)), structure(NA_real_, freq = NA_integer_)) 

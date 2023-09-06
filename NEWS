@@ -1,5 +1,23 @@
 
 
+
+DescTools 0.99.50 (2023-09-02)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+  * The confidence intervals for the coefficient of variation are calculated 
+    by the new function CoefVar(). Additional methods have been implemented.
+    So far these are: "vangel","mckay","nct","naive".
+
+UPDATED FUNCTIONS:
+  * Mode() returns NA for a vector of length = 1.
+  * CoefVar() confidence intervals have been organised in a new function.
+  * DFLOAT replaced by DBLE everywhere in Fortran code.
+  
+ 
+
+
+
 DescTools 0.99.49 (2023-05-14)
 ------------------------------
 

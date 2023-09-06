@@ -1,6 +1,6 @@
-2c0c7630ab31998c694f5eec4aa1aa5c *DESCRIPTION
-5a1c694adda1bd0f75541b027db31137 *NAMESPACE
-7380b3ded18995dfe340c7658fe76de6 *NEWS
+acfed5f14db7b240f4f0b55bfe7abdf0 *DESCRIPTION
+44b0cfbf2e52576308db735a0aab348a *NAMESPACE
+a35446124564121d05344409538d900a *NEWS
 5a03ca23f8659d980b8d0b59e2d80059 *R/Const.R
 dab581b02d4044a557ff2141fb4073f7 *R/Desc.R
 3bc2fd99fa1f9a6ee1fe30c6b7c7e654 *R/DescTools.r
@@ -13,13 +13,13 @@ e6d352b11b4cbcc3df8883af8ea21e31 *R/PageDF.r
 803ab390d78374dafd9cf6d83e2ef000 *R/PlotQQ.R
 33f65c94f9264128919d56f7a58f371c *R/RcppExports.R
 a7c1ac494369d7ea52109271ea2e41d3 *R/SpecialPlots.r
-643027a2ff21d7b45041954173637279 *R/StatsAndCIs.r
+2f433fe73bb41303e4f67ef6712759c0 *R/StatsAndCIs.r
 51870de66223f2b1811eccac199a6f40 *R/Tables.r
-c7fa00122ae5d3804fb49e2d2e48223c *R/Tests.r
+703b4cd2bc1ba5c0d44be8d1fef69a0f *R/Tests.r
 4065085f36204c54dccc84b9a6e25485 *R/Utils.R
 e662ac2a30620cf4b8996dbaa1f4cffc *R/zzz.r
 f72f9ff7dc862c8512b4c2ffc927c09b *README.md
-ff06558b556a711a5fc827b505d668ed *build/vignette.rds
+4cb725caec563cddb7c42805ca7ff561 *build/vignette.rds
 d4559219fae4f8d733c3cd5a7d24c7d5 *data/cards.rda
 be3c30ea5cb863f1873935783b093144 *data/d.countries.rda
 de50a7e0ed8364331d5bdc2d2156f5d6 *data/d.diamonds.rda
@@ -99,7 +99,7 @@ e7c562d81b84cb0a7944374dbb424423 *man/Clockwise.Rd
 e70c6e9b4efa3abd54d7ccbd086b9627 *man/Coalesce.Rd
 3c883e16bf34c5917a5cb59588e9ff40 *man/CochranArmitageTest.Rd
 19d3e99ba949b405945980a7905eb27a *man/CochranQTest.Rd
-3d073cbc73bfe85c1312e4dd6339f2f3 *man/CoefVar.Rd
+b3f7768ee854ab4aa31b23baf10fc4dd *man/CoefVar.Rd
 0a4f5064b54f32f28bad812e4361bbb8 *man/CohenD.Rd
 bc56a38b3db62d32fd792aeab6891866 *man/CohenKappa.Rd
 cf1d317d96f564917507897a8eb8b2d6 *man/ColToGrey.Rd
@@ -187,7 +187,7 @@ adfc4ab4c66e49252c65a12b4ada9a35 *man/GetCurrWrd.Rd
 1d68bf60b33050d527a2404582529a83 *man/Gmean.Rd
 f0cb0401cf138900b6949dacce3ac07a *man/Gompertz.Rd
 a049368d9087dd959cd3cb30716d1d13 *man/GoodmanKruskalGamma.Rd
-6e63a31346bd7d1a2d6c86a1e16e478f *man/GoodmanKruskalTau.Rd
+4e9d4c4613ff5460e99a906dc1b6b7aa *man/GoodmanKruskalTau.Rd
 3af6214c928aeab74a4b56816bd80da4 *man/Gumbel.Rd
 7332d277a677f4f729751bcd318785c3 *man/Herfindahl.Rd
 927963d102f88cb331e58882a9a1aac8 *man/HexToCol.Rd
@@ -474,9 +474,9 @@ bf0801b2690d042ea7a9da274d60f93e *src/extremes.cpp
 a91c025627e5dd4c2f1fa8ad08c289d4 *src/fdwilcox.c
 91e9e271cd08882f4576e1120a24e676 *src/fpow.c
 bb3f8202be0512891798ad3851fa37c6 *src/gompertz.cpp
-4e562a4570979794f333a4b0e2f70a11 *src/hoeffd.f
+53797256a1873b4231ab2b878e0f1b27 *src/hoeffd.f
 4f5dd3101a34d420604686a64ef613c9 *src/init.c
-2ffebcbeb56e537bffbcb29329c7911c *src/jtpdf.f
+14d0edacdd8356806a2ca5f86a08f70c *src/jtpdf.f
 5dda88ac914a65b1f5ec7a428f7386c9 *src/ks.c
 0d9f763218494ff8d8cc688f8eecdaf2 *src/moments.c
 c0afcd42011a236739133c8b67651902 *src/pan.f
@@ -488,7 +488,7 @@ faacf375d683e4bb6cc25e0193b2888d *src/rep_len.h
 cb5478376d46bcfd4dde4cd398669f2f *src/wgt_himed.c
 8ecf1e9e5dfde44f7f7b21d443a207c3 *src/wgt_himed_templ.h
 4f1802003bbf563fe44db4a5ced74628 *tests/TestsPseudoR2.R
-e410abb12b4edbd2601f762cc34812cb *tests/misc.R
+168c3f49c64dc55cc2c420a888ccb302 *tests/misc.R
 f80c03f227cd5c2582119429b2f1d7a5 *vignettes/Combinatorics.pdf.asis
 4e58d1542585d1ade6667ce69b7f7720 *vignettes/DescToolsCompanion.pdf.asis
 7a5c3b11573b137d75da698022202a07 *vignettes/TablesInR.pdf.asis
