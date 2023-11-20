@@ -1,12 +1,45 @@
 
 
+DescTools 0.99.51 (2023-11-02)
+------------------------------
+
+NEW FUNCTIONS ADDED:
+  * Labels() is a vectorized function for Label().
+  * SDN() and VarN() return the uncorrected (biased) estimators for
+    standard deviation and variance (sometimes needed for
+	  didactical reasons). 
+	* EX() and VarX() return the expected value and the variance for
+	  the distribution of a discrete random variable.
+	* Mgsub() is a vectorized version for gsub, allowing to replace
+	  multiple patterns at the same time.
+	* New function GiniDeltas() returns the Gini variant from Deltas.  
+	  (Credits to Wim Bernasco,  https://github.com/AndriSignorell/DescTools/issues/120)
+
+
+UPDATED FUNCTIONS:
+  * TwoGroups() gains a formula interface. plot(), print() and ToWrd()
+    routines have been better organized.
+  * Hardcoded ANSI colors have been replaced by their cli::variants.
+  * LCM() and GCD() no longer use the library BH, but rely on 
+    standard C++ functions instead.
+
+BUGFIXES:
+  * HunterGaston() now calculates what it always pretended to do. 
+    (Credits to Wim Bernasco)
+  * Internal function NormWeights() does no more remove 0 values on the
+    value vector x. 
+  * VonNeumannTest() uses the correct normal approximation now.
+    (Credits to LukeAFullard in https://github.com/AndriSignorell/DescTools/issues/126)
+
+
+
 
 DescTools 0.99.50 (2023-09-02)
 ------------------------------
 
 NEW FUNCTIONS ADDED:
   * The confidence intervals for the coefficient of variation are calculated 
-    by the new function CoefVar(). Additional methods have been implemented.
+    by the new function CoefVarCI(). Additional methods have been implemented.
     So far these are: "vangel","mckay","nct","naive".
 
 UPDATED FUNCTIONS:

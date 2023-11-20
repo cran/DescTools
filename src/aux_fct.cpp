@@ -1,15 +1,13 @@
 
-// [[Rcpp::depends(BH)]]
-
 #include <Rcpp.h>
-#include <boost/integer/common_factor.hpp>
+// #include <boost/integer/common_factor.hpp>
 #include <queue>
 
 #include <iostream>
 #include <sstream>
 #include <bitset>
 #include <string>
-#include <boost/algorithm/string.hpp>
+// #include <boost/algorithm/string.hpp>
 
 // #include <stdio.h>
 // #include <stdlib.h>
@@ -30,19 +28,32 @@ using namespace Rcpp;
 //
 
 
+// // [[Rcpp::export]]
+// int compute_GCD(int a, int b){
+//   return
+//     //boost::math::gcd(a, b);
+//     boost::integer::gcd(a,b);
+// }
+// 
+// // [[Rcpp::export]]
+// int compute_LCM(int a, int b){
+//   return
+//     // boost::math::lcm(a, b);
+//     boost::integer::lcm(a,b);
+// }
+
 // [[Rcpp::export]]
-int compute_GCD(int a, int b){
+long long compute_LCM(long long int a, long long int b){
   return
-    //boost::math::gcd(a, b);
-    boost::integer::gcd(a,b);
+    std::lcm(a,b);
 }
 
 // [[Rcpp::export]]
-int compute_LCM(int a, int b){
+long long compute_GCD(long long int a, long long int b){
   return
-    // boost::math::lcm(a, b);
-    boost::integer::lcm(a,b);
+    std::gcd(a,b);
 }
+
 
 
 //[[Rcpp::export]]
@@ -195,6 +206,7 @@ List n_pow_sum(NumericVector x) {
   double d = 0;
   double d2 = 0;
 
+  double sum1 = 0;
   double sum2 = 0;
   double sum3 = 0;
   double sum4 = 0;
@@ -205,6 +217,7 @@ List n_pow_sum(NumericVector x) {
     d = iterator->first - mean;
     d2 = iterator->second * d * d;
 
+    sum1 += abs(d);  // sum of absolute difference
     sum2 += d2;      // sum of squares
     sum3 += d2*d;    // sum of 3th powers
     sum4 += d2*d*d;  // sum of 4th powers
@@ -242,6 +255,7 @@ List n_pow_sum(NumericVector x) {
 
   return Rcpp::List::create(
     Rcpp::Named("mean", mean),
+    Rcpp::Named("sum1", sum1),
     Rcpp::Named("sum2", sum2),
     Rcpp::Named("sum3", sum3),
     Rcpp::Named("sum4", sum4),

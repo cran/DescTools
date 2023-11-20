@@ -6871,8 +6871,8 @@ ParseSASDatalines <- function(x, env = .GlobalEnv, overwrite = FALSE) {
     if( overwrite | ! exists(dsname, envir=env) ) {
       assign(dsname, res, envir=env)
       
-      note <- gettextf("\033[36m\nThe object %s has been added to %s.\n\033[39m" 
-                       , dsname, deparse(substitute(env))) 
+      note <- col_cyan(gettextf("\nThe object %s has been added to %s.\n" 
+                       , dsname, deparse(substitute(env)))) 
       cat(note)
       
     } else {
@@ -6882,8 +6882,8 @@ ParseSASDatalines <- function(x, env = .GlobalEnv, overwrite = FALSE) {
       if(ans == "y"){
         assign(dsname, res, envir = env)
         
-        note <- gettextf("\033[36m\nThe object %s has been overwritten in %s.\n\033[39m" 
-                         , dsname, deparse(substitute(env))) 
+        note <- col_cyan(gettextf("\nThe object %s has been overwritten in %s.\n" 
+                         , dsname, deparse(substitute(env)))) 
         cat(note)
       }
       
@@ -7194,6 +7194,37 @@ Label <- function(x) {
   attr(x, "label") <- value
   return(x)
 }
+
+
+
+`Labels<-` <- function(x, value) {
+  if(is.list(value))  stop("cannot assign a list to be an object label")
+  # if((length(value) != 1L) & !is.null(value)) stop("value must be character vector of length 1")
+  
+  
+  if(is.atomic(x)) {
+    DescTools::Label(x) <- value
+    
+  } else {
+    
+    value <- rep(value, times=length(x))
+    
+    for(i in seq(x))
+      DescTools::Label(x[, i]) <- value[i]
+  }
+  
+  return(x)
+  
+}
+
+Labels <- function(x) {
+  if(is.atomic(x))
+    Label(x)
+  else 
+    sapply(x, DescTools::Label)
+}
+
+
 
 # "Label<-.data.frame" <- function(x, self=(length(value)==1), ..., value) {
 #
