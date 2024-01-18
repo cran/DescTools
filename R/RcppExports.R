@@ -61,3 +61,7 @@ hlqest <- function(x) {
     .Call(`_DescTools_hlqest`, x)
 }
 
+hl2qest <- function(x, y) {
+    .Call(`_DescTools_hl2qest`, x, y)
+}
+
