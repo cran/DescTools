@@ -1,9 +1,9 @@
-a30303fe18e27b90cd94fab83e26f4dc *DESCRIPTION
-73990eb3a6f0735e7002a7d601686a94 *NAMESPACE
-95dba9c77773e2214a0d5bde325fb910 *NEWS
+c5b88617c6d4c33566c1ac8f1b4a9e43 *DESCRIPTION
+ba1530a7be024a13739f6ceab5b1d3c0 *NAMESPACE
+4b09249da70739131d13a0cf84921c82 *NEWS
 5a03ca23f8659d980b8d0b59e2d80059 *R/Const.R
-98d68e24ec9e99e0f930c6ff4a8e05a2 *R/Desc.R
-2d9af847d39744319285b3d3cbefd799 *R/DescTools.r
+9a59167edaf5c6ad62e5d8e9be97f9ab *R/Desc.R
+5503bd1bcd16807d04dd579c5b8596cc *R/DescTools.r
 eb6e9f7b12bffa110d3aabf59c59c6fd *R/Dialogs.r
 a002600980f534c19325bdb6731444b9 *R/Distributions.R
 ba0c145dc3726157984e8bd74a445abc *R/DoBy.r
@@ -58,8 +58,7 @@ a27bef20b33d7719b06dd6c77e31d479 *man/ABCCoords.Rd
 3afbd1095ee458fc610fc1a8631f991a *man/AUC.Rd
 c292ff23ffe89572dabc9247d82e71e8 *man/Abind.Rd
 b54e7682c6fe50f83ea16d3b0ffee2f4 *man/Abstract.Rd
-e184e7d16bd97cbaa23389800debe58b *man/AddMonths.Rd
-c490317e32229fb4ee06a5aa2be66d22 *man/AddMonthsYM.Rd
+bf85e3130b1dd8b2469b721273524cdd *man/AddMonths.Rd
 ce2ec9d867b3b8292f3d46deca304701 *man/Agree.Rd
 83292085545c0051b0949dc8ba8c0863 *man/AllDuplicated.Rd
 aab7cc855f0ea9429e062841cd4acd48 *man/AllIdentical.Rd
@@ -131,12 +130,13 @@ fac14718620328f93912ee6a345caf2c *man/CronbachAlpha.Rd
 c0360ed6e19976754476e2bb14e1eb95 *man/Cross.Rd
 57e3a0cf535113a234c6d45a0cc40fe6 *man/CrossN.Rd
 6e4eaf590826d779ccd47b1bd476919d *man/Cstat.Rd
+1c07295be6e918400a54346563b464bb *man/CutAge.Rd
 37cc90e03e55b4a5405e626894690d12 *man/CutQ.Rd
 e1c6d94e67b88db02e1231d7c056cabd *man/DatasetsforSimulation.Rd
-29b69ef71ee20bac54dbe14259ad2595 *man/DateFunctions.Rd
+404a881a3f11e5b6cff08c2d0441970e *man/DateFunctions.Rd
 c8256af86d11bc16e5e627b1ece2ade8 *man/DegToRad.Rd
 959409ee5768ff4b179cb9b0de6e1aad *man/Desc.Rd
-e6046f9297b708eacff4ead05105dba8 *man/DescTools-package.Rd
+96377c49506ff9033a059a30d4b6c1f4 *man/DescTools-package.Rd
 60718ca9eafa19d96193ff7f71b5a2a4 *man/DescToolsOptions.Rd
 f82e3aa0a0fffc91ee559f9dc5da1f7b *man/DigitSum.Rd
 64a84a162fe75e5821084396a87853de *man/DivCoef.Rd
@@ -257,6 +257,7 @@ f6a0a0ab1e5a55912bbc02f580947574 *man/Mode.Rd
 f346e2a8695b5694d0cabf8afe8b045f *man/MoveAvg.Rd
 895efb02505516c6efa539da7dde4fca *man/MultMerge.Rd
 0dbc8229a3f0220db8340b6c176561b0 *man/MultinomCI.Rd
+27897119bf4ea25d6c2122fd5f319b3d *man/NALevel.Rd
 3b21c0d4d99ecd441e9d2a6443bef7c0 *man/NPV.Rd
 26292fae0c8d4ce3601c05b5b993a8d8 *man/NemenyiTest.Rd
 03de74981fc8b16bff4633dbb6078603 *man/Nf.Rd
@@ -323,7 +324,7 @@ c25c84d69260179095cdefe8ae861945 *man/Quot.Rd
 b60bf53481bdca10e4320dcbbafec0a2 *man/Rank.Rd
 34d752f365b480afcaa81fb51d32cfe7 *man/Recode.Rd
 5106337214bc8975865aa2cdcd5f39a2 *man/Recycle.Rd
-eb870f0dd8fa5649c2f00956e94d5ab6 *man/RelRisk.Rd
+782135eb288d15b5bc7320048d2ab6ad *man/RelRisk.Rd
 e88424c73d7bc858345a97792312fb84 *man/Rename.Rd
 2a2c312a0a65cc5a12ed5c8fe41ea590 *man/ReorderFactor.Rd
 5cb051cfaa7f28b649364ef49028493f *man/Rev.Rd
@@ -441,6 +442,7 @@ b4be8acb381eefd7d340bdef6b2bf788 *man/ZTest.Rd
 8880fd467e18dbe155ed846f8e7fb691 *man/ZeroIfNA.Rd
 3b3af218ff3318eb3a351d87fb0cdcf9 *man/Zodiac.Rd
 1196d8cbdfe2c308b257f1b3ab4c987f *man/as.matrix.Rd
+b451271c0b46519363f44d8263b161b0 *man/as.ym.Rd
 4ca22db456dbb217225c6c49ed8a93fa *man/axTicks.POSIXct.Rd
 51b1bf4513772029cec31a70cbd20cb6 *man/d.countries.Rd
 2bdaf9204c322fcf9b95792bcd5901c6 *man/d.diamonds.Rd
@@ -479,7 +481,7 @@ bf0801b2690d042ea7a9da274d60f93e *src/extremes.cpp
 a91c025627e5dd4c2f1fa8ad08c289d4 *src/fdwilcox.c
 91e9e271cd08882f4576e1120a24e676 *src/fpow.c
 bb3f8202be0512891798ad3851fa37c6 *src/gompertz.cpp
-49b3a8d6b45759a61a9737d12847ad98 *src/hlqest.cpp
+e9d37b170fa0a7deb6489daae3114c79 *src/hlqest.cpp
 53797256a1873b4231ab2b878e0f1b27 *src/hoeffd.f
 935357fa3c0fe3252f2e84fd2ab3f60e *src/init.c
 14d0edacdd8356806a2ca5f86a08f70c *src/jtpdf.f

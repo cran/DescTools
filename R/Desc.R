@@ -436,6 +436,7 @@ Desc.formula <- function(formula, data = parent.frame(),
 
         lst[[paste(resp, pred, sep = " ~ ")]] <-
           calcDesc.bivar(x = y, g = x, xname = resp, gname = pred, ...)
+
         lst[[paste(resp, pred, sep = " ~ ")]]["plotit"] <- plotit
         # would not accept vectors when ["digits"] used. Why??:
         lst[[paste(resp, pred, sep = " ~ ")]][["digits"]] <- digits
@@ -740,6 +741,7 @@ calcDesc.ts <- function(x, ...) {
     x = x
   )
 }
+
 calcDesc.table <- function(x, n, conf.level = 0.95, verbose, rfrq, margins,
                            p, digits, ...) {
   # loglik.chisq <- function(r.chisq) {
@@ -823,6 +825,9 @@ calcDesc.table <- function(x, n, conf.level = 0.95, verbose, rfrq, margins,
     },
     relrisk2 = if (ttype == "t2x2") {
       RelRisk(Rev(x, margin = 2), conf.level = conf.level, method = "wald", delta = 0)
+    },
+    propdiff = if (ttype == "t2x2") {
+      BinomDiffCI(x[1,1], sum(x[1,]), x[2,1], sum(x[2,]), conf.level = conf.level, method = "mn")
     },
     relrisk1r = if (ttype == "t2x2") {
       RelRisk(t(x), conf.level = conf.level, method = "wald", delta = 0)
@@ -999,13 +1004,17 @@ calcDesc.bivar <- function(x, g, xname = NULL, gname = NULL,
     #    res$tab <- table(x[ok], g[ok], useNA=InDots(..., arg="useNA",
     #    default = "no"))
     # do not use x[ok] here, as we could not use NAs in the output
-    res$tab <- table(x, g, useNA = InDots(..., arg = "useNA", default = "no"))
+    
+    # changed 2024-02-03: response should be columns and predictors rows
+    # old: res$tab <- table(x, g, useNA = InDots(..., arg = "useNA", default = "no"))
+    
+    res$tab <- table(g, x, useNA = InDots(..., arg = "useNA", default = "no"))
     res$rfrq <- InDots(..., arg = "rfrq", default = "111")
     res$conf.level <- conf.level
     res$verbose <- verbose
     res$freq <- InDots(..., arg = "freq", default = TRUE)
     res$margins <- InDots(..., arg = "margins", default = c(1, 2))
-    names(dimnames(res$tab)) <- c(xname, gname)
+    names(dimnames(res$tab)) <- c(gname, xname)
   } else {
     return(NA)
   }
@@ -1468,7 +1477,8 @@ print.Desc.table <- function(x, digits = NULL, ...) {
             m <- ftable(format(rbind(
               "odds ratio    " = x$or,
               "rel. risk (col1)  " = x$relrisk1,
-              "rel. risk (col2)  " = x$relrisk2
+              "rel. risk (col2)  " = x$relrisk2,
+              "prop. diff " = x$propdiff
             ), digits = 3, nsmall = 3))
           } else {
             m <- ftable(format(rbind(
@@ -1476,7 +1486,8 @@ print.Desc.table <- function(x, digits = NULL, ...) {
               "rel. risk (col1)  " = x$relrisk1,
               "rel. risk (col2)  " = x$relrisk2,
               "rel. risk (row1)  " = x$relrisk1r,
-              "rel. risk (row2)  " = x$relrisk2r
+              "rel. risk (row2)  " = x$relrisk2r,
+              "prop. diff        " = x$propdiff
             ), digits = 3, nsmall = 3))
           }
           attr(m, "col.vars")[[1]][1] <- "estimate"

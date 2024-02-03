@@ -1,8 +1,8 @@
 Package: DescTools
 Type: Package
 Title: Tools for Descriptive Statistics
-Version: 0.99.53
-Date: 2024-01-17
+Version: 0.99.54
+Date: 2024-02-03
 Authors@R: c(
   person("Andri", "Signorell", email = "andri@signorell.net", role = c("aut", "cre")),
   person("Ken"           , "Aho",                 role = c("ctb")),
@@ -142,7 +142,7 @@ NeedsCompilation: yes
 SystemRequirements: C++17
 VignetteBuilder: R.rsp
 Config/testthat/edition: 3
-Packaged: 2024-01-18 07:50:26 UTC; andri
+Packaged: 2024-02-03 16:20:05 UTC; andri
 Author: Andri Signorell [aut, cre],
   Ken Aho [ctb],
   Andreas Alfons [ctb],
@@ -262,4 +262,4 @@ Author: Andri Signorell [aut, cre],
   Achim Zeileis [ctb]
 Maintainer: Andri Signorell <andri@signorell.net>
 Repository: CRAN
-Date/Publication: 2024-01-18 10:50:05 UTC
+Date/Publication: 2024-02-03 22:40:02 UTC
