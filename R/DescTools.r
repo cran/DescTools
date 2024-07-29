@@ -895,56 +895,56 @@ UnirootAll <- function (f, interval, lower= min(interval),
 
 
 
-
-Winsorize <- function(x, minval = NULL, maxval = NULL,
-                      probs=c(0.05, 0.95), na.rm = FALSE, type=7) {
-
-  # following an idea from Gabor Grothendieck
-  # http://r.789695.n4.nabble.com/how-to-winsorize-data-td930227.html
-
-  # in HuberM things are implemented the same way
-
-  # don't eliminate NAs in x, moreover leave them untouched,
-  # just calc quantile without them...
-
-  # pmax(pmin(x, maxval), minval)
-
-  # the pmax(pmin()-version is slower than the following
-
-  if(is.null(minval) || is.null(maxval)){
-    xq <- quantile(x=x, probs=probs, na.rm=na.rm, type=type)
-    if(is.null(minval)) minval <- xq[1L]
-    if(is.null(maxval)) maxval <- xq[2L]
-  }
-
-  x[x<minval] <- minval
-  x[x>maxval] <- maxval
-
-  return(x)
-
-  # see also Andreas Alfons, KU Leuven
-  # roubustHD, Winsorize
-
-  # Jim Lemon's rather clumsy implementation:
-
-  # #added winsor.var and winsor.sd and winsor.mean (to supplement winsor.means)
-  # #August 28, 2009 following a suggestion by Jim Lemon
-  # #corrected January 15, 2009 to use the quantile function rather than sorting.
-  # #suggested by Michael Conklin in correspondence with Karl Healey
-  # #this preserves the order of the data
-  # "wins" <- function(x,trim=.2, na.rm=TRUE) {
-    # if ((trim < 0) | (trim>0.5) )
-        # stop("trimming must be reasonable")
-      # qtrim <- quantile(x,c(trim,.5, 1-trim),na.rm = na.rm)
-      # xbot <- qtrim[1]
-      # xtop <- qtrim[3]
-       # if(trim<.5) {
-      # x[x < xbot]  <- xbot
-      # x[x > xtop] <- xtop} else {x[!is.na(x)] <- qtrim[2]}
-     # return(x) }
-
-}
-
+# 
+# Winsorize <- function(x, minval = NULL, maxval = NULL,
+#                       probs=c(0.05, 0.95), na.rm = FALSE, type=7) {
+# 
+#   # following an idea from Gabor Grothendieck
+#   # http://r.789695.n4.nabble.com/how-to-winsorize-data-td930227.html
+# 
+#   # in HuberM things are implemented the same way
+# 
+#   # don't eliminate NAs in x, moreover leave them untouched,
+#   # just calc quantile without them...
+# 
+#   # pmax(pmin(x, maxval), minval)
+# 
+#   # the pmax(pmin()-version is slower than the following
+# 
+#   if(is.null(minval) || is.null(maxval)){
+#     xq <- quantile(x=x, probs=probs, na.rm=na.rm, type=type)
+#     if(is.null(minval)) minval <- xq[1L]
+#     if(is.null(maxval)) maxval <- xq[2L]
+#   }
+# 
+#   x[x<minval] <- minval
+#   x[x>maxval] <- maxval
+# 
+#   return(x)
+# 
+#   # see also Andreas Alfons, KU Leuven
+#   # roubustHD, Winsorize
+# 
+#   # Jim Lemon's rather clumsy implementation:
+# 
+#   # #added winsor.var and winsor.sd and winsor.mean (to supplement winsor.means)
+#   # #August 28, 2009 following a suggestion by Jim Lemon
+#   # #corrected January 15, 2009 to use the quantile function rather than sorting.
+#   # #suggested by Michael Conklin in correspondence with Karl Healey
+#   # #this preserves the order of the data
+#   # "wins" <- function(x,trim=.2, na.rm=TRUE) {
+#     # if ((trim < 0) | (trim>0.5) )
+#         # stop("trimming must be reasonable")
+#       # qtrim <- quantile(x,c(trim,.5, 1-trim),na.rm = na.rm)
+#       # xbot <- qtrim[1]
+#       # xtop <- qtrim[3]
+#        # if(trim<.5) {
+#       # x[x < xbot]  <- xbot
+#       # x[x > xtop] <- xtop} else {x[!is.na(x)] <- qtrim[2]}
+#      # return(x) }
+# 
+# }
+# 
 
 Trim <- function(x, trim = 0.1, na.rm = FALSE){
 
@@ -1295,33 +1295,81 @@ HighLow <- function (x, nlow = 5L, nhigh = nlow, na.last = NA) {
 
 
 
+# Closest <- Vectorize( function(x, a, which = FALSE, na.rm = FALSE){
+# 
+# #   # example: Closest(a=67.5, x=d.pizza$temperature)
+# #
+#   if(na.rm) x <- x[!is.na(x)]
+# 
+#   mdist <- min(abs(x-a))
+#   if(is.na(mdist))
+#     res <- NA
+# 
+#   else {
+#     idx <- DescTools::IsZero(abs(x-a) - mdist)    # beware of floating-point-gods
+#     if(which == TRUE )
+#       res <- which(idx)
+#     else
+#       res <- x[idx]
+#   }
+# 
+# # Frank's Hmisc solution is faster
+# # but does not handle ties satisfactorily
+# 
+# #   res <- .Fortran("wclosest", as.double(a), as.double(x), length(a),
+# #            length(x), j = integer(length(a)), PACKAGE = "DescTools")$j
+# #   if(!which) res <- x[res]
+#   return(res)
+# 
+# }, vectorize.args="a")
+# 
+
+
 Closest <- function(x, a, which = FALSE, na.rm = FALSE){
+  
+  # example: Closest(a=67.5, x=d.pizza$temperature, na.rm=TRUE)
+  
+  FUN <- function(x, a, which = FALSE, na.rm = FALSE){
+    
+    if(na.rm) x <- x[!is.na(x)]
+    
+    mdist <- min(abs(x-a))
+    if(is.na(mdist))
+      res <- NA
+    
+    else {
+      idx <- DescTools::IsZero(abs(x-a) - mdist)    # beware of floating-point-gods
+      if(which == TRUE )
+        res <- which(idx)
+      else
+        res <- x[idx]
+    }
 
-#   # example: Closest(a=67.5, x=d.pizza$temperature)
-#
-  if(na.rm) x <- x[!is.na(x)]
-
-  mdist <- min(abs(x-a))
-  if(is.na(mdist))
-    res <- NA
-
-  else {
-    idx <- DescTools::IsZero(abs(x-a) - mdist)    # beware of floating-point-gods
-    if(which == TRUE )
-      res <- which(idx)
-    else
-      res <- x[idx]
+    # Frank's Hmisc solution is faster
+    # but does not handle ties satisfactorily
+    
+    #   res <- .Fortran("wclosest", as.double(a), as.double(x), length(a),
+    #            length(x), j = integer(length(a)), PACKAGE = "DescTools")$j
+    #   if(!which) res <- x[res]
+    
+    return(res)
+    
   }
-
-# Frank's Hmisc solution is faster
-# but does not handle ties satisfactorily
-
-#   res <- .Fortran("wclosest", as.double(a), as.double(x), length(a),
-#            length(x), j = integer(length(a)), PACKAGE = "DescTools")$j
-#   if(!which) res <- x[res]
+  
+  # vectorize arguments a and which
+  res <- mapply(FUN=FUN, a=a, which=which, 
+                MoreArgs = list(x=x, na.rm=na.rm), SIMPLIFY=FALSE)
+  
+  # simplify: if res is a list with 1 element only, reduce to vector
+  if(length(res)==1)
+    res <- res[[1]] 
+  
   return(res)
-
+  
 }
+
+
+
 
 
 # DenseRank <- function(x, na.last = TRUE) {
@@ -1355,7 +1403,7 @@ PercentRank <- function(x)
 
 
 
-Unwhich <- function(idx, n, useNames=TRUE){
+Unwhich <- function(idx, n = max(idx), useNames=TRUE){
 
   # Author: Nick Sabbe
 
@@ -1364,8 +1412,13 @@ Unwhich <- function(idx, n, useNames=TRUE){
   # less performant, but oneliner:
   #   is.element(seq_len(n), i)
 
+  if(n < max(idx)){
+    warning(gettextf("n=%s must not be less than max(idx)=%s, which currently is the case", n, max(idx)))
+    return(NA)
+  }
+  
   res <- logical(n)
-
+  
   if(length(idx) > 0L) {
     res[idx] <- TRUE
     if(useNames) names(res)[idx] <- names(idx)
@@ -2509,15 +2562,6 @@ RevCode <- function (x, ...) {
 }
 
 
-
-CutAge <- function(x, from=0, to=90, by=10, right=FALSE, ordered_result=TRUE, ...){
-  cut(x, breaks = c(seq(from, to, by), Inf), 
-      right=right, ordered_result = ordered_result, ...)
-}
-
-
-
-
 NAIf <- function (x, what) {
   x[!is.na(match(x, what))] <- NA
   return(x)
@@ -2542,6 +2586,14 @@ BlankIfNA <- function(x, blank="") {
 NAIfBlank <- function(x)
   replace(x, x=="", NA)
 
+
+
+
+
+NZ <- function(x){
+  # return non-zero elements of x
+  x[ !IsZero(x) ]
+}
 
 
 
@@ -3440,11 +3492,10 @@ Year.ym  <- function(x){  unclass(round((x/100)))   }
 as.ym <- function(x){
   
   # expects a YYYYMM format
-  if((y <- round(x/100)) %[]% c(1000, 3000) & (x - y*100) %[]% c(1, 12) ) 
-    structure(as.integer(x), class = c("ym", "num")) 
-  else 
-    structure(NA_integer_, class = c("ym", "num")) 
-  
+    res <- structure(as.integer(x), class = c("ym", "num"))
+    res[!((y <- round(x/100)) %[]% c(1000, 3000) & 
+            (x - y * 100) %[]% c(1, 12))]   <- NA_integer_
+    return(res)
 }
 
 print.ym <- function(x, ...) {
@@ -4145,6 +4196,15 @@ AllDuplicated <- function(x){
 # }
 
 
+
+Bun <- function(..., na.rm=FALSE){
+  # unites a list of binary vectors elementwise using max
+  lst <- list(...)
+  (apply(do.call(cbind, lst), 1, sum, na.rm=na.rm) > 0)*1
+}
+
+
+
 Dummy <- function (x, method = c("treatment", "sum", "helmert", "poly", "full"),  base = 1, levels=NULL) {
 
   # Alternatives:
@@ -4536,10 +4596,12 @@ LsFct <- function(package){
 #
 # }
 
+
 LsObj <- function(package){
   # example  lsf("DescTools")
   ls(pos = gettextf("package:%s", package))
 }
+
 
 
 GetCalls <- function (fun, alphabetic = TRUE, package=NULL) {
@@ -4963,7 +5025,15 @@ ToWide <- function(x, g, by=NULL, varnames=NULL){
 
   g <- factor(g)
   s <- split(x, g)
-
+  
+  if(by != "row.names"){
+    # set the columnname for the value according to the group level
+    # in order to avoid duplicate names in Reduce() down the road ...
+    for(i in seq(s)){
+      colnames(s[[i]])[1] <- names(s)[i]
+    }
+  }
+  
   res <- Reduce(function(x, y) {
     z <- merge(x, y, by=by, all.x=TRUE, all.y=TRUE)
     # kill the rownames
@@ -6489,6 +6559,26 @@ FctArgs <- function(name, sort=FALSE) {
 
   invisible(output)
 }
+
+
+# GetArgs <- function(FUN) {
+#   
+#   a <- formals(getAnywhere(FUN)$objs[[1]])
+#   arg.labels <- names(a)
+#   arg.values <- as.character(a)
+#   char <- sapply(a, is.character)
+#   arg.values[char] <- paste("\"", arg.values[char], "\"", sep="")
+#   
+#   c(fname=FUN, args=paste(StrTrim(gsub("= $", "", paste(arg.labels, arg.values, sep=" = "))), collapse=", "))
+#   
+# }
+# 
+# fcts <- grep("plot.Desc", unclass(lsf.str(envir = asNamespace("DescTools"), all.names = T)), v=T)
+# fargs <- t(unname(sapply(fcts, GetArgs)))
+# 
+
+
+
 
 
 
@@ -9159,50 +9249,51 @@ LineToUser <- function(line, side) {
 
 
 
-
-Arrow <- function(x0, y0, x1, y1, col=par("bg"), border = par("fg"), head=1, cex=1, lwd=1, lty=1){
-
-  ArrowHead <- function(x=0, y=0, type=2, cex=1, theta=0){
-
-    # choose a default
-    rx <- par("pin")[1] / 100  * cex
-
-    # get aspect ratio for not allowing the arrowhead to lose form
-    asp <- Asp()
-
-    head <- DrawRegPolygon(x, y, radius.x = rx, radius.y = rx * asp, plot=FALSE)
-
-    if(type==3){
-      head$x <- append(head$x, head$x[1] - rx, 2)
-      head$y <- append(head$y, y, 2)
-    }
-
-    # Rotate the head
-    head <- Rotate(head, theta=theta, mx=x, my=y, asp = asp)
-
-    head$x <- head$x - rx * cos(theta)
-    head$y <- head$y - rx * sin(theta)
-
-    return(head)
-
-  }
-
-
-  if(head > 1){
-    segments(x0 = x0, y0 = y0, x1 = x1, y1 = y1, lty=lty, lwd=lwd)
-    head <- ArrowHead(x=x1, y=y1, type=head, cex=cex,
-                      theta= (atan((y0-y1) / Asp() /(x0-x1)) + (x0 > x1) * pi))
-
-    polygon(head, col=col, border=border)
-
-  } else {
-    arrows(x0 = x0, y0 = y0, x1 = x1, y1 = y1, lty=lty, lwd=lwd)
-  }
-
-  invisible()
-
-}
-
+# Transferred to DescToolsAddIns 2024-03-02
+# 
+# Arrow <- function(x0, y0, x1, y1, col=par("bg"), border = par("fg"), head=1, cex=1, lwd=1, lty=1){
+# 
+#   ArrowHead <- function(x=0, y=0, type=2, cex=1, theta=0){
+# 
+#     # choose a default
+#     rx <- par("pin")[1] / 100  * cex
+# 
+#     # get aspect ratio for not allowing the arrowhead to lose form
+#     asp <- Asp()
+# 
+#     head <- DrawRegPolygon(x, y, radius.x = rx, radius.y = rx * asp, plot=FALSE)
+# 
+#     if(type==3){
+#       head$x <- append(head$x, head$x[1] - rx, 2)
+#       head$y <- append(head$y, y, 2)
+#     }
+# 
+#     # Rotate the head
+#     head <- Rotate(head, theta=theta, mx=x, my=y, asp = asp)
+# 
+#     head$x <- head$x - rx * cos(theta)
+#     head$y <- head$y - rx * sin(theta)
+# 
+#     return(head)
+# 
+#   }
+# 
+# 
+#   if(head > 1){
+#     segments(x0 = x0, y0 = y0, x1 = x1, y1 = y1, lty=lty, lwd=lwd)
+#     head <- ArrowHead(x=x1, y=y1, type=head, cex=cex,
+#                       theta= (atan((y0-y1) / Asp() /(x0-x1)) + (x0 > x1) * pi))
+# 
+#     polygon(head, col=col, border=border)
+# 
+#   } else {
+#     arrows(x0 = x0, y0 = y0, x1 = x1, y1 = y1, lty=lty, lwd=lwd)
+#   }
+# 
+#   invisible()
+# 
+# }
+# 
 
 
 SpreadOut <- function(x, mindist = NULL, cex = 1.0) {
@@ -12744,7 +12835,7 @@ print.CountCompCases <- function(x, digits=1, ...){
 
 
 
-PlotMiss <- function(x, col = hred, bg=SetAlpha(hecru, 0.3), clust=FALSE,
+PlotMiss <- function(x, col = DescTools::hred, bg=SetAlpha(DescTools::hecru, 0.3), clust=FALSE,
                      main = NULL, ...){
 
   x <- as.data.frame(x)
@@ -13020,7 +13111,8 @@ PlotCirc <- function(tab, acol = rainbow(sum(dim(tab))), aborder = "darkgrey",
 ## plots: PlotWeb ====
 
 
-PlotWeb <- function(m, col=c(hred, hblue), lty=NULL, lwd = NULL, args.legend=NULL, pch=21, pt.cex=2,
+PlotWeb <- function(m, col=c(DescTools::hred, DescTools::hblue), lty=NULL, 
+                    lwd = NULL, args.legend=NULL, pch=21, pt.cex=2,
                     pt.col="black", pt.bg="darkgrey", cex.lab = 1.0,
                     las = 1, adj = NULL, dist = 0.5, ... ){
 
@@ -13831,7 +13923,7 @@ PlotPairs <- function(x, g=NULL, col=1, pch=19, col.smooth=1, main="",
   panel.hist <- function(x, ...) { 
     b <- hist(x, plot=FALSE) 
     par(usr = c(par("usr")[1:2], 0, max(pretty(b$density))*1.3)) 
-    hist(x, prob=TRUE, add=TRUE, col=SetAlpha(hecru, 0.6), border=hecru) 
+    hist(x, prob=TRUE, add=TRUE, col=SetAlpha(DescTools::hecru, 0.6), border=hecru) 
   }
   
   
@@ -13882,320 +13974,6 @@ PlotPairs <- function(x, g=NULL, col=1, pch=19, col.smooth=1, main="",
 
 ## Describe  ====
 
-
-# not needed anymore, by 0.99.19
-# .txtline <- function(txt, width, space="", ind="") {
-#   paste(
-#     ind, paste(format(names(txt), width=width, justify="right"), collapse=space), "\n",
-#     ind, paste(format(txt, width=width, justify="right"), collapse=space), "\n",
-#     sep="" )
-# }
-
-
-
-
-
-TOne <- function(x, grp = NA, add.length=TRUE,
-                 colnames=NULL, vnames=NULL, total=TRUE,
-                 align="\\l", FUN = NULL, TEST = NULL, intref="high",
-                 fmt=list(abs  = Fmt("abs"),
-                          num  = Fmt("num"), per=Fmt("per"),
-                          pval = as.fmt(fmt = "*", na.form = "   ")) ) {
-  
-  
-  # set the formats, take the provided fmt and combine with defaults
-  fmt <- c(fmt,
-           list(abs  = Fmt("abs"),
-                num  = Fmt("num"), 
-                per=Fmt("per"),
-                pval = as.fmt(fmt = "*", na.form = "   ")))
-  # use the first instance, so user defined formats are preferred 
-  # and the standards come into effect if there are no user specifications
-  fmt <- fmt[!duplicated(fmt)]
-  # we could restrict the names here to c("abs","num","per","pval")
-
-
-  # set the variablenames per row
-  if(is.null(vnames)){
-    vnames <- if(is.null(colnames(x))) "Var1" else colnames(x)
-    default_vnames <- TRUE
-  } else {
-    default_vnames <- TRUE
-  }
-  
-  # creates the table one in a study
-  if(is.null(FUN)){
-    num_fun <- function(x){
-      # the cell for numeric data
-      gettextf("%s (%s)",
-               Format(mean(x, na.rm=TRUE), fmt=fmt$num),
-               Format(sd(x, na.rm=TRUE), fmt=fmt$num))
-    }
-  } else {
-    num_fun <- FUN
-  }
-
-  
-  if(identical(grp, NA)){
-    # no grouping factor, let's define something appropriate
-    grp <- rep(1, nrow(x))
-    TEST <- NA
-  }
-  
-  
-  if(identical(TEST, NA)){
-    
-    TEST <- list(num=list(fun=function(x, g) 1, lbl="None"),
-                 cat=list(fun=function(x, g) 1, lbl="None"),
-                 dich=list(fun=function(x, g) 1, lbl="None"))
-    notest <- TRUE
-
-  } else {
-
-    # the default tests for quantitative and categorical data
-    TEST.def <- list(num=list(fun=function(x, g){kruskal.test(x, g)$p.val},
-                              lbl="Kruskal-Wallis test"),
-                     cat=list(fun=function(x, g){chisq.test(table(x, g))$p.val},
-                              lbl="Chi-Square test"),
-                     dich=list(fun=function(x, g){fisher.test(table(x, g))$p.val},
-                               lbl="Fisher exact test"))
-    
-    if(is.null(TEST))  # the defaults
-      TEST <- TEST.def
-    
-    # define test for the single tests
-    if(is.null(TEST[["num"]]))
-      TEST[["num"]] <- TEST.def[["num"]]
-    if(is.null(TEST[["cat"]]))
-      TEST[["cat"]] <- TEST.def[["cat"]]
-    if(is.null(TEST[["dich"]]))
-      TEST[["dich"]] <- TEST.def[["dich"]]
-    
-    notest <- FALSE
-    
-  }
-  
-  num_test <- TEST[["num"]]$fun
-  cat_test <- TEST[["cat"]]$fun
-  dich_test <- TEST[["dich"]]$fun
-  
-  
-  
-  # replaced for flexible test in 0.99.19
-  # num_row <- function(x, g, total=TRUE, test="kruskal.test", vname = deparse(substitute(x))){
-  #   # wie soll die zeile aussehen fuer numerische Daten
-  #   p <- eval(parse(text=gettextf("%s(x ~ g)", test)))
-  #   cbind(var=vname, total = num_fun(x), rbind(tapply(x, g, num_fun)),
-  #   #      paste(Format(p$p.value, fmt="*", na.form = "   "), ifelse(is.na(p), "", .FootNote(1))))
-  #         paste(Format(p$p.value, fmt="*", na.form = "   "), ifelse(is.na(p$p.value), "", .FootNote(1))))
-  # }
-  
-  
-  num_row <- function(x, g, total=TRUE, vname = deparse(substitute(x))){
-    if(!identical(g, NA)) {
-      res <- Format(num_test(x, g), fmt=fmt$pval)
-      num_test_label <- names(res)
-    } else {
-      res <- ""
-    }
-    cbind(var=vname, total = num_fun(x), rbind(tapply(x, g, num_fun)),
-          paste(res, .FootNote(1)))
-  }
-  
-  
-  cat_mat <- function(x, g, vname=deparse(substitute(x))){
-    
-    if(inherits(x, "character"))
-      x <- factor(x)
-    
-    tab <- table(x, g)
-    ptab <- prop.table(tab, margin = 2)
-    tab <- addmargins(tab, 2)
-    ptab <- cbind(ptab, Sum=prop.table(table(x)))
-    
-    
-    # crunch tab and ptab
-    m <- matrix(NA, nrow=nrow(tab), ncol=ncol(tab))
-    m[,] <- gettextf("%s (%s)",
-                     Format(tab, fmt=fmt$abs),
-                     Format(ptab, fmt=fmt$per))
-    # totals to the left
-    m <- m[, c(ncol(m), 1:(ncol(m)-1))]
-    
-    # set rownames
-    m <- cbind( c(vname, paste(" ", levels(x))),
-                rbind("", m))
-    # add test
-    if(nrow(tab)>1)
-      # p <- chisq.test(tab)$p.value
-      p <- cat_test(x, g)
-    else
-      p <- NA
-    m <- cbind(m, c(paste(Format(p, fmt=fmt$pval), ifelse(is.na(p), "", .FootNote(3))), rep("", nlevels(x))))
-    
-    if(nrow(m) <=3) {
-      m[2,1] <- gettextf("%s (= %s)", m[1, 1], row.names(tab)[1])
-      m <- m[2, , drop=FALSE]
-    }
-    
-    colnames(m) <- c("var","total", head(colnames(tab), -1), "")
-    m
-  }
-  
-  dich_mat <- function(x, g, vname=deparse(substitute(x))){
-    
-    tab <- table(x, g)
-    
-    if(identical(dim(tab), c(2L,2L))){
-      #      p <- fisher.test(tab)$p.value
-      p <- dich_test(x, g)
-      foot <- .FootNote(2)
-    } else {
-      #      p <- chisq.test(tab)$p.value
-      p <- cat_test(x, g)
-      foot <- .FootNote(3)
-    }
-    
-    ptab <- prop.table(tab, 2)
-    tab <- addmargins(tab, 2)
-    ptab <- cbind(ptab, Sum = prop.table(tab[,"Sum"]))
-    
-    m <- matrix(NA, nrow=nrow(tab), ncol=ncol(tab))
-    m[,] <- gettextf("%s (%s)",
-                     Format(tab, fmt=fmt$abs),
-                     Format(ptab, fmt=fmt$per))
-    
-    # totals to the left
-    m <- m[, c(ncol(m), 1:(ncol(m)-1)), drop=FALSE]
-    
-    m <- rbind(c(vname, m[1,], paste(Format(p, fmt=fmt$pval), foot)))
-    colnames(m) <- c("var","total", head(colnames(tab), -1), "")
-    
-    m
-  }
-  
-  
-  intref <- match.arg(intref, choices = c("high", "low"))
-  
-  if(mode(x) %in% c("logical","numeric","complex","character"))
-    x <- data.frame(x)
-  
-  # find description types
-  ctype <- sapply(x, class)
-  # should we add "identical type": only one value??
-  ctype[sapply(x, IsDichotomous, strict=TRUE, na.rm=TRUE)] <- "dich"
-  
-  ctype[sapply(ctype, function(x) any(x %in% c("numeric","integer")))] <- "num"
-  ctype[sapply(ctype, function(x) any(x %in% c("factor","ordered","character")))] <- "cat"
-  
-  lst <- list()
-  for(i in 1:ncol(x)){
-    if(ctype[i] == "num"){
-      lst[[i]] <- num_row(x[,i], grp, vname=vnames[i])
-      
-    } else if(ctype[i] == "cat") {
-      lst[[i]] <- cat_mat(x[,i], grp, vname=vnames[i])
-      
-    } else if(ctype[i] == "dich") {
-      
-      # refactor all types, numeric, logic but not factors and let user choose
-      # the level to be reported.
-      if(!is.factor(x[, i])) {   # should only apply to boolean, integer or numerics
-        xi <- factor(x[, i])
-        if(match.arg(intref, choices = c("high", "low")) == "high")
-          xi <- relevel(xi, tail(levels(xi), 1))
-        
-      } else {
-        xi <- x[, i]
-      }
-      
-      if (default_vnames) {
-        lst[[i]] <- dich_mat(xi, grp, vname = gettextf("%s (= %s)", vnames[i], head(levels(xi), 1)))
-      } else {
-        lst[[i]] <- dich_mat(xi, grp, vname = gettextf("%s", vnames[i]))
-      }
-      
-      #
-      # if(default_vnames){
-      #   # only declare the ref level on default_vnames
-      #   lst[[i]] <- dich_mat(x[,i], grp, vname=gettextf("%s (= %s)", vnames[i], head(levels(factor(x[,i])), 1)))
-      #
-      # } else {
-      #   # the user is expected to define ref level, if he wants one
-      #   lst[[i]] <- dich_mat(x[,i], grp, vname=gettextf("%s", vnames[i]))
-      # }
-      
-    } else {
-      lst[[i]] <- rbind(c(colnames(x)[i], rep(NA, nlevels(grp) + 2)))
-    }
-    
-  }
-  
-  res <- do.call(rbind, lst)
-  
-  if(add.length)
-    res <- rbind(c("n", c(Format(sum(!is.na(grp)), fmt=fmt$abs),
-                          paste(Format(table(grp), fmt=fmt$abs), " (",
-                                Format(prop.table(table(grp)), fmt=fmt$per), ")", sep=""), ""))
-                 , res)
-  
-  # align the table
-  if(align != "\\l")
-    res[,-c(1, ncol(res))] <- StrAlign(res[,-c(1, ncol(res))], sep = align)
-  
-  if(all(grp==1)){
-    res <- res[, -3]
-    total <- TRUE
-  }
-  
-  if(!total)
-    res <- res[, -2]
-
-  if(!is.null(colnames))
-    colnames(res) <- rep(colnames, length.out=ncol(res))
-  
-  
-  if(!notest)
-    attr(res, "legend") <- gettextf("%s) %s, %s) %s, %s) %s\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1",
-                                    .FootNote(1), TEST[["num"]]$lbl, .FootNote(2), TEST[["dich"]]$lbl, .FootNote(3), TEST[["cat"]]$lbl)
-  else {
-    attr(res, "legend") <- ""
-    res <- res[, -ncol(res)]
-  }
-  
-  class(res) <- "TOne"
-  return(res)
-}
-
-
-
-
-.FootNote <- function(i){
-
-  # internal function, not exported
-
-  # x <- getOption("footnote")
-  x <- DescToolsOptions("footnote")
-  if(is.null(x))
-    x <- c("'", '"', '""')
-  return(x[i])
-}
-
-
-print.TOne <- function(x, ...){
-  
-  cat("\n")
-  
-  write.table(format(rbind(colnames(x), x), justify="left"),
-              row.names=FALSE, col.names=FALSE, quote=FALSE)
-
-  if(!is.null(attr(x, "legend"))){
-    cat("---\n")
-    cat(attr(x, "legend"), "\n")
-  }
-  cat("\n")
-  
-}
 
 
 
@@ -14573,7 +14351,7 @@ ToWrd <- function(x, font=NULL, ..., wrd=DescToolsOptions("lastWord")){
 
 # function to generate random bookmark names 
 # (ensure we'll always get 9 digits with min=0.1)
-randbm <- function() paste("bm", round(runif(1, min=0.1)*1e9), sep="")
+.randbm <- function() paste("bm", round(runif(1, min=0.1)*1e9), sep="")
 
 
 
@@ -14583,13 +14361,13 @@ ToWrdB <- function(x, font = NULL, ..., wrd = DescToolsOptions("lastWord"),
   # Sends the output of an object x to word and places a bookmark bm on it
   
   # place the temporary bookmark on cursor
-  bm_start <- WrdInsertBookmark(randbm())
+  bm_start <- WrdInsertBookmark(.randbm())
   
   # send stuff to Word (it's generic ...)
   ToWrd(x, font=font, ..., wrd=wrd)
   
   # place end bookmark
-  bm_end <- WrdInsertBookmark(randbm())
+  bm_end <- WrdInsertBookmark(.randbm())
   
   # select all the inserted text between the two bookmarks
   wrd[["ActiveDocument"]]$Range(bm_start$range()$start(), bm_end$range()$end())$select()
@@ -14621,7 +14399,7 @@ ToWrdPlot <- function(plotcode,
 
   crop <- rep(crop, length.out=4)
     
-  if(is.null(bookmark)) bookmark <- randbm()
+  if(is.null(bookmark)) bookmark <- .randbm()
   
   
   # open device
@@ -14639,7 +14417,7 @@ ToWrdPlot <- function(plotcode,
   
   # import in word ***********
   # place the temporary bookmark on cursor
-  bm_start <- WrdInsertBookmark(randbm(), wrd=wrd)
+  bm_start <- WrdInsertBookmark(.randbm(), wrd=wrd)
   
   # send stuff to Word (it's generic ...)
   hwnd <- wrd$selection()$InlineShapes()$AddPicture(FileName=fn, LinkToFile=FALSE, SaveWithDocument=TRUE)
@@ -14663,7 +14441,7 @@ ToWrdPlot <- function(plotcode,
   ToWrd(x="\n", wrd=wrd)
   
   # place end bookmark
-  bm_end <- WrdInsertBookmark(randbm(), wrd=wrd)
+  bm_end <- WrdInsertBookmark(.randbm(), wrd=wrd)
   
   # select all the inserted text between the two bookmarks
   wrd[["ActiveDocument"]]$Range(bm_start$range()$start(), bm_end$range()$end())$select()
@@ -14996,7 +14774,7 @@ ToWrd.ftable <- function (x, font = NULL, main = NULL, align=NULL, method = "com
 
 
 ToWrd.table <- function (x, font = NULL, main = NULL, align=NULL, tablestyle=NULL, autofit = TRUE,
-                              row.names=FALSE, col.names=TRUE, ..., wrd = DescToolsOptions("lastWord")) {
+                              row.names=TRUE, col.names=TRUE, ..., wrd = DescToolsOptions("lastWord")) {
 
 
   x[] <- as.character(x)

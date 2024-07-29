@@ -1,8 +1,8 @@
 Package: DescTools
 Type: Package
 Title: Tools for Descriptive Statistics
-Version: 0.99.54
-Date: 2024-02-03
+Version: 0.99.55
+Date: 2024-07-25
 Authors@R: c(
   person("Andri", "Signorell", email = "andri@signorell.net", role = c("aut", "cre")),
   person("Ken"           , "Aho",                 role = c("ctb")),
@@ -136,13 +136,13 @@ Additional_repositories: http://www.omegahat.net/R
 URL: https://andrisignorell.github.io/DescTools/,
         https://github.com/AndriSignorell/DescTools/
 BugReports: https://github.com/AndriSignorell/DescTools/issues
-RoxygenNote: 6.1.1
+RoxygenNote: 7.3.2
 Encoding: UTF-8
 NeedsCompilation: yes
 SystemRequirements: C++17
 VignetteBuilder: R.rsp
 Config/testthat/edition: 3
-Packaged: 2024-02-03 16:20:05 UTC; andri
+Packaged: 2024-07-28 14:55:17 UTC; andri
 Author: Andri Signorell [aut, cre],
   Ken Aho [ctb],
   Andreas Alfons [ctb],
@@ -262,4 +262,4 @@ Author: Andri Signorell [aut, cre],
   Achim Zeileis [ctb]
 Maintainer: Andri Signorell <andri@signorell.net>
 Repository: CRAN
-Date/Publication: 2024-02-03 22:40:02 UTC
+Date/Publication: 2024-07-29 07:10:03 UTC

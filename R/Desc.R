@@ -4,6 +4,398 @@ ChisqWarning <- function(){
 }
 
 
+
+
+#' Describe Data
+#' 
+#' Produce summaries of various types of variables. Calculate descriptive
+#' statistics for x and use Word as reporting tool for the numeric results and
+#' for descriptive plots.  The appropriate statistics are chosen depending on
+#' the class of x.  The general intention is to simplify the description
+#' process for lazy typers and return a quick, but rich summary.
+#' 
+#' A **2-dimensional table** will be described with it's relative frequencies, a
+#' short summary containing the total cases, the dimensions of the table,
+#' chi-square tests and some association measures as phi-coefficient,
+#' contingency coefficient and Cramer's V. \cr
+#' Tables with higher dimensions  will simply be printed as flat table,
+#' with marginal sums for the first and for the last dimension.
+#' 
+#' `Desc` is a **generic function**. It dispatches to one of the methods above
+#' depending on the class of its first argument. Typing `?Desc` + TAB at the
+#' prompt should present a choice of links: the help pages for each of these
+#' `Desc` methods (at least if you're using RStudio, which anyway is
+#' recommended). You don't need to use the full name of the method although you
+#' may if you wish; i.e., `Desc(x)` is idiomatic R but you can bypass method
+#' dispatch by going direct if you wish: `Desc.numeric(x)`.
+#' 
+#' This function produces a rich description of a **factor**, containing length,
+#' number of NAs, number of levels and detailed frequencies of all levels. The
+#' order of the frequency table can be chosen between descending/ascending
+#' frequency, labels or levels. For ordered factors the order default is
+#' `"level"`. Character vectors are treated as unordered factors Desc.char
+#' converts x to a factor an processes x as factor.\cr
+#' Desc.ordered does nothing more than changing the standard order for the 
+#' frequencies to it's intrinsic order, which means order `"level"` 
+#' instead of `"desc"` in the factor case.
+#' 
+#' Description interface for **dates**. We do here what seems reasonable for
+#' describing dates. We start with a short summary about length, number of NAs
+#' and extreme values, before we describe the frequencies of the weekdays and
+#' months, rounded up by a chi-square test.
+#' 
+#' A **2-dimensional table** will be described with it's relative frequencies, a
+#' short summary containing the total cases, the dimensions of the table,
+#' chi-square tests and some association measures as phi-coefficient,
+#' contingency coefficient and Cramer's V. \cr
+#' Tables with higher dimensions will simply be printed as flat table, 
+#' with marginal sums for the first and for the last dimension.
+#' 
+#' Note that `NA`s cannot be handled by this interface, as tables in general come
+#' in "as.is", say basically as a matrix without any further information about
+#' potentially previously cleared NAs.
+#' 
+#' Description of a **dichotomous variable**. This can either be a logical vector,
+#' a factor with two levels or a numeric variable with only two unique values.
+#' The confidence levels for the relative frequencies are calculated by
+#' [BinomCI()], method `"Wilson"` on a confidence level defined
+#' by `conf.level`. Dichotomous variables can easily be condensed in one
+#' graphical representation. Desc for a set of flags (=dichotomous variables)
+#' calculates the frequencies, a binomial confidence interval and produces a
+#' kind of dotplot with error bars. Motivation for this function is, that
+#' dichotomous variable in general do not contain intense information.
+#' Therefore it makes sense to condense the description of sets of dichotomous
+#' variables.
+#' 
+#' The **formula interface** accepts the formula operators `+`, `:`,
+#' `*`, `I()`, `1` and evaluates any function. The left hand
+#' side and right hand side of the formula are evaluated the same way. The
+#' variable pairs are processed in dependency of their classes.
+#' 
+#' `Word` This function is not thought of being directly run by the end user. 
+#' It will normally be called automatically, when a pointer to a Word instance 
+#' is passed to the function [Desc()].\cr
+#' However `DescWrd` takes
+#' some more specific arguments concerning the Word output (like `font` or
+#' `fontsize`), which can make it necessary to call the function directly.
+#' 
+#' @aliases 
+#' Desc 
+#' Desc.default 
+#' Desc.data.frame 
+#' Desc.list 
+#' Desc.formula
+#' Desc.numeric 
+#' Desc.integer 
+#' Desc.factor 
+#' Desc.ordered 
+#' Desc.character
+#' Desc.logical 
+#' Desc.Date 
+#' Desc.table 
+#' print.Desc 
+#' plot.Desc
+#' 
+#' @param x the object to be described. This can be a data.frame, a list, a
+#' table or a vector of the classes: numeric, integer, factor, ordered factor,
+#' logical.
+#' 
+#' @param main (character|`NULL`|`NA`), the main title(s).
+#' - If `NULL`, the title will be composed as:
+#'     - variable name (class(es)),
+#'     - resp. number - variable name (class(es)) if the `enum` option 
+#'       is set to `TRUE.`
+#' -  Use `NA` if no caption should be printed at all.
+#' 
+#' @param wrd the pointer to a running MS Word instance, as created by
+#' [GetNewWrd()] (for a new one) or by [GetCurrWrd()] for an existing
+#' one.  All output will then be redirected there. Default is `NULL`,
+#' which will report all results to the console.
+#' 
+#' @param digits integer. With how many digits should the relative frequencies
+#' be formatted? Default can be set by 
+#' [DescToolsOptions(digits=x)][DescToolsOptions()].
+#' 
+#' @param maxrows numeric; defines the maximum number of rows in a frequency
+#' table to be reported. For factors with many levels it is often not
+#' interesting to see all of them. Default is set to 12 most frequent ones
+#' (resp. the first ones if `ord` is set to `"levels"` or
+#' `"names"`).
+#' 
+#' For a numeric argument x `maxrows` is the minimum
+#' number of unique values needed for a numeric variable to be treated as
+#' continuous. If left to its default `NULL`, x will be regarded as
+#' continuous if it has more than 12 single values. In this case the list of
+#' extreme values will be displayed and the frequency table else.
+#' 
+#' If `maxrows` is < 1 it will be interpreted as percentage. In this case
+#' just as many rows, as the `maxrows` most frequent levels will be
+#' shown. Say, if `maxrows` is set to `0.8`, then the number of rows is
+#' fixed so, that the highest cumulative relative frequency is the first one
+#' going beyond 0.8.
+#' 
+#' Setting `maxrows` to `Inf` will unconditionally report all values
+#' and also produce a plot with type "h" instead of a histogram.
+#' 
+#' @param ord character out of `"name"` (alphabetical order),
+#' `"level"`, `"asc"` (by frequencies ascending), `"desc"` (by
+#' frequencies descending) defining the order for a frequency table as used for
+#' factors, numerics with few unique values and logicals. Factors (and
+#' character vectors) are by default ordered by their descending frequencies,
+#' ordered factors by their natural order.
+#' 
+#' @param rfrq a string with 3 characters, each of them being `1` or
+#' `0`, defining which percentages should be reported. The first position
+#' is interpreted as total percentages, the second as row percentages and the
+#' third as column percentages. "`011`" hence produces a table output with
+#' row and column percentages. If set to `NULL` `rfrq` is defined in
+#' dependency of `verbose` (`verbose = 1` sets `rfrq` to
+#' `"000"` and else to `"111"`, latter meaning all percentages will
+#' be reported.) \cr
+#' Applies only to tables and is ignored else. 
+#' 
+#' @param margins a vector, consisting out of 1 and/or 2. Defines the margin
+#' sums to be included. Row margins are reported if margins is set to 1. Set it
+#' to 2 for column margins and c(1,2) for both. \cr
+#' Default is `NULL` (none).\cr 
+#' Applies only to tables and is ignored else.
+#' 
+#' @param verbose integer out of `c(2, 1, 3)` defining the verbosity of
+#' the reported results. 2 (default) means medium, 1 less and 3 extensive
+#' results. \cr
+#' Applies only to tables and is ignored else.
+#' 
+#' @param conf.level confidence level of the interval. If set to `NA` no
+#' confidence interval will be calculated. Default is 0.95.
+#' 
+#' @param dprobs,mprobs a vector with the probabilities for the Chi-Square test
+#' for days, resp. months, when describing a `Date` variable.  If this is
+#' left to `NULL` (default) then a uniform distribution will be used for
+#' days and a monthdays distribution in a non leap year (p = c(31/365, 28/365,
+#' 31/365, ...)) for the months. \cr
+#' Applies only to `Dates` and is ignored else.
+#' 
+#' @param enum logical, determining if in data.frames and lists a sequential
+#' number should be included in the main title. Default is TRUE. The reason for
+#' this option is, that if a Word report with enumerated headings is created,
+#' the numbers may be redundant or inconsistent.
+#' 
+#' @param plotit logical. Should a plot be created? The plot type will be
+#' chosen according to the classes of variables (roughly following a
+#' numeric-numeric, numeric-categorical, categorical-categorical logic).
+#' Default can be defined by option `plotit`, if it does not exist then
+#' it's set to `FALSE`.
+#' 
+#' @param sep character. The separator for the title. By default a line of
+#' `"-"` for the current width of the screen `(options("width"))`
+#' will be used.
+#' 
+#' @param nolabel logical, defining if labels (defined as attribute with the
+#' name `label`, as done by `Label`) should be plotted.
+#' 
+#' @param formula a formula of the form `lhs ~ rhs` where `lhs` gives
+#' the data values and rhs the corresponding groups.
+#' 
+#' @param data an optional matrix or data frame containing the variables in the
+#' formula `formula`.  By default the variables are taken from
+#' `environment(formula)`.
+#' 
+#' @param subset an optional vector specifying a subset of observations to be
+#' used.
+#' 
+#' @param nomain logical, determines if the main title of the output is printed
+#' or not, default is `TRUE`.
+#' 
+#' @param \dots further arguments to be passed to or from other methods.
+#'       For the internal default method these can include: 
+#'    \describe{
+#'  
+#'    \item{`p`}{a vector of probabilities of the same length of `x`. 
+#'    An error is given if any entry of `p` is negative. 
+#'    This argument will be passed on to [chisq.test()][stats::chisq.test()].
+#'    Default is `rep(1/length(x), length(x))`.}
+#'    
+#'    \item{`add_ni`}{logical. Indicates if the group length should be
+#'    displayed in the boxplot.}
+#'    
+#'    \item{`smooth`}{character, either "loess" or "smooth.spline" defining
+#'    the type of smoother to be used in num ~ num plots. Default is "loess" for 
+#'    n < 500 and "smooth.spline" otherwise.}
+#'    }
+#' 
+#' @return A list containing the following components: 
+#' 
+#' \item{length}{the length of the vector (n + NAs).}
+#' \item{n}{the valid entries (NAs are excluded)}
+#' \item{NAs}{number of NAs} 
+#' \item{unique}{number of unique values. }
+#' \item{0s}{number of zeros}
+#' \item{mean}{arithmetic mean}
+#' \item{MeanSE}{standard error of the mean, as calculated by [MeanSE()].} 
+#' \item{quant}{a table of quantiles, as calculated by
+#'       [quantile(x, probs = c(.05,.10,.25,.5,.75,.9,.95), na.rm = TRUE)][stats::quantile()].
+#'       }
+#' \item{sd}{standard deviation}
+#' \item{vcoef}{coefficient of variation: `mean(x)` / `sd(x)`.}
+#' \item{mad}{median absolute deviation ([stats::mad()]).}
+#' \item{IQR}{interquartile range }
+#' \item{skew}{skewness, as calculated by [Skew()].}
+#' \item{kurt}{kurtosis, as calculated by [Kurt()].}
+#' \item{highlow}{the lowest and the highest values, reported with their
+#'      frequencies in brackets, if > 1.}
+#' \item{frq}{a data.frame of absolute and  relative frequencies given by
+#'       [Freq()] if `maxlevels` > unique values in the vector.}
+#' 
+#' @author Andri Signorell <andri@@signorell.net>
+#' 
+#' @seealso 
+#' [base::summary()], [base::plot()]
+#' 
+#' @concept Desc
+#' @family Statistical summary functions
+#' @keywords print univar multivariate
+#' 
+#' 
+#' @export
+#' 
+#' @examples
+#' 
+#' opt <- DescToolsOptions()
+#'
+#' # implemented classes:
+#' Desc(d.pizza$wrongpizza)               # logical
+#' Desc(d.pizza$driver)                   # factor
+#' Desc(d.pizza$quality)                  # ordered factor
+#' Desc(as.character(d.pizza$driver))     # character
+#' Desc(d.pizza$week)                     # integer
+#' Desc(d.pizza$delivery_min)             # numeric
+#' Desc(d.pizza$date)                     # Date
+#'
+#' Desc(d.pizza)
+#'
+#' Desc(d.pizza$wrongpizza, main="The wrong pizza delivered", digits=5)
+#'
+#' Desc(table(d.pizza$area))                                    # 1-dim table
+#' Desc(table(d.pizza$area, d.pizza$operator))                  # 2-dim table
+#' Desc(table(d.pizza$area, d.pizza$operator, d.pizza$driver))  # n-dim table
+#'
+#' # expressions
+#' Desc(log(d.pizza$temperature))
+#' Desc(d.pizza$temperature > 45)
+#'
+#' # supported labels
+#' Label(d.pizza$temperature) <- "This is the temperature in degrees Celsius
+#' measured at the time when the pizza is delivered to the client."
+#' Desc(d.pizza$temperature)
+#' # try as well:      Desc(d.pizza$temperature, wrd=GetNewWrd())
+#'
+#' z <- Desc(d.pizza$temperature)
+#' print(z, digits=1, plotit=FALSE)
+#' # plot (additional arguments are passed on to the underlying plot function)
+#' plot(z, main="The pizza's temperature in Celsius", args.hist=list(breaks=50))
+#'
+#'
+#' # formula interface for single variables
+#' Desc(~ uptake + Type, data = CO2, plotit = FALSE)
+#'
+#' # bivariate
+#' Desc(price ~ operator, data=d.pizza)                  # numeric ~ factor
+#' Desc(driver ~ operator, data=d.pizza)                 # factor ~ factor
+#' Desc(driver ~ area + operator, data=d.pizza)          # factor ~ several factors
+#' Desc(driver + area ~ operator, data=d.pizza)          # several factors ~ factor
+#' Desc(driver ~ week, data=d.pizza)                     # factor ~ integer
+#'
+#' Desc(driver ~ operator, data=d.pizza, rfrq="111")   # alle rel. frequencies
+#' Desc(driver ~ operator, data=d.pizza, rfrq="000",
+#'      verbose=3)                                  # no rel. frequencies
+#'
+#' Desc(price ~ delivery_min, data=d.pizza)              # numeric ~ numeric
+#' Desc(price + delivery_min ~ operator + driver + wrongpizza,
+#'      data=d.pizza, digits=c(2,2,2,2,0,3,0,0) )
+#'
+#' Desc(week ~ driver, data=d.pizza, digits=c(2,2,2,2,0,3,0,0))   # define digits
+#'
+#' Desc(delivery_min + weekday ~ driver, data=d.pizza)
+#'
+#'
+#' # without defining data-parameter
+#' Desc(d.pizza$delivery_min ~ d.pizza$driver)
+#'
+#'
+#' # with functions and interactions
+#' Desc(sqrt(price) ~ operator : factor(wrongpizza), data=d.pizza)
+#' Desc(log(price+1) ~ cut(delivery_min, breaks=seq(10,90,10)),
+#'      data=d.pizza, digits=c(2,2,2,2,0,3,0,0))
+#'
+#' # response versus all the rest
+#' Desc(driver ~ ., data=d.pizza[, c("temperature","wine_delivered","area","driver")])
+#'
+#' # all the rest versus response
+#' Desc(. ~ driver, data=d.pizza[, c("temperature","wine_delivered","area","driver")])
+#'
+#' # pairwise Descriptions
+#' p <- CombPairs(c("area","count","operator","driver","temperature","wrongpizza","quality"), )
+#' for(i in 1:nrow(p))
+#'   print(Desc(formula(gettextf("%s ~ %s", p$X1[i], p$X2[i])), data=d.pizza))
+#'
+#'
+#' # get more flexibility, create the table first
+#' tab <- as.table(apply(HairEyeColor, c(1,2), sum))
+#' tab <- tab[,c("Brown","Hazel","Green","Blue")]
+#'
+#' # display only absolute values, row and columnwise percentages
+#' Desc(tab, row.vars=c(3, 1), rfrq="011", plotit=FALSE)
+#'
+#' # do the plot by hand, while setting the colours for the mosaics
+#' cols1 <- SetAlpha(c("sienna4", "burlywood", "chartreuse3", "slategray1"), 0.6)
+#' cols2 <- SetAlpha(c("moccasin", "salmon1", "wheat3", "gray32"), 0.8)
+#' plot(Desc(tab), col1=cols1, col2=cols2)
+#'
+#' # choose alternative flavours for graphing numeric ~ factor using pipe
+#' # (colors are recyled)
+#' Desc(temperature ~ driver, data = d.pizza) |> plot(type="dens", col=Pal("Tibco"))
+#'
+#'
+#' # use global format options for presentation
+#' Fmt(abs=as.fmt(digits=0, big.mark=""))
+#' Fmt(per=as.fmt(digits=2, fmt="%"))
+#' Desc(area ~ driver, d.pizza, plotit=FALSE)
+#'
+#' Fmt(abs=as.fmt(digits=0, big.mark="'"))
+#' Fmt(per=as.fmt(digits=3, ldigits=0))
+#' Desc(area ~ driver, d.pizza, plotit=FALSE)
+#'
+#' # plot arguments can be fixed in detail
+#' z <- Desc(BoxCox(d.pizza$temperature, lambda = 1.5))
+#' plot(z, mar=c(0, 2.1, 4.1, 2.1), args.rug=TRUE, args.hist=list(breaks=50),
+#'      args.dens=list(from=0))
+#'
+#' # The default description for count variables can be inappropriate,
+#' # the density curve does not represent the variable well.
+#' set.seed(1972)
+#' x <- rpois(n = 500, lambda = 5)
+#' Desc(x)
+#' # but setting maxrows to Inf gives a better plot
+#' Desc(x, maxrows = Inf)
+#'
+#'
+#' # Output into word document (Windows-specific example) -----------------------
+#' # by simply setting wrd=GetNewWrd()
+#' \dontrun{
+#'
+#'   # create a new word instance and insert title and contents
+#'   wrd <- GetNewWrd(header=TRUE)
+#'
+#'   # let's have a subset
+#'   d.sub <- d.pizza[,c("driver", "date", "operator", "price", "wrongpizza")]
+#'
+#'   # do just the univariate analysis
+#'   Desc(d.sub, wrd=wrd)
+#' }
+#'
+#' DescToolsOptions(opt)
+#'
+#' 
 Desc <- function(x, ..., main = NULL, plotit = NULL, wrd = NULL) {
   if (is.null(wrd)) {
     UseMethod("Desc")
@@ -31,6 +423,9 @@ Desc <- function(x, ..., main = NULL, plotit = NULL, wrd = NULL) {
 }
 
 
+
+#' @rdname Desc
+#' @export
 Desc.numeric <- function(x, main = NULL,
                          maxrows = NULL,
                          plotit = NULL, sep = NULL, digits = NULL, ...) {
@@ -42,6 +437,9 @@ Desc.numeric <- function(x, main = NULL,
 }
 
 
+
+#' @rdname Desc
+#' @export
 Desc.integer <- function(x, main = NULL,
                          maxrows = NULL,
                          plotit = NULL, sep = NULL, digits = NULL, ...) {
@@ -53,6 +451,9 @@ Desc.integer <- function(x, main = NULL,
 }
 
 
+
+#' @rdname Desc
+#' @export
 Desc.factor <- function(x, main = NULL,
                         maxrows = NULL, ord = NULL,
                         plotit = NULL, sep = NULL, digits = NULL, ...) {
@@ -64,6 +465,9 @@ Desc.factor <- function(x, main = NULL,
 }
 
 
+
+#' @rdname Desc
+#' @export
 Desc.labelled <- function(x, main = NULL,
                           maxrows = NULL, ord = NULL,
                           plotit = NULL, sep = NULL, digits = NULL, ...) {
@@ -78,6 +482,9 @@ Desc.labelled <- function(x, main = NULL,
 }
 
 
+
+#' @rdname Desc
+#' @export
 Desc.ordered <- function(x, main = NULL,
                          maxrows = NULL, ord = NULL,
                          plotit = NULL, sep = NULL, digits = NULL, ...) {
@@ -89,6 +496,9 @@ Desc.ordered <- function(x, main = NULL,
 }
 
 
+
+#' @rdname Desc
+#' @export
 Desc.character <- function(x, main = NULL,
                            maxrows = NULL, ord = NULL,
                            plotit = NULL, sep = NULL, digits = NULL, ...) {
@@ -100,6 +510,9 @@ Desc.character <- function(x, main = NULL,
 }
 
 
+
+#' @rdname Desc
+#' @export
 Desc.ts <- function(x, main = NULL,
                     plotit = NULL, sep = NULL, digits = NULL, ...) {
   return(desc(
@@ -109,6 +522,10 @@ Desc.ts <- function(x, main = NULL,
   ))
 }
 
+
+
+#' @rdname Desc
+#' @export
 Desc.logical <- function(x, main = NULL,
                          ord = NULL, conf.level = 0.95,
                          plotit = NULL, sep = NULL, digits = NULL, ...) {
@@ -121,6 +538,9 @@ Desc.logical <- function(x, main = NULL,
 }
 
 
+
+#' @rdname Desc
+#' @export
 Desc.Date <- function(x, main = NULL,
                       dprobs = NULL, mprobs = NULL,
                       plotit = NULL, sep = NULL, digits = NULL, ...) {
@@ -132,6 +552,9 @@ Desc.Date <- function(x, main = NULL,
 }
 
 
+
+#' @rdname Desc
+#' @export
 Desc.table <- function(x, main = NULL,
                        conf.level = 0.95, verbose = 2,
                        rfrq = "111", margins = c(1, 2),
@@ -146,6 +569,8 @@ Desc.table <- function(x, main = NULL,
 
 
 
+#' @rdname Desc
+#' @export
 Desc.default <- function(x, main = NULL, maxrows = NULL, ord = NULL,
                          conf.level = 0.95, verbose = 2, rfrq = "111", margins = c(1, 2),
                          dprobs = NULL, mprobs = NULL,
@@ -290,6 +715,9 @@ desc <- function(x, main = NULL, xname = deparse(substitute(x)), digits = NULL,
 }
 
 
+
+#' @rdname Desc
+#' @export
 Desc.data.frame <- function(x, main = NULL, plotit = NULL, enum = TRUE,
                             sep = NULL, ...) {
   res <- Desc.list(
@@ -316,6 +744,9 @@ Desc.data.frame <- function(x, main = NULL, plotit = NULL, enum = TRUE,
 }
 
 
+
+#' @rdname Desc
+#' @export
 Desc.list <- function(x, main = NULL, plotit = NULL, enum = TRUE,
                       sep = NULL, ...) {
   xname <- deparse(substitute(x))
@@ -374,6 +805,10 @@ Desc.list <- function(x, main = NULL, plotit = NULL, enum = TRUE,
   return(lst)
 }
 
+
+
+#' @rdname Desc
+#' @export
 Desc.formula <- function(formula, data = parent.frame(),
                          subset, main = NULL, plotit = NULL, digits = NULL, ...) {
   mf <- match.call(expand.dots = FALSE)
@@ -493,8 +928,10 @@ calcDesc.default <- function(x, ...) {
 }
 
 
+
 calcDesc.numeric <- function(x, n, maxrows = NULL, conf.level = 0.95,
                              include_x = TRUE, ...) {
+  
   probs <- c(0, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 1)
 
   # the quantiles, totally analogue to the core of stats::quantile:
@@ -514,8 +951,8 @@ calcDesc.numeric <- function(x, n, maxrows = NULL, conf.level = 0.95,
   i <- which(index > lo)
   h <- (index - lo)[i]
   qs[i] <- (1 - h) * qs[i] + h * x[hi[i]]
-  names(qs) <-
-    c("min", ".05", ".10", ".25", "median", ".75", ".90", ".95", "max")
+  
+  names(qs) <- c("min", ".05", ".10", ".25", "median", ".75", ".90", ".95", "max")
 
   # ... here we go, all we need so far is in qs
 
@@ -529,12 +966,19 @@ calcDesc.numeric <- function(x, n, maxrows = NULL, conf.level = 0.95,
 
   # this is method 3 in the usual functions Skew and Kurt
   skewx <- ((1 / n * psum$sum3) / (psum$sum2 / n)^1.5) * ((n - 1) / n)^(3 / 2)
-  kurtx <-
-    ((((1 / n * psum$sum4) / (psum$sum2 / n)^2) - 3) + 3) * (1 - 1 / n)^2 - 3
+  kurtx <- ((((1 / n * psum$sum4) / (psum$sum2 / n)^2) - 3) + 3) * (1 - 1 / n)^2 - 3
 
   # get std dev here
   sdx <- sqrt(psum$sum2 / (n - 1))
 
+  # meanCI
+  if (n > 1) {
+    a <- qt(p = (1-conf.level) / 2, df = n-1) * sdx / sqrt(n)
+  } else {
+    a <- NA
+  }
+  meanCI <- psum$mean + c(-1,1) * a
+  
   # get the mode
   modex <- Mode(x)
 
@@ -577,6 +1021,7 @@ calcDesc.numeric <- function(x, n, maxrows = NULL, conf.level = 0.95,
     mean = psum$mean,
     meanSE = sdx / sqrt(n),
     conf.level = conf.level,
+    meanCI = meanCI,
     quant = qs,
     range = unname(diff(qs[c(1, 9)])),
     meanAD = psum$sum1 / n,
@@ -597,6 +1042,7 @@ calcDesc.numeric <- function(x, n, maxrows = NULL, conf.level = 0.95,
 
   return(res)
 }
+
 
 calcDesc.logical <- function(x, n, ord = "level", conf.level = 0.95, ...) {
   ff <- table(x)
@@ -626,6 +1072,7 @@ calcDesc.logical <- function(x, n, ord = "level", conf.level = 0.95, ...) {
   return(res)
 }
 
+
 calcDesc.factor <- function(x, n, maxrows = NULL, ord, ...) {
   freq <- Freq(x, ord = ord)
 
@@ -646,12 +1093,14 @@ calcDesc.factor <- function(x, n, maxrows = NULL, ord, ...) {
   return(res)
 }
 
+
 calcDesc.character <- function(x, n, maxrows = NULL, ord, ...) {
   # simply factorize x and send to calcDesc.factor
   calcDesc.factor(
     x = factor(x, ordered = TRUE), n = n, ord = ord, maxrows = maxrows, ...
   )
 }
+
 
 calcDesc.Date <- function(x, n, dprobs = NULL, mprobs = NULL,
                           include_x = TRUE, ...) {
@@ -742,6 +1191,7 @@ calcDesc.ts <- function(x, ...) {
   )
 }
 
+
 calcDesc.table <- function(x, n, conf.level = 0.95, verbose, rfrq, margins,
                            p, digits, ...) {
   # loglik.chisq <- function(r.chisq) {
@@ -827,7 +1277,7 @@ calcDesc.table <- function(x, n, conf.level = 0.95, verbose, rfrq, margins,
       RelRisk(Rev(x, margin = 2), conf.level = conf.level, method = "wald", delta = 0)
     },
     propdiff = if (ttype == "t2x2") {
-      BinomDiffCI(x[1,1], sum(x[1,]), x[2,1], sum(x[2,]), conf.level = conf.level, method = "mn")
+      BinomDiffCI(x[1,1], sum(x[1,]), x[2,1], sum(x[2,]), conf.level = conf.level, method = "mn")[1,]
     },
     relrisk1r = if (ttype == "t2x2") {
       RelRisk(t(x), conf.level = conf.level, method = "wald", delta = 0)
@@ -1036,7 +1486,8 @@ calcDesc.bivar <- function(x, g, xname = NULL, gname = NULL,
 
 
 
-
+#' @rdname Desc
+#' @export
 print.Desc <- function(x, digits = NULL, plotit = NULL, nolabel = FALSE,
                        sep = NULL, nomain = FALSE, ...) {
   .print <- function(x, digits = NULL, plotit = NULL, nomain = FALSE, ...) {
@@ -1573,9 +2024,12 @@ print.Desc.table <- function(x, digits = NULL, ...) {
   }
 }
 
+
 print.Desc.xtabs <- function(x, digits = NULL, ...) {
   print.Desc.table(x, digits, ...)
 }
+
+
 
 print.Desc.Date <- function(x, digits = NULL, ...) {
   # time aggregation already in the definition of the variable:
@@ -1758,6 +2212,7 @@ print.Desc.numfact <- function(x, digits = NULL, ...) {
   cat("\n")
 }
 
+
 print.Desc.numnum <- function(x, digits = NULL, ...) {
   cat("Summary: \n",
     "n pairs: ", Format(x$n, fmt = Fmt("abs")),
@@ -1781,6 +2236,7 @@ print.Desc.numnum <- function(x, digits = NULL, ...) {
   ))
 }
 
+
 print.Desc.factnum <- function(x, digits = NULL, ...) {
   x$main <- paste(x$xname, x$gname, sep = " ~ ")
   x$NAgs <- x$NAxs
@@ -1799,7 +2255,8 @@ print.Desc.factnum <- function(x, digits = NULL, ...) {
 
 
 
-
+#' @rdname Desc
+#' @export
 plot.Desc <- function(x, main = NULL, ...) {
   plot.Desc.z <- function(z, main = main, ...) {
     if (any(z$class %in% c(
@@ -2267,13 +2724,15 @@ plot.Desc.xtabs <- function(x, main = NULL, col1 = NULL, col2 = NULL,
 
 
 plot.Desc.table <- function(x, main = NULL, col1 = NULL, col2 = NULL,
-                            horiz = TRUE, ...) {
+                            horiz = TRUE, ..., xlab = NULL, ylab = NULL, which = c(1,2)) {
   opt <- DescToolsOptions(stamp = NULL)
 
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
 
   if (is.null(main)) main <- x$main
+  if (is.null(xlab)) xlab <- Coalesce(names(dimnames(x$tab))[2], "x")
+  if (is.null(ylab)) ylab <- Coalesce(names(dimnames(x$tab))[1], "y")
 
   if (length(dim(x$tab)) == 1) {
     #    maxrows <- InDots(..., arg="maxrows", default = 12)
@@ -2304,38 +2763,39 @@ plot.Desc.table <- function(x, main = NULL, col1 = NULL, col2 = NULL,
       )
     }
 
-    if (horiz) {
-      # width <- 16
-      # height <- 6.5  # dimension for 2 mosaicplots
-      par(mfrow = c(1, 2))
-      par(oma = c(1.1, 2.1, ifelse(is.na(main), 0, 2.1), 0))
-    } else {
-      # width <- 7
-      # height <- 14  # dimension for 2 mosaicplots
-      par(mfrow = c(2, 1), xpd = TRUE)
-      par(oma = c(3.1, 1.1, ifelse(is.na(main), 0, 2), 0))
+    if(length(which) == 2){
+      if (horiz) {
+        # width <- 16
+        # height <- 6.5  # dimension for 2 mosaicplots
+        par(mfrow = c(1, 2))
+        par(oma = c(1.1, 2.1, ifelse(is.na(main), 0, 2.1), 0))
+      } else {
+        # width <- 7
+        # height <- 14  # dimension for 2 mosaicplots
+        par(mfrow = c(2, 1), xpd = TRUE)
+        par(oma = c(3.1, 1.1, ifelse(is.na(main), 0, 2), 0))
+      }
     }
+    
+    if(any(which==1))
+      PlotMosaic(x$tab, main = NA, xlab = NA, ylab = NA, horiz = TRUE, cols = col1)
+    
+    if(any(which==2))
+      PlotMosaic(x$tab, main = NA, xlab = NA, ylab = NA, horiz = FALSE, cols = col2)
 
-    PlotMosaic(x$tab, main = NA, xlab = NA, ylab = NA, horiz = TRUE, cols = col1)
-    PlotMosaic(x$tab, main = NA, xlab = NA, ylab = NA, horiz = FALSE, cols = col2)
-
-    title(
-      xlab = Coalesce(names(dimnames(x$tab))[2], "x"),
-      outer = TRUE, line = -1, font = 2
-    )
-    title(
-      ylab = Coalesce(names(dimnames(x$tab))[1], "y"),
-      outer = TRUE, line = 0, font = 2
-    )
+    title(xlab = xlab, outer = TRUE, line = -1, font = 2)
+    title(ylab = ylab, outer = TRUE, line = 0, font = 2)
   }
 
-  if (!is.na(main) && (length(dim(x$tab)) == 2)) title(main, outer = TRUE)
+  if (!is.na(main) && (length(dim(x$tab)) == 2)) 
+    title(main, outer = ifelse(length(which)==2, TRUE, FALSE))
 
   options(opt)
   if (!is.null(DescToolsOptions("stamp"))) Stamp()
 
   # invisible(list(width=width, height=height))
   invisible()
+  
 }
 
 
@@ -2347,15 +2807,17 @@ plot.Desc.matrix <- function(x, main = NULL, col1 = NULL, col2 = NULL,
   plot.Desc.table(x, main = main, col1 = col1, col2 = col2, horiz = horiz, ...)
 }
 
+
 plot.Desc.xtabs <- function(x, main = NULL, col1 = NULL, col2 = NULL,
                             horiz = TRUE, ...) {
   # treat matrix as table
   plot.Desc.table(x, main = main, col1 = col1, col2 = col2, horiz = horiz, ...)
 }
 
+
 plot.Desc.factfact <- function(x, main = NULL, col1 = NULL, col2 = NULL,
                                horiz = TRUE, ...) {
-  plot.Desc.table(x, main = main, col1 = col1, col2 = col2, horiz = horiz)
+  plot.Desc.table(x, main = main, col1 = col1, col2 = col2, horiz = horiz, ...)
 }
 
 # plot.Desc.numfact <- function(x, main=NULL, notch=FALSE, add_ni = TRUE,
@@ -2654,7 +3116,9 @@ plot.Desc.factnum <- function(x, main = NULL, col = NULL,
   if (!is.null(DescToolsOptions("stamp"))) {
     Stamp()
   }
-
+  
+  layout(matrix(1))           # reset layout on exit
+  
   invisible()
 }
 
@@ -2862,376 +3326,9 @@ printWrd <- function(x, main = NULL, plotit = NULL, ..., wrd = wrd) {
 
 
 
-ColumnWrap <- function(x, width = NULL) {
-  if (is.null(width)) {
-    width <- getOption("width") / length(x)
-  }
 
-  width <- rep(width, length.out = length(x))
-
-  lst <- lapply(seq_along(x), function(i) strwrap(x[[i]], width = width[i]))
-
-  maxdim <- max(unlist(lapply(lst, length)))
-  lst <- lapply(lst, function(z) c(z, rep("", maxdim - length(z))))
-
-  do.call(cbind, lst)
-}
-
-
-
-
-
-
-
-Abstract <- function(x, sep = ", ", zero.form = ".", maxlevels = 5,
-                     trunc = TRUE, list.len = 999) {
-  res <- data.frame(
-    nr = 1:ncol(x),
-    varname = colnames(x),
-    class = unlist(lapply(x, function(z) paste(class(z), collapse = ", "))),
-    label = unlist(lapply(lapply(x, Label), Coalesce, "-")),
-    levels = unlist(lapply(
-      x,
-      function(z) {
-        if (nlevels(z) > 0) {
-          maxlevels <- ifelse(is.na(maxlevels) || is.infinite(maxlevels),
-            nlevels(z), min(nlevels(z), maxlevels)
-          )
-
-          txt <- gettextf(
-            "(%s): %s", nlevels(z),
-            paste(1:maxlevels, "-", levels(z)[1:maxlevels],
-              sep = "", collapse = sep
-            )
-          )
-
-          if (maxlevels < nlevels(z)) {
-            txt <- paste(txt, ", ...", sep = "")
-          }
-
-          txt
-        } else {
-          ""
-        }
-      }
-    )),
-    NAs = unlist(lapply(x, function(z) sum(is.na(z)))),
-    stringsAsFactors = FALSE
-  )
-
-  res$NAs <- ifelse(res$NAs != 0,
-    paste(res$NAs, " (",
-      Format(res$NAs / dim(x)[1], fmt = "%", digits = 1), ")",
-      sep = ""
-    ), zero.form
-  )
-
-  rownames(res) <- NULL
-  res <- res[, c("nr", "varname", "class", "NAs", "levels", "label")]
-  colnames(res) <- c("Nr", "ColName", "Class", "NAs", "Levels", "Label")
-
-  res <- res[1:min(nrow(res), list.len), ]
-
-  attr(res, "main") <-
-    gsub(" +", " ", paste(deparse(substitute(x)), collapse = " "))
-  attr(res, "nrow") <- dim(x)[1]
-  attr(res, "ncol") <- dim(x)[2]
-  # complete.cases can not be constructed with lists in data.frames
-  attr(res, "complete") <-
-    ifelse(all(sapply(x, is.atomic)), sum(complete.cases(x)), NA)
-  attr(res, "trunc") <- trunc
-
-  if (!is.null(attr(x, "label"))) {
-    attr(res, "label") <- attr(x, "label")
-  }
-
-  class(res) <- append(class(res), "abstract", after = 0)
-  # res <- AddClass(res, "abstract", after = 0)
-
-  return(res)
-}
-
-
-
-print.abstract <- function(x, sep = NULL, width = NULL,
-                           trunc = NULL, print.gap = 2, ...) {
-  # check if there are labels, if there aren't, we will hide the labels column
-  lbl_fg <- !all(x["Label"] == "-")
-
-  if (is.null(width)) {
-    width <- unlist(lapply(x, function(x) {
-      max(nchar(as.character(x))) +
-        1
-    }))[1:4]
-    width <-
-      c(width, rep((getOption("width") - (sum(width) + 6 * print.gap)) /
-        (1 + lbl_fg), (1 + lbl_fg)))
-  }
-
-
-  opt <- options(max.print = 1e4)
-  on.exit(options(opt))
-
-  #   # define the separator, "-------..." if not given
-  sep <- Coalesce(sep, x$sep, paste(rep("-", (getOption("width") - 2)),
-    collapse = ""
-  ))
-
-  cat(sep, "\n")
-  cat(attr(x, "main"))
-
-  label <- attr(x, "label")
-
-  if (!is.null(label)) {
-    cat(" :", strwrap(label, indent = 2, exdent = 2), sep = "\n")
-  } else {
-    cat("\n")
-  }
-
-  cat(gettextf(
-    "\ndata frame:\t%s obs. of  %s variables\n\t\t%s complete cases (%s)\n\n",
-    attr(x, "nrow"), attr(x, "ncol"), attr(x, "complete"),
-    Format(attr(x, "complete") / attr(x, "nrow"), fmt = "%", digits = 1)
-  ))
-
-  class(x) <- "data.frame"
-
-  if (!lbl_fg) {
-    x["Label"] <- NULL
-  }
-
-  res <- apply(x, 1, ColumnWrap, width = width)
-  res <- data.frame(
-    if (is.matrix(res)) {
-      t(res)
-    } else {
-      do.call(rbind, res)
-    },
-    stringsAsFactors = FALSE
-  )
-
-  colnames(res) <- colnames(x)
-
-  if (Coalesce(trunc, attr(x, "trunc"), TRUE)) {
-    res[, ] <- sapply(
-      1:ncol(res),
-      function(i) StrTrunc(res[, i], maxlen = width[i])
-    )
-  }
-
-  res$NAs <- StrAlign(res$NAs, " ")
-
-  print(x = res, print.gap = print.gap, right = FALSE, row.names = FALSE, ...)
-  cat("\n")
-}
-
-
-
-# Abstract <- function(x, sep=", ", zero.form=".", maxlevels=12, trunc=TRUE) {
-#
-#   res <- data.frame(
-#     nr = 1:ncol(x)
-#     , varname=colnames(x)
-#     #, type=unlist(lapply(x, typeof))
-#     , class=unlist(lapply(x, function(z) paste(class(z), collapse=", ")))
-#     , label= unlist(lapply(lapply(x, Label), Coalesce, "-"))
-#     , levels=unlist(lapply(x, function(z) {
-#       if(nlevels(z) > 0)
-#         gettextf("(%s): %s", nlevels(z), paste(1:nlevels(z), "-",
-#             levels(z)[1:ifelse(is.na(maxlevels) || is.infinite(maxlevels),
-#              nlevels(z), maxlevels)], sep="", collapse=sep))
-#       else
-#         "" }))
-#     , NAs=unlist(lapply(x, function(z) sum(is.na(z))))
-#     , stringsAsFactors = FALSE
-#   )
-#
-#
-#   res$NAs <- StrAlign(ifelse(res$NAs != 0,
-#                 paste(res$NAs, " (", Format(res$NAs/dim(x)[1],
-#                  fmt="%", digits=1), ")", sep="")
-#               , zero.form)
-#               , sep=" ")
-#
-#   rownames(res) <- NULL
-#
-#   res <- res[, c("nr","varname","class","NAs","levels","label")]
-#   colnames(res) <- c("Nr","ColName","Class","NAs","Levels","Label")
-#
-#   attr(res, "main") <- deparse(substitute(x))
-#   attr(res, "nrow") <- dim(x)[1]
-#   attr(res, "ncol") <- dim(x)[2]
-#
-#   attr(res, "trunc") <- trunc
-#
-#   if(!is.null(attr(x, "label")))
-#      attr(res, "label") <- attr(x, "label")
-#
-#   res <- AddClass(res, "abstract", after=0)
-#   return (res)
-#
-# }
-#
-#
-# print.abstract <- function (x, sep=NULL, width=NULL, trunc=NULL,
-#  print.gap=2, ...){
-#
-#   # check if there are labels, if there aren't, we will hide the labels column
-#   lbl_fg <- !all(x["Label"]=="-")
-#
-#   if(is.null(width)){
-#     width <- unlist(lapply(x,
-#      function(x) max(nchar(as.character(x))) + 1))[1:4]
-#     width <- c(width, rep((getOption("width") -
-#      (sum(width) + 6*print.gap))/ (1+lbl_fg), (1+lbl_fg)))
-#   }
-#
-#
-#   # define the separator, "-------..." if not given
-#   sep <- Coalesce(sep, x$sep,
-#   paste(rep("-", (getOption("width") - 2)), collapse = ""))
-#   cat(sep, "\n")
-#
-#   cat(attr(x, "main"))
-#
-#   label <- attr(x, "label")
-#
-#   if (!is.null(label))
-#     cat(" :", strwrap(label, indent = 2, exdent = 2), sep = "\n")
-#   else
-#     cat("\n")
-#
-#   cat(gettextf("\ndata.frame:	%s obs. of  %s variables\n\n",
-#    attr(x, "nrow"), attr(x, "ncol")))
-#
-#   class(x) <- "data.frame"
-#
-#   if(!lbl_fg)
-#     x["Label"] <- NULL
-#
-#   trunc <- Coalesce(trunc, attr(x, "trunc"), TRUE)
-#
-#   res <- apply(x, 1, ColumnWrap, width=width)
-#   res <- data.frame( if(is.matrix(res)){
-#             t(res)
-#           } else {
-#             do.call(rbind,  res)
-#           } )
-#   colnames(res) <- colnames(x)
-#
-#
-#   print(x=res, print.gap=print.gap, right=FALSE, row.names=FALSE, ...)
-#   cat("\n")
-# }
-#
-
-
-
-#
-# Desc.Lc <- function (x, main = NULL, p = c(0.8,0.9,0.95,0.99),
-# plotit=DescToolsOptions("plotit"), ...) {
-#
-#   # Describe a Lorenz curve
-#
-#   if (is.null(main))
-#     main <- gettextf("%s (%s)", deparse(substitute(x)),
-#                      paste(class(x), collapse = ", "))
-#   n <- length(x$p)
-#
-#   cat(paste(rep("-", (as.numeric(options("width")) - 2)), collapse = ""),
-#       "\n")
-#   if (!identical(main, NA))
-#     cat(main)
-#   if (!is.null(attr(x, "label")))
-#     cat(" :", strwrap(attr(x, "label"), indent = 2, exdent = 2),
-#         sep = "\n")
-#   cat("\n\n")
-#
-#   d.frm <- data.frame( (1-p), sapply(p, function(p){1 - approx(x=x$p,
-#   y=x$L, xout=p)$y}))
-#   colnames(d.frm) <- c("1-p","1-L(p)")
-#
-#   txt <- d.frm
-#   txt[,2] <- round(txt[,2], 3)
-#   txt <- .CaptOut(txt)
-#   txt <- gsub(pattern = "0\\.", replacement = " \\.", txt)
-#
-#   lres <- list(l1 = list(n = n, `0s` = max(x$p[x$L==0]), Gini=x$Gini))
-#
-#   lfmt <- lapply(lres, lapply, .fmt)
-#   width <- max(c(unlist(lapply(lfmt, nchar)), unlist(lapply(lapply(lfmt, names), nchar))))
-#   cat(paste(lapply(lfmt, .txtline, width = width, ind = "  ",
-#                    space = " "), collapse = "\n"), "\n")
-#
-#   cat(txt, sep = "\n")
-#
-#   if (plotit)
-#     if (lres$l1$n > 0)
-#       plot(x, main = main)
-#
-#   invisible(lres)
-# }
-#
-#
-#
-#
-# Desc.flags <- function(x, i=1, plotit=getOption("plotit", FALSE), ...){
-#
-#   cat( paste(rep("-",(as.numeric(options("width"))-2)), collapse=""), "\n" )
-#   main <- InDots(..., arg="main", default = "Multiple dichotomous variables")
-#   cat(main)
-#   if( !is.null(attr(x,"label")) ) cat(" :", strwrap(attr(x,"label"),
-#   indent=2, exdent=2), sep="\n" )
-#   cat("\n")
-#
-#   cat( "\nSummary: \n", "total n: ", nrow(x), "\n\n", sep="" )
-#
-#   d.sub <- x
-#
-#   flags <- do.call(rbind, lapply(d.sub, function(z) {
-#     tab <- table(z)
-#     data.frame(val = names(tab[i]), abs=tab[i], BinomCI(tab[i], sum(tab)))
-#   }
-#   ))
-#   out <- data.frame( do.call(rbind,  lapply(d.sub,
-#   function(x) cbind(NAs=sum(is.na(x)), n=length(x)- sum(is.na(x)))))
-#                      , flags)
-#   out[,5:7] <- apply(out[,5:7],2, Format, digits=3)
-#
-#   print(out, quote=FALSE)
-#   cat("\n")
-#
-#   if(plotit) PlotDesc(x)
-#
-# }
-#
-#
-#
-# PlotDesc.flags <- function(x, ..., wrd = NULL){
-#
-#   oldpar <- par(no.readonly=TRUE);  on.exit( par(oldpar) )
-#
-#   flags <- do.call(rbind, lapply(x, function(z) {
-#     tab <- table(z)
-#     BinomCI(tab[1], sum(tab))
-#   }))
-#   rownames(flags) <- names(x)
-#
-#   par(mai=c(1, max(strwidth(rev(rownames(flags)), "inch"))+2, 0.2, .3)+.02)
-#   PlotDot(flags, lwd = 20, code = 0, cex=0.9,
-#           lcolor = PalHelsana()["hellgruen"], pch="|", pch.cex = 2.5,
-#           xlim=c(0,1), lend="butt")
-#
-#   if(!is.null(wrd)) WrdPlot(width=8, height=pmin(3+3/6*nrow(flags), 10),
-#                             dfact=2.5, crop=c(0,0,0.2,0), wrd=wrd,
-#                             append.cr=TRUE)
-#   invisible()
-#
-# }
-#
-#
-
-
+#' @rdname Desc
+#' @export
 Desc.palette <- function(x, ...) {
   print(x, ...)
   if (DescToolsOptions("plotit")) {
