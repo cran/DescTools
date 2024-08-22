@@ -41,12 +41,7 @@ BrierScore <- function(x, pred=NULL, scaled = FALSE, ...){
 
      } else {
       pred <- predict(x, type="prob")[, 2]
-      
-      # resp <- as.numeric(model.extract(x$model, "response")) - 1
-      if(inherits(x, "C5.0") | inherits(x, "naive_bayes"))
-        x$terms <- eval(x$call$formula)
-      
-      resp <- as.numeric(model.response(model.frame(x))) - 1
+      resp <- as.numeric(model.extract(x$model, "response")) - 1
      }
 
     .Brier(resp=resp, pred=pred, scaled=scaled)

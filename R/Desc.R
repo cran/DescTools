@@ -1485,6 +1485,21 @@ calcDesc.bivar <- function(x, g, xname = NULL, gname = NULL,
 }
 
 
+.LineSep <- function(sep=NULL, x=NULL){
+
+  sep <- Coalesce(sep, x$sep, DescToolsOptions("linesep", default = "\u2500"))
+  
+  # Remove the ANSI color codes using gsub
+  # ansi_pattern <- "\033\\[\\d+(;\\d+)?m"
+  
+  if(nchar(gsub("\033\\[\\d+(;\\d+)?m", "", sep, perl = TRUE)) == 1)
+    sep <- strrep(sep, getOption("width") - 2)
+  
+  return(sep)  
+    
+}
+
+
 
 #' @rdname Desc
 #' @export
@@ -1514,12 +1529,7 @@ print.Desc <- function(x, digits = NULL, plotit = NULL, nolabel = FALSE,
     # }
 
     if (!nomain) {
-      # define the separator, "-------..." if not given
-      sep <- Coalesce(
-        sep, x$sep,
-        paste(rep("-", (getOption("width") - 2)), collapse = "")
-      )
-      cat(sep, "\n")
+      cat(.LineSep(sep = sep, x = x), "\n")
 
       if (!identical(x$main, NA)) {
         if (.has_color()) {
@@ -2008,12 +2018,12 @@ print.Desc.table <- function(x, digits = NULL, ...) {
       if ((x$verbose == "3") || (x$ttype == "t2x2")) {
         if (.has_color()) {
           cat(cli::col_silver(gettextf(
-            "\n----------\n%s %s%s conf. level\n",
+            "\n%s\n%s %s%s conf. level\n", strrep("\u2500", 20),
             DescToolsOptions("footnote")[1], x$conf.level * 100, "%"
           )))
         } else {
           cat(gettextf(
-            "\n----------\n%s %s%s conf. level\n",
+            "\n%s\n%s %s%s conf. level\n", strrep("\u2500", 20),
             DescToolsOptions("footnote")[1], x$conf.level * 100, "%"
           ))
         }
@@ -2028,6 +2038,8 @@ print.Desc.table <- function(x, digits = NULL, ...) {
 print.Desc.xtabs <- function(x, digits = NULL, ...) {
   print.Desc.table(x, digits, ...)
 }
+
+
 
 
 
