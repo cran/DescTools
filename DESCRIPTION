@@ -1,10 +1,13 @@
 Package: DescTools
 Type: Package
 Title: Tools for Descriptive Statistics
-Version: 0.99.57
-Date: 2024-09-25
+Version: 0.99.58
+Date: 2024-11-08
 Authors@R: c(
-  person("Andri", "Signorell", email = "andri@signorell.net", role = c("aut", "cre")),
+  person(given="Andri", family="Signorell", 
+         email = "andri@signorell.net", 
+         role = c("aut", "cre"),
+         comment = c(ORCID = "0000-0003-4311-1969")),
   person("Ken"           , "Aho",                 role = c("ctb")),
   person("Andreas"       , "Alfons",              role = c("ctb")),
   person("Nanina"        , "Anderegg",            role = c("ctb")),
@@ -127,7 +130,7 @@ Suggests: RDCOMClient, tcltk, VGAM, R.rsp, testthat (>= 3.0.0)
 Depends: base, stats, R (>= 4.2.0)
 Imports: graphics, grDevices, methods, MASS, utils, boot, mvtnorm,
         expm, Rcpp (>= 0.12.10), rstudioapi, Exact, gld, data.table,
-        readxl, httr, withr, cli
+        readxl, haven, httr, withr, cli
 LinkingTo: Rcpp
 License: GPL (>= 2)
 LazyLoad: yes
@@ -142,8 +145,8 @@ NeedsCompilation: yes
 SystemRequirements: C++17
 VignetteBuilder: R.rsp
 Config/testthat/edition: 3
-Packaged: 2024-09-25 20:56:09 UTC; andri
-Author: Andri Signorell [aut, cre],
+Packaged: 2024-11-08 08:17:14 UTC; andri
+Author: Andri Signorell [aut, cre] (<https://orcid.org/0000-0003-4311-1969>),
   Ken Aho [ctb],
   Andreas Alfons [ctb],
   Nanina Anderegg [ctb],
@@ -262,4 +265,4 @@ Author: Andri Signorell [aut, cre],
   Achim Zeileis [ctb]
 Maintainer: Andri Signorell <andri@signorell.net>
 Repository: CRAN
-Date/Publication: 2024-09-25 23:30:05 UTC
+Date/Publication: 2024-11-08 09:40:02 UTC

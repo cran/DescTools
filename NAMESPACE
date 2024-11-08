@@ -64,7 +64,7 @@ export(
 "PseudoR2", "MAE","MSE","RMSE","MAPE","SMAPE","NMSE","NMAE", "BrierScore", "BrierScoreCI", "Unwhich",
 "Fmt", "as.fmt", "ModSummary", "TMod", "VIF", "StdCoef", "PartialSD", "HosmerLemeshowTest", "Cstat", "GeomTrans",
 "%^%", "TitleRect","BarText","as.CDateFmt", "Phrase", "N","Nf", "BootCI", "VonNeumannTest",
-"Append","ConoverTest",
+"Append","AppendRowNames","ConoverTest",
 
 "%()%","%(]%","%)(%","%)[%","%[)%","%[]%","%](%","%][%","%:%","%::%","TTestA",
 "DecToBin", "RomanToInt", "TukeyBiweight","PtInPoly",
@@ -83,7 +83,7 @@ export(
 "CmykToCmy", "CmyToCmyk", "RgbToCmy", "CmykToRgb", "RevCode", "MADCI","QuantileCI", "BinomCIn",
 "GetCalls", "BhapkarTest", "StrExtractBetween", "GenRandGroups", "Rank", "rSum21",
 "dTri","pTri","qTri","rTri",
-"BrierScoreCI","CstatCI","RSqCI"
+"BrierScoreCI","CstatCI","RSqCI", "ReadSPSS"
 )
 
 
@@ -116,9 +116,9 @@ importFrom("Exact","exact.test")
 importFrom("withr", "with_seed")
 
 importFrom("readxl","read_excel")
+importFrom("haven", "read_spss")
 importFrom("httr","GET","write_disk", "http_status")
 importFrom("cli", "col_red","col_silver","style_bold","col_blue","col_cyan")
-
 
 S3method(as.Date, ym)
 S3method(Month, ym)

@@ -1,10 +1,10 @@
-924d12c8e1074f479c9a8d1fd043ec87 *DESCRIPTION
-40fff691a76c45b977018ce75c5d4c97 *NAMESPACE
-ec184cfa4e09c2979221f19dc616fe84 *NEWS
+77b18bb545048c9d37de3fd7fd5774ea *DESCRIPTION
+a4fe50f7081d8f3b43ab3295efbf05fe *NAMESPACE
+28e6a6ece22bf70809414bf1938e7d62 *NEWS
 8a34c5f3381374e84344be46fd53da9c *R/Abstract.R
 f63511814e41a13af45f0b4916fcdb8f *R/ColumnWrap.R
 0816aec2566f38f795332987860ff4fb *R/Desc.R
-bab116571ae012940d299b2f77d29387 *R/DescTools.r
+63fac312297778d36cbcbc5ec0089adc *R/DescTools.r
 eb6e9f7b12bffa110d3aabf59c59c6fd *R/Dialogs.r
 a002600980f534c19325bdb6731444b9 *R/Distributions.R
 ba0c145dc3726157984e8bd74a445abc *R/DoBy.r
@@ -14,7 +14,7 @@ ba3e86db18ebc9faa12fbb136bb129da *R/MeanAD.R
 eb042e8cee6842c96f1c44f60f5ff2b1 *R/MeanCI.R
 8f5286c5cfc310152e4f9b65854f243f *R/MedianCI.R
 3a25140bc45e24e4ca699e637ab1bfc1 *R/Mod_BreuschGodfreyTest.R
-0e604184ff7f8d7c1f971b749a1f2dae *R/Mod_BrierScore.R
+ee4e70f4c9af56bc8dded840c5a41a29 *R/Mod_BrierScore.R
 923c3cd92b75f5e150fe449caad3e0c9 *R/Mod_BrierScoreCI.R
 372e812d655f6de1f2a816858fc19fb4 *R/Mod_Conf.R
 17ddd751ffd31810d837a2c94acb300a *R/Mod_Cstat.R
@@ -83,6 +83,7 @@ ce2ec9d867b3b8292f3d46deca304701 *man/Agree.Rd
 aab7cc855f0ea9429e062841cd4acd48 *man/AllIdentical.Rd
 5ccfebc2e008e78f0262f2a370f03e63 *man/AndersonDarlingTest.Rd
 2249f366edbdd5b22de5fc799f1915eb *man/Append.Rd
+eb3891a6cc63a8cfb059caf17593c341 *man/AppendRowNames.Rd
 7a6a0923163841f3ff0da1825145cda3 *man/AscToChar.Rd
 da44736223720796476e775f7ed93341 *man/Asp.Rd
 c512525b730c431c9c3aaad18a12df3c *man/Assocs.Rd
@@ -344,6 +345,7 @@ c25c84d69260179095cdefe8ae861945 *man/Quot.Rd
 4dfb58239b61242a66e5fa2d9ddca983 *man/RSqCI.Rd
 77b3dedecbba84145d20134ec4c976e3 *man/Range.Rd
 4ff8b73d35a1e9659b9994b6a3e21b7d *man/Rank.Rd
+5902003a1098c459616a883e12ed62f9 *man/ReadSPSS.Rd
 34d752f365b480afcaa81fb51d32cfe7 *man/Recode.Rd
 5106337214bc8975865aa2cdcd5f39a2 *man/Recycle.Rd
 782135eb288d15b5bc7320048d2ab6ad *man/RelRisk.Rd

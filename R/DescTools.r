@@ -6995,6 +6995,30 @@ as.fmt <- function(...){
 
 
 
+ReadSPSS <- function(fn, encoding=NULL){
+  
+  d.spss <- haven::read_spss(file=fn, encoding = encoding)
+  
+  d.set <- as.data.frame(d.spss)
+  
+  # get rid of SPSS specific attributes
+  d.set <- as.data.frame(
+               lapply(d.set, 
+                      DescTools::StripAttr, 
+                      attr=c("format.spss", "display_width"))) 
+
+  # turn haven_labelled into common factors
+  idx <- sapply(d.spss, inherits, "haven_labelled")
+  
+  # restore factors and the labels
+  d.set[idx] <- haven::as_factor(d.set[idx])
+
+  return(d.set)
+  
+}
+
+
+
 ParseSASDatalines <- function(x, env = .GlobalEnv, overwrite = FALSE) {
 
   # see: http://www.psychstatistics.com/2012/12/07/using-datalines-in-sas/
@@ -7216,8 +7240,6 @@ Append.data.frame <- function(x, values, after = NULL, rows=FALSE, names=NULL, .
   
 }
 
-
-
 Append.TOne <-  function(x, values, after = NULL, rows=TRUE, names=NULL, ...) {
   
   # appending to a TOne object means appending to a matrix while preserving the class
@@ -7232,57 +7254,17 @@ Append.TOne <-  function(x, values, after = NULL, rows=TRUE, names=NULL, ...) {
 }
 
 
+AppendRowNames <- function(x, names="rownames", after=0, remove_rownames=TRUE){
+  
+  res <- Append(x, row.names(x), after = after, names=names)
+  
+  if(remove_rownames)
+    res <- SetNames(res, rownames=NULL)
+  
+  return(res)
+  
+}
 
-
-# InsRow <- function(m, x, i, row.names=NULL){
-#
-#   nr <- dim(m)[1]
-#   if(missing(i)) i <- nr+1
-#
-#   x <- matrix(x, ncol=ncol(m))
-#   if(!is.null(row.names))
-#     row.names(x) <- row.names
-#   if(i==1)
-#     res <- rbind(x, m)
-#   else if(i>nr)
-#     res <- rbind(m, x)
-#   else
-#     res <- rbind(m[1:(i-1),, drop=FALSE], x, m[i:nr,, drop=FALSE])
-#   colnames(res) <- colnames(m)
-#   res
-# }
-#
-#
-#
-#
-# InsCol <- function(x, values, i, names=NULL, ...) {
-#   UseMethod("InsCol")
-# }
-#
-#
-# InsCol.data.frame <- function(x, values, i, names=NULL, ...) {
-#   as.data.frame(append(x, SetNames(list(values), names=names), after = i+1))
-# }
-#
-#
-# InsCol.default <- function(x, values, i, names=NULL, ...){
-#
-#   nc <- dim(x)[2]
-#   if(missing(i)) i <- nc+1
-#
-#   values <- matrix(values, nrow=nrow(x))
-#   if(!is.null(names))
-#     colnames(values) <- names
-#   if(i==1)
-#     res <- cbind(values, x)
-#   else if(i > nc)
-#     res <- cbind(x, values)
-#   else
-#     res <- cbind(x[,1:(i-1), drop=FALSE], values, x[,i:nc, drop=FALSE])
-#   rownames(res) <- rownames(x)
-#   res
-# }
-#
 
 
 
@@ -16735,19 +16717,44 @@ WrdKill <- function(){
 
 
 
-CourseData <- function(name, url=NULL, header=TRUE, sep=";", ...){
+FileExistURL <- function(url){
+  HTTP_STATUS_OK <- 200
+  hd <- httr::HEAD(url)
+  status <- hd$all_headers[[1]]$status
+  res <- status == HTTP_STATUS_OK 
+  attr(res, "status") <- status
+  
+  return(res)
+}
 
+
+CourseData <- function(name, url=NULL, header=TRUE, sep=";", ...){
+  
+  # try datasets and buch folder
+  if(is.null(url)){
+    url <- "http://www.signorell.net/hwz/datasets/"
+    if(FileExistURL(gettextf("%s/%s", url, name))){
+      # do nothing, url and name are both correct
+    } else {
+      url <- "http://www.signorell.net/buch/"
+      if(FileExistURL(gettextf("%s/%s", url, name))){
+        # do nothing, url and name are both correct
+      } else {
+        stop(gettextf("File %s does not exist!"))
+      }  
+    }
+  } else {
+    if(!FileExistURL(gettextf("%s/%s", url, name)))
+      stop(gettextf("File %s does not exist!"))
+  }
+  
+  
   if(grepl("xls", tools::file_ext(name))) {
     res <- OpenDataObject(name=name, url=url, ...)
     
   } else {
-  
-    if(length(grep(pattern = "\\..{3}", x = name))==0)
-      name <- paste(name, ".txt", sep="")
-    if(is.null(url))
-      url <- "http://www.signorell.net/hwz/datasets/"
-    url <- gettextf(paste(url, "%s", sep=""), name)
-    res <- read.table(file = url, header = header, sep = sep, ...)
+    res <- read.table(file = gettextf("%s/%s", url, name), 
+                      header = header, sep = sep, ...)
   }
   
   return(res)
@@ -16757,10 +16764,7 @@ CourseData <- function(name, url=NULL, header=TRUE, sep=";", ...){
 
 
 
-OpenDataObject <- function(name, url=NULL, 
-                           doc=list(Description=c("Variable", "Beschreibung", "Codes", "Skala")), 
-                           ...){
-
+OpenDataObject <- function(name, url=NULL, doc=NULL, ...){
 
   if(is.null(url))
     url <- "http://www.signorell.net/hwz/datasets/"
@@ -16771,6 +16775,14 @@ OpenDataObject <- function(name, url=NULL,
     stop(resp)
   
   z <- as.data.frame(read_excel(tf))
+  
+  if(is.null(doc)){
+    # try to use doc if at least one more sheet exists
+    if(length(readxl::excel_sheets(tf)) > 1)
+      doc <- list(Description=c("Variable", "Beschreibung", "Codes", "Skala"))
+    else 
+      doc <- NA
+  }
   
   if(!is.na(doc)) {
 
