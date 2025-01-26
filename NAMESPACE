@@ -6,7 +6,7 @@ export(
 "%c%","%like%","%like any%", "%nin%","%overlaps%","AddMonths","Agree","AllDuplicated","aovlDetails","aovlErrorTerms","as.matrix.xtabs","AscToChar","Assocs","Atkinson","AUC","AxisBreak","BartelsRankTest","BinomCI","BinomDiffCI","BinomRatioCI","BinToDec","BoxCox","BoxCoxInv","BoxCoxLambda","BoxedText","BreslowDayTest","BubbleLegend","Canvas","CartToPol","CartToSph","CatTable","CCC","CharToAsc",
 "Clockwise","Closest","Coalesce","CourseData",
 "CochranArmitageTest",
-"CochranQTest","CutAge",
+"CochranQTest","CutAge","CutGen",
 "CoefVar","CoefVarCI","CohenD","CohenKappa","CollapseTable","ColorLegend",
 "ColToGray","ColToGrey","ColToHex","ColToHsv","ColToRgb","ColToOpaque","RgbToHex", 
 "CombN","CombPairs","CombSet","ConDisPairs","Conf","ConnLines","ContCoef","Contrasts","CorCI",
@@ -31,7 +31,7 @@ export(
 "NemenyiTest","Now","OctToDec","OddsRatio","OPR","OrderMixed","Outlier","Overlap",
 "PageTest", "PlotProbDist",
 "PairApply","ParseFormula","ParseSASDatalines","CorPart","PasswordDlg","pBenf","PearsonTest",
-"PercTable", "Mgsub",
+"PercTable", "Mgsub", "SumCI",
 "Permn","Phi","plot.bagplot","plot.Conf","plot.Lc","plot.Lclist","plot.PostHocTest","PlotACF","PlotArea","PlotBag","PlotBagPairs",
 "PlotBubble","PlotCandlestick","PlotCirc","PlotCorr","ABCCoords","Bg",
 

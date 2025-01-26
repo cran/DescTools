@@ -1589,7 +1589,8 @@ Kurt <- function (x, weights=NULL, na.rm = FALSE, method = 3, conf.level = NA,
     }
     
     se <- sqrt((24*n*(n-2)*(n-3))/((n+1)^2*(n+3)*(n+5)))
-
+#    se <- sqrt((24 * n * (n - 1)^2) / ((n - 3) * (n - 2) * (n + 3) * (n + 5)))
+    
     if (method == 2) {
       # method 2: SAS/SPSS
       r.kurt <- ((r.kurt + 3) * (n + 1)/(n - 1) - 3) * (n - 1)^2/(n - 2)/(n - 3)
@@ -3405,73 +3406,62 @@ BinomRatioCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided
 MultinomCI <- function(x, conf.level = 0.95, sides = c("two.sided","left","right"),
                        method = c("sisonglaz", "cplus1", "goodman", "wald", "waldcc", "wilson", "qh", "fs")) {
 
-  # Code mainly by:
+  # Code originally from 
   # Pablo J. Villacorta Iglesias <pjvi@decsai.ugr.es>\n
   # Department of Computer Science and Artificial Intelligence, University of Granada (Spain)
-
-  .moments <- function(c, lambda){
-
+  
+  # rewritten in R by Andri Signorell
+  
+  .moments <- function(c, lambda) {
+    
     a <- lambda + c
-    b <- lambda - c
-    if(b < 0) b <- 0
-    if(b > 0) den <- ppois(a, lambda) - ppois(b-1, lambda)
-    if(b == 0) den <- ppois(a,lambda)
-
-    mu <- mat.or.vec(4,1)
-    mom <- mat.or.vec(5,1)
-    for(r in 1:4){
-      poisA <- 0
-      poisB <- 0
-
-      if((a-r) >=0){ poisA <- ppois(a,lambda)-ppois(a-r,lambda) }
-      if((a-r) < 0){ poisA <- ppois(a,lambda) }
-      if((b-r-1) >=0){ poisB <- ppois(b-1,lambda)-ppois(b-r-1,lambda) }
-      if((b-r-1) < 0 && (b-1)>=0){ poisB <- ppois(b-1,lambda) }
-      if((b-r-1) < 0 && (b-1) < 0){ poisB <- 0 }
-
-      mu[r] <- (lambda^r)*(1-(poisA-poisB)/den)
-    }
-    mom[1] <- mu[1]
-    mom[2] <- mu[2] + mu[1] - mu[1]^2
-    mom[3] <- mu[3] + mu[2]*(3-3*mu[1]) + (mu[1]-3*mu[1]^2+2*mu[1]^3)
-    mom[4] <- mu[4] + mu[3]*(6-4*mu[1]) + mu[2]*(7-12*mu[1]+6*mu[1]^2)+mu[1]-4*mu[1]^2+6*mu[1]^3-3*mu[1]^4
-    mom[5] <- den
-
-    return(mom)
-
+    b <- max(lambda - c, 0)
+    
+    den <- diff(ppois(c(b - 1, a), lambda))
+    
+    r <- 1:4
+    
+    poisA <- ppois(a, lambda) - ppois(a - r, lambda) 
+    poisB <- ppois(b - 1, lambda) - ppois(b - r - 1, lambda)
+    mu <- SetNames(lambda^r * (1 - (poisA - poisB)/den), LETTERS[1:4])
+    
+    res <- with(as.list(mu), 
+                c(A, 
+                  A + B - A^2, 
+                  C + B * (3 - 3 * A) + 
+                    (A - 3 * A^2 + 2 * A^3),
+                  D + C * (6 - 4 * A) + 
+                    B * (7 - 12 * A + 6 * A^2) + 
+                    A - 4 * A^2 + 6 * A^3 - 3 * A^4, 
+                  den
+                ))
+    return(res)
+    
   }
+  
+  .truncpoi <- function(c, x, n, k) {
 
-  .truncpoi <- function(c, x, n, k){
-
-    m <- matrix(0, k, 5)
-
-    for(i in 1L:k){
-      lambda <- x[i]
-      mom <- .moments(c, lambda)
-      for(j in 1L:5L){ m[i,j] <- mom[j] }
-    }
-    for(i in 1L:k){ m[i, 4] <- m[i, 4] - 3 * m[i, 2]^2 }
-
-    s <- colSums(m)
-    s1 <- s[1]
-    s2 <- s[2]
-    s3 <- s[3]
-    s4 <- s[4]
-
-    probn <- 1/(ppois(n,n)-ppois(n-1,n))
-    z <- (n-s1)/sqrt(s2)
-    g1 <- s3/(s2^(3/2))
-    g2 <- s4/(s2^2)
-    poly <- 1 + g1*(z^3-3*z)/6 + g2*(z^4-6*z^2+3)/24
-    + g1^2*(z^6-15*z^4 + 45*z^2-15)/72
-    f <- poly*exp(-z^2/2)/(sqrt(2)*gamma(0.5))
-
-    probx <- 1
-    for(i in 1L:k){ probx <- probx * m[i,5]  }
-
-    return(probn * probx * f / sqrt(s2))
+    m <- t(sapply(x, .moments, c=c))
+    m[,4] <- m[,4] - 3*m[, 2]^2
+    
+    probn <- 1/(ppois(n, n) - ppois(n - 1, n))
+    
+    cS <- as.list(SetNames(colSums(m), LETTERS[1:5]))
+    z  <- with(cS, (n - A)/sqrt(B))
+    g1 <- with(cS, C/(B^(3/2)))
+    g2 <- with(cS, D/(B^2))
+    
+    poly <- 1 + g1 * (z^3 - 3 * z)/6 + g2 * (z^4 - 6 * z^2 + 3)/24 + 
+      g1^2 * (z^6 - 15 * z^4 + 45 * z^2 - 15)/72
+    
+    f <- poly * exp(-z^2/2)/(sqrt(2) * gamma(0.5))
+    
+    probx <- prod(m[, 5])
+    
+    return(probn * probx * f/sqrt(cS$B))
+    
   }
-
+  
 
   n <- sum(x, na.rm=TRUE)
   k <- length(x)
@@ -3480,18 +3470,17 @@ MultinomCI <- function(x, conf.level = 0.95, sides = c("two.sided","left","right
   if (missing(method)) method <- "sisonglaz"
   if(missing(sides)) sides <- "two.sided"
 
-  sides <- match.arg(sides, choices = c("two.sided","left","right"), several.ok = FALSE)
+  sides <- match.arg(sides, choices = c("two.sided","left","right"), 
+                     several.ok = FALSE)
   if(sides!="two.sided")
-    conf.level <- 1 - 2*(1-conf.level)
+    conf.level <- 1 - 2 * (1 - conf.level)
 
 
-  method <- match.arg(arg = method, choices = c("sisonglaz", "cplus1", "goodman", "wald", "waldcc", "wilson", "qh", "fs"))
+  method <- match.arg(arg = method, 
+                      choices = c("sisonglaz", "cplus1", "goodman", 
+                                  "wald", "waldcc", "wilson", "qh", "fs"))
+  
   if(method == "goodman") {
-
-    
-    # erroneous: q.chi <- qchisq(conf.level, k - 1)
-    # corrected on 
-    
     q.chi <- qchisq(1 - (1-conf.level)/k, df = 1)
     lci <- (q.chi + 2*x - sqrt(q.chi*(q.chi + 4*x*(n-x)/n))) / (2*(n+q.chi))
     uci <- (q.chi + 2*x + sqrt(q.chi*(q.chi + 4*x*(n-x)/n))) / (2*(n+q.chi))
@@ -3566,17 +3555,21 @@ MultinomCI <- function(x, conf.level = 0.95, sides = c("two.sided","left","right
     const <- const - 1
 
     if(method == "sisonglaz") {
-      res <- cbind(est = p, lwr.ci = pmax(0, p - const/n), upr.ci = pmin(1, p + const/n + 2*delta/n))
+      res <- cbind(est = p, 
+                   lwr.ci = pmax(0, p - const/n), 
+                   upr.ci = pmin(1, p + const/n + 2*delta/n))
 
     } else if(method == "cplus1") {
-      res <- cbind(est = p, lwr.ci = pmax(0, p - const/n - 1/n), upr.ci = pmin(1,p + const/n + 1/n))
+      res <- cbind(est = p, 
+                   lwr.ci = pmax(0, p - const/n - 1/n), 
+                   upr.ci = pmin(1,p + const/n + 1/n))
     }
   }
 
   if(sides=="left")
-    res[,3] <- 1
+    res[, 3] <- 1
   else if(sides=="right")
-    res[,2] <- 0
+    res[, 2] <- 0
 
   return(res)
 }
@@ -3687,8 +3680,6 @@ PoissonCI <- function(x, n = 1, conf.level = 0.95, sides = c("two.sided","left",
   return(t(res))
 
 }
-
-
 
 
 
@@ -4906,6 +4897,22 @@ CutAge <- function(x, from=0, to=90, by=10, right=FALSE, ordered_result=TRUE, ..
 
 
 
+CutGen <- function(vintage){
+  
+  # Babyboomer (1946-1964)
+  # Generation X (1965-1979)
+  # Generation Y (1980-1995) – auch als Millennials bezeichnet.
+  # Generation Z (1996-2010)
+  # Generation Alpha (ab 2011-2025)
+  
+  cut(vintage,
+      breaks=c(1946,1965,1980,1996,2011, Inf), right=FALSE, 
+      labels = c("Babyboomer","Gen X","Millennials","Gen Z","Gen Alpha"),
+      ordered = TRUE)
+  
+}
+
+
 CutQ <- function(x, breaks=quantile(x, seq(0, 1, by=0.25), na.rm=TRUE), 
                  labels=NULL, na.rm = FALSE, ...){
 
@@ -5654,80 +5661,6 @@ CronbachAlpha <- function(x, conf.level = NA, cond = FALSE, na.rm = FALSE){
   return(res)
 }
 
-
-KendallW <- function(x, correct=FALSE, test=FALSE, na.rm = FALSE) {
-
-  # see also old Jim Lemon function kendall.w
-  # other solution: library(irr);  kendall(ratings, correct = TRUE)
-  # http://www.real-statistics.com/reliability/kendalls-w/
-
-
-  dname <- deparse(substitute(x))
-
-  ratings <- as.matrix(x)
-  if(na.rm) ratings <- na.omit(ratings)
-
-  ns <- nrow(ratings)
-  nr <- ncol(ratings)
-
-  #Without correction for ties
-  if (!correct) {
-    #Test for ties
-    TIES = FALSE
-    testties <- apply(ratings, 2, unique)
-    if (!is.matrix(testties)) TIES=TRUE
-    else { if (length(testties) < length(ratings)) TIES=TRUE }
-
-    ratings.rank <- apply(ratings,2,rank)
-
-    coeff.name <- "W"
-    coeff <- (12*var(apply(ratings.rank,1,sum))*(ns-1))/(nr^2*(ns^3-ns))
-  }
-  else { #With correction for ties
-    ratings <- as.matrix(na.omit(ratings))
-
-    ns <- nrow(ratings)
-    nr <- ncol(ratings)
-
-    ratings.rank <- apply(ratings,2,rank)
-
-    Tj <- 0
-    for (i in 1:nr) {
-      rater <- table(ratings.rank[,i])
-      ties  <- rater[rater>1]
-      l 	  <- as.numeric(ties)
-      Tj	  <- Tj + sum(l^3-l)
-    }
-
-    coeff.name <- "Wt"
-    coeff <- (12*var(apply(ratings.rank,1,sum))*(ns-1))/(nr^2*(ns^3-ns)-nr*Tj)
-  }
-
-  if(test){
-    #test statistics
-    Xvalue  <- nr*(ns-1)*coeff
-    df1     <- ns-1
-    names(df1) <- "df"
-    p.value <- pchisq(Xvalue, df1, lower.tail = FALSE)
-    method <- paste("Kendall's coefficient of concordance", coeff.name)
-    alternative <- paste(coeff.name, "is greater 0")
-    names(ns) <- "subjects"
-    names(nr) <- "raters"
-    names(Xvalue) <- "Kendall chi-squared"
-    names(coeff) <- coeff.name
-    rval <- list(#subjects = ns, raters = nr,
-      estimate = coeff, parameter=c(df1, ns, nr),
-      statistic = Xvalue, p.value = p.value,
-      alternative = alternative, method = method, data.name = dname)
-
-    class(rval) <- "htest"
-  } else {
-    rval <- coeff
-  }
-
-  if (!correct && TIES) warning("Coefficient may be incorrect due to ties")
-  return(rval)
-}
 
 
 
